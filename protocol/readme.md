@@ -1,6 +1,6 @@
 ### 客户端与服务端通信架构概览
 
-Methods.ts -> 请求, 相应 方法的 ID 映射
+Methods.ts -> Request/Response Method (ID 映射)
 
 Package.ts -> 数据包体的封装
 
@@ -21,7 +21,7 @@ crypto.generateKeyPairSync('x25519')
 
 客户端连接服务端, 发送初次握手消息, 传递客户端临时公钥, 服务端针对此客户端生成自己的临时密钥对: 服务临时 公,私
 ```js
-//HandShake_Request
+// HandShake_Request
 keyObject.export({ type: 'spki', format: 'pem' })
 crypto.createPublicKey({ key: rawPubC, type: 'spki', format: 'pem' })
 ```
@@ -36,7 +36,7 @@ crypto.hkdfSync('sha256', ikm, salt, info, 32)
 服务端在客户端握手请求后先用私钥对响应内容签名, 再响应, 传递服务端临时公钥, 客户端用预置的服务端长期公钥进行验证
 ```js
 crypto.sign(null, data, privateKey)
-HandShake_Response
+// HandShake_Response
 crypto.verify(null, data, publicKey, signature)
 ```
 
