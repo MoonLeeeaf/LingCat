@@ -1,0 +1,17 @@
+{
+    "name": "lingcat",
+    "version": "0.0.0",
+    "workspaces": [
+        "./server",
+        "./shared",
+        "./protocol",
+        "./client_protocol"
+    ],
+    "scripts": {
+        "server": "npx tsx ./server/main.ts",
+        "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js --dts ./protocol/*.proto"
+    },
+    "devDependencies": {
+        "protobufjs-cli": "^2.4.2"
+    }
+}

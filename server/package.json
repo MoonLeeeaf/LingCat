@@ -1,0 +1,16 @@
+{
+    "name": "lingcat-server",
+    "version": "0.0.0",
+    "type": "module",
+    "dependencies": {
+        "express": "^5.2.1",
+        "knex": "^3.2.10",
+        "lingcat-shared": "*",
+        "lingcat-protocol": "*",
+        "ws": "^8.19.0"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/ws": "^8.18.1"
+    }
+}

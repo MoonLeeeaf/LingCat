@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package lingcat.classes;
+
+/** 
+ * =======================================================
+ *
+ *                          基础类
+ *
+ * =======================================================
+ */
+
+message EncryptedMessage {
+    uint32 seq = 1;
+    bytes iv = 2;
+    bytes data = 3;
+    bytes aad = 4;
+    bytes tag = 5;
+}
+
+message User {
+    /** 
+     * 用户 ID 在服务端为真实 ID, 在客户端为服务端生成的针对某个客户端的临时 ID
+     */
+    string id = 1;
+    optional string username = 2;
+    string nickname = 3;
+}
+
+message Group {
+    string id = 1;
+    optional string group_unique = 2;
+    string name = 3;
+}
