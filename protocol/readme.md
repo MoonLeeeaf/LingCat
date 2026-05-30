@@ -1,4 +1,12 @@
-### 客户端与服务端通信协议 - 架构概览
+### 客户端与服务端通信架构概览
+
+Methods.ts -> 请求, 相应 方法的 ID 映射
+
+Package.ts -> 数据包体的封装
+
+LingCatProto -> 二进制数据结构, 请求体定义, 基础数据类定义
+
+#### 设计思路
 
 服务端生成长期密钥并将公钥通过安全途径传递给客户端验证并保存
 ```js
@@ -14,8 +22,8 @@ crypto.generateKeyPairSync('x25519')
 客户端连接服务端, 发送初次握手消息, 传递客户端临时公钥, 服务端针对此客户端生成自己的临时密钥对: 服务临时 公,私
 ```js
 //HandShake_Request
-keyObject.export({ type: 'spki', format: 'der' })
-crypto.createPublicKey({ key: rawPubC, type: 'raw', format: 'der' })
+keyObject.export({ type: 'spki', format: 'pem' })
+crypto.createPublicKey({ key: rawPubC, type: 'spki', format: 'pem' })
 ```
 
 服务端用自己的 服务临时私钥 和 客户临时公钥 计算共享秘密, 然后依次派生出会话使用的对称加密密钥: 客户端→服务端加密, 服务端→客户端加密
