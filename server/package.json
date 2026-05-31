@@ -2,11 +2,13 @@
     "name": "lingcat-server",
     "version": "0.0.0",
     "type": "module",
+    "exports": "./server.ts",
     "dependencies": {
         "express": "^5.2.1",
         "knex": "^3.2.10",
-        "lingcat-shared": "*",
         "lingcat-protocol": "*",
+        "lingcat-shared": "*",
+        "sqlite3": "^6.0.1",
         "ws": "^8.19.0"
     },
     "devDependencies": {
