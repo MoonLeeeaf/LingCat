@@ -1,5 +1,4 @@
 import { Package, Methods, LingCatProto } from 'lingcat-protocol'
-import fs from 'node:fs'
 import crypto from 'node:crypto'
 import { promisify } from 'node:util'
 
