@@ -1,5 +1,6 @@
 {
     "name": "lingcat-shared",
+    "type": "module",
     "version": "0.0.0",
     "exports": "./main.ts"
 }

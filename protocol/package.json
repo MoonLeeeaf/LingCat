@@ -1,6 +1,7 @@
 {
     "name": "lingcat-protocol",
     "version": "0.0.0",
+    "type": "module",
     "exports": "./main.ts",
     "dependencies": {
         "protobufjs": "^8.0.3"
