@@ -3,11 +3,10 @@ import express from 'express'
 import http from 'node:http'
 import { Package, Methods, LingCatProto } from 'lingcat-protocol'
 import fs from 'node:fs'
-import { fileExists } from 'lingcat-shared'
+import { fileExists, mkdir } from 'lingcat-shared'
 import crypto from 'node:crypto'
 import { promisify } from 'node:util'
-
-const dataPath = './_data'
+import { base_data_path, config } from './config.ts'
 
 const app = express()
 const httpServer = http.createServer(app)
@@ -15,17 +14,17 @@ const wsServer = new WebSocketServer({
     server: httpServer,
 })
 
-if (!fileExists(`${dataPath}/key`)) {
-    console.log('gen keys...')
-    fs.mkdirSync(`${dataPath}/key`, { recursive: true })
+if (!fileExists(`${base_data_path}/key/`)) {
+    console.log('[Server]', '生成服务端密钥...')
+    mkdir(`${base_data_path}/key`)
     const keyPair = await promisify(crypto.generateKeyPair)('ed25519')
-    fs.writeFileSync(`${dataPath}/key/public`, keyPair.publicKey.export({ type: 'spki', format: 'pem' }))
-    fs.writeFileSync(`${dataPath}/key/private`, keyPair.privateKey.export({ type: 'pkcs8', format: 'pem' }))
+    fs.writeFileSync(`${base_data_path}/key/public`, keyPair.publicKey.export({ type: 'spki', format: 'pem' }))
+    fs.writeFileSync(`${base_data_path}/key/private`, keyPair.privateKey.export({ type: 'pkcs8', format: 'pem' }))
 }
 
 wsServer.on('connection', async (client) => {
     const keyPair = await promisify(crypto.generateKeyPair)('x25519')
-    const privateKey = fs.readFileSync(`${dataPath}/key/private`)
+    const privateKey = fs.readFileSync(`${base_data_path}/key/private`)
     let keyServerToClient: ArrayBuffer | undefined
     let keyClientToServer: ArrayBuffer | undefined
 
@@ -121,4 +120,4 @@ wsServer.on('connection', async (client) => {
     })
 })
 
-httpServer.listen(3601)
+httpServer.listen(config.port || 3601, config.hostname)

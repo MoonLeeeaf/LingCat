@@ -8,3 +8,6 @@ export function fileExists(path: string) {
         return false
     }
 }
+export function mkdir(path: string) {
+    return fs.mkdirSync(path, { recursive: true })
+}
