@@ -4,6 +4,7 @@
     "type": "module",
     "dependencies": {
         "lingcat-server": "*",
+        "lingcat-protocol": "*",
         "lingcat-client-protocol": "*"
     }
 }
