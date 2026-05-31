@@ -1,0 +1,14 @@
+{
+    "name": "lingcat-client",
+    "type": "module",
+    "version": "0.1.0",
+    "scripts": {
+        "build": "npx vite build",
+        "build-watch": "npx vite --watch build"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^6.0.2",
+        "vite": "^8.0.14",
+        "vite-plugin-node-polyfills": "^0.28.0"
+    }
+}
