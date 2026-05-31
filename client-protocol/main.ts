@@ -6,6 +6,15 @@ export default class LingCatClient {
     server_ws: string
     server_public_key: string
     client?: WebSocket
+    session: {
+        keyClientToServer?: ArrayBuffer,
+        recvSeq: number,
+        sendSeq: number,
+    } = {
+            keyClientToServer: undefined,
+            recvSeq: -999,
+            sendSeq: -999,
+        }
 
     constructor(options: {
         server_ws: string,
@@ -15,20 +24,52 @@ export default class LingCatClient {
         this.server_public_key = options.server_public_key
     }
 
+    on_package_listeners: Function[] = []
+    invoke({ timeout, data, method_id, flags }: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
+        return new Promise((res: (mPackage: Package) => void, rej) => {
+            const mPackage = Package.fromObject({
+                method_id,
+                flags: (flags || 0) | Package.FLAG_ENCRYPTED,
+                data,
+            }).encrypt(this.session.sendSeq++, this.session.keyClientToServer!)
+
+            const requestId = mPackage.REQUEST_ID
+            const onRecv = (p: Package) => {
+                if (Buffer.compare(p.REQUEST_ID, requestId) === 0) {
+                    this.on_package_listeners.splice(this.on_package_listeners.indexOf(onRecv))
+                    res(p)
+                }
+            }
+            this.on_package_listeners.push(onRecv)
+
+            this.client?.send(mPackage.toBuffer())
+
+            timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
+        })
+    }
+    invokeUnEncrypted({ timeout, data, method_id, flags }: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
+        return new Promise((res, rej) => {
+            this.client?.send(Package.fromObject({
+                method_id,
+                flags: flags || 0,
+                data,
+            }).toBuffer())
+        })
+    }
+
     connect() {
         if (this.client == null)
             this.client = new WebSocket(this.server_ws)
-        
+
         const client = this.client
+        const session = this.session
+        const on_package_listeners = this.on_package_listeners
+
         client.binaryType = 'arraybuffer'
 
         client.addEventListener('open', async () => {
             const keyPair = await promisify(crypto.generateKeyPair)('x25519')
             let keyServerToClient: ArrayBuffer | undefined
-            let keyClientToServer: ArrayBuffer | undefined
-
-            let sendSeq = -1
-            let recvSeq = -1
 
             // 发送握手请求
             client?.send(Package.fromObject({
@@ -47,15 +88,15 @@ export default class LingCatClient {
                         // 按需要进行解密
                         const isEncrypted = (mPackage.FLAGS & Package.FLAG_ENCRYPTED) && (mPackage.METHOD_ID != Methods.HandShake_Response)
                         if (isEncrypted) {
-                            console.log("[Client] (Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH)
-                            mPackage = mPackage.decrypt(recvSeq, keyServerToClient!)
-                            recvSeq = mPackage.SEQ_AFTER_DECRYPTION
+                            console.log("[Client] (Encrypted, seq.recv: " + session.recvSeq + ", current seq.send: " + session.sendSeq + ") Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
+                            mPackage = mPackage.decrypt(session.recvSeq, keyServerToClient!)
+                            session.recvSeq = mPackage.SEQ_AFTER_DECRYPTION
                         } else {
-                            console.log("[Client] Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH)
+                            console.log("[Client] Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
                         }
                         // 如果是加密消息, 同时应该返回加密的消息
                         function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
-                            client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keyClientToServer!) : p).toBuffer())
+                            client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(session.sendSeq++, session.keyClientToServer!) : p).toBuffer())
                         }
 
                         switch (mPackage.METHOD_ID) {
@@ -77,8 +118,8 @@ export default class LingCatClient {
                                 )) {
                                     console.log('[Client] Server verified!')
 
-                                    sendSeq = 0
-                                    recvSeq = -1
+                                    session.sendSeq = 0
+                                    session.recvSeq = -1
 
                                     let sharedSecret = crypto.diffieHellman({
                                         privateKey: keyPair.privateKey,
@@ -87,7 +128,7 @@ export default class LingCatClient {
 
                                     // 服务端交互所需要的对称密钥
                                     keyServerToClient = crypto.hkdfSync('sha256', sharedSecret, res.salt, 'server-to-client', 32)
-                                    keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, res.salt, 'client-to-server', 32)
+                                    session.keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, res.salt, 'client-to-server', 32)
                                     sharedSecret.fill(0)
 
                                     const id = setInterval(() => sendPackage(Package.fromObject({
@@ -107,6 +148,7 @@ export default class LingCatClient {
                                 break
                             }
                         }
+                        on_package_listeners.forEach((v) => v(mPackage))
                     } catch (e) {
                         console.error(e)
                     }
