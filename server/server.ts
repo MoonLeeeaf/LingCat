@@ -49,14 +49,15 @@ export default function createLingCatServer() {
                 // 按需要进行解密
                 const isEncrypted = (mPackage.FLAGS & Package.FLAG_ENCRYPTED) && (mPackage.METHOD_ID != Methods.HandShake_Request)
                 if (isEncrypted) {
-                    console.log("[Server] (Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH)
+                    console.log("[Server] (Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
                     mPackage = mPackage.decrypt(recvSeq, keyClientToServer!)
                     recvSeq = mPackage.SEQ_AFTER_DECRYPTION
                 } else {
-                    console.log("[Server] Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH)
+                    console.log("[Server] Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
                 }
                 // 如果是加密消息, 同时应该返回加密的消息
                 function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
+                    p.REQUEST_ID = mPackage.REQUEST_ID
                     client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keyServerToClient!) : p).toBuffer())
                 }
 
@@ -112,6 +113,15 @@ export default function createLingCatServer() {
                             }).finish()
                         }))
                         break
+                    }
+                    default: {
+                        sendPackage(Package.fromObject({
+                            method_id: Methods.Unknown_Method_Response,
+                            flags: 0,
+                            data: LingCatProto.methods.Unknown_Method_Response.encode({
+                                requestMethod: mPackage.METHOD_ID
+                            }).finish()
+                        }))
                     }
                 }
 
