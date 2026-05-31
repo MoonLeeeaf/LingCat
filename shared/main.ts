@@ -1,8 +1,8 @@
-import fs from 'node:fs/promises'
+import fs from 'node:fs'
 
-export async function fileExists(path: string) {
+export function fileExists(path: string) {
     try {
-        await fs.stat(path)
+        fs.statSync(path)
         return true
     } catch (e) {
         return false

@@ -15,7 +15,7 @@ const wsServer = new WebSocketServer({
     server: httpServer,
 })
 
-if (!await fileExists(`${dataPath}/key`)) {
+if (!fileExists(`${dataPath}/key`)) {
     console.log('gen keys...')
     fs.mkdirSync(`${dataPath}/key`, { recursive: true })
     const keyPair = await promisify(crypto.generateKeyPair)('ed25519')
