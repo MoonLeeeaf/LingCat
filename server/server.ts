@@ -7,6 +7,7 @@ import { fileExists, mkdir } from 'lingcat-shared'
 import crypto from 'node:crypto'
 import { promisify } from 'node:util'
 import { base_data_path } from './config.ts'
+import UserApi from './api/UserApi.ts'
 
 export default function createLingCatServer() {
     const app = express()
@@ -125,6 +126,7 @@ export default function createLingCatServer() {
                     }
                 }
 
+                UserApi.onCall(sendPackage, mPackage)
             } catch (e) {
                 console.error(e)
             }
