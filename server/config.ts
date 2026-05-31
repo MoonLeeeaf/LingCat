@@ -11,7 +11,12 @@ if (!fileExists(base_data_path + '/config.json'))
         port: 3601,
     }))
 
-export const config: {
+export let config: {
     port?: number,
     hostname?: string,
-} = JSON.parse(fs.readFileSync(base_data_path + '/config.json', 'utf8'))
+} = {}
+try {
+    config = JSON.parse(fs.readFileSync(base_data_path + '/config.json', 'utf8'))
+} catch(e) {
+    console.log(e)
+}
