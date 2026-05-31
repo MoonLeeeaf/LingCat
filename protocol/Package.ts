@@ -17,6 +17,11 @@ export default class Package {
     FLAGS: number
     LENGTH: number
 
+    /**
+     * 一般规定, 发出端设定好请求 ID 后, 接收端以同样的请求 ID 响应数据, 发出端对比以接收响应
+     */
+    REQUEST_ID: Uint8Array
+
     SEQ_AFTER_DECRYPTION: number = -999
 
     data: Uint8Array
@@ -29,7 +34,8 @@ export default class Package {
         mPackage.METHOD_ID = buffer.readUInt16LE(0)
         mPackage.FLAGS = buffer.readUInt16LE(0 + 2)
         mPackage.LENGTH = buffer.readUInt32LE(0 + 2 + 2)
-        mPackage.data = buffer.subarray(0 + 2 + 2 + 4, 0 + 2 + 2 + 4 + mPackage.LENGTH)
+        mPackage.REQUEST_ID = buffer.subarray(0 + 2 + 2 + 4, 0 + 2 + 2 + 4 + 6)
+        mPackage.data = buffer.subarray(0 + 2 + 2 + 4 + 6, 0 + 2 + 2 + 4 + 6 + mPackage.LENGTH)
         return mPackage
     }
 
@@ -43,6 +49,7 @@ export default class Package {
         mPackage.METHOD_ID = method_id
         mPackage.FLAGS = flags
         mPackage.LENGTH = buffer.length
+        mPackage.REQUEST_ID = crypto.randomBytes(6)
         mPackage.data = buffer
         return mPackage
     }
@@ -94,6 +101,7 @@ export default class Package {
         mPackage.FLAGS = this.FLAGS | Package.FLAG_ENCRYPTED
         mPackage.data = this.encryptData(seq, key)
         mPackage.LENGTH = mPackage.data.length
+        mPackage.REQUEST_ID = this.REQUEST_ID
         return mPackage
     }
 
@@ -104,15 +112,17 @@ export default class Package {
         mPackage.FLAGS = this.FLAGS & Package.FLAG_ENCRYPTED
         mPackage.data = this.decryptData(seq, key)
         mPackage.LENGTH = mPackage.data.length
+        mPackage.REQUEST_ID = this.REQUEST_ID
         return mPackage
     }
 
     toBuffer() {
-        const buffer = Buffer.allocUnsafe(2 + 2 + 2 + 4 + this.data.length)
+        const buffer = Buffer.allocUnsafe(2 + 2 + 2 + 4 + 6 + this.data.length)
         buffer.writeUInt16LE(this.METHOD_ID, 0)
         buffer.writeUInt16LE(this.FLAGS, 0 + 2)
         buffer.writeUInt32LE(this.data.length, 0 + 2 + 2)
-        buffer.set(this.data, 0 + 2 + 2 + 4)
+        buffer.set(this.REQUEST_ID, 0 + 2 + 2 + 4)
+        buffer.set(this.data, 0 + 2 + 2 + 4 + 6)
         return buffer
     }
 }
