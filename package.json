@@ -6,10 +6,12 @@
         "./shared",
         "./protocol",
         "./client-protocol",
-        "./client"
+        "./client",
+        "./test"
     ],
     "scripts": {
         "server": "npx tsx ./server/main.ts",
+        "test": "npx tsx ./test/main.ts",
         "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js --dts ./protocol/*.proto"
     },
     "devDependencies": {

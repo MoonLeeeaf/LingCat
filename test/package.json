@@ -1,0 +1,9 @@
+{
+    "name": "lingcat-test",
+    "version": "0.0.0",
+    "type": "module",
+    "dependencies": {
+        "lingcat-server": "*",
+        "lingcat-client-protocol": "*"
+    }
+}
