@@ -5,7 +5,8 @@
         "./server",
         "./shared",
         "./protocol",
-        "./client-protocol"
+        "./client-protocol",
+        "./client"
     ],
     "scripts": {
         "server": "npx tsx ./server/main.ts",
