@@ -18,9 +18,11 @@ export default class LingCatClient {
     connect() {
         if (this.client == null)
             this.client = new WebSocket(this.server_ws)
-        this.client.binaryType = 'arraybuffer'
+        
+        const client = this.client
+        client.binaryType = 'arraybuffer'
 
-        this.client.addEventListener('open', async () => {
+        client.addEventListener('open', async () => {
             const keyPair = await promisify(crypto.generateKeyPair)('x25519')
             let keyServerToClient: ArrayBuffer | undefined
             let keyClientToServer: ArrayBuffer | undefined
@@ -29,7 +31,7 @@ export default class LingCatClient {
             let recvSeq = -1
 
             // 发送握手请求
-            this.client?.send(Package.fromObject({
+            client?.send(Package.fromObject({
                 method_id: Methods.HandShake_Request,
                 flags: 0,
                 data: LingCatProto.methods.HandShake_Request.encode({
@@ -37,7 +39,7 @@ export default class LingCatClient {
                 }).finish()
             }).toBuffer())
 
-            this.client?.addEventListener('message', async (event) => {
+            client?.addEventListener('message', async (event) => {
                 if (event.data instanceof ArrayBuffer) {
                     try {
                         let mPackage = Package.fromBuffer(event.data)
@@ -53,7 +55,7 @@ export default class LingCatClient {
                         }
                         // 如果是加密消息, 同时应该返回加密的消息
                         function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
-                            this.client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keyClientToServer!) : p).toBuffer())
+                            client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keyClientToServer!) : p).toBuffer())
                         }
 
                         switch (mPackage.METHOD_ID) {
@@ -95,7 +97,7 @@ export default class LingCatClient {
                                             time: Date.now()
                                         }).finish()
                                     }), { forceEncrypt: true }), 10000)
-                                    this.client?.addEventListener('close', () => clearInterval(id))
+                                    client?.addEventListener('close', () => clearInterval(id))
                                 }
                                 break
                             }
