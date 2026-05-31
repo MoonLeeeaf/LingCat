@@ -1092,6 +1092,262 @@ export const lingcat = $root.lingcat = (() => {
          */
         const methods = {};
 
+        methods.Unknown_Method_Response = (function() {
+
+            /**
+             * Properties of an Unknown_Method_Response.
+             * @typedef {Object} lingcat.methods.Unknown_Method_Response.$Properties
+             * @property {number|null} [requestMethod] Unknown_Method_Response requestMethod
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+             */
+
+            /**
+             * Properties of an Unknown_Method_Response.
+             * @memberof lingcat.methods
+             * @interface IUnknown_Method_Response
+             * @augments lingcat.methods.Unknown_Method_Response.$Properties
+             * @deprecated Use lingcat.methods.Unknown_Method_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of an Unknown_Method_Response.
+             * @typedef {lingcat.methods.Unknown_Method_Response.$Properties} lingcat.methods.Unknown_Method_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Unknown_Method_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Unknown_Method_Response.
+             * @constructor
+             * @param {lingcat.methods.Unknown_Method_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+             */
+            function Unknown_Method_Response(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Unknown_Method_Response requestMethod.
+             * @member {number} requestMethod
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @instance
+             */
+            Unknown_Method_Response.prototype.requestMethod = 0;
+
+            /**
+             * Creates a new Unknown_Method_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {lingcat.methods.Unknown_Method_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Unknown_Method_Response} Unknown_Method_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Unknown_Method_Response.$Shape): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+             *   (properties?: lingcat.methods.Unknown_Method_Response.$Properties): lingcat.methods.Unknown_Method_Response;
+             * }}
+             */
+            Unknown_Method_Response.create = function create(properties) {
+                return new Unknown_Method_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Unknown_Method_Response message. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {lingcat.methods.Unknown_Method_Response.$Properties} message Unknown_Method_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Unknown_Method_Response.encode = function encode(message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                if (message.requestMethod != null && Object.hasOwnProperty.call(message, "requestMethod"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.requestMethod);
+                if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Unknown_Method_Response message, length delimited. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {lingcat.methods.Unknown_Method_Response.$Properties} message Unknown_Method_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Unknown_Method_Response.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Unknown_Method_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Unknown_Method_Response.decode = function decode(reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw Error("max depth exceeded");
+                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Unknown_Method_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.int32())
+                                message.requestMethod = value;
+                            else
+                                delete message.requestMethod;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+                if (_end !== undefined)
+                    throw Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Unknown_Method_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Unknown_Method_Response.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Unknown_Method_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Unknown_Method_Response.verify = function verify(message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.requestMethod != null && message.hasOwnProperty("requestMethod"))
+                    if (!$util.isInteger(message.requestMethod))
+                        return "requestMethod: integer expected";
+                return null;
+            };
+
+            /**
+             * Creates an Unknown_Method_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Unknown_Method_Response} Unknown_Method_Response
+             */
+            Unknown_Method_Response.fromObject = function fromObject(object, _depth) {
+                if (object instanceof $root.lingcat.methods.Unknown_Method_Response)
+                    return object;
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Unknown_Method_Response();
+                if (object.requestMethod != null)
+                    if (Number(object.requestMethod) !== 0)
+                        message.requestMethod = object.requestMethod | 0;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Unknown_Method_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {lingcat.methods.Unknown_Method_Response} message Unknown_Method_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Unknown_Method_Response.toObject = function toObject(message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.requestMethod = 0;
+                if (message.requestMethod != null && message.hasOwnProperty("requestMethod"))
+                    object.requestMethod = message.requestMethod;
+                return object;
+            };
+
+            /**
+             * Converts this Unknown_Method_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Unknown_Method_Response.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Unknown_Method_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Unknown_Method_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Unknown_Method_Response.getTypeUrl = function getTypeUrl(prefix) {
+                if (prefix === undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Unknown_Method_Response";
+            };
+
+            return Unknown_Method_Response;
+        })();
+
         methods.HandShake_Request = (function() {
 
             /**

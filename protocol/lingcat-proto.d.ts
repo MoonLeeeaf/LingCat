@@ -411,6 +411,123 @@ export namespace lingcat {
     namespace methods {
 
         /**
+         * Properties of an Unknown_Method_Response.
+         * @deprecated Use lingcat.methods.Unknown_Method_Response.$Properties instead.
+         */
+        interface IUnknown_Method_Response extends lingcat.methods.Unknown_Method_Response.$Properties {
+        }
+
+        /** Represents an Unknown_Method_Response. */
+        class Unknown_Method_Response {
+
+            /**
+             * Constructs a new Unknown_Method_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Unknown_Method_Response.$Properties);
+
+            /** Unknown fields preserved while decoding */
+            $unknowns?: Uint8Array[];
+
+            /** Unknown_Method_Response requestMethod. */
+            requestMethod: number;
+
+            /**
+             * Creates a new Unknown_Method_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Unknown_Method_Response instance
+             */
+            static create(properties: lingcat.methods.Unknown_Method_Response.$Shape): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+            static create(properties?: lingcat.methods.Unknown_Method_Response.$Properties): lingcat.methods.Unknown_Method_Response;
+
+            /**
+             * Encodes the specified Unknown_Method_Response message. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * @param message Unknown_Method_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Unknown_Method_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Unknown_Method_Response message, length delimited. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * @param message Unknown_Method_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Unknown_Method_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Unknown_Method_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+
+            /**
+             * Decodes an Unknown_Method_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+
+            /**
+             * Verifies an Unknown_Method_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Unknown_Method_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Unknown_Method_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Unknown_Method_Response;
+
+            /**
+             * Creates a plain object from an Unknown_Method_Response message. Also converts values to other types if specified.
+             * @param message Unknown_Method_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Unknown_Method_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Unknown_Method_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Unknown_Method_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Unknown_Method_Response {
+
+            /** Properties of an Unknown_Method_Response. */
+            interface $Properties {
+
+                /** Unknown_Method_Response requestMethod */
+                requestMethod?: (number|null);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Unknown_Method_Response. */
+            type $Shape = lingcat.methods.Unknown_Method_Response.$Properties;
+        }
+
+        /**
          * Properties of a HandShake_Request.
          * @deprecated Use lingcat.methods.HandShake_Request.$Properties instead.
          */
