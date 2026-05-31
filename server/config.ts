@@ -17,6 +17,6 @@ export let config: {
 } = {}
 try {
     config = JSON.parse(fs.readFileSync(base_data_path + '/config.json', 'utf8'))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
