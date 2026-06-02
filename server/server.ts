@@ -78,8 +78,8 @@ export default function createLingCatServer() {
                         const salt = crypto.randomBytes(16)
 
                         // 与客户端交互所需要的对称密钥
-                        keyServerToClient = await promisify(crypto.hkdf)('sha256', sharedSecret, salt, 'server-to-client', 32)
-                        keyClientToServer = await promisify(crypto.hkdf)('sha256', sharedSecret, salt, 'client-to-server', 32)
+                        keyServerToClient = crypto.hkdfSync('sha256', sharedSecret, salt, 'server-to-client', 32)
+                        keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, salt, 'client-to-server', 32)
                         sharedSecret.fill(0)
 
                         sendSeq = 0

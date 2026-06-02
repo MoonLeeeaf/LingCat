@@ -68,7 +68,7 @@ export default class LingCatClient {
         client.binaryType = 'arraybuffer'
 
         client.addEventListener('open', async () => {
-            const keyPair = await promisify(crypto.generateKeyPair)('x25519')
+            const keyPair = crypto.generateKeyPairSync('x25519')
             let keyServerToClient: ArrayBuffer | undefined
 
             // 发送握手请求
@@ -106,6 +106,7 @@ export default class LingCatClient {
 
                                 const serverPublicKey = Buffer.from(this.server_public_key)
 
+                                // 验证服务端签名的消息
                                 if (crypto.verify(
                                     null,
                                     Buffer.concat([
