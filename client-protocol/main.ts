@@ -48,12 +48,25 @@ export default class LingCatClient {
         })
     }
     invokeUnEncrypted({ timeout, data, method_id, flags }: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
-        return new Promise((res, rej) => {
-            this.client?.send(Package.fromObject({
+        return new Promise((res: (mPackage: Package) => void, rej) => {
+            const mPackage = Package.fromObject({
                 method_id,
                 flags: flags || 0,
                 data,
-            }).toBuffer())
+            })
+
+            const requestId = mPackage.REQUEST_ID
+            const onRecv = (p: Package) => {
+                if (Buffer.compare(p.REQUEST_ID, requestId) === 0) {
+                    this.on_package_listeners.splice(this.on_package_listeners.indexOf(onRecv))
+                    res(p)
+                }
+            }
+            this.on_package_listeners.push(onRecv)
+
+            this.client?.send(mPackage.toBuffer())
+
+            timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
         })
     }
 
