@@ -13,13 +13,17 @@ const db = knex({
 
 interface IServerUser extends IUser {
     created_at: number
+    password: string
 }
+
+export type { IServerUser }
 
 (!await db.schema.hasTable('Users')) && await db.schema.createTable('Users', (table) => {
     table.increments('key_id').primary()
     table.string('id').unique().notNullable()
     table.string('username').unique()
     table.string('nickname').notNullable()
+    table.string('password').notNullable()
     table.integer('created_at').notNullable()
 })
 
@@ -27,25 +31,30 @@ export default class UserDataBase {
     static async createUser({
         username,
         nickname,
+        password,
     }: {
-        username?: string,
+        username?: string | null,
         nickname: string,
+        password: string,
     }) {
         try {
-            return await db<IServerUser>('Users').insert({
+            const userId = crypto.randomUUID()
+            await db<IServerUser>('Users').insert({
                 username,
                 nickname,
+                password,
                 created_at: Date.now(),
-                id: crypto.randomUUID(),
+                id: userId,
             })
+            return userId
         } catch (e) {
             const s = e + ''
             if (s.indexOf('UNIQUE') != -1 && s.indexOf('username') != -1)
-                throw { msg: '用户名重复!', cause: e }
+                throw { message: '用户名重复!', cause: e }
             else if (s.indexOf('NOT NULL') != -1 && s.indexOf('nickname') != -1)
-                throw { msg: '缺失昵称!', cause: e }
+                throw { message: '缺失昵称!', cause: e }
             else
-                throw { msg: s, cause: e }
+                throw { message: s, cause: e }
         }
     }
     static async queryUserById(id: string) {
@@ -60,5 +69,8 @@ export default class UserDataBase {
     }
     static async updateNickName(id: string, username: string) {
         return await db<IServerUser>('Users').update({ username }).where('id', id)
+    }
+    static async updatePassWord(id: string, password: string) {
+        return await db<IServerUser>('Users').update({ password }).where('id', id)
     }
 }
