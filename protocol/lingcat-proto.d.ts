@@ -411,120 +411,126 @@ export namespace lingcat {
     namespace methods {
 
         /**
-         * Properties of an Unknown_Method_Response.
-         * @deprecated Use lingcat.methods.Unknown_Method_Response.$Properties instead.
+         * Properties of an Error_Response.
+         * @deprecated Use lingcat.methods.Error_Response.$Properties instead.
          */
-        interface IUnknown_Method_Response extends lingcat.methods.Unknown_Method_Response.$Properties {
+        interface IError_Response extends lingcat.methods.Error_Response.$Properties {
         }
 
-        /** Represents an Unknown_Method_Response. */
-        class Unknown_Method_Response {
+        /** Represents an Error_Response. */
+        class Error_Response {
 
             /**
-             * Constructs a new Unknown_Method_Response.
+             * Constructs a new Error_Response.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.Unknown_Method_Response.$Properties);
+            constructor(properties?: lingcat.methods.Error_Response.$Properties);
 
             /** Unknown fields preserved while decoding */
             $unknowns?: Uint8Array[];
 
-            /** Unknown_Method_Response requestMethod. */
+            /** Error_Response requestMethod. */
             requestMethod: number;
 
+            /** Error_Response message. */
+            message?: (string|null);
+
             /**
-             * Creates a new Unknown_Method_Response instance using the specified properties.
+             * Creates a new Error_Response instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Unknown_Method_Response instance
+             * @returns Error_Response instance
              */
-            static create(properties: lingcat.methods.Unknown_Method_Response.$Shape): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
-            static create(properties?: lingcat.methods.Unknown_Method_Response.$Properties): lingcat.methods.Unknown_Method_Response;
+            static create(properties: lingcat.methods.Error_Response.$Shape): lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape;
+            static create(properties?: lingcat.methods.Error_Response.$Properties): lingcat.methods.Error_Response;
 
             /**
-             * Encodes the specified Unknown_Method_Response message. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
-             * @param message Unknown_Method_Response message or plain object to encode
+             * Encodes the specified Error_Response message. Does not implicitly {@link lingcat.methods.Error_Response.verify|verify} messages.
+             * @param message Error_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.Unknown_Method_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Error_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Unknown_Method_Response message, length delimited. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
-             * @param message Unknown_Method_Response message or plain object to encode
+             * Encodes the specified Error_Response message, length delimited. Does not implicitly {@link lingcat.methods.Error_Response.verify|verify} messages.
+             * @param message Error_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.Unknown_Method_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Error_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes an Unknown_Method_Response message from the specified reader or buffer.
+             * Decodes an Error_Response message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @returns {lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape} Error_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape;
 
             /**
-             * Decodes an Unknown_Method_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Error_Response message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @returns {lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape} Error_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape;
 
             /**
-             * Verifies an Unknown_Method_Response message.
+             * Verifies an Error_Response message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates an Unknown_Method_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Error_Response message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Unknown_Method_Response
+             * @returns Error_Response
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Unknown_Method_Response;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Error_Response;
 
             /**
-             * Creates a plain object from an Unknown_Method_Response message. Also converts values to other types if specified.
-             * @param message Unknown_Method_Response
+             * Creates a plain object from an Error_Response message. Also converts values to other types if specified.
+             * @param message Error_Response
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.Unknown_Method_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Error_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Unknown_Method_Response to JSON.
+             * Converts this Error_Response to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Unknown_Method_Response
+             * Gets the type url for Error_Response
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Unknown_Method_Response {
+        namespace Error_Response {
 
-            /** Properties of an Unknown_Method_Response. */
+            /** Properties of an Error_Response. */
             interface $Properties {
 
-                /** Unknown_Method_Response requestMethod */
+                /** Error_Response requestMethod */
                 requestMethod?: (number|null);
+
+                /** Error_Response message */
+                message?: (string|null);
 
                 /** Unknown fields preserved while decoding */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of an Unknown_Method_Response. */
-            type $Shape = lingcat.methods.Unknown_Method_Response.$Properties;
+            /** Shape of an Error_Response. */
+            type $Shape = lingcat.methods.Error_Response.$Properties;
         }
 
         /**
@@ -1008,126 +1014,249 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a User_Registration.
-         * @deprecated Use lingcat.methods.User_Registration.$Properties instead.
+         * Properties of a User_Registration_Request.
+         * @deprecated Use lingcat.methods.User_Registration_Request.$Properties instead.
          */
-        interface IUser_Registration extends lingcat.methods.User_Registration.$Properties {
+        interface IUser_Registration_Request extends lingcat.methods.User_Registration_Request.$Properties {
         }
 
-        /** Represents a User_Registration. */
-        class User_Registration {
+        /** Represents a User_Registration_Request. */
+        class User_Registration_Request {
 
             /**
-             * Constructs a new User_Registration.
+             * Constructs a new User_Registration_Request.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.User_Registration.$Properties);
+            constructor(properties?: lingcat.methods.User_Registration_Request.$Properties);
 
             /** Unknown fields preserved while decoding */
             $unknowns?: Uint8Array[];
 
-            /** User_Registration username. */
+            /** User_Registration_Request username. */
             username?: (string|null);
 
-            /** User_Registration password. */
+            /** User_Registration_Request password. */
             password: string;
 
+            /** User_Registration_Request nickname. */
+            nickname: string;
+
             /**
-             * Creates a new User_Registration instance using the specified properties.
+             * Creates a new User_Registration_Request instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns User_Registration instance
+             * @returns User_Registration_Request instance
              */
-            static create(properties: lingcat.methods.User_Registration.$Shape): lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape;
-            static create(properties?: lingcat.methods.User_Registration.$Properties): lingcat.methods.User_Registration;
+            static create(properties: lingcat.methods.User_Registration_Request.$Shape): lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape;
+            static create(properties?: lingcat.methods.User_Registration_Request.$Properties): lingcat.methods.User_Registration_Request;
 
             /**
-             * Encodes the specified User_Registration message. Does not implicitly {@link lingcat.methods.User_Registration.verify|verify} messages.
-             * @param message User_Registration message or plain object to encode
+             * Encodes the specified User_Registration_Request message. Does not implicitly {@link lingcat.methods.User_Registration_Request.verify|verify} messages.
+             * @param message User_Registration_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.User_Registration.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.User_Registration_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified User_Registration message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration.verify|verify} messages.
-             * @param message User_Registration message or plain object to encode
+             * Encodes the specified User_Registration_Request message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration_Request.verify|verify} messages.
+             * @param message User_Registration_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.User_Registration.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.User_Registration_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a User_Registration message from the specified reader or buffer.
+             * Decodes a User_Registration_Request message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape} User_Registration
+             * @returns {lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape} User_Registration_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape;
 
             /**
-             * Decodes a User_Registration message from the specified reader or buffer, length delimited.
+             * Decodes a User_Registration_Request message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape} User_Registration
+             * @returns {lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape} User_Registration_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape;
 
             /**
-             * Verifies a User_Registration message.
+             * Verifies a User_Registration_Request message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a User_Registration message from a plain object. Also converts values to their respective internal types.
+             * Creates a User_Registration_Request message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns User_Registration
+             * @returns User_Registration_Request
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Registration;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Registration_Request;
 
             /**
-             * Creates a plain object from a User_Registration message. Also converts values to other types if specified.
-             * @param message User_Registration
+             * Creates a plain object from a User_Registration_Request message. Also converts values to other types if specified.
+             * @param message User_Registration_Request
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.User_Registration, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.User_Registration_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this User_Registration to JSON.
+             * Converts this User_Registration_Request to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for User_Registration
+             * Gets the type url for User_Registration_Request
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace User_Registration {
+        namespace User_Registration_Request {
 
-            /** Properties of a User_Registration. */
+            /** Properties of a User_Registration_Request. */
             interface $Properties {
 
-                /** User_Registration username */
+                /** User_Registration_Request username */
                 username?: (string|null);
 
-                /** User_Registration password */
+                /** User_Registration_Request password */
                 password?: (string|null);
+
+                /** User_Registration_Request nickname */
+                nickname?: (string|null);
 
                 /** Unknown fields preserved while decoding */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a User_Registration. */
-            type $Shape = lingcat.methods.User_Registration.$Properties;
+            /** Shape of a User_Registration_Request. */
+            type $Shape = lingcat.methods.User_Registration_Request.$Properties;
+        }
+
+        /**
+         * Properties of a User_Registration_Response.
+         * @deprecated Use lingcat.methods.User_Registration_Response.$Properties instead.
+         */
+        interface IUser_Registration_Response extends lingcat.methods.User_Registration_Response.$Properties {
+        }
+
+        /** Represents a User_Registration_Response. */
+        class User_Registration_Response {
+
+            /**
+             * Constructs a new User_Registration_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.User_Registration_Response.$Properties);
+
+            /** Unknown fields preserved while decoding */
+            $unknowns?: Uint8Array[];
+
+            /** User_Registration_Response id. */
+            id: string;
+
+            /**
+             * Creates a new User_Registration_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns User_Registration_Response instance
+             */
+            static create(properties: lingcat.methods.User_Registration_Response.$Shape): lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape;
+            static create(properties?: lingcat.methods.User_Registration_Response.$Properties): lingcat.methods.User_Registration_Response;
+
+            /**
+             * Encodes the specified User_Registration_Response message. Does not implicitly {@link lingcat.methods.User_Registration_Response.verify|verify} messages.
+             * @param message User_Registration_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.User_Registration_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified User_Registration_Response message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration_Response.verify|verify} messages.
+             * @param message User_Registration_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.User_Registration_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a User_Registration_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape} User_Registration_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape;
+
+            /**
+             * Decodes a User_Registration_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape} User_Registration_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape;
+
+            /**
+             * Verifies a User_Registration_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a User_Registration_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns User_Registration_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Registration_Response;
+
+            /**
+             * Creates a plain object from a User_Registration_Response message. Also converts values to other types if specified.
+             * @param message User_Registration_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.User_Registration_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this User_Registration_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for User_Registration_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace User_Registration_Response {
+
+            /** Properties of a User_Registration_Response. */
+            interface $Properties {
+
+                /** User_Registration_Response id */
+                id?: (string|null);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a User_Registration_Response. */
+            type $Shape = lingcat.methods.User_Registration_Response.$Properties;
         }
     }
 }

@@ -1092,37 +1092,38 @@ export const lingcat = $root.lingcat = (() => {
          */
         const methods = {};
 
-        methods.Unknown_Method_Response = (function() {
+        methods.Error_Response = (function() {
 
             /**
-             * Properties of an Unknown_Method_Response.
-             * @typedef {Object} lingcat.methods.Unknown_Method_Response.$Properties
-             * @property {number|null} [requestMethod] Unknown_Method_Response requestMethod
+             * Properties of an Error_Response.
+             * @typedef {Object} lingcat.methods.Error_Response.$Properties
+             * @property {number|null} [requestMethod] Error_Response requestMethod
+             * @property {string|null} [message] Error_Response message
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
              */
 
             /**
-             * Properties of an Unknown_Method_Response.
+             * Properties of an Error_Response.
              * @memberof lingcat.methods
-             * @interface IUnknown_Method_Response
-             * @augments lingcat.methods.Unknown_Method_Response.$Properties
-             * @deprecated Use lingcat.methods.Unknown_Method_Response.$Properties instead.
+             * @interface IError_Response
+             * @augments lingcat.methods.Error_Response.$Properties
+             * @deprecated Use lingcat.methods.Error_Response.$Properties instead.
              */
 
             /**
-             * Shape of an Unknown_Method_Response.
-             * @typedef {lingcat.methods.Unknown_Method_Response.$Properties} lingcat.methods.Unknown_Method_Response.$Shape
+             * Shape of an Error_Response.
+             * @typedef {lingcat.methods.Error_Response.$Properties} lingcat.methods.Error_Response.$Shape
              */
 
             /**
-             * Constructs a new Unknown_Method_Response.
+             * Constructs a new Error_Response.
              * @memberof lingcat.methods
-             * @classdesc Represents an Unknown_Method_Response.
+             * @classdesc Represents an Error_Response.
              * @constructor
-             * @param {lingcat.methods.Unknown_Method_Response.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Error_Response.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
              */
-            function Unknown_Method_Response(properties) {
+            function Error_Response(properties) {
                 if (properties)
                     for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -1130,39 +1131,56 @@ export const lingcat = $root.lingcat = (() => {
             }
 
             /**
-             * Unknown_Method_Response requestMethod.
+             * Error_Response requestMethod.
              * @member {number} requestMethod
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @instance
              */
-            Unknown_Method_Response.prototype.requestMethod = 0;
+            Error_Response.prototype.requestMethod = 0;
 
             /**
-             * Creates a new Unknown_Method_Response instance using the specified properties.
+             * Error_Response message.
+             * @member {string|null|undefined} message
+             * @memberof lingcat.methods.Error_Response
+             * @instance
+             */
+            Error_Response.prototype.message = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            Object.defineProperty(Error_Response.prototype, "_message", {
+                get: $util.oneOfGetter($oneOfFields = ["message"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Error_Response instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
-             * @param {lingcat.methods.Unknown_Method_Response.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Unknown_Method_Response} Unknown_Method_Response instance
+             * @param {lingcat.methods.Error_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Error_Response} Error_Response instance
              * @type {{
-             *   (properties: lingcat.methods.Unknown_Method_Response.$Shape): lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape;
-             *   (properties?: lingcat.methods.Unknown_Method_Response.$Properties): lingcat.methods.Unknown_Method_Response;
+             *   (properties: lingcat.methods.Error_Response.$Shape): lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape;
+             *   (properties?: lingcat.methods.Error_Response.$Properties): lingcat.methods.Error_Response;
              * }}
              */
-            Unknown_Method_Response.create = function create(properties) {
-                return new Unknown_Method_Response(properties);
+            Error_Response.create = function create(properties) {
+                return new Error_Response(properties);
             };
 
             /**
-             * Encodes the specified Unknown_Method_Response message. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * Encodes the specified Error_Response message. Does not implicitly {@link lingcat.methods.Error_Response.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
-             * @param {lingcat.methods.Unknown_Method_Response.$Properties} message Unknown_Method_Response message or plain object to encode
+             * @param {lingcat.methods.Error_Response.$Properties} message Error_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Unknown_Method_Response.encode = function encode(message, writer, _depth) {
+            Error_Response.encode = function encode(message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === undefined)
@@ -1171,6 +1189,8 @@ export const lingcat = $root.lingcat = (() => {
                     throw Error("max depth exceeded");
                 if (message.requestMethod != null && Object.hasOwnProperty.call(message, "requestMethod"))
                     writer.uint32(/* id 1, wireType 0 =*/8).int32(message.requestMethod);
+                if (message.message != null && Object.hasOwnProperty.call(message, "message"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
                 if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -1178,37 +1198,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Unknown_Method_Response message, length delimited. Does not implicitly {@link lingcat.methods.Unknown_Method_Response.verify|verify} messages.
+             * Encodes the specified Error_Response message, length delimited. Does not implicitly {@link lingcat.methods.Error_Response.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
-             * @param {lingcat.methods.Unknown_Method_Response.$Properties} message Unknown_Method_Response message or plain object to encode
+             * @param {lingcat.methods.Error_Response.$Properties} message Error_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Unknown_Method_Response.encodeDelimited = function encodeDelimited(message, writer) {
+            Error_Response.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an Unknown_Method_Response message from the specified reader or buffer.
+             * Decodes an Error_Response message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @returns {lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape} Error_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Unknown_Method_Response.decode = function decode(reader, length, _end, _depth, _target) {
+            Error_Response.decode = function decode(reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw Error("max depth exceeded");
-                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Unknown_Method_Response(), value;
+                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Error_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -1227,6 +1247,13 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.requestMethod;
                             continue;
                         }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.message = reader.string();
+                            message._message = "message";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     $util.makeProp(message, "$unknowns", false);
@@ -1238,74 +1265,82 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an Unknown_Method_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Error_Response message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Unknown_Method_Response & lingcat.methods.Unknown_Method_Response.$Shape} Unknown_Method_Response
+             * @returns {lingcat.methods.Error_Response & lingcat.methods.Error_Response.$Shape} Error_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Unknown_Method_Response.decodeDelimited = function decodeDelimited(reader) {
+            Error_Response.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an Unknown_Method_Response message.
+             * Verifies an Error_Response message.
              * @function verify
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Unknown_Method_Response.verify = function verify(message, _depth) {
+            Error_Response.verify = function verify(message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                let properties = {};
                 if (message.requestMethod != null && message.hasOwnProperty("requestMethod"))
                     if (!$util.isInteger(message.requestMethod))
                         return "requestMethod: integer expected";
+                if (message.message != null && message.hasOwnProperty("message")) {
+                    properties._message = 1;
+                    if (!$util.isString(message.message))
+                        return "message: string expected";
+                }
                 return null;
             };
 
             /**
-             * Creates an Unknown_Method_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Error_Response message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Unknown_Method_Response} Unknown_Method_Response
+             * @returns {lingcat.methods.Error_Response} Error_Response
              */
-            Unknown_Method_Response.fromObject = function fromObject(object, _depth) {
-                if (object instanceof $root.lingcat.methods.Unknown_Method_Response)
+            Error_Response.fromObject = function fromObject(object, _depth) {
+                if (object instanceof $root.lingcat.methods.Error_Response)
                     return object;
                 if (_depth === undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw Error("max depth exceeded");
-                let message = new $root.lingcat.methods.Unknown_Method_Response();
+                let message = new $root.lingcat.methods.Error_Response();
                 if (object.requestMethod != null)
                     if (Number(object.requestMethod) !== 0)
                         message.requestMethod = object.requestMethod | 0;
+                if (object.message != null)
+                    message.message = String(object.message);
                 return message;
             };
 
             /**
-             * Creates a plain object from an Unknown_Method_Response message. Also converts values to other types if specified.
+             * Creates a plain object from an Error_Response message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
-             * @param {lingcat.methods.Unknown_Method_Response} message Unknown_Method_Response
+             * @param {lingcat.methods.Error_Response} message Error_Response
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Unknown_Method_Response.toObject = function toObject(message, options, _depth) {
+            Error_Response.toObject = function toObject(message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === undefined)
@@ -1317,35 +1352,37 @@ export const lingcat = $root.lingcat = (() => {
                     object.requestMethod = 0;
                 if (message.requestMethod != null && message.hasOwnProperty("requestMethod"))
                     object.requestMethod = message.requestMethod;
+                if (message.message != null && message.hasOwnProperty("message"))
+                    object.message = message.message;
                 return object;
             };
 
             /**
-             * Converts this Unknown_Method_Response to JSON.
+             * Converts this Error_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Unknown_Method_Response.prototype.toJSON = function toJSON() {
+            Error_Response.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Unknown_Method_Response
+             * Gets the type url for Error_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.Unknown_Method_Response
+             * @memberof lingcat.methods.Error_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Unknown_Method_Response.getTypeUrl = function getTypeUrl(prefix) {
+            Error_Response.getTypeUrl = function getTypeUrl(prefix) {
                 if (prefix === undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Unknown_Method_Response";
+                return prefix + "/lingcat.methods.Error_Response";
             };
 
-            return Unknown_Method_Response;
+            return Error_Response;
         })();
 
         methods.HandShake_Request = (function() {
@@ -2481,38 +2518,39 @@ export const lingcat = $root.lingcat = (() => {
             return Ping_Response;
         })();
 
-        methods.User_Registration = (function() {
+        methods.User_Registration_Request = (function() {
 
             /**
-             * Properties of a User_Registration.
-             * @typedef {Object} lingcat.methods.User_Registration.$Properties
-             * @property {string|null} [username] User_Registration username
-             * @property {string|null} [password] User_Registration password
+             * Properties of a User_Registration_Request.
+             * @typedef {Object} lingcat.methods.User_Registration_Request.$Properties
+             * @property {string|null} [username] User_Registration_Request username
+             * @property {string|null} [password] User_Registration_Request password
+             * @property {string|null} [nickname] User_Registration_Request nickname
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
              */
 
             /**
-             * Properties of a User_Registration.
+             * Properties of a User_Registration_Request.
              * @memberof lingcat.methods
-             * @interface IUser_Registration
-             * @augments lingcat.methods.User_Registration.$Properties
-             * @deprecated Use lingcat.methods.User_Registration.$Properties instead.
+             * @interface IUser_Registration_Request
+             * @augments lingcat.methods.User_Registration_Request.$Properties
+             * @deprecated Use lingcat.methods.User_Registration_Request.$Properties instead.
              */
 
             /**
-             * Shape of a User_Registration.
-             * @typedef {lingcat.methods.User_Registration.$Properties} lingcat.methods.User_Registration.$Shape
+             * Shape of a User_Registration_Request.
+             * @typedef {lingcat.methods.User_Registration_Request.$Properties} lingcat.methods.User_Registration_Request.$Shape
              */
 
             /**
-             * Constructs a new User_Registration.
+             * Constructs a new User_Registration_Request.
              * @memberof lingcat.methods
-             * @classdesc Represents a User_Registration.
+             * @classdesc Represents a User_Registration_Request.
              * @constructor
-             * @param {lingcat.methods.User_Registration.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.User_Registration_Request.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
              */
-            function User_Registration(properties) {
+            function User_Registration_Request(properties) {
                 if (properties)
                     for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -2520,56 +2558,64 @@ export const lingcat = $root.lingcat = (() => {
             }
 
             /**
-             * User_Registration username.
+             * User_Registration_Request username.
              * @member {string|null|undefined} username
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @instance
              */
-            User_Registration.prototype.username = null;
+            User_Registration_Request.prototype.username = null;
 
             /**
-             * User_Registration password.
+             * User_Registration_Request password.
              * @member {string} password
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @instance
              */
-            User_Registration.prototype.password = "";
+            User_Registration_Request.prototype.password = "";
+
+            /**
+             * User_Registration_Request nickname.
+             * @member {string} nickname
+             * @memberof lingcat.methods.User_Registration_Request
+             * @instance
+             */
+            User_Registration_Request.prototype.nickname = "";
 
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
             // Virtual OneOf for proto3 optional field
-            Object.defineProperty(User_Registration.prototype, "_username", {
+            Object.defineProperty(User_Registration_Request.prototype, "_username", {
                 get: $util.oneOfGetter($oneOfFields = ["username"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
             /**
-             * Creates a new User_Registration instance using the specified properties.
+             * Creates a new User_Registration_Request instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
-             * @param {lingcat.methods.User_Registration.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.User_Registration} User_Registration instance
+             * @param {lingcat.methods.User_Registration_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.User_Registration_Request} User_Registration_Request instance
              * @type {{
-             *   (properties: lingcat.methods.User_Registration.$Shape): lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape;
-             *   (properties?: lingcat.methods.User_Registration.$Properties): lingcat.methods.User_Registration;
+             *   (properties: lingcat.methods.User_Registration_Request.$Shape): lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape;
+             *   (properties?: lingcat.methods.User_Registration_Request.$Properties): lingcat.methods.User_Registration_Request;
              * }}
              */
-            User_Registration.create = function create(properties) {
-                return new User_Registration(properties);
+            User_Registration_Request.create = function create(properties) {
+                return new User_Registration_Request(properties);
             };
 
             /**
-             * Encodes the specified User_Registration message. Does not implicitly {@link lingcat.methods.User_Registration.verify|verify} messages.
+             * Encodes the specified User_Registration_Request message. Does not implicitly {@link lingcat.methods.User_Registration_Request.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
-             * @param {lingcat.methods.User_Registration.$Properties} message User_Registration message or plain object to encode
+             * @param {lingcat.methods.User_Registration_Request.$Properties} message User_Registration_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            User_Registration.encode = function encode(message, writer, _depth) {
+            User_Registration_Request.encode = function encode(message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === undefined)
@@ -2580,6 +2626,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.username);
                 if (message.password != null && Object.hasOwnProperty.call(message, "password"))
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.password);
+                if (message.nickname != null && Object.hasOwnProperty.call(message, "nickname"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
                 if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -2587,37 +2635,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified User_Registration message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration.verify|verify} messages.
+             * Encodes the specified User_Registration_Request message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration_Request.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
-             * @param {lingcat.methods.User_Registration.$Properties} message User_Registration message or plain object to encode
+             * @param {lingcat.methods.User_Registration_Request.$Properties} message User_Registration_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            User_Registration.encodeDelimited = function encodeDelimited(message, writer) {
+            User_Registration_Request.encodeDelimited = function encodeDelimited(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes a User_Registration message from the specified reader or buffer.
+             * Decodes a User_Registration_Request message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape} User_Registration
+             * @returns {lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape} User_Registration_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            User_Registration.decode = function decode(reader, length, _end, _depth, _target) {
+            User_Registration_Request.decode = function decode(reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw Error("max depth exceeded");
-                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Registration(), value;
+                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Registration_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -2643,6 +2691,15 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.password;
                             continue;
                         }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.string()).length)
+                                message.nickname = value;
+                            else
+                                delete message.nickname;
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     $util.makeProp(message, "$unknowns", false);
@@ -2654,30 +2711,30 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes a User_Registration message from the specified reader or buffer, length delimited.
+             * Decodes a User_Registration_Request message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.User_Registration & lingcat.methods.User_Registration.$Shape} User_Registration
+             * @returns {lingcat.methods.User_Registration_Request & lingcat.methods.User_Registration_Request.$Shape} User_Registration_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            User_Registration.decodeDelimited = function decodeDelimited(reader) {
+            User_Registration_Request.decodeDelimited = function decodeDelimited(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a User_Registration message.
+             * Verifies a User_Registration_Request message.
              * @function verify
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            User_Registration.verify = function verify(message, _depth) {
+            User_Registration_Request.verify = function verify(message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === undefined)
@@ -2693,43 +2750,311 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.password != null && message.hasOwnProperty("password"))
                     if (!$util.isString(message.password))
                         return "password: string expected";
+                if (message.nickname != null && message.hasOwnProperty("nickname"))
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
                 return null;
             };
 
             /**
-             * Creates a User_Registration message from a plain object. Also converts values to their respective internal types.
+             * Creates a User_Registration_Request message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.User_Registration} User_Registration
+             * @returns {lingcat.methods.User_Registration_Request} User_Registration_Request
              */
-            User_Registration.fromObject = function fromObject(object, _depth) {
-                if (object instanceof $root.lingcat.methods.User_Registration)
+            User_Registration_Request.fromObject = function fromObject(object, _depth) {
+                if (object instanceof $root.lingcat.methods.User_Registration_Request)
                     return object;
                 if (_depth === undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw Error("max depth exceeded");
-                let message = new $root.lingcat.methods.User_Registration();
+                let message = new $root.lingcat.methods.User_Registration_Request();
                 if (object.username != null)
                     message.username = String(object.username);
                 if (object.password != null)
                     if (typeof object.password !== "string" || object.password.length)
                         message.password = String(object.password);
+                if (object.nickname != null)
+                    if (typeof object.nickname !== "string" || object.nickname.length)
+                        message.nickname = String(object.nickname);
                 return message;
             };
 
             /**
-             * Creates a plain object from a User_Registration message. Also converts values to other types if specified.
+             * Creates a plain object from a User_Registration_Request message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Request
              * @static
-             * @param {lingcat.methods.User_Registration} message User_Registration
+             * @param {lingcat.methods.User_Registration_Request} message User_Registration_Request
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            User_Registration.toObject = function toObject(message, options, _depth) {
+            User_Registration_Request.toObject = function toObject(message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.password = "";
+                    object.nickname = "";
+                }
+                if (message.username != null && message.hasOwnProperty("username"))
+                    object.username = message.username;
+                if (message.password != null && message.hasOwnProperty("password"))
+                    object.password = message.password;
+                if (message.nickname != null && message.hasOwnProperty("nickname"))
+                    object.nickname = message.nickname;
+                return object;
+            };
+
+            /**
+             * Converts this User_Registration_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.User_Registration_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            User_Registration_Request.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for User_Registration_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.User_Registration_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            User_Registration_Request.getTypeUrl = function getTypeUrl(prefix) {
+                if (prefix === undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.User_Registration_Request";
+            };
+
+            return User_Registration_Request;
+        })();
+
+        methods.User_Registration_Response = (function() {
+
+            /**
+             * Properties of a User_Registration_Response.
+             * @typedef {Object} lingcat.methods.User_Registration_Response.$Properties
+             * @property {string|null} [id] User_Registration_Response id
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+             */
+
+            /**
+             * Properties of a User_Registration_Response.
+             * @memberof lingcat.methods
+             * @interface IUser_Registration_Response
+             * @augments lingcat.methods.User_Registration_Response.$Properties
+             * @deprecated Use lingcat.methods.User_Registration_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a User_Registration_Response.
+             * @typedef {lingcat.methods.User_Registration_Response.$Properties} lingcat.methods.User_Registration_Response.$Shape
+             */
+
+            /**
+             * Constructs a new User_Registration_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a User_Registration_Response.
+             * @constructor
+             * @param {lingcat.methods.User_Registration_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
+             */
+            function User_Registration_Response(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * User_Registration_Response id.
+             * @member {string} id
+             * @memberof lingcat.methods.User_Registration_Response
+             * @instance
+             */
+            User_Registration_Response.prototype.id = "";
+
+            /**
+             * Creates a new User_Registration_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {lingcat.methods.User_Registration_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.User_Registration_Response} User_Registration_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.User_Registration_Response.$Shape): lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape;
+             *   (properties?: lingcat.methods.User_Registration_Response.$Properties): lingcat.methods.User_Registration_Response;
+             * }}
+             */
+            User_Registration_Response.create = function create(properties) {
+                return new User_Registration_Response(properties);
+            };
+
+            /**
+             * Encodes the specified User_Registration_Response message. Does not implicitly {@link lingcat.methods.User_Registration_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {lingcat.methods.User_Registration_Response.$Properties} message User_Registration_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            User_Registration_Response.encode = function encode(message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified User_Registration_Response message, length delimited. Does not implicitly {@link lingcat.methods.User_Registration_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {lingcat.methods.User_Registration_Response.$Properties} message User_Registration_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            User_Registration_Response.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a User_Registration_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape} User_Registration_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            User_Registration_Response.decode = function decode(reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw Error("max depth exceeded");
+                let end = length === undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Registration_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.string()).length)
+                                message.id = value;
+                            else
+                                delete message.id;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+                if (_end !== undefined)
+                    throw Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a User_Registration_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.User_Registration_Response & lingcat.methods.User_Registration_Response.$Shape} User_Registration_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            User_Registration_Response.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a User_Registration_Response message.
+             * @function verify
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            User_Registration_Response.verify = function verify(message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a User_Registration_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.User_Registration_Response} User_Registration_Response
+             */
+            User_Registration_Response.fromObject = function fromObject(object, _depth) {
+                if (object instanceof $root.lingcat.methods.User_Registration_Response)
+                    return object;
+                if (_depth === undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw Error("max depth exceeded");
+                let message = new $root.lingcat.methods.User_Registration_Response();
+                if (object.id != null)
+                    if (typeof object.id !== "string" || object.id.length)
+                        message.id = String(object.id);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a User_Registration_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.User_Registration_Response
+             * @static
+             * @param {lingcat.methods.User_Registration_Response} message User_Registration_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            User_Registration_Response.toObject = function toObject(message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === undefined)
@@ -2738,40 +3063,38 @@ export const lingcat = $root.lingcat = (() => {
                     throw Error("max depth exceeded");
                 let object = {};
                 if (options.defaults)
-                    object.password = "";
-                if (message.username != null && message.hasOwnProperty("username"))
-                    object.username = message.username;
-                if (message.password != null && message.hasOwnProperty("password"))
-                    object.password = message.password;
+                    object.id = "";
+                if (message.id != null && message.hasOwnProperty("id"))
+                    object.id = message.id;
                 return object;
             };
 
             /**
-             * Converts this User_Registration to JSON.
+             * Converts this User_Registration_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            User_Registration.prototype.toJSON = function toJSON() {
+            User_Registration_Response.prototype.toJSON = function toJSON() {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for User_Registration
+             * Gets the type url for User_Registration_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.User_Registration
+             * @memberof lingcat.methods.User_Registration_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            User_Registration.getTypeUrl = function getTypeUrl(prefix) {
+            User_Registration_Response.getTypeUrl = function getTypeUrl(prefix) {
                 if (prefix === undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.User_Registration";
+                return prefix + "/lingcat.methods.User_Registration_Response";
             };
 
-            return User_Registration;
+            return User_Registration_Response;
         })();
 
         return methods;

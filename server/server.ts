@@ -117,9 +117,9 @@ export default function createLingCatServer() {
                     }
                     default: {
                         sendPackage(Package.fromObject({
-                            method_id: Methods.Unknown_Method_Response,
+                            method_id: Methods.Error_Response,
                             flags: 0,
-                            data: LingCatProto.methods.Unknown_Method_Response.encode({
+                            data: LingCatProto.methods.Error_Response.encode({
                                 requestMethod: mPackage.METHOD_ID
                             }).finish()
                         }))

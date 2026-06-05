@@ -10,8 +10,9 @@ syntax = "proto3";
 
 package lingcat.methods;
 
-message Unknown_Method_Response {
+message Error_Response {
     int32 request_method = 1;
+    optional string message = 2;
 }
 
 message HandShake_Request {
@@ -32,7 +33,12 @@ message Ping_Response {
     int64 usage = 1;
 }
 
-message User_Registration {
+message User_Registration_Request {
     optional string username = 1;
     string password = 2;
+    string nickname = 3;
+}
+
+message User_Registration_Response {
+    string id = 1;
 }
