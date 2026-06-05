@@ -6,6 +6,8 @@ export default class Methods {
     static HandShake_Response = 0x2
     static Ping_Request = 0x3
     static Ping_Response = 0x4
+    static User_Registration_Request = 0x5
+    static User_Registration_Response = 0x6
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>
