@@ -1,6 +1,6 @@
 import knex from 'knex'
 import { base_data_path } from '../config.ts'
-import type { IUser } from 'lingcat-protocol'
+import { Code, type IUser } from 'lingcat-protocol'
 import crypto from 'node:crypto'
 
 const db = knex({
@@ -50,11 +50,11 @@ export default class UserDataBase {
         } catch (e) {
             const s = e + ''
             if (s.indexOf('UNIQUE') != -1 && s.indexOf('username') != -1)
-                throw { message: '用户名重复!', cause: e }
+                throw { message: '用户名重复!', cause: e, code: Code.Bad_Request }
             else if (s.indexOf('NOT NULL') != -1 && s.indexOf('nickname') != -1)
-                throw { message: '缺失昵称!', cause: e }
+                throw { message: '缺失昵称!', cause: e, code: Code.Bad_Request }
             else
-                throw { message: s, cause: e }
+                throw { message: s, cause: e, code: Code.Internal_Server_Error }
         }
     }
     static async queryUserById(id: string) {

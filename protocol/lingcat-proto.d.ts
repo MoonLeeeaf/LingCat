@@ -435,6 +435,9 @@ export namespace lingcat {
             /** Error_Response message. */
             message?: (string|null);
 
+            /** Error_Response code. */
+            code?: (number|null);
+
             /**
              * Creates a new Error_Response instance using the specified properties.
              * @param [properties] Properties to set
@@ -524,6 +527,9 @@ export namespace lingcat {
 
                 /** Error_Response message */
                 message?: (string|null);
+
+                /** Error_Response code */
+                code?: (number|null);
 
                 /** Unknown fields preserved while decoding */
                 $unknowns?: Uint8Array[];

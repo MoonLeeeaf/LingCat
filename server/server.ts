@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws'
 import express from 'express'
 import http from 'node:http'
-import { Package, Methods, LingCatProto } from 'lingcat-protocol'
+import { Package, Methods, LingCatProto, Code } from 'lingcat-protocol'
 import fs from 'node:fs'
 import { fileExists, mkdir } from 'lingcat-shared'
 import crypto from 'node:crypto'
@@ -62,71 +62,97 @@ export default function createLingCatServer() {
                     client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keyServerToClient!) : p).toBuffer())
                 }
 
-                switch (mPackage.METHOD_ID) {
-                    // 握手请求
-                    case Methods.HandShake_Request: {
-                        // 计算共享秘密
-                        const clientPublicKey = Buffer.from(
-                            LingCatProto.methods.HandShake_Request.decode(mPackage.data).publicKey
-                        )
-                        let sharedSecret = crypto.diffieHellman({
-                            privateKey: keyPair.privateKey,
-                            publicKey: crypto.createPublicKey(clientPublicKey),
-                        })
+                try {
 
-                        // 生成盐值, 并签名交由客户端进行验证
-                        const salt = crypto.randomBytes(16)
+                    switch (mPackage.METHOD_ID) {
+                        // 握手请求
+                        case Methods.HandShake_Request: {
+                            // 计算共享秘密
+                            const clientPublicKey = Buffer.from(
+                                LingCatProto.methods.HandShake_Request.decode(mPackage.data).publicKey
+                            )
+                            let sharedSecret = crypto.diffieHellman({
+                                privateKey: keyPair.privateKey,
+                                publicKey: crypto.createPublicKey(clientPublicKey),
+                            })
 
-                        // 与客户端交互所需要的对称密钥
-                        keyServerToClient = crypto.hkdfSync('sha256', sharedSecret, salt, 'server-to-client', 32)
-                        keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, salt, 'client-to-server', 32)
-                        sharedSecret.fill(0)
+                            // 生成盐值, 并签名交由客户端进行验证
+                            const salt = crypto.randomBytes(16)
 
-                        sendSeq = 0
-                        recvSeq = -1
+                            // 与客户端交互所需要的对称密钥
+                            keyServerToClient = crypto.hkdfSync('sha256', sharedSecret, salt, 'server-to-client', 32)
+                            keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, salt, 'client-to-server', 32)
+                            sharedSecret.fill(0)
 
-                        sendPackage(Package.fromObject({
-                            method_id: Methods.HandShake_Response,
-                            flags: 0,
-                            data: LingCatProto.methods.HandShake_Response.encode({
-                                salt,
-                                publicKey: keyPair.publicKey.export({ type: 'spki', format: 'pem' }),
-                                verifyMessage: crypto.sign(
-                                    null,
-                                    Buffer.concat([
-                                        salt,
-                                        clientPublicKey,
-                                        Buffer.from(keyPair.publicKey.export({ type: 'spki', format: 'pem' }))
-                                    ]),
-                                    crypto.createPrivateKey(privateKey)
-                                )
-                            }).finish()
-                        }))
-                        break
+                            sendSeq = 0
+                            recvSeq = -1
+
+                            sendPackage(Package.fromObject({
+                                method_id: Methods.HandShake_Response,
+                                flags: 0,
+                                data: LingCatProto.methods.HandShake_Response.encode({
+                                    salt,
+                                    publicKey: keyPair.publicKey.export({ type: 'spki', format: 'pem' }),
+                                    verifyMessage: crypto.sign(
+                                        null,
+                                        Buffer.concat([
+                                            salt,
+                                            clientPublicKey,
+                                            Buffer.from(keyPair.publicKey.export({ type: 'spki', format: 'pem' }))
+                                        ]),
+                                        crypto.createPrivateKey(privateKey)
+                                    )
+                                }).finish()
+                            }))
+                            break
+                        }
+                        // Ping 请求
+                        case Methods.Ping_Request: {
+                            sendPackage(Package.fromObject({
+                                method_id: Methods.Ping_Response,
+                                flags: 0,
+                                data: LingCatProto.methods.Ping_Response.encode({
+                                    usage: Date.now() - LingCatProto.methods.Ping_Request.decode(mPackage.data).time
+                                }).finish()
+                            }))
+                            break
+                        }
+                        default: {
+                            sendPackage(Package.fromObject({
+                                method_id: Methods.Error_Response,
+                                flags: 0,
+                                data: LingCatProto.methods.Error_Response.encode({
+                                    requestMethod: mPackage.METHOD_ID,
+                                    code: Code.Not_Found,
+                                }).finish()
+                            }))
+                        }
                     }
-                    // Ping 请求
-                    case Methods.Ping_Request: {
-                        sendPackage(Package.fromObject({
-                            method_id: Methods.Ping_Response,
-                            flags: 0,
-                            data: LingCatProto.methods.Ping_Response.encode({
-                                usage: Date.now() - LingCatProto.methods.Ping_Request.decode(mPackage.data).time
-                            }).finish()
-                        }))
-                        break
-                    }
-                    default: {
+
+                    UserApi.onCall(sendPackage, mPackage)
+                } catch (e) {
+                    console.log('[Server] Error: ', e)
+                    if (e.message && e.code)
                         sendPackage(Package.fromObject({
                             method_id: Methods.Error_Response,
                             flags: 0,
                             data: LingCatProto.methods.Error_Response.encode({
-                                requestMethod: mPackage.METHOD_ID
+                                requestMethod: mPackage.METHOD_ID,
+                                message: e.message + ' (' + e.cause + ')',
+                                code: e.code,
                             }).finish()
                         }))
-                    }
+                    else
+                        sendPackage(Package.fromObject({
+                            method_id: Methods.Error_Response,
+                            flags: 0,
+                            data: LingCatProto.methods.Error_Response.encode({
+                                requestMethod: mPackage.METHOD_ID,
+                                message: e + '',
+                                code: Code.Internal_Server_Error,
+                            }).finish()
+                        }))
                 }
-
-                UserApi.onCall(sendPackage, mPackage)
             } catch (e) {
                 console.error(e)
             }

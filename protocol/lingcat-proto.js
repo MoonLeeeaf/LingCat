@@ -1099,6 +1099,7 @@ export const lingcat = $root.lingcat = (() => {
              * @typedef {Object} lingcat.methods.Error_Response.$Properties
              * @property {number|null} [requestMethod] Error_Response requestMethod
              * @property {string|null} [message] Error_Response message
+             * @property {number|null} [code] Error_Response code
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding
              */
 
@@ -1146,12 +1147,26 @@ export const lingcat = $root.lingcat = (() => {
              */
             Error_Response.prototype.message = null;
 
+            /**
+             * Error_Response code.
+             * @member {number|null|undefined} code
+             * @memberof lingcat.methods.Error_Response
+             * @instance
+             */
+            Error_Response.prototype.code = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
             // Virtual OneOf for proto3 optional field
             Object.defineProperty(Error_Response.prototype, "_message", {
                 get: $util.oneOfGetter($oneOfFields = ["message"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            Object.defineProperty(Error_Response.prototype, "_code", {
+                get: $util.oneOfGetter($oneOfFields = ["code"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -1188,9 +1203,11 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw Error("max depth exceeded");
                 if (message.requestMethod != null && Object.hasOwnProperty.call(message, "requestMethod"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.requestMethod);
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.requestMethod);
                 if (message.message != null && Object.hasOwnProperty.call(message, "message"))
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+                if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.code);
                 if (message.$unknowns != null && Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -1241,7 +1258,7 @@ export const lingcat = $root.lingcat = (() => {
                     case 1: {
                             if (wireType !== 0)
                                 break;
-                            if (value = reader.int32())
+                            if (value = reader.uint32())
                                 message.requestMethod = value;
                             else
                                 delete message.requestMethod;
@@ -1252,6 +1269,13 @@ export const lingcat = $root.lingcat = (() => {
                                 break;
                             message.message = reader.string();
                             message._message = "message";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            message.code = reader.uint32();
+                            message._code = "code";
                             continue;
                         }
                     }
@@ -1304,6 +1328,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.message))
                         return "message: string expected";
                 }
+                if (message.code != null && message.hasOwnProperty("code")) {
+                    properties._code = 1;
+                    if (!$util.isInteger(message.code))
+                        return "code: integer expected";
+                }
                 return null;
             };
 
@@ -1325,9 +1354,11 @@ export const lingcat = $root.lingcat = (() => {
                 let message = new $root.lingcat.methods.Error_Response();
                 if (object.requestMethod != null)
                     if (Number(object.requestMethod) !== 0)
-                        message.requestMethod = object.requestMethod | 0;
+                        message.requestMethod = object.requestMethod >>> 0;
                 if (object.message != null)
                     message.message = String(object.message);
+                if (object.code != null)
+                    message.code = object.code >>> 0;
                 return message;
             };
 
@@ -1354,6 +1385,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.requestMethod = message.requestMethod;
                 if (message.message != null && message.hasOwnProperty("message"))
                     object.message = message.message;
+                if (message.code != null && message.hasOwnProperty("code"))
+                    object.code = message.code;
                 return object;
             };
 

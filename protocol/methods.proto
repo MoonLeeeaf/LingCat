@@ -11,8 +11,9 @@ syntax = "proto3";
 package lingcat.methods;
 
 message Error_Response {
-    int32 request_method = 1;
+    uint32 request_method = 1;
     optional string message = 2;
+    optional uint32 code = 3;
 }
 
 message HandShake_Request {
