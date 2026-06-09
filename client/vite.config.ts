@@ -3,8 +3,13 @@ import react from '@vitejs/plugin-react'
 import { base_data_path } from '../server/config.ts'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import fs from 'node:fs'
+import node_path from 'node:path'
 
-fs.unlinkSync("." + base_data_path + '/page')
+const path = base_data_path + '/page'
+
+try {
+    fs.unlinkSync(path)
+} catch(e) {}
 
 export default defineConfig({
     plugins: [
@@ -20,6 +25,6 @@ export default defineConfig({
     ],
     build: {
         sourcemap: true,
-        outDir: "." + base_data_path + '/page',
+        outDir: path,
     },
 })

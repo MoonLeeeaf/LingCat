@@ -5,16 +5,16 @@ import { Package, Methods, LingCatProto, Code } from 'lingcat-protocol'
 import fs from 'node:fs'
 import { fileExists, mkdir } from 'lingcat-shared'
 import crypto from 'node:crypto'
-import { promisify } from 'node:util'
-import { base_data_path } from './config.ts'
 import UserApi from './api/UserApi.ts'
 
-export default function createLingCatServer() {
+export default function createLingCatServer(base_data_path: string) {
     const app = express()
     const httpServer = http.createServer(app)
     const wsServer = new WebSocketServer({
         server: httpServer,
     })
+
+    app.use(express.static(`${base_data_path}/page/`))
 
     if (!fileExists(`${base_data_path}/key/`)) {
         console.log('[Server]', '生成服务端密钥...')
