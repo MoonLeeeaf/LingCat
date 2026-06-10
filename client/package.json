@@ -13,6 +13,8 @@
     },
     "dependencies": {
         "mdui": "^2.1.4",
-        "react": "^19.2.7"
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-image": "^4.1.0"
     }
 }
