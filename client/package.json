@@ -7,11 +7,14 @@
         "build-watch": "npx vite --watch build"
     },
     "devDependencies": {
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.2",
         "vite": "^8.0.14",
         "vite-plugin-node-polyfills": "^0.28.0"
     },
     "dependencies": {
+        "marked-react": "^4.0.0",
         "mdui": "^2.1.4",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
