@@ -13,10 +13,19 @@ function TextContainer({ children }: { children: React.ReactNode }) {
     </div>
 }
 
-export default function Message({ message, senderName, render }: { message: string, senderName: string, render?: Render }) {
-    const isAtRight = true
-    const hideSender = false
-
+export default function Message({
+    message,
+    senderName,
+    render,
+    hideSender,
+    isAtRight
+}: {
+    message: string,
+    senderName: string,
+    render?: Render,
+    hideSender?: boolean,
+    isAtRight?: boolean,
+}) {
     const defaultRender: Render = {
         text(text) {
             // console.log('text', text)
@@ -51,7 +60,7 @@ export default function Message({ message, senderName, render }: { message: stri
             // console.log('image', src)
             return <ReloadableImage src={src} alt={alt} />
         },
-        ...render
+        ...render,
     }
 
     return <mdui-layout-item style={{
