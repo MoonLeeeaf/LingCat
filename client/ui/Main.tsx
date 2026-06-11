@@ -1,6 +1,4 @@
-import Message from "./chat-layout/Message"
-import MessageContainer from "./chat-layout/MessageContainer"
-import UserMain from "./UserMain"
+import UserMain from "./UserMain.tsx"
 
 export default function Main() {
     return (

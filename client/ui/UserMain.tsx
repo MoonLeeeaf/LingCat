@@ -1,5 +1,5 @@
-import Message from "./chat-layout/Message"
-import MessageContainer from "./chat-layout/MessageContainer"
+import Message from "./chat-layout/Message.tsx"
+import MessageContainer from "./chat-layout/MessageContainer.tsx"
 
 export default function UserMain() {
     return <>
