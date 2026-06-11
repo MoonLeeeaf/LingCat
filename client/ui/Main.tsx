@@ -1,5 +1,5 @@
-import Message from "./chat-layout/Message";
-import MessageContainer from "./chat-layout/MessageContainer";
+import Message from "./chat-layout/Message"
+import MessageContainer from "./chat-layout/MessageContainer"
 
 export default function Main() {
     return (
