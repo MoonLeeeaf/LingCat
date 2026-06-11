@@ -47,7 +47,7 @@ export default function Message({ message, senderName, render }: { message: stri
             ls.push(<TextContainer>{cache}</TextContainer>)
             return <span>{ls}</span>
         },
-        image(src, alt, title) {
+        image(src, alt, _title) {
             // console.log('image', src)
             return <ReloadableImage src={src} alt={alt} />
         },
