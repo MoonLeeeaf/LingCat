@@ -17,6 +17,10 @@ interface Action {
      * @param dialog
      */
     onClick?: (dialog: Dialog) => void | boolean | Promise<void>;
+    /**
+     * 样式变体
+     */
+    variant?: string
 }
 interface Options {
     /**
