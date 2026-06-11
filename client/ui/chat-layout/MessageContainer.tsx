@@ -1,7 +1,9 @@
 export default function MessageContainer({ children }: { children: React.ReactNode }) {
-    return <mdui-layout style={{
+    return <div style={{
         flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     }}>
         {children}
-    </mdui-layout>
+    </div>
 }
