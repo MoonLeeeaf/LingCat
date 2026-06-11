@@ -129,7 +129,7 @@ export default function Message({
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                    <Markdown value={message} renderer={defaultRender} />
+                    <Markdown value={message} renderer={defaultRender} breaks={true} />
                 </span>
             </mdui-card>
 
