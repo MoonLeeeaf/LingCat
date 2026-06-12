@@ -2,6 +2,7 @@ import { dialog, Dialog, TextField } from "mdui"
 import React from 'react'
 import fs from '../fs.ts'
 import ClientManager from "./ClientManager.ts"
+import useEventListener from "./useEventListener.ts"
 
 function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
     const [k, setK] = React.useState(Date.now() + '')
@@ -9,6 +10,11 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
     const mAddKeyDialog = React.useRef<Dialog>(undefined)
     const mAddKeyServerHost = React.useRef<TextField>(undefined)
     const mAddKeyPublicKey = React.useRef<TextField>(undefined)
+
+    useEventListener(mAddKeyDialog, 'closed', () => {
+        mAddKeyServerHost.current!.value = ''
+        mAddKeyPublicKey.current!.value = ''
+    })
 
     return <>
         <mdui-dialog close-on-overlay-click close-on-esc ref={ref}>
@@ -65,8 +71,6 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
             <mdui-button slot="action" variant="tonal" onClick={() => {
                 fs.writeFileSync('/public_keys/' + mAddKeyServerHost.current!.value, mAddKeyPublicKey.current!.value.trim() + '\n')
                 mAddKeyDialog.current!.open = false
-                mAddKeyServerHost.current!.value = ''
-                mAddKeyPublicKey.current!.value = ''
                 setK(Date.now() + '')
             }}>添加</mdui-button>
         </mdui-dialog>
