@@ -1,9 +1,0 @@
-{
-    "name": "lingcat-client-protocol",
-    "version": "0.0.0",
-    "type": "module",
-    "exports": "./main.ts",
-    "dependencies": {
-        "@noble/ciphers": "^2.2.0"
-    }
-}

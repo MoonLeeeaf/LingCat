@@ -3,7 +3,6 @@
     "version": "0.0.0",
     "workspaces": [
         "./server",
-        "./shared",
         "./protocol",
         "./client-protocol",
         "./client",
@@ -13,7 +12,6 @@
     "scripts": {
         "start": "npm run build-client && npm run server",
         "server": "npx tsx ./server/main.ts",
-        "test": "node ./test/main.js",
         "build-client": "cd client && npm run build",
         "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js --dts ./protocol/*.proto"
     },
