@@ -1,5 +1,5 @@
-import LingCatClient from "./LingCatClient"
-import UserApi from "./UserApi"
+import LingCatClient from "./LingCatClient.ts"
+import UserApi from "./UserApi.ts"
 
 export default LingCatClient
 export {

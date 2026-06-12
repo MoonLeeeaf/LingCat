@@ -42,7 +42,7 @@ export default class UserDataBase {
             await db<IServerUser>('Users').insert({
                 username,
                 nickname,
-                password,
+                password: this.hashifyPassword(password),
                 created_at: Date.now(),
                 id: userId,
             })
@@ -57,11 +57,18 @@ export default class UserDataBase {
                 throw { message: s, cause: e, code: Code.Internal_Server_Error }
         }
     }
+    static hashifyPassword(password: string) {
+        return crypto.createHash('sha256').update(password + '_lingcat').digest().toString('hex')
+    }
+
     static async queryUserById(id: string) {
         return await db<IServerUser>('Users').where('id', id).first()
     }
     static async queryUserByUserName(username: string) {
         return await db<IServerUser>('Users').where('username', username).first()
+    }
+    static async queryUserByAccount(account: string) {
+        return await this.queryUserById(account) || await this.queryUserByUserName(account)
     }
 
     static async updateUserName(id: string, username: string) {

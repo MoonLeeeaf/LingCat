@@ -87,6 +87,12 @@ export default function createLingCatServer(base_data_path: string) {
                             sendSeq = 0
                             recvSeq = -1
 
+                            console.log([
+                                salt,
+                                LingCatProto.methods.HandShake_Request.decode(mPackage.data).publicKey,
+                                keyPair.publicKey.export({ type: 'spki', format: 'pem' })
+                            ])
+
                             sendPackage(Package.fromObject({
                                 method_id: Methods.HandShake_Response,
                                 flags: 0,

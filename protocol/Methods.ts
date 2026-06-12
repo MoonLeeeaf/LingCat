@@ -8,6 +8,8 @@ export default class Methods {
     static Ping_Response = 0x4
     static User_Registration_Request = 0x5
     static User_Registration_Response = 0x6
+    static User_Login_Request = 0x7
+    static User_Login_Response = 0x8
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

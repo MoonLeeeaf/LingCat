@@ -1,5 +1,25 @@
 import { Package, Methods, LingCatProto } from 'lingcat-protocol'
-import crypto from 'node:crypto'
+import { x25519, ed25519 } from '@noble/curves/ed25519.js'
+import { hkdf } from '@noble/hashes/hkdf.js'
+import { sha256 } from '@noble/hashes/sha2.js'
+import { concatBytes } from '@noble/hashes/utils.js'
+
+function pemToEd25519Bytes(pem: string) {
+    const b64 = pem
+        .replace(/-----BEGIN PUBLIC KEY-----/, '')
+        .replace(/-----END PUBLIC KEY-----/, '')
+        .replace(/\s/g, '');
+    const der = Uint8Array.from(atob(b64), c => c.charCodeAt(0))
+    return der.slice(-32);
+}
+
+function x25519BytesToPem(rawKey: Uint8Array): string {
+    // 算法标识 OID 1.3.101.110 + 公钥位串
+    const oid = Uint8Array.from([0x30, 0x2a, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x6e, 0x03, 0x21, 0x00])
+    const spki = concatBytes(oid, rawKey)
+    const pem = `-----BEGIN PUBLIC KEY-----\n${btoa(String.fromCharCode(...spki))}\n-----END PUBLIC KEY-----\n`
+    return pem
+}
 
 export default class LingCatClient {
     server_ws: string
@@ -64,7 +84,6 @@ export default class LingCatClient {
     init() {
         if (this.client == null) {
             this.client = new WebSocket(this.server_ws)
-
             const client = this.client
             const session = this.session
             const on_package_listeners = this.on_package_listeners
@@ -72,94 +91,97 @@ export default class LingCatClient {
             client.binaryType = 'arraybuffer'
 
             client.addEventListener('open', async () => {
-                const keyPair = crypto.generateKeyPairSync('x25519')
-                let keyServerToClient: ArrayBuffer | undefined
+                const clientPrivateKey = x25519.utils.randomSecretKey()
+                const clientPublicKey = x25519.getPublicKey(clientPrivateKey)
+
+                const serverLongPublicKey = pemToEd25519Bytes(this.server_public_key)
 
                 // 发送握手请求
-                client?.send(Package.fromObject({
+                client.send(Package.fromObject({
                     method_id: Methods.HandShake_Request,
                     flags: 0,
                     data: LingCatProto.methods.HandShake_Request.encode({
-                        publicKey: keyPair.publicKey.export({ type: 'spki', format: 'pem' }),
+                        publicKey: x25519BytesToPem(clientPublicKey),
                     }).finish()
                 }).toBuffer())
 
-                client?.addEventListener('message', async (event) => {
+                let keyServerToClient: Uint8Array
+
+                client.addEventListener('message', async (event) => {
                     if (event.data instanceof ArrayBuffer) {
                         try {
-                            let mPackage = Package.fromBuffer(event.data)
+                            let mPackage = Package.fromBuffer(new Uint8Array(event.data))
 
-                            // 按需要进行解密
-                            const isEncrypted = (mPackage.FLAGS & Package.FLAG_ENCRYPTED) && (mPackage.METHOD_ID != Methods.HandShake_Response)
+                            const isEncrypted = (mPackage.FLAGS & Package.FLAG_ENCRYPTED) &&
+                                (mPackage.METHOD_ID != Methods.HandShake_Response)
                             if (isEncrypted) {
-                                console.log("[Client] (Encrypted, seq.recv: " + session.recvSeq + ", current seq.send: " + session.sendSeq + ") Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
+                                console.log("[Client] (Encrypted, seq.recv:", session.recvSeq, ", seq.send:", session.sendSeq, ") Method:", Methods.getMethodName(mPackage.METHOD_ID))
                                 mPackage = mPackage.decrypt(session.recvSeq, keyServerToClient!)
-                                session.recvSeq = mPackage.SEQ_AFTER_DECRYPTION
+                                session.recvSeq = mPackage.SEQ_AFTER_DECRYPTION;
                             } else {
-                                console.log("[Client] Method:", Methods.getMethodName(mPackage.METHOD_ID), "| Flags:", mPackage.FLAGS, "| Data length:", mPackage.LENGTH, '| Request ID:', mPackage.REQUEST_ID)
+                                console.log("[Client] Method:", Methods.getMethodName(mPackage.METHOD_ID))
                             }
-                            // 如果是加密消息, 同时应该返回加密的消息
+
                             function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
-                                client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(session.sendSeq++, session.keyClientToServer!) : p).toBuffer())
+                                const pkgToSend = (isEncrypted || option?.forceEncrypt)
+                                    ? p.encrypt(session.sendSeq++, session.keyClientToServer!)
+                                    : p;
+                                client.send(pkgToSend.toBuffer())
                             }
 
                             switch (mPackage.METHOD_ID) {
-                                // 握手响应
                                 case Methods.HandShake_Response: {
                                     const res = LingCatProto.methods.HandShake_Response.decode(mPackage.data)
 
-                                    const serverPublicKey = Buffer.from(this.server_public_key)
+                                    // clientPublicKey + serverPublicKey
+                                    console.log([res.salt, x25519BytesToPem(clientPublicKey), res.publicKey])
+                                    const message = concatBytes(res.salt, Buffer.from(x25519BytesToPem(clientPublicKey)), Buffer.from(res.publicKey))
+                                    const isValid = ed25519.verify(res.verifyMessage, message, serverLongPublicKey)
+                                    if (!isValid) {
+                                        console.error('[Client] Server verification failed')
+                                        return
+                                    }
+                                    console.log('[Client] Server verified!')
 
-                                    // 验证服务端签名的消息
-                                    if (crypto.verify(
-                                        null,
-                                        Buffer.concat([
-                                            res.salt,
-                                            Buffer.from(keyPair.publicKey.export({ type: 'spki', format: 'pem' })),
-                                            Buffer.from(res.publicKey)
-                                        ]),
-                                        crypto.createPublicKey(serverPublicKey),
-                                        res.verifyMessage
-                                    )) {
-                                        console.log('[Client] Server verified!')
+                                    session.sendSeq = 0
+                                    session.recvSeq = -1
 
-                                        session.sendSeq = 0
-                                        session.recvSeq = -1
+                                    // 计算共享密钥
+                                    const sharedSecret = x25519.getSharedSecret(clientPrivateKey, pemToEd25519Bytes(res.publicKey))
+                                    // 派生对称密钥
+                                    const salt = res.salt;
+                                    const clientToServerKey = hkdf(sha256, sharedSecret, salt, Buffer.from('client-to-server'), 32)
+                                    const serverToClientKey = hkdf(sha256, sharedSecret, salt, Buffer.from('server-to-client'), 32)
+                                    session.keyClientToServer = clientToServerKey.buffer
+                                    keyServerToClient = serverToClientKey
 
-                                        let sharedSecret = crypto.diffieHellman({
-                                            privateKey: keyPair.privateKey,
-                                            publicKey: crypto.createPublicKey(res.publicKey),
-                                        })
+                                    sharedSecret.fill(0)
 
-                                        // 服务端交互所需要的对称密钥
-                                        keyServerToClient = crypto.hkdfSync('sha256', sharedSecret, res.salt, 'server-to-client', 32)
-                                        session.keyClientToServer = crypto.hkdfSync('sha256', sharedSecret, res.salt, 'client-to-server', 32)
-                                        sharedSecret.fill(0)
-
-                                        const id = setInterval(() => sendPackage(Package.fromObject({
+                                    // 启动心跳
+                                    const id = setInterval(() => {
+                                        const pingPkg = Package.fromObject({
                                             method_id: Methods.Ping_Request,
                                             flags: 0,
-                                            data: LingCatProto.methods.Ping_Request.encode({
-                                                time: Date.now()
-                                            }).finish()
-                                        }), { forceEncrypt: true }), 10000)
-                                        client?.addEventListener('close', () => clearInterval(id))
-                                    }
-                                    break
+                                            data: LingCatProto.methods.Ping_Request.encode({ time: Date.now() }).finish()
+                                        });
+                                        sendPackage(pingPkg, { forceEncrypt: true });
+                                    }, 10000);
+                                    client.addEventListener('close', () => clearInterval(id));
+                                    break;
                                 }
-                                // Ping 成功
                                 case Methods.Ping_Response: {
-                                    console.log('[Client] Server recv time:', LingCatProto.methods.Ping_Response.decode(mPackage.data).usage + 'ms')
-                                    break
+                                    const pong = LingCatProto.methods.Ping_Response.decode(mPackage.data);
+                                    console.log('[Client] Server recv time:', pong.usage + 'ms');
+                                    break;
                                 }
                             }
-                            on_package_listeners.forEach((v) => v(mPackage))
+                            on_package_listeners.forEach(v => v(mPackage));
                         } catch (e) {
-                            console.error(e)
+                            console.error(e);
                         }
                     }
-                })
-            })
+                });
+            });
         }
     }
     disconnect() {

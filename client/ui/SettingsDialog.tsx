@@ -28,12 +28,12 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
                         return <mdui-dropdown trigger="hover">
                             <mdui-list-item slot="trigger" rounded>{fileName}</mdui-list-item>
                             <mdui-menu>
-                                <mdui-menu-item onClick={() => {
+                                <mdui-menu-item icon="edit" onClick={() => {
                                     mAddKeyServerHost.current!.value = fileName
                                     mAddKeyPublicKey.current!.value = ClientManager.getServerPublicKey(fileName)
                                     mAddKeyDialog.current!.open = true
                                 }}>修改</mdui-menu-item>
-                                <mdui-menu-item onClick={() => {
+                                <mdui-menu-item icon="delete" onClick={() => {
                                     dialog({
                                         headline: "提示",
                                         body: "确定要删除 " + fileName + ' 的公钥吗?',

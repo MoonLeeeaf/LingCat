@@ -4,6 +4,8 @@
     "type": "module",
     "exports": "./main.ts",
     "dependencies": {
+        "@noble/ciphers": "^2.2.0",
+        "@noble/hashes": "^2.2.0",
         "protobufjs": "^8.0.3"
     }
 }

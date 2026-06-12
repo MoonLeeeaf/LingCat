@@ -11,7 +11,8 @@
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.2",
         "vite": "^8.0.14",
-        "vite-plugin-node-polyfills": "^0.28.0"
+        "vite-plugin-node-polyfills": "^0.28.0",
+        "lingcat-client-protocol": "*"
     },
     "dependencies": {
         "@zenfs/core": "^2.5.6",

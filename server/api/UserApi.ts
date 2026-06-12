@@ -1,6 +1,7 @@
 import { LingCatProto, Methods, Package } from 'lingcat-protocol'
 import type { ISendPackageFunction } from './ISendPackageFunction.ts'
 import UserDataBase from '../data/UserDataBase.ts'
+import TokenManageer from './TokenManager.ts'
 
 export default class UserApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {
@@ -27,6 +28,30 @@ export default class UserApi {
                                 nickname,
                                 password,
                             })
+                        }).finish(),
+                    }))
+
+                break
+            }
+            case Methods.User_Login_Request: {
+                const { account, password } = LingCatProto.methods.User_Login_Request.decode(mPackage.data)
+
+                const mUser = await UserDataBase.queryUserByAccount(account)
+                if (mUser?.password == UserDataBase.hashifyPassword(password))
+                    sendPackage(Package.fromObject({
+                        method_id: Methods.Error_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.Error_Response.encode({
+                            requestMethod: mPackage.METHOD_ID,
+                            message: 'Password or account is not match.',
+                        }).finish(),
+                    }))
+                else
+                    sendPackage(Package.fromObject({
+                        method_id: Methods.User_Login_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.User_Login_Response.encode({
+                            accessToken: TokenManageer.signAccessTokenForUser(mUser!.id)
                         }).finish(),
                     }))
 

@@ -1264,5 +1264,245 @@ export namespace lingcat {
             /** Shape of a User_Registration_Response. */
             type $Shape = lingcat.methods.User_Registration_Response.$Properties;
         }
+
+        /**
+         * Properties of a User_Login_Request.
+         * @deprecated Use lingcat.methods.User_Login_Request.$Properties instead.
+         */
+        interface IUser_Login_Request extends lingcat.methods.User_Login_Request.$Properties {
+        }
+
+        /** Represents a User_Login_Request. */
+        class User_Login_Request {
+
+            /**
+             * Constructs a new User_Login_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.User_Login_Request.$Properties);
+
+            /** Unknown fields preserved while decoding */
+            $unknowns?: Uint8Array[];
+
+            /** User_Login_Request account. */
+            account: string;
+
+            /** User_Login_Request password. */
+            password: string;
+
+            /**
+             * Creates a new User_Login_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns User_Login_Request instance
+             */
+            static create(properties: lingcat.methods.User_Login_Request.$Shape): lingcat.methods.User_Login_Request & lingcat.methods.User_Login_Request.$Shape;
+            static create(properties?: lingcat.methods.User_Login_Request.$Properties): lingcat.methods.User_Login_Request;
+
+            /**
+             * Encodes the specified User_Login_Request message. Does not implicitly {@link lingcat.methods.User_Login_Request.verify|verify} messages.
+             * @param message User_Login_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.User_Login_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified User_Login_Request message, length delimited. Does not implicitly {@link lingcat.methods.User_Login_Request.verify|verify} messages.
+             * @param message User_Login_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.User_Login_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a User_Login_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.User_Login_Request & lingcat.methods.User_Login_Request.$Shape} User_Login_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Login_Request & lingcat.methods.User_Login_Request.$Shape;
+
+            /**
+             * Decodes a User_Login_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.User_Login_Request & lingcat.methods.User_Login_Request.$Shape} User_Login_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Login_Request & lingcat.methods.User_Login_Request.$Shape;
+
+            /**
+             * Verifies a User_Login_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a User_Login_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns User_Login_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Login_Request;
+
+            /**
+             * Creates a plain object from a User_Login_Request message. Also converts values to other types if specified.
+             * @param message User_Login_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.User_Login_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this User_Login_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for User_Login_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace User_Login_Request {
+
+            /** Properties of a User_Login_Request. */
+            interface $Properties {
+
+                /** User_Login_Request account */
+                account?: (string|null);
+
+                /** User_Login_Request password */
+                password?: (string|null);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a User_Login_Request. */
+            type $Shape = lingcat.methods.User_Login_Request.$Properties;
+        }
+
+        /**
+         * Properties of a User_Login_Response.
+         * @deprecated Use lingcat.methods.User_Login_Response.$Properties instead.
+         */
+        interface IUser_Login_Response extends lingcat.methods.User_Login_Response.$Properties {
+        }
+
+        /** Represents a User_Login_Response. */
+        class User_Login_Response {
+
+            /**
+             * Constructs a new User_Login_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.User_Login_Response.$Properties);
+
+            /** Unknown fields preserved while decoding */
+            $unknowns?: Uint8Array[];
+
+            /** User_Login_Response accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new User_Login_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns User_Login_Response instance
+             */
+            static create(properties: lingcat.methods.User_Login_Response.$Shape): lingcat.methods.User_Login_Response & lingcat.methods.User_Login_Response.$Shape;
+            static create(properties?: lingcat.methods.User_Login_Response.$Properties): lingcat.methods.User_Login_Response;
+
+            /**
+             * Encodes the specified User_Login_Response message. Does not implicitly {@link lingcat.methods.User_Login_Response.verify|verify} messages.
+             * @param message User_Login_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.User_Login_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified User_Login_Response message, length delimited. Does not implicitly {@link lingcat.methods.User_Login_Response.verify|verify} messages.
+             * @param message User_Login_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.User_Login_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a User_Login_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.User_Login_Response & lingcat.methods.User_Login_Response.$Shape} User_Login_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Login_Response & lingcat.methods.User_Login_Response.$Shape;
+
+            /**
+             * Decodes a User_Login_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.User_Login_Response & lingcat.methods.User_Login_Response.$Shape} User_Login_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Login_Response & lingcat.methods.User_Login_Response.$Shape;
+
+            /**
+             * Verifies a User_Login_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a User_Login_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns User_Login_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Login_Response;
+
+            /**
+             * Creates a plain object from a User_Login_Response message. Also converts values to other types if specified.
+             * @param message User_Login_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.User_Login_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this User_Login_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for User_Login_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace User_Login_Response {
+
+            /** Properties of a User_Login_Response. */
+            interface $Properties {
+
+                /** User_Login_Response accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a User_Login_Response. */
+            type $Shape = lingcat.methods.User_Login_Response.$Properties;
+        }
     }
 }
