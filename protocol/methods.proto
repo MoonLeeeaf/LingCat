@@ -27,11 +27,11 @@ message HandShake_Response {
 }
 
 message Ping_Request {
-    int64 time = 1;
+    uint64 time = 1;
 }
 
 message Ping_Response {
-    int64 usage = 1;
+    uint64 usage = 1;
 }
 
 message User_Registration_Request {
