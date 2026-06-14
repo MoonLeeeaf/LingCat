@@ -7,6 +7,7 @@ import { fileExists, mkdir, toUint8Array } from 'lingcat-shared'
 import crypto from 'node:crypto'
 import UserApi from './api/UserApi.ts'
 import ServerApi from './api/ServerApi.ts'
+import { randomSha256Salt } from '../protocol/SecureKey.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -36,20 +37,22 @@ export default function createLingCatServer(base_data_path: string) {
 
         client.on('close', () => {
             if (keySend) {
-                new Uint8Array(keySend).fill(0);
+                new Uint8Array(keySend).fill(0)
             }
             if (keySend) {
-                new Uint8Array(keySend).fill(0);
+                new Uint8Array(keySend).fill(0)
             }
         })
 
         client.on('message', async (data, isBinary) => {
             if (!isBinary) return
             try {
-                let mPackage = Package.decode(toUint8Array(data), keyRecv)
+                let mPackage = Package.decode(toUint8Array(data), keyRecv, recvSeq)
 
-                const isEncrypted = mPackage.flags & Package.FLAG_ENCRYPTED
-                console.log("[Server] " + isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ")") : '' + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+                recvSeq = mPackage.seq
+
+                const isEncrypted = mPackage.isDecrypted
+                console.log("[Server] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
 
                 // 如果是加密消息, 同时应该返回加密的消息
                 function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
@@ -71,7 +74,7 @@ export default function createLingCatServer(base_data_path: string) {
                             )
 
                             // 生成盐值, 并签名交由客户端进行验证
-                            const salt = crypto.randomBytes(16)
+                            const salt = randomSha256Salt()
 
                                 // 与客户端交互所需要的对称密钥
                                 ; ({ keyRecv, keySend } = SecureKey.Server_hkdf(sharedSecret, salt))
@@ -93,7 +96,7 @@ export default function createLingCatServer(base_data_path: string) {
                                     )
                                 }).finish()
                             }))
-                            break
+                            return
                         }
                     }
 

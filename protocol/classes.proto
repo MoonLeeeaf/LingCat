@@ -15,7 +15,6 @@ message EncryptedMessage {
     bytes iv = 2;
     bytes data = 3;
     bytes aad = 4;
-    bytes tag = 5;
 }
 
 message User {

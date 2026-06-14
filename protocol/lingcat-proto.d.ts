@@ -38,9 +38,6 @@ export namespace lingcat {
             /** EncryptedMessage aad. */
             aad: Uint8Array;
 
-            /** EncryptedMessage tag. */
-            tag: Uint8Array;
-
             /**
              * Creates a new EncryptedMessage instance using the specified properties.
              * @param [properties] Properties to set
@@ -136,9 +133,6 @@ export namespace lingcat {
 
                 /** EncryptedMessage aad */
                 aad?: (Uint8Array|null);
-
-                /** EncryptedMessage tag */
-                tag?: (Uint8Array|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

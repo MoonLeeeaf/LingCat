@@ -35,7 +35,6 @@ export const lingcat = $root.lingcat = (() => {
              * @property {Uint8Array|null} [iv] EncryptedMessage iv
              * @property {Uint8Array|null} [data] EncryptedMessage data
              * @property {Uint8Array|null} [aad] EncryptedMessage aad
-             * @property {Uint8Array|null} [tag] EncryptedMessage tag
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -100,14 +99,6 @@ export const lingcat = $root.lingcat = (() => {
             EncryptedMessage.prototype.aad = $util.newBuffer([]);
 
             /**
-             * EncryptedMessage tag.
-             * @member {Uint8Array} tag
-             * @memberof lingcat.classes.EncryptedMessage
-             * @instance
-             */
-            EncryptedMessage.prototype.tag = $util.newBuffer([]);
-
-            /**
              * Creates a new EncryptedMessage instance using the specified properties.
              * @function create
              * @memberof lingcat.classes.EncryptedMessage
@@ -147,8 +138,6 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.data);
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad"))
                     writer.uint32(/* id 4, wireType 2 =*/34).bytes(message.aad);
-                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag"))
-                    writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.tag);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -232,15 +221,6 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.aad;
                             continue;
                         }
-                    case 5: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.bytes()).length)
-                                message.tag = value;
-                            else
-                                delete message.tag;
-                            continue;
-                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -296,9 +276,6 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad"))
                     if (!(message.aad && typeof message.aad.length === "number" || $util.isString(message.aad)))
                         return "aad: buffer expected";
-                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag"))
-                    if (!(message.tag && typeof message.tag.length === "number" || $util.isString(message.tag)))
-                        return "tag: buffer expected";
                 return null;
             };
 
@@ -341,12 +318,6 @@ export const lingcat = $root.lingcat = (() => {
                             $util.base64.decode(object.aad, message.aad = $util.newBuffer($util.base64.length(object.aad)), 0);
                         else if (object.aad.length >= 0)
                             message.aad = object.aad;
-                if (object.tag != null)
-                    if (object.tag.length)
-                        if (typeof object.tag === "string")
-                            $util.base64.decode(object.tag, message.tag = $util.newBuffer($util.base64.length(object.tag)), 0);
-                        else if (object.tag.length >= 0)
-                            message.tag = object.tag;
                 return message;
             };
 
@@ -390,13 +361,6 @@ export const lingcat = $root.lingcat = (() => {
                         if (options.bytes !== $Array)
                             object.aad = $util.newBuffer(object.aad);
                     }
-                    if (options.bytes === $String)
-                        object.tag = "";
-                    else {
-                        object.tag = [];
-                        if (options.bytes !== $Array)
-                            object.tag = $util.newBuffer(object.tag);
-                    }
                 }
                 if (message.seq != null && $Object.hasOwnProperty.call(message, "seq"))
                     object.seq = message.seq;
@@ -406,8 +370,6 @@ export const lingcat = $root.lingcat = (() => {
                     object.data = options.bytes === $String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.data) : message.data;
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad"))
                     object.aad = options.bytes === $String ? $util.base64.encode(message.aad, 0, message.aad.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.aad) : message.aad;
-                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag"))
-                    object.tag = options.bytes === $String ? $util.base64.encode(message.tag, 0, message.tag.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.tag) : message.tag;
                 return object;
             };
 

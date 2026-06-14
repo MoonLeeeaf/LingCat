@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { fileExists, mkdir } from 'lingcat-shared'
 
-export const base_data_path = process.argv.join().indexOf('vite') != -1 ? '../_data' : './_data'
+export const base_data_path = (process.argv.join().indexOf('vite') != -1) ? '../lingcat_data' : './lingcat_data'
 
 mkdir(base_data_path)
 mkdir(base_data_path + '/db')

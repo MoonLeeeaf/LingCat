@@ -1,5 +1,5 @@
-import { LingCatProto, Methods, Package } from "lingcat-protocol";
-import { ISendPackageFunction } from "./ISendPackageFunction.ts"
+import { LingCatProto, Methods, Package } from "lingcat-protocol"
+import type { ISendPackageFunction } from "./ISendPackageFunction.ts"
 
 export default class ServerApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {

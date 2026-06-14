@@ -87,10 +87,12 @@ export default class LingCatClient {
                 client?.addEventListener('message', async (event) => {
                     if (event.data instanceof ArrayBuffer) {
                         try {
-                            let mPackage = Package.decode(toUint8Array(event.data))
+                            let mPackage = Package.decode(toUint8Array(event.data), session.keyRecv!, session.recvSeq)
 
-                            const isEncrypted = mPackage.flags & Package.FLAG_ENCRYPTED
-                            console.log("[Client] " + isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ")") : '' + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+                            session.recvSeq = mPackage.seq
+
+                            const isEncrypted = mPackage.isDecrypted
+                            console.log("[Client] " + (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
 
                             // 如果是加密消息, 同时应该返回加密的消息
                             function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
@@ -101,8 +103,6 @@ export default class LingCatClient {
                                 // 握手响应
                                 case Methods.HandShake_Response: {
                                     const res = LingCatProto.methods.HandShake_Response.decode(mPackage.data)
-
-                                    const serverPublicKey = Buffer.from(this.server_public_key)
 
                                     // 验证服务端签名的消息
                                     if (SecureKey.Client_checkSignedMessage(
@@ -126,6 +126,7 @@ export default class LingCatClient {
                                                 sharedSecret,
                                                 res.salt
                                             ))
+
                                         sharedSecret.fill(0)
 
                                         const id = setInterval(() => sendPackage(Package.encode({

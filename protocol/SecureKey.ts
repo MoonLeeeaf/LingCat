@@ -1,4 +1,6 @@
-import sodium from "libsodium-wrappers"
+import sodium from "libsodium-wrappers-sumo"
+
+await sodium.ready
 
 function hkdfExtract(salt: Uint8Array, ikm: Uint8Array): Uint8Array {
     // PRK = HMAC-SHA256(salt, ikm)
@@ -23,9 +25,13 @@ function hkdfExpand(prk: Uint8Array, info: Uint8Array, length: number): Uint8Arr
     return okm.slice(0, length)
 }
 
-export function hkdf(ikm: Uint8Array, salt: Uint8Array, info: Uint8Array, length: number): Uint8Array {
+function hkdf(ikm: Uint8Array, salt: Uint8Array, info: Uint8Array, length: number): Uint8Array {
     const prk = hkdfExtract(salt, ikm);
     return hkdfExpand(prk, info, length);
+}
+
+export function randomSha256Salt() {
+    return sodium.randombytes_buf(sodium.crypto_auth_hmacsha256_KEYBYTES)
 }
 
 export default class SecureKey {
