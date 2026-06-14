@@ -8,6 +8,10 @@ export default class Methods {
     static User_Registration_Response = 0x6
     static User_Login_Request = 0x7
     static User_Login_Response = 0x8
+    static Request_File_Upload_Request = 0x9
+    static Request_File_Upload_Response = 0x10
+    static File_Upload_Request = 0x11
+    static File_Upload_Response = 0x12
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>
