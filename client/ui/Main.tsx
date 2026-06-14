@@ -54,8 +54,6 @@ export default function Main() {
                 </span>
             </div>
 
-            <SettingsDialog ref={mSettingsDialog} />
-
             <mdui-dialog ref={mLoginDialog as any}>
                 <span slot="headline">登录</span>
 
@@ -65,6 +63,9 @@ export default function Main() {
                 <div style={{ paddingTop: '15px' }}></div>
                 <mdui-text-field label="密码" type="password" ref={mLoginPassword as any}></mdui-text-field>
 
+
+                <mdui-button slot="action" variant="text" onClick={() => mSettingsDialog.current!.open = true}>设置</mdui-button>
+                <div slot="action" style={{ flexGrow: 1 }}></div>
                 <mdui-button slot="action" variant="text" onClick={() => {
                     const dlg = dialog({
                         headline: "注册",
@@ -121,6 +122,8 @@ export default function Main() {
 
                 }}>登录</mdui-button>
             </mdui-dialog>
+
+            <SettingsDialog ref={mSettingsDialog} />
         </mdui-layout>
     )
 }
