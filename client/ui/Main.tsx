@@ -89,20 +89,22 @@ export default function Main() {
                                     })
                                     client.init()
 
-                                    // @ts-ignore
-                                    const password = dlg.querySelector('#password').value
-                                    const userId = await UserApi.register(client, {
-                                        password,
+                                    client.onInit = async () => {
                                         // @ts-ignore
-                                        nickname: dlg.querySelector('#nickname').value,
-                                        // @ts-ignore
-                                        username: dlg.querySelector('#username').value,
-                                    })
+                                        const password = dlg.querySelector('#password').value
+                                        const userId = await UserApi.register(client, {
+                                            password,
+                                            // @ts-ignore
+                                            nickname: dlg.querySelector('#nickname').value,
+                                            // @ts-ignore
+                                            username: dlg.querySelector('#username').value,
+                                        })
 
-                                    mLoginAccount.current!.value = userId
-                                    mLoginPassword.current!.value = password
+                                        mLoginAccount.current!.value = userId
+                                        mLoginPassword.current!.value = password
 
-                                    client.disconnect()
+                                        client.disconnect()
+                                    }
                                 } catch (e) {
                                     console.log(e)
                                     showSnackbar({
