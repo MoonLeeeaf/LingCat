@@ -1,5 +1,5 @@
 import { dialog, Dialog, TextField } from "mdui"
-import ClientManager from "./ClientManager.ts"
+import ClientManager from "../ClientManager.ts"
 import SettingsDialog from "./SettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
 import React from 'react'

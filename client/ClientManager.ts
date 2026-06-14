@@ -1,4 +1,4 @@
-import fs from '../fs.ts'
+import fs from './fs.ts'
 
 export default class ClientManager {
     static listServerPublicKeys() {

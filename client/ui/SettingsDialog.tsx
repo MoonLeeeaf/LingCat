@@ -1,7 +1,7 @@
 import { dialog, Dialog, TextField } from "mdui"
 import React from 'react'
 import fs from '../fs.ts'
-import ClientManager from "./ClientManager.ts"
+import ClientManager from "../ClientManager.ts"
 import useEventListener from "./useEventListener.ts"
 
 function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
