@@ -7,7 +7,7 @@
         "./client-protocol",
         "./client",
         "./test",
-        "./mdui-patched"
+        "./mdui_patched"
     ],
     "scripts": {
         "start": "npm run build-client && npm run server",
