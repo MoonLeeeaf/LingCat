@@ -24,7 +24,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
                 <mdui-list-item rounded icon="add" onClick={() => mAddKeyDialog.current!.open = true}>添加</mdui-list-item>
                 <mdui-list-item rounded icon="refresh" onClick={() => setK(Date.now() + '')}>刷新</mdui-list-item>
                 <div key={k}>{
-                    fs.readdirSync('/public_keys').map((fileName) => {
+                    ClientManager.listServerPublicKeys().map((fileName) => {
                         return <mdui-dropdown trigger="hover">
                             <mdui-list-item slot="trigger" rounded>{fileName}</mdui-list-item>
                             <mdui-menu>
@@ -46,7 +46,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
                                             text: "确定",
                                             variant: 'tonal',
                                             onClick: () => {
-                                                fs.unlinkSync('/public_keys/' + fileName)
+                                                ClientManager.removeServerPublicKey(fileName)
                                                 setK(Date.now() + '')
                                                 return true
                                             }
@@ -69,7 +69,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
 
             <mdui-button slot="action" variant="text" onClick={() => mAddKeyDialog.current!.open = false}>取消</mdui-button>
             <mdui-button slot="action" variant="tonal" onClick={() => {
-                fs.writeFileSync('/public_keys/' + mAddKeyServerHost.current!.value, Buffer.from(mAddKeyPublicKey.current!.value.trim(), 'hex'))
+                ClientManager.setServerPublicKey(mAddKeyServerHost.current!.value, Buffer.from(mAddKeyPublicKey.current!.value.trim(), 'hex'))
                 mAddKeyDialog.current!.open = false
                 setK(Date.now() + '')
             }}>添加</mdui-button>
