@@ -119,7 +119,35 @@ export default function Main() {
                     dlg.querySelector('#password').value = mLoginPassword.current!.value
                 }}>注册</mdui-button>
                 <mdui-button slot="action" variant="tonal" onClick={() => {
+                    try {
+                        showSnackbar({
+                            message: '登录中...'
+                        })
 
+                        const client = new LingCatClient({
+                            server_ws: mLoginServer.current!.value,
+                            server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
+                        })
+                        client.init()
+
+                        client.onInit = async () => {
+                            const token = await UserApi.login(client, {
+                                password: mLoginPassword.current!.value,
+                                account: mLoginAccount.current!.value,
+                            })
+                            
+                            ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
+
+                            location.reload()
+
+                            client.disconnect()
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        showSnackbar({
+                            message: '登录失败: ' + e
+                        })
+                    }
                 }}>登录</mdui-button>
             </mdui-dialog>
 

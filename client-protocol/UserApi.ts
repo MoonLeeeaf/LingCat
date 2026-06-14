@@ -23,4 +23,22 @@ export default class UserApi {
             timeout,
         })).data).id
     }
+    static async login(client: LingCatClient, {
+        password,
+        account,
+        timeout,
+    }: {
+        password: string
+        account: string
+        timeout?: number
+    }) {
+        return LingCatProto.methods.User_Login_Response.decode((await client.invoke({
+            method_id: Methods.User_Registration_Request,
+            data: LingCatProto.methods.User_Login_Request.encode({
+                password,
+                account,
+            }).finish(),
+            timeout,
+        })).data).accessToken
+    }
 }
