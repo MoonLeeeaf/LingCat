@@ -26,6 +26,8 @@ export default function createLingCatServer(base_data_path: string) {
         fs.writeFileSync(`${base_data_path}/key/private`, keyPair.privateKey)
     }
 
+    console.log('[Server]', '服务端公钥 Hex:', fs.readFileSync(`${base_data_path}/key/public`).toString('hex'))
+
     wsServer.on('connection', async (client) => {
         const keyPair = SecureKey.All_generateExchangeKeyPair()
         const privateKey = fs.readFileSync(`${base_data_path}/key/private`)
