@@ -1,6 +1,5 @@
 import { Package, Methods, LingCatProto, SecureKey } from 'lingcat-protocol'
 import { toUint8Array } from 'lingcat-shared'
-import crypto from 'node:crypto'
 
 export default class LingCatClient {
     server_ws: string
@@ -61,6 +60,8 @@ export default class LingCatClient {
             timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
         })
     }
+
+    onInit() {}
 
     init() {
         if (this.client == null) {
@@ -137,6 +138,8 @@ export default class LingCatClient {
                                             }).finish()
                                         }), { forceEncrypt: true }), 15000)
                                         client?.addEventListener('close', () => clearInterval(id))
+
+                                        this.onInit()
                                     }
                                     break
                                 }
