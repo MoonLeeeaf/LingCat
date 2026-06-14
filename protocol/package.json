@@ -4,6 +4,7 @@
     "type": "module",
     "exports": "./main.ts",
     "dependencies": {
+        "libsodium-wrappers": "^0.8.4",
         "protobufjs": "^8.0.3"
     }
 }

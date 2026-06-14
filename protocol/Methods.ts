@@ -1,5 +1,3 @@
-import { lingcat } from './lingcat-proto.js'
-
 export default class Methods {
     static Error_Response = 0x0
     static HandShake_Request = 0x1
