@@ -30,7 +30,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
                             <mdui-menu>
                                 <mdui-menu-item icon="edit" onClick={() => {
                                     mAddKeyServerHost.current!.value = fileName
-                                    mAddKeyPublicKey.current!.value = ClientManager.getServerPublicKey(fileName)
+                                    mAddKeyPublicKey.current!.value = ClientManager.getServerPublicKey(fileName).toString('hex')
                                     mAddKeyDialog.current!.open = true
                                 }}>修改</mdui-menu-item>
                                 <mdui-menu-item icon="delete" onClick={() => {
@@ -65,11 +65,11 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
 
             <mdui-text-field label="服务端 Host (如 127.0.0.1:80)" ref={mAddKeyServerHost as any}></mdui-text-field>
             <div style={{ paddingTop: '15px' }}></div>
-            <mdui-text-field autosize label="服务端公钥 (PEM)" ref={mAddKeyPublicKey as any}></mdui-text-field>
+            <mdui-text-field autosize label="服务端公钥 (Hex)" ref={mAddKeyPublicKey as any}></mdui-text-field>
 
             <mdui-button slot="action" variant="text" onClick={() => mAddKeyDialog.current!.open = false}>取消</mdui-button>
             <mdui-button slot="action" variant="tonal" onClick={() => {
-                fs.writeFileSync('/public_keys/' + mAddKeyServerHost.current!.value, mAddKeyPublicKey.current!.value.trim() + '\n')
+                fs.writeFileSync('/public_keys/' + mAddKeyServerHost.current!.value, Buffer.from(mAddKeyPublicKey.current!.value.trim(), 'hex'))
                 mAddKeyDialog.current!.open = false
                 setK(Date.now() + '')
             }}>添加</mdui-button>

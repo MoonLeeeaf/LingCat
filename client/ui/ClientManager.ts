@@ -8,7 +8,7 @@ export default class ClientManager {
         return fs.readdirSync('/sessions')
     }
     static getServerPublicKey(name: string) {
-        return fs.readFileSync('/public_keys/' + name).toString('utf-8')
+        return fs.readFileSync('/public_keys/' + name)
     }
     static initClientFromSession(name: string) {
         
