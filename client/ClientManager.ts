@@ -7,7 +7,7 @@ export default class ClientManager {
     static listServerPublicKeys() {
         return fs.readdirSync('/public_keys')
     }
-    static listSessionTokens() {
+    static listUserSessions() {
         return fs.readdirSync('/sessions')
     }
     static setServerPublicKey(name: string, data: Uint8Array) {
@@ -32,6 +32,19 @@ export default class ClientManager {
         return JSON.parse(fs.readFileSync('/sessions/' + name).toString('utf-8')) as {
             token: string,
             server: string,
+        }
+    }
+    static setActiveUserSessionName(userSessionName: string) {
+        fs.writeFileSync('/active_session', userSessionName)
+    }
+    static removeActiveUserSession() {
+        fs.unlinkSync('/active_session')
+    }
+    static getActiveUserSessionName() {
+        try {
+            return fs.readFileSync('/active_session').toString('utf-8')
+        } catch (e) {
+            return undefined
         }
     }
     static initClient(userSessionName: string) {
