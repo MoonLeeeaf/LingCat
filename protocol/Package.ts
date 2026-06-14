@@ -63,7 +63,7 @@ export default class Package {
 
     encrypt(seq: number, secret: Uint8Array) {
         // public_nonce
-        const iv = sodium.randombytes_buf(12)
+        const iv = sodium.randombytes_buf(sodium.crypto_aead_aegis256_NPUBBYTES)
 
         const aad = new Uint8Array(4)
         new DataView(aad.buffer).setUint32(0, seq, false)
