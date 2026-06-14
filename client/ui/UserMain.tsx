@@ -1,7 +1,7 @@
 import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 
-export default function UserMain() {
+export default function UserMain({ access_token }: { access_token: string }) {
     return <>
         <mdui-navigation-drawer open>
             <mdui-list>
