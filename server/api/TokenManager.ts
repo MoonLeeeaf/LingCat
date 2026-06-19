@@ -26,9 +26,17 @@ export default class TokenManager {
         })
     }
 
-    static verifyTokenAndGetUserId(token: string, type: TokenType, user_id?: string) {
+    static verifyAccessToken(token: string, user_id?: string) {
+        return TokenManager.verifyToken(token, 'access', user_id) as { user_id: string, type: 'access' }
+    }
+
+    static verifyFileUploadToken(token: string, user_id?: string) {
+        return TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload', file_id: string }
+    }
+
+    static verifyToken(token: string, type: TokenType, user_id?: string) {
         try {
-            const t = jwt.verify(token, secret) as { user_id: string, type: TokenType }
+            const t = jwt.verify(token, secret) as any
             if (t.user_id != user_id && user_id != null)
                 throw "需要验证用户, 但用户 ID 与令牌不配对!"
             if (t.type != type)

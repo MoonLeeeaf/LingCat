@@ -2055,7 +2055,7 @@ export const lingcat = $root.lingcat = (() => {
              * @memberof lingcat.methods.Ping_Request
              * @instance
              */
-            Ping_Request.prototype.time = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+            Ping_Request.prototype.time = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
             /**
              * Creates a new Ping_Request instance using the specified properties.
@@ -2090,7 +2090,7 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 if (message.time != null && $Object.hasOwnProperty.call(message, "time"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int64(message.time);
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.time);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -2141,7 +2141,7 @@ export const lingcat = $root.lingcat = (() => {
                     case 1: {
                             if (wireType !== 0)
                                 break;
-                            if (typeof (value = reader.int64()) === "object" ? value.low || value.high : value !== 0)
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
                                 message.time = value;
                             else
                                 delete message.time;
@@ -2217,13 +2217,13 @@ export const lingcat = $root.lingcat = (() => {
                 if (object.time != null)
                     if (typeof object.time === "object" ? object.time.low || object.time.high : $Number(object.time) !== 0)
                         if ($util.Long)
-                            message.time = $util.Long.fromValue(object.time, false);
+                            message.time = $util.Long.fromValue(object.time, true);
                         else if (typeof object.time === "string")
                             message.time = $parseInt(object.time, 10);
                         else if (typeof object.time === "number")
                             message.time = object.time;
                         else if (typeof object.time === "object")
-                            message.time = new $util.LongBits(object.time.low >>> 0, object.time.high >>> 0).toNumber();
+                            message.time = new $util.LongBits(object.time.low >>> 0, object.time.high >>> 0).toNumber(true);
                 return message;
             };
 
@@ -2246,17 +2246,17 @@ export const lingcat = $root.lingcat = (() => {
                 let object = {};
                 if (options.defaults)
                     if ($util.Long) {
-                        let long = new $util.Long(0, 0, false);
+                        let long = new $util.Long(0, 0, true);
                         object.time = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
                     } else
                         object.time = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
                 if (message.time != null && $Object.hasOwnProperty.call(message, "time"))
                     if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
-                        object.time = typeof message.time === "number" ? $BigInt(message.time) : $util.Long.fromBits(message.time.low >>> 0, message.time.high >>> 0, false).toBigInt();
+                        object.time = typeof message.time === "number" ? $BigInt(message.time) : $util.Long.fromBits(message.time.low >>> 0, message.time.high >>> 0, true).toBigInt();
                     else if (typeof message.time === "number")
                         object.time = options.longs === $String ? $String(message.time) : message.time;
                     else
-                        object.time = options.longs === $String ? $util.Long.prototype.toString.call(message.time) : options.longs === $Number ? new $util.LongBits(message.time.low >>> 0, message.time.high >>> 0).toNumber() : message.time;
+                        object.time = options.longs === $String ? $util.Long.prototype.toString.call(message.time) : options.longs === $Number ? new $util.LongBits(message.time.low >>> 0, message.time.high >>> 0).toNumber(true) : message.time;
                 return object;
             };
 
@@ -2331,7 +2331,7 @@ export const lingcat = $root.lingcat = (() => {
              * @memberof lingcat.methods.Ping_Response
              * @instance
              */
-            Ping_Response.prototype.usage = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+            Ping_Response.prototype.usage = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
             /**
              * Creates a new Ping_Response instance using the specified properties.
@@ -2366,7 +2366,7 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 if (message.usage != null && $Object.hasOwnProperty.call(message, "usage"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int64(message.usage);
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.usage);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -2417,7 +2417,7 @@ export const lingcat = $root.lingcat = (() => {
                     case 1: {
                             if (wireType !== 0)
                                 break;
-                            if (typeof (value = reader.int64()) === "object" ? value.low || value.high : value !== 0)
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
                                 message.usage = value;
                             else
                                 delete message.usage;
@@ -2493,13 +2493,13 @@ export const lingcat = $root.lingcat = (() => {
                 if (object.usage != null)
                     if (typeof object.usage === "object" ? object.usage.low || object.usage.high : $Number(object.usage) !== 0)
                         if ($util.Long)
-                            message.usage = $util.Long.fromValue(object.usage, false);
+                            message.usage = $util.Long.fromValue(object.usage, true);
                         else if (typeof object.usage === "string")
                             message.usage = $parseInt(object.usage, 10);
                         else if (typeof object.usage === "number")
                             message.usage = object.usage;
                         else if (typeof object.usage === "object")
-                            message.usage = new $util.LongBits(object.usage.low >>> 0, object.usage.high >>> 0).toNumber();
+                            message.usage = new $util.LongBits(object.usage.low >>> 0, object.usage.high >>> 0).toNumber(true);
                 return message;
             };
 
@@ -2522,17 +2522,17 @@ export const lingcat = $root.lingcat = (() => {
                 let object = {};
                 if (options.defaults)
                     if ($util.Long) {
-                        let long = new $util.Long(0, 0, false);
+                        let long = new $util.Long(0, 0, true);
                         object.usage = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
                     } else
                         object.usage = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
                 if (message.usage != null && $Object.hasOwnProperty.call(message, "usage"))
                     if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
-                        object.usage = typeof message.usage === "number" ? $BigInt(message.usage) : $util.Long.fromBits(message.usage.low >>> 0, message.usage.high >>> 0, false).toBigInt();
+                        object.usage = typeof message.usage === "number" ? $BigInt(message.usage) : $util.Long.fromBits(message.usage.low >>> 0, message.usage.high >>> 0, true).toBigInt();
                     else if (typeof message.usage === "number")
                         object.usage = options.longs === $String ? $String(message.usage) : message.usage;
                     else
-                        object.usage = options.longs === $String ? $util.Long.prototype.toString.call(message.usage) : options.longs === $Number ? new $util.LongBits(message.usage.low >>> 0, message.usage.high >>> 0).toNumber() : message.usage;
+                        object.usage = options.longs === $String ? $util.Long.prototype.toString.call(message.usage) : options.longs === $Number ? new $util.LongBits(message.usage.low >>> 0, message.usage.high >>> 0).toNumber(true) : message.usage;
                 return object;
             };
 
@@ -4219,6 +4219,553 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return Request_File_Upload_Response;
+        })();
+
+        methods.File_Upload_Request = (function() {
+
+            /**
+             * Properties of a File_Upload_Request.
+             * @typedef {Object} lingcat.methods.File_Upload_Request.$Properties
+             * @property {Uint8Array|null} [data] File_Upload_Request data
+             * @property {number|null} [offset] File_Upload_Request offset
+             * @property {string|null} [token] File_Upload_Request token
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a File_Upload_Request.
+             * @memberof lingcat.methods
+             * @interface IFile_Upload_Request
+             * @augments lingcat.methods.File_Upload_Request.$Properties
+             * @deprecated Use lingcat.methods.File_Upload_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a File_Upload_Request.
+             * @typedef {lingcat.methods.File_Upload_Request.$Properties} lingcat.methods.File_Upload_Request.$Shape
+             */
+
+            /**
+             * Constructs a new File_Upload_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a File_Upload_Request.
+             * @constructor
+             * @param {lingcat.methods.File_Upload_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const File_Upload_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * File_Upload_Request data.
+             * @member {Uint8Array} data
+             * @memberof lingcat.methods.File_Upload_Request
+             * @instance
+             */
+            File_Upload_Request.prototype.data = $util.newBuffer([]);
+
+            /**
+             * File_Upload_Request offset.
+             * @member {number} offset
+             * @memberof lingcat.methods.File_Upload_Request
+             * @instance
+             */
+            File_Upload_Request.prototype.offset = 0;
+
+            /**
+             * File_Upload_Request token.
+             * @member {string} token
+             * @memberof lingcat.methods.File_Upload_Request
+             * @instance
+             */
+            File_Upload_Request.prototype.token = "";
+
+            /**
+             * Creates a new File_Upload_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {lingcat.methods.File_Upload_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.File_Upload_Request} File_Upload_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.File_Upload_Request.$Shape): lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape;
+             *   (properties?: lingcat.methods.File_Upload_Request.$Properties): lingcat.methods.File_Upload_Request;
+             * }}
+             */
+            File_Upload_Request.create = function(properties) {
+                return new File_Upload_Request(properties);
+            };
+
+            /**
+             * Encodes the specified File_Upload_Request message. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {lingcat.methods.File_Upload_Request.$Properties} message File_Upload_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            File_Upload_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.offset);
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.token);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified File_Upload_Request message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {lingcat.methods.File_Upload_Request.$Properties} message File_Upload_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            File_Upload_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a File_Upload_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            File_Upload_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.File_Upload_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.data = value;
+                            else
+                                delete message.data;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.offset = value;
+                            else
+                                delete message.offset;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.token = value;
+                            else
+                                delete message.token;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a File_Upload_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            File_Upload_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a File_Upload_Request message.
+             * @function verify
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            File_Upload_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
+                    if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
+                        return "data: buffer expected";
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
+                    if (!$util.isInteger(message.offset))
+                        return "offset: integer expected";
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
+                    if (!$util.isString(message.token))
+                        return "token: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a File_Upload_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.File_Upload_Request} File_Upload_Request
+             */
+            File_Upload_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.File_Upload_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.File_Upload_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.File_Upload_Request();
+                if (object.data != null)
+                    if (object.data.length)
+                        if (typeof object.data === "string")
+                            $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
+                        else if (object.data.length >= 0)
+                            message.data = object.data;
+                if (object.offset != null)
+                    if ($Number(object.offset) !== 0)
+                        message.offset = object.offset >>> 0;
+                if (object.token != null)
+                    if (typeof object.token !== "string" || object.token.length)
+                        message.token = $String(object.token);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a File_Upload_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {lingcat.methods.File_Upload_Request} message File_Upload_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            File_Upload_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    if (options.bytes === $String)
+                        object.data = "";
+                    else {
+                        object.data = [];
+                        if (options.bytes !== $Array)
+                            object.data = $util.newBuffer(object.data);
+                    }
+                    object.offset = 0;
+                    object.token = "";
+                }
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
+                    object.data = options.bytes === $String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.data) : message.data;
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
+                    object.offset = message.offset;
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
+                    object.token = message.token;
+                return object;
+            };
+
+            /**
+             * Converts this File_Upload_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.File_Upload_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            File_Upload_Request.prototype.toJSON = function() {
+                return File_Upload_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for File_Upload_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.File_Upload_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            File_Upload_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.File_Upload_Request";
+            };
+
+            return File_Upload_Request;
+        })();
+
+        methods.File_Upload_Response = (function() {
+
+            /**
+             * Properties of a File_Upload_Response.
+             * @typedef {Object} lingcat.methods.File_Upload_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a File_Upload_Response.
+             * @memberof lingcat.methods
+             * @interface IFile_Upload_Response
+             * @augments lingcat.methods.File_Upload_Response.$Properties
+             * @deprecated Use lingcat.methods.File_Upload_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a File_Upload_Response.
+             * @typedef {lingcat.methods.File_Upload_Response.$Properties} lingcat.methods.File_Upload_Response.$Shape
+             */
+
+            /**
+             * Constructs a new File_Upload_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a File_Upload_Response.
+             * @constructor
+             * @param {lingcat.methods.File_Upload_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const File_Upload_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new File_Upload_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {lingcat.methods.File_Upload_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.File_Upload_Response} File_Upload_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.File_Upload_Response.$Shape): lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape;
+             *   (properties?: lingcat.methods.File_Upload_Response.$Properties): lingcat.methods.File_Upload_Response;
+             * }}
+             */
+            File_Upload_Response.create = function(properties) {
+                return new File_Upload_Response(properties);
+            };
+
+            /**
+             * Encodes the specified File_Upload_Response message. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {lingcat.methods.File_Upload_Response.$Properties} message File_Upload_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            File_Upload_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified File_Upload_Response message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {lingcat.methods.File_Upload_Response.$Properties} message File_Upload_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            File_Upload_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a File_Upload_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            File_Upload_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.File_Upload_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a File_Upload_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            File_Upload_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a File_Upload_Response message.
+             * @function verify
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            File_Upload_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a File_Upload_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.File_Upload_Response} File_Upload_Response
+             */
+            File_Upload_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.File_Upload_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.File_Upload_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.File_Upload_Response();
+            };
+
+            /**
+             * Creates a plain object from a File_Upload_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {lingcat.methods.File_Upload_Response} message File_Upload_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            File_Upload_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this File_Upload_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.File_Upload_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            File_Upload_Response.prototype.toJSON = function() {
+                return File_Upload_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for File_Upload_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.File_Upload_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            File_Upload_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.File_Upload_Response";
+            };
+
+            return File_Upload_Response;
         })();
 
         return methods;

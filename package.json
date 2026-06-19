@@ -4,7 +4,7 @@
     "workspaces": [
         "./server",
         "./protocol",
-        "./client-protocol",
+        "./client_protocol",
         "./client",
         "./test",
         "./mdui_patched"

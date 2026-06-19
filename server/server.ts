@@ -4,7 +4,7 @@ import http from 'node:http'
 import { Package, Methods, LingCatProto, Code, SecureKey } from 'lingcat-protocol'
 import fs from 'node:fs'
 import { fileExists, mkdir, toUint8Array } from 'lingcat-shared'
-import crypto from 'node:crypto'
+import fileUpload from 'express-fileupload'
 import UserApi from './api/UserApi.ts'
 import ServerApi from './api/ServerApi.ts'
 import { randomSha256Salt } from '../protocol/SecureKey.ts'
@@ -17,6 +17,36 @@ export default function createLingCatServer(base_data_path: string) {
     })
 
     app.use(express.static(`${base_data_path}/page/`))
+    app.use(fileUpload({
+        limits: { fileSize: 2 * 1024 * 1024 * 1024 },
+        useTempFiles: true,
+        tempFileDir: base_data_path + '/upload_cache',
+        abortOnLimit: true,
+    }))
+    app.post('/upload_file', (req, res, next) => {
+        const file = req.files?.file as fileUpload.UploadedFile
+        if (file?.data == null) {
+            res.status(400).send({
+                msg: "No file was found or multiple files were uploaded",
+            })
+            return
+        }
+        if (req.body.file_name == null) {
+            res.status(400).send({
+                msg: "Filename is required",
+            })
+            return
+        }
+        next()
+    }, (req, res) => {
+        const file = req.files?.file as fileUpload.UploadedFile
+
+        res.status(200).send({
+            msg: "success",
+            // file_hash: '',
+        })
+    })
+
 
     if (!fileExists(`${base_data_path}/key/`)) {
         console.log('[Server]', '生成服务端密钥...')
