@@ -10,3 +10,11 @@ export interface IGroup {
     group_unique?: string | null
     name: string
 }
+
+export interface IFile {
+    hash: string
+    first_upload_file_name?: string | null
+    belong_to_chat_id?: string | null
+    mime: string
+    uploaded_at: number
+}

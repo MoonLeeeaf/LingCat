@@ -4,10 +4,14 @@ import http from 'node:http'
 import { Package, Methods, LingCatProto, Code, SecureKey } from 'lingcat-protocol'
 import fs from 'node:fs'
 import { fileExists, mkdir, toUint8Array } from 'lingcat-shared'
-import fileUpload from 'express-fileupload'
 import UserApi from './api/UserApi.ts'
 import ServerApi from './api/ServerApi.ts'
 import { randomSha256Salt } from '../protocol/SecureKey.ts'
+import busboy from 'busboy'
+import crypto from 'node:crypto'
+import os from 'node:os'
+import FileManager from './data/FileManager.ts'
+import { config } from './config.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -17,34 +21,65 @@ export default function createLingCatServer(base_data_path: string) {
     })
 
     app.use(express.static(`${base_data_path}/page/`))
-    app.use(fileUpload({
-        limits: { fileSize: 2 * 1024 * 1024 * 1024 },
-        useTempFiles: true,
-        tempFileDir: base_data_path + '/upload_cache',
-        abortOnLimit: true,
-    }))
-    app.post('/upload_file', (req, res, next) => {
-        const file = req.files?.file as fileUpload.UploadedFile
-        if (file?.data == null) {
-            res.status(400).send({
-                msg: "No file was found or multiple files were uploaded",
-            })
-            return
-        }
-        if (req.body.file_name == null) {
-            res.status(400).send({
-                msg: "Filename is required",
-            })
-            return
-        }
-        next()
-    }, (req, res) => {
-        const file = req.files?.file as fileUpload.UploadedFile
+    app.post('/upload_file', (req, res) => {
+        const bb = busboy({ headers: req.headers, limits: { files: 1, fileSize: config.max_file_size || 1000 * 1024 * 1024 } })
 
-        res.status(200).send({
-            msg: "success",
-            // file_hash: '',
+        let hash_from_client: string | undefined
+        let hash: string | undefined
+        let fileName = ''
+        let belong_to_chat_id: string | undefined
+        const path = os.tmpdir() + '/lingcat-upload-tmp-' + crypto.randomBytes(6).toString('hex')
+
+        bb.on('field', (name, val) => {
+            if (name == 'hash') {
+                hash_from_client = val
+            }
+            if (name == 'belong_to_chat_id') {
+                belong_to_chat_id = val
+            }
         })
+
+        bb.on('file', (_name, file, info) => {
+            let size = 0
+            const hasher = crypto.createHash('sha256')
+            const writeStream = fs.createWriteStream(path)
+
+            fileName = info.filename
+
+            file.on('data', (data) => {
+                hasher.update(data)
+                writeStream.write(data)
+                size += data.length
+            }).on('close', () => {
+                writeStream.close()
+                hash = hasher.digest().toString('hex')
+            })
+        })
+
+        bb.on('close', async () => {
+            if (!hash_from_client) {
+                return res.status(400).send({ msg: "Missing client hash" })
+            }
+
+            if (hash != hash_from_client) {
+                if (fs.existsSync(path)) {
+                    fs.unlinkSync(path)
+                }
+                return res.status(400).send({ msg: "Hash mismatch" })
+            }
+            try {
+                await FileManager.uploadFile(hash, fileName, path, belong_to_chat_id)
+            } finally {
+                fs.unlinkSync(path)
+            }
+
+            res.status(200).send({
+                msg: "success",
+                file_hash: hash,
+            })
+        })
+
+        req.pipe(bb)
     })
 
 

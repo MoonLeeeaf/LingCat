@@ -4,8 +4,9 @@
     "type": "module",
     "exports": "./server.ts",
     "dependencies": {
+        "busboy": "^1.6.0",
         "express": "^5.2.1",
-        "express-fileupload": "^1.5.2",
+        "file-type": "^22.0.1",
         "jsonwebtoken": "^9.0.3",
         "knex": "^3.2.10",
         "lingcat-protocol": "*",

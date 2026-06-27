@@ -17,6 +17,7 @@ export let config: {
     port?: number,
     hostname?: string,
     token_secret?: string,
+    max_file_size?: number,
 } = {}
 try {
     config = JSON.parse(fs.readFileSync(base_data_path + '/config.json', 'utf8'))
