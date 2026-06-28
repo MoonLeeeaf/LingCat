@@ -51,7 +51,7 @@ export default class UserApi {
                         method_id: Methods.User_Login_Response,
                         flags: 0,
                         data: LingCatProto.methods.User_Login_Response.encode({
-                            accessToken: TokenManager.signTokenForUser(mUser!.id, 'access')
+                            accessToken: TokenManager.signAccessTokenForUser(mUser!.id)
                         }).finish(),
                     }))
 
