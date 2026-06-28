@@ -1,7 +1,6 @@
 import knex from "knex"
 import { base_data_path } from "../config.ts"
 import { IFile } from "../../protocol/classes-interfaces.ts"
-import crypto from 'node:crypto'
 import node_path from 'node:path'
 import fs from 'node:fs'
 import { fileTypeFromFile } from 'file-type'
