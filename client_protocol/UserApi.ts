@@ -34,7 +34,7 @@ export default class UserApi {
         timeout?: number
     }) {
         return decodeOrThrow<LingCatProto.methods.User_Login_Response>(LingCatProto.methods.User_Login_Response,(await client.invoke({
-            method_id: Methods.User_Registration_Request,
+            method_id: Methods.User_Login_Request,
             data: LingCatProto.methods.User_Login_Request.encode({
                 password,
                 account,
@@ -56,5 +56,15 @@ export default class UserApi {
             }).finish(),
             timeout,
         })).data)
+    }
+    static async queryUserInfo(client: LingCatClient, {
+        access_token,
+        user_id,
+    }: {
+        access_token: string
+        user_id: string
+        timeout?: number
+    }) {
+
     }
 }
