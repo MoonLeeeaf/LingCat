@@ -1,5 +1,6 @@
 import { LingCatProto, Methods } from "lingcat-protocol"
 import LingCatClient from "./LingCatClient.ts"
+import decodeOrThrow from "./decodeOrThrow.ts"
 
 export default class UserApi {
     static async register(client: LingCatClient, {
@@ -13,7 +14,7 @@ export default class UserApi {
         nickname: string
         timeout?: number
     }) {
-        return LingCatProto.methods.User_Registration_Response.decode((await client.invoke({
+        return decodeOrThrow<LingCatProto.methods.User_Registration_Response>(LingCatProto.methods.User_Registration_Response,(await client.invoke({
             method_id: Methods.User_Registration_Request,
             data: LingCatProto.methods.User_Registration_Request.encode({
                 password,
@@ -32,7 +33,7 @@ export default class UserApi {
         account: string
         timeout?: number
     }) {
-        return LingCatProto.methods.User_Login_Response.decode((await client.invoke({
+        return decodeOrThrow<LingCatProto.methods.User_Login_Response>(LingCatProto.methods.User_Login_Response,(await client.invoke({
             method_id: Methods.User_Registration_Request,
             data: LingCatProto.methods.User_Login_Request.encode({
                 password,
@@ -40,5 +41,20 @@ export default class UserApi {
             }).finish(),
             timeout,
         })).data).accessToken
+    }
+    static async authorize(client: LingCatClient, {
+        access_token,
+        timeout,
+    }: {
+        access_token: string
+        timeout?: number
+    }) {
+        return decodeOrThrow(LingCatProto.methods.Authorize_Response,(await client.invoke({
+            method_id: Methods.User_Registration_Request,
+            data: LingCatProto.methods.Authorize_Request.encode({
+                accessToken: access_token,
+            }).finish(),
+            timeout,
+        })).data)
     }
 }

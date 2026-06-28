@@ -12,6 +12,7 @@ import crypto from 'node:crypto'
 import os from 'node:os'
 import FileManager from './data/FileManager.ts'
 import { config } from './config.ts'
+import TokenManager from './api/TokenManager.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -22,6 +23,9 @@ export default function createLingCatServer(base_data_path: string) {
 
     app.use(express.static(`${base_data_path}/page/`))
     app.post('/upload_file', (req, res) => {
+        const token = req.headers.token
+        if (!token) return res.status(401).send({ msg: "Unauthorzied" })
+
         const bb = busboy({ headers: req.headers, limits: { files: 1, fileSize: config.max_file_size || 1000 * 1024 * 1024 } })
 
         let hash_from_client: string | undefined
@@ -102,6 +106,8 @@ export default function createLingCatServer(base_data_path: string) {
         let sendSeq = -1
         let recvSeq = -1
 
+        let user_id_after_authorzied: string | undefined
+
         client.on('close', () => {
             if (keySend) {
                 new Uint8Array(keySend).fill(0)
@@ -163,6 +169,13 @@ export default function createLingCatServer(base_data_path: string) {
                                     )
                                 }).finish()
                             }))
+                            return
+                        }
+                        case Methods.Authorize_Request: {
+                            user_id_after_authorzied = TokenManager.verifyAccessToken(
+                                LingCatProto.methods.Authorize_Request.decode(mPackage.data).accessToken
+                            ).user_id
+
                             return
                         }
                     }

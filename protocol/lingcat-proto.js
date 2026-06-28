@@ -4221,39 +4221,37 @@ export const lingcat = $root.lingcat = (() => {
             return Request_File_Upload_Response;
         })();
 
-        methods.File_Upload_Request = (function() {
+        methods.Authorize_Request = (function() {
 
             /**
-             * Properties of a File_Upload_Request.
-             * @typedef {Object} lingcat.methods.File_Upload_Request.$Properties
-             * @property {Uint8Array|null} [data] File_Upload_Request data
-             * @property {number|null} [offset] File_Upload_Request offset
-             * @property {string|null} [token] File_Upload_Request token
+             * Properties of an Authorize_Request.
+             * @typedef {Object} lingcat.methods.Authorize_Request.$Properties
+             * @property {string|null} [accessToken] Authorize_Request accessToken
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of a File_Upload_Request.
+             * Properties of an Authorize_Request.
              * @memberof lingcat.methods
-             * @interface IFile_Upload_Request
-             * @augments lingcat.methods.File_Upload_Request.$Properties
-             * @deprecated Use lingcat.methods.File_Upload_Request.$Properties instead.
+             * @interface IAuthorize_Request
+             * @augments lingcat.methods.Authorize_Request.$Properties
+             * @deprecated Use lingcat.methods.Authorize_Request.$Properties instead.
              */
 
             /**
-             * Shape of a File_Upload_Request.
-             * @typedef {lingcat.methods.File_Upload_Request.$Properties} lingcat.methods.File_Upload_Request.$Shape
+             * Shape of an Authorize_Request.
+             * @typedef {lingcat.methods.Authorize_Request.$Properties} lingcat.methods.Authorize_Request.$Shape
              */
 
             /**
-             * Constructs a new File_Upload_Request.
+             * Constructs a new Authorize_Request.
              * @memberof lingcat.methods
-             * @classdesc Represents a File_Upload_Request.
+             * @classdesc Represents an Authorize_Request.
              * @constructor
-             * @param {lingcat.methods.File_Upload_Request.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Authorize_Request.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const File_Upload_Request = function (properties) {
+            const Authorize_Request = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -4261,67 +4259,47 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * File_Upload_Request data.
-             * @member {Uint8Array} data
-             * @memberof lingcat.methods.File_Upload_Request
+             * Authorize_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Authorize_Request
              * @instance
              */
-            File_Upload_Request.prototype.data = $util.newBuffer([]);
+            Authorize_Request.prototype.accessToken = "";
 
             /**
-             * File_Upload_Request offset.
-             * @member {number} offset
-             * @memberof lingcat.methods.File_Upload_Request
-             * @instance
-             */
-            File_Upload_Request.prototype.offset = 0;
-
-            /**
-             * File_Upload_Request token.
-             * @member {string} token
-             * @memberof lingcat.methods.File_Upload_Request
-             * @instance
-             */
-            File_Upload_Request.prototype.token = "";
-
-            /**
-             * Creates a new File_Upload_Request instance using the specified properties.
+             * Creates a new Authorize_Request instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
-             * @param {lingcat.methods.File_Upload_Request.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.File_Upload_Request} File_Upload_Request instance
+             * @param {lingcat.methods.Authorize_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Authorize_Request} Authorize_Request instance
              * @type {{
-             *   (properties: lingcat.methods.File_Upload_Request.$Shape): lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape;
-             *   (properties?: lingcat.methods.File_Upload_Request.$Properties): lingcat.methods.File_Upload_Request;
+             *   (properties: lingcat.methods.Authorize_Request.$Shape): lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape;
+             *   (properties?: lingcat.methods.Authorize_Request.$Properties): lingcat.methods.Authorize_Request;
              * }}
              */
-            File_Upload_Request.create = function(properties) {
-                return new File_Upload_Request(properties);
+            Authorize_Request.create = function(properties) {
+                return new Authorize_Request(properties);
             };
 
             /**
-             * Encodes the specified File_Upload_Request message. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
+             * Encodes the specified Authorize_Request message. Does not implicitly {@link lingcat.methods.Authorize_Request.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
-             * @param {lingcat.methods.File_Upload_Request.$Properties} message File_Upload_Request message or plain object to encode
+             * @param {lingcat.methods.Authorize_Request.$Properties} message Authorize_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            File_Upload_Request.encode = function (message, writer, _depth) {
+            Authorize_Request.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
-                    writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
-                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.offset);
-                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
-                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.token);
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -4329,37 +4307,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified File_Upload_Request message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
+             * Encodes the specified Authorize_Request message, length delimited. Does not implicitly {@link lingcat.methods.Authorize_Request.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
-             * @param {lingcat.methods.File_Upload_Request.$Properties} message File_Upload_Request message or plain object to encode
+             * @param {lingcat.methods.Authorize_Request.$Properties} message Authorize_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            File_Upload_Request.encodeDelimited = function(message, writer) {
+            Authorize_Request.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes a File_Upload_Request message from the specified reader or buffer.
+             * Decodes an Authorize_Request message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @returns {lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape} Authorize_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            File_Upload_Request.decode = function (reader, length, _end, _depth, _target) {
+            Authorize_Request.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.File_Upload_Request(), value;
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Authorize_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -4372,28 +4350,10 @@ export const lingcat = $root.lingcat = (() => {
                     case 1: {
                             if (wireType !== 2)
                                 break;
-                            if ((value = reader.bytes()).length)
-                                message.data = value;
-                            else
-                                delete message.data;
-                            continue;
-                        }
-                    case 2: {
-                            if (wireType !== 0)
-                                break;
-                            if (value = reader.uint32())
-                                message.offset = value;
-                            else
-                                delete message.offset;
-                            continue;
-                        }
-                    case 3: {
-                            if (wireType !== 2)
-                                break;
                             if ((value = reader.stringVerify()).length)
-                                message.token = value;
+                                message.accessToken = value;
                             else
-                                delete message.token;
+                                delete message.accessToken;
                             continue;
                         }
                     }
@@ -4409,91 +4369,76 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes a File_Upload_Request message from the specified reader or buffer, length delimited.
+             * Decodes an Authorize_Request message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @returns {lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape} Authorize_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            File_Upload_Request.decodeDelimited = function(reader) {
+            Authorize_Request.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a File_Upload_Request message.
+             * Verifies an Authorize_Request message.
              * @function verify
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            File_Upload_Request.verify = function (message, _depth) {
+            Authorize_Request.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
-                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
-                    if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
-                        return "data: buffer expected";
-                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
-                    if (!$util.isInteger(message.offset))
-                        return "offset: integer expected";
-                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
-                    if (!$util.isString(message.token))
-                        return "token: string expected";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
                 return null;
             };
 
             /**
-             * Creates a File_Upload_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates an Authorize_Request message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.File_Upload_Request} File_Upload_Request
+             * @returns {lingcat.methods.Authorize_Request} Authorize_Request
              */
-            File_Upload_Request.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.File_Upload_Request)
+            Authorize_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Authorize_Request)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.File_Upload_Request: object expected");
+                    throw $TypeError(".lingcat.methods.Authorize_Request: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                let message = new $root.lingcat.methods.File_Upload_Request();
-                if (object.data != null)
-                    if (object.data.length)
-                        if (typeof object.data === "string")
-                            $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
-                        else if (object.data.length >= 0)
-                            message.data = object.data;
-                if (object.offset != null)
-                    if ($Number(object.offset) !== 0)
-                        message.offset = object.offset >>> 0;
-                if (object.token != null)
-                    if (typeof object.token !== "string" || object.token.length)
-                        message.token = $String(object.token);
+                let message = new $root.lingcat.methods.Authorize_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
                 return message;
             };
 
             /**
-             * Creates a plain object from a File_Upload_Request message. Also converts values to other types if specified.
+             * Creates a plain object from an Authorize_Request message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
-             * @param {lingcat.methods.File_Upload_Request} message File_Upload_Request
+             * @param {lingcat.methods.Authorize_Request} message Authorize_Request
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            File_Upload_Request.toObject = function (message, options, _depth) {
+            Authorize_Request.toObject = function (message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === $undefined)
@@ -4501,84 +4446,71 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 let object = {};
-                if (options.defaults) {
-                    if (options.bytes === $String)
-                        object.data = "";
-                    else {
-                        object.data = [];
-                        if (options.bytes !== $Array)
-                            object.data = $util.newBuffer(object.data);
-                    }
-                    object.offset = 0;
-                    object.token = "";
-                }
-                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
-                    object.data = options.bytes === $String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.data) : message.data;
-                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
-                    object.offset = message.offset;
-                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
-                    object.token = message.token;
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
                 return object;
             };
 
             /**
-             * Converts this File_Upload_Request to JSON.
+             * Converts this Authorize_Request to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            File_Upload_Request.prototype.toJSON = function() {
-                return File_Upload_Request.toObject(this, $protobuf.util.toJSONOptions);
+            Authorize_Request.prototype.toJSON = function() {
+                return Authorize_Request.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for File_Upload_Request
+             * Gets the type url for Authorize_Request
              * @function getTypeUrl
-             * @memberof lingcat.methods.File_Upload_Request
+             * @memberof lingcat.methods.Authorize_Request
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            File_Upload_Request.getTypeUrl = function(prefix) {
+            Authorize_Request.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.File_Upload_Request";
+                return prefix + "/lingcat.methods.Authorize_Request";
             };
 
-            return File_Upload_Request;
+            return Authorize_Request;
         })();
 
-        methods.File_Upload_Response = (function() {
+        methods.Authorize_Response = (function() {
 
             /**
-             * Properties of a File_Upload_Response.
-             * @typedef {Object} lingcat.methods.File_Upload_Response.$Properties
+             * Properties of an Authorize_Response.
+             * @typedef {Object} lingcat.methods.Authorize_Response.$Properties
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of a File_Upload_Response.
+             * Properties of an Authorize_Response.
              * @memberof lingcat.methods
-             * @interface IFile_Upload_Response
-             * @augments lingcat.methods.File_Upload_Response.$Properties
-             * @deprecated Use lingcat.methods.File_Upload_Response.$Properties instead.
+             * @interface IAuthorize_Response
+             * @augments lingcat.methods.Authorize_Response.$Properties
+             * @deprecated Use lingcat.methods.Authorize_Response.$Properties instead.
              */
 
             /**
-             * Shape of a File_Upload_Response.
-             * @typedef {lingcat.methods.File_Upload_Response.$Properties} lingcat.methods.File_Upload_Response.$Shape
+             * Shape of an Authorize_Response.
+             * @typedef {lingcat.methods.Authorize_Response.$Properties} lingcat.methods.Authorize_Response.$Shape
              */
 
             /**
-             * Constructs a new File_Upload_Response.
+             * Constructs a new Authorize_Response.
              * @memberof lingcat.methods
-             * @classdesc Represents a File_Upload_Response.
+             * @classdesc Represents an Authorize_Response.
              * @constructor
-             * @param {lingcat.methods.File_Upload_Response.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Authorize_Response.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const File_Upload_Response = function (properties) {
+            const Authorize_Response = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -4586,31 +4518,31 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a new File_Upload_Response instance using the specified properties.
+             * Creates a new Authorize_Response instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
-             * @param {lingcat.methods.File_Upload_Response.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.File_Upload_Response} File_Upload_Response instance
+             * @param {lingcat.methods.Authorize_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Authorize_Response} Authorize_Response instance
              * @type {{
-             *   (properties: lingcat.methods.File_Upload_Response.$Shape): lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape;
-             *   (properties?: lingcat.methods.File_Upload_Response.$Properties): lingcat.methods.File_Upload_Response;
+             *   (properties: lingcat.methods.Authorize_Response.$Shape): lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape;
+             *   (properties?: lingcat.methods.Authorize_Response.$Properties): lingcat.methods.Authorize_Response;
              * }}
              */
-            File_Upload_Response.create = function(properties) {
-                return new File_Upload_Response(properties);
+            Authorize_Response.create = function(properties) {
+                return new Authorize_Response(properties);
             };
 
             /**
-             * Encodes the specified File_Upload_Response message. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
+             * Encodes the specified Authorize_Response message. Does not implicitly {@link lingcat.methods.Authorize_Response.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
-             * @param {lingcat.methods.File_Upload_Response.$Properties} message File_Upload_Response message or plain object to encode
+             * @param {lingcat.methods.Authorize_Response.$Properties} message Authorize_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            File_Upload_Response.encode = function (message, writer, _depth) {
+            Authorize_Response.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -4624,37 +4556,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified File_Upload_Response message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
+             * Encodes the specified Authorize_Response message, length delimited. Does not implicitly {@link lingcat.methods.Authorize_Response.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
-             * @param {lingcat.methods.File_Upload_Response.$Properties} message File_Upload_Response message or plain object to encode
+             * @param {lingcat.methods.Authorize_Response.$Properties} message Authorize_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            File_Upload_Response.encodeDelimited = function(message, writer) {
+            Authorize_Response.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes a File_Upload_Response message from the specified reader or buffer.
+             * Decodes an Authorize_Response message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @returns {lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape} Authorize_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            File_Upload_Response.decode = function (reader, length, _end, _depth, _target) {
+            Authorize_Response.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.File_Upload_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Authorize_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -4674,30 +4606,30 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes a File_Upload_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Authorize_Response message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @returns {lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape} Authorize_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            File_Upload_Response.decodeDelimited = function(reader) {
+            Authorize_Response.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a File_Upload_Response message.
+             * Verifies an Authorize_Response message.
              * @function verify
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            File_Upload_Response.verify = function (message, _depth) {
+            Authorize_Response.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
@@ -4708,64 +4640,64 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a File_Upload_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Authorize_Response message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.File_Upload_Response} File_Upload_Response
+             * @returns {lingcat.methods.Authorize_Response} Authorize_Response
              */
-            File_Upload_Response.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.File_Upload_Response)
+            Authorize_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Authorize_Response)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.File_Upload_Response: object expected");
+                    throw $TypeError(".lingcat.methods.Authorize_Response: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                return new $root.lingcat.methods.File_Upload_Response();
+                return new $root.lingcat.methods.Authorize_Response();
             };
 
             /**
-             * Creates a plain object from a File_Upload_Response message. Also converts values to other types if specified.
+             * Creates a plain object from an Authorize_Response message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
-             * @param {lingcat.methods.File_Upload_Response} message File_Upload_Response
+             * @param {lingcat.methods.Authorize_Response} message Authorize_Response
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            File_Upload_Response.toObject = function () {
+            Authorize_Response.toObject = function () {
                 return {};
             };
 
             /**
-             * Converts this File_Upload_Response to JSON.
+             * Converts this Authorize_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            File_Upload_Response.prototype.toJSON = function() {
-                return File_Upload_Response.toObject(this, $protobuf.util.toJSONOptions);
+            Authorize_Response.prototype.toJSON = function() {
+                return Authorize_Response.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for File_Upload_Response
+             * Gets the type url for Authorize_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.File_Upload_Response
+             * @memberof lingcat.methods.Authorize_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            File_Upload_Response.getTypeUrl = function(prefix) {
+            Authorize_Response.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.File_Upload_Response";
+                return prefix + "/lingcat.methods.Authorize_Response";
             };
 
-            return File_Upload_Response;
+            return Authorize_Response;
         })();
 
         return methods;

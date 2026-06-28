@@ -1734,243 +1734,231 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a File_Upload_Request.
-         * @deprecated Use lingcat.methods.File_Upload_Request.$Properties instead.
+         * Properties of an Authorize_Request.
+         * @deprecated Use lingcat.methods.Authorize_Request.$Properties instead.
          */
-        interface IFile_Upload_Request extends lingcat.methods.File_Upload_Request.$Properties {
+        interface IAuthorize_Request extends lingcat.methods.Authorize_Request.$Properties {
         }
 
-        /** Represents a File_Upload_Request. */
-        class File_Upload_Request {
+        /** Represents an Authorize_Request. */
+        class Authorize_Request {
 
             /**
-             * Constructs a new File_Upload_Request.
+             * Constructs a new Authorize_Request.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.File_Upload_Request.$Properties);
+            constructor(properties?: lingcat.methods.Authorize_Request.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** File_Upload_Request data. */
-            data: Uint8Array;
-
-            /** File_Upload_Request offset. */
-            offset: number;
-
-            /** File_Upload_Request token. */
-            token: string;
+            /** Authorize_Request accessToken. */
+            accessToken: string;
 
             /**
-             * Creates a new File_Upload_Request instance using the specified properties.
+             * Creates a new Authorize_Request instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns File_Upload_Request instance
+             * @returns Authorize_Request instance
              */
-            static create(properties: lingcat.methods.File_Upload_Request.$Shape): lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape;
-            static create(properties?: lingcat.methods.File_Upload_Request.$Properties): lingcat.methods.File_Upload_Request;
+            static create(properties: lingcat.methods.Authorize_Request.$Shape): lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape;
+            static create(properties?: lingcat.methods.Authorize_Request.$Properties): lingcat.methods.Authorize_Request;
 
             /**
-             * Encodes the specified File_Upload_Request message. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
-             * @param message File_Upload_Request message or plain object to encode
+             * Encodes the specified Authorize_Request message. Does not implicitly {@link lingcat.methods.Authorize_Request.verify|verify} messages.
+             * @param message Authorize_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.File_Upload_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Authorize_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified File_Upload_Request message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Request.verify|verify} messages.
-             * @param message File_Upload_Request message or plain object to encode
+             * Encodes the specified Authorize_Request message, length delimited. Does not implicitly {@link lingcat.methods.Authorize_Request.verify|verify} messages.
+             * @param message Authorize_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.File_Upload_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Authorize_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a File_Upload_Request message from the specified reader or buffer.
+             * Decodes an Authorize_Request message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @returns {lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape} Authorize_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape;
 
             /**
-             * Decodes a File_Upload_Request message from the specified reader or buffer, length delimited.
+             * Decodes an Authorize_Request message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape} File_Upload_Request
+             * @returns {lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape} Authorize_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.File_Upload_Request & lingcat.methods.File_Upload_Request.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Authorize_Request & lingcat.methods.Authorize_Request.$Shape;
 
             /**
-             * Verifies a File_Upload_Request message.
+             * Verifies an Authorize_Request message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a File_Upload_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates an Authorize_Request message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns File_Upload_Request
+             * @returns Authorize_Request
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.File_Upload_Request;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Authorize_Request;
 
             /**
-             * Creates a plain object from a File_Upload_Request message. Also converts values to other types if specified.
-             * @param message File_Upload_Request
+             * Creates a plain object from an Authorize_Request message. Also converts values to other types if specified.
+             * @param message Authorize_Request
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.File_Upload_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Authorize_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this File_Upload_Request to JSON.
+             * Converts this Authorize_Request to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for File_Upload_Request
+             * Gets the type url for Authorize_Request
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace File_Upload_Request {
+        namespace Authorize_Request {
 
-            /** Properties of a File_Upload_Request. */
+            /** Properties of an Authorize_Request. */
             interface $Properties {
 
-                /** File_Upload_Request data */
-                data?: (Uint8Array|null);
-
-                /** File_Upload_Request offset */
-                offset?: (number|null);
-
-                /** File_Upload_Request token */
-                token?: (string|null);
+                /** Authorize_Request accessToken */
+                accessToken?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a File_Upload_Request. */
-            type $Shape = lingcat.methods.File_Upload_Request.$Properties;
+            /** Shape of an Authorize_Request. */
+            type $Shape = lingcat.methods.Authorize_Request.$Properties;
         }
 
         /**
-         * Properties of a File_Upload_Response.
-         * @deprecated Use lingcat.methods.File_Upload_Response.$Properties instead.
+         * Properties of an Authorize_Response.
+         * @deprecated Use lingcat.methods.Authorize_Response.$Properties instead.
          */
-        interface IFile_Upload_Response extends lingcat.methods.File_Upload_Response.$Properties {
+        interface IAuthorize_Response extends lingcat.methods.Authorize_Response.$Properties {
         }
 
-        /** Represents a File_Upload_Response. */
-        class File_Upload_Response {
+        /** Represents an Authorize_Response. */
+        class Authorize_Response {
 
             /**
-             * Constructs a new File_Upload_Response.
+             * Constructs a new Authorize_Response.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.File_Upload_Response.$Properties);
+            constructor(properties?: lingcat.methods.Authorize_Response.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
             /**
-             * Creates a new File_Upload_Response instance using the specified properties.
+             * Creates a new Authorize_Response instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns File_Upload_Response instance
+             * @returns Authorize_Response instance
              */
-            static create(properties: lingcat.methods.File_Upload_Response.$Shape): lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape;
-            static create(properties?: lingcat.methods.File_Upload_Response.$Properties): lingcat.methods.File_Upload_Response;
+            static create(properties: lingcat.methods.Authorize_Response.$Shape): lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape;
+            static create(properties?: lingcat.methods.Authorize_Response.$Properties): lingcat.methods.Authorize_Response;
 
             /**
-             * Encodes the specified File_Upload_Response message. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
-             * @param message File_Upload_Response message or plain object to encode
+             * Encodes the specified Authorize_Response message. Does not implicitly {@link lingcat.methods.Authorize_Response.verify|verify} messages.
+             * @param message Authorize_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.File_Upload_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Authorize_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified File_Upload_Response message, length delimited. Does not implicitly {@link lingcat.methods.File_Upload_Response.verify|verify} messages.
-             * @param message File_Upload_Response message or plain object to encode
+             * Encodes the specified Authorize_Response message, length delimited. Does not implicitly {@link lingcat.methods.Authorize_Response.verify|verify} messages.
+             * @param message Authorize_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.File_Upload_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Authorize_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a File_Upload_Response message from the specified reader or buffer.
+             * Decodes an Authorize_Response message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @returns {lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape} Authorize_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape;
 
             /**
-             * Decodes a File_Upload_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Authorize_Response message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape} File_Upload_Response
+             * @returns {lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape} Authorize_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.File_Upload_Response & lingcat.methods.File_Upload_Response.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Authorize_Response & lingcat.methods.Authorize_Response.$Shape;
 
             /**
-             * Verifies a File_Upload_Response message.
+             * Verifies an Authorize_Response message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a File_Upload_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Authorize_Response message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns File_Upload_Response
+             * @returns Authorize_Response
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.File_Upload_Response;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Authorize_Response;
 
             /**
-             * Creates a plain object from a File_Upload_Response message. Also converts values to other types if specified.
-             * @param message File_Upload_Response
+             * Creates a plain object from an Authorize_Response message. Also converts values to other types if specified.
+             * @param message Authorize_Response
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.File_Upload_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Authorize_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this File_Upload_Response to JSON.
+             * Converts this Authorize_Response to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for File_Upload_Response
+             * Gets the type url for Authorize_Response
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace File_Upload_Response {
+        namespace Authorize_Response {
 
-            /** Properties of a File_Upload_Response. */
+            /** Properties of an Authorize_Response. */
             interface $Properties {
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a File_Upload_Response. */
-            type $Shape = lingcat.methods.File_Upload_Response.$Properties;
+            /** Shape of an Authorize_Response. */
+            type $Shape = lingcat.methods.Authorize_Response.$Properties;
         }
     }
 }

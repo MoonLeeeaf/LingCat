@@ -60,3 +60,9 @@ message Request_File_Upload_Request {
 message Request_File_Upload_Response {
     string token = 1;
 }
+
+message Authorize_Request {
+    string access_token = 1;
+}
+
+message Authorize_Response {}

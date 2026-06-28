@@ -34,6 +34,10 @@ export function randomSha256Salt() {
     return sodium.randombytes_buf(sodium.crypto_auth_hmacsha256_KEYBYTES)
 }
 
+export function sha256Hex(salt: Uint8Array, message: Uint8Array) {
+    return sodium.to_hex(sodium.crypto_auth_hmacsha256(message, salt))
+}
+
 export default class SecureKey {
     /**
      * 客户端 / 服务端生成临时密钥对

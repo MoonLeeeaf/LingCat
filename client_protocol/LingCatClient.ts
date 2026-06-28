@@ -3,6 +3,7 @@ import { toUint8Array } from 'lingcat-shared'
 
 export default class LingCatClient {
     server_ws: string
+    server_http: string
     server_public_key: Uint8Array
     client?: WebSocket
     session: {
@@ -17,10 +18,16 @@ export default class LingCatClient {
 
     constructor(options: {
         server_ws: string,
+        server_http: string,
         server_public_key: Uint8Array,
     }) {
         this.server_ws = options.server_ws
+        this.server_http = options.server_http
         this.server_public_key = options.server_public_key
+    }
+
+    getFileUrlByHash(hash: string) {
+        return this.server_http + '/uploaded_files/' + hash
     }
 
     on_package_listeners: Function[] = []
