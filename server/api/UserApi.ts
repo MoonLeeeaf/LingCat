@@ -6,6 +6,11 @@ import TokenManager from './TokenManager.ts'
 export default class UserApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {
         switch (mPackage.method_id) {
+            /**
+             * ===============================
+             *             注册请求
+             * ===============================
+             */
             case Methods.User_Registration_Request: {
                 const { username, password, nickname } = LingCatProto.methods.User_Registration_Request.decode(mPackage.data)
 
@@ -33,6 +38,11 @@ export default class UserApi {
 
                 break
             }
+            /**
+             * ===============================
+             *             登录请求
+             * ===============================
+             */
             case Methods.User_Login_Request: {
                 const { account, password } = LingCatProto.methods.User_Login_Request.decode(mPackage.data)
 

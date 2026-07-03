@@ -5,7 +5,11 @@ import TokenManager from "./TokenManager.ts"
 export default class FileApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {
         switch (mPackage.method_id) {
-            // 请求文件上传密钥
+            /**
+             * ===============================
+             *         请求文件上传令牌
+             * ===============================
+             */
             case Methods.Request_File_Upload_Request: {
                 const user_id = TokenManager.verifyAccessToken(
                     LingCatProto.methods.Request_File_Upload_Request.decode(mPackage.data).accessToken,
