@@ -66,3 +66,16 @@ message Authorize_Request {
 }
 
 message Authorize_Response {}
+
+message Query_User_Info_Request {
+    string access_token = 1;
+    string user_id = 2;
+}
+
+/** see @link{ classes-interfaces.ts } */
+message Query_User_Info_Response {
+    string id = 1;
+    optional string username = 2;
+    string nickname = 3;
+    optional string avatar_file_hash = 4;
+}

@@ -4700,6 +4700,656 @@ export const lingcat = $root.lingcat = (() => {
             return Authorize_Response;
         })();
 
+        methods.Query_User_Info_Request = (function() {
+
+            /**
+             * Properties of a Query_User_Info_Request.
+             * @typedef {Object} lingcat.methods.Query_User_Info_Request.$Properties
+             * @property {string|null} [accessToken] Query_User_Info_Request accessToken
+             * @property {string|null} [userId] Query_User_Info_Request userId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Query_User_Info_Request.
+             * @memberof lingcat.methods
+             * @interface IQuery_User_Info_Request
+             * @augments lingcat.methods.Query_User_Info_Request.$Properties
+             * @deprecated Use lingcat.methods.Query_User_Info_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Query_User_Info_Request.
+             * @typedef {lingcat.methods.Query_User_Info_Request.$Properties} lingcat.methods.Query_User_Info_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Query_User_Info_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Query_User_Info_Request.
+             * @constructor
+             * @param {lingcat.methods.Query_User_Info_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Query_User_Info_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Query_User_Info_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @instance
+             */
+            Query_User_Info_Request.prototype.accessToken = "";
+
+            /**
+             * Query_User_Info_Request userId.
+             * @member {string} userId
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @instance
+             */
+            Query_User_Info_Request.prototype.userId = "";
+
+            /**
+             * Creates a new Query_User_Info_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Query_User_Info_Request} Query_User_Info_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Query_User_Info_Request.$Shape): lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape;
+             *   (properties?: lingcat.methods.Query_User_Info_Request.$Properties): lingcat.methods.Query_User_Info_Request;
+             * }}
+             */
+            Query_User_Info_Request.create = function(properties) {
+                return new Query_User_Info_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Query_User_Info_Request message. Does not implicitly {@link lingcat.methods.Query_User_Info_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Request.$Properties} message Query_User_Info_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_User_Info_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Query_User_Info_Request message, length delimited. Does not implicitly {@link lingcat.methods.Query_User_Info_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Request.$Properties} message Query_User_Info_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_User_Info_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Query_User_Info_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape} Query_User_Info_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_User_Info_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_User_Info_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.userId = value;
+                            else
+                                delete message.userId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Query_User_Info_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape} Query_User_Info_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_User_Info_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Query_User_Info_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Query_User_Info_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Query_User_Info_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Query_User_Info_Request} Query_User_Info_Request
+             */
+            Query_User_Info_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Query_User_Info_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Query_User_Info_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Query_User_Info_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.userId != null)
+                    if (typeof object.userId !== "string" || object.userId.length)
+                        message.userId = $String(object.userId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Query_User_Info_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Request} message Query_User_Info_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Query_User_Info_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.userId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                return object;
+            };
+
+            /**
+             * Converts this Query_User_Info_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Query_User_Info_Request.prototype.toJSON = function() {
+                return Query_User_Info_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Query_User_Info_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Query_User_Info_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Query_User_Info_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Query_User_Info_Request";
+            };
+
+            return Query_User_Info_Request;
+        })();
+
+        methods.Query_User_Info_Response = (function() {
+
+            /**
+             * Properties of a Query_User_Info_Response.
+             * @typedef {Object} lingcat.methods.Query_User_Info_Response.$Properties
+             * @property {string|null} [id] Query_User_Info_Response id
+             * @property {string|null} [username] Query_User_Info_Response username
+             * @property {string|null} [nickname] Query_User_Info_Response nickname
+             * @property {string|null} [avatarFileHash] Query_User_Info_Response avatarFileHash
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Query_User_Info_Response.
+             * @memberof lingcat.methods
+             * @interface IQuery_User_Info_Response
+             * @augments lingcat.methods.Query_User_Info_Response.$Properties
+             * @deprecated Use lingcat.methods.Query_User_Info_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Query_User_Info_Response.
+             * @typedef {lingcat.methods.Query_User_Info_Response.$Properties} lingcat.methods.Query_User_Info_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Query_User_Info_Response.
+             * @memberof lingcat.methods
+             * @classdesc @see classes-interfaces.ts
+             * @constructor
+             * @param {lingcat.methods.Query_User_Info_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Query_User_Info_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Query_User_Info_Response id.
+             * @member {string} id
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             */
+            Query_User_Info_Response.prototype.id = "";
+
+            /**
+             * Query_User_Info_Response username.
+             * @member {string|null|undefined} username
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             */
+            Query_User_Info_Response.prototype.username = null;
+
+            /**
+             * Query_User_Info_Response nickname.
+             * @member {string} nickname
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             */
+            Query_User_Info_Response.prototype.nickname = "";
+
+            /**
+             * Query_User_Info_Response avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             */
+            Query_User_Info_Response.prototype.avatarFileHash = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Query_User_Info_Response.prototype, "_username", {
+                get: $util.oneOfGetter($oneOfFields = ["username"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Query_User_Info_Response.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Query_User_Info_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Query_User_Info_Response} Query_User_Info_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Query_User_Info_Response.$Shape): lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape;
+             *   (properties?: lingcat.methods.Query_User_Info_Response.$Properties): lingcat.methods.Query_User_Info_Response;
+             * }}
+             */
+            Query_User_Info_Response.create = function(properties) {
+                return new Query_User_Info_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Query_User_Info_Response message. Does not implicitly {@link lingcat.methods.Query_User_Info_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Response.$Properties} message Query_User_Info_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_User_Info_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.avatarFileHash);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Query_User_Info_Response message, length delimited. Does not implicitly {@link lingcat.methods.Query_User_Info_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Response.$Properties} message Query_User_Info_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_User_Info_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Query_User_Info_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape} Query_User_Info_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_User_Info_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_User_Info_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.id = value;
+                            else
+                                delete message.id;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.username = reader.stringVerify();
+                            message._username = "username";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.nickname = value;
+                            else
+                                delete message.nickname;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Query_User_Info_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape} Query_User_Info_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_User_Info_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Query_User_Info_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Query_User_Info_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username")) {
+                    properties._username = 1;
+                    if (!$util.isString(message.username))
+                        return "username: string expected";
+                }
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Query_User_Info_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Query_User_Info_Response} Query_User_Info_Response
+             */
+            Query_User_Info_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Query_User_Info_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Query_User_Info_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Query_User_Info_Response();
+                if (object.id != null)
+                    if (typeof object.id !== "string" || object.id.length)
+                        message.id = $String(object.id);
+                if (object.username != null)
+                    message.username = $String(object.username);
+                if (object.nickname != null)
+                    if (typeof object.nickname !== "string" || object.nickname.length)
+                        message.nickname = $String(object.nickname);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Query_User_Info_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {lingcat.methods.Query_User_Info_Response} message Query_User_Info_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Query_User_Info_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.id = "";
+                    object.nickname = "";
+                }
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    object.id = message.id;
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    object.username = message.username;
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    object.nickname = message.nickname;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                return object;
+            };
+
+            /**
+             * Converts this Query_User_Info_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Query_User_Info_Response.prototype.toJSON = function() {
+                return Query_User_Info_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Query_User_Info_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Query_User_Info_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Query_User_Info_Response";
+            };
+
+            return Query_User_Info_Response;
+        })();
+
         return methods;
     })();
 

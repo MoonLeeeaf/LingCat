@@ -1960,5 +1960,263 @@ export namespace lingcat {
             /** Shape of an Authorize_Response. */
             type $Shape = lingcat.methods.Authorize_Response.$Properties;
         }
+
+        /**
+         * Properties of a Query_User_Info_Request.
+         * @deprecated Use lingcat.methods.Query_User_Info_Request.$Properties instead.
+         */
+        interface IQuery_User_Info_Request extends lingcat.methods.Query_User_Info_Request.$Properties {
+        }
+
+        /** Represents a Query_User_Info_Request. */
+        class Query_User_Info_Request {
+
+            /**
+             * Constructs a new Query_User_Info_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Query_User_Info_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Query_User_Info_Request accessToken. */
+            accessToken: string;
+
+            /** Query_User_Info_Request userId. */
+            userId: string;
+
+            /**
+             * Creates a new Query_User_Info_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Query_User_Info_Request instance
+             */
+            static create(properties: lingcat.methods.Query_User_Info_Request.$Shape): lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape;
+            static create(properties?: lingcat.methods.Query_User_Info_Request.$Properties): lingcat.methods.Query_User_Info_Request;
+
+            /**
+             * Encodes the specified Query_User_Info_Request message. Does not implicitly {@link lingcat.methods.Query_User_Info_Request.verify|verify} messages.
+             * @param message Query_User_Info_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Query_User_Info_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Query_User_Info_Request message, length delimited. Does not implicitly {@link lingcat.methods.Query_User_Info_Request.verify|verify} messages.
+             * @param message Query_User_Info_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Query_User_Info_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Query_User_Info_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape} Query_User_Info_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape;
+
+            /**
+             * Decodes a Query_User_Info_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape} Query_User_Info_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Query_User_Info_Request & lingcat.methods.Query_User_Info_Request.$Shape;
+
+            /**
+             * Verifies a Query_User_Info_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Query_User_Info_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Query_User_Info_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Query_User_Info_Request;
+
+            /**
+             * Creates a plain object from a Query_User_Info_Request message. Also converts values to other types if specified.
+             * @param message Query_User_Info_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Query_User_Info_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Query_User_Info_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Query_User_Info_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Query_User_Info_Request {
+
+            /** Properties of a Query_User_Info_Request. */
+            interface $Properties {
+
+                /** Query_User_Info_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Query_User_Info_Request userId */
+                userId?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Query_User_Info_Request. */
+            type $Shape = lingcat.methods.Query_User_Info_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Query_User_Info_Response.
+         * @deprecated Use lingcat.methods.Query_User_Info_Response.$Properties instead.
+         */
+        interface IQuery_User_Info_Response extends lingcat.methods.Query_User_Info_Response.$Properties {
+        }
+
+        /** @see classes-interfaces.ts */
+        class Query_User_Info_Response {
+
+            /**
+             * Constructs a new Query_User_Info_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Query_User_Info_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Query_User_Info_Response id. */
+            id: string;
+
+            /** Query_User_Info_Response username. */
+            username?: (string|null);
+
+            /** Query_User_Info_Response nickname. */
+            nickname: string;
+
+            /** Query_User_Info_Response avatarFileHash. */
+            avatarFileHash?: (string|null);
+
+            /**
+             * Creates a new Query_User_Info_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Query_User_Info_Response instance
+             */
+            static create(properties: lingcat.methods.Query_User_Info_Response.$Shape): lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape;
+            static create(properties?: lingcat.methods.Query_User_Info_Response.$Properties): lingcat.methods.Query_User_Info_Response;
+
+            /**
+             * Encodes the specified Query_User_Info_Response message. Does not implicitly {@link lingcat.methods.Query_User_Info_Response.verify|verify} messages.
+             * @param message Query_User_Info_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Query_User_Info_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Query_User_Info_Response message, length delimited. Does not implicitly {@link lingcat.methods.Query_User_Info_Response.verify|verify} messages.
+             * @param message Query_User_Info_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Query_User_Info_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Query_User_Info_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape} Query_User_Info_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape;
+
+            /**
+             * Decodes a Query_User_Info_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape} Query_User_Info_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Query_User_Info_Response & lingcat.methods.Query_User_Info_Response.$Shape;
+
+            /**
+             * Verifies a Query_User_Info_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Query_User_Info_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Query_User_Info_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Query_User_Info_Response;
+
+            /**
+             * Creates a plain object from a Query_User_Info_Response message. Also converts values to other types if specified.
+             * @param message Query_User_Info_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Query_User_Info_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Query_User_Info_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Query_User_Info_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Query_User_Info_Response {
+
+            /** Properties of a Query_User_Info_Response. */
+            interface $Properties {
+
+                /** Query_User_Info_Response id */
+                id?: (string|null);
+
+                /** Query_User_Info_Response username */
+                username?: (string|null);
+
+                /** Query_User_Info_Response nickname */
+                nickname?: (string|null);
+
+                /** Query_User_Info_Response avatarFileHash */
+                avatarFileHash?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Query_User_Info_Response. */
+            type $Shape = lingcat.methods.Query_User_Info_Response.$Properties;
+        }
     }
 }

@@ -67,6 +67,40 @@ export default class UserApi {
 
                 break
             }
+            /**
+             * ===============================
+             *          请求用户信息
+             * ===============================
+             */
+            case Methods.Query_User_Info_Request: {
+                const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
+                
+                TokenManager.verifyAccessToken(data.accessToken, 'access')
+
+                const user = await UserDataBase.queryUserById(data.userId)
+
+                if (user == null)
+                    return sendPackage(Package.encode({
+                        method_id: Methods.Error_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.Error_Response.encode({
+                            requestMethod: mPackage.method_id,
+                            message: 'User doesn\'t exists',
+                        }).finish(),
+                    }))
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Query_User_Info_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Query_User_Info_Response.encode({
+                        username: user.username,
+                        avatarFileHash: user.avatar_file_hash,
+                        nickname: user.nickname,
+                        id: user.id,
+                    }).finish()
+                }))
+                break
+            }
             default: {
                 return false
             }

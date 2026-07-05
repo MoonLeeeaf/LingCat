@@ -1,8 +1,8 @@
 export interface IUser {
-    /** 用户 ID 在服务端为真实 ID, 在客户端为服务端生成的针对某个客户端的临时 ID */
     id: string
     username?: string | null
     nickname: string
+    avatar_file_hash?: string | null
 }
 
 export interface IGroup {

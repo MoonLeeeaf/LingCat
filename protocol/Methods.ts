@@ -12,6 +12,8 @@ export default class Methods {
     static Request_File_Upload_Response = 0x10
     static Authorize_Request = 0x11
     static Authorize_Response = 0x12
+    static Query_User_Info_Request = 0x13
+    static Query_User_Info_Response = 0x14
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>
