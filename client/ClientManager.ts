@@ -51,6 +51,7 @@ export default class ClientManager {
         const { server } = this.getUserSession(userSessionName)
         this.client = new LingCatClient({
             server_ws: server,
+            server_http: server,
             server_public_key: this.getServerPublicKey(new URL(server).host)
         })
     }

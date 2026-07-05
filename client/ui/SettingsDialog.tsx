@@ -165,6 +165,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
 
                             const client = new LingCatClient({
                                 server_ws: mLoginServer.current!.value,
+                                server_http: mLoginServer.current!.value,
                                 server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
                             })
                             client.init()
@@ -205,6 +206,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
 
                 const client = new LingCatClient({
                     server_ws: mLoginServer.current!.value,
+                    server_http: mLoginServer.current!.value,
                     server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
                 })
                 client.init()
