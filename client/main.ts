@@ -9,4 +9,6 @@ import ReactDOM from 'react-dom/client'
 import React from 'react'
 import Main from './ui/Main.tsx'
 
+import './ui/MduiPatchedTextAreaElement.ts'
+
 ReactDOM.createRoot(document.getElementById('app')!).render(React.createElement(Main))
