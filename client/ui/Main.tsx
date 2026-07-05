@@ -28,10 +28,10 @@ export default function Main() {
     return (
         <mdui-layout>
             <mdui-top-app-bar>
-                <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
+                <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
                 <div style={{ flexGrow: 1 }}></div>
                 <mdui-button-icon icon="settings" onClick={() => mSettingsDialog.current!.open = true}></mdui-button-icon>
-                <mdui-button-icon icon="more_vert"></mdui-button-icon>
+                <mdui-button-icon icon="more_vert" style={{ marginRight: '4px' }}></mdui-button-icon>
             </mdui-top-app-bar>
 
             {

@@ -2,6 +2,8 @@ import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 
 export default function UserMain({ access_token }: { access_token: string }) {
+    const cachedProfile = null
+
     return <>
         <mdui-navigation-drawer open>
             <mdui-list>
@@ -33,7 +35,9 @@ export default function UserMain({ access_token }: { access_token: string }) {
                 <div style={{
                     flexGrow: 1,
                 }}></div>
-                <mdui-text-field variant="outlined" autosize max-rows={10} placeholder="输入...">
+                <mdui-text-field use-patched-textarea variant="outlined" autosize max-rows={10} placeholder="输入..." style={{
+                    padding: '4px',
+                }}>
                     <mdui-button-icon slot="end-icon" icon="attachment"></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
                     <mdui-button-icon slot="end-icon" icon="send"></mdui-button-icon>
