@@ -176,6 +176,12 @@ export default function createLingCatServer(base_data_path: string) {
                                 LingCatProto.methods.Authorize_Request.decode(mPackage.data).accessToken
                             ).user_id
 
+                            sendPackage(Package.encode({
+                                method_id: Methods.Authorize_Response,
+                                flags: 0,
+                                data: LingCatProto.methods.Authorize_Response.encode({}).finish()
+                            }))
+
                             return
                         }
                     }
