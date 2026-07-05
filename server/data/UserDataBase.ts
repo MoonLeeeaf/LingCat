@@ -24,6 +24,7 @@ export type { IServerUser }
     table.string('username').unique()
     table.string('nickname').notNullable()
     table.string('password').notNullable()
+    table.string('avatar_file_hash')
     table.integer('created_at').notNullable()
 })
 
