@@ -228,6 +228,9 @@ let TextField = class TextField extends FocusableMixin(MduiElement) {
     get isTextarea() {
         return (this.rows && this.rows > 1) || this.autosize;
     }
+    get isPatchedTextarea() {
+        return this.getAttribute("use-patched-textarea") != null;
+    }
     onDisabledChange() {
         // 禁用状态始终为验证通过，所以 disabled 变更时需要重新校验
         this.inputRef.value.disabled = this.disabled;
@@ -399,7 +402,7 @@ let TextField = class TextField extends FocusableMixin(MduiElement) {
             ...invalidClassNameObj,
         });
         return html`<div part="container" class="${className}">${this.renderPrefix()}<div class="input-container">${this.renderLabel()} ${!hasInputSlot ? (
-            this.getAttribute("use-patched-textarea")
+            this.isPatchedTextarea
                 ? this.renderPatchedTextArea(hasInputSlot)
                 : (
                     this.isTextarea
