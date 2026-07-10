@@ -224,18 +224,18 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                             password: mLoginPassword.current!.value,
                             account: mLoginAccount.current!.value,
                         })
+
+                        ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
+
+                        location.reload()
+
+                        client.disconnect()
                     } catch (e) {
                         console.log(e)
                         showSnackbar({
                             message: '登录失败: ' + e
                         })
                     }
-
-                    ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
-
-                    location.reload()
-
-                    client.disconnect()
                 }
             } catch (e) {
                 console.log(e)
