@@ -173,18 +173,25 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                             client.onInit = async () => {
                                 // @ts-ignore
                                 const password = dlg.querySelector('#password').value
-                                const userId = await UserApi.register(client, {
-                                    password,
-                                    // @ts-ignore
-                                    nickname: dlg.querySelector('#nickname').value,
-                                    // @ts-ignore
-                                    username: dlg.querySelector('#username').value,
-                                })
+                                try {
+                                    const userId = await UserApi.register(client, {
+                                        password,
+                                        // @ts-ignore
+                                        nickname: dlg.querySelector('#nickname').value,
+                                        // @ts-ignore
+                                        username: dlg.querySelector('#username').value,
+                                    })
 
-                                mLoginAccount.current!.value = userId
-                                mLoginPassword.current!.value = password
+                                    mLoginAccount.current!.value = userId
+                                    mLoginPassword.current!.value = password
 
-                                client.disconnect()
+                                    client.disconnect()
+                                } catch (e) {
+                                    console.log(e)
+                                    showSnackbar({
+                                        message: '注册失败: ' + e
+                                    })
+                                }
                             }
                         } catch (e) {
                             console.log(e)
@@ -212,10 +219,17 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                 client.init()
 
                 client.onInit = async () => {
-                    const token = await UserApi.login(client, {
-                        password: mLoginPassword.current!.value,
-                        account: mLoginAccount.current!.value,
-                    })
+                    try {
+                        const token = await UserApi.login(client, {
+                            password: mLoginPassword.current!.value,
+                            account: mLoginAccount.current!.value,
+                        })
+                    } catch (e) {
+                        console.log(e)
+                        showSnackbar({
+                            message: '登录失败: ' + e
+                        })
+                    }
 
                     ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
 
