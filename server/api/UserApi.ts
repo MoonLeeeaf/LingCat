@@ -42,6 +42,8 @@ export default class UserApi {
                 const { account, password } = LingCatProto.methods.User_Login_Request.decode(mPackage.data)
 
                 const mUser = await UserDataBase.queryUserByAccount(account)
+                if (mUser == null)
+                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists')
                 if (mUser?.password == UserDataBase.hashifyPassword(password))
                     sendError(sendPackage, mPackage.method_id, 'Password or account is not match.')
                 else
