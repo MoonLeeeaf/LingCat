@@ -2,10 +2,26 @@ import { NavigationDrawer } from "mdui"
 import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
+import default_avatar from '../default_avatar.png'
+import { IChat, IUser } from "lingcat-protocol"
+import UserProfileDialog from "./UserProfileDialog.tsx"
+import ClientManager from "../ClientManager.ts"
+import { UserApi } from "lingcat-client-protocol"
 
+let setActiveChatFunc
 export default function UserMain({ access_token, drawerRef }: { access_token: string, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
-    const cachedProfile = null
-    const [activeChat, setActiveChat] = React.useState<Chat>()
+    const [profile, setProfile] = React.useState<IUser>()
+    React.useEffect(() => {
+        ;(async () => {
+            ClientManager.initClient(ClientManager.getActiveUserSessionName()!)
+            ClientManager.client.onInit = async () => setProfile(await UserApi.queryMyUserInfo(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+            }))
+        })()
+    }, [access_token])
+    
+    const [activeChat, setActiveChat] = React.useState<IChat>()
+    setActiveChatFunc = setActiveChat
 
     return <>
         <mdui-navigation-drawer ref={drawerRef as any} close-on-overlay-click>
@@ -22,18 +38,9 @@ export default function UserMain({ access_token, drawerRef }: { access_token: st
                 <div style={{
                     overflowY: 'auto',
                 }}>
-                    <Message message={"**喵**\n我是开头![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} />
-                    <Message message={"**喵**\n我是末尾![image](icon.png)\n喵"} senderName={"月月"} />
+                    <Message message={"**喵**\n我是开头![image](icon.png)\n喵"} senderName={"月月"} avatar={default_avatar} />
+                    <Message message={"**喵**\n喵喵喵![image](icon.png)\n喵"} senderName={"月月"} avatar={default_avatar} />
+                    <Message message={"**喵**\n我是末尾![image](icon.png)\n喵"} senderName={"月月"} avatar={default_avatar} />
                 </div>
                 <div style={{
                     flexGrow: 1,
@@ -43,10 +50,14 @@ export default function UserMain({ access_token, drawerRef }: { access_token: st
                 }}>
                     <mdui-button-icon slot="end-icon" icon="attachment"></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
-                    <mdui-button-icon slot="end-icon" icon="send"></mdui-button-icon>
+                    <mdui-button-icon slot="end-icon" icon="send" onClick={() => UserProfileDialog.show(profile?.id!)}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '5px' }}></div>
                 </mdui-text-field>
             </MessageContainer>
         </mdui-layout-main>
     </>
+}
+
+UserMain.openChat = (chat_id: string) => {
+    // setActiveChatFunc()
 }

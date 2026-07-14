@@ -1,5 +1,4 @@
 import Markdown, { ReactRenderer } from "marked-react"
-import default_avatar from '../../default_avatar.png'
 import ReloadableImage from "../ReloadableImage"
 import React from "react"
 
@@ -18,9 +17,11 @@ export default function Message({
     senderName,
     render,
     hideSender,
-    isAtRight
+    isAtRight,
+    avatar
 }: {
     message: string,
+    avatar: string,
     senderName: string,
     render?: Render,
     hideSender?: boolean,
@@ -91,7 +92,7 @@ export default function Message({
                 }
                 <mdui-avatar
                     slot="trigger"
-                    src={default_avatar}
+                    src={avatar}
                     style={{
                         width: "43px",
                         height: "43px",

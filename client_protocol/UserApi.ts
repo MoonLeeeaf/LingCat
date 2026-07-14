@@ -70,6 +70,32 @@ export default class UserApi {
         })).data)
     }
     /**
+     * 查询我的用户信息
+     * @returns 用户信息
+     */
+    static async queryMyUserInfo(client: LingCatClient, {
+        access_token,
+        timeout,
+    }: {
+        access_token: string
+        timeout?: number
+    }) {
+        const re = decodeOrThrow<LingCatProto.methods.Query_My_User_Info_Response>(LingCatProto.methods.Query_My_User_Info_Response,(await client.invoke({
+            method_id: Methods.Query_My_User_Info_Request,
+            data: LingCatProto.methods.Query_My_User_Info_Request.encode({
+                accessToken: access_token,
+            }).finish(),
+            timeout,
+        })).data)
+
+        return {
+            username: re.username,
+            id: re.id,
+            nickname: re.nickname,
+            avatar_file_hash: re.avatarFileHash,
+        } as IUser
+    }
+    /**
      * 查询用户信息
      * @returns 用户信息
      */
@@ -97,5 +123,24 @@ export default class UserApi {
             nickname: re.nickname,
             avatar_file_hash: re.avatarFileHash,
         } as IUser
+    }
+    /**
+     * 更新头像
+     * @returns 访问令牌
+     */
+    static async updateMyAvatarFileHash(client: LingCatClient, {
+        file_hash,
+        timeout,
+    }: {
+        file_hash: string
+        timeout?: number
+    }) {
+        return decodeOrThrow<LingCatProto.methods.Update_My_Avatar_Response>(LingCatProto.methods.Update_Chat_Avatar_Response,(await client.invoke({
+            method_id: Methods.Update_My_Avatar_Request,
+            data: LingCatProto.methods.Update_My_Avatar_Request.encode({
+                fileHash: file_hash,
+            }).finish(),
+            timeout,
+        })).data)
     }
 }

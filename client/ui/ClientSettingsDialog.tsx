@@ -1,10 +1,11 @@
-import { dialog, Dialog, TextField } from "../../mdui_patched/mdui"
+import { dialog, Dialog, TextField } from "mdui"
 import React from 'react'
 import fs from '../fs.ts'
 import ClientManager from "../ClientManager.ts"
 import useEventListener from "./useEventListener.ts"
 import showSnackbar from "./showSnackbar.ts"
 import LingCatClient, { UserApi } from "lingcat-client-protocol"
+import tipError from "./tipError.ts"
 
 function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
     const [k, setK] = React.useState(Date.now() + '')
@@ -187,18 +188,14 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                                     client.disconnect()
                                 } catch (e) {
                                     console.log(e)
-                                    showSnackbar({
-                                        message: '注册失败: ' + e
-                                    })
+                                    tipError(e, '注册失败')
                                 }
                             }
 
                             client.init()
                         } catch (e) {
                             console.log(e)
-                            showSnackbar({
-                                message: '注册失败: ' + e
-                            })
+                            tipError(e, '注册失败')
                         }
                     },
                 }]
@@ -217,7 +214,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                     server_http: mLoginServer.current!.value,
                     server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
                 })
-                
+
                 client.onInit = async () => {
                     try {
                         const token = await UserApi.login(client, {
@@ -229,21 +226,17 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
 
                         client.disconnect()
 
-                        setTimeout(location.reload, 500)
+                        //setTimeout(() => document.location.reload(), 500)
                     } catch (e) {
                         console.log(e)
-                        showSnackbar({
-                            message: '登录失败: ' + e
-                        })
+                        tipError(e, '登录失败')
                     }
                 }
 
                 client.init()
             } catch (e) {
                 console.log(e)
-                showSnackbar({
-                    message: '登录失败: ' + e
-                })
+                tipError(e, '登录失败')
             }
         }}>登录</mdui-button>
     </>
@@ -255,7 +248,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
     </mdui-dialog>
 }
 
-export default function SettingsDialog({ mSettingsDialog, mLoginDialog }: { mSettingsDialog: any, mLoginDialog: any }) {
+export default function ClientSettingsDialog({ mSettingsDialog, mLoginDialog }: { mSettingsDialog: any, mLoginDialog: any }) {
     const mServerPublicKeysSettingDialog = React.useRef<Dialog>(undefined)
     const mSwitchUserDialog = React.useRef<Dialog>(undefined)
     const mSwitchUserLoginDialog = React.useRef<Dialog>(undefined)
@@ -266,10 +259,9 @@ export default function SettingsDialog({ mSettingsDialog, mLoginDialog }: { mSet
             mLoginDialog={mLoginDialog}
             allowClose={false} />
         <mdui-dialog close-on-overlay-click close-on-esc ref={mSettingsDialog}>
-            <span slot="headline">设置</span>
+            <span slot="headline">客户端设置</span>
 
             <mdui-list>
-                <mdui-list-subheader>客户端</mdui-list-subheader>
                 <mdui-list-item icon="switch_account" rounded onClick={() => mSwitchUserDialog.current!.open = true}>切换用户</mdui-list-item>
                 <mdui-list-item icon="key" rounded onClick={() => mServerPublicKeysSettingDialog.current!.open = true}>服务端公钥管理</mdui-list-item>
             </mdui-list>

@@ -18,6 +18,8 @@ export default class Methods {
     static Update_My_Avatar_Response = 0x16
     static Update_Chat_Avatar_Request = 0x17
     static Update_Chat_Avatar_Response = 0x18
+    static Query_My_User_Info_Request = 0x19
+    static Query_My_User_Info_Response = 0x20
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

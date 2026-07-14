@@ -28,6 +28,9 @@ export default class ClientManager {
     static removeUserSession(name: string) {
         fs.unlinkSync('/sessions/' + name)
     }
+    static getActiveUserSession() {
+        return this.getUserSession(this.getActiveUserSessionName()!)
+    }
     static getUserSession(name: string) {
         return JSON.parse(fs.readFileSync('/sessions/' + name).toString('utf-8')) as {
             token: string,
@@ -54,5 +57,6 @@ export default class ClientManager {
             server_http: server,
             server_public_key: this.getServerPublicKey(new URL(server).host)
         })
+        this.client.init()
     }
 }

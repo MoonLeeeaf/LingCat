@@ -1,6 +1,6 @@
 import { dialog, Dialog, NavigationDrawer, TextField } from "mdui"
 import ClientManager from "../ClientManager.ts"
-import SettingsDialog from "./SettingsDialog.tsx"
+import ClientSettingsDialog from "./ClientSettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
 import React from 'react'
 
@@ -56,7 +56,7 @@ export default function Main() {
                     : <UserMain access_token={ClientManager.getActiveUserSessionName()!} drawerRef={drawerRef} />
             }
 
-            <SettingsDialog
+            <ClientSettingsDialog
                 mLoginDialog={mLoginDialog}
                 mSettingsDialog={mSettingsDialog} />
         </mdui-layout>

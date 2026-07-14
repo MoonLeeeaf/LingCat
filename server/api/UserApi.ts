@@ -1,4 +1,4 @@
-import { LingCatProto, Methods, Package } from 'lingcat-protocol'
+import { Code, LingCatProto, Methods, Package } from 'lingcat-protocol'
 import type { ISendPackageFunction } from './ISendPackageFunction.ts'
 import UserDataBase from '../data/UserDataBase.ts'
 import TokenManager from './TokenManager.ts'
@@ -43,17 +43,19 @@ export default class UserApi {
 
                 const mUser = await UserDataBase.queryUserByAccount(account)
                 if (mUser == null)
-                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists')
+                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists', Code.Not_Found)
                 if (mUser?.password == UserDataBase.hashifyPassword(password))
-                    sendError(sendPackage, mPackage.method_id, 'Password or account is not match.')
-                else
-                    sendPackage(Package.encode({
-                        method_id: Methods.User_Login_Response,
-                        flags: 0,
-                        data: LingCatProto.methods.User_Login_Response.encode({
-                            accessToken: TokenManager.signAccessTokenForUser(mUser!.id)
-                        }).finish(),
-                    }))
+                    return sendError(sendPackage, mPackage.method_id, 'Password or account is not match.', Code.Bad_Request)
+
+                const token = TokenManager.signAccessTokenForUser(mUser!.id)
+                console.log(token)
+                sendPackage(Package.encode({
+                    method_id: Methods.User_Login_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.User_Login_Response.encode({
+                        accessToken: token
+                    }).finish(),
+                }))
 
                 break
             }
@@ -64,13 +66,13 @@ export default class UserApi {
              */
             case Methods.Query_User_Info_Request: {
                 const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
-                
+
                 await TokenManager.verifyAccessToken(data.accessToken, 'access')
 
                 const user = await UserDataBase.queryUserById(data.userId)
 
                 if (user == null)
-                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists')
+                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists', Code.Not_Found)
 
                 sendPackage(Package.encode({
                     method_id: Methods.Query_User_Info_Response,
@@ -91,11 +93,11 @@ export default class UserApi {
              */
             case Methods.Update_My_Avatar_Request: {
                 const data = LingCatProto.methods.Update_My_Avatar_Request.decode(mPackage.data)
-                
+
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken, 'access')).user_id
 
-                if (await FileManager.queryFileByHash(data.fileHash) == null) 
-                    return sendError(sendPackage, mPackage.method_id, 'File doesn\'t exists')
+                if (await FileManager.queryFileByHash(data.fileHash) == null)
+                    return sendError(sendPackage, mPackage.method_id, 'File doesn\'t exists', Code.Not_Found)
 
                 await UserDataBase.updateAvatarFileHash(user_id, data.fileHash)
 
