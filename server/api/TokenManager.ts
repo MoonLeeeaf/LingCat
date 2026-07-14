@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { Code } from 'lingcat-protocol'
 import crypto from 'node:crypto'
 import { config } from '../config.ts'
+import UserDataBase from '../data/UserDataBase.ts'
 
 export type TokenType = 'access' | 'file_upload'
 
@@ -26,15 +27,15 @@ export default class TokenManager {
         })
     }
 
-    static verifyAccessToken(token: string, user_id?: string) {
-        return TokenManager.verifyToken(token, 'access', user_id) as { user_id: string, type: 'access' }
+    static async verifyAccessToken(token: string, user_id?: string) {
+        return await TokenManager.verifyToken(token, 'access', user_id) as { user_id: string, type: 'access' }
     }
 
-    static verifyFileUploadToken(token: string, user_id?: string) {
-        return TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload', file_id: string }
+    static async verifyFileUploadToken(token: string, user_id?: string) {
+        return await TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload', file_id: string }
     }
 
-    static verifyToken(token: string, type: TokenType, user_id?: string) {
+    static async verifyToken(token: string, type: TokenType, user_id?: string) {
         try {
             const t = jwt.verify(token, secret) as any
             if (t.user_id != user_id && user_id != null)

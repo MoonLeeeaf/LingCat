@@ -75,7 +75,7 @@ export default class UserApi {
             case Methods.Query_User_Info_Request: {
                 const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
                 
-                TokenManager.verifyAccessToken(data.accessToken, 'access')
+                await TokenManager.verifyAccessToken(data.accessToken, 'access')
 
                 const user = await UserDataBase.queryUserById(data.userId)
 
