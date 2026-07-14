@@ -44,7 +44,7 @@ export default class UserApi {
                 const mUser = await UserDataBase.queryUserByAccount(account)
                 if (mUser == null)
                     return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists', Code.Not_Found)
-                if (mUser?.password == UserDataBase.hashifyPassword(password))
+                if (mUser?.password != UserDataBase.hashifyPassword(password))
                     return sendError(sendPackage, mPackage.method_id, 'Password or account is not match.', Code.Bad_Request)
 
                 const token = TokenManager.signAccessTokenForUser(mUser!.id)
