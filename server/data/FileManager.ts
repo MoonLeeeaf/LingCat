@@ -32,7 +32,7 @@ export type { IServerFile }
 
 export default class FileManager {
     static async queryFileByHash(hash: string) {
-        return await db<IServerFile>('Users').where('hash', hash).first()
+        return await db<IServerFile>('FilesMap').where('hash', hash).first()
     }
 
     static async queryFilesByChatId(chatId: string): Promise<IServerFile[]> {
