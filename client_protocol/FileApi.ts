@@ -11,7 +11,7 @@ export default class UserApi {
         timeout?: number
     }) {
         return decodeOrThrow<LingCatProto.methods.Request_File_Upload_Response>(LingCatProto.methods.Request_File_Upload_Response, (await client.invoke({
-            method_id: Methods.User_Registration_Request,
+            method_id: Methods.Request_File_Upload_Request,
             data: LingCatProto.methods.Request_File_Upload_Request.encode({
                 accessToken: access_token,
             }).finish(),
