@@ -80,6 +80,12 @@ export default class LingCatClient {
 
             client.binaryType = 'arraybuffer'
 
+            client.addEventListener('close', () => {
+                client.close()
+                delete this.client
+                this.init()
+            })
+
             client.addEventListener('open', async () => {
                 const keyPair = SecureKey.All_generateExchangeKeyPair()
 
