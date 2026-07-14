@@ -13,6 +13,8 @@ import os from 'node:os'
 import FileManager from './data/FileManager.ts'
 import { config } from './config.ts'
 import TokenManager from './api/TokenManager.ts'
+import node_path from 'node:path'
+import UserChatLinker from './data/UserChatLinker.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -22,9 +24,35 @@ export default function createLingCatServer(base_data_path: string) {
     })
 
     app.use(express.static(`${base_data_path}/page/`))
-    app.post('/upload_file', (req, res) => {
+    app.get('/uploaded_files/:hash', async (req, res) => {
         const token = req.headers.token
         if (!token) return res.status(401).send({ msg: "Unauthorzied" })
+
+        try {
+            const user_id = (await TokenManager.verifyAccessToken(token as string)).user_id
+
+            const file = await FileManager.queryFileByHash(req.params.hash as string)
+            if (file == null) return res.status(404).send({ msg: "Not Found" })
+
+            if (file.belong_to_chat_id && await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
+                return res.status(403).send({ msg: "This file belongs to a chat you have no access" })
+
+            res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
+            res.setHeader('Content-Type', file.mime)
+            res.sendFile(node_path.resolve(FileManager.getFilePath(file.hash)))
+        } catch (e) {
+            return res.status(401).send({ msg: "Token is invalid" })
+        }
+    })
+    app.post('/upload_file', async (req, res) => {
+        const token = req.headers.token
+        if (!token) return res.status(401).send({ msg: "Unauthorzied" })
+
+        try {
+            await TokenManager.verifyFileUploadToken(token as string)
+        } catch (e) {
+            return res.status(401).send({ msg: "Token is invalid" })
+        }
 
         const bb = busboy({ headers: req.headers, limits: { files: 1, fileSize: config.max_file_size || 1000 * 1024 * 1024 } })
 
@@ -172,9 +200,9 @@ export default function createLingCatServer(base_data_path: string) {
                             return
                         }
                         case Methods.Authorize_Request: {
-                            user_id_after_authorzied = TokenManager.verifyAccessToken(
+                            user_id_after_authorzied = (await TokenManager.verifyAccessToken(
                                 LingCatProto.methods.Authorize_Request.decode(mPackage.data).accessToken
-                            ).user_id
+                            )).user_id
 
                             sendPackage(Package.encode({
                                 method_id: Methods.Authorize_Response,

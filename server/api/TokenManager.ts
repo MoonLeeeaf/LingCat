@@ -21,7 +21,6 @@ export default class TokenManager {
         return jwt.sign({
             user_id,
             type: 'file_upload',
-            file_id: crypto.randomUUID(),
         }, secret, {
             expiresIn: '1h',
         })
@@ -32,7 +31,7 @@ export default class TokenManager {
     }
 
     static async verifyFileUploadToken(token: string, user_id?: string) {
-        return await TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload', file_id: string }
+        return await TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload' }
     }
 
     static async verifyToken(token: string, type: TokenType, user_id?: string) {

@@ -41,6 +41,10 @@ export default class FileManager {
             .select('*')
     }
 
+    static async updateLastUsedTime(hash: string) {
+        await db<IServerFile>('FilesMap').update({ last_used_time: Date.now() }).where('hash', hash)
+    }
+
     static async uploadFile(hash: string, fileName: string, filePath: string, chatId?: string): Promise<IServerFile> {
         const mFile = await this.queryFileByHash(hash)
         if (mFile) {
