@@ -6,20 +6,23 @@ import default_avatar from '../default_avatar.png'
 import { IChat, IUser } from "lingcat-protocol"
 import UserProfileDialog from "./UserProfileDialog.tsx"
 import ClientManager from "../ClientManager.ts"
-import { UserApi } from "lingcat-client-protocol"
+import { FileApi, UserApi } from "lingcat-client-protocol"
 
 let setActiveChatFunc
 export default function UserMain({ access_token, drawerRef }: { access_token: string, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [profile, setProfile] = React.useState<IUser>()
     React.useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             ClientManager.initClient(ClientManager.getActiveUserSessionName()!)
-            ClientManager.client.onInit = async () => setProfile(await UserApi.queryMyUserInfo(ClientManager.client, {
-                access_token: ClientManager.getActiveUserSession().token,
-            }))
+            ClientManager.client.onInit = async () => {
+                setProfile(await ClientManager.getMe())
+                document.cookie = "file_access_token=" + await FileApi.requestAccessUploadFileToken(ClientManager.client, {
+                    access_token: ClientManager.getActiveUserSession().token
+                }) + ';'
+            }
         })()
     }, [access_token])
-    
+
     const [activeChat, setActiveChat] = React.useState<IChat>()
     setActiveChatFunc = setActiveChat
 
@@ -56,8 +59,4 @@ export default function UserMain({ access_token, drawerRef }: { access_token: st
             </MessageContainer>
         </mdui-layout-main>
     </>
-}
-
-UserMain.openChat = (chat_id: string) => {
-    // setActiveChatFunc()
 }

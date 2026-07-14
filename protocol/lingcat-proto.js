@@ -4221,6 +4221,526 @@ export const lingcat = $root.lingcat = (() => {
             return Request_File_Upload_Response;
         })();
 
+        methods.Request_File_Access_Request = (function() {
+
+            /**
+             * Properties of a Request_File_Access_Request.
+             * @typedef {Object} lingcat.methods.Request_File_Access_Request.$Properties
+             * @property {string|null} [accessToken] Request_File_Access_Request accessToken
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Request_File_Access_Request.
+             * @memberof lingcat.methods
+             * @interface IRequest_File_Access_Request
+             * @augments lingcat.methods.Request_File_Access_Request.$Properties
+             * @deprecated Use lingcat.methods.Request_File_Access_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Request_File_Access_Request.
+             * @typedef {lingcat.methods.Request_File_Access_Request.$Properties} lingcat.methods.Request_File_Access_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Request_File_Access_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Request_File_Access_Request.
+             * @constructor
+             * @param {lingcat.methods.Request_File_Access_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Request_File_Access_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Request_File_Access_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @instance
+             */
+            Request_File_Access_Request.prototype.accessToken = "";
+
+            /**
+             * Creates a new Request_File_Access_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Request_File_Access_Request} Request_File_Access_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Request_File_Access_Request.$Shape): lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape;
+             *   (properties?: lingcat.methods.Request_File_Access_Request.$Properties): lingcat.methods.Request_File_Access_Request;
+             * }}
+             */
+            Request_File_Access_Request.create = function(properties) {
+                return new Request_File_Access_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Request_File_Access_Request message. Does not implicitly {@link lingcat.methods.Request_File_Access_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Request.$Properties} message Request_File_Access_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Request_File_Access_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Request_File_Access_Request message, length delimited. Does not implicitly {@link lingcat.methods.Request_File_Access_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Request.$Properties} message Request_File_Access_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Request_File_Access_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Request_File_Access_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape} Request_File_Access_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Request_File_Access_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Access_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Request_File_Access_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape} Request_File_Access_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Request_File_Access_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Request_File_Access_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Request_File_Access_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Request_File_Access_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Request_File_Access_Request} Request_File_Access_Request
+             */
+            Request_File_Access_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Request_File_Access_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Request_File_Access_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Request_File_Access_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Request_File_Access_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Request} message Request_File_Access_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Request_File_Access_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                return object;
+            };
+
+            /**
+             * Converts this Request_File_Access_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Request_File_Access_Request.prototype.toJSON = function() {
+                return Request_File_Access_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Request_File_Access_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Request_File_Access_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Request_File_Access_Request";
+            };
+
+            return Request_File_Access_Request;
+        })();
+
+        methods.Request_File_Access_Response = (function() {
+
+            /**
+             * Properties of a Request_File_Access_Response.
+             * @typedef {Object} lingcat.methods.Request_File_Access_Response.$Properties
+             * @property {string|null} [token] Request_File_Access_Response token
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Request_File_Access_Response.
+             * @memberof lingcat.methods
+             * @interface IRequest_File_Access_Response
+             * @augments lingcat.methods.Request_File_Access_Response.$Properties
+             * @deprecated Use lingcat.methods.Request_File_Access_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Request_File_Access_Response.
+             * @typedef {lingcat.methods.Request_File_Access_Response.$Properties} lingcat.methods.Request_File_Access_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Request_File_Access_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Request_File_Access_Response.
+             * @constructor
+             * @param {lingcat.methods.Request_File_Access_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Request_File_Access_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Request_File_Access_Response token.
+             * @member {string} token
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @instance
+             */
+            Request_File_Access_Response.prototype.token = "";
+
+            /**
+             * Creates a new Request_File_Access_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Request_File_Access_Response} Request_File_Access_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Request_File_Access_Response.$Shape): lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape;
+             *   (properties?: lingcat.methods.Request_File_Access_Response.$Properties): lingcat.methods.Request_File_Access_Response;
+             * }}
+             */
+            Request_File_Access_Response.create = function(properties) {
+                return new Request_File_Access_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Request_File_Access_Response message. Does not implicitly {@link lingcat.methods.Request_File_Access_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Response.$Properties} message Request_File_Access_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Request_File_Access_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token") && message.token !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.token);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Request_File_Access_Response message, length delimited. Does not implicitly {@link lingcat.methods.Request_File_Access_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Response.$Properties} message Request_File_Access_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Request_File_Access_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Request_File_Access_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape} Request_File_Access_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Request_File_Access_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Access_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.token = value;
+                            else
+                                delete message.token;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Request_File_Access_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape} Request_File_Access_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Request_File_Access_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Request_File_Access_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Request_File_Access_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
+                    if (!$util.isString(message.token))
+                        return "token: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Request_File_Access_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Request_File_Access_Response} Request_File_Access_Response
+             */
+            Request_File_Access_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Request_File_Access_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Request_File_Access_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Request_File_Access_Response();
+                if (object.token != null)
+                    if (typeof object.token !== "string" || object.token.length)
+                        message.token = $String(object.token);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Request_File_Access_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {lingcat.methods.Request_File_Access_Response} message Request_File_Access_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Request_File_Access_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.token = "";
+                if (message.token != null && $Object.hasOwnProperty.call(message, "token"))
+                    object.token = message.token;
+                return object;
+            };
+
+            /**
+             * Converts this Request_File_Access_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Request_File_Access_Response.prototype.toJSON = function() {
+                return Request_File_Access_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Request_File_Access_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Request_File_Access_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Request_File_Access_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Request_File_Access_Response";
+            };
+
+            return Request_File_Access_Response;
+        })();
+
         methods.Authorize_Request = (function() {
 
             /**
@@ -5259,6 +5779,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [username] Query_User_Info_Response username
              * @property {string|null} [nickname] Query_User_Info_Response nickname
              * @property {string|null} [avatarFileHash] Query_User_Info_Response avatarFileHash
+             * @property {string|null} [description] Query_User_Info_Response description
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -5322,6 +5843,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             Query_User_Info_Response.prototype.avatarFileHash = null;
 
+            /**
+             * Query_User_Info_Response description.
+             * @member {string|null|undefined} description
+             * @memberof lingcat.methods.Query_User_Info_Response
+             * @instance
+             */
+            Query_User_Info_Response.prototype.description = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -5334,6 +5863,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(Query_User_Info_Response.prototype, "_avatarFileHash", {
                 get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Query_User_Info_Response.prototype, "_description", {
+                get: $util.oneOfGetter($oneOfFields = ["description"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -5377,6 +5912,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
                 if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
                     writer.uint32(/* id 4, wireType 2 =*/34).string(message.avatarFileHash);
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.description);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -5456,6 +5993,13 @@ export const lingcat = $root.lingcat = (() => {
                             message._avatarFileHash = "avatarFileHash";
                             continue;
                         }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.description = reader.stringVerify();
+                            message._description = "description";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -5516,6 +6060,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.avatarFileHash))
                         return "avatarFileHash: string expected";
                 }
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description")) {
+                    properties._description = 1;
+                    if (!$util.isString(message.description))
+                        return "description: string expected";
+                }
                 return null;
             };
 
@@ -5547,6 +6096,8 @@ export const lingcat = $root.lingcat = (() => {
                         message.nickname = $String(object.nickname);
                 if (object.avatarFileHash != null)
                     message.avatarFileHash = $String(object.avatarFileHash);
+                if (object.description != null)
+                    message.description = $String(object.description);
                 return message;
             };
 
@@ -5579,6 +6130,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.nickname = message.nickname;
                 if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
                     object.avatarFileHash = message.avatarFileHash;
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    object.description = message.description;
                 return object;
             };
 
@@ -5619,6 +6172,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [username] Query_My_User_Info_Response username
              * @property {string|null} [nickname] Query_My_User_Info_Response nickname
              * @property {string|null} [avatarFileHash] Query_My_User_Info_Response avatarFileHash
+             * @property {string|null} [description] Query_My_User_Info_Response description
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -5682,6 +6236,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             Query_My_User_Info_Response.prototype.avatarFileHash = null;
 
+            /**
+             * Query_My_User_Info_Response description.
+             * @member {string|null|undefined} description
+             * @memberof lingcat.methods.Query_My_User_Info_Response
+             * @instance
+             */
+            Query_My_User_Info_Response.prototype.description = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -5694,6 +6256,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(Query_My_User_Info_Response.prototype, "_avatarFileHash", {
                 get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Query_My_User_Info_Response.prototype, "_description", {
+                get: $util.oneOfGetter($oneOfFields = ["description"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -5737,6 +6305,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
                 if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
                     writer.uint32(/* id 4, wireType 2 =*/34).string(message.avatarFileHash);
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.description);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -5816,6 +6386,13 @@ export const lingcat = $root.lingcat = (() => {
                             message._avatarFileHash = "avatarFileHash";
                             continue;
                         }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.description = reader.stringVerify();
+                            message._description = "description";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -5876,6 +6453,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.avatarFileHash))
                         return "avatarFileHash: string expected";
                 }
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description")) {
+                    properties._description = 1;
+                    if (!$util.isString(message.description))
+                        return "description: string expected";
+                }
                 return null;
             };
 
@@ -5907,6 +6489,8 @@ export const lingcat = $root.lingcat = (() => {
                         message.nickname = $String(object.nickname);
                 if (object.avatarFileHash != null)
                     message.avatarFileHash = $String(object.avatarFileHash);
+                if (object.description != null)
+                    message.description = $String(object.description);
                 return message;
             };
 
@@ -5939,6 +6523,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.nickname = message.nickname;
                 if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
                     object.avatarFileHash = message.avatarFileHash;
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    object.description = message.description;
                 return object;
             };
 
@@ -5970,38 +6556,41 @@ export const lingcat = $root.lingcat = (() => {
             return Query_My_User_Info_Response;
         })();
 
-        methods.Update_My_Avatar_Request = (function() {
+        methods.Update_My_Profile_Request = (function() {
 
             /**
-             * Properties of an Update_My_Avatar_Request.
-             * @typedef {Object} lingcat.methods.Update_My_Avatar_Request.$Properties
-             * @property {string|null} [accessToken] Update_My_Avatar_Request accessToken
-             * @property {string|null} [fileHash] Update_My_Avatar_Request fileHash
+             * Properties of an Update_My_Profile_Request.
+             * @typedef {Object} lingcat.methods.Update_My_Profile_Request.$Properties
+             * @property {string|null} [accessToken] Update_My_Profile_Request accessToken
+             * @property {string|null} [avatarFileHash] Update_My_Profile_Request avatarFileHash
+             * @property {string|null} [username] Update_My_Profile_Request username
+             * @property {string|null} [nickname] Update_My_Profile_Request nickname
+             * @property {string|null} [description] Update_My_Profile_Request description
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of an Update_My_Avatar_Request.
+             * Properties of an Update_My_Profile_Request.
              * @memberof lingcat.methods
-             * @interface IUpdate_My_Avatar_Request
-             * @augments lingcat.methods.Update_My_Avatar_Request.$Properties
-             * @deprecated Use lingcat.methods.Update_My_Avatar_Request.$Properties instead.
+             * @interface IUpdate_My_Profile_Request
+             * @augments lingcat.methods.Update_My_Profile_Request.$Properties
+             * @deprecated Use lingcat.methods.Update_My_Profile_Request.$Properties instead.
              */
 
             /**
-             * Shape of an Update_My_Avatar_Request.
-             * @typedef {lingcat.methods.Update_My_Avatar_Request.$Properties} lingcat.methods.Update_My_Avatar_Request.$Shape
+             * Shape of an Update_My_Profile_Request.
+             * @typedef {lingcat.methods.Update_My_Profile_Request.$Properties} lingcat.methods.Update_My_Profile_Request.$Shape
              */
 
             /**
-             * Constructs a new Update_My_Avatar_Request.
+             * Constructs a new Update_My_Profile_Request.
              * @memberof lingcat.methods
-             * @classdesc Represents an Update_My_Avatar_Request.
+             * @classdesc Represents an Update_My_Profile_Request.
              * @constructor
-             * @param {lingcat.methods.Update_My_Avatar_Request.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Update_My_Profile_Request.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Update_My_Avatar_Request = function (properties) {
+            const Update_My_Profile_Request = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -6009,47 +6598,98 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Update_My_Avatar_Request accessToken.
+             * Update_My_Profile_Request accessToken.
              * @member {string} accessToken
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @instance
              */
-            Update_My_Avatar_Request.prototype.accessToken = "";
+            Update_My_Profile_Request.prototype.accessToken = "";
 
             /**
-             * Update_My_Avatar_Request fileHash.
-             * @member {string} fileHash
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * Update_My_Profile_Request avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @instance
              */
-            Update_My_Avatar_Request.prototype.fileHash = "";
+            Update_My_Profile_Request.prototype.avatarFileHash = null;
 
             /**
-             * Creates a new Update_My_Avatar_Request instance using the specified properties.
+             * Update_My_Profile_Request username.
+             * @member {string|null|undefined} username
+             * @memberof lingcat.methods.Update_My_Profile_Request
+             * @instance
+             */
+            Update_My_Profile_Request.prototype.username = null;
+
+            /**
+             * Update_My_Profile_Request nickname.
+             * @member {string|null|undefined} nickname
+             * @memberof lingcat.methods.Update_My_Profile_Request
+             * @instance
+             */
+            Update_My_Profile_Request.prototype.nickname = null;
+
+            /**
+             * Update_My_Profile_Request description.
+             * @member {string|null|undefined} description
+             * @memberof lingcat.methods.Update_My_Profile_Request
+             * @instance
+             */
+            Update_My_Profile_Request.prototype.description = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_My_Profile_Request.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_My_Profile_Request.prototype, "_username", {
+                get: $util.oneOfGetter($oneOfFields = ["username"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_My_Profile_Request.prototype, "_nickname", {
+                get: $util.oneOfGetter($oneOfFields = ["nickname"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_My_Profile_Request.prototype, "_description", {
+                get: $util.oneOfGetter($oneOfFields = ["description"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Update_My_Profile_Request instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Request.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Update_My_Avatar_Request} Update_My_Avatar_Request instance
+             * @param {lingcat.methods.Update_My_Profile_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_My_Profile_Request} Update_My_Profile_Request instance
              * @type {{
-             *   (properties: lingcat.methods.Update_My_Avatar_Request.$Shape): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
-             *   (properties?: lingcat.methods.Update_My_Avatar_Request.$Properties): lingcat.methods.Update_My_Avatar_Request;
+             *   (properties: lingcat.methods.Update_My_Profile_Request.$Shape): lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape;
+             *   (properties?: lingcat.methods.Update_My_Profile_Request.$Properties): lingcat.methods.Update_My_Profile_Request;
              * }}
              */
-            Update_My_Avatar_Request.create = function(properties) {
-                return new Update_My_Avatar_Request(properties);
+            Update_My_Profile_Request.create = function(properties) {
+                return new Update_My_Profile_Request(properties);
             };
 
             /**
-             * Encodes the specified Update_My_Avatar_Request message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
+             * Encodes the specified Update_My_Profile_Request message. Does not implicitly {@link lingcat.methods.Update_My_Profile_Request.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Request.$Properties} message Update_My_Avatar_Request message or plain object to encode
+             * @param {lingcat.methods.Update_My_Profile_Request.$Properties} message Update_My_Profile_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_My_Avatar_Request.encode = function (message, writer, _depth) {
+            Update_My_Profile_Request.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -6058,8 +6698,14 @@ export const lingcat = $root.lingcat = (() => {
                     throw $Error("max depth exceeded");
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash") && message.fileHash !== "")
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.fileHash);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.avatarFileHash);
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.username);
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.nickname);
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.description);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -6067,37 +6713,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Update_My_Avatar_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
+             * Encodes the specified Update_My_Profile_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Profile_Request.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Request.$Properties} message Update_My_Avatar_Request message or plain object to encode
+             * @param {lingcat.methods.Update_My_Profile_Request.$Properties} message Update_My_Profile_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_My_Avatar_Request.encodeDelimited = function(message, writer) {
+            Update_My_Profile_Request.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer.
+             * Decodes an Update_My_Profile_Request message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @returns {lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape} Update_My_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_My_Avatar_Request.decode = function (reader, length, _end, _depth, _target) {
+            Update_My_Profile_Request.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Avatar_Request(), value;
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Profile_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6119,10 +6765,29 @@ export const lingcat = $root.lingcat = (() => {
                     case 2: {
                             if (wireType !== 2)
                                 break;
-                            if ((value = reader.stringVerify()).length)
-                                message.fileHash = value;
-                            else
-                                delete message.fileHash;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            message.username = reader.stringVerify();
+                            message._username = "username";
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.nickname = reader.stringVerify();
+                            message._nickname = "nickname";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.description = reader.stringVerify();
+                            message._description = "description";
                             continue;
                         }
                     }
@@ -6138,82 +6803,105 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer, length delimited.
+             * Decodes an Update_My_Profile_Request message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @returns {lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape} Update_My_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_My_Avatar_Request.decodeDelimited = function(reader) {
+            Update_My_Profile_Request.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an Update_My_Avatar_Request message.
+             * Verifies an Update_My_Profile_Request message.
              * @function verify
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Update_My_Avatar_Request.verify = function (message, _depth) {
+            Update_My_Profile_Request.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                let properties = {};
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     if (!$util.isString(message.accessToken))
                         return "accessToken: string expected";
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
-                    if (!$util.isString(message.fileHash))
-                        return "fileHash: string expected";
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username")) {
+                    properties._username = 1;
+                    if (!$util.isString(message.username))
+                        return "username: string expected";
+                }
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname")) {
+                    properties._nickname = 1;
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
+                }
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description")) {
+                    properties._description = 1;
+                    if (!$util.isString(message.description))
+                        return "description: string expected";
+                }
                 return null;
             };
 
             /**
-             * Creates an Update_My_Avatar_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_My_Profile_Request message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Update_My_Avatar_Request} Update_My_Avatar_Request
+             * @returns {lingcat.methods.Update_My_Profile_Request} Update_My_Profile_Request
              */
-            Update_My_Avatar_Request.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Update_My_Avatar_Request)
+            Update_My_Profile_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_My_Profile_Request)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Update_My_Avatar_Request: object expected");
+                    throw $TypeError(".lingcat.methods.Update_My_Profile_Request: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                let message = new $root.lingcat.methods.Update_My_Avatar_Request();
+                let message = new $root.lingcat.methods.Update_My_Profile_Request();
                 if (object.accessToken != null)
                     if (typeof object.accessToken !== "string" || object.accessToken.length)
                         message.accessToken = $String(object.accessToken);
-                if (object.fileHash != null)
-                    if (typeof object.fileHash !== "string" || object.fileHash.length)
-                        message.fileHash = $String(object.fileHash);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                if (object.username != null)
+                    message.username = $String(object.username);
+                if (object.nickname != null)
+                    message.nickname = $String(object.nickname);
+                if (object.description != null)
+                    message.description = $String(object.description);
                 return message;
             };
 
             /**
-             * Creates a plain object from an Update_My_Avatar_Request message. Also converts values to other types if specified.
+             * Creates a plain object from an Update_My_Profile_Request message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Request} message Update_My_Avatar_Request
+             * @param {lingcat.methods.Update_My_Profile_Request} message Update_My_Profile_Request
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Update_My_Avatar_Request.toObject = function (message, options, _depth) {
+            Update_My_Profile_Request.toObject = function (message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === $undefined)
@@ -6221,75 +6909,79 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 let object = {};
-                if (options.defaults) {
+                if (options.defaults)
                     object.accessToken = "";
-                    object.fileHash = "";
-                }
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     object.accessToken = message.accessToken;
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
-                    object.fileHash = message.fileHash;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    object.username = message.username;
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    object.nickname = message.nickname;
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    object.description = message.description;
                 return object;
             };
 
             /**
-             * Converts this Update_My_Avatar_Request to JSON.
+             * Converts this Update_My_Profile_Request to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Update_My_Avatar_Request.prototype.toJSON = function() {
-                return Update_My_Avatar_Request.toObject(this, $protobuf.util.toJSONOptions);
+            Update_My_Profile_Request.prototype.toJSON = function() {
+                return Update_My_Profile_Request.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Update_My_Avatar_Request
+             * Gets the type url for Update_My_Profile_Request
              * @function getTypeUrl
-             * @memberof lingcat.methods.Update_My_Avatar_Request
+             * @memberof lingcat.methods.Update_My_Profile_Request
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Update_My_Avatar_Request.getTypeUrl = function(prefix) {
+            Update_My_Profile_Request.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Update_My_Avatar_Request";
+                return prefix + "/lingcat.methods.Update_My_Profile_Request";
             };
 
-            return Update_My_Avatar_Request;
+            return Update_My_Profile_Request;
         })();
 
-        methods.Update_My_Avatar_Response = (function() {
+        methods.Update_My_Profile_Response = (function() {
 
             /**
-             * Properties of an Update_My_Avatar_Response.
-             * @typedef {Object} lingcat.methods.Update_My_Avatar_Response.$Properties
+             * Properties of an Update_My_Profile_Response.
+             * @typedef {Object} lingcat.methods.Update_My_Profile_Response.$Properties
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of an Update_My_Avatar_Response.
+             * Properties of an Update_My_Profile_Response.
              * @memberof lingcat.methods
-             * @interface IUpdate_My_Avatar_Response
-             * @augments lingcat.methods.Update_My_Avatar_Response.$Properties
-             * @deprecated Use lingcat.methods.Update_My_Avatar_Response.$Properties instead.
+             * @interface IUpdate_My_Profile_Response
+             * @augments lingcat.methods.Update_My_Profile_Response.$Properties
+             * @deprecated Use lingcat.methods.Update_My_Profile_Response.$Properties instead.
              */
 
             /**
-             * Shape of an Update_My_Avatar_Response.
-             * @typedef {lingcat.methods.Update_My_Avatar_Response.$Properties} lingcat.methods.Update_My_Avatar_Response.$Shape
+             * Shape of an Update_My_Profile_Response.
+             * @typedef {lingcat.methods.Update_My_Profile_Response.$Properties} lingcat.methods.Update_My_Profile_Response.$Shape
              */
 
             /**
-             * Constructs a new Update_My_Avatar_Response.
+             * Constructs a new Update_My_Profile_Response.
              * @memberof lingcat.methods
-             * @classdesc Represents an Update_My_Avatar_Response.
+             * @classdesc Represents an Update_My_Profile_Response.
              * @constructor
-             * @param {lingcat.methods.Update_My_Avatar_Response.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Update_My_Profile_Response.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Update_My_Avatar_Response = function (properties) {
+            const Update_My_Profile_Response = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -6297,31 +6989,31 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a new Update_My_Avatar_Response instance using the specified properties.
+             * Creates a new Update_My_Profile_Response instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Response.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Update_My_Avatar_Response} Update_My_Avatar_Response instance
+             * @param {lingcat.methods.Update_My_Profile_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_My_Profile_Response} Update_My_Profile_Response instance
              * @type {{
-             *   (properties: lingcat.methods.Update_My_Avatar_Response.$Shape): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
-             *   (properties?: lingcat.methods.Update_My_Avatar_Response.$Properties): lingcat.methods.Update_My_Avatar_Response;
+             *   (properties: lingcat.methods.Update_My_Profile_Response.$Shape): lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape;
+             *   (properties?: lingcat.methods.Update_My_Profile_Response.$Properties): lingcat.methods.Update_My_Profile_Response;
              * }}
              */
-            Update_My_Avatar_Response.create = function(properties) {
-                return new Update_My_Avatar_Response(properties);
+            Update_My_Profile_Response.create = function(properties) {
+                return new Update_My_Profile_Response(properties);
             };
 
             /**
-             * Encodes the specified Update_My_Avatar_Response message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
+             * Encodes the specified Update_My_Profile_Response message. Does not implicitly {@link lingcat.methods.Update_My_Profile_Response.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Response.$Properties} message Update_My_Avatar_Response message or plain object to encode
+             * @param {lingcat.methods.Update_My_Profile_Response.$Properties} message Update_My_Profile_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_My_Avatar_Response.encode = function (message, writer, _depth) {
+            Update_My_Profile_Response.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -6335,37 +7027,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Update_My_Avatar_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
+             * Encodes the specified Update_My_Profile_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Profile_Response.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Response.$Properties} message Update_My_Avatar_Response message or plain object to encode
+             * @param {lingcat.methods.Update_My_Profile_Response.$Properties} message Update_My_Profile_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_My_Avatar_Response.encodeDelimited = function(message, writer) {
+            Update_My_Profile_Response.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer.
+             * Decodes an Update_My_Profile_Response message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @returns {lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape} Update_My_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_My_Avatar_Response.decode = function (reader, length, _end, _depth, _target) {
+            Update_My_Profile_Response.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Avatar_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Profile_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6385,30 +7077,30 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Update_My_Profile_Response message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @returns {lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape} Update_My_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_My_Avatar_Response.decodeDelimited = function(reader) {
+            Update_My_Profile_Response.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an Update_My_Avatar_Response message.
+             * Verifies an Update_My_Profile_Response message.
              * @function verify
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Update_My_Avatar_Response.verify = function (message, _depth) {
+            Update_My_Profile_Response.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
@@ -6419,64 +7111,64 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates an Update_My_Avatar_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_My_Profile_Response message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Update_My_Avatar_Response} Update_My_Avatar_Response
+             * @returns {lingcat.methods.Update_My_Profile_Response} Update_My_Profile_Response
              */
-            Update_My_Avatar_Response.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Update_My_Avatar_Response)
+            Update_My_Profile_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_My_Profile_Response)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Update_My_Avatar_Response: object expected");
+                    throw $TypeError(".lingcat.methods.Update_My_Profile_Response: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                return new $root.lingcat.methods.Update_My_Avatar_Response();
+                return new $root.lingcat.methods.Update_My_Profile_Response();
             };
 
             /**
-             * Creates a plain object from an Update_My_Avatar_Response message. Also converts values to other types if specified.
+             * Creates a plain object from an Update_My_Profile_Response message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_My_Avatar_Response} message Update_My_Avatar_Response
+             * @param {lingcat.methods.Update_My_Profile_Response} message Update_My_Profile_Response
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Update_My_Avatar_Response.toObject = function () {
+            Update_My_Profile_Response.toObject = function () {
                 return {};
             };
 
             /**
-             * Converts this Update_My_Avatar_Response to JSON.
+             * Converts this Update_My_Profile_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Update_My_Avatar_Response.prototype.toJSON = function() {
-                return Update_My_Avatar_Response.toObject(this, $protobuf.util.toJSONOptions);
+            Update_My_Profile_Response.prototype.toJSON = function() {
+                return Update_My_Profile_Response.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Update_My_Avatar_Response
+             * Gets the type url for Update_My_Profile_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.Update_My_Avatar_Response
+             * @memberof lingcat.methods.Update_My_Profile_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Update_My_Avatar_Response.getTypeUrl = function(prefix) {
+            Update_My_Profile_Response.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Update_My_Avatar_Response";
+                return prefix + "/lingcat.methods.Update_My_Profile_Response";
             };
 
-            return Update_My_Avatar_Response;
+            return Update_My_Profile_Response;
         })();
 
         methods.Update_Chat_Avatar_Request = (function() {

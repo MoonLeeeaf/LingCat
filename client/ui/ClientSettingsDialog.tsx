@@ -173,16 +173,17 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                             client.onInit = async () => {
                                 // @ts-ignore
                                 const password = dlg.querySelector('#password').value
+                                // @ts-ignore
+                                const nickname = dlg.querySelector('#nickname').value
                                 try {
                                     const userId = await UserApi.register(client, {
                                         password,
-                                        // @ts-ignore
-                                        nickname: dlg.querySelector('#nickname').value,
+                                        nickname,
                                         // @ts-ignore
                                         username: dlg.querySelector('#username').value,
                                     })
 
-                                    mLoginAccount.current!.value = userId
+                                    mLoginAccount.current!.value = nickname != '' ? nickname : userId
                                     mLoginPassword.current!.value = password
 
                                     client.disconnect()
@@ -223,10 +224,11 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                         })
 
                         ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
+                        ClientManager.setActiveUserSessionName(mLoginAccount.current!.value)
 
                         client.disconnect()
 
-                        //setTimeout(() => document.location.reload(), 500)
+                        setTimeout(() => document.location.reload(), 500)
                     } catch (e) {
                         console.log(e)
                         tipError(e, '登录失败')

@@ -18,6 +18,21 @@ export default class UserApi {
             timeout,
         })).data).token
     }
+    static async requestAccessUploadFileToken(client: LingCatClient, {
+        access_token,
+        timeout,
+    }: {
+        access_token: string
+        timeout?: number
+    }) {
+        return decodeOrThrow<LingCatProto.methods.Request_File_Access_Response>(LingCatProto.methods.Request_File_Access_Response, (await client.invoke({
+            method_id: Methods.Request_File_Access_Request,
+            data: LingCatProto.methods.Request_File_Access_Request.encode({
+                accessToken: access_token,
+            }).finish(),
+            timeout,
+        })).data).token
+    }
     static async uploadFile(client: LingCatClient, {
         file_upload_token,
         belong_to_chat_id,
@@ -26,7 +41,7 @@ export default class UserApi {
         file_upload_token: string
         belong_to_chat_id?: string | null
         file_data: ArrayBuffer | Blob | Response
-    }) {
+    }): Promise<string> {
         let buffer: Uint8Array
         if (file_data instanceof ArrayBuffer) {
             buffer = new Uint8Array(file_data)
@@ -41,7 +56,7 @@ export default class UserApi {
 
         const form = new FormData()
         form.append("file", new File([buffer], "File", { type: 'application/octet-stream' }))
-        form.append('hash', sha256Hex(new TextEncoder().encode('file_upload'), buffer))
+        // form.append('hash', sha256Hex(new TextEncoder().encode('file_upload'), buffer))
         belong_to_chat_id && form.append('belong_to_chat_id', belong_to_chat_id)
 
         const re = await fetch(client.server_http + '/upload_file', {
@@ -53,18 +68,18 @@ export default class UserApi {
             credentials: 'omit',
         })
         const text = await (await re.blob()).text()
-        let json: { msg: string, file_hash: string } | undefined
+        let json: { message: string, file_hash: string } | undefined
         try {
             json = JSON.parse(text)
         } catch (e) {
             throw {
-                msg: e,
+                message: e,
                 cause: e,
                 code: re.status,
             }
         }
         if (!re.ok) throw {
-            msg: text,
+            message: text,
             code: re.status,
         }
         return json!.file_hash

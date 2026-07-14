@@ -61,6 +61,14 @@ message Request_File_Upload_Response {
     string token = 1;
 }
 
+message Request_File_Access_Request {
+    string access_token = 1;
+}
+
+message Request_File_Access_Response {
+    string token = 1;
+}
+
 message Authorize_Request {
     string access_token = 1;
 }
@@ -82,6 +90,7 @@ message Query_User_Info_Response {
     optional string username = 2;
     string nickname = 3;
     optional string avatar_file_hash = 4;
+    optional string description = 5;
 }
 
 message Query_My_User_Info_Response {
@@ -89,14 +98,18 @@ message Query_My_User_Info_Response {
     optional string username = 2;
     string nickname = 3;
     optional string avatar_file_hash = 4;
+    optional string description = 5;
 }
 
-message Update_My_Avatar_Request {
+message Update_My_Profile_Request {
     string access_token = 1;
-    string file_hash = 2;
+    optional string avatar_file_hash = 2;
+    optional string username = 3;
+    optional string nickname = 4;
+    optional string description = 5;
 }
 
-message Update_My_Avatar_Response {}
+message Update_My_Profile_Response {}
 
 message Update_Chat_Avatar_Request {
     string access_token = 1;
@@ -105,3 +118,5 @@ message Update_Chat_Avatar_Request {
 }
 
 message Update_Chat_Avatar_Response {}
+
+

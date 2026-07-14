@@ -15,8 +15,10 @@ export default function Avatar({
     ...props
 }: Args) {
     if (src != null && src != '')
-        return <mdui-avatar fit="fill" ref={avatarRef} {...props}>
-            <ReloadableImage src={src} />
+        return <mdui-avatar ref={avatarRef} {...props}>
+            <img style={{
+                width: '100%'
+            }} src={src} />
         </mdui-avatar>
     else if (text != null && text != '')
         return <mdui-avatar ref={avatarRef} {...props}>

@@ -14,12 +14,14 @@ export default class Methods {
     static Authorize_Response = 0x12
     static Query_User_Info_Request = 0x13
     static Query_User_Info_Response = 0x14
-    static Update_My_Avatar_Request = 0x15
-    static Update_My_Avatar_Response = 0x16
+    static Update_My_Profile_Request = 0x15
+    static Update_My_Profile_Response = 0x16
     static Update_Chat_Avatar_Request = 0x17
     static Update_Chat_Avatar_Response = 0x18
     static Query_My_User_Info_Request = 0x19
     static Query_My_User_Info_Response = 0x20
+    static Request_File_Access_Request = 0x21
+    static Request_File_Access_Response = 0x22
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

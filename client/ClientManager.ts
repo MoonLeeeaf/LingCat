@@ -1,9 +1,14 @@
-import LingCatClient from 'lingcat-client-protocol'
+import LingCatClient, { UserApi } from 'lingcat-client-protocol'
 import fs from './fs.ts'
 
 export default class ClientManager {
     static client: LingCatClient
 
+    static async getMe() {
+        return await UserApi.queryMyUserInfo(this.client, {
+            access_token: this.getActiveUserSession().token,
+        })
+    }
     static listServerPublicKeys() {
         return fs.readdirSync('/public_keys')
     }

@@ -48,7 +48,7 @@ export default class UserApi {
                     return sendError(sendPackage, mPackage.method_id, 'Password or account is not match.', Code.Bad_Request)
 
                 const token = TokenManager.signAccessTokenForUser(mUser!.id)
-                console.log(token)
+
                 sendPackage(Package.encode({
                     method_id: Methods.User_Login_Response,
                     flags: 0,
@@ -67,7 +67,7 @@ export default class UserApi {
             case Methods.Query_User_Info_Request: {
                 const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
 
-                await TokenManager.verifyAccessToken(data.accessToken, 'access')
+                await TokenManager.verifyAccessToken(data.accessToken)
 
                 const user = await UserDataBase.queryUserById(data.userId)
 
@@ -82,6 +82,25 @@ export default class UserApi {
                         avatarFileHash: user.avatar_file_hash,
                         nickname: user.nickname,
                         id: user.id,
+                        description: user.description,
+                    }).finish()
+                }))
+                break
+            }
+            case Methods.Query_My_User_Info_Request: {
+                const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
+
+                const user = (await UserDataBase.queryUserById((await TokenManager.verifyAccessToken(data.accessToken)).user_id))!
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Query_User_Info_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Query_User_Info_Response.encode({
+                        username: user.username,
+                        avatarFileHash: user.avatar_file_hash,
+                        nickname: user.nickname,
+                        description: user.description,
+                        id: user.id,
                     }).finish()
                 }))
                 break
@@ -91,20 +110,28 @@ export default class UserApi {
              *            更新头像
              * ===============================
              */
-            case Methods.Update_My_Avatar_Request: {
-                const data = LingCatProto.methods.Update_My_Avatar_Request.decode(mPackage.data)
+            case Methods.Update_My_Profile_Request: {
+                const data = LingCatProto.methods.Update_My_Profile_Request.decode(mPackage.data)
 
-                const user_id = (await TokenManager.verifyAccessToken(data.accessToken, 'access')).user_id
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
 
-                if (await FileManager.queryFileByHash(data.fileHash) == null)
-                    return sendError(sendPackage, mPackage.method_id, 'File doesn\'t exists', Code.Not_Found)
+                if (data.avatarFileHash != '' && data.avatarFileHash)
+                    if (await FileManager.queryFileByHash(data.avatarFileHash) == null)
+                        return sendError(sendPackage, mPackage.method_id, 'File doesn\'t exists', Code.Not_Found)
+                    else
+                        await UserDataBase.updateAvatarFileHash(user_id, data.avatarFileHash!)
 
-                await UserDataBase.updateAvatarFileHash(user_id, data.fileHash)
+                if (data.username)
+                    await UserDataBase.updateUserName(user_id, data.username)
+                if (data.nickname)
+                    await UserDataBase.updateNickName(user_id, data.nickname)
+                if (data.description)
+                    await UserDataBase.updateDescription(user_id, data.description)
 
                 sendPackage(Package.encode({
-                    method_id: Methods.Update_My_Avatar_Response,
+                    method_id: Methods.Update_My_Profile_Response,
                     flags: 0,
-                    data: LingCatProto.methods.Update_My_Avatar_Response.encode({}).finish()
+                    data: LingCatProto.methods.Update_My_Profile_Response.encode({}).finish()
                 }))
                 break
             }

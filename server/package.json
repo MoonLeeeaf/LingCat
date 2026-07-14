@@ -5,6 +5,7 @@
     "exports": "./server.ts",
     "dependencies": {
         "busboy": "^1.6.0",
+        "cookie-parser": "^1.4.7",
         "express": "^5.2.1",
         "file-type": "^22.0.1",
         "jsonwebtoken": "^9.0.3",
@@ -15,6 +16,7 @@
         "ws": "^8.19.0"
     },
     "devDependencies": {
+        "@types/cookie-parser": "^1.4.10",
         "@types/express": "^5.0.6",
         "@types/express-fileupload": "^1.5.1",
         "@types/jsonwebtoken": "^9.0.10",

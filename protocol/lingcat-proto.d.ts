@@ -1734,6 +1734,240 @@ export namespace lingcat {
         }
 
         /**
+         * Properties of a Request_File_Access_Request.
+         * @deprecated Use lingcat.methods.Request_File_Access_Request.$Properties instead.
+         */
+        interface IRequest_File_Access_Request extends lingcat.methods.Request_File_Access_Request.$Properties {
+        }
+
+        /** Represents a Request_File_Access_Request. */
+        class Request_File_Access_Request {
+
+            /**
+             * Constructs a new Request_File_Access_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Request_File_Access_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Request_File_Access_Request accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Request_File_Access_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Request_File_Access_Request instance
+             */
+            static create(properties: lingcat.methods.Request_File_Access_Request.$Shape): lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape;
+            static create(properties?: lingcat.methods.Request_File_Access_Request.$Properties): lingcat.methods.Request_File_Access_Request;
+
+            /**
+             * Encodes the specified Request_File_Access_Request message. Does not implicitly {@link lingcat.methods.Request_File_Access_Request.verify|verify} messages.
+             * @param message Request_File_Access_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Request_File_Access_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Request_File_Access_Request message, length delimited. Does not implicitly {@link lingcat.methods.Request_File_Access_Request.verify|verify} messages.
+             * @param message Request_File_Access_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Request_File_Access_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Request_File_Access_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape} Request_File_Access_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape;
+
+            /**
+             * Decodes a Request_File_Access_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape} Request_File_Access_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Request_File_Access_Request & lingcat.methods.Request_File_Access_Request.$Shape;
+
+            /**
+             * Verifies a Request_File_Access_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Request_File_Access_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Request_File_Access_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Request_File_Access_Request;
+
+            /**
+             * Creates a plain object from a Request_File_Access_Request message. Also converts values to other types if specified.
+             * @param message Request_File_Access_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Request_File_Access_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Request_File_Access_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Request_File_Access_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Request_File_Access_Request {
+
+            /** Properties of a Request_File_Access_Request. */
+            interface $Properties {
+
+                /** Request_File_Access_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Request_File_Access_Request. */
+            type $Shape = lingcat.methods.Request_File_Access_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Request_File_Access_Response.
+         * @deprecated Use lingcat.methods.Request_File_Access_Response.$Properties instead.
+         */
+        interface IRequest_File_Access_Response extends lingcat.methods.Request_File_Access_Response.$Properties {
+        }
+
+        /** Represents a Request_File_Access_Response. */
+        class Request_File_Access_Response {
+
+            /**
+             * Constructs a new Request_File_Access_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Request_File_Access_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Request_File_Access_Response token. */
+            token: string;
+
+            /**
+             * Creates a new Request_File_Access_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Request_File_Access_Response instance
+             */
+            static create(properties: lingcat.methods.Request_File_Access_Response.$Shape): lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape;
+            static create(properties?: lingcat.methods.Request_File_Access_Response.$Properties): lingcat.methods.Request_File_Access_Response;
+
+            /**
+             * Encodes the specified Request_File_Access_Response message. Does not implicitly {@link lingcat.methods.Request_File_Access_Response.verify|verify} messages.
+             * @param message Request_File_Access_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Request_File_Access_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Request_File_Access_Response message, length delimited. Does not implicitly {@link lingcat.methods.Request_File_Access_Response.verify|verify} messages.
+             * @param message Request_File_Access_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Request_File_Access_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Request_File_Access_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape} Request_File_Access_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape;
+
+            /**
+             * Decodes a Request_File_Access_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape} Request_File_Access_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Request_File_Access_Response & lingcat.methods.Request_File_Access_Response.$Shape;
+
+            /**
+             * Verifies a Request_File_Access_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Request_File_Access_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Request_File_Access_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Request_File_Access_Response;
+
+            /**
+             * Creates a plain object from a Request_File_Access_Response message. Also converts values to other types if specified.
+             * @param message Request_File_Access_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Request_File_Access_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Request_File_Access_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Request_File_Access_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Request_File_Access_Response {
+
+            /** Properties of a Request_File_Access_Response. */
+            interface $Properties {
+
+                /** Request_File_Access_Response token */
+                token?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Request_File_Access_Response. */
+            type $Shape = lingcat.methods.Request_File_Access_Response.$Properties;
+        }
+
+        /**
          * Properties of an Authorize_Request.
          * @deprecated Use lingcat.methods.Authorize_Request.$Properties instead.
          */
@@ -2232,6 +2466,9 @@ export namespace lingcat {
             /** Query_User_Info_Response avatarFileHash. */
             avatarFileHash?: (string|null);
 
+            /** Query_User_Info_Response description. */
+            description?: (string|null);
+
             /**
              * Creates a new Query_User_Info_Response instance using the specified properties.
              * @param [properties] Properties to set
@@ -2328,6 +2565,9 @@ export namespace lingcat {
                 /** Query_User_Info_Response avatarFileHash */
                 avatarFileHash?: (string|null);
 
+                /** Query_User_Info_Response description */
+                description?: (string|null);
+
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
@@ -2366,6 +2606,9 @@ export namespace lingcat {
 
             /** Query_My_User_Info_Response avatarFileHash. */
             avatarFileHash?: (string|null);
+
+            /** Query_My_User_Info_Response description. */
+            description?: (string|null);
 
             /**
              * Creates a new Query_My_User_Info_Response instance using the specified properties.
@@ -2463,6 +2706,9 @@ export namespace lingcat {
                 /** Query_My_User_Info_Response avatarFileHash */
                 avatarFileHash?: (string|null);
 
+                /** Query_My_User_Info_Response description */
+                description?: (string|null);
+
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
@@ -2472,237 +2718,255 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of an Update_My_Avatar_Request.
-         * @deprecated Use lingcat.methods.Update_My_Avatar_Request.$Properties instead.
+         * Properties of an Update_My_Profile_Request.
+         * @deprecated Use lingcat.methods.Update_My_Profile_Request.$Properties instead.
          */
-        interface IUpdate_My_Avatar_Request extends lingcat.methods.Update_My_Avatar_Request.$Properties {
+        interface IUpdate_My_Profile_Request extends lingcat.methods.Update_My_Profile_Request.$Properties {
         }
 
-        /** Represents an Update_My_Avatar_Request. */
-        class Update_My_Avatar_Request {
+        /** Represents an Update_My_Profile_Request. */
+        class Update_My_Profile_Request {
 
             /**
-             * Constructs a new Update_My_Avatar_Request.
+             * Constructs a new Update_My_Profile_Request.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.Update_My_Avatar_Request.$Properties);
+            constructor(properties?: lingcat.methods.Update_My_Profile_Request.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** Update_My_Avatar_Request accessToken. */
+            /** Update_My_Profile_Request accessToken. */
             accessToken: string;
 
-            /** Update_My_Avatar_Request fileHash. */
-            fileHash: string;
+            /** Update_My_Profile_Request avatarFileHash. */
+            avatarFileHash?: (string|null);
+
+            /** Update_My_Profile_Request username. */
+            username?: (string|null);
+
+            /** Update_My_Profile_Request nickname. */
+            nickname?: (string|null);
+
+            /** Update_My_Profile_Request description. */
+            description?: (string|null);
 
             /**
-             * Creates a new Update_My_Avatar_Request instance using the specified properties.
+             * Creates a new Update_My_Profile_Request instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Update_My_Avatar_Request instance
+             * @returns Update_My_Profile_Request instance
              */
-            static create(properties: lingcat.methods.Update_My_Avatar_Request.$Shape): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
-            static create(properties?: lingcat.methods.Update_My_Avatar_Request.$Properties): lingcat.methods.Update_My_Avatar_Request;
+            static create(properties: lingcat.methods.Update_My_Profile_Request.$Shape): lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape;
+            static create(properties?: lingcat.methods.Update_My_Profile_Request.$Properties): lingcat.methods.Update_My_Profile_Request;
 
             /**
-             * Encodes the specified Update_My_Avatar_Request message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
-             * @param message Update_My_Avatar_Request message or plain object to encode
+             * Encodes the specified Update_My_Profile_Request message. Does not implicitly {@link lingcat.methods.Update_My_Profile_Request.verify|verify} messages.
+             * @param message Update_My_Profile_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.Update_My_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Update_My_Profile_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Update_My_Avatar_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
-             * @param message Update_My_Avatar_Request message or plain object to encode
+             * Encodes the specified Update_My_Profile_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Profile_Request.verify|verify} messages.
+             * @param message Update_My_Profile_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.Update_My_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Update_My_Profile_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer.
+             * Decodes an Update_My_Profile_Request message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @returns {lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape} Update_My_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape;
 
             /**
-             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer, length delimited.
+             * Decodes an Update_My_Profile_Request message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @returns {lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape} Update_My_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Profile_Request & lingcat.methods.Update_My_Profile_Request.$Shape;
 
             /**
-             * Verifies an Update_My_Avatar_Request message.
+             * Verifies an Update_My_Profile_Request message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates an Update_My_Avatar_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_My_Profile_Request message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Update_My_Avatar_Request
+             * @returns Update_My_Profile_Request
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Avatar_Request;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Profile_Request;
 
             /**
-             * Creates a plain object from an Update_My_Avatar_Request message. Also converts values to other types if specified.
-             * @param message Update_My_Avatar_Request
+             * Creates a plain object from an Update_My_Profile_Request message. Also converts values to other types if specified.
+             * @param message Update_My_Profile_Request
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.Update_My_Avatar_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Update_My_Profile_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Update_My_Avatar_Request to JSON.
+             * Converts this Update_My_Profile_Request to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Update_My_Avatar_Request
+             * Gets the type url for Update_My_Profile_Request
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Update_My_Avatar_Request {
+        namespace Update_My_Profile_Request {
 
-            /** Properties of an Update_My_Avatar_Request. */
+            /** Properties of an Update_My_Profile_Request. */
             interface $Properties {
 
-                /** Update_My_Avatar_Request accessToken */
+                /** Update_My_Profile_Request accessToken */
                 accessToken?: (string|null);
 
-                /** Update_My_Avatar_Request fileHash */
-                fileHash?: (string|null);
+                /** Update_My_Profile_Request avatarFileHash */
+                avatarFileHash?: (string|null);
+
+                /** Update_My_Profile_Request username */
+                username?: (string|null);
+
+                /** Update_My_Profile_Request nickname */
+                nickname?: (string|null);
+
+                /** Update_My_Profile_Request description */
+                description?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of an Update_My_Avatar_Request. */
-            type $Shape = lingcat.methods.Update_My_Avatar_Request.$Properties;
+            /** Shape of an Update_My_Profile_Request. */
+            type $Shape = lingcat.methods.Update_My_Profile_Request.$Properties;
         }
 
         /**
-         * Properties of an Update_My_Avatar_Response.
-         * @deprecated Use lingcat.methods.Update_My_Avatar_Response.$Properties instead.
+         * Properties of an Update_My_Profile_Response.
+         * @deprecated Use lingcat.methods.Update_My_Profile_Response.$Properties instead.
          */
-        interface IUpdate_My_Avatar_Response extends lingcat.methods.Update_My_Avatar_Response.$Properties {
+        interface IUpdate_My_Profile_Response extends lingcat.methods.Update_My_Profile_Response.$Properties {
         }
 
-        /** Represents an Update_My_Avatar_Response. */
-        class Update_My_Avatar_Response {
+        /** Represents an Update_My_Profile_Response. */
+        class Update_My_Profile_Response {
 
             /**
-             * Constructs a new Update_My_Avatar_Response.
+             * Constructs a new Update_My_Profile_Response.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.Update_My_Avatar_Response.$Properties);
+            constructor(properties?: lingcat.methods.Update_My_Profile_Response.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
             /**
-             * Creates a new Update_My_Avatar_Response instance using the specified properties.
+             * Creates a new Update_My_Profile_Response instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Update_My_Avatar_Response instance
+             * @returns Update_My_Profile_Response instance
              */
-            static create(properties: lingcat.methods.Update_My_Avatar_Response.$Shape): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
-            static create(properties?: lingcat.methods.Update_My_Avatar_Response.$Properties): lingcat.methods.Update_My_Avatar_Response;
+            static create(properties: lingcat.methods.Update_My_Profile_Response.$Shape): lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape;
+            static create(properties?: lingcat.methods.Update_My_Profile_Response.$Properties): lingcat.methods.Update_My_Profile_Response;
 
             /**
-             * Encodes the specified Update_My_Avatar_Response message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
-             * @param message Update_My_Avatar_Response message or plain object to encode
+             * Encodes the specified Update_My_Profile_Response message. Does not implicitly {@link lingcat.methods.Update_My_Profile_Response.verify|verify} messages.
+             * @param message Update_My_Profile_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.Update_My_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Update_My_Profile_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Update_My_Avatar_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
-             * @param message Update_My_Avatar_Response message or plain object to encode
+             * Encodes the specified Update_My_Profile_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Profile_Response.verify|verify} messages.
+             * @param message Update_My_Profile_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.Update_My_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Update_My_Profile_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer.
+             * Decodes an Update_My_Profile_Response message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @returns {lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape} Update_My_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape;
 
             /**
-             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Update_My_Profile_Response message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @returns {lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape} Update_My_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Profile_Response & lingcat.methods.Update_My_Profile_Response.$Shape;
 
             /**
-             * Verifies an Update_My_Avatar_Response message.
+             * Verifies an Update_My_Profile_Response message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates an Update_My_Avatar_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_My_Profile_Response message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Update_My_Avatar_Response
+             * @returns Update_My_Profile_Response
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Avatar_Response;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Profile_Response;
 
             /**
-             * Creates a plain object from an Update_My_Avatar_Response message. Also converts values to other types if specified.
-             * @param message Update_My_Avatar_Response
+             * Creates a plain object from an Update_My_Profile_Response message. Also converts values to other types if specified.
+             * @param message Update_My_Profile_Response
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.Update_My_Avatar_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Update_My_Profile_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Update_My_Avatar_Response to JSON.
+             * Converts this Update_My_Profile_Response to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Update_My_Avatar_Response
+             * Gets the type url for Update_My_Profile_Response
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Update_My_Avatar_Response {
+        namespace Update_My_Profile_Response {
 
-            /** Properties of an Update_My_Avatar_Response. */
+            /** Properties of an Update_My_Profile_Response. */
             interface $Properties {
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of an Update_My_Avatar_Response. */
-            type $Shape = lingcat.methods.Update_My_Avatar_Response.$Properties;
+            /** Shape of an Update_My_Profile_Response. */
+            type $Shape = lingcat.methods.Update_My_Profile_Response.$Properties;
         }
 
         /**

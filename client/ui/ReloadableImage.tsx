@@ -1,7 +1,7 @@
 import { Img } from "react-image"
 import React from "react"
 
-export default function ReloadableImage({ src, alt, ...props }: { src: string, alt?: string, props?: React.HTMLAttributes<HTMLImageElement> }) {
+export default function ReloadableImage({ src, alt, ...props }: { src: string, alt?: string } & React.HTMLAttributes<HTMLImageElement>) {
     const [k, setK] = React.useState(Date.now() + '')
 
     return (

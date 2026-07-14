@@ -64,11 +64,13 @@ export default class LingCatClient {
 
             this.client?.send(mPackage.toBuffer())
 
+            console.log("[Send] " + (!mPackage.isDecrypted ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+
             timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
         })
     }
 
-    onInit() {}
+    onInit() { }
 
     init() {
         if (this.client == null) {
@@ -106,12 +108,7 @@ export default class LingCatClient {
                             session.recvSeq = mPackage.seq
 
                             const isEncrypted = mPackage.isDecrypted
-                            console.log("[Client] " + (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
-
-                            // 如果是加密消息, 同时应该返回加密的消息
-                            function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
-                                client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(session.sendSeq++, session.keySend!) : p).toBuffer())
-                            }
+                            console.log("[Receive] " + (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
 
                             switch (mPackage.method_id) {
                                 // 握手响应
@@ -143,14 +140,14 @@ export default class LingCatClient {
 
                                         sharedSecret.fill(0)
 
-                                       /*  const id = setInterval(() => sendPackage(Package.encode({
-                                            method_id: Methods.Ping_Request,
-                                            flags: 0,
-                                            data: LingCatProto.methods.Ping_Request.encode({
-                                                time: Date.now()
-                                            }).finish()
-                                        }), { forceEncrypt: true }), 15000)
-                                        client?.addEventListener('close', () => clearInterval(id)) */
+                                        /*  const id = setInterval(() => sendPackage(Package.encode({
+                                             method_id: Methods.Ping_Request,
+                                             flags: 0,
+                                             data: LingCatProto.methods.Ping_Request.encode({
+                                                 time: Date.now()
+                                             }).finish()
+                                         }), { forceEncrypt: true }), 15000)
+                                         client?.addEventListener('close', () => clearInterval(id)) */
 
                                         this.onInit()
                                     }

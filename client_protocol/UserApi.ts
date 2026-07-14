@@ -18,7 +18,7 @@ export default class UserApi {
         nickname: string
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.User_Registration_Response>(LingCatProto.methods.User_Registration_Response,(await client.invoke({
+        return decodeOrThrow<LingCatProto.methods.User_Registration_Response>(LingCatProto.methods.User_Registration_Response, (await client.invoke({
             method_id: Methods.User_Registration_Request,
             data: LingCatProto.methods.User_Registration_Request.encode({
                 password,
@@ -41,7 +41,7 @@ export default class UserApi {
         account: string
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.User_Login_Response>(LingCatProto.methods.User_Login_Response,(await client.invoke({
+        return decodeOrThrow<LingCatProto.methods.User_Login_Response>(LingCatProto.methods.User_Login_Response, (await client.invoke({
             method_id: Methods.User_Login_Request,
             data: LingCatProto.methods.User_Login_Request.encode({
                 password,
@@ -61,7 +61,7 @@ export default class UserApi {
         access_token: string
         timeout?: number
     }) {
-        return decodeOrThrow(LingCatProto.methods.Authorize_Response,(await client.invoke({
+        return decodeOrThrow(LingCatProto.methods.Authorize_Response, (await client.invoke({
             method_id: Methods.User_Registration_Request,
             data: LingCatProto.methods.Authorize_Request.encode({
                 accessToken: access_token,
@@ -80,7 +80,7 @@ export default class UserApi {
         access_token: string
         timeout?: number
     }) {
-        const re = decodeOrThrow<LingCatProto.methods.Query_My_User_Info_Response>(LingCatProto.methods.Query_My_User_Info_Response,(await client.invoke({
+        const re = decodeOrThrow<LingCatProto.methods.Query_My_User_Info_Response>(LingCatProto.methods.Query_My_User_Info_Response, (await client.invoke({
             method_id: Methods.Query_My_User_Info_Request,
             data: LingCatProto.methods.Query_My_User_Info_Request.encode({
                 accessToken: access_token,
@@ -93,6 +93,7 @@ export default class UserApi {
             id: re.id,
             nickname: re.nickname,
             avatar_file_hash: re.avatarFileHash,
+            description: re.description,
         } as IUser
     }
     /**
@@ -108,7 +109,7 @@ export default class UserApi {
         user_id: string
         timeout?: number
     }) {
-        const re = decodeOrThrow<LingCatProto.methods.Query_User_Info_Response>(LingCatProto.methods.Query_User_Info_Response,(await client.invoke({
+        const re = decodeOrThrow<LingCatProto.methods.Query_User_Info_Response>(LingCatProto.methods.Query_User_Info_Response, (await client.invoke({
             method_id: Methods.Query_User_Info_Request,
             data: LingCatProto.methods.Query_User_Info_Request.encode({
                 accessToken: access_token,
@@ -122,23 +123,36 @@ export default class UserApi {
             id: re.id,
             nickname: re.nickname,
             avatar_file_hash: re.avatarFileHash,
+            description: re.description,
         } as IUser
     }
     /**
-     * 更新头像
+     * 更新资料
      * @returns 访问令牌
      */
-    static async updateMyAvatarFileHash(client: LingCatClient, {
-        file_hash,
+    static async updateMyProfile(client: LingCatClient, {
+        access_token,
+        username,
+        nickname,
+        description,
+        avatar_file_hash,
         timeout,
     }: {
-        file_hash: string
+        access_token: string
+        username?: string
+        nickname?: string
+        description?: string
+        avatar_file_hash?: string
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.Update_My_Avatar_Response>(LingCatProto.methods.Update_Chat_Avatar_Response,(await client.invoke({
-            method_id: Methods.Update_My_Avatar_Request,
-            data: LingCatProto.methods.Update_My_Avatar_Request.encode({
-                fileHash: file_hash,
+        return decodeOrThrow<LingCatProto.methods.Update_My_Profile_Response>(LingCatProto.methods.Update_My_Profile_Response, (await client.invoke({
+            method_id: Methods.Update_My_Profile_Request,
+            data: LingCatProto.methods.Update_My_Profile_Request.encode({
+                accessToken: access_token,
+                username,
+                nickname,
+                description,
+                avatarFileHash: avatar_file_hash,
             }).finish(),
             timeout,
         })).data)

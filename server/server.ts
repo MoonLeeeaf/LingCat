@@ -15,6 +15,9 @@ import { config } from './config.ts'
 import TokenManager from './api/TokenManager.ts'
 import node_path from 'node:path'
 import UserChatLinker from './data/UserChatLinker.ts'
+import sendError from './api/sendError.ts'
+import FileApi from './api/FileApi.ts'
+import cookieParser from 'cookie-parser'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -34,20 +37,21 @@ export default function createLingCatServer(base_data_path: string) {
         next()
     })
 
-
     app.use(express.static(`${base_data_path}/page/`))
+
+    app.use(cookieParser())
     app.get('/uploaded_files/:hash', async (req, res) => {
-        const token = req.headers.token
-        if (!token) return res.status(401).send({ msg: "Unauthorzied" })
+        const token = req.headers.file_access_token || req.cookies.file_access_token
+        if (!token) return res.status(401).send({ message: "Unauthorzied" })
 
         try {
-            const user_id = (await TokenManager.verifyAccessToken(token as string)).user_id
+            const user_id = (await TokenManager.verifyFileAccessToken(token as string)).user_id
 
             const file = await FileManager.queryFileByHash(req.params.hash as string)
-            if (file == null) return res.status(404).send({ msg: "Not Found" })
+            if (file == null) return res.status(404).send({ message: "Not Found" })
 
             if (file.belong_to_chat_id && await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
-                return res.status(403).send({ msg: "This file belongs to a chat you have no access" })
+                return res.status(403).send({ message: "This file belongs to a chat you have no access" })
 
             res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
             res.setHeader('Content-Type', file.mime)
@@ -55,17 +59,17 @@ export default function createLingCatServer(base_data_path: string) {
 
             await FileManager.updateLastUsedTime(file.hash)
         } catch (e) {
-            return res.status(401).send({ msg: "Token is invalid" })
+            return res.status(401).send({ message: "Token is invalid", cause: JSON.stringify(e) })
         }
     })
     app.post('/upload_file', async (req, res) => {
         const token = req.headers.token
-        if (!token) return res.status(401).send({ msg: "Unauthorzied" })
+        if (!token) return res.status(401).send({ message: "Unauthorzied" })
 
         try {
             await TokenManager.verifyFileUploadToken(token as string)
         } catch (e) {
-            return res.status(401).send({ msg: "Token is invalid" })
+            return res.status(401).send({ message: "Token is invalid" })
         }
 
         const bb = busboy({ headers: req.headers, limits: { files: 1, fileSize: config.max_file_size || 1000 * 1024 * 1024 } })
@@ -103,24 +107,25 @@ export default function createLingCatServer(base_data_path: string) {
         })
 
         bb.on('close', async () => {
+            /*
             if (!hash_from_client) {
-                return res.status(400).send({ msg: "Missing client hash" })
+                return res.status(400).send({ message: "Missing client hash" })
             }
-
-            if (hash != hash_from_client) {
+             */
+            if (hash_from_client && hash != hash_from_client) {
                 if (fs.existsSync(path)) {
                     fs.unlinkSync(path)
                 }
-                return res.status(400).send({ msg: "Hash mismatch" })
+                return res.status(400).send({ message: "Hash mismatch" })
             }
             try {
-                await FileManager.uploadFile(hash, fileName, path, belong_to_chat_id)
+                await FileManager.uploadFile(hash!, fileName, path, belong_to_chat_id)
             } finally {
                 fs.unlinkSync(path)
             }
 
             res.status(200).send({
-                msg: "success",
+                message: "success",
                 file_hash: hash,
             })
         })
@@ -230,38 +235,16 @@ export default function createLingCatServer(base_data_path: string) {
                     }
 
                     // 若没有一个命中, 则报 Not_Found 错误
-                    if (!(await ServerApi.onCall(sendPackage, mPackage) || await UserApi.onCall(sendPackage, mPackage))) {
-                        sendPackage(Package.encode({
-                            method_id: Methods.Error_Response,
-                            flags: 0,
-                            data: LingCatProto.methods.Error_Response.encode({
-                                requestMethod: mPackage.method_id,
-                                code: Code.Not_Found,
-                            }).finish()
-                        }))
+                    if (!(await ServerApi.onCall(sendPackage, mPackage) || await UserApi.onCall(sendPackage, mPackage) || await FileApi.onCall(sendPackage, mPackage))) {
+                        console.log('[Server] Method not found:', mPackage.method_id)
+                        sendError(sendPackage, mPackage.method_id, 'Method not found', Code.Not_Found)
                     }
                 } catch (e) {
                     console.log('[Server] Error: ', e)
                     if (e.message && e.code)
-                        sendPackage(Package.encode({
-                            method_id: Methods.Error_Response,
-                            flags: 0,
-                            data: LingCatProto.methods.Error_Response.encode({
-                                requestMethod: mPackage.method_id,
-                                message: e.message + ' (' + e.cause + ')',
-                                code: e.code,
-                            }).finish()
-                        }))
+                        sendError(sendPackage, mPackage.method_id, e.message + ' (' + e.cause + ')', e.code)
                     else
-                        sendPackage(Package.encode({
-                            method_id: Methods.Error_Response,
-                            flags: 0,
-                            data: LingCatProto.methods.Error_Response.encode({
-                                requestMethod: mPackage.method_id,
-                                message: e + '',
-                                code: Code.Internal_Server_Error,
-                            }).finish()
-                        }))
+                        sendError(sendPackage, mPackage.method_id, e + '', Code.Internal_Server_Error)
                 }
             } catch (e) {
                 console.error(e)
