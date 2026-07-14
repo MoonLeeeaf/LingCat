@@ -64,7 +64,7 @@ export default class LingCatClient {
 
             this.client?.send(mPackage.toBuffer())
 
-            console.log("[Send] " + (!mPackage.isDecrypted ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+            console.log("[发]", "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (!mPackage.isDecrypted ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ") : ''))
 
             timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
         })
@@ -108,7 +108,7 @@ export default class LingCatClient {
                             session.recvSeq = mPackage.seq
 
                             const isEncrypted = mPackage.isDecrypted
-                            console.log("[Receive] " + (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+                            console.log("[收]", "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : ''))
 
                             switch (mPackage.method_id) {
                                 // 握手响应

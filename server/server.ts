@@ -144,7 +144,7 @@ export default function createLingCatServer(base_data_path: string) {
 
     console.log('[Server]', '服务端公钥 Hex:', fs.readFileSync(`${base_data_path}/key/public`).toString('hex'))
 
-    wsServer.on('connection', async (client) => {
+    wsServer.on('connection', async (client, req) => {
         const keyPair = SecureKey.All_generateExchangeKeyPair()
         const privateKey = fs.readFileSync(`${base_data_path}/key/private`)
         let keySend: Uint8Array | undefined
@@ -172,13 +172,13 @@ export default function createLingCatServer(base_data_path: string) {
                 recvSeq = mPackage.seq
 
                 const isEncrypted = mPackage.isDecrypted
-                console.log("[Receive] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+                console.log("[收]", req.socket.remoteAddress, "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : ''))
 
                 // 如果是加密消息, 同时应该返回加密的消息
                 function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
                     p.request_id = mPackage.request_id
                     client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keySend!) : p).toBuffer())
-                    console.log("[Send] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(p.method_id), "| Flags:", p.flags, "| Data length:", p.length, '| Request ID:', p.request_id)
+                    console.log("[发]", req.socket.remoteAddress, "Method:", Methods.getMethodName(p.method_id), "| Flags:", p.flags, "| Data length:", p.length, '| Request ID:', p.request_id, (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : ''))
                 }
 
                 try {
