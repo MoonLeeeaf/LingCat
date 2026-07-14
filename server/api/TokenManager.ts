@@ -41,7 +41,9 @@ export default class TokenManager {
                 throw "需要验证用户, 但用户 ID 与令牌不配对!"
             if (t.type != type)
                 throw "令牌类型不匹配! 期待 " + type + ", 得到 " + t.type
-            return t.user_id
+            if (await UserDataBase.queryUserById(t.user_id))
+                throw "User " + t.user_id + " doesn\'t exists"
+            return t
         } catch (e) {
             throw {
                 message: '令牌错误!',
