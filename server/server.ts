@@ -23,6 +23,18 @@ export default function createLingCatServer(base_data_path: string) {
         server: httpServer,
     })
 
+    app.use((req, res, next) => {
+        const start = Date.now()
+
+        res.on('finish', () => {
+            const duration = Date.now() - start
+            console.log(`[HTTP] ${req.socket.remoteAddress} <- ${req.originalUrl} [${res.statusCode}] (with ${req.method}, ${duration}ms)`)
+        })
+
+        next()
+    })
+
+
     app.use(express.static(`${base_data_path}/page/`))
     app.get('/uploaded_files/:hash', async (req, res) => {
         const token = req.headers.token
@@ -155,12 +167,13 @@ export default function createLingCatServer(base_data_path: string) {
                 recvSeq = mPackage.seq
 
                 const isEncrypted = mPackage.isDecrypted
-                console.log("[Server] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
+                console.log("[Receive] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id)
 
                 // 如果是加密消息, 同时应该返回加密的消息
                 function sendPackage(p: Package, option?: { forceEncrypt: boolean }) {
                     p.request_id = mPackage.request_id
                     client.send((isEncrypted || option?.forceEncrypt ? p.encrypt(sendSeq++, keySend!) : p).toBuffer())
+                    console.log("[Send] " + (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : '') + "Method:", Methods.getMethodName(p.method_id), "| Flags:", p.flags, "| Data length:", p.length, '| Request ID:', p.request_id)
                 }
 
                 try {
