@@ -137,14 +137,14 @@ export default class LingCatClient {
 
                                         sharedSecret.fill(0)
 
-                                        const id = setInterval(() => sendPackage(Package.encode({
+                                       /*  const id = setInterval(() => sendPackage(Package.encode({
                                             method_id: Methods.Ping_Request,
                                             flags: 0,
                                             data: LingCatProto.methods.Ping_Request.encode({
                                                 time: Date.now()
                                             }).finish()
                                         }), { forceEncrypt: true }), 15000)
-                                        client?.addEventListener('close', () => clearInterval(id))
+                                        client?.addEventListener('close', () => clearInterval(id)) */
 
                                         this.onInit()
                                     }
