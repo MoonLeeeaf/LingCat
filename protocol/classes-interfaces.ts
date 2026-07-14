@@ -2,6 +2,7 @@ export interface IUser {
     id: string
     username?: string | null
     nickname: string
+    description?: string | null
     avatar_file_hash?: string | null
 }
 

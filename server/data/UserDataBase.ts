@@ -24,6 +24,7 @@ export type { IServerUser }
     table.string('username').unique()
     table.string('nickname').notNullable()
     table.string('password').notNullable()
+    table.string('description')
     table.string('avatar_file_hash')
     table.integer('created_at').notNullable()
 })
@@ -78,8 +79,11 @@ export default class UserDataBase {
     static async updateNickName(id: string, username: string) {
         await db<IServerUser>('Users').update({ username }).where('id', id)
     }
-    static async updatePassWord(id: string, password: string) {
+    static async updateRawPassWord(id: string, password: string) {
         await db<IServerUser>('Users').update({ password }).where('id', id)
+    }
+    static async updateDescription(id: string, description: string) {
+        await db<IServerUser>('Users').update({ description }).where('id', id)
     }
     static async updateAvatarFileHash(id: string, avatar_file_hash: string) {
         await db<IServerUser>('Users').update({ avatar_file_hash }).where('id', id)
