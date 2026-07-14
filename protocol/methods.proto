@@ -79,3 +79,18 @@ message Query_User_Info_Response {
     string nickname = 3;
     optional string avatar_file_hash = 4;
 }
+
+message Update_My_Avatar_Request {
+    string access_token = 1;
+    string file_hash = 2;
+}
+
+message Update_My_Avatar_Response {}
+
+message Update_Chat_Avatar_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string file_hash = 3;
+}
+
+message Update_Chat_Avatar_Response {}

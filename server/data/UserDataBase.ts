@@ -73,12 +73,15 @@ export default class UserDataBase {
     }
 
     static async updateUserName(id: string, username: string) {
-        return await db<IServerUser>('Users').update({ username }).where('id', id)
+        await db<IServerUser>('Users').update({ username }).where('id', id)
     }
     static async updateNickName(id: string, username: string) {
-        return await db<IServerUser>('Users').update({ username }).where('id', id)
+        await db<IServerUser>('Users').update({ username }).where('id', id)
     }
     static async updatePassWord(id: string, password: string) {
-        return await db<IServerUser>('Users').update({ password }).where('id', id)
+        await db<IServerUser>('Users').update({ password }).where('id', id)
+    }
+    static async updateAvatarFileHash(id: string, avatar_file_hash: string) {
+        await db<IServerUser>('Users').update({ avatar_file_hash }).where('id', id)
     }
 }

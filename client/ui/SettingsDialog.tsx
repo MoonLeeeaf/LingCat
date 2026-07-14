@@ -168,7 +168,6 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                                 server_http: mLoginServer.current!.value,
                                 server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
                             })
-                            client.init()
 
                             client.onInit = async () => {
                                 // @ts-ignore
@@ -193,6 +192,8 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                                     })
                                 }
                             }
+
+                            client.init()
                         } catch (e) {
                             console.log(e)
                             showSnackbar({
@@ -216,8 +217,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                     server_http: mLoginServer.current!.value,
                     server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
                 })
-                client.init()
-
+                
                 client.onInit = async () => {
                     try {
                         const token = await UserApi.login(client, {
@@ -227,9 +227,9 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
 
                         ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
 
-                        location.reload()
-
                         client.disconnect()
+
+                        setTimeout(location.reload, 500)
                     } catch (e) {
                         console.log(e)
                         showSnackbar({
@@ -237,6 +237,8 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                         })
                     }
                 }
+
+                client.init()
             } catch (e) {
                 console.log(e)
                 showSnackbar({

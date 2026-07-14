@@ -5,10 +5,15 @@ export interface IUser {
     avatar_file_hash?: string | null
 }
 
-export interface IGroup {
+export type ChatType = 'private' | 'group'
+
+export interface IChat {
     id: string
-    group_unique?: string | null
-    name: string
+    title?: string | null
+    unique?: string | null
+    type: ChatType
+    avatar_file_hash?: string | null
+    settings: string
 }
 
 export interface IFile {

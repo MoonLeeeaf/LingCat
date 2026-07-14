@@ -1,11 +1,14 @@
+import { NavigationDrawer } from "mdui"
 import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
+import React from "react"
 
-export default function UserMain({ access_token }: { access_token: string }) {
+export default function UserMain({ access_token, drawerRef }: { access_token: string, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const cachedProfile = null
+    const [activeChat, setActiveChat] = React.useState<Chat>()
 
     return <>
-        <mdui-navigation-drawer open>
+        <mdui-navigation-drawer ref={drawerRef as any} close-on-overlay-click>
             <mdui-list>
                 <mdui-list-item>Navigation drawer</mdui-list-item>
             </mdui-list>

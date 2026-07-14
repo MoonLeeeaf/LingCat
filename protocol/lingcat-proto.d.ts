@@ -2091,7 +2091,7 @@ export namespace lingcat {
         interface IQuery_User_Info_Response extends lingcat.methods.Query_User_Info_Response.$Properties {
         }
 
-        /** @see classes-interfaces.ts */
+        /** see @link{ classes-interfaces.ts } */
         class Query_User_Info_Response {
 
             /**
@@ -2217,6 +2217,480 @@ export namespace lingcat {
 
             /** Shape of a Query_User_Info_Response. */
             type $Shape = lingcat.methods.Query_User_Info_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Update_My_Avatar_Request.
+         * @deprecated Use lingcat.methods.Update_My_Avatar_Request.$Properties instead.
+         */
+        interface IUpdate_My_Avatar_Request extends lingcat.methods.Update_My_Avatar_Request.$Properties {
+        }
+
+        /** Represents an Update_My_Avatar_Request. */
+        class Update_My_Avatar_Request {
+
+            /**
+             * Constructs a new Update_My_Avatar_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_My_Avatar_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Update_My_Avatar_Request accessToken. */
+            accessToken: string;
+
+            /** Update_My_Avatar_Request fileHash. */
+            fileHash: string;
+
+            /**
+             * Creates a new Update_My_Avatar_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_My_Avatar_Request instance
+             */
+            static create(properties: lingcat.methods.Update_My_Avatar_Request.$Shape): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
+            static create(properties?: lingcat.methods.Update_My_Avatar_Request.$Properties): lingcat.methods.Update_My_Avatar_Request;
+
+            /**
+             * Encodes the specified Update_My_Avatar_Request message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
+             * @param message Update_My_Avatar_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_My_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_My_Avatar_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Request.verify|verify} messages.
+             * @param message Update_My_Avatar_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_My_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
+
+            /**
+             * Decodes an Update_My_Avatar_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape} Update_My_Avatar_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Avatar_Request & lingcat.methods.Update_My_Avatar_Request.$Shape;
+
+            /**
+             * Verifies an Update_My_Avatar_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_My_Avatar_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_My_Avatar_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Avatar_Request;
+
+            /**
+             * Creates a plain object from an Update_My_Avatar_Request message. Also converts values to other types if specified.
+             * @param message Update_My_Avatar_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_My_Avatar_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_My_Avatar_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_My_Avatar_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_My_Avatar_Request {
+
+            /** Properties of an Update_My_Avatar_Request. */
+            interface $Properties {
+
+                /** Update_My_Avatar_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Update_My_Avatar_Request fileHash */
+                fileHash?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_My_Avatar_Request. */
+            type $Shape = lingcat.methods.Update_My_Avatar_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Update_My_Avatar_Response.
+         * @deprecated Use lingcat.methods.Update_My_Avatar_Response.$Properties instead.
+         */
+        interface IUpdate_My_Avatar_Response extends lingcat.methods.Update_My_Avatar_Response.$Properties {
+        }
+
+        /** Represents an Update_My_Avatar_Response. */
+        class Update_My_Avatar_Response {
+
+            /**
+             * Constructs a new Update_My_Avatar_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_My_Avatar_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Update_My_Avatar_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_My_Avatar_Response instance
+             */
+            static create(properties: lingcat.methods.Update_My_Avatar_Response.$Shape): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
+            static create(properties?: lingcat.methods.Update_My_Avatar_Response.$Properties): lingcat.methods.Update_My_Avatar_Response;
+
+            /**
+             * Encodes the specified Update_My_Avatar_Response message. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
+             * @param message Update_My_Avatar_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_My_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_My_Avatar_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Avatar_Response.verify|verify} messages.
+             * @param message Update_My_Avatar_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_My_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
+
+            /**
+             * Decodes an Update_My_Avatar_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape} Update_My_Avatar_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_My_Avatar_Response & lingcat.methods.Update_My_Avatar_Response.$Shape;
+
+            /**
+             * Verifies an Update_My_Avatar_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_My_Avatar_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_My_Avatar_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_My_Avatar_Response;
+
+            /**
+             * Creates a plain object from an Update_My_Avatar_Response message. Also converts values to other types if specified.
+             * @param message Update_My_Avatar_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_My_Avatar_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_My_Avatar_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_My_Avatar_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_My_Avatar_Response {
+
+            /** Properties of an Update_My_Avatar_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_My_Avatar_Response. */
+            type $Shape = lingcat.methods.Update_My_Avatar_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Chat_Avatar_Request.
+         * @deprecated Use lingcat.methods.Update_Chat_Avatar_Request.$Properties instead.
+         */
+        interface IUpdate_Chat_Avatar_Request extends lingcat.methods.Update_Chat_Avatar_Request.$Properties {
+        }
+
+        /** Represents an Update_Chat_Avatar_Request. */
+        class Update_Chat_Avatar_Request {
+
+            /**
+             * Constructs a new Update_Chat_Avatar_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Chat_Avatar_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Update_Chat_Avatar_Request accessToken. */
+            accessToken: string;
+
+            /** Update_Chat_Avatar_Request chatId. */
+            chatId: string;
+
+            /** Update_Chat_Avatar_Request fileHash. */
+            fileHash: string;
+
+            /**
+             * Creates a new Update_Chat_Avatar_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Chat_Avatar_Request instance
+             */
+            static create(properties: lingcat.methods.Update_Chat_Avatar_Request.$Shape): lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape;
+            static create(properties?: lingcat.methods.Update_Chat_Avatar_Request.$Properties): lingcat.methods.Update_Chat_Avatar_Request;
+
+            /**
+             * Encodes the specified Update_Chat_Avatar_Request message. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Request.verify|verify} messages.
+             * @param message Update_Chat_Avatar_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Chat_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Chat_Avatar_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Request.verify|verify} messages.
+             * @param message Update_Chat_Avatar_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Chat_Avatar_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Chat_Avatar_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape} Update_Chat_Avatar_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape;
+
+            /**
+             * Decodes an Update_Chat_Avatar_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape} Update_Chat_Avatar_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape;
+
+            /**
+             * Verifies an Update_Chat_Avatar_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Chat_Avatar_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Chat_Avatar_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Chat_Avatar_Request;
+
+            /**
+             * Creates a plain object from an Update_Chat_Avatar_Request message. Also converts values to other types if specified.
+             * @param message Update_Chat_Avatar_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Chat_Avatar_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Chat_Avatar_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Chat_Avatar_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Chat_Avatar_Request {
+
+            /** Properties of an Update_Chat_Avatar_Request. */
+            interface $Properties {
+
+                /** Update_Chat_Avatar_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Update_Chat_Avatar_Request chatId */
+                chatId?: (string|null);
+
+                /** Update_Chat_Avatar_Request fileHash */
+                fileHash?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Chat_Avatar_Request. */
+            type $Shape = lingcat.methods.Update_Chat_Avatar_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Chat_Avatar_Response.
+         * @deprecated Use lingcat.methods.Update_Chat_Avatar_Response.$Properties instead.
+         */
+        interface IUpdate_Chat_Avatar_Response extends lingcat.methods.Update_Chat_Avatar_Response.$Properties {
+        }
+
+        /** Represents an Update_Chat_Avatar_Response. */
+        class Update_Chat_Avatar_Response {
+
+            /**
+             * Constructs a new Update_Chat_Avatar_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Chat_Avatar_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Update_Chat_Avatar_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Chat_Avatar_Response instance
+             */
+            static create(properties: lingcat.methods.Update_Chat_Avatar_Response.$Shape): lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape;
+            static create(properties?: lingcat.methods.Update_Chat_Avatar_Response.$Properties): lingcat.methods.Update_Chat_Avatar_Response;
+
+            /**
+             * Encodes the specified Update_Chat_Avatar_Response message. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Response.verify|verify} messages.
+             * @param message Update_Chat_Avatar_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Chat_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Chat_Avatar_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Response.verify|verify} messages.
+             * @param message Update_Chat_Avatar_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Chat_Avatar_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Chat_Avatar_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape} Update_Chat_Avatar_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape;
+
+            /**
+             * Decodes an Update_Chat_Avatar_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape} Update_Chat_Avatar_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape;
+
+            /**
+             * Verifies an Update_Chat_Avatar_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Chat_Avatar_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Chat_Avatar_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Chat_Avatar_Response;
+
+            /**
+             * Creates a plain object from an Update_Chat_Avatar_Response message. Also converts values to other types if specified.
+             * @param message Update_Chat_Avatar_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Chat_Avatar_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Chat_Avatar_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Chat_Avatar_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Chat_Avatar_Response {
+
+            /** Properties of an Update_Chat_Avatar_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Chat_Avatar_Response. */
+            type $Shape = lingcat.methods.Update_Chat_Avatar_Response.$Properties;
         }
     }
 }

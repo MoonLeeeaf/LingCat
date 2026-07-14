@@ -1,4 +1,4 @@
-import { dialog, Dialog, TextField } from "mdui"
+import { dialog, Dialog, NavigationDrawer, TextField } from "mdui"
 import ClientManager from "../ClientManager.ts"
 import SettingsDialog from "./SettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
@@ -7,6 +7,8 @@ import React from 'react'
 export default function Main() {
     const mSettingsDialog = React.useRef<Dialog>(undefined)
     const mLoginDialog = React.useRef<Dialog>(undefined)
+
+    const drawerRef = React.useRef<NavigationDrawer>(undefined)
 
     React.useEffect(() => {
         if (ClientManager.listServerPublicKeys().length == 0)
@@ -28,6 +30,9 @@ export default function Main() {
     return (
         <mdui-layout>
             <mdui-top-app-bar>
+                <mdui-button-icon icon="menu" onClick={() => {
+                    drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
+                }}></mdui-button-icon>
                 <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
                 <div style={{ flexGrow: 1 }}></div>
                 <mdui-button-icon icon="settings" onClick={() => mSettingsDialog.current!.open = true}></mdui-button-icon>
@@ -48,7 +53,7 @@ export default function Main() {
                             您还没有登录, 仅可进行设置, 如需登录, 请在配置完服务端公钥后刷新本页面
                         </span>
                     </div>
-                    : <UserMain access_token={ClientManager.getActiveUserSessionName()!} />
+                    : <UserMain access_token={ClientManager.getActiveUserSessionName()!} drawerRef={drawerRef} />
             }
 
             <SettingsDialog
