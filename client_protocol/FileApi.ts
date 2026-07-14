@@ -20,13 +20,11 @@ export default class UserApi {
     }
     static async uploadFile(client: LingCatClient, {
         file_upload_token,
-        chat_id,
-        file_name,
+        belong_to_chat_id,
         file_data,
     }: {
         file_upload_token: string
-        chat_id: string
-        file_name: string
+        belong_to_chat_id?: string | null
         file_data: ArrayBuffer | Blob | Response
     }) {
         let buffer: Uint8Array
@@ -42,9 +40,9 @@ export default class UserApi {
         }
 
         const form = new FormData()
-        form.append("file", new File([buffer], file_name, { type: 'application/octet-stream' }))
+        form.append("file", new File([buffer], "File", { type: 'application/octet-stream' }))
         form.append('hash', sha256Hex(new TextEncoder().encode('file_upload'), buffer))
-        chat_id && form.append('chat_id', chat_id)
+        belong_to_chat_id && form.append('belong_to_chat_id', belong_to_chat_id)
 
         const re = await fetch(client.server_http + '/upload_file', {
             method: 'POST',
