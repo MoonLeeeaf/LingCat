@@ -10,6 +10,8 @@ syntax = "proto3";
 
 package lingcat.methods;
 
+import "./classes.proto";
+
 message Error_Response {
     uint32 request_method = 1;
     optional string message = 2;
@@ -84,21 +86,13 @@ message Query_My_User_Info_Request {
     string access_token = 1;
 }
 
-/** see @link{ classes-interfaces.ts } */
+/** see { @link classes-interfaces.ts } */
 message Query_User_Info_Response {
-    string id = 1;
-    optional string username = 2;
-    string nickname = 3;
-    optional string avatar_file_hash = 4;
-    optional string description = 5;
+    IUser info = 1;
 }
 
 message Query_My_User_Info_Response {
-    string id = 1;
-    optional string username = 2;
-    string nickname = 3;
-    optional string avatar_file_hash = 4;
-    optional string description = 5;
+    IUser info = 1;
 }
 
 message Update_My_Profile_Request {
@@ -119,4 +113,10 @@ message Update_Chat_Avatar_Request {
 
 message Update_Chat_Avatar_Response {}
 
-
+message Get_Chat_Messages_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    optional int64 before = 3;
+    optional int64 after = 4;
+    optional int32 limit = 5;
+}

@@ -24,3 +24,12 @@ export interface IFile {
     mime: string
     uploaded_at: number
 }
+
+export interface IMessage {
+    id: number
+    sender_user_id?: string | null
+    system?: boolean | null
+    chat_id: string
+    text: string
+    time: number
+}

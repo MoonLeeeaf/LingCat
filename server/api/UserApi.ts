@@ -78,11 +78,13 @@ export default class UserApi {
                     method_id: Methods.Query_User_Info_Response,
                     flags: 0,
                     data: LingCatProto.methods.Query_User_Info_Response.encode({
-                        username: user.username,
-                        avatarFileHash: user.avatar_file_hash,
-                        nickname: user.nickname,
-                        id: user.id,
-                        description: user.description,
+                        info: LingCatProto.classes.IUser.create({
+                            username: user.username,
+                            avatarFileHash: user.avatar_file_hash,
+                            nickname: user.nickname,
+                            description: user.description,
+                            id: user.id,
+                        }),
                     }).finish()
                 }))
                 break
@@ -96,11 +98,13 @@ export default class UserApi {
                     method_id: Methods.Query_User_Info_Response,
                     flags: 0,
                     data: LingCatProto.methods.Query_User_Info_Response.encode({
-                        username: user.username,
-                        avatarFileHash: user.avatar_file_hash,
-                        nickname: user.nickname,
-                        description: user.description,
-                        id: user.id,
+                        info: LingCatProto.classes.IUser.create({
+                            username: user.username,
+                            avatarFileHash: user.avatar_file_hash,
+                            nickname: user.nickname,
+                            description: user.description,
+                            id: user.id,
+                        }),
                     }).finish()
                 }))
                 break

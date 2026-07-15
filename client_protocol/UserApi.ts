@@ -89,11 +89,11 @@ export default class UserApi {
         })).data)
 
         return {
-            username: re.username,
-            id: re.id,
-            nickname: re.nickname,
-            avatar_file_hash: re.avatarFileHash,
-            description: re.description,
+            username: re.info!.username,
+            id: re.info!.id,
+            nickname: re.info!.nickname,
+            avatar_file_hash: re.info!.avatarFileHash,
+            description: re.info!.description,
         } as IUser
     }
     /**
@@ -119,11 +119,11 @@ export default class UserApi {
         })).data)
 
         return {
-            username: re.username,
-            id: re.id,
-            nickname: re.nickname,
-            avatar_file_hash: re.avatarFileHash,
-            description: re.description,
+            username: re.info!.username,
+            id: re.info!.id,
+            nickname: re.info!.nickname,
+            avatar_file_hash: re.info!.avatarFileHash,
+            description: re.info!.description,
         } as IUser
     }
     /**

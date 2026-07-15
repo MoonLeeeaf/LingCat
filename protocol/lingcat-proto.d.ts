@@ -143,261 +143,579 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a User.
-         * @deprecated Use lingcat.classes.User.$Properties instead.
+         * Properties of a IUser.
+         * @deprecated Use lingcat.classes.IUser.$Properties instead.
          */
-        interface IUser extends lingcat.classes.User.$Properties {
+        interface IIUser extends lingcat.classes.IUser.$Properties {
         }
 
-        /** Represents a User. */
-        class User {
+        /** Represents a IUser. */
+        class IUser {
 
             /**
-             * Constructs a new User.
+             * Constructs a new IUser.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.classes.User.$Properties);
+            constructor(properties?: lingcat.classes.IUser.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** 用户 ID 在服务端为真实 ID, 在客户端为服务端生成的针对某个客户端的临时 ID */
+            /** IUser id. */
             id: string;
 
-            /** User username. */
+            /** IUser username. */
             username?: (string|null);
 
-            /** User nickname. */
+            /** IUser nickname. */
             nickname: string;
 
+            /** IUser description. */
+            description?: (string|null);
+
+            /** IUser avatarFileHash. */
+            avatarFileHash?: (string|null);
+
             /**
-             * Creates a new User instance using the specified properties.
+             * Creates a new IUser instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns User instance
+             * @returns IUser instance
              */
-            static create(properties: lingcat.classes.User.$Shape): lingcat.classes.User & lingcat.classes.User.$Shape;
-            static create(properties?: lingcat.classes.User.$Properties): lingcat.classes.User;
+            static create(properties: lingcat.classes.IUser.$Shape): lingcat.classes.IUser & lingcat.classes.IUser.$Shape;
+            static create(properties?: lingcat.classes.IUser.$Properties): lingcat.classes.IUser;
 
             /**
-             * Encodes the specified User message. Does not implicitly {@link lingcat.classes.User.verify|verify} messages.
-             * @param message User message or plain object to encode
+             * Encodes the specified IUser message. Does not implicitly {@link lingcat.classes.IUser.verify|verify} messages.
+             * @param message IUser message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.classes.User.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.classes.IUser.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified User message, length delimited. Does not implicitly {@link lingcat.classes.User.verify|verify} messages.
-             * @param message User message or plain object to encode
+             * Encodes the specified IUser message, length delimited. Does not implicitly {@link lingcat.classes.IUser.verify|verify} messages.
+             * @param message IUser message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.classes.User.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.classes.IUser.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a User message from the specified reader or buffer.
+             * Decodes a IUser message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.classes.User & lingcat.classes.User.$Shape} User
+             * @returns {lingcat.classes.IUser & lingcat.classes.IUser.$Shape} IUser
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.User & lingcat.classes.User.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IUser & lingcat.classes.IUser.$Shape;
 
             /**
-             * Decodes a User message from the specified reader or buffer, length delimited.
+             * Decodes a IUser message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.classes.User & lingcat.classes.User.$Shape} User
+             * @returns {lingcat.classes.IUser & lingcat.classes.IUser.$Shape} IUser
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.User & lingcat.classes.User.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IUser & lingcat.classes.IUser.$Shape;
 
             /**
-             * Verifies a User message.
+             * Verifies a IUser message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a User message from a plain object. Also converts values to their respective internal types.
+             * Creates a IUser message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns User
+             * @returns IUser
              */
-            static fromObject(object: { [k: string]: any }): lingcat.classes.User;
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IUser;
 
             /**
-             * Creates a plain object from a User message. Also converts values to other types if specified.
-             * @param message User
+             * Creates a plain object from a IUser message. Also converts values to other types if specified.
+             * @param message IUser
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.classes.User, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.classes.IUser, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this User to JSON.
+             * Converts this IUser to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for User
+             * Gets the type url for IUser
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace User {
+        namespace IUser {
 
-            /** Properties of a User. */
+            /** Properties of a IUser. */
             interface $Properties {
 
-                /** 用户 ID 在服务端为真实 ID, 在客户端为服务端生成的针对某个客户端的临时 ID */
+                /** IUser id */
                 id?: (string|null);
 
-                /** User username */
+                /** IUser username */
                 username?: (string|null);
 
-                /** User nickname */
+                /** IUser nickname */
                 nickname?: (string|null);
+
+                /** IUser description */
+                description?: (string|null);
+
+                /** IUser avatarFileHash */
+                avatarFileHash?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a User. */
-            type $Shape = lingcat.classes.User.$Properties;
+            /** Shape of a IUser. */
+            type $Shape = lingcat.classes.IUser.$Properties;
         }
 
         /**
-         * Properties of a Group.
-         * @deprecated Use lingcat.classes.Group.$Properties instead.
+         * Properties of a IChat.
+         * @deprecated Use lingcat.classes.IChat.$Properties instead.
          */
-        interface IGroup extends lingcat.classes.Group.$Properties {
+        interface IIChat extends lingcat.classes.IChat.$Properties {
         }
 
-        /** Represents a Group. */
-        class Group {
+        /** Represents a IChat. */
+        class IChat {
 
             /**
-             * Constructs a new Group.
+             * Constructs a new IChat.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.classes.Group.$Properties);
+            constructor(properties?: lingcat.classes.IChat.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** Group id. */
+            /** IChat id. */
             id: string;
 
-            /** Group groupUnique. */
-            groupUnique?: (string|null);
+            /** IChat title. */
+            title?: (string|null);
 
-            /** Group name. */
-            name: string;
+            /** IChat unique. */
+            unique?: (string|null);
+
+            /** IChat type. */
+            type: string;
+
+            /** IChat avatarFileHash. */
+            avatarFileHash?: (string|null);
+
+            /** IChat settings. */
+            settings: string;
 
             /**
-             * Creates a new Group instance using the specified properties.
+             * Creates a new IChat instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Group instance
+             * @returns IChat instance
              */
-            static create(properties: lingcat.classes.Group.$Shape): lingcat.classes.Group & lingcat.classes.Group.$Shape;
-            static create(properties?: lingcat.classes.Group.$Properties): lingcat.classes.Group;
+            static create(properties: lingcat.classes.IChat.$Shape): lingcat.classes.IChat & lingcat.classes.IChat.$Shape;
+            static create(properties?: lingcat.classes.IChat.$Properties): lingcat.classes.IChat;
 
             /**
-             * Encodes the specified Group message. Does not implicitly {@link lingcat.classes.Group.verify|verify} messages.
-             * @param message Group message or plain object to encode
+             * Encodes the specified IChat message. Does not implicitly {@link lingcat.classes.IChat.verify|verify} messages.
+             * @param message IChat message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.classes.Group.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.classes.IChat.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Group message, length delimited. Does not implicitly {@link lingcat.classes.Group.verify|verify} messages.
-             * @param message Group message or plain object to encode
+             * Encodes the specified IChat message, length delimited. Does not implicitly {@link lingcat.classes.IChat.verify|verify} messages.
+             * @param message IChat message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.classes.Group.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.classes.IChat.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a Group message from the specified reader or buffer.
+             * Decodes a IChat message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.classes.Group & lingcat.classes.Group.$Shape} Group
+             * @returns {lingcat.classes.IChat & lingcat.classes.IChat.$Shape} IChat
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.Group & lingcat.classes.Group.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IChat & lingcat.classes.IChat.$Shape;
 
             /**
-             * Decodes a Group message from the specified reader or buffer, length delimited.
+             * Decodes a IChat message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.classes.Group & lingcat.classes.Group.$Shape} Group
+             * @returns {lingcat.classes.IChat & lingcat.classes.IChat.$Shape} IChat
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.Group & lingcat.classes.Group.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IChat & lingcat.classes.IChat.$Shape;
 
             /**
-             * Verifies a Group message.
+             * Verifies a IChat message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a Group message from a plain object. Also converts values to their respective internal types.
+             * Creates a IChat message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Group
+             * @returns IChat
              */
-            static fromObject(object: { [k: string]: any }): lingcat.classes.Group;
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IChat;
 
             /**
-             * Creates a plain object from a Group message. Also converts values to other types if specified.
-             * @param message Group
+             * Creates a plain object from a IChat message. Also converts values to other types if specified.
+             * @param message IChat
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.classes.Group, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.classes.IChat, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Group to JSON.
+             * Converts this IChat to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Group
+             * Gets the type url for IChat
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Group {
+        namespace IChat {
 
-            /** Properties of a Group. */
+            /** Properties of a IChat. */
             interface $Properties {
 
-                /** Group id */
+                /** IChat id */
                 id?: (string|null);
 
-                /** Group groupUnique */
-                groupUnique?: (string|null);
+                /** IChat title */
+                title?: (string|null);
 
-                /** Group name */
-                name?: (string|null);
+                /** IChat unique */
+                unique?: (string|null);
+
+                /** IChat type */
+                type?: (string|null);
+
+                /** IChat avatarFileHash */
+                avatarFileHash?: (string|null);
+
+                /** IChat settings */
+                settings?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a Group. */
-            type $Shape = lingcat.classes.Group.$Properties;
+            /** Shape of a IChat. */
+            type $Shape = lingcat.classes.IChat.$Properties;
+        }
+
+        /**
+         * Properties of a IFile.
+         * @deprecated Use lingcat.classes.IFile.$Properties instead.
+         */
+        interface IIFile extends lingcat.classes.IFile.$Properties {
+        }
+
+        /** Represents a IFile. */
+        class IFile {
+
+            /**
+             * Constructs a new IFile.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IFile.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IFile hash. */
+            hash: string;
+
+            /** IFile firstUploadFileName. */
+            firstUploadFileName?: (string|null);
+
+            /** IFile belongToChatId. */
+            belongToChatId?: (string|null);
+
+            /** IFile mime. */
+            mime: string;
+
+            /** IFile uploadedAt. */
+            uploadedAt: (number|Long);
+
+            /**
+             * Creates a new IFile instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IFile instance
+             */
+            static create(properties: lingcat.classes.IFile.$Shape): lingcat.classes.IFile & lingcat.classes.IFile.$Shape;
+            static create(properties?: lingcat.classes.IFile.$Properties): lingcat.classes.IFile;
+
+            /**
+             * Encodes the specified IFile message. Does not implicitly {@link lingcat.classes.IFile.verify|verify} messages.
+             * @param message IFile message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IFile.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IFile message, length delimited. Does not implicitly {@link lingcat.classes.IFile.verify|verify} messages.
+             * @param message IFile message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IFile.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IFile message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IFile & lingcat.classes.IFile.$Shape} IFile
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IFile & lingcat.classes.IFile.$Shape;
+
+            /**
+             * Decodes a IFile message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IFile & lingcat.classes.IFile.$Shape} IFile
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IFile & lingcat.classes.IFile.$Shape;
+
+            /**
+             * Verifies a IFile message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IFile message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IFile
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IFile;
+
+            /**
+             * Creates a plain object from a IFile message. Also converts values to other types if specified.
+             * @param message IFile
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IFile, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IFile to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IFile
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IFile {
+
+            /** Properties of a IFile. */
+            interface $Properties {
+
+                /** IFile hash */
+                hash?: (string|null);
+
+                /** IFile firstUploadFileName */
+                firstUploadFileName?: (string|null);
+
+                /** IFile belongToChatId */
+                belongToChatId?: (string|null);
+
+                /** IFile mime */
+                mime?: (string|null);
+
+                /** IFile uploadedAt */
+                uploadedAt?: (number|Long|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IFile. */
+            type $Shape = lingcat.classes.IFile.$Properties;
+        }
+
+        /**
+         * Properties of a IMessage.
+         * @deprecated Use lingcat.classes.IMessage.$Properties instead.
+         */
+        interface IIMessage extends lingcat.classes.IMessage.$Properties {
+        }
+
+        /** Represents a IMessage. */
+        class IMessage {
+
+            /**
+             * Constructs a new IMessage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IMessage.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IMessage id. */
+            id: (number|Long);
+
+            /** IMessage senderUserId. */
+            senderUserId?: (string|null);
+
+            /** IMessage system. */
+            system?: (boolean|null);
+
+            /** IMessage chatId. */
+            chatId: string;
+
+            /** IMessage text. */
+            text: string;
+
+            /** IMessage time. */
+            time: (number|Long);
+
+            /**
+             * Creates a new IMessage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IMessage instance
+             */
+            static create(properties: lingcat.classes.IMessage.$Shape): lingcat.classes.IMessage & lingcat.classes.IMessage.$Shape;
+            static create(properties?: lingcat.classes.IMessage.$Properties): lingcat.classes.IMessage;
+
+            /**
+             * Encodes the specified IMessage message. Does not implicitly {@link lingcat.classes.IMessage.verify|verify} messages.
+             * @param message IMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IMessage message, length delimited. Does not implicitly {@link lingcat.classes.IMessage.verify|verify} messages.
+             * @param message IMessage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IMessage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IMessage & lingcat.classes.IMessage.$Shape} IMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IMessage & lingcat.classes.IMessage.$Shape;
+
+            /**
+             * Decodes a IMessage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IMessage & lingcat.classes.IMessage.$Shape} IMessage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IMessage & lingcat.classes.IMessage.$Shape;
+
+            /**
+             * Verifies a IMessage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IMessage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IMessage
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IMessage;
+
+            /**
+             * Creates a plain object from a IMessage message. Also converts values to other types if specified.
+             * @param message IMessage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IMessage to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IMessage
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IMessage {
+
+            /** Properties of a IMessage. */
+            interface $Properties {
+
+                /** IMessage id */
+                id?: (number|Long|null);
+
+                /** IMessage senderUserId */
+                senderUserId?: (string|null);
+
+                /** IMessage system */
+                system?: (boolean|null);
+
+                /** IMessage chatId */
+                chatId?: (string|null);
+
+                /** IMessage text */
+                text?: (string|null);
+
+                /** IMessage time */
+                time?: (number|Long|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IMessage. */
+            type $Shape = lingcat.classes.IMessage.$Properties;
         }
     }
 
@@ -2442,7 +2760,7 @@ export namespace lingcat {
         interface IQuery_User_Info_Response extends lingcat.methods.Query_User_Info_Response.$Properties {
         }
 
-        /** see @link{ classes-interfaces.ts } */
+        /** see { @link classes-interfaces.ts } */
         class Query_User_Info_Response {
 
             /**
@@ -2454,20 +2772,8 @@ export namespace lingcat {
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** Query_User_Info_Response id. */
-            id: string;
-
-            /** Query_User_Info_Response username. */
-            username?: (string|null);
-
-            /** Query_User_Info_Response nickname. */
-            nickname: string;
-
-            /** Query_User_Info_Response avatarFileHash. */
-            avatarFileHash?: (string|null);
-
-            /** Query_User_Info_Response description. */
-            description?: (string|null);
+            /** Query_User_Info_Response info. */
+            info?: (lingcat.classes.IUser.$Properties|null);
 
             /**
              * Creates a new Query_User_Info_Response instance using the specified properties.
@@ -2553,20 +2859,8 @@ export namespace lingcat {
             /** Properties of a Query_User_Info_Response. */
             interface $Properties {
 
-                /** Query_User_Info_Response id */
-                id?: (string|null);
-
-                /** Query_User_Info_Response username */
-                username?: (string|null);
-
-                /** Query_User_Info_Response nickname */
-                nickname?: (string|null);
-
-                /** Query_User_Info_Response avatarFileHash */
-                avatarFileHash?: (string|null);
-
-                /** Query_User_Info_Response description */
-                description?: (string|null);
+                /** Query_User_Info_Response info */
+                info?: (lingcat.classes.IUser.$Properties|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -2595,20 +2889,8 @@ export namespace lingcat {
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** Query_My_User_Info_Response id. */
-            id: string;
-
-            /** Query_My_User_Info_Response username. */
-            username?: (string|null);
-
-            /** Query_My_User_Info_Response nickname. */
-            nickname: string;
-
-            /** Query_My_User_Info_Response avatarFileHash. */
-            avatarFileHash?: (string|null);
-
-            /** Query_My_User_Info_Response description. */
-            description?: (string|null);
+            /** Query_My_User_Info_Response info. */
+            info?: (lingcat.classes.IUser.$Properties|null);
 
             /**
              * Creates a new Query_My_User_Info_Response instance using the specified properties.
@@ -2694,20 +2976,8 @@ export namespace lingcat {
             /** Properties of a Query_My_User_Info_Response. */
             interface $Properties {
 
-                /** Query_My_User_Info_Response id */
-                id?: (string|null);
-
-                /** Query_My_User_Info_Response username */
-                username?: (string|null);
-
-                /** Query_My_User_Info_Response nickname */
-                nickname?: (string|null);
-
-                /** Query_My_User_Info_Response avatarFileHash */
-                avatarFileHash?: (string|null);
-
-                /** Query_My_User_Info_Response description */
-                description?: (string|null);
+                /** Query_My_User_Info_Response info */
+                info?: (lingcat.classes.IUser.$Properties|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -3207,6 +3477,147 @@ export namespace lingcat {
 
             /** Shape of an Update_Chat_Avatar_Response. */
             type $Shape = lingcat.methods.Update_Chat_Avatar_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_Chat_Messages_Request.
+         * @deprecated Use lingcat.methods.Get_Chat_Messages_Request.$Properties instead.
+         */
+        interface IGet_Chat_Messages_Request extends lingcat.methods.Get_Chat_Messages_Request.$Properties {
+        }
+
+        /** Represents a Get_Chat_Messages_Request. */
+        class Get_Chat_Messages_Request {
+
+            /**
+             * Constructs a new Get_Chat_Messages_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_Chat_Messages_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_Chat_Messages_Request accessToken. */
+            accessToken: string;
+
+            /** Get_Chat_Messages_Request chatId. */
+            chatId: string;
+
+            /** Get_Chat_Messages_Request before. */
+            before?: (number|Long|null);
+
+            /** Get_Chat_Messages_Request after. */
+            after?: (number|Long|null);
+
+            /** Get_Chat_Messages_Request limit. */
+            limit?: (number|null);
+
+            /**
+             * Creates a new Get_Chat_Messages_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_Chat_Messages_Request instance
+             */
+            static create(properties: lingcat.methods.Get_Chat_Messages_Request.$Shape): lingcat.methods.Get_Chat_Messages_Request & lingcat.methods.Get_Chat_Messages_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_Chat_Messages_Request.$Properties): lingcat.methods.Get_Chat_Messages_Request;
+
+            /**
+             * Encodes the specified Get_Chat_Messages_Request message. Does not implicitly {@link lingcat.methods.Get_Chat_Messages_Request.verify|verify} messages.
+             * @param message Get_Chat_Messages_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_Chat_Messages_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_Chat_Messages_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_Chat_Messages_Request.verify|verify} messages.
+             * @param message Get_Chat_Messages_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_Chat_Messages_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_Chat_Messages_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Chat_Messages_Request & lingcat.methods.Get_Chat_Messages_Request.$Shape} Get_Chat_Messages_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_Chat_Messages_Request & lingcat.methods.Get_Chat_Messages_Request.$Shape;
+
+            /**
+             * Decodes a Get_Chat_Messages_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Chat_Messages_Request & lingcat.methods.Get_Chat_Messages_Request.$Shape} Get_Chat_Messages_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_Chat_Messages_Request & lingcat.methods.Get_Chat_Messages_Request.$Shape;
+
+            /**
+             * Verifies a Get_Chat_Messages_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_Chat_Messages_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_Chat_Messages_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_Chat_Messages_Request;
+
+            /**
+             * Creates a plain object from a Get_Chat_Messages_Request message. Also converts values to other types if specified.
+             * @param message Get_Chat_Messages_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_Chat_Messages_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_Chat_Messages_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_Chat_Messages_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_Chat_Messages_Request {
+
+            /** Properties of a Get_Chat_Messages_Request. */
+            interface $Properties {
+
+                /** Get_Chat_Messages_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Get_Chat_Messages_Request chatId */
+                chatId?: (string|null);
+
+                /** Get_Chat_Messages_Request before */
+                before?: (number|Long|null);
+
+                /** Get_Chat_Messages_Request after */
+                after?: (number|Long|null);
+
+                /** Get_Chat_Messages_Request limit */
+                limit?: (number|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_Chat_Messages_Request. */
+            type $Shape = lingcat.methods.Get_Chat_Messages_Request.$Properties;
         }
     }
 }
