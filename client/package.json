@@ -19,6 +19,7 @@
         "@zenfs/dom": "^1.2.9",
         "marked-react": "^4.0.0",
         "mdui": "^2.1.4",
+        "pinch-zoom-element": "^1.1.1",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "react-image": "^4.1.0",

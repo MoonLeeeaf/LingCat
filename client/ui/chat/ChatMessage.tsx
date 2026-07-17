@@ -6,17 +6,22 @@ import Message from "../chat-layout/Message.tsx"
 import default_avatar from '../../default_avatar.png'
 import React from "react"
 import ProfileCache from "../../ProfileCache.ts"
+import { ReactRenderer } from "marked-react"
+
+type Render = Partial<ReactRenderer>
 
 export default function ChatMessage({
     msg,
     hideSender,
     onAvatarClick,
-    messageMenus
+    messageMenus,
+    render,
 }: {
     msg: IMessage
     hideSender?: boolean
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
+    render?: Render
 }) {
     const [isMe, setIsMe] = React.useState(false)
     const [profile, setProfile] = React.useState<IUser>()
@@ -35,5 +40,5 @@ export default function ChatMessage({
         })()
     }, [msg.sender_user_id])
 
-    return <Message onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
+    return <Message time={msg.time} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
 }

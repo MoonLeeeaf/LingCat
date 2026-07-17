@@ -6,13 +6,71 @@ import { useChatMessageStore } from "./useChatMessageStore.ts"
 import { IChat, IMessage, LingCatProto, Methods, Package } from "lingcat-protocol"
 import React from "react"
 import { NavigationDrawer, TextField } from "mdui"
-import { ChatApi } from "lingcat-client-protocol"
+import { ChatApi, FileApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
 import ChatProfileDialog from "../ChatProfileDialog.tsx"
+import { ReactRenderer } from "marked-react"
+import ReloadableImage from "../ReloadableImage.tsx"
+import showSnackbar from "../showSnackbar.ts"
+import useEventListener from "../useEventListener.ts"
+import ImageViewerDialog from "../ImageViewerDialog.tsx"
+import VideoViewerDialog from "../VideoViewerDialog.tsx"
+
+function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
+    if (!scroller) return false
+    const { scrollTop, scrollHeight, clientHeight } = scroller
+    return scrollTop + clientHeight >= scrollHeight - threshold
+}
+
+function VideoAttachment({ src }: { src: string }) {
+    return <video onClick={() => VideoViewerDialog.show(src)} src={src} style={{
+        maxWidth: "400px",
+        maxHeight: "300px",
+        width: "100%",
+        height: "100%",
+        display: 'block',
+    }}></video>
+}
+
+function FileAttachment({ src, name }: { src: string, name: string }) {
+    return <a style={{
+        width: '100%',
+        height: '100%',
+        textDecoration: 'none',
+        color: 'inherit',
+    }} href={src} download={src}>
+        <mdui-card
+            clickable
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                boxShadow: 'inherit',
+                borderRadius: 'inherit',
+            }}>
+            <mdui-icon
+                name="insert_drive_file"
+                style={{
+                    margin: '13px',
+                    fontSize: '34px',
+                }} />
+            <span
+                style={{
+                    marginRight: '13px',
+                    wordWrap: 'break-word',
+                    wordBreak: 'break-all',
+                    whiteSpace: 'normal',
+                    maxWidth: '100%',
+                }}>
+                {name}
+            </span>
+        </mdui-card>
+    </a>
+}
 
 export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
+    const containerRef = React.useRef<HTMLDivElement>(null)
 
     const messageStore = useChatMessageStore()
 
@@ -61,13 +119,27 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                     chat_id: raw?.chatId!,
                 }])
 
-                if (isAtBottomRef.current) {
-                    setTimeout(() => {
-                        virtuosoRef.current!.scrollTo({
-                            top: 10000000000,
-                            behavior: "smooth",
-                        })
-                    }, 200)
+                if (isAtBottomRef.current || isApproximatelyAtBottom(containerRef.current!, 160)) {
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            virtuosoRef.current!.scrollTo({
+                                top: 10000000000,
+                                behavior: "smooth",
+                            })
+                        }, 200)
+                        setTimeout(() => {
+                            virtuosoRef.current!.scrollTo({
+                                top: 10000000000,
+                                behavior: "smooth",
+                            })
+                        }, 300)
+                        setTimeout(() => {
+                            virtuosoRef.current!.scrollTo({
+                                top: 10000000000,
+                                behavior: "smooth",
+                            })
+                        }, 400)
+                    })
                 }
             }
         }
@@ -110,7 +182,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 loadingRef.current = false
             }
         })()
-    }, [])
+    }, [chat])
     const atBottomStateChange = React.useCallback((atBottom: boolean) => {
         console.log('bottom', atBottom, loadingRef.current)
         if (!atBottom || loadingRef.current) {
@@ -146,7 +218,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 loadingRef.current = false
             }
         })()
-    }, [])
+    }, [chat])
 
     const id = 'a' + Date.now()
 
@@ -154,10 +226,47 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
     const { sortedIds } = useChatMessageStore()
 
+    const [isMessageSending, setIsMessageSending] = React.useState(false)
     async function sendMessage() {
-        const text = inputRef.current?.value || ''
+        let text = inputRef.current?.value || ''
         if (text.trim() == '') return
+
+        const sendingFilesSnackbar = showSnackbar({
+            message: `发送消息到 [${chat.title}]...`,
+            autoCloseDelay: 0,
+        })
+        let i = 1
+        let i2 = 0
+        const sendingFilesSnackbarId = setInterval(() => {
+            const len = Object.keys(cachedFiles.current).filter((fileName) => text.indexOf(fileName)).length
+            sendingFilesSnackbar.textContent = i2 == len ? `发送消息到 [${chat.title}]... (${i}s)` : `上传第 ${i2}/${len} 文件到 [${chat.title}]... (${i}s)`
+            i++
+        }, 1000)
+        function endSendingSnack() {
+            clearTimeout(sendingFilesSnackbarId)
+            sendingFilesSnackbar.open = false
+        }
+
+        const func = () => {
+            endSendingSnack()
+            ClientManager.client.client?.removeEventListener('close', func)
+        }
+        ClientManager.client.client?.addEventListener('close', func)
+
         try {
+            setIsMessageSending(true)
+            const token = await FileApi.requestUploadFileToken(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token
+            })
+            for (const fileName of Object.keys(cachedFiles.current)) {
+                if (text.indexOf(fileName) != -1) {
+                    const hash = await FileApi.uploadFile(ClientManager.client, {
+                        file_upload_token: token,
+                        file_data: cachedFiles.current[fileName]
+                    })
+                    text = text.replaceAll('(' + fileName + ')', '(lingcat://file?hash=' + hash + ')')
+                }
+            }
             await ChatApi.sendChatMessage(ClientManager.client, {
                 access_token: ClientManager.getActiveUserSession().token,
                 chat_id: chat.id,
@@ -167,9 +276,78 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
         } catch (e) {
             tipError(e, '发送失败')
         }
+        setIsMessageSending(false)
+        endSendingSnack()
     }
 
+    const render: Partial<ReactRenderer> = {
+        image(src, alt, _title) {
+            console.log('image', src)
+            const type = /^(Video|File)=.*/.exec(alt)?.[1]
+            const fileType = /^(Video|File)=.*/.exec(alt)?.[1] || 'Image'
+            if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(src)) {
+                const url = ClientManager.client.getFileUrlByHash(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!)
+                // 注意返回的元素必须是函数式组件
+                // 否则无法识别为独立的元素
+                // 使用 React.createElement(() => <component />) 会导致不必要的开销
+                // 且移动端会导致严重问题
+                return ({
+                    Image: <ReloadableImage src={url} alt={alt} onClick={() => ImageViewerDialog.show(url)} style={{
+                        width: '100%',
+                        maxHeight: "300px",
+                        objectFit: 'cover',
+                        display: 'block',
+                    }} />,
+                    Video: <VideoAttachment src={url} />,
+                    File: <FileAttachment src={url} name={/^Video|File=(.*)/.exec(alt)?.[1] || 'Unnamed file'} />,
+                })?.[fileType] || <em>{'<'}无法解析的消息元素{'>'}</em>
+            }
+            return <ReloadableImage src={src} alt={alt} />
+        },
+    }
+
+    const attachFileInputRef = React.useRef<HTMLInputElement>(null)
+    const cachedFiles = React.useRef<{ [fileName: string]: ArrayBuffer }>({})
+    const cachedFileNamesCount = React.useRef<{ [fileName: string]: number }>({})
+
+    function insertText(text: string) {
+        const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as HTMLTextAreaElement
+        inputRef.current!.value = input.value!.substring(0, input.selectionStart as number) + text + input.value!.substring(input.selectionEnd as number, input.value.length)
+    }
+    async function addFile(type: string, name_: string, data: Blob | Response) {
+        let name = name_
+        while (cachedFiles.current[name] != null) {
+            name = name_ + '_' + cachedFileNamesCount.current[name]
+            cachedFileNamesCount.current[name]++
+        }
+
+        cachedFiles.current[name] = await data.arrayBuffer()
+        cachedFileNamesCount.current[name] = 1
+        if (type.startsWith('image/'))
+            insertText(`![图片](${name})`)
+        else if (type.startsWith('video/'))
+            insertText(`![Video=${name}](${name})`)
+        else
+            insertText(`![File=${name}](${name})`)
+    }
+
+    useEventListener(attachFileInputRef, 'change', (_e) => {
+        const files = attachFileInputRef.current!.files as unknown as File[]
+        if (files?.length == 0) return
+
+        for (const file of files) {
+            addFile(file.type, file.name, file)
+        }
+        attachFileInputRef.current!.value = ''
+    })
+
     return <div style={{ position: 'relative', overflow: 'hidden', display: 'flex', width: '100%' }}>
+        <div style={{
+            display: 'none'
+        }}>
+            <input accept="*/*" type="file" name="添加文件" multiple ref={attachFileInputRef}></input>
+        </div>
+
         <mdui-top-app-bar scroll-target={'#' + id}>
             <mdui-button-icon icon="menu" onClick={() => {
                 drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
@@ -180,7 +358,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
         </mdui-top-app-bar>
 
         <div id={id} style={{ display: 'flex', width: '100%' }}>
-            <MessageContainer>
+            <MessageContainer ref={containerRef}>
                 <Virtuoso
                     ref={virtuosoRef}
                     style={{ overflowY: 'auto' }}
@@ -193,7 +371,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                         if (id == null) return <div style={{ height: '0.5px' }}></div>
                         const msg = messageMap.get(id);
                         if (!msg) return <div style={{ height: '0.5px' }}></div>
-                        return <ChatMessage msg={msg} messageMenus={<>
+                        return <ChatMessage onAvatarClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)} render={render} msg={msg} messageMenus={<>
                             <mdui-menu-item icon="info">Info</mdui-menu-item>
                         </>} />
                     }} />
@@ -201,18 +379,64 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 <div style={{
                     flexGrow: 1,
                 }}></div>
-                <mdui-text-field ref={inputRef} use-patched-textarea variant="outlined" autosize max-rows={10} placeholder="输入..." style={{
-                    padding: '4px',
-                }} onKeyDown={(event) => {
-                    if (event.ctrlKey && event.key == 'Enter')
-                        sendMessage()
-                }}>
-                    <mdui-button-icon slot="end-icon" icon="keyboard_arrow_left"></mdui-button-icon>
-                    <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
-                    <mdui-button-icon slot="end-icon" icon="keyboard_arrow_right"></mdui-button-icon>
-                    <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
-
-                    <mdui-button-icon slot="end-icon" icon="attachment"></mdui-button-icon>
+                <mdui-text-field
+                    ref={inputRef}
+                    use-patched-textarea
+                    variant="outlined"
+                    autosize
+                    max-rows={10}
+                    placeholder="输入..."
+                    style={{
+                        padding: '4px',
+                    }}
+                    onKeyDown={(event) => {
+                        if (event.ctrlKey && event.key == 'Enter')
+                            sendMessage()
+                    }}
+                    onPaste={(event) => {
+                        for (const item of event.clipboardData.items) {
+                            if (item.kind == 'file') {
+                                event.preventDefault()
+                                const file = item.getAsFile() as File
+                                addFile(item.type, file.name, file)
+                            }
+                        }
+                    }}
+                    onDrop={(e) => {
+                        function getFileNameOrRandom(urlString: string) {
+                            const url = new URL(urlString)
+                            let filename = url.pathname.substring(url.pathname.lastIndexOf('/') + 1).trim()
+                            if (filename == '')
+                                filename = 'file_' + Date.now()
+                            return filename
+                        }
+                        if (e.dataTransfer.items.length > 0) {
+                            // 基于当前的实现, 浏览器不会读取文件的字节流来确定其媒体类型, 其根据文件扩展名进行假设
+                            // https://developer.mozilla.org/zh-CN/docs/Web/API/Blob/type
+                            for (const item of e.dataTransfer.items) {
+                                if (item.type == 'text/uri-list') {
+                                    item.getAsString(async (url) => {
+                                        try {
+                                            // 即便是 no-cors 還是殘廢, 因此暫時沒有什麽想法
+                                            const re = await fetch(url)
+                                            const type = re.headers.get("Content-Type")
+                                            if (type && re.ok)
+                                                addFile(type as string, getFileNameOrRandom(url), re)
+                                        } catch (e) {
+                                            showSnackbar({
+                                                message: '无法解析链接: ' + (e as Error).message,
+                                            })
+                                        }
+                                    })
+                                } else if (item.kind == 'file') {
+                                    e.preventDefault()
+                                    const file = item.getAsFile() as File
+                                    addFile(item.type, file.name, file)
+                                }
+                            }
+                        }
+                    }}>
+                    <mdui-button-icon slot="end-icon" icon="attachment" onClick={() => attachFileInputRef.current!.click()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
                     <mdui-button-icon slot="end-icon" icon="send" onClick={() => sendMessage()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '5px' }}></div>

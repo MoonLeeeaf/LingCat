@@ -14,6 +14,7 @@ import tipError from "./tipError.ts"
 import EditMyProfileDialog from "./EditMyProfileDialog.tsx"
 import ProfileCache from "../ProfileCache.ts"
 import AppState from "./AppState.ts"
+import ImageViewerDialog from "./ImageViewerDialog.tsx"
 
 export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: React.RefObject<any>, user_id: string, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -43,6 +44,8 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
         return () => ref.current?.removeEventListener(eventName, onClose)
     }, [loading])
 
+    const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar) : default_avatar
+
     return loading ? (<EffectOnly deps={[]} effect={() => {
         return CircleProgressDialog.show('加载中...')
     }} />)
@@ -52,7 +55,7 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
                     display: 'flex',
                     alignItems: 'center',
                 }}>
-                    <Avatar src={profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar) : default_avatar} />
+                    <Avatar onClick={() => ImageViewerDialog.show(avatar)} src={avatar} />
                     <div style={{
                         display: 'flex',
                         marginLeft: '15px',

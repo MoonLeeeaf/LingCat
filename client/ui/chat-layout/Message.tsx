@@ -22,6 +22,7 @@ export default function Message({
     isSystem,
     avatar,
     onAvatarClick,
+    time,
     messageMenus,
 }: {
     message: string
@@ -33,6 +34,7 @@ export default function Message({
     isAtRight?: boolean
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
+    time?: number,
 }) {
     const defaultRender: Render = {
         text(text) {
@@ -59,7 +61,7 @@ export default function Message({
                     // 如果是自定义组件（函数组件），视为“块级元素”
                     if (child.type instanceof Function) {
                         // 先输出之前的文本缓存
-                        flushCache();
+                        flushCache()
                         // 直接添加图片本身，不包裹额外容器
                         elements.push(child)
                     } else {
@@ -209,5 +211,23 @@ export default function Message({
                     {messageMenus}
                 </mdui-menu>
             </mdui-dropdown>
+            {
+                time && <span style={{
+                    padding: '10px',
+                    fontSize: 'small',
+                    maxWidth: (window.matchMedia('(pointer: fine)') && "50%") || (window.matchMedia('(pointer: coarse)') && "77%"),
+                    minWidth: "0%",
+                    [isAtRight ? "marginRight" : "marginLeft"]: "55px",
+                    marginTop: '5px',
+                    alignSelf: isAtRight ? "flex-end" : "flex-start",
+                }}>
+                    {
+                        (() => {
+                            const d = new Date(Number.parseInt(time + ''))
+                            return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+                        })()
+                    }
+                </span>
+            }
         </div>
 }

@@ -15,6 +15,7 @@ import EditMyProfileDialog from "./EditMyProfileDialog.tsx"
 import ProfileCache from "../ProfileCache.ts"
 import AppState from "./AppState.ts"
 import UserProfileDialog from "./UserProfileDialog.tsx"
+import ImageViewerDialog from "./ImageViewerDialog.tsx"
 
 function findFavourited(chatId: string) {
     return AppState.favouritedChats?.findIndex(chat => chat.id == chatId)
@@ -47,6 +48,8 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
         return () => ref.current?.removeEventListener(eventName, onClose)
     }, [loading])
 
+    const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar) : default_avatar
+
     return loading ? (<EffectOnly deps={[]} effect={() => {
         return CircleProgressDialog.show('加载中...')
     }} />)
@@ -56,7 +59,7 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                     display: 'flex',
                     alignItems: 'center',
                 }}>
-                    <Avatar src={profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar) : default_avatar} />
+                    <Avatar onClick={() => ImageViewerDialog.show(avatar)} src={avatar} />
                     <div style={{
                         display: 'flex',
                         marginLeft: '15px',
