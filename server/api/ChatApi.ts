@@ -214,26 +214,25 @@ export default class ChatApi {
             case Methods.Get_My_Chats_Request: {
                 const data = LingCatProto.methods.Get_My_Chats_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
-                const chats = await UserChatLinker.queryChatsOfUser(user_id, {
-                    limit: data.limit || 20,
+                const chats = await Promise.all((await UserChatLinker.queryChatsOfUser(user_id, {
+                    limit: data.limit || 1000,
                     offset: data.offset || 0,
-                })
+                })).map((c) => IChatToProtoChat(c, user_id)))
                 sendPackage(Package.encode({
                     method_id: Methods.Get_My_Chats_Response,
                     flags: 0,
                     data: LingCatProto.methods.Get_My_Chats_Response.encode({
-                        chats: await Promise.all(chats.map((c) => IChatToProtoChat(c, user_id))),
+                        chats,
                     }).finish()
                 }))
                 break
             }
-
             // 获取我的收藏对话
             case Methods.Get_My_Favourite_Chats_Request: {
                 const data = LingCatProto.methods.Get_My_Favourite_Chats_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
                 const chats = await UserChatLinker.queryFavouriteChatsOfUser(user_id, {
-                    limit: data.limit || 20,
+                    limit: data.limit || 1000,
                     offset: data.offset || 0,
                 })
                 sendPackage(Package.encode({
@@ -245,7 +244,23 @@ export default class ChatApi {
                 }))
                 break
             }
+            case Methods.Set_Chat_Favourited_Request: {
+                const data = LingCatProto.methods.Set_Chat_Favourited_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                
+                if (!await ChatDataBase.queryChatById(data.chatId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found);
+                }
 
+                await UserChatLinker.setUserChatFavourited(user_id, data.chatId, data.favourited)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Set_Chat_Favourited_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Set_Chat_Favourited_Response.encode({}).finish()
+                }))
+                break
+            }
             // 搜索我的对话
             case Methods.Search_My_Chats_Request: {
                 const data = LingCatProto.methods.Search_My_Chats_Request.decode(mPackage.data)

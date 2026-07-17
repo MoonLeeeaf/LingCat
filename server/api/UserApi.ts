@@ -91,6 +91,25 @@ export default class UserApi {
                 }))
                 break
             }
+            case Methods.Get_User_Id_By_Username_Request: {
+                const data = LingCatProto.methods.Get_User_Id_By_Username_Request.decode(mPackage.data)
+
+                await TokenManager.verifyAccessToken(data.accessToken)
+
+                const user = await UserDataBase.queryUserByUserName(data.username)
+
+                if (user == null)
+                    return sendError(sendPackage, mPackage.method_id, 'User doesn\'t exists', Code.Not_Found)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_User_Id_By_Username_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_User_Id_By_Username_Response.encode({
+                        userId: user.id,
+                    }).finish()
+                }))
+                break
+            }
             case Methods.Query_My_User_Info_Request: {
                 const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
 

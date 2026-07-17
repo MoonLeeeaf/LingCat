@@ -13561,6 +13561,1094 @@ export const lingcat = $root.lingcat = (() => {
             return Get_Another_User_From_Private_Chat_Response;
         })();
 
+        methods.Set_Chat_Favourited_Request = (function() {
+
+            /**
+             * Properties of a Set_Chat_Favourited_Request.
+             * @typedef {Object} lingcat.methods.Set_Chat_Favourited_Request.$Properties
+             * @property {string|null} [accessToken] Set_Chat_Favourited_Request accessToken
+             * @property {string|null} [chatId] Set_Chat_Favourited_Request chatId
+             * @property {boolean|null} [favourited] Set_Chat_Favourited_Request favourited
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Chat_Favourited_Request.
+             * @memberof lingcat.methods
+             * @interface ISet_Chat_Favourited_Request
+             * @augments lingcat.methods.Set_Chat_Favourited_Request.$Properties
+             * @deprecated Use lingcat.methods.Set_Chat_Favourited_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Chat_Favourited_Request.
+             * @typedef {lingcat.methods.Set_Chat_Favourited_Request.$Properties} lingcat.methods.Set_Chat_Favourited_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Chat_Favourited_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Chat_Favourited_Request.
+             * @constructor
+             * @param {lingcat.methods.Set_Chat_Favourited_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Chat_Favourited_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Set_Chat_Favourited_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @instance
+             */
+            Set_Chat_Favourited_Request.prototype.accessToken = "";
+
+            /**
+             * Set_Chat_Favourited_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @instance
+             */
+            Set_Chat_Favourited_Request.prototype.chatId = "";
+
+            /**
+             * Set_Chat_Favourited_Request favourited.
+             * @member {boolean} favourited
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @instance
+             */
+            Set_Chat_Favourited_Request.prototype.favourited = false;
+
+            /**
+             * Creates a new Set_Chat_Favourited_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request} Set_Chat_Favourited_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Chat_Favourited_Request.$Shape): lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape;
+             *   (properties?: lingcat.methods.Set_Chat_Favourited_Request.$Properties): lingcat.methods.Set_Chat_Favourited_Request;
+             * }}
+             */
+            Set_Chat_Favourited_Request.create = function(properties) {
+                return new Set_Chat_Favourited_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Request message. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Request.$Properties} message Set_Chat_Favourited_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Chat_Favourited_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited") && message.favourited !== false)
+                    writer.uint32(/* id 3, wireType 0 =*/24).bool(message.favourited);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Request.$Properties} message Set_Chat_Favourited_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Chat_Favourited_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Chat_Favourited_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape} Set_Chat_Favourited_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Chat_Favourited_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.bool())
+                                message.favourited = value;
+                            else
+                                delete message.favourited;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Chat_Favourited_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape} Set_Chat_Favourited_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Chat_Favourited_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Set_Chat_Favourited_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Chat_Favourited_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited"))
+                    if (typeof message.favourited !== "boolean")
+                        return "favourited: boolean expected";
+                return null;
+            };
+
+            /**
+             * Creates a Set_Chat_Favourited_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request} Set_Chat_Favourited_Request
+             */
+            Set_Chat_Favourited_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Chat_Favourited_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Chat_Favourited_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Set_Chat_Favourited_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.favourited != null)
+                    if (object.favourited)
+                        message.favourited = $Boolean(object.favourited);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Set_Chat_Favourited_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Request} message Set_Chat_Favourited_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Chat_Favourited_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                    object.favourited = false;
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited"))
+                    object.favourited = message.favourited;
+                return object;
+            };
+
+            /**
+             * Converts this Set_Chat_Favourited_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Chat_Favourited_Request.prototype.toJSON = function() {
+                return Set_Chat_Favourited_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Chat_Favourited_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Chat_Favourited_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Chat_Favourited_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Chat_Favourited_Request";
+            };
+
+            return Set_Chat_Favourited_Request;
+        })();
+
+        methods.Set_Chat_Favourited_Response = (function() {
+
+            /**
+             * Properties of a Set_Chat_Favourited_Response.
+             * @typedef {Object} lingcat.methods.Set_Chat_Favourited_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Chat_Favourited_Response.
+             * @memberof lingcat.methods
+             * @interface ISet_Chat_Favourited_Response
+             * @augments lingcat.methods.Set_Chat_Favourited_Response.$Properties
+             * @deprecated Use lingcat.methods.Set_Chat_Favourited_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Chat_Favourited_Response.
+             * @typedef {lingcat.methods.Set_Chat_Favourited_Response.$Properties} lingcat.methods.Set_Chat_Favourited_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Chat_Favourited_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Chat_Favourited_Response.
+             * @constructor
+             * @param {lingcat.methods.Set_Chat_Favourited_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Chat_Favourited_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Set_Chat_Favourited_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response} Set_Chat_Favourited_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Chat_Favourited_Response.$Shape): lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape;
+             *   (properties?: lingcat.methods.Set_Chat_Favourited_Response.$Properties): lingcat.methods.Set_Chat_Favourited_Response;
+             * }}
+             */
+            Set_Chat_Favourited_Response.create = function(properties) {
+                return new Set_Chat_Favourited_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Response message. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Response.$Properties} message Set_Chat_Favourited_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Chat_Favourited_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Response.$Properties} message Set_Chat_Favourited_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Chat_Favourited_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Chat_Favourited_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape} Set_Chat_Favourited_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Chat_Favourited_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Chat_Favourited_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape} Set_Chat_Favourited_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Chat_Favourited_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Set_Chat_Favourited_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Chat_Favourited_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Set_Chat_Favourited_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response} Set_Chat_Favourited_Response
+             */
+            Set_Chat_Favourited_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Chat_Favourited_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Chat_Favourited_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Set_Chat_Favourited_Response();
+            };
+
+            /**
+             * Creates a plain object from a Set_Chat_Favourited_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {lingcat.methods.Set_Chat_Favourited_Response} message Set_Chat_Favourited_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Chat_Favourited_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Set_Chat_Favourited_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Chat_Favourited_Response.prototype.toJSON = function() {
+                return Set_Chat_Favourited_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Chat_Favourited_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Chat_Favourited_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Chat_Favourited_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Chat_Favourited_Response";
+            };
+
+            return Set_Chat_Favourited_Response;
+        })();
+
+        methods.Get_User_Id_By_Username_Request = (function() {
+
+            /**
+             * Properties of a Get_User_Id_By_Username_Request.
+             * @typedef {Object} lingcat.methods.Get_User_Id_By_Username_Request.$Properties
+             * @property {string|null} [accessToken] Get_User_Id_By_Username_Request accessToken
+             * @property {string|null} [username] Get_User_Id_By_Username_Request username
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_User_Id_By_Username_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_User_Id_By_Username_Request
+             * @augments lingcat.methods.Get_User_Id_By_Username_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_User_Id_By_Username_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_User_Id_By_Username_Request.
+             * @typedef {lingcat.methods.Get_User_Id_By_Username_Request.$Properties} lingcat.methods.Get_User_Id_By_Username_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_User_Id_By_Username_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_User_Id_By_Username_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_User_Id_By_Username_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_User_Id_By_Username_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_User_Id_By_Username_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @instance
+             */
+            Get_User_Id_By_Username_Request.prototype.accessToken = "";
+
+            /**
+             * Get_User_Id_By_Username_Request username.
+             * @member {string} username
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @instance
+             */
+            Get_User_Id_By_Username_Request.prototype.username = "";
+
+            /**
+             * Creates a new Get_User_Id_By_Username_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request} Get_User_Id_By_Username_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_User_Id_By_Username_Request.$Shape): lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_User_Id_By_Username_Request.$Properties): lingcat.methods.Get_User_Id_By_Username_Request;
+             * }}
+             */
+            Get_User_Id_By_Username_Request.create = function(properties) {
+                return new Get_User_Id_By_Username_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Request message. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Request.$Properties} message Get_User_Id_By_Username_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_User_Id_By_Username_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username") && message.username !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Request.$Properties} message Get_User_Id_By_Username_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_User_Id_By_Username_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape} Get_User_Id_By_Username_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_User_Id_By_Username_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.username = value;
+                            else
+                                delete message.username;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape} Get_User_Id_By_Username_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_User_Id_By_Username_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_User_Id_By_Username_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_User_Id_By_Username_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    if (!$util.isString(message.username))
+                        return "username: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_User_Id_By_Username_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request} Get_User_Id_By_Username_Request
+             */
+            Get_User_Id_By_Username_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_User_Id_By_Username_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_User_Id_By_Username_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_User_Id_By_Username_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.username != null)
+                    if (typeof object.username !== "string" || object.username.length)
+                        message.username = $String(object.username);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_User_Id_By_Username_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Request} message Get_User_Id_By_Username_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_User_Id_By_Username_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.username = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    object.username = message.username;
+                return object;
+            };
+
+            /**
+             * Converts this Get_User_Id_By_Username_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_User_Id_By_Username_Request.prototype.toJSON = function() {
+                return Get_User_Id_By_Username_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_User_Id_By_Username_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_User_Id_By_Username_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_User_Id_By_Username_Request";
+            };
+
+            return Get_User_Id_By_Username_Request;
+        })();
+
+        methods.Get_User_Id_By_Username_Response = (function() {
+
+            /**
+             * Properties of a Get_User_Id_By_Username_Response.
+             * @typedef {Object} lingcat.methods.Get_User_Id_By_Username_Response.$Properties
+             * @property {string|null} [userId] Get_User_Id_By_Username_Response userId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_User_Id_By_Username_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_User_Id_By_Username_Response
+             * @augments lingcat.methods.Get_User_Id_By_Username_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_User_Id_By_Username_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_User_Id_By_Username_Response.
+             * @typedef {lingcat.methods.Get_User_Id_By_Username_Response.$Properties} lingcat.methods.Get_User_Id_By_Username_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_User_Id_By_Username_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_User_Id_By_Username_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_User_Id_By_Username_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_User_Id_By_Username_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_User_Id_By_Username_Response userId.
+             * @member {string} userId
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @instance
+             */
+            Get_User_Id_By_Username_Response.prototype.userId = "";
+
+            /**
+             * Creates a new Get_User_Id_By_Username_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response} Get_User_Id_By_Username_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_User_Id_By_Username_Response.$Shape): lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_User_Id_By_Username_Response.$Properties): lingcat.methods.Get_User_Id_By_Username_Response;
+             * }}
+             */
+            Get_User_Id_By_Username_Response.create = function(properties) {
+                return new Get_User_Id_By_Username_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Response message. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Response.$Properties} message Get_User_Id_By_Username_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_User_Id_By_Username_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId") && message.userId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Response.$Properties} message Get_User_Id_By_Username_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_User_Id_By_Username_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape} Get_User_Id_By_Username_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_User_Id_By_Username_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.userId = value;
+                            else
+                                delete message.userId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape} Get_User_Id_By_Username_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_User_Id_By_Username_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_User_Id_By_Username_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_User_Id_By_Username_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_User_Id_By_Username_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response} Get_User_Id_By_Username_Response
+             */
+            Get_User_Id_By_Username_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_User_Id_By_Username_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_User_Id_By_Username_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_User_Id_By_Username_Response();
+                if (object.userId != null)
+                    if (typeof object.userId !== "string" || object.userId.length)
+                        message.userId = $String(object.userId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_User_Id_By_Username_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {lingcat.methods.Get_User_Id_By_Username_Response} message Get_User_Id_By_Username_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_User_Id_By_Username_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.userId = "";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                return object;
+            };
+
+            /**
+             * Converts this Get_User_Id_By_Username_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_User_Id_By_Username_Response.prototype.toJSON = function() {
+                return Get_User_Id_By_Username_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_User_Id_By_Username_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_User_Id_By_Username_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_User_Id_By_Username_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_User_Id_By_Username_Response";
+            };
+
+            return Get_User_Id_By_Username_Response;
+        })();
+
         return methods;
     })();
 

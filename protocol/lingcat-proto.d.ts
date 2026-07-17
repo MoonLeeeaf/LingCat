@@ -5581,5 +5581,485 @@ export namespace lingcat {
             /** Shape of a Get_Another_User_From_Private_Chat_Response. */
             type $Shape = lingcat.methods.Get_Another_User_From_Private_Chat_Response.$Properties;
         }
+
+        /**
+         * Properties of a Set_Chat_Favourited_Request.
+         * @deprecated Use lingcat.methods.Set_Chat_Favourited_Request.$Properties instead.
+         */
+        interface ISet_Chat_Favourited_Request extends lingcat.methods.Set_Chat_Favourited_Request.$Properties {
+        }
+
+        /** Represents a Set_Chat_Favourited_Request. */
+        class Set_Chat_Favourited_Request {
+
+            /**
+             * Constructs a new Set_Chat_Favourited_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Chat_Favourited_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Set_Chat_Favourited_Request accessToken. */
+            accessToken: string;
+
+            /** Set_Chat_Favourited_Request chatId. */
+            chatId: string;
+
+            /** Set_Chat_Favourited_Request favourited. */
+            favourited: boolean;
+
+            /**
+             * Creates a new Set_Chat_Favourited_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Chat_Favourited_Request instance
+             */
+            static create(properties: lingcat.methods.Set_Chat_Favourited_Request.$Shape): lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape;
+            static create(properties?: lingcat.methods.Set_Chat_Favourited_Request.$Properties): lingcat.methods.Set_Chat_Favourited_Request;
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Request message. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Request.verify|verify} messages.
+             * @param message Set_Chat_Favourited_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Chat_Favourited_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Request.verify|verify} messages.
+             * @param message Set_Chat_Favourited_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Chat_Favourited_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Chat_Favourited_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape} Set_Chat_Favourited_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape;
+
+            /**
+             * Decodes a Set_Chat_Favourited_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape} Set_Chat_Favourited_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Chat_Favourited_Request & lingcat.methods.Set_Chat_Favourited_Request.$Shape;
+
+            /**
+             * Verifies a Set_Chat_Favourited_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Chat_Favourited_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Chat_Favourited_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Chat_Favourited_Request;
+
+            /**
+             * Creates a plain object from a Set_Chat_Favourited_Request message. Also converts values to other types if specified.
+             * @param message Set_Chat_Favourited_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Chat_Favourited_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Chat_Favourited_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Chat_Favourited_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Chat_Favourited_Request {
+
+            /** Properties of a Set_Chat_Favourited_Request. */
+            interface $Properties {
+
+                /** Set_Chat_Favourited_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Set_Chat_Favourited_Request chatId */
+                chatId?: (string|null);
+
+                /** Set_Chat_Favourited_Request favourited */
+                favourited?: (boolean|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Chat_Favourited_Request. */
+            type $Shape = lingcat.methods.Set_Chat_Favourited_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Set_Chat_Favourited_Response.
+         * @deprecated Use lingcat.methods.Set_Chat_Favourited_Response.$Properties instead.
+         */
+        interface ISet_Chat_Favourited_Response extends lingcat.methods.Set_Chat_Favourited_Response.$Properties {
+        }
+
+        /** Represents a Set_Chat_Favourited_Response. */
+        class Set_Chat_Favourited_Response {
+
+            /**
+             * Constructs a new Set_Chat_Favourited_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Chat_Favourited_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Set_Chat_Favourited_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Chat_Favourited_Response instance
+             */
+            static create(properties: lingcat.methods.Set_Chat_Favourited_Response.$Shape): lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape;
+            static create(properties?: lingcat.methods.Set_Chat_Favourited_Response.$Properties): lingcat.methods.Set_Chat_Favourited_Response;
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Response message. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Response.verify|verify} messages.
+             * @param message Set_Chat_Favourited_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Chat_Favourited_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Chat_Favourited_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Chat_Favourited_Response.verify|verify} messages.
+             * @param message Set_Chat_Favourited_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Chat_Favourited_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Chat_Favourited_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape} Set_Chat_Favourited_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape;
+
+            /**
+             * Decodes a Set_Chat_Favourited_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape} Set_Chat_Favourited_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Chat_Favourited_Response & lingcat.methods.Set_Chat_Favourited_Response.$Shape;
+
+            /**
+             * Verifies a Set_Chat_Favourited_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Chat_Favourited_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Chat_Favourited_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Chat_Favourited_Response;
+
+            /**
+             * Creates a plain object from a Set_Chat_Favourited_Response message. Also converts values to other types if specified.
+             * @param message Set_Chat_Favourited_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Chat_Favourited_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Chat_Favourited_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Chat_Favourited_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Chat_Favourited_Response {
+
+            /** Properties of a Set_Chat_Favourited_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Chat_Favourited_Response. */
+            type $Shape = lingcat.methods.Set_Chat_Favourited_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_User_Id_By_Username_Request.
+         * @deprecated Use lingcat.methods.Get_User_Id_By_Username_Request.$Properties instead.
+         */
+        interface IGet_User_Id_By_Username_Request extends lingcat.methods.Get_User_Id_By_Username_Request.$Properties {
+        }
+
+        /** Represents a Get_User_Id_By_Username_Request. */
+        class Get_User_Id_By_Username_Request {
+
+            /**
+             * Constructs a new Get_User_Id_By_Username_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_User_Id_By_Username_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_User_Id_By_Username_Request accessToken. */
+            accessToken: string;
+
+            /** Get_User_Id_By_Username_Request username. */
+            username: string;
+
+            /**
+             * Creates a new Get_User_Id_By_Username_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_User_Id_By_Username_Request instance
+             */
+            static create(properties: lingcat.methods.Get_User_Id_By_Username_Request.$Shape): lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_User_Id_By_Username_Request.$Properties): lingcat.methods.Get_User_Id_By_Username_Request;
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Request message. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Request.verify|verify} messages.
+             * @param message Get_User_Id_By_Username_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_User_Id_By_Username_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Request.verify|verify} messages.
+             * @param message Get_User_Id_By_Username_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_User_Id_By_Username_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape} Get_User_Id_By_Username_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape;
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape} Get_User_Id_By_Username_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_User_Id_By_Username_Request & lingcat.methods.Get_User_Id_By_Username_Request.$Shape;
+
+            /**
+             * Verifies a Get_User_Id_By_Username_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_User_Id_By_Username_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_User_Id_By_Username_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_User_Id_By_Username_Request;
+
+            /**
+             * Creates a plain object from a Get_User_Id_By_Username_Request message. Also converts values to other types if specified.
+             * @param message Get_User_Id_By_Username_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_User_Id_By_Username_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_User_Id_By_Username_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_User_Id_By_Username_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_User_Id_By_Username_Request {
+
+            /** Properties of a Get_User_Id_By_Username_Request. */
+            interface $Properties {
+
+                /** Get_User_Id_By_Username_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Get_User_Id_By_Username_Request username */
+                username?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_User_Id_By_Username_Request. */
+            type $Shape = lingcat.methods.Get_User_Id_By_Username_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_User_Id_By_Username_Response.
+         * @deprecated Use lingcat.methods.Get_User_Id_By_Username_Response.$Properties instead.
+         */
+        interface IGet_User_Id_By_Username_Response extends lingcat.methods.Get_User_Id_By_Username_Response.$Properties {
+        }
+
+        /** Represents a Get_User_Id_By_Username_Response. */
+        class Get_User_Id_By_Username_Response {
+
+            /**
+             * Constructs a new Get_User_Id_By_Username_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_User_Id_By_Username_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_User_Id_By_Username_Response userId. */
+            userId: string;
+
+            /**
+             * Creates a new Get_User_Id_By_Username_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_User_Id_By_Username_Response instance
+             */
+            static create(properties: lingcat.methods.Get_User_Id_By_Username_Response.$Shape): lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_User_Id_By_Username_Response.$Properties): lingcat.methods.Get_User_Id_By_Username_Response;
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Response message. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Response.verify|verify} messages.
+             * @param message Get_User_Id_By_Username_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_User_Id_By_Username_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_User_Id_By_Username_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_User_Id_By_Username_Response.verify|verify} messages.
+             * @param message Get_User_Id_By_Username_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_User_Id_By_Username_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape} Get_User_Id_By_Username_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape;
+
+            /**
+             * Decodes a Get_User_Id_By_Username_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape} Get_User_Id_By_Username_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_User_Id_By_Username_Response & lingcat.methods.Get_User_Id_By_Username_Response.$Shape;
+
+            /**
+             * Verifies a Get_User_Id_By_Username_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_User_Id_By_Username_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_User_Id_By_Username_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_User_Id_By_Username_Response;
+
+            /**
+             * Creates a plain object from a Get_User_Id_By_Username_Response message. Also converts values to other types if specified.
+             * @param message Get_User_Id_By_Username_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_User_Id_By_Username_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_User_Id_By_Username_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_User_Id_By_Username_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_User_Id_By_Username_Response {
+
+            /** Properties of a Get_User_Id_By_Username_Response. */
+            interface $Properties {
+
+                /** Get_User_Id_By_Username_Response userId */
+                userId?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_User_Id_By_Username_Response. */
+            type $Shape = lingcat.methods.Get_User_Id_By_Username_Response.$Properties;
+        }
     }
 }

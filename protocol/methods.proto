@@ -199,3 +199,20 @@ message Get_Another_User_From_Private_Chat_Request {
 message Get_Another_User_From_Private_Chat_Response {
     string user_id = 1;
 }
+
+message Set_Chat_Favourited_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    bool favourited = 3;
+}
+
+message Set_Chat_Favourited_Response {}
+
+message Get_User_Id_By_Username_Request {
+    string access_token = 1;
+    string username = 2;
+}
+
+message Get_User_Id_By_Username_Response {
+    string user_id = 1;
+}

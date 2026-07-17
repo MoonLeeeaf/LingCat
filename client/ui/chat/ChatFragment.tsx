@@ -9,6 +9,7 @@ import { NavigationDrawer, TextField } from "mdui"
 import { ChatApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
+import ChatProfileDialog from "../ChatProfileDialog.tsx"
 
 export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
@@ -153,14 +154,29 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
     const { sortedIds } = useChatMessageStore()
 
+    async function sendMessage() {
+        const text = inputRef.current?.value || ''
+        if (text.trim() == '') return
+        try {
+            await ChatApi.sendChatMessage(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id: chat.id,
+                text,
+            })
+            inputRef.current!.value = ''
+        } catch (e) {
+            tipError(e, '发送失败')
+        }
+    }
+
     return <div style={{ position: 'relative', overflow: 'hidden', display: 'flex', width: '100%' }}>
         <mdui-top-app-bar scroll-target={'#' + id}>
             <mdui-button-icon icon="menu" onClick={() => {
                 drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
             }}></mdui-button-icon>
-            <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
+            <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
-            <mdui-button-icon icon="more_vert" style={{ marginRight: '4px' }}></mdui-button-icon>
+            <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>
         </mdui-top-app-bar>
 
         <div id={id} style={{ display: 'flex', width: '100%' }}>
@@ -187,6 +203,9 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 }}></div>
                 <mdui-text-field ref={inputRef} use-patched-textarea variant="outlined" autosize max-rows={10} placeholder="输入..." style={{
                     padding: '4px',
+                }} onKeyDown={(event) => {
+                    if (event.ctrlKey && event.key == 'Enter')
+                        sendMessage()
                 }}>
                     <mdui-button-icon slot="end-icon" icon="keyboard_arrow_left"></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
@@ -195,20 +214,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
                     <mdui-button-icon slot="end-icon" icon="attachment"></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
-                    <mdui-button-icon slot="end-icon" icon="send" onClick={async () => {
-                        const text = inputRef.current?.value || ''
-                        if (text.trim() == '') return
-                        try {
-                            await ChatApi.sendChatMessage(ClientManager.client, {
-                                access_token: ClientManager.getActiveUserSession().token,
-                                chat_id: chat.id,
-                                text,
-                            })
-                        } catch (e) {
-                            tipError(e, '发送失败')
-                        }
-                        inputRef.current!.value = ''
-                    }}></mdui-button-icon>
+                    <mdui-button-icon slot="end-icon" icon="send" onClick={() => sendMessage()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '5px' }}></div>
                 </mdui-text-field>
             </MessageContainer>

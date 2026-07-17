@@ -38,6 +38,10 @@ export default class Methods {
     static Search_My_Chats_Response = 0x38
     static Get_Another_User_From_Private_Chat_Request = 0x39
     static Get_Another_User_From_Private_Chat_Response = 0x40
+    static Set_Chat_Favourited_Request = 0x41
+    static Set_Chat_Favourited_Response = 0x42
+    static Get_User_Id_By_Username_Request = 0x43
+    static Get_User_Id_By_Username_Response = 0x44
 
     static Receive_Chat_Message_Event = 0x31
     static Reserved_Event = 0x32

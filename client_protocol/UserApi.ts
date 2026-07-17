@@ -130,6 +130,32 @@ export default class UserApi {
         } as IUser
     }
     /**
+     * 通过用户名获取用户 ID
+     * @returns 用户 ID
+     */
+    static async getUserIdByUsername(client: LingCatClient, {
+        access_token,
+        username,
+        timeout,
+    }: {
+        access_token: string;
+        username: string;
+        timeout?: number;
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Get_User_Id_By_Username_Request,
+            data: LingCatProto.methods.Get_User_Id_By_Username_Request.encode({
+                accessToken: access_token,
+                username,
+            }).finish(),
+            timeout,
+        });
+        return decodeOrThrow<LingCatProto.methods.Get_User_Id_By_Username_Response>(
+            LingCatProto.methods.Get_User_Id_By_Username_Response,
+            response.data
+        ).userId
+    }
+    /**
      * 更新资料
      * @returns 访问令牌
      */

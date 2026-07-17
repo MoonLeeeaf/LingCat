@@ -199,7 +199,32 @@ export default class ChatApi {
             timeout,
         })).data).chats.map((v) => protoChatToIChat(v))
     }
-
+    /**
+     * 设置对话的收藏状态
+     * @returns
+     */
+    static async setChatFavourited(client: LingCatClient, {
+        access_token,
+        chat_id,
+        favourited,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        favourited: boolean
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Set_Chat_Favourited_Response>(LingCatProto.methods.Set_Chat_Favourited_Response, (await client.invoke({
+            method_id: Methods.Set_Chat_Favourited_Request,
+            data: LingCatProto.methods.Set_Chat_Favourited_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                favourited,
+            }).finish(),
+            timeout,
+        })).data
+        )
+    }
     // 获取我的收藏对话
     static async getMyFavouriteChats(client: LingCatClient, {
         access_token,

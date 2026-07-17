@@ -55,7 +55,7 @@ export default class LingCatClient {
         return new Promise((res: (mPackage: Package) => void, rej) => {
             const requestId = mPackage.request_id
             const onRecv = (p: Package) => {
-                if (Buffer.compare(p.request_id, requestId) === 0) {
+                if (Buffer.compare(p.request_id, requestId) == 0) {
                     this.on_package_listeners.splice(this.on_package_listeners.indexOf(onRecv))
                     res(p)
                 }

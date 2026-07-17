@@ -16,11 +16,16 @@ import ProfileCache from "../ProfileCache.ts"
 import AppState from "./AppState.ts"
 import UserProfileDialog from "./UserProfileDialog.tsx"
 
+function findFavourited(chatId: string) {
+    return AppState.favouritedChats?.findIndex(chat => chat.id == chatId)
+}
+
 export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
 
     const [loading, setLoading] = React.useState(true)
     const [profile, setProfile] = React.useState<IChat>()
+    const [favourited, setFavourited] = React.useState(findFavourited(chat_id) != -1)
 
     React.useEffect(() => {
         (async () => {
@@ -70,12 +75,30 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                 <mdui-list>
                     {profile?.chat_unique && <mdui-list-item icon="alternate_email" rounded>{profile?.title}<span slot="description">对话标识符</span></mdui-list-item>}
                     {profile?.description && <mdui-list-item icon="info" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
-                    {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async() => UserProfileDialog.show(
+                    {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async () => UserProfileDialog.show(
                         await ChatApi.getAnotherUserFromPrivateChat(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token,
                             target_chat_id: chat_id,
                         })
                     )}>用户信息</mdui-list-item>}
+                    <mdui-list-item icon={favourited ? 'favorite_border' : 'favorite'} rounded onClick={async () => {
+                        try {
+                            await ChatApi.setChatFavourited(ClientManager.client, {
+                                access_token: ClientManager.getActiveUserSession().token,
+                                chat_id: chat_id,
+                                favourited: !favourited,
+                            })
+                            if (favourited)
+                                AppState.favouritedChats.splice(findFavourited(chat_id), 1)
+                            else
+                                AppState.favouritedChats.push(profile!)
+                            setFavourited(!favourited)
+
+                        } catch (e) {
+                            console.log(e)
+                            tipError(e, (favourited ? '取消' : '') + "收藏对话失败")
+                        }
+                    }}>{favourited ? '取消收藏' : '收藏对话'}</mdui-list-item>
                     <mdui-list-item icon="chat" rounded onClick={async () => {
                         try {
                             const chat = await ProfileCache.queryChatInfo(profile?.id!)

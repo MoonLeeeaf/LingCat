@@ -1,4 +1,4 @@
-import { Dialog, NavigationDrawer } from "mdui"
+import { Dialog, NavigationDrawer, TextField } from "mdui"
 import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
@@ -14,6 +14,7 @@ import Avatar from "./Avatar.tsx"
 import AppState from "./AppState.ts"
 import tipError from "./tipError.ts"
 import ChatProfileDialog from "./ChatProfileDialog.tsx"
+import showSnackbar from "./showSnackbar.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -21,6 +22,28 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
         clearTimeout(timer)
         timer = setTimeout(() => fn(...args), delay)
     }
+}
+
+function ChatListItem({ chat, setActiveChat }: { chat: IChat, setActiveChat: Function }) {
+    return <mdui-dropdown trigger="hover">
+        <mdui-list-item
+            slot='trigger'
+            key={chat.id}
+            rounded
+            onClick={() => {
+                setActiveChat(chat)
+                // drawerRef.current && (drawerRef.current.open = false) // 移动端关闭抽屉
+            }}
+            headline={chat.title || ''}>
+            <Avatar
+                slot="icon"
+                src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
+            />
+        </mdui-list-item>
+        <mdui-menu>
+            <mdui-menu-item onClick={() => ChatProfileDialog.show(chat.id)} icon="info">对话信息</mdui-menu-item>
+        </mdui-menu>
+    </mdui-dropdown>
 }
 
 export default function UserMain({ profile, setProfile, drawerRef, mSettingsDialog, mLoginDialog }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>, mSettingsDialog: React.RefObject<Dialog | undefined>, mLoginDialog: React.RefObject<Dialog | undefined> }) {
@@ -87,31 +110,110 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     )
     const [recentChats, setRecentChats] = React.useState<IChat[]>([])
     const [loadingRecent, setLoadingRecent] = React.useState(false)
+    const [favouritedChats, setFavouritedChats] = React.useState<IChat[]>([])
+    const [loadingFavourited, setLoadingFavourited] = React.useState(false)
+    const [allChats, setAllChats] = React.useState<IChat[]>([])
+    const [loadingAll, setLoadingAll] = React.useState(false)
+    const [refreshTime, setRefreshTime] = React.useState(Date.now())
 
     // 放在现有 useEffect 之后
     React.useEffect(() => {
         if (!profile?.id) return // 等用户登录后再加载
 
-        const loadRecentChats = async () => {
-            setLoadingRecent(true)
-            try {
-                const token = ClientManager.getActiveUserSession().token
-                const chats = await ChatApi.getMyChats(ClientManager.client, {
-                    access_token: token,
-                    limit: 50, // 最近显示 50 个足够
-                })
-                setRecentChats(chats)
-            } catch (e) {
-                tipError(e, '加载最近对话失败')
-            } finally {
-                setLoadingRecent(false)
-            }
-        }
+            ; (async () => {
+                setLoadingRecent(true)
+                try {
+                    const token = ClientManager.getActiveUserSession().token
+                    const chats = await ChatApi.getMyChats(ClientManager.client, {
+                        access_token: token,
+                        limit: 50,
+                    })
+                    setRecentChats(chats)
+                } catch (e) {
+                    tipError(e, '加载最近对话失败')
+                } finally {
+                    setLoadingRecent(false)
+                }
 
-        loadRecentChats()
-    }, [profile?.id]) // profile 加载完成后触发
+                setLoadingFavourited(true)
+                try {
+                    const token = ClientManager.getActiveUserSession().token
+                    const chats = await ChatApi.getMyFavouriteChats(ClientManager.client, {
+                        access_token: token,
+                        // limit: 50,
+                    })
+                    setFavouritedChats(chats)
+                    AppState.favouritedChats = chats
+                } catch (e) {
+                    tipError(e, '加载收藏对话失败')
+                } finally {
+                    setLoadingFavourited(false)
+                }
+
+                setLoadingAll(true)
+                try {
+                    const token = ClientManager.getActiveUserSession().token
+                    const chats = await ChatApi.getMyChats(ClientManager.client, {
+                        access_token: token,
+                    })
+                    setAllChats(chats)
+                } catch (e) {
+                    tipError(e, '加载所有对话失败')
+                } finally {
+                    setLoadingAll(false)
+                }
+            })()
+    }, [profile?.id, refreshTime])
+    // profile 加载完成后触发
+
+    const addFavouriteChatDialogRef = React.useRef<Dialog>(null)
+    const addFavouriteChatInputRef = React.useRef<TextField>(null)
 
     return <>
+        <mdui-dialog ref={addFavouriteChatDialogRef} close-on-overlay-click headline="添加收藏对话">
+            <mdui-text-field
+                placeholder="输入对话标识符 / ID 或用户名 / ID"
+                variant="outlined"
+                ref={addFavouriteChatInputRef}
+                style={{ width: '100%', marginBottom: '16px' }}
+                clearable>
+                <mdui-button-icon slot="end-icon" icon="add" onClick={async () => {
+                    try {
+                        let chat_id
+                        try {
+                            let user_id
+                            try {
+                                user_id = await UserApi.getUserIdByUsername(ClientManager.client, {
+                                    access_token: ClientManager.getActiveUserSession().token,
+                                    username: addFavouriteChatInputRef.current!.value,
+                                })
+                            } catch (e) {
+                                user_id = addFavouriteChatInputRef.current!.value
+                            }
+                            chat_id = await ChatApi.getOrCreatePrivateChat(ClientManager.client, {
+                                access_token: ClientManager.getActiveUserSession().token,
+                                target_user_id: user_id,
+                            })
+                        } catch (e) {
+                            chat_id = addFavouriteChatInputRef.current!.value
+                        }
+                        await ChatApi.setChatFavourited(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token,
+                            chat_id: chat_id,
+                            favourited: true,
+                        })
+
+                        addFavouriteChatDialogRef.current!.open = false
+                        showSnackbar({
+                            message: "成功"
+                        })
+                    } catch (e) {
+                        tipError(e, '添加收藏对话失败')
+                    }
+                }}></mdui-button-icon>
+            </mdui-text-field>
+            <mdui-button variant="text" onClick={() => addFavouriteChatDialogRef.current!.open = false} slot="action">取消</mdui-button>
+        </mdui-dialog>
         <mdui-dialog ref={searchChatsDialogRef} close-on-overlay-click headline="搜索对话">
             <mdui-text-field
                 placeholder="输入对话名称或对话 ID"
@@ -125,7 +227,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 style={{ width: '100%', marginBottom: '16px' }}
                 clearable
             >
-                <mdui-icon slot="leading-icon" name="search"></mdui-icon>
+                <mdui-icon slot="icon" name="search"></mdui-icon>
             </mdui-text-field>
 
             {searching && <mdui-circular-progress style={{ margin: '20px auto', display: 'block' }} />}
@@ -168,6 +270,16 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 }}>
                     搜索对话
                 </mdui-list-item>
+                <mdui-list-item rounded icon="refresh" onClick={async () => {
+                    setRefreshTime(Date.now())
+                }}>
+                    刷新列表
+                </mdui-list-item>
+                <mdui-list-item rounded icon="add" onClick={() => {
+                    addFavouriteChatDialogRef.current!.open = true
+                }}>
+                    添加收藏
+                </mdui-list-item>
                 <mdui-collapse value="recents">
                     <mdui-collapse-item value="recents">
                         <mdui-list-item rounded slot="header" icon="access_time">最近对话
@@ -175,43 +287,29 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                         <div style={{ marginLeft: '2.5rem' }}>
                             {loadingRecent && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingRecent && recentChats.length === 0 && (
-                                <div style={{ padding: '10px', color: 'var(--mdui-color-secondary)', fontSize: '14px' }}>
-                                    暂无对话
-                                </div>
+                                <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {recentChats.map(chat => (
-                                <mdui-dropdown trigger="hover">
-                                    <mdui-list-item
-                                        slot='trigger'
-                                        key={chat.id}
-                                        rounded
-                                        onClick={() => {
-                                            setActiveChat(chat)
-                                            // drawerRef.current && (drawerRef.current.open = false) // 移动端关闭抽屉
-                                        }}
-                                        headline={chat.title || ''}>
-                                        <Avatar
-                                            slot="icon"
-                                            src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
-                                        />
-                                    </mdui-list-item>
-                                    <mdui-menu>
-                                        <mdui-menu-item onClick={() => ChatProfileDialog.show(chat.id)} icon="info">对话信息</mdui-menu-item>
-                                    </mdui-menu>
-                                </mdui-dropdown>
-                            ))}
+                            {recentChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
                         </div>
                     </mdui-collapse-item>
                     <mdui-collapse-item value="favourites">
                         <mdui-list-item rounded slot="header" icon="favorite">收藏对话</mdui-list-item>
                         <div style={{ marginLeft: '2.5rem' }}>
-                            <mdui-list-item rounded>Item 2 - subitem</mdui-list-item>
+                            {loadingFavourited && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
+                            {!loadingFavourited && favouritedChats.length === 0 && (
+                                <mdui-list-item rounded>暂无对话</mdui-list-item>
+                            )}
+                            {favouritedChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
                         </div>
                     </mdui-collapse-item>
                     <mdui-collapse-item value="all">
                         <mdui-list-item rounded slot="header" icon="chat">全部对话</mdui-list-item>
                         <div style={{ marginLeft: '2.5rem' }}>
-                            <mdui-list-item rounded>Item 2 - subitem</mdui-list-item>
+                            {loadingAll && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
+                            {!loadingAll && allChats.length === 0 && (
+                                <mdui-list-item rounded>暂无对话</mdui-list-item>
+                            )}
+                            {allChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
                         </div>
                     </mdui-collapse-item>
                 </mdui-collapse>
@@ -226,13 +324,24 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                     ? <ChatFragment chat={activeChat} drawerRef={drawerRef} />
                     : <div style={{
                         display: 'flex',
-                        flex: 1,
-                        justifyContent: 'center',
+                        width: '100%',
                     }}>
+                        <mdui-top-app-bar style={{ position: 'relative' }}>
+                            <mdui-button-icon icon="menu" onClick={() => {
+                                drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
+                            }}></mdui-button-icon>
+                            <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
+                        </mdui-top-app-bar>
                         <div style={{
-                            alignSelf: 'center',
+                            display: 'flex',
+                            flex: 1,
+                            justifyContent: 'center',
                         }}>
-                            打开侧边栏, 选择一个对话以开始聊天喵~
+                            <div style={{
+                                alignSelf: 'center',
+                            }}>
+                                打开侧边栏, 选择一个对话以开始聊天喵~
+                            </div>
                         </div>
                     </div>
             }
