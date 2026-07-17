@@ -56,15 +56,18 @@ export default class UserApi {
      */
     static async authorize(client: LingCatClient, {
         access_token,
+        session_id,
         timeout,
     }: {
         access_token: string
+        session_id: string
         timeout?: number
     }) {
         return decodeOrThrow(LingCatProto.methods.Authorize_Response, (await client.invoke({
             method_id: Methods.Authorize_Request,
             data: LingCatProto.methods.Authorize_Request.encode({
                 accessToken: access_token,
+                sessionId: session_id,
             }).finish(),
             timeout,
         })).data)

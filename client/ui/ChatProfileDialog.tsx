@@ -3,7 +3,7 @@ import React from 'react'
 import ReloadableImage from "./ReloadableImage.tsx"
 import { Dialog } from "mdui"
 import useEventListener from "./useEventListener.ts"
-import { IUser } from "lingcat-protocol"
+import { IChat, IUser } from "lingcat-protocol"
 import EffectOnly from "./EffectOnly.tsx"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ClientManager from "../ClientManager.ts"
@@ -14,26 +14,25 @@ import tipError from "./tipError.ts"
 import EditMyProfileDialog from "./EditMyProfileDialog.tsx"
 import ProfileCache from "../ProfileCache.ts"
 import AppState from "./AppState.ts"
+import UserProfileDialog from "./UserProfileDialog.tsx"
 
-export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: React.RefObject<any>, user_id: string, onClose?: () => void }) {
+export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
 
     const [loading, setLoading] = React.useState(true)
-    const [profile, setProfile] = React.useState<IUser>()
-    const [isMe, setIsMe] = React.useState(false)
+    const [profile, setProfile] = React.useState<IChat>()
 
     React.useEffect(() => {
         (async () => {
             try {
-                const profile = await ProfileCache.queryUserInfo(user_id)
-                setProfile(profile)
-                setIsMe((await ClientManager.getMe()).id == profile.id)
+                const chat = await ProfileCache.queryChatInfo(chat_id)
+                setProfile(chat!)
             } catch (e) {
                 tipError(e, '加载失败')
             }
             setLoading(false)
         })()
-    }, [user_id])
+    }, [chat_id])
 
     React.useEffect(() => {
         if (loading) return
@@ -62,23 +61,24 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
                     }}>
                         <span style={{
                             fontSize: '1.25rem'
-                        }}>{profile?.nickname}</span>
+                        }}>{profile?.title}</span>
                     </div>
                 </div>
                 <div style={{
                     marginTop: "10px",
                 }}></div>
                 <mdui-list>
-                    {profile?.username && <mdui-list-item icon="alternate_email" rounded>{profile?.username}<span slot="description">用户名</span></mdui-list-item>}
+                    {profile?.chat_unique && <mdui-list-item icon="alternate_email" rounded>{profile?.title}<span slot="description">对话标识符</span></mdui-list-item>}
                     {profile?.description && <mdui-list-item icon="info" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
-                    {isMe && <mdui-list-item icon="edit" rounded onClick={() => EditMyProfileDialog.show()}>编辑资料</mdui-list-item>}
+                    {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async() => UserProfileDialog.show(
+                        await ChatApi.getAnotherUserFromPrivateChat(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token,
+                            target_chat_id: chat_id,
+                        })
+                    )}>用户信息</mdui-list-item>}
                     <mdui-list-item icon="chat" rounded onClick={async () => {
                         try {
-                            const chat_id = await ChatApi.getOrCreatePrivateChat(ClientManager.client, {
-                                access_token: ClientManager.getActiveUserSession().token,
-                                target_user_id: profile?.id!,
-                            })
-                            const chat = await ProfileCache.queryChatInfo(chat_id)
+                            const chat = await ProfileCache.queryChatInfo(profile?.id!)
                             AppState.setActiveChat(chat)
                             ref.current!.open = false
                         } catch (e) {
@@ -91,7 +91,7 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
         )
 }
 
-UserProfileDialog.show = function (user_id: string) {
+ChatProfileDialog.show = function (chat_id: string) {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const root = ReactClient.createRoot(container)
@@ -100,5 +100,5 @@ UserProfileDialog.show = function (user_id: string) {
         root.unmount()
         container.remove()
     }
-    root.render(<UserProfileDialog user_id={user_id} onClose={onClose} />)
+    root.render(<ChatProfileDialog chat_id={chat_id} onClose={onClose} />)
 }

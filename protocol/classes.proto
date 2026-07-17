@@ -28,10 +28,13 @@ message IUser {
 message IChat {
     string id = 1;
     optional string title = 2;
-    optional string unique = 3;
+    optional string chat_unique = 3;
     string type = 4;
     optional string avatar_file_hash = 5;
     string settings = 6;
+    uint32 last_message_id = 7;
+    uint64 last_message_time = 8;
+    optional string description = 9;
 }
 
 message IFile {
@@ -39,14 +42,14 @@ message IFile {
     optional string first_upload_file_name = 2;
     optional string belong_to_chat_id = 3;
     string mime = 4;
-    int64 uploaded_at = 5;
+    uint64 uploaded_at = 5;
 }
 
 message IMessage {
-    int64 id = 1;
+    uint32 id = 1;
     optional string sender_user_id = 2;
     optional bool system = 3;
     string chat_id = 4;
     string text = 5;
-    int64 time = 6;
+    uint64 time = 6;
 }

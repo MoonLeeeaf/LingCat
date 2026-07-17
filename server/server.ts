@@ -18,6 +18,8 @@ import UserChatLinker from './data/UserChatLinker.ts'
 import sendError from './api/sendError.ts'
 import FileApi from './api/FileApi.ts'
 import cookieParser from 'cookie-parser'
+import WebSocket from 'ws'
+import ChatApi from './api/ChatApi.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -144,6 +146,8 @@ export default function createLingCatServer(base_data_path: string) {
 
     console.log('[Server]', '服务端公钥 Hex:', fs.readFileSync(`${base_data_path}/key/public`).toString('hex'))
 
+    const clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } } = {}
+
     wsServer.on('connection', async (client, req) => {
         const keyPair = SecureKey.All_generateExchangeKeyPair()
         const privateKey = fs.readFileSync(`${base_data_path}/key/private`)
@@ -154,6 +158,7 @@ export default function createLingCatServer(base_data_path: string) {
         let recvSeq = -1
 
         let user_id_after_authorzied: string | undefined
+        let session_id : string | undefined
 
         client.on('close', () => {
             if (keySend) {
@@ -161,6 +166,9 @@ export default function createLingCatServer(base_data_path: string) {
             }
             if (keySend) {
                 new Uint8Array(keySend).fill(0)
+            }
+            if (user_id_after_authorzied && session_id) {
+                delete clients_emiter[user_id_after_authorzied][session_id]
             }
         })
 
@@ -220,9 +228,19 @@ export default function createLingCatServer(base_data_path: string) {
                             return
                         }
                         case Methods.Authorize_Request: {
+                            const data = LingCatProto.methods.Authorize_Request.decode(mPackage.data)
+                            
                             user_id_after_authorzied = (await TokenManager.verifyAccessToken(
-                                LingCatProto.methods.Authorize_Request.decode(mPackage.data).accessToken
+                                data.accessToken
                             )).user_id
+
+                            if (data.sessionId == null || data.sessionId?.trim() == '')
+                                return sendError(sendPackage, mPackage.method_id, 'Session id should be provided')
+                            session_id = data.sessionId
+
+                            if (clients_emiter[user_id_after_authorzied] == null)
+                                clients_emiter[user_id_after_authorzied] = {}
+                            clients_emiter[user_id_after_authorzied][session_id] = sendPackage
 
                             sendPackage(Package.encode({
                                 method_id: Methods.Authorize_Response,
@@ -235,7 +253,12 @@ export default function createLingCatServer(base_data_path: string) {
                     }
 
                     // 若没有一个命中, 则报 Not_Found 错误
-                    if (!(await ServerApi.onCall(sendPackage, mPackage) || await UserApi.onCall(sendPackage, mPackage) || await FileApi.onCall(sendPackage, mPackage))) {
+                    if (!(
+                        await ServerApi.onCall(sendPackage, mPackage) ||
+                        await UserApi.onCall(sendPackage, mPackage) ||
+                        await ChatApi.onCall(sendPackage, mPackage, clients_emiter) ||
+                        await FileApi.onCall(sendPackage, mPackage)
+                    )) {
                         console.log('[Server] Method not found:', mPackage.method_id)
                         sendError(sendPackage, mPackage.method_id, 'Method not found', Code.Not_Found)
                     }

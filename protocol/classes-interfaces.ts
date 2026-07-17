@@ -10,11 +10,16 @@ export type ChatType = 'private' | 'group'
 
 export interface IChat {
     id: string
+    // 私聊拿到的是对方的 title
     title?: string | null
-    unique?: string | null
+    chat_unique?: string | null
     type: ChatType
     avatar_file_hash?: string | null
     settings: string
+    last_message_id: number
+    last_message_time: number
+    // 私聊拿到的是对方的 description
+    description?: string | null
 }
 
 export interface IFile {

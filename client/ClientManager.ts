@@ -1,13 +1,20 @@
 import LingCatClient, { UserApi } from 'lingcat-client-protocol'
 import fs from './fs.ts'
+import { IUser } from 'lingcat-protocol'
+import ProfileCache from './ProfileCache.ts'
 
 export default class ClientManager {
     static client: LingCatClient
 
+    static me: IUser
     static async getMe() {
-        return await UserApi.queryMyUserInfo(this.client, {
-            access_token: this.getActiveUserSession().token,
-        })
+        if (this.me == null) {
+            this.me = await UserApi.queryMyUserInfo(this.client, {
+                access_token: this.getActiveUserSession().token,
+            })
+            ProfileCache.user_info[this.me.id] = this.me
+        }
+        return this.me
     }
     static listServerPublicKeys() {
         return fs.readdirSync('/public_keys')

@@ -5,7 +5,6 @@ import crypto from 'node:crypto'
 export const base_data_path = (process.argv.join().indexOf('vite') != -1) ? '../lingcat_data' : './lingcat_data'
 
 mkdir(base_data_path)
-mkdir(base_data_path + '/db')
 
 if (!fileExists(base_data_path + '/config.json'))
     fs.writeFileSync(base_data_path + '/config.json', JSON.stringify({

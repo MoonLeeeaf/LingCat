@@ -2,14 +2,7 @@ import knex from 'knex'
 import { base_data_path } from '../config.ts'
 import { Code, type IUser } from 'lingcat-protocol'
 import crypto from 'node:crypto'
-
-const db = knex({
-    client: 'sqlite3',
-    connection: {
-        filename: base_data_path + '/db/Users.db'
-    },
-    useNullAsDefault: true,
-})
+import { db } from "./db.ts"
 
 interface IServerUser extends IUser {
     created_at: number
@@ -18,7 +11,8 @@ interface IServerUser extends IUser {
 
 export type { IServerUser }
 
-(!await db.schema.hasTable('Users')) && await db.schema.createTable('Users', (table) => {
+const tableName = 'Users';
+(!await db.schema.hasTable(tableName)) && await db.schema.createTable(tableName, (table) => {
     table.increments('key_id').primary()
     table.string('id').unique().notNullable()
     table.string('username').unique()
@@ -41,7 +35,7 @@ export default class UserDataBase {
     }) {
         try {
             const userId = crypto.randomUUID()
-            await db<IServerUser>('Users').insert({
+            await db<IServerUser>(tableName).insert({
                 username,
                 nickname,
                 password: this.hashifyPassword(password),
@@ -64,28 +58,28 @@ export default class UserDataBase {
     }
 
     static async queryUserById(id: string) {
-        return await db<IServerUser>('Users').where('id', id).first()
+        return await db<IServerUser>(tableName).where('id', id).first()
     }
     static async queryUserByUserName(username: string) {
-        return await db<IServerUser>('Users').where('username', username).first()
+        return await db<IServerUser>(tableName).where('username', username).first()
     }
     static async queryUserByAccount(account: string) {
         return await this.queryUserById(account) || await this.queryUserByUserName(account)
     }
 
     static async updateUserName(id: string, username: string) {
-        await db<IServerUser>('Users').update({ username }).where('id', id)
+        await db<IServerUser>(tableName).update({ username }).where('id', id)
     }
-    static async updateNickName(id: string, username: string) {
-        await db<IServerUser>('Users').update({ username }).where('id', id)
+    static async updateNickName(id: string, nickname: string) {
+        await db<IServerUser>(tableName).update({ nickname }).where('id', id)
     }
     static async updateRawPassWord(id: string, password: string) {
-        await db<IServerUser>('Users').update({ password }).where('id', id)
+        await db<IServerUser>(tableName).update({ password }).where('id', id)
     }
     static async updateDescription(id: string, description: string) {
-        await db<IServerUser>('Users').update({ description }).where('id', id)
+        await db<IServerUser>(tableName).update({ description }).where('id', id)
     }
     static async updateAvatarFileHash(id: string, avatar_file_hash: string) {
-        await db<IServerUser>('Users').update({ avatar_file_hash }).where('id', id)
+        await db<IServerUser>(tableName).update({ avatar_file_hash }).where('id', id)
     }
 }

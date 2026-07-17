@@ -73,6 +73,7 @@ message Request_File_Access_Response {
 
 message Authorize_Request {
     string access_token = 1;
+    string session_id = 2;
 }
 
 message Authorize_Response {}
@@ -113,10 +114,88 @@ message Update_Chat_Avatar_Request {
 
 message Update_Chat_Avatar_Response {}
 
+message Send_Chat_Message_Request {
+    string access_token = 1;
+    string chat_id = 2; 
+    string text = 3; 
+}
+
+message Send_Chat_Message_Response {
+    uint32 id = 1;
+}
+
+message Receive_Chat_Message_Event {
+    IMessage msg = 1;
+}
+
 message Get_Chat_Messages_Request {
     string access_token = 1;
     string chat_id = 2;
-    optional int64 before = 3;
-    optional int64 after = 4;
-    optional int32 limit = 5;
+    optional uint32 before = 3;
+    optional uint32 after = 4;
+    optional uint32 limit = 5;
+}
+
+message Get_Chat_Messages_Response {
+    repeated IMessage messages = 1;
+}
+
+message Query_Chat_Info_Request {
+    string access_token = 1;
+    string chat_id = 2;
+}
+
+message Query_Chat_Info_Response {
+    IChat info = 1;
+}
+
+message Get_Or_Create_Private_Chat_Request {
+    string access_token = 1;
+    string target_user_id = 2;
+}
+
+message Get_Or_Create_Private_Chat_Response {
+    string chat_id = 1;
+}
+
+// 获取我的所有对话（分页）
+message Get_My_Chats_Request {
+    string access_token = 1;
+    optional uint32 limit = 2;
+    optional uint32 offset = 3;
+}
+
+message Get_My_Chats_Response {
+    repeated IChat chats = 1;
+}
+
+// 获取我的收藏对话（分页）
+message Get_My_Favourite_Chats_Request {
+    string access_token = 1;
+    optional uint32 limit = 2;
+    optional uint32 offset = 3;
+}
+
+message Get_My_Favourite_Chats_Response {
+    repeated IChat chats = 1;
+}
+
+// 搜索我的对话（关键词）
+message Search_My_Chats_Request {
+    string access_token = 1;
+    string keyword = 2;
+    optional uint32 limit = 3;
+}
+
+message Search_My_Chats_Response {
+    repeated IChat chats = 1;
+}
+
+message Get_Another_User_From_Private_Chat_Request {
+    string access_token = 1;
+    string target_chat_id = 2;
+}
+
+message Get_Another_User_From_Private_Chat_Response {
+    string user_id = 1;
 }

@@ -4,6 +4,8 @@ import UserDataBase from '../data/UserDataBase.ts'
 import TokenManager from './TokenManager.ts'
 import FileManager from '../data/FileManager.ts'
 import sendError from './sendError.ts'
+import ChatDataBase from '../data/ChatDataBase.ts'
+import UserChatLinker from '../data/UserChatLinker.ts'
 
 export default class UserApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {

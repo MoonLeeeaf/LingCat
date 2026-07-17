@@ -3,10 +3,13 @@ import ClientManager from "../ClientManager.ts"
 import ClientSettingsDialog from "./ClientSettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
 import React from 'react'
+import { IUser } from "lingcat-protocol"
 
 export default function Main() {
     const mSettingsDialog = React.useRef<Dialog>(undefined)
     const mLoginDialog = React.useRef<Dialog>(undefined)
+
+    const [profile, setProfile] = React.useState<IUser>()
 
     const drawerRef = React.useRef<NavigationDrawer>(undefined)
 
@@ -29,16 +32,6 @@ export default function Main() {
 
     return (
         <mdui-layout>
-            <mdui-top-app-bar>
-                <mdui-button-icon icon="menu" onClick={() => {
-                    drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
-                }}></mdui-button-icon>
-                <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
-                <div style={{ flexGrow: 1 }}></div>
-                <mdui-button-icon icon="settings" onClick={() => mSettingsDialog.current!.open = true}></mdui-button-icon>
-                <mdui-button-icon icon="more_vert" style={{ marginRight: '4px' }}></mdui-button-icon>
-            </mdui-top-app-bar>
-
             {
                 (ClientManager.listUserSessions().length == 0 || ClientManager.listServerPublicKeys().length == 0 || ClientManager.getActiveUserSessionName() == null)
                     ? <div style={{
@@ -46,14 +39,15 @@ export default function Main() {
                         flex: 1,
                         justifyContent: 'center',
                     }}>
-                        <span style={{
+                        <div style={{
                             alignSelf: 'center',
                         }}>
-                            如果还未配置服务端公钥, 请打开右上角设置进行配置<br /><br />
-                            您还没有登录, 仅可进行设置, 如需登录, 请在配置完服务端公钥后刷新本页面
-                        </span>
+                            <mdui-button onClick={() => mSettingsDialog.current!.open = true}>打开设置</mdui-button>
+                            <div style={{ height: '10px' }}></div>
+                            <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
+                        </div>
                     </div>
-                    : <UserMain access_token={ClientManager.getActiveUserSessionName()!} drawerRef={drawerRef} />
+                    : <UserMain mLoginDialog={mLoginDialog} mSettingsDialog={mSettingsDialog} profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
             }
 
             <ClientSettingsDialog

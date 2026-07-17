@@ -72,6 +72,14 @@ export default class LingCatClient {
 
     onInit() { }
 
+    on_receive_listeners: ((mPackage: Package) => void)[] = []
+    addOnReceiveListener(func: (mPackage: Package) => void) {
+        this.on_receive_listeners.push(func)
+    }
+    removeOnReceiveListener(func: (mPackage: Package) => void) {
+        this.on_receive_listeners.splice(this.on_receive_listeners.indexOf(func), 1)
+    }
+
     init() {
         if (this.client == null) {
             this.client = new WebSocket(this.server_ws)
@@ -79,6 +87,7 @@ export default class LingCatClient {
             const client = this.client
             const session = this.session
             const on_package_listeners = this.on_package_listeners
+            const on_receive_listeners = this.on_receive_listeners
 
             client.binaryType = 'arraybuffer'
 
@@ -160,6 +169,7 @@ export default class LingCatClient {
                                 }
                             }
                             on_package_listeners.forEach((v) => v(mPackage))
+                            on_receive_listeners.forEach((v) => v(mPackage))
                         } catch (e) {
                             console.error(e)
                         }

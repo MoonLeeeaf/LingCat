@@ -22,6 +22,25 @@ export default class Methods {
     static Query_My_User_Info_Response = 0x20
     static Request_File_Access_Request = 0x21
     static Request_File_Access_Response = 0x22
+    static Send_Chat_Message_Request = 0x23
+    static Send_Chat_Message_Response = 0x24
+    static Get_Chat_Messages_Request = 0x25
+    static Get_Chat_Messages_Response = 0x26
+    static Query_Chat_Info_Request = 0x27
+    static Query_Chat_Info_Response = 0x28
+    static Get_Or_Create_Private_Chat_Request = 0x29
+    static Get_Or_Create_Private_Chat_Response = 0x30
+    static Get_My_Chats_Request = 0x33
+    static Get_My_Chats_Response = 0x34
+    static Get_My_Favourite_Chats_Request = 0x35
+    static Get_My_Favourite_Chats_Response = 0x36
+    static Search_My_Chats_Request = 0x37
+    static Search_My_Chats_Response = 0x38
+    static Get_Another_User_From_Private_Chat_Request = 0x39
+    static Get_Another_User_From_Private_Chat_Response = 0x40
+
+    static Receive_Chat_Message_Event = 0x31
+    static Reserved_Event = 0x32
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

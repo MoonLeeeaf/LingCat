@@ -3,4 +3,5 @@ export default class Code {
     static Internal_Server_Error = 500
     static Bad_Request = 400
     static Not_Found = 404
+    static Forbidden = 403
 }

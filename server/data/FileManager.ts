@@ -4,14 +4,7 @@ import { IFile } from "../../protocol/classes-interfaces.ts"
 import node_path from 'node:path'
 import fs from 'node:fs'
 import { fileTypeFromFile } from 'file-type'
-
-const db = knex({
-    client: 'sqlite3',
-    connection: {
-        filename: base_data_path + '/db/FilesMap.db'
-    },
-    useNullAsDefault: true,
-})
+import { db } from "./db.ts"
 
 interface IServerFile extends IFile {
     key_id: number
@@ -20,7 +13,8 @@ interface IServerFile extends IFile {
 
 export type { IServerFile }
 
-(!await db.schema.hasTable('FilesMap')) && await db.schema.createTable('FilesMap', (table) => {
+const tableName = 'FilesMap';
+(!await db.schema.hasTable(tableName)) && await db.schema.createTable(tableName, (table) => {
     table.increments('key_id').primary()
     table.string('hash').unique().notNullable()
     table.string('first_upload_file_name')
@@ -32,17 +26,17 @@ export type { IServerFile }
 
 export default class FileManager {
     static async queryFileByHash(hash: string) {
-        return await db<IServerFile>('FilesMap').where('hash', hash).first()
+        return await db<IServerFile>(tableName).where('hash', hash).first()
     }
 
     static async queryFilesByChatId(chatId: string): Promise<IServerFile[]> {
-        return await db<IServerFile>('FilesMap')
+        return await db<IServerFile>(tableName)
             .where('belong_to_chat_id', chatId)
             .select('*')
     }
 
     static async updateLastUsedTime(hash: string) {
-        await db<IServerFile>('FilesMap').update({ last_used_time: Date.now() }).where('hash', hash)
+        await db<IServerFile>(tableName).update({ last_used_time: Date.now() }).where('hash', hash)
     }
 
     static async uploadFile(hash: string, fileName: string, filePath: string, chatId?: string): Promise<IServerFile> {
@@ -63,7 +57,7 @@ export default class FileManager {
         fs.mkdirSync(folder, { recursive: true })
         fs.createReadStream(filePath).pipe(fs.createWriteStream(node_path.join(folder, hash)))
 
-        await db('FilesMap').insert({
+        await db(tableName).insert({
             hash: hash,
             first_upload_file_name: fileName,
             belong_to_chat_id: chatId || null,
@@ -92,7 +86,7 @@ export default class FileManager {
         const filePath = this.getFilePath(file.hash)
         try {
             fs.unlinkSync(filePath)
-            await db('FilesMap').where('hash', hash).del()
+            await db(tableName).where('hash', hash).del()
         } catch (err) {
             console.log(err)
         }
