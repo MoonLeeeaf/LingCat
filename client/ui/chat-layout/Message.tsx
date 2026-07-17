@@ -44,25 +44,36 @@ export default function Message({
             return <span>{children}</span>
         },
         paragraph(children) {
-            // console.log('paragraph', children)
-            const ls = []
+            const elements: React.ReactNode[] = []
             let cache: React.ReactNode[] = []
-            React.Children.map(children, (child, _index) => {
+
+            const flushCache = () => {
+                if (cache.length > 0) {
+                    elements.push(<TextContainer>{cache}</TextContainer>)
+                    cache = []
+                }
+            }
+
+            React.Children.forEach(children, (child) => {
                 if (React.isValidElement(child)) {
+                    // 如果是自定义组件（函数组件），视为“块级元素”
                     if (child.type instanceof Function) {
-                        ls.push(<TextContainer>{cache}</TextContainer>)
-                        cache = []
-                        ls.push(child)
+                        // 先输出之前的文本缓存
+                        flushCache();
+                        // 直接添加图片本身，不包裹额外容器
+                        elements.push(child)
                     } else {
+                        // 普通内置元素（span, a 等）放入缓存
                         cache.push(child)
                     }
-                }
-                if (typeof child == 'string') {
+                } else if (typeof child == 'string') {
                     cache.push(child)
                 }
+                // 其他类型（number, boolean 等）也可按需处理
             })
-            ls.push(<TextContainer>{cache}</TextContainer>)
-            return <span>{ls}</span>
+            // 末尾剩余的缓存
+            flushCache()
+            return <span>{elements}</span>
         },
         image(src, alt, _title) {
             // console.log('image', src)
