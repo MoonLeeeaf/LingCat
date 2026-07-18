@@ -1,4 +1,4 @@
-import { Dialog, NavigationDrawer, TextField } from "mdui"
+import { Dialog, NavigationBar, NavigationDrawer, NavigationRail, TextField } from "mdui"
 import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
@@ -15,6 +15,7 @@ import AppState from "./AppState.ts"
 import tipError from "./tipError.ts"
 import ChatProfileDialog from "./ChatProfileDialog.tsx"
 import showSnackbar from "./showSnackbar.ts"
+import useEventListener from "./useEventListener.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -79,6 +80,30 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     const [activeChat, setActiveChat] = React.useState<IChat>()
     AppState.setActiveChat = setActiveChat
 
+    const navigationRef = React.useRef<NavigationRail | NavigationBar>(null)
+    const [navigationSelected, setNavigationSelected] = React.useState('recent')
+    useEventListener(navigationRef, 'change', (e) => {
+        setNavigationSelected((e.target as NavigationRail | NavigationBar).value || '')
+    })
+
+    const filterInputRef = React.useRef<TextField>(null)
+    const [filterText, setFilterText] = React.useState('')
+    useEventListener(filterInputRef, 'input', (e) => {
+        setFilterText((e.target as TextField).value)
+    })
+    const chatFilter = (chat: IChat) => {
+        const filter = filterText.trim().toLowerCase()
+        if (filter === '') return true
+        const searchFields = [
+            chat.chat_unique,
+            chat.description,
+            chat.id,
+            chat.last_message_text,
+            chat.title
+        ]
+        return searchFields.some(field => field?.toLowerCase().includes(filter))
+    }
+
     const searchChatsDialogRef = React.useRef<Dialog>(null)
     const [searchKeyword, setSearchKeyword] = React.useState('')
     const [searchResults, setSearchResults] = React.useState<IChat[]>([])
@@ -115,7 +140,6 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     const [loadingFavourited, setLoadingFavourited] = React.useState(false)
     const [allChats, setAllChats] = React.useState<IChat[]>([])
     const [loadingAll, setLoadingAll] = React.useState(false)
-    // const [refreshTime, setRefreshTime] = React.useState(Date.now())
 
     React.useEffect(() => {
         if (!profile?.id) return
@@ -190,105 +214,91 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
             </mdui-text-field>
             <mdui-button variant="text" onClick={() => addFavouriteChatDialogRef.current!.open = false} slot="action">取消</mdui-button>
         </mdui-dialog>
-        <mdui-dialog ref={searchChatsDialogRef} close-on-overlay-click headline="搜索对话">
-            <mdui-text-field
-                placeholder="输入对话名称或对话 ID"
-                variant="outlined"
-                value={searchKeyword}
-                onInput={(e: any) => {
-                    const val = e.target.value
-                    setSearchKeyword(val)
-                    debouncedSearch(val)
-                }}
-                style={{ width: '100%', marginBottom: '16px' }}
-                clearable
-            >
-                <mdui-icon slot="icon" name="search"></mdui-icon>
-            </mdui-text-field>
-
-            {searching && <mdui-circular-progress style={{ margin: '20px auto', display: 'block' }} />}
-
-            {!searching && searchKeyword.trim() !== '' && searchResults.length === 0 && (
-                <div style={{ padding: '20px', textAlign: 'center', color: 'var(--mdui-color-secondary)' }}>
-                    没有找到匹配的对话
-                </div>
-            )}
-
-            <mdui-list style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                {searchResults.map(chat => (
-                    <mdui-list-item
-                        key={chat.id}
-                        rounded
-                        onClick={() => {
-                            ChatProfileDialog.show(chat.id)
-                            searchChatsDialogRef.current!.open = false
-                        }}
-                        headline={chat.title || '私聊'}>
-                        <Avatar
-                            slot="icon"
-                            src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
-                        />
-                    </mdui-list-item>
-                ))}
-            </mdui-list>
-            <mdui-button variant="text" onClick={() => searchChatsDialogRef.current!.open = false} slot="action">取消</mdui-button>
-        </mdui-dialog>
         <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
-            <mdui-list style={{ marginLeft: '10px' }}>
-                <mdui-list-item rounded onClick={() => UserProfileDialog.show(profile?.id!)} headline={profile?.nickname}>
-                    <Avatar slot="icon" src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
-                </mdui-list-item>
-                <mdui-list-item rounded icon="settings" onClick={() => mSettingsDialog.current!.open = true}>
-                    客户端设置
-                </mdui-list-item>
-                <mdui-list-item rounded icon="search" onClick={() => {
-                    searchChatsDialogRef.current!.open = true
-                }}>
-                    搜索对话
-                </mdui-list-item>
-                {/* <mdui-list-item rounded icon="refresh" onClick={async () => {
-                    setRefreshTime(Date.now())
-                }}>
-                    刷新列表
-                </mdui-list-item> */}
-                <mdui-list-item rounded icon="add" onClick={() => {
-                    addFavouriteChatDialogRef.current!.open = true
-                }}>
-                    添加收藏
-                </mdui-list-item>
-                <mdui-collapse value="recents">
-                    <mdui-collapse-item value="recents">
-                        <mdui-list-item rounded slot="header" icon="access_time">最近对话
-                        </mdui-list-item>
-                        <div style={{ marginLeft: '2.5rem' }}>
+            <mdui-navigation-rail ref={navigationRef} contained alignment="center" value="recent">
+                <Avatar slot="top" onClick={() => UserProfileDialog.show(profile?.id!)} src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
+
+                <mdui-dropdown trigger="hover" slot="top">
+                    <mdui-button-icon icon="add" slot="trigger"></mdui-button-icon>
+                    <mdui-menu>
+                        <mdui-menu-item onClick={() => {
+                            addFavouriteChatDialogRef.current!.open = true
+                        }}>添加收藏对话</mdui-menu-item>
+                        <mdui-menu-item onClick={() => {
+                            createGroupDialog.current!.open = true
+                        }}>创建群组</mdui-menu-item>
+                    </mdui-menu>
+                </mdui-dropdown>
+
+                <mdui-navigation-rail-item icon="watch_later--outlined" active-icon="watch_later" value="recent"></mdui-navigation-rail-item>
+                <mdui-navigation-rail-item icon="favorite_border" active-icon="favorite" value="favourited"></mdui-navigation-rail-item>
+                <mdui-navigation-rail-item icon="chat--outlined" active-icon="chat" value="all"></mdui-navigation-rail-item>
+                <mdui-navigation-rail-item icon="search" value="search"></mdui-navigation-rail-item>
+
+                <mdui-button-icon icon="settings" slot="bottom" onClick={() => mSettingsDialog.current!.open = true}></mdui-button-icon>
+            </mdui-navigation-rail>
+            <mdui-list style={{ marginLeft: 'calc(5px + 5rem)', marginRight: '5px' }}>
+                <mdui-text-field variant="outlined" ref={filterInputRef} placeholder="从中查找..." style={{ width: '100%', display: navigationSelected != 'search' ? undefined : 'none', paddingBottom: '10px' }}></mdui-text-field>
+                {
+                    ({
+                        recent: <>
                             {loadingRecent && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingRecent && recentChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {recentChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
-                        </div>
-                    </mdui-collapse-item>
-                    <mdui-collapse-item value="favourites">
-                        <mdui-list-item rounded slot="header" icon="favorite">收藏对话</mdui-list-item>
-                        <div style={{ marginLeft: '2.5rem' }}>
+                            {recentChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                        </>,
+                        favourited: <>
                             {loadingFavourited && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingFavourited && favouritedChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {favouritedChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
-                        </div>
-                    </mdui-collapse-item>
-                    <mdui-collapse-item value="all">
-                        <mdui-list-item rounded slot="header" icon="chat">全部对话</mdui-list-item>
-                        <div style={{ marginLeft: '2.5rem' }}>
+                            {favouritedChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                        </>,
+                        all: <>
                             {loadingAll && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingAll && allChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {allChats.map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
-                        </div>
-                    </mdui-collapse-item>
-                </mdui-collapse>
+                            {allChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                        </>,
+                        search: <>
+                            <mdui-text-field variant="outlined"
+                                placeholder="查找我的对话..."
+                                value={searchKeyword}
+                                onInput={(e: any) => {
+                                    const val = e.target.value
+                                    setSearchKeyword(val)
+                                    debouncedSearch(val)
+                                }}
+                                style={{ width: '100%', marginBottom: '16px' }}
+                                clearable></mdui-text-field>
+                            {searching && <mdui-circular-progress style={{ margin: '20px auto', display: 'block' }} />}
+                            {!searching && searchKeyword.trim() !== '' && searchResults.length == 0 && (
+                                <div style={{ padding: '20px', textAlign: 'center', color: 'var(--mdui-color-secondary)' }}>
+                                    没有找到匹配的对话
+                                </div>
+                            )}
+                            <mdui-list style={{ overflowY: 'auto' }}>
+                                {searchResults.map(chat => (
+                                    <mdui-list-item
+                                        key={chat.id}
+                                        rounded
+                                        onClick={() => {
+                                            ChatProfileDialog.show(chat.id)
+                                            searchChatsDialogRef.current!.open = false
+                                        }}
+                                        headline={chat.title || '私聊'}>
+                                        <Avatar
+                                            slot="icon"
+                                            src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
+                                        />
+                                    </mdui-list-item>
+                                ))}
+                            </mdui-list>
+                        </>
+                    })[navigationSelected]
+                }
             </mdui-list>
         </mdui-navigation-drawer>
         <mdui-layout-main style={{
