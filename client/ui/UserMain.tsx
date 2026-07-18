@@ -362,6 +362,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                     ? <ChatFragment chat={activeChat} drawerRef={drawerRef} />
                     : <div style={{
                         display: 'flex',
+                        flexDirection: 'column',
                         width: '100%',
                     }}>
                         <mdui-top-app-bar style={{ position: 'relative' }}>

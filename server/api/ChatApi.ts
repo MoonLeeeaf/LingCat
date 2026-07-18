@@ -368,8 +368,8 @@ export default class ChatApi {
                     data: LingCatProto.methods.Create_Group_Response.encode({
                         chatId: chat_id,
                     }).finish()
-                }));
-                break;
+                }))
+                break
             }
             default: {
                 return false

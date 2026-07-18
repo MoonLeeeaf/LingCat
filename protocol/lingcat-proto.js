@@ -15577,7 +15577,11 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Create_Group_Request.encodeDelimited = function(message, writer) {
+<<<<<<< HEAD
                 return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+=======
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+>>>>>>> 59ffeac (基本的创建群组)
             };
 
             /**
