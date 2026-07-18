@@ -22,8 +22,8 @@ const tableName = 'UserChatLinker';
     table.string('chat_id').notNullable()
     table.boolean('favorited_by_user').notNullable().defaultTo(false)
 
-    table.index('user_id', 'idx_user_id')
-    table.index('chat_id', 'idx_chat_id')
+    table.index('user_id', 'idx_ucl_user_id')
+    table.index('chat_id', 'idx_ucl_chat_id')
     table.unique(['user_id', 'chat_id'], 'idx_unique_user_chat')
 })
 
