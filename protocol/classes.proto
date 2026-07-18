@@ -35,6 +35,7 @@ message IChat {
     uint32 last_message_id = 7;
     uint64 last_message_time = 8;
     optional string description = 9;
+    optional string last_message_text = 10; 
 }
 
 message IFile {

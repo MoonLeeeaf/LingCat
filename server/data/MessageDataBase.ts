@@ -35,12 +35,12 @@ export default class MessageDataBase {
                 .first()
             const nextId = lastRow ? lastRow.id + 1 : 1
 
-            const [id] = await trx(tableName).insert({
+            await trx(tableName).insert({
                 ...msg,
                 id: nextId,
             })
 
-            return id
+            return nextId
         })
         // 注意: 处理完事务再处理更新
         await ChatDataBase.updateLastMessage(msg.chat_id, id, msg.time)

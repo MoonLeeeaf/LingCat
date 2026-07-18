@@ -3,7 +3,7 @@ import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
 import default_avatar from '../default_avatar.png'
-import { IChat, IMessage, IUser } from "lingcat-protocol"
+import { IChat, IMessage, IUser, Methods, Package } from "lingcat-protocol"
 import UserProfileDialog from "./UserProfileDialog.tsx"
 import ClientManager from "../ClientManager.ts"
 import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
@@ -34,7 +34,8 @@ function ChatListItem({ chat, setActiveChat }: { chat: IChat, setActiveChat: Fun
                 setActiveChat(chat)
                 // drawerRef.current && (drawerRef.current.open = false) // 移动端关闭抽屉
             }}
-            headline={chat.title || ''}>
+            headline={chat.title || ''}
+            description={chat.last_message_text}>
             <Avatar
                 slot="icon"
                 src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
@@ -62,7 +63,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                             access_token: ClientManager.getActiveUserSession().token
                         }) + ';'
                     }
-                    const id = setInterval(updateFileAccessToken, 1000 * 60 * 60 * 10)
+                    const id = setInterval(updateFileAccessToken, 1000 * 60 * 60 * 0.5)
                     await updateFileAccessToken()
                     ClientManager.client.client?.addEventListener('close', () => clearInterval(id))
 
@@ -114,56 +115,45 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     const [loadingFavourited, setLoadingFavourited] = React.useState(false)
     const [allChats, setAllChats] = React.useState<IChat[]>([])
     const [loadingAll, setLoadingAll] = React.useState(false)
-    const [refreshTime, setRefreshTime] = React.useState(Date.now())
+    // const [refreshTime, setRefreshTime] = React.useState(Date.now())
 
-    // 放在现有 useEffect 之后
     React.useEffect(() => {
-        if (!profile?.id) return // 等用户登录后再加载
-
-            ; (async () => {
-                setLoadingRecent(true)
-                try {
-                    const token = ClientManager.getActiveUserSession().token
-                    const chats = await ChatApi.getMyChats(ClientManager.client, {
-                        access_token: token,
-                        limit: 50,
-                    })
-                    setRecentChats(chats)
-                } catch (e) {
-                    tipError(e, '加载最近对话失败')
-                } finally {
-                    setLoadingRecent(false)
-                }
-
-                setLoadingFavourited(true)
-                try {
-                    const token = ClientManager.getActiveUserSession().token
-                    const chats = await ChatApi.getMyFavouriteChats(ClientManager.client, {
-                        access_token: token,
-                        // limit: 50,
-                    })
-                    setFavouritedChats(chats)
-                    AppState.favouritedChats = chats
-                } catch (e) {
-                    tipError(e, '加载收藏对话失败')
-                } finally {
-                    setLoadingFavourited(false)
-                }
-
-                setLoadingAll(true)
-                try {
-                    const token = ClientManager.getActiveUserSession().token
-                    const chats = await ChatApi.getMyChats(ClientManager.client, {
-                        access_token: token,
-                    })
-                    setAllChats(chats)
-                } catch (e) {
-                    tipError(e, '加载所有对话失败')
-                } finally {
-                    setLoadingAll(false)
-                }
-            })()
-    }, [profile?.id, refreshTime])
+        if (!profile?.id) return
+        const refresh = async () => {
+            setLoadingAll(true)
+            setLoadingRecent(true)
+            setLoadingFavourited(true)
+            try {
+                const token = ClientManager.getActiveUserSession().token;
+                const all = await ChatApi.getMyChats(ClientManager.client, {
+                    access_token: token,
+                    limit: 1000,
+                })
+                setAllChats(all)
+                setRecentChats(all.slice(0, 50))
+                const fav = await ChatApi.getMyFavouriteChats(ClientManager.client, {
+                    access_token: token,
+                    // limit: 50,
+                })
+                setFavouritedChats(fav)
+                AppState.favouritedChats = fav
+            } catch (e) {
+                tipError(e, '刷新对话列表失败')
+            } finally {
+                setLoadingAll(false)
+                setLoadingRecent(false)
+                setLoadingFavourited(false)
+            }
+        }
+        const onUpdate = async (mPackage: Package) => {
+            if (mPackage.method_id === Methods.Update_My_Chats_Event) {
+                await refresh()
+            }
+        }
+        ClientManager.client.addOnReceiveListener(onUpdate)
+        refresh()
+        return () => ClientManager.client.removeOnReceiveListener(onUpdate)
+    }, [profile?.id])
     // profile 加载完成后触发
 
     const addFavouriteChatDialogRef = React.useRef<Dialog>(null)
@@ -175,31 +165,17 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 placeholder="输入对话标识符 / ID 或用户名 / ID"
                 variant="outlined"
                 ref={addFavouriteChatInputRef}
-                style={{ width: '100%', marginBottom: '16px' }}
+                style={{ width: '100%' }}
                 clearable>
                 <mdui-button-icon slot="end-icon" icon="add" onClick={async () => {
                     try {
-                        let chat_id
-                        try {
-                            let user_id
-                            try {
-                                user_id = await UserApi.getUserIdByUsername(ClientManager.client, {
-                                    access_token: ClientManager.getActiveUserSession().token,
-                                    username: addFavouriteChatInputRef.current!.value,
-                                })
-                            } catch (e) {
-                                user_id = addFavouriteChatInputRef.current!.value
-                            }
-                            chat_id = await ChatApi.getOrCreatePrivateChat(ClientManager.client, {
-                                access_token: ClientManager.getActiveUserSession().token,
-                                target_user_id: user_id,
-                            })
-                        } catch (e) {
-                            chat_id = addFavouriteChatInputRef.current!.value
-                        }
+                        const chat_id = await ChatApi.resolveChatIdentifier(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token,
+                            identifier: addFavouriteChatInputRef.current!.value,
+                        })
                         await ChatApi.setChatFavourited(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token,
-                            chat_id: chat_id,
+                            chat_id,
                             favourited: true,
                         })
 
@@ -270,11 +246,11 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 }}>
                     搜索对话
                 </mdui-list-item>
-                <mdui-list-item rounded icon="refresh" onClick={async () => {
+                {/* <mdui-list-item rounded icon="refresh" onClick={async () => {
                     setRefreshTime(Date.now())
                 }}>
                     刷新列表
-                </mdui-list-item>
+                </mdui-list-item> */}
                 <mdui-list-item rounded icon="add" onClick={() => {
                     addFavouriteChatDialogRef.current!.open = true
                 }}>

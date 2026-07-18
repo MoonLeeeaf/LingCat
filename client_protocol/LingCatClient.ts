@@ -94,6 +94,7 @@ export default class LingCatClient {
             client.addEventListener('close', () => {
                 client.close()
                 delete this.client
+                on_package_listeners.splice(0, on_package_listeners.length)
                 this.init()
             })
 

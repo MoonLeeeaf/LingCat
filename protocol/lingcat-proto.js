@@ -808,6 +808,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {number|null} [lastMessageId] IChat lastMessageId
              * @property {number|Long|null} [lastMessageTime] IChat lastMessageTime
              * @property {string|null} [description] IChat description
+             * @property {string|null} [lastMessageText] IChat lastMessageText
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -911,6 +912,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             IChat.prototype.description = null;
 
+            /**
+             * IChat lastMessageText.
+             * @member {string|null|undefined} lastMessageText
+             * @memberof lingcat.classes.IChat
+             * @instance
+             */
+            IChat.prototype.lastMessageText = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -935,6 +944,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(IChat.prototype, "_description", {
                 get: $util.oneOfGetter($oneOfFields = ["description"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IChat.prototype, "_lastMessageText", {
+                get: $util.oneOfGetter($oneOfFields = ["lastMessageText"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -988,6 +1003,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.lastMessageTime);
                 if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
                     writer.uint32(/* id 9, wireType 2 =*/74).string(message.description);
+                if (message.lastMessageText != null && $Object.hasOwnProperty.call(message, "lastMessageText"))
+                    writer.uint32(/* id 10, wireType 2 =*/82).string(message.lastMessageText);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -1108,6 +1125,13 @@ export const lingcat = $root.lingcat = (() => {
                             message._description = "description";
                             continue;
                         }
+                    case 10: {
+                            if (wireType !== 2)
+                                break;
+                            message.lastMessageText = reader.stringVerify();
+                            message._lastMessageText = "lastMessageText";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -1187,6 +1211,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.description))
                         return "description: string expected";
                 }
+                if (message.lastMessageText != null && $Object.hasOwnProperty.call(message, "lastMessageText")) {
+                    properties._lastMessageText = 1;
+                    if (!$util.isString(message.lastMessageText))
+                        return "lastMessageText: string expected";
+                }
                 return null;
             };
 
@@ -1238,6 +1267,8 @@ export const lingcat = $root.lingcat = (() => {
                             message.lastMessageTime = new $util.LongBits(object.lastMessageTime.low >>> 0, object.lastMessageTime.high >>> 0).toNumber(true);
                 if (object.description != null)
                     message.description = $String(object.description);
+                if (object.lastMessageText != null)
+                    message.lastMessageText = $String(object.lastMessageText);
                 return message;
             };
 
@@ -1292,6 +1323,8 @@ export const lingcat = $root.lingcat = (() => {
                         object.lastMessageTime = options.longs === $String ? $util.Long.prototype.toString.call(message.lastMessageTime) : options.longs === $Number ? new $util.LongBits(message.lastMessageTime.low >>> 0, message.lastMessageTime.high >>> 0).toNumber(true) : message.lastMessageTime;
                 if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
                     object.description = message.description;
+                if (message.lastMessageText != null && $Object.hasOwnProperty.call(message, "lastMessageText"))
+                    object.lastMessageText = message.lastMessageText;
                 return object;
             };
 
@@ -14647,6 +14680,775 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return Get_User_Id_By_Username_Response;
+        })();
+
+        methods.Resolve_Chat_Identifier_Request = (function() {
+
+            /**
+             * Properties of a Resolve_Chat_Identifier_Request.
+             * @typedef {Object} lingcat.methods.Resolve_Chat_Identifier_Request.$Properties
+             * @property {string|null} [accessToken] Resolve_Chat_Identifier_Request accessToken
+             * @property {string|null} [identifier] Resolve_Chat_Identifier_Request identifier
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Resolve_Chat_Identifier_Request.
+             * @memberof lingcat.methods
+             * @interface IResolve_Chat_Identifier_Request
+             * @augments lingcat.methods.Resolve_Chat_Identifier_Request.$Properties
+             * @deprecated Use lingcat.methods.Resolve_Chat_Identifier_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Resolve_Chat_Identifier_Request.
+             * @typedef {lingcat.methods.Resolve_Chat_Identifier_Request.$Properties} lingcat.methods.Resolve_Chat_Identifier_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Resolve_Chat_Identifier_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Resolve_Chat_Identifier_Request.
+             * @constructor
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Resolve_Chat_Identifier_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Resolve_Chat_Identifier_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @instance
+             */
+            Resolve_Chat_Identifier_Request.prototype.accessToken = "";
+
+            /**
+             * Resolve_Chat_Identifier_Request identifier.
+             * @member {string} identifier
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @instance
+             */
+            Resolve_Chat_Identifier_Request.prototype.identifier = "";
+
+            /**
+             * Creates a new Resolve_Chat_Identifier_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Request} Resolve_Chat_Identifier_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Resolve_Chat_Identifier_Request.$Shape): lingcat.methods.Resolve_Chat_Identifier_Request & lingcat.methods.Resolve_Chat_Identifier_Request.$Shape;
+             *   (properties?: lingcat.methods.Resolve_Chat_Identifier_Request.$Properties): lingcat.methods.Resolve_Chat_Identifier_Request;
+             * }}
+             */
+            Resolve_Chat_Identifier_Request.create = function(properties) {
+                return new Resolve_Chat_Identifier_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Resolve_Chat_Identifier_Request message. Does not implicitly {@link lingcat.methods.Resolve_Chat_Identifier_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Request.$Properties} message Resolve_Chat_Identifier_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Resolve_Chat_Identifier_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.identifier != null && $Object.hasOwnProperty.call(message, "identifier") && message.identifier !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.identifier);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Resolve_Chat_Identifier_Request message, length delimited. Does not implicitly {@link lingcat.methods.Resolve_Chat_Identifier_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Request.$Properties} message Resolve_Chat_Identifier_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Resolve_Chat_Identifier_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Resolve_Chat_Identifier_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Request & lingcat.methods.Resolve_Chat_Identifier_Request.$Shape} Resolve_Chat_Identifier_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Resolve_Chat_Identifier_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.identifier = value;
+                            else
+                                delete message.identifier;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Resolve_Chat_Identifier_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Request & lingcat.methods.Resolve_Chat_Identifier_Request.$Shape} Resolve_Chat_Identifier_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Resolve_Chat_Identifier_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Resolve_Chat_Identifier_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Resolve_Chat_Identifier_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.identifier != null && $Object.hasOwnProperty.call(message, "identifier"))
+                    if (!$util.isString(message.identifier))
+                        return "identifier: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Resolve_Chat_Identifier_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Request} Resolve_Chat_Identifier_Request
+             */
+            Resolve_Chat_Identifier_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Resolve_Chat_Identifier_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Resolve_Chat_Identifier_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Resolve_Chat_Identifier_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.identifier != null)
+                    if (typeof object.identifier !== "string" || object.identifier.length)
+                        message.identifier = $String(object.identifier);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Resolve_Chat_Identifier_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Request} message Resolve_Chat_Identifier_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Resolve_Chat_Identifier_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.identifier = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.identifier != null && $Object.hasOwnProperty.call(message, "identifier"))
+                    object.identifier = message.identifier;
+                return object;
+            };
+
+            /**
+             * Converts this Resolve_Chat_Identifier_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Resolve_Chat_Identifier_Request.prototype.toJSON = function() {
+                return Resolve_Chat_Identifier_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Resolve_Chat_Identifier_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Resolve_Chat_Identifier_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Resolve_Chat_Identifier_Request";
+            };
+
+            return Resolve_Chat_Identifier_Request;
+        })();
+
+        methods.Resolve_Chat_Identifier_Response = (function() {
+
+            /**
+             * Properties of a Resolve_Chat_Identifier_Response.
+             * @typedef {Object} lingcat.methods.Resolve_Chat_Identifier_Response.$Properties
+             * @property {string|null} [chatId] Resolve_Chat_Identifier_Response chatId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Resolve_Chat_Identifier_Response.
+             * @memberof lingcat.methods
+             * @interface IResolve_Chat_Identifier_Response
+             * @augments lingcat.methods.Resolve_Chat_Identifier_Response.$Properties
+             * @deprecated Use lingcat.methods.Resolve_Chat_Identifier_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Resolve_Chat_Identifier_Response.
+             * @typedef {lingcat.methods.Resolve_Chat_Identifier_Response.$Properties} lingcat.methods.Resolve_Chat_Identifier_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Resolve_Chat_Identifier_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Resolve_Chat_Identifier_Response.
+             * @constructor
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Resolve_Chat_Identifier_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Resolve_Chat_Identifier_Response chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @instance
+             */
+            Resolve_Chat_Identifier_Response.prototype.chatId = "";
+
+            /**
+             * Creates a new Resolve_Chat_Identifier_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Response} Resolve_Chat_Identifier_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Resolve_Chat_Identifier_Response.$Shape): lingcat.methods.Resolve_Chat_Identifier_Response & lingcat.methods.Resolve_Chat_Identifier_Response.$Shape;
+             *   (properties?: lingcat.methods.Resolve_Chat_Identifier_Response.$Properties): lingcat.methods.Resolve_Chat_Identifier_Response;
+             * }}
+             */
+            Resolve_Chat_Identifier_Response.create = function(properties) {
+                return new Resolve_Chat_Identifier_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Resolve_Chat_Identifier_Response message. Does not implicitly {@link lingcat.methods.Resolve_Chat_Identifier_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Response.$Properties} message Resolve_Chat_Identifier_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Resolve_Chat_Identifier_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.chatId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Resolve_Chat_Identifier_Response message, length delimited. Does not implicitly {@link lingcat.methods.Resolve_Chat_Identifier_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Response.$Properties} message Resolve_Chat_Identifier_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Resolve_Chat_Identifier_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Resolve_Chat_Identifier_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Response & lingcat.methods.Resolve_Chat_Identifier_Response.$Shape} Resolve_Chat_Identifier_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Resolve_Chat_Identifier_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Resolve_Chat_Identifier_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Response & lingcat.methods.Resolve_Chat_Identifier_Response.$Shape} Resolve_Chat_Identifier_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Resolve_Chat_Identifier_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Resolve_Chat_Identifier_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Resolve_Chat_Identifier_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Resolve_Chat_Identifier_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Resolve_Chat_Identifier_Response} Resolve_Chat_Identifier_Response
+             */
+            Resolve_Chat_Identifier_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Resolve_Chat_Identifier_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Resolve_Chat_Identifier_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Resolve_Chat_Identifier_Response();
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Resolve_Chat_Identifier_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {lingcat.methods.Resolve_Chat_Identifier_Response} message Resolve_Chat_Identifier_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Resolve_Chat_Identifier_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.chatId = "";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                return object;
+            };
+
+            /**
+             * Converts this Resolve_Chat_Identifier_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Resolve_Chat_Identifier_Response.prototype.toJSON = function() {
+                return Resolve_Chat_Identifier_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Resolve_Chat_Identifier_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Resolve_Chat_Identifier_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Resolve_Chat_Identifier_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Resolve_Chat_Identifier_Response";
+            };
+
+            return Resolve_Chat_Identifier_Response;
+        })();
+
+        methods.Update_My_Chats_Event = (function() {
+
+            /**
+             * Properties of an Update_My_Chats_Event.
+             * @typedef {Object} lingcat.methods.Update_My_Chats_Event.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Update_My_Chats_Event.
+             * @memberof lingcat.methods
+             * @interface IUpdate_My_Chats_Event
+             * @augments lingcat.methods.Update_My_Chats_Event.$Properties
+             * @deprecated Use lingcat.methods.Update_My_Chats_Event.$Properties instead.
+             */
+
+            /**
+             * Shape of an Update_My_Chats_Event.
+             * @typedef {lingcat.methods.Update_My_Chats_Event.$Properties} lingcat.methods.Update_My_Chats_Event.$Shape
+             */
+
+            /**
+             * Constructs a new Update_My_Chats_Event.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Update_My_Chats_Event.
+             * @constructor
+             * @param {lingcat.methods.Update_My_Chats_Event.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Update_My_Chats_Event = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Update_My_Chats_Event instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {lingcat.methods.Update_My_Chats_Event.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_My_Chats_Event} Update_My_Chats_Event instance
+             * @type {{
+             *   (properties: lingcat.methods.Update_My_Chats_Event.$Shape): lingcat.methods.Update_My_Chats_Event & lingcat.methods.Update_My_Chats_Event.$Shape;
+             *   (properties?: lingcat.methods.Update_My_Chats_Event.$Properties): lingcat.methods.Update_My_Chats_Event;
+             * }}
+             */
+            Update_My_Chats_Event.create = function(properties) {
+                return new Update_My_Chats_Event(properties);
+            };
+
+            /**
+             * Encodes the specified Update_My_Chats_Event message. Does not implicitly {@link lingcat.methods.Update_My_Chats_Event.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {lingcat.methods.Update_My_Chats_Event.$Properties} message Update_My_Chats_Event message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_My_Chats_Event.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Update_My_Chats_Event message, length delimited. Does not implicitly {@link lingcat.methods.Update_My_Chats_Event.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {lingcat.methods.Update_My_Chats_Event.$Properties} message Update_My_Chats_Event message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_My_Chats_Event.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Update_My_Chats_Event message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_My_Chats_Event & lingcat.methods.Update_My_Chats_Event.$Shape} Update_My_Chats_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_My_Chats_Event.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Chats_Event();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Update_My_Chats_Event message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_My_Chats_Event & lingcat.methods.Update_My_Chats_Event.$Shape} Update_My_Chats_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_My_Chats_Event.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Update_My_Chats_Event message.
+             * @function verify
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Update_My_Chats_Event.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates an Update_My_Chats_Event message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Update_My_Chats_Event} Update_My_Chats_Event
+             */
+            Update_My_Chats_Event.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_My_Chats_Event)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Update_My_Chats_Event: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Update_My_Chats_Event();
+            };
+
+            /**
+             * Creates a plain object from an Update_My_Chats_Event message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {lingcat.methods.Update_My_Chats_Event} message Update_My_Chats_Event
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Update_My_Chats_Event.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Update_My_Chats_Event to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Update_My_Chats_Event.prototype.toJSON = function() {
+                return Update_My_Chats_Event.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Update_My_Chats_Event
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Update_My_Chats_Event
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Update_My_Chats_Event.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Update_My_Chats_Event";
+            };
+
+            return Update_My_Chats_Event;
         })();
 
         return methods;

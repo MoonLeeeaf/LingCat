@@ -216,3 +216,14 @@ message Get_User_Id_By_Username_Request {
 message Get_User_Id_By_Username_Response {
     string user_id = 1;
 }
+
+message Resolve_Chat_Identifier_Request {
+    string access_token = 1;
+    string identifier = 2;
+}
+
+message Resolve_Chat_Identifier_Response {
+    string chat_id = 1;
+}
+
+message Update_My_Chats_Event {}

@@ -4,6 +4,7 @@ import { db } from "./db.ts"
 import { IChat } from "lingcat-protocol"
 import ChatDataBase from "./ChatDataBase.ts"
 import UserDataBase from "./UserDataBase.ts"
+import MessageDataBase from "./MessageDataBase.ts"
 
 interface IUserChatLink {
     seq: number
@@ -32,15 +33,20 @@ export default class UserChatLinker {
         offset?: number
     }) {
         const { limit = 20, offset = 0 } = options
-        const query = db(tableName + ' as ucl')
+        const query = await db(tableName + ' as ucl')
             .join('Chats as c', 'ucl.chat_id', 'c.id')
+            .leftJoin('Messages as m', function () {
+                this.on('c.last_message_id', '=', 'm.id')
+                    .andOn('c.id', '=', 'm.chat_id');
+            })
             .where('ucl.user_id', user_id)
             // 按时间从新到旧排列
             .orderBy('c.last_message_time', 'desc')
-            .select('c.*')
+            .select('c.*', 'm.text as last_message_text')
             .limit(limit)
             .offset(offset)
-        return (await query as IChat[])
+        console.log(query)
+        return (query as IChat[])
     }
     static async queryFavouriteChatsOfUser(user_id: string, options: {
         limit?: number
@@ -49,11 +55,15 @@ export default class UserChatLinker {
         const { limit = 20, offset = 0 } = options
         const query = db(tableName + ' as ucl')
             .join('Chats as c', 'ucl.chat_id', 'c.id')
+            .leftJoin('Messages as m', function () {
+                this.on('c.last_message_id', '=', 'm.id')
+                    .andOn('c.id', '=', 'm.chat_id');
+            })
             .where('ucl.user_id', user_id)
             .andWhere('ucl.favorited_by_user', true)
             // 按时间从新到旧排列
             .orderBy('c.last_message_time', 'desc')
-            .select('c.*')
+            .select('c.*', 'm.text as last_message_text')
             .limit(limit)
             .offset(offset)
         return (await query as IChat[])
@@ -66,6 +76,10 @@ export default class UserChatLinker {
         // 1. 搜索群聊（匹配 title 或 chat_unique）
         const groupChats = await db('Chats as c')
             .join('UserChatLinker as ucl', 'c.id', 'ucl.chat_id')
+            .leftJoin('Messages as m', function () {
+                this.on('c.last_message_id', '=', 'm.id')
+                    .andOn('c.id', '=', 'm.chat_id');
+            })
             .where('ucl.user_id', user_id)
             .andWhere('c.type', 'group')
             .andWhere(function () {
@@ -73,7 +87,7 @@ export default class UserChatLinker {
                     .orWhere('c.chat_unique', 'like', kw)
                     .orWhere('c.id', 'like', kw)
             })
-            .select('c.*')
+            .select('c.*', 'm.text as last_message_text')
 
         // 2. 搜索私聊（通过 UserChatLinker 找到对方，再匹配对方昵称/用户名）
         const privateChats = await db('Chats as c')
@@ -83,6 +97,10 @@ export default class UserChatLinker {
             .join('UserChatLinker as ucl2', 'c.id', 'ucl2.chat_id')
             // 对方用户信息
             .join('Users as u', 'u.id', 'ucl2.user_id')
+            .leftJoin('Messages as m', function () {
+                this.on('c.last_message_id', '=', 'm.id')
+                    .andOn('c.id', '=', 'm.chat_id');
+            })
             .where('ucl1.user_id', user_id)
             // 排除自己
             .andWhere('ucl2.user_id', '!=', user_id)
@@ -92,7 +110,7 @@ export default class UserChatLinker {
                     .orWhere('u.username', 'like', kw)
                     .orWhere('u.id', 'like', kw)
             })
-            .select('c.*')
+            .select('c.*', 'm.text as last_message_text')
 
         const currentUser = await UserDataBase.queryUserById(user_id)!
         let selfChat: IChat | undefined
@@ -110,6 +128,7 @@ export default class UserChatLinker {
                 selfChat = (await ChatDataBase.queryChatById(selfChatId))
                 selfChat!.avatar_file_hash = currentUser?.avatar_file_hash
                 selfChat!.title = currentUser?.nickname
+                selfChat!.last_message_text = (await MessageDataBase.getMessages(selfChatId, { limit: 1 }))[0].text
             }
         }
 

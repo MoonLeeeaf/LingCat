@@ -19,6 +19,7 @@ async function IChatToProtoChat(c: IChat, user_id?: string) {
         lastMessageId: c.last_message_id,
         lastMessageTime: c.last_message_time,
         description: c.description,
+        lastMessageText: c.last_message_text,
     }
     if (c.type == 'private' && user_id) {
         const anotherUser = await UserDataBase.queryUserById((await UserChatLinker.getAnotherUserInPrivateChat(c.id, user_id))!)
@@ -60,19 +61,26 @@ export default class ChatApi {
                 })
 
                     ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => [
-                        Object.values(clients_emiter[v]).forEach((func) => func(Package.encode({
-                            method_id: Methods.Receive_Chat_Message_Event,
-                            flags: 0,
-                            data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
-                                msg: {
-                                    text: data.text,
-                                    chatId: data.chatId,
-                                    senderUserId: user_id,
-                                    time: Date.now(),
-                                    id: msg_id,
-                                }
-                            }).finish()
-                        })))
+                        Object.values(clients_emiter[v] || []).forEach((func) => {
+                            func(Package.encode({
+                                method_id: Methods.Receive_Chat_Message_Event,
+                                flags: 0,
+                                data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
+                                    msg: {
+                                        text: data.text,
+                                        chatId: data.chatId,
+                                        senderUserId: user_id,
+                                        time: Date.now(),
+                                        id: msg_id,
+                                    }
+                                }).finish()
+                            }))
+                            setTimeout(() => func(Package.encode({
+                                method_id: Methods.Update_My_Chats_Event,
+                                flags: 0,
+                                data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
+                            })), 50)
+                        })
                     ])
 
                 sendPackage(Package.encode({
@@ -104,7 +112,6 @@ export default class ChatApi {
                 }
                 if (await UserChatLinker.isUserChatLinked(user_id, data.chatId))
                     hideForNonMember.settings = chat.settings
-
 
                 sendPackage(Package.encode({
                     method_id: Methods.Query_Chat_Info_Response,
@@ -273,6 +280,64 @@ export default class ChatApi {
                     flags: 0,
                     data: LingCatProto.methods.Search_My_Chats_Response.encode({
                         chats: await Promise.all(limited.map((c) => IChatToProtoChat(c, user_id))),
+                    }).finish()
+                }))
+                break
+            }
+            case Methods.Resolve_Chat_Identifier_Request: {
+                const data = LingCatProto.methods.Resolve_Chat_Identifier_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const identifier = data.identifier.trim()
+                if (!identifier) return sendError(sendPackage, mPackage.method_id, 'Identifier cannot be empty', Code.Bad_Request)
+            
+                let chat_id: string | null = null
+            
+                // 1. 尝试作为 chat_id 查找
+                let chat = await ChatDataBase.queryChatById(identifier)
+                if (chat) {
+                    chat_id = chat.id
+                }
+            
+                // 2. 如果没找到，尝试作为 chat_unique（群号）查找
+                if (!chat_id) {
+                    chat = await ChatDataBase.queryChatByUnique(identifier);
+                    if (chat) {
+                        chat_id = chat.id;
+                    }
+                }
+            
+                // 3. 如果仍没找到，尝试作为 username 或 user_id 处理（生成私聊）
+                if (!chat_id) {
+                    let targetUser = await UserDataBase.queryUserByUserName(identifier);
+                    if (!targetUser) {
+                        // 尝试作为 user_id 查找
+                        targetUser = await UserDataBase.queryUserById(identifier);
+                    }
+                    if (targetUser) {
+                        if (targetUser.id == user_id) {
+                            chat_id = await ChatDataBase.createOrGetPrivate({ a: user_id, b: user_id })
+                        } else {
+                            chat_id = await ChatDataBase.createOrGetPrivate({ a: user_id, b: targetUser.id })
+                        }
+                        // 确保双方都在 UserChatLinker 中
+                        await UserChatLinker.linkUserAndChat(user_id, chat_id)
+                        await UserChatLinker.linkUserAndChat(targetUser.id, chat_id)
+                    }
+                }
+            
+                if (!chat_id) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot resolve identifier to any chat', Code.Not_Found);
+                }
+            
+                if (!await UserChatLinker.isUserChatLinked(user_id, chat_id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
+                }
+            
+                sendPackage(Package.encode({
+                    method_id: Methods.Resolve_Chat_Identifier_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Resolve_Chat_Identifier_Response.encode({
+                        chatId: chat_id,
                     }).finish()
                 }))
                 break

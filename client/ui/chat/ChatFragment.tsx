@@ -16,6 +16,8 @@ import showSnackbar from "../showSnackbar.ts"
 import useEventListener from "../useEventListener.ts"
 import ImageViewerDialog from "../ImageViewerDialog.tsx"
 import VideoViewerDialog from "../VideoViewerDialog.tsx"
+import MduiPatchedTextAreaElement from "../MduiPatchedTextAreaElement.ts"
+import escapeHtml from "../escapeHtml.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -272,6 +274,11 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 chat_id: chat.id,
                 text,
             })
+            Object.keys(cachedFiles.current).forEach((k) => delete cachedFiles.current[k])
+            Object.keys(cachedFileUrls.current).forEach((k) => {
+                URL.revokeObjectURL(cachedFileUrls.current[k])
+                delete cachedFiles.current[k]
+            })
             inputRef.current!.value = ''
         } catch (e) {
             tipError(e, '发送失败')
@@ -308,11 +315,25 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
     const attachFileInputRef = React.useRef<HTMLInputElement>(null)
     const cachedFiles = React.useRef<{ [fileName: string]: ArrayBuffer }>({})
+    const cachedFileUrls = React.useRef<{ [fileName: string]: string }>({})
     const cachedFileNamesCount = React.useRef<{ [fileName: string]: number }>({})
 
+    /* function insertAttachment(text: string, type: 'image' | 'video' | 'file', src: string, alt?: string) {
+        const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as MduiPatchedTextAreaElement
+        input.focus()
+        type == 'image' && input.insertHtml(`
+            <span contenteditable="false" style="display:inline-block;"><mdui-card style="max-width: 10%; max-height: 10%"><img src="${src}" style="display: block; width: 100%; height: 100%" /><span style="display:none;">${text}</span></mdui-card>\u200B</span>
+        `.trim())
+        type == 'video' && input.insertHtml(`
+            <span contenteditable="false" style="display:inline-block;"><mdui-card style="max-width: 10%; max-height: 10%"><video src="${src}" style="display: block; width: 100%; height: 100%" /><span style="display:none;">${text}</span></mdui-card>\u200B</span>
+        `.trim())
+        type == 'file' && input.insertHtml(`
+            <span contenteditable="false" style="display:inline-block;"><mdui-card><span style="padding: 10px">${alt}</span></mdui-card>\u200B</span>
+        `.trim())
+    } */
     function insertText(text: string) {
-        const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as HTMLTextAreaElement
-        inputRef.current!.value = input.value!.substring(0, input.selectionStart as number) + text + input.value!.substring(input.selectionEnd as number, input.value.length)
+        const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as MduiPatchedTextAreaElement
+        input.insertHtml(escapeHtml(text))
     }
     async function addFile(type: string, name_: string, data: Blob | Response) {
         let name = name_
@@ -320,8 +341,10 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
             name = name_ + '_' + cachedFileNamesCount.current[name]
             cachedFileNamesCount.current[name]++
         }
-
-        cachedFiles.current[name] = await data.arrayBuffer()
+        const blob = data instanceof Blob ? data : await (data as Response).blob()
+        cachedFiles.current[name] = await blob.arrayBuffer()
+        const src = URL.createObjectURL(blob)
+        cachedFileUrls.current[name] = src
         cachedFileNamesCount.current[name] = 1
         if (type.startsWith('image/'))
             insertText(`![图片](${name})`)
@@ -329,6 +352,12 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
             insertText(`![Video=${name}](${name})`)
         else
             insertText(`![File=${name}](${name})`)
+        /* if (type.startsWith('image/'))
+            insertAttachment(`![图片](${name})`, 'image', src)
+        else if (type.startsWith('video/'))
+            insertAttachment(`![Video=${name}](${name})`, 'video', src)
+        else
+            insertAttachment(`![File=${name}](${name})`, 'file', src, name) */
     }
 
     useEventListener(attachFileInputRef, 'change', (_e) => {
@@ -403,6 +432,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                         }
                     }}
                     onDrop={(e) => {
+                        e.preventDefault()
                         function getFileNameOrRandom(urlString: string) {
                             const url = new URL(urlString)
                             let filename = url.pathname.substring(url.pathname.lastIndexOf('/') + 1).trim()
@@ -420,16 +450,20 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                                             // 即便是 no-cors 還是殘廢, 因此暫時沒有什麽想法
                                             const re = await fetch(url)
                                             const type = re.headers.get("Content-Type")
-                                            if (type && re.ok)
+                                            if (type && re.ok) {
                                                 addFile(type as string, getFileNameOrRandom(url), re)
+                                            }
                                         } catch (e) {
                                             showSnackbar({
                                                 message: '无法解析链接: ' + (e as Error).message,
                                             })
                                         }
                                     })
+                                } else if (item.type == 'text/plain') {
+                                    item.getAsString((text) => {
+                                        insertText(text + ' ')
+                                    })
                                 } else if (item.kind == 'file') {
-                                    e.preventDefault()
                                     const file = item.getAsFile() as File
                                     addFile(item.type, file.name, file)
                                 }
@@ -443,5 +477,5 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
                 </mdui-text-field>
             </MessageContainer>
         </div>
-    </div>
+    </div >
 }

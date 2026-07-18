@@ -2,6 +2,8 @@ import Markdown, { ReactRenderer } from "marked-react"
 import ReloadableImage from "../ReloadableImage"
 import React from "react"
 import { Dropdown } from "mdui"
+import useEventListener from "../useEventListener.ts"
+import isMobileUI from "../isMobileUI.ts"
 
 type Render = Partial<ReactRenderer>
 
@@ -88,8 +90,15 @@ export default function Message({
     const longPressTimer = React.useRef<NodeJS.Timeout | null>(null)
 
     const dropDownRef = React.useRef<Dropdown>(null)
-    function onMessageMenu() {
-        dropDownRef.current!.open = true
+    useEventListener(dropDownRef, 'closed', () => {
+        setDropDownOpen(false)
+    })
+
+    const [isDropDownOpen, setDropDownOpen_] = React.useState(false)
+
+    function setDropDownOpen(open: boolean) {
+        setDropDownOpen_(open)
+
     }
 
     return isSystem
@@ -114,6 +123,22 @@ export default function Message({
             </mdui-card>
         </div>
         : <div
+            slot="trigger"
+            onContextMenu={(e) => {
+                if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+                if (isMobileUI()) return
+                e.preventDefault()
+                setDropDownOpen(!isDropDownOpen)
+            }}
+            onClick={(e) => {
+                if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+                if (!isMobileUI()) {
+                    isDropDownOpen && setDropDownOpen(false)
+                    return
+                }
+                e.preventDefault()
+                setDropDownOpen(!isDropDownOpen)
+            }}
             style={{
                 display: 'flex',
                 justifyContent: isAtRight ? "flex-end" : "flex-start",
@@ -161,40 +186,15 @@ export default function Message({
                     }
                 </div>
             }
-            <mdui-dropdown ref={dropDownRef} trigger="manual">
+            <mdui-dropdown ref={dropDownRef} open={isDropDownOpen} trigger="manual">
                 <mdui-card slot="trigger"
                     variant="elevated"
                     style={{
-                        maxWidth: (window.matchMedia('(pointer: fine)') && "50%") || (window.matchMedia('(pointer: coarse)') && "77%"),
+                        maxWidth: isMobileUI() ? '77%' : '50%',
                         minWidth: "0%",
                         [isAtRight ? "marginRight" : "marginLeft"]: "55px",
                         marginTop: hideSender ? '5px' : "-5px",
                         alignSelf: isAtRight ? "flex-end" : "flex-start",
-                    }}
-                    onContextMenu={(e: React.MouseEvent) => {
-                        e.preventDefault() // 阻止浏览器默认右键菜单
-                        onMessageMenu?.()
-                    }}
-                    // 长按（移动端）
-                    onTouchStart={(e: React.TouchEvent) => {
-                        // 防止与滚动冲突：如果触摸目标是滚动容器，可加判断，但这里简单防误触
-                        longPressTimer.current = setTimeout(() => {
-                            setIsLongPress(true)
-                            onMessageMenu?.()
-                            // 可选：震动反馈
-                            // navigator.vibrate?.(10)
-                        }, 600) // 600ms 长按
-                    }}
-                    onTouchEnd={() => {
-                        // 如果已经触发了长按，不再触发点击
-                        if (isLongPress) {
-                            setIsLongPress(false)
-                        }
-                        clearTimeout(longPressTimer.current!)
-                    }}
-                    onTouchMove={() => {
-                        // 触摸滑动时取消长按（防止滚动时误触）
-                        clearTimeout(longPressTimer.current!)
                     }}>
                     <span
                         id="msg"
@@ -215,7 +215,6 @@ export default function Message({
                 time && <span style={{
                     padding: '10px',
                     fontSize: 'small',
-                    maxWidth: (window.matchMedia('(pointer: fine)') && "50%") || (window.matchMedia('(pointer: coarse)') && "77%"),
                     minWidth: "0%",
                     [isAtRight ? "marginRight" : "marginLeft"]: "55px",
                     marginTop: '5px',
@@ -230,4 +229,5 @@ export default function Message({
                 </span>
             }
         </div>
+
 }

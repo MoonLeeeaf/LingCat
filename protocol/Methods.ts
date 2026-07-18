@@ -42,9 +42,15 @@ export default class Methods {
     static Set_Chat_Favourited_Response = 0x42
     static Get_User_Id_By_Username_Request = 0x43
     static Get_User_Id_By_Username_Response = 0x44
+    static Create_Group_Request = 0x45
+    static Create_Group_Response = 0x46
+    static Set_Chat_Admin_Request = 0x47
+    static Set_Chat_Admin_Response = 0x48
+    static Resolve_Chat_Identifier_Request = 0x49
+    static Resolve_Chat_Identifier_Response = 0x50
 
     static Receive_Chat_Message_Event = 0x31
-    static Reserved_Event = 0x32
+    static Update_My_Chats_Event = 0x32
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

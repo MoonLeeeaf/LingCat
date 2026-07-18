@@ -12,6 +12,7 @@ function protoChatToIChat(chat: LingCatProto.classes.IChat.$Properties) {
         settings: chat.settings,
         last_message_id: chat.lastMessageId,
         last_message_time: chat.lastMessageTime,
+        last_message_text: chat.lastMessageText,
         description: chat.description,
     } as IChat
 }
@@ -269,5 +270,27 @@ export default class ChatApi {
             }).finish(),
             timeout,
         })).data).chats.map((v) => protoChatToIChat(v))
+    }
+    static async resolveChatIdentifier(client: LingCatClient, {
+        access_token,
+        identifier,
+        timeout,
+    }: {
+        access_token: string
+        identifier: string
+        timeout?: number
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Resolve_Chat_Identifier_Request,
+            data: LingCatProto.methods.Resolve_Chat_Identifier_Request.encode({
+                accessToken: access_token,
+                identifier,
+            }).finish(),
+            timeout,
+        });
+        return decodeOrThrow<LingCatProto.methods.Resolve_Chat_Identifier_Response>(
+            LingCatProto.methods.Resolve_Chat_Identifier_Response,
+            response.data
+        ).chatId
     }
 }

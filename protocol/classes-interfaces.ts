@@ -18,6 +18,7 @@ export interface IChat {
     settings: string
     last_message_id: number
     last_message_time: number
+    last_message_text?: string
     // 私聊拿到的是对方的 description
     description?: string | null
 }
