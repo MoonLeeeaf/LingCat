@@ -7,13 +7,13 @@
         "./client_protocol",
         "./client",
         "./test",
-        "./mdui_patched",
         "./shared"
     ],
     "scripts": {
         "start": "npm run build-client && npm run server",
         "server": "npx tsx ./server/main.ts",
         "test": "node ./test/main.js",
+        "patch-mdui": "cp -r ./mdui_patched ./node_modules/mdui",
         "build-client": "cd client && npm run build",
         "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js --dts ./protocol/*.proto"
     },
