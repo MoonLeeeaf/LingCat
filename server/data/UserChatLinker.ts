@@ -37,7 +37,7 @@ export default class UserChatLinker {
             .join('Chats as c', 'ucl.chat_id', 'c.id')
             .leftJoin('Messages as m', function () {
                 this.on('c.last_message_id', '=', 'm.id')
-                    .andOn('c.id', '=', 'm.chat_id');
+                    .andOn('c.id', '=', 'm.chat_id')
             })
             .where('ucl.user_id', user_id)
             // 按时间从新到旧排列
@@ -45,7 +45,7 @@ export default class UserChatLinker {
             .select('c.*', 'm.text as last_message_text')
             .limit(limit)
             .offset(offset)
-        console.log(query)
+        // console.log(query)
         return (query as IChat[])
     }
     static async queryFavouriteChatsOfUser(user_id: string, options: {
@@ -53,11 +53,11 @@ export default class UserChatLinker {
         offset?: number
     }) {
         const { limit = 20, offset = 0 } = options
-        const query = db(tableName + ' as ucl')
+        const query = await db(tableName + ' as ucl')
             .join('Chats as c', 'ucl.chat_id', 'c.id')
             .leftJoin('Messages as m', function () {
                 this.on('c.last_message_id', '=', 'm.id')
-                    .andOn('c.id', '=', 'm.chat_id');
+                    .andOn('c.id', '=', 'm.chat_id')
             })
             .where('ucl.user_id', user_id)
             .andWhere('ucl.favorited_by_user', true)
@@ -66,7 +66,8 @@ export default class UserChatLinker {
             .select('c.*', 'm.text as last_message_text')
             .limit(limit)
             .offset(offset)
-        return (await query as IChat[])
+        // console.log(query)
+        return query as IChat[]
     }
     // DeepSeek
     static async searchChatsOfUser(user_id: string, keyword: string) {
