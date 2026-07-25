@@ -254,7 +254,7 @@ export default class ChatApi {
             case Methods.Set_Chat_Favourited_Request: {
                 const data = LingCatProto.methods.Set_Chat_Favourited_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
-                
+
                 if (!await ChatDataBase.queryChatById(data.chatId)) {
                     return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found);
                 }
@@ -289,15 +289,15 @@ export default class ChatApi {
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
                 const identifier = data.identifier.trim()
                 if (!identifier) return sendError(sendPackage, mPackage.method_id, 'Identifier cannot be empty', Code.Bad_Request)
-            
+
                 let chat_id: string | null = null
-            
+
                 // 1. 尝试作为 chat_id 查找
                 let chat = await ChatDataBase.queryChatById(identifier)
                 if (chat) {
                     chat_id = chat.id
                 }
-            
+
                 // 2. 如果没找到，尝试作为 chat_unique（群号）查找
                 if (!chat_id) {
                     chat = await ChatDataBase.queryChatByUnique(identifier);
@@ -305,7 +305,7 @@ export default class ChatApi {
                         chat_id = chat.id;
                     }
                 }
-            
+
                 // 3. 如果仍没找到，尝试作为 username 或 user_id 处理（生成私聊）
                 if (!chat_id) {
                     let targetUser = await UserDataBase.queryUserByUserName(identifier);
@@ -324,15 +324,15 @@ export default class ChatApi {
                         await UserChatLinker.linkUserAndChat(targetUser.id, chat_id)
                     }
                 }
-            
+
                 if (!chat_id) {
                     return sendError(sendPackage, mPackage.method_id, 'Cannot resolve identifier to any chat', Code.Not_Found);
                 }
-            
+
                 if (!await UserChatLinker.isUserChatLinked(user_id, chat_id)) {
                     return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
                 }
-            
+
                 sendPackage(Package.encode({
                     method_id: Methods.Resolve_Chat_Identifier_Response,
                     flags: 0,
@@ -341,6 +341,35 @@ export default class ChatApi {
                     }).finish()
                 }))
                 break
+            }
+            /**
+             * ===============================
+             *           创建群组
+             * ===============================
+             */
+            case Methods.Create_Group_Request: {
+                const data = LingCatProto.methods.Create_Group_Request.decode(mPackage.data);
+                const creator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id;
+
+                if (!data.title || data.title.trim() === '') {
+                    return sendError(sendPackage, mPackage.method_id, 'Group title cannot be empty', Code.Bad_Request);
+                }
+
+                const chat_id = await ChatDataBase.createGroup({
+                    title: data.title.trim(),
+                    unique: data.unique || undefined,
+                });
+
+                await UserChatLinker.linkUserAndChat(creator_id, chat_id);
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Create_Group_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Create_Group_Response.encode({
+                        chatId: chat_id,
+                    }).finish()
+                }));
+                break;
             }
             default: {
                 return false

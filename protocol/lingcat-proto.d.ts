@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from "protobufjs/minimal.js";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -6417,6 +6417,252 @@ export namespace lingcat {
 
             /** Shape of an Update_My_Chats_Event. */
             type $Shape = lingcat.methods.Update_My_Chats_Event.$Properties;
+        }
+
+        /**
+         * Properties of a Create_Group_Request.
+         * @deprecated Use lingcat.methods.Create_Group_Request.$Properties instead.
+         */
+        interface ICreate_Group_Request extends lingcat.methods.Create_Group_Request.$Properties {
+        }
+
+        /** Represents a Create_Group_Request. */
+        class Create_Group_Request {
+
+            /**
+             * Constructs a new Create_Group_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Create_Group_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Create_Group_Request accessToken. */
+            accessToken: string;
+
+            /** Create_Group_Request title. */
+            title: string;
+
+            /** Create_Group_Request unique. */
+            unique?: (string|null);
+
+            /**
+             * Creates a new Create_Group_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Create_Group_Request instance
+             */
+            static create(properties: lingcat.methods.Create_Group_Request.$Shape): lingcat.methods.Create_Group_Request & lingcat.methods.Create_Group_Request.$Shape;
+            static create(properties?: lingcat.methods.Create_Group_Request.$Properties): lingcat.methods.Create_Group_Request;
+
+            /**
+             * Encodes the specified Create_Group_Request message. Does not implicitly {@link lingcat.methods.Create_Group_Request.verify|verify} messages.
+             * @param message Create_Group_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Create_Group_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Create_Group_Request message, length delimited. Does not implicitly {@link lingcat.methods.Create_Group_Request.verify|verify} messages.
+             * @param message Create_Group_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Create_Group_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Create_Group_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Group_Request & lingcat.methods.Create_Group_Request.$Shape} Create_Group_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Create_Group_Request & lingcat.methods.Create_Group_Request.$Shape;
+
+            /**
+             * Decodes a Create_Group_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Group_Request & lingcat.methods.Create_Group_Request.$Shape} Create_Group_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Create_Group_Request & lingcat.methods.Create_Group_Request.$Shape;
+
+            /**
+             * Verifies a Create_Group_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Create_Group_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Create_Group_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Create_Group_Request;
+
+            /**
+             * Creates a plain object from a Create_Group_Request message. Also converts values to other types if specified.
+             * @param message Create_Group_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Create_Group_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Create_Group_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Create_Group_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Create_Group_Request {
+
+            /** Properties of a Create_Group_Request. */
+            interface $Properties {
+
+                /** Create_Group_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Create_Group_Request title */
+                title?: (string|null);
+
+                /** Create_Group_Request unique */
+                unique?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Create_Group_Request. */
+            type $Shape = lingcat.methods.Create_Group_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Create_Group_Response.
+         * @deprecated Use lingcat.methods.Create_Group_Response.$Properties instead.
+         */
+        interface ICreate_Group_Response extends lingcat.methods.Create_Group_Response.$Properties {
+        }
+
+        /** Represents a Create_Group_Response. */
+        class Create_Group_Response {
+
+            /**
+             * Constructs a new Create_Group_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Create_Group_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Create_Group_Response chatId. */
+            chatId: string;
+
+            /**
+             * Creates a new Create_Group_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Create_Group_Response instance
+             */
+            static create(properties: lingcat.methods.Create_Group_Response.$Shape): lingcat.methods.Create_Group_Response & lingcat.methods.Create_Group_Response.$Shape;
+            static create(properties?: lingcat.methods.Create_Group_Response.$Properties): lingcat.methods.Create_Group_Response;
+
+            /**
+             * Encodes the specified Create_Group_Response message. Does not implicitly {@link lingcat.methods.Create_Group_Response.verify|verify} messages.
+             * @param message Create_Group_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Create_Group_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Create_Group_Response message, length delimited. Does not implicitly {@link lingcat.methods.Create_Group_Response.verify|verify} messages.
+             * @param message Create_Group_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Create_Group_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Create_Group_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Group_Response & lingcat.methods.Create_Group_Response.$Shape} Create_Group_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Create_Group_Response & lingcat.methods.Create_Group_Response.$Shape;
+
+            /**
+             * Decodes a Create_Group_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Group_Response & lingcat.methods.Create_Group_Response.$Shape} Create_Group_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Create_Group_Response & lingcat.methods.Create_Group_Response.$Shape;
+
+            /**
+             * Verifies a Create_Group_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Create_Group_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Create_Group_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Create_Group_Response;
+
+            /**
+             * Creates a plain object from a Create_Group_Response message. Also converts values to other types if specified.
+             * @param message Create_Group_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Create_Group_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Create_Group_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Create_Group_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Create_Group_Response {
+
+            /** Properties of a Create_Group_Response. */
+            interface $Properties {
+
+                /** Create_Group_Response chatId */
+                chatId?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Create_Group_Response. */
+            type $Shape = lingcat.methods.Create_Group_Response.$Properties;
         }
     }
 }

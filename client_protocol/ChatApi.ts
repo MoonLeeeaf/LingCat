@@ -293,4 +293,33 @@ export default class ChatApi {
             response.data
         ).chatId
     }
+    /**
+     * 创建群组
+     * @returns chat_id
+     */
+    static async createGroup(client: LingCatClient, {
+        access_token,
+        title,
+        unique,
+        timeout,
+    }: {
+        access_token: string
+        title: string
+        unique?: string
+        timeout?: number
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Create_Group_Request,
+            data: LingCatProto.methods.Create_Group_Request.encode({
+                accessToken: access_token,
+                title,
+                unique,
+            }).finish(),
+            timeout,
+        })
+        return decodeOrThrow<LingCatProto.methods.Create_Group_Response>(
+            LingCatProto.methods.Create_Group_Response,
+            response.data
+        ).chatId
+    }
 }

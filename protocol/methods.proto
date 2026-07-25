@@ -227,3 +227,13 @@ message Resolve_Chat_Identifier_Response {
 }
 
 message Update_My_Chats_Event {}
+
+message Create_Group_Request {
+    string access_token = 1;
+    string title = 2;
+    optional string unique = 3;
+}
+
+message Create_Group_Response {
+    string chat_id = 1;
+}
