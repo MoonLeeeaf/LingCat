@@ -76,6 +76,14 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                     marginTop: "10px",
                 }}></div>
                 <mdui-list>
+                    <mdui-list-item icon="info" rounded>{profile?.id}<span slot="description">对话 ID</span></mdui-list-item>
+                    <mdui-list-item icon={({
+                        group: "group",
+                        private: "person",
+                    })[profile?.type!]} rounded>{({
+                        group: "群组",
+                        private: "私聊",
+                    })[profile?.type!]}<span slot="description">对话类型</span></mdui-list-item>
                     {profile?.chat_unique && <mdui-list-item icon="alternate_email" rounded>{profile?.title}<span slot="description">对话标识符</span></mdui-list-item>}
                     {profile?.description && <mdui-list-item icon="info" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
                     {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async () => UserProfileDialog.show(
