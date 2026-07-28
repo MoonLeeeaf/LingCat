@@ -1,5 +1,5 @@
+import '@mdui/icons-shared/clear.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/clear.js';
 import '../button-icon.js';
 import '../button.js';
 import '../icon.js';
@@ -27,7 +27,7 @@ import type { CSSResultGroup, TemplateResult } from 'lit';
  * @csspart close-button - 关闭按钮
  * @csspart close-icon - 关闭按钮中的图标
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 export declare class Snackbar extends MduiElement<SnackbarEventMap> {

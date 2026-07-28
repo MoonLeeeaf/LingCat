@@ -33,7 +33,7 @@ import { navigationRailStyle } from './navigation-rail-style.js';
  * @csspart bottom - 底部元素的容器
  * @csspart items - `<mdui-navigation-rail-item>` 组件的容器
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 let NavigationRail = class NavigationRail extends LayoutItemBase {
@@ -55,13 +55,13 @@ let NavigationRail = class NavigationRail extends LayoutItemBase {
          */
         this.alignment = 'start';
         /**
-         * 默认情况下，导航栏相对于 `body` 元素显示。当该参数设置为 `true` 时，导航栏将相对于其父元素显示。
+         * 默认情况下，导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，导航栏将相对于其父元素显示。
          *
          * **Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。
          */
         this.contained = false;
         /**
-         * 是否在导航栏和页面内容之间添加分割线
+         * 是否在导航栏和页面内容之间添加分隔线
          */
         this.divider = false;
         // 因为 navigation-rail-item 的 value 可能会重复，所以在每个 navigation-rail-item 元素上都添加了一个唯一的 key，通过 activeKey 来记录激活状态的 key
@@ -192,7 +192,6 @@ __decorate([
 ], NavigationRail.prototype, "value", void 0);
 __decorate([
     property({ reflect: true })
-    // eslint-disable-next-line prettier/prettier
 ], NavigationRail.prototype, "placement", void 0);
 __decorate([
     property({ reflect: true })

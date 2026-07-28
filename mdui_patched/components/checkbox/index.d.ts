@@ -1,7 +1,7 @@
+import '@mdui/icons-shared/check-box-outline-blank.js';
+import '@mdui/icons-shared/check-box.js';
+import '@mdui/icons-shared/indeterminate-check-box.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/check-box-outline-blank.js';
-import '@mdui/shared/icons/check-box.js';
-import '@mdui/shared/icons/indeterminate-check-box.js';
 import '../icon.js';
 import type { Ripple } from '../ripple/index.js';
 import type { FormControl } from '@mdui/jq/shared/form.js';
@@ -64,7 +64,7 @@ export declare class Checkbox extends Checkbox_base<CheckboxEventMap> implements
      */
     name: string;
     /**
-     * 复选框的值，将于表单数据一起提交
+     * 复选框的值，将与表单数据一起提交
      */
     value: string;
     /**

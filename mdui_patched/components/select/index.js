@@ -51,7 +51,7 @@ import { style } from './style.js';
  * @csspart chip__button - chip 内部的 `<button>` 元素
  * @csspart chip__label - chip 内部的文本
  * @csspart chip__delete-icon - chip 内部的删除图标
- * @csspart text-field - 文本框，即 [`<mdui-text-field>`](/docs/2/components/text-field) 元素
+ * @csspart text-field - 文本框，即 [`<mdui-text-field>`](/zh-cn/docs/2/components/text-field) 元素
  * @csspart text-field__container - text-field 内部的文本框容器
  * @csspart text-field__icon - text-field 内部的左侧图标
  * @csspart text-field__end-icon - text-field 内部的右侧图标
@@ -65,7 +65,7 @@ import { style } from './style.js';
  * @csspart text-field__supporting - text-field 内部的底部辅助信息容器，包括 helper 和 error
  * @csspart text-field__helper - text-field 内部的底部帮助文本
  * @csspart text-field__error - text-field 内部的底部错误描述文本
- * @csspart menu - 下拉菜单，即 [`<mdui-menu>`](/docs/2/components/menu) 元素
+ * @csspart menu - 下拉菜单，即 [`<mdui-menu>`](/zh-cn/docs/2/components/menu) 元素
  */
 let Select = class Select extends FocusableMixin(MduiElement) {
     constructor() {

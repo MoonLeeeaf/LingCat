@@ -1,9 +1,9 @@
+import '@mdui/icons-shared/cancel--outlined.js';
+import '@mdui/icons-shared/error.js';
+import '@mdui/icons-shared/visibility-off.js';
+import '@mdui/icons-shared/visibility.js';
 import '@mdui/jq/methods/css.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/cancel--outlined.js';
-import '@mdui/shared/icons/error.js';
-import '@mdui/shared/icons/visibility-off.js';
-import '@mdui/shared/icons/visibility.js';
 import '../button-icon.js';
 import '../icon.js';
 import type { FormControl } from '@mdui/jq/shared/form.js';

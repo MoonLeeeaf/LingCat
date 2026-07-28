@@ -627,7 +627,7 @@
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
               "privacy": "public",
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "attribute": "scroll-target"
             },
             {
@@ -648,7 +648,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "attribute": "scroll-threshold",
               "reflects": true
             },
@@ -904,7 +904,7 @@
               "type": {
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "fieldName": "scrollTarget"
             },
             {
@@ -920,7 +920,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "fieldName": "scrollThreshold"
             }
           ],
@@ -963,7 +963,7 @@
           "name": "Avatar",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -1002,7 +1002,7 @@
                 "text": "| /*保持图片原有尺寸比例，内容会被等比例缩放*/ 'contain'\n    | /*保持图片原有尺寸比例，但部分内容可能被剪切*/ 'cover'\n    | /*默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器*/ 'fill'\n    | /*保留图片原有尺寸，内容不会被缩放或拉伸*/ 'none'\n    | /*保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同*/ 'scale-down' | undefined"
               },
               "privacy": "public",
-              "description": "图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) 属性相同。可选值包括：\n\n* `contain`：保持图片原有尺寸比例，内容会被等比例缩放\n* `cover`：保持图片原有尺寸比例，但部分内容可能被剪切\n* `fill`：默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器\n* `none`：保留图片原有尺寸，内容不会被缩放或拉伸\n* `scale-down`：保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同",
+              "description": "图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit) 属性相同。可选值包括：\n\n* `contain`：保持图片原有尺寸比例，内容会被等比例缩放\n* `cover`：保持图片原有尺寸比例，但部分内容可能被剪切\n* `fill`：默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器\n* `none`：保留图片原有尺寸，内容不会被缩放或拉伸\n* `scale-down`：保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同",
               "attribute": "fit",
               "reflects": true
             },
@@ -1050,7 +1050,7 @@
               "type": {
                 "text": "| /*保持图片原有尺寸比例，内容会被等比例缩放*/ 'contain'\n    | /*保持图片原有尺寸比例，但部分内容可能被剪切*/ 'cover'\n    | /*默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器*/ 'fill'\n    | /*保留图片原有尺寸，内容不会被缩放或拉伸*/ 'none'\n    | /*保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同*/ 'scale-down' | undefined"
               },
-              "description": "图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) 属性相同。可选值包括：\n\n* `contain`：保持图片原有尺寸比例，内容会被等比例缩放\n* `cover`：保持图片原有尺寸比例，但部分内容可能被剪切\n* `fill`：默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器\n* `none`：保留图片原有尺寸，内容不会被缩放或拉伸\n* `scale-down`：保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同",
+              "description": "图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit) 属性相同。可选值包括：\n\n* `contain`：保持图片原有尺寸比例，内容会被等比例缩放\n* `cover`：保持图片原有尺寸比例，但部分内容可能被剪切\n* `fill`：默认值，不保持图片原有尺寸比例，内容会被拉伸以填充整个容器\n* `none`：保留图片原有尺寸，内容不会被缩放或拉伸\n* `scale-down`：保持图片原有尺寸比例，内容尺寸与 `none` 或 `contain` 中较小的一个相同",
               "fieldName": "fit"
             },
             {
@@ -1108,7 +1108,7 @@
           "name": "Badge",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -1181,7 +1181,7 @@
           "name": "BottomAppBar",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -1216,7 +1216,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否让底部应用栏中的 [`<mdui-fab>`](/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/docs/2/components/fab) 仍会停留在页面上",
+              "description": "是否让底部应用栏中的 [`<mdui-fab>`](/zh-cn/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/zh-cn/docs/2/components/fab) 仍会停留在页面上",
               "attribute": "fab-detach",
               "reflects": true
             },
@@ -1288,7 +1288,7 @@
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
               "privacy": "public",
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "attribute": "scroll-target",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -1302,7 +1302,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "attribute": "scroll-threshold",
               "reflects": true,
               "inheritedFrom": {
@@ -1586,7 +1586,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -1650,7 +1650,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否让底部应用栏中的 [`<mdui-fab>`](/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/docs/2/components/fab) 仍会停留在页面上",
+              "description": "是否让底部应用栏中的 [`<mdui-fab>`](/zh-cn/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/zh-cn/docs/2/components/fab) 仍会停留在页面上",
               "fieldName": "fabDetach"
             },
             {
@@ -1670,7 +1670,7 @@
               "type": {
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "fieldName": "scrollTarget",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -1682,7 +1682,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "fieldName": "scrollThreshold",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -1694,7 +1694,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",
@@ -1746,7 +1746,7 @@
           "name": "ButtonIcon",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -1885,8 +1885,8 @@
               "attribute": "href",
               "reflects": true,
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1900,8 +1900,8 @@
               "attribute": "download",
               "reflects": true,
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1915,8 +1915,8 @@
               "attribute": "target",
               "reflects": true,
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1930,8 +1930,8 @@
               "attribute": "rel",
               "reflects": true,
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1952,8 +1952,8 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1968,8 +1968,8 @@
               "attribute": "autofocus",
               "reflects": true,
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -1984,8 +1984,8 @@
               "attribute": "focused",
               "reflects": true,
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2000,8 +2000,8 @@
               "attribute": "focus-visible",
               "reflects": true,
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2013,8 +2013,8 @@
               "privacy": "protected",
               "default": "new DefinedController(this, { relatedElements: [''] })",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2026,8 +2026,8 @@
               "privacy": "private",
               "default": "false",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2039,8 +2039,8 @@
               "privacy": "private",
               "default": "0",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2051,8 +2051,8 @@
               },
               "privacy": "private",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2065,8 +2065,8 @@
               "description": "元素在使用 Tab 键切换焦点时的顺序",
               "attribute": "tabindex",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2076,8 +2076,8 @@
                 "text": "boolean"
               },
               "privacy": "protected",
-              "readonly": true,
               "description": "父类要实现该属性，表示是否禁用 focus 状态",
+              "readonly": true,
               "inheritedFrom": {
                 "name": "ButtonBase",
                 "module": "components/button/button-base.js"
@@ -2087,11 +2087,11 @@
               "kind": "field",
               "name": "focusElement",
               "type": {
-                "text": "HTMLElement | null"
+                "text": "HTMLElement | null | undefined"
               },
               "privacy": "protected",
-              "readonly": true,
               "description": "最终获得焦点的元素",
+              "readonly": true,
               "inheritedFrom": {
                 "name": "ButtonBase",
                 "module": "components/button/button-base.js"
@@ -2108,8 +2108,8 @@
               },
               "description": "模拟鼠标点击元素",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2132,8 +2132,8 @@
               ],
               "description": "将焦点设置到当前元素。\n\n可以传入一个对象作为参数，该对象的属性包括：\n\n* `preventScroll`：默认情况下，元素获取焦点后，页面会滚动以将该元素滚动到视图中。如果不希望页面滚动，可以将此属性设置为 `true`。",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2147,8 +2147,8 @@
               },
               "description": "移除当前元素的焦点",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2169,8 +2169,8 @@
                 }
               ],
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2183,8 +2183,8 @@
                 }
               },
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2538,8 +2538,8 @@
                 "text": "KeyboardEvent"
               },
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             }
           ],
@@ -2595,8 +2595,8 @@
               "description": "链接的目标 URL。\n\n如果设置了此属性，组件内部将渲染为 `<a>` 元素，并可以使用链接相关的属性。",
               "fieldName": "href",
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2607,8 +2607,8 @@
               "description": "下载链接的目标。\n\n**Note**：仅在设置了 `href` 属性时，此属性才有效。",
               "fieldName": "download",
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2619,8 +2619,8 @@
               "description": "链接的打开方式。可选值包括：\n\n* `_blank`：在新窗口中打开链接\n* `_parent`：在父框架中打开链接\n* `_self`：默认。在当前框架中打开链接\n* `_top`：在整个窗口中打开链接\n\n**Note**：仅在设置了 `href` 属性时，此属性才有效。",
               "fieldName": "target",
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2631,8 +2631,8 @@
               "description": "当前文档与被链接文档之间的关系。可选值包括：\n\n* `alternate`：当前文档的替代版本\n* `author`：当前文档或文章的作者\n* `bookmark`：永久链接到最近的祖先章节\n* `external`：引用的文档与当前文档不在同一站点\n* `help`：链接到相关的帮助文档\n* `license`：当前文档的主要内容由被引用文件的版权许可覆盖\n* `me`：当前文档代表链接内容的所有者\n* `next`：当前文档是系列中的一部分，被引用的文档是系列的下一个文档\n* `nofollow`：当前文档的作者或发布者不认可被引用的文件\n* `noreferrer`：不包含 `Referer` 头。类似于 `noopener` 的效果\n* `opener`：如果超链接会创建一个顶级浏览上下文（即 `target` 属性值为 `_blank`），则创建一个辅助浏览上下文\n* `prev`：当前文档是系列的一部分，被引用的文档是系列的上一个文档\n* `search`：提供一个资源链接，可用于搜索当前文件及其相关页面\n* `tag`：提供一个适用于当前文档的标签（由给定地址识别）\n\n**Note**：仅在指定了 `href` 属性时可用。",
               "fieldName": "rel",
               "inheritedFrom": {
-                "name": "AnchorMixin",
-                "module": "@mdui/shared/mixins/anchor.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2644,8 +2644,8 @@
               "description": "是否在页面加载完成后自动获取焦点",
               "fieldName": "autofocus",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2657,8 +2657,8 @@
               "description": "是否获得了焦点，不管是鼠标点击，还是键盘切换获得的焦点，都会添加该属性\n添加到 :host 元素上，供 CSS 选择器添加样式",
               "fieldName": "focused",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2670,8 +2670,8 @@
               "description": "是否通过键盘切换获得了焦点\n添加到 :host 元素上，供 CSS 选择器添加样式",
               "fieldName": "focusVisible",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -2682,8 +2682,8 @@
               "description": "元素在使用 Tab 键切换焦点时的顺序",
               "fieldName": "tabIndex",
               "inheritedFrom": {
-                "name": "FocusableMixin",
-                "module": "@mdui/shared/mixins/focusable.js"
+                "name": "ButtonBase",
+                "module": "components/button/button-base.js"
               }
             },
             {
@@ -3667,7 +3667,7 @@
           "name": "Button",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -4785,7 +4785,7 @@
           "name": "Card",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -5498,7 +5498,7 @@
               },
               "privacy": "public",
               "default": "'on'",
-              "description": "复选框的值，将于表单数据一起提交",
+              "description": "复选框的值，将与表单数据一起提交",
               "attribute": "value",
               "reflects": true
             },
@@ -5987,7 +5987,7 @@
                 "text": "string"
               },
               "default": "'on'",
-              "description": "复选框的值，将于表单数据一起提交",
+              "description": "复选框的值，将与表单数据一起提交",
               "fieldName": "value"
             },
             {
@@ -6114,7 +6114,7 @@
           "name": "Chip",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -6124,7 +6124,7 @@
               "name": "button"
             },
             {
-              "description": "纸片文本",
+              "description": "标签文本",
               "name": "label"
             },
             {
@@ -6150,7 +6150,7 @@
           ],
           "slots": [
             {
-              "description": "纸片文本",
+              "description": "标签文本",
               "name": ""
             },
             {
@@ -6179,7 +6179,7 @@
               },
               "privacy": "public",
               "default": "'assist'",
-              "description": "纸片的形状。可选值包括：\n\n* `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能\n* `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果\n* `input`：用于表示用户输入的信息片段，如在 Gmail 的“收件人”字段中的联系人\n* `suggestion`：用于提供动态生成的推荐信息，以简化用户操作，如在聊天应用中预测用户可能想发送的信息",
+              "description": "标签的形状。可选值包括：\n\n* `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能\n* `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果\n* `input`：用于表示用户输入的信息片段，如在 Gmail 的“收件人”字段中的联系人\n* `suggestion`：用于提供动态生成的推荐信息，以简化用户操作，如在聊天应用中预测用户可能想发送的信息",
               "attribute": "variant",
               "reflects": true
             },
@@ -6227,7 +6227,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否可删除。为 `true` 时，纸片右侧会显示删除图标",
+              "description": "是否可删除。为 `true` 时，标签右侧会显示删除图标",
               "attribute": "deletable",
               "reflects": true
             },
@@ -7064,7 +7064,7 @@
                 "text": "| /*用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能*/ 'assist'\n    | /*用于对内容进行筛选，如在搜索结果页过滤搜索结果*/ 'filter'\n    | /*用于表示用户输入的信息片段，如在 Gmail 的“收件人”字段中的联系人*/ 'input'\n    | /*用于提供动态生成的推荐信息，以简化用户操作，如在聊天应用中预测用户可能想发送的信息*/ 'suggestion'"
               },
               "default": "'assist'",
-              "description": "纸片的形状。可选值包括：\n\n* `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能\n* `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果\n* `input`：用于表示用户输入的信息片段，如在 Gmail 的“收件人”字段中的联系人\n* `suggestion`：用于提供动态生成的推荐信息，以简化用户操作，如在聊天应用中预测用户可能想发送的信息",
+              "description": "标签的形状。可选值包括：\n\n* `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能\n* `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果\n* `input`：用于表示用户输入的信息片段，如在 Gmail 的“收件人”字段中的联系人\n* `suggestion`：用于提供动态生成的推荐信息，以简化用户操作，如在聊天应用中预测用户可能想发送的信息",
               "fieldName": "variant"
             },
             {
@@ -7100,7 +7100,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否可删除。为 `true` 时，纸片右侧会显示删除图标",
+              "description": "是否可删除。为 `true` 时，标签右侧会显示删除图标",
               "fieldName": "deletable"
             },
             {
@@ -7377,7 +7377,7 @@
             "name": "ButtonBase",
             "module": "components/button/button-base.js"
           },
-          "summary": "纸片组件\n\n```html\n<mdui-chip>Chip</mdui-chip>\n```",
+          "summary": "标签组件\n\n```html\n<mdui-chip>Chip</mdui-chip>\n```",
           "tagName": "mdui-chip",
           "customElement": true
         }
@@ -7418,7 +7418,7 @@
               },
               "privacy": "public",
               "default": "1",
-              "description": "进度指示器的最大值。默认为 `1`",
+              "description": "进度条的最大值。默认为 `1`",
               "attribute": "max",
               "reflects": true
             },
@@ -7429,7 +7429,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "进度指示器的当前值。如果未指定该值，则显示为不确定状态",
+              "description": "进度条的当前值。如果未指定该值，则显示为不确定状态",
               "attribute": "value"
             },
             {
@@ -7460,7 +7460,7 @@
                 "text": "number"
               },
               "default": "1",
-              "description": "进度指示器的最大值。默认为 `1`",
+              "description": "进度条的最大值。默认为 `1`",
               "fieldName": "max"
             },
             {
@@ -7468,7 +7468,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "进度指示器的当前值。如果未指定该值，则显示为不确定状态",
+              "description": "进度条的当前值。如果未指定该值，则显示为不确定状态",
               "fieldName": "value"
             }
           ],
@@ -7476,7 +7476,7 @@
             "name": "MduiElement",
             "package": "@mdui/shared/base/mdui-element.js"
           },
-          "summary": "圆形进度指示器组件\n\n```html\n<mdui-circular-progress></mdui-circular-progress>\n```",
+          "summary": "环形进度条组件\n\n```html\n<mdui-circular-progress></mdui-circular-progress>\n```",
           "tagName": "mdui-circular-progress",
           "customElement": true
         }
@@ -7570,7 +7570,7 @@
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
               "privacy": "public",
-              "description": "点击该元素时触发折叠，值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认为点击整个 header 区域触发",
+              "description": "点击该元素时触发折叠，值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认为点击整个 header 区域触发",
               "attribute": "trigger"
             },
             {
@@ -7689,7 +7689,7 @@
               "type": {
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
-              "description": "点击该元素时触发折叠，值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认为点击整个 header 区域触发",
+              "description": "点击该元素时触发折叠，值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认为点击整个 header 区域触发",
               "fieldName": "trigger"
             }
           ],
@@ -7945,7 +7945,7 @@
           "name": "Dialog",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -8353,7 +8353,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否为垂直分割线",
+              "description": "是否为垂直分隔线",
               "attribute": "vertical",
               "reflects": true
             },
@@ -8389,7 +8389,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否为垂直分割线",
+              "description": "是否为垂直分隔线",
               "fieldName": "vertical"
             },
             {
@@ -8415,7 +8415,7 @@
             "name": "MduiElement",
             "package": "@mdui/shared/base/mdui-element.js"
           },
-          "summary": "分割线组件\n\n```html\n<mdui-divider></mdui-divider>\n```",
+          "summary": "分隔线组件\n\n```html\n<mdui-divider></mdui-divider>\n```",
           "tagName": "mdui-divider",
           "customElement": true
         }
@@ -8469,7 +8469,7 @@
               "name": ""
             },
             {
-              "description": "触发下拉组件的元素，例如 [`<mdui-button>`](/docs/2/components/button) 元素",
+              "description": "触发下拉组件的元素，例如 [`<mdui-button>`](/zh-cn/docs/2/components/button) 元素",
               "name": "trigger"
             }
           ],
@@ -8530,7 +8530,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "点击 [`<mdui-menu-item>`](/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态",
+              "description": "点击 [`<mdui-menu-item>`](/zh-cn/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态",
               "attribute": "stay-open-on-click",
               "reflects": true
             },
@@ -8862,7 +8862,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "点击 [`<mdui-menu-item>`](/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态",
+              "description": "点击 [`<mdui-menu-item>`](/zh-cn/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态",
               "fieldName": "stayOpenOnClick"
             },
             {
@@ -8931,15 +8931,15 @@
           "name": "Fab",
           "cssProperties": [
             {
-              "description": "`size=\"small\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "`size=\"small\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-small"
             },
             {
-              "description": "`size=\"normal\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "`size=\"normal\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-normal"
             },
             {
-              "description": "`size=\"large\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "`size=\"large\"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-large"
             }
           ],
@@ -10388,7 +10388,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true
             },
@@ -10431,7 +10431,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order"
             }
           ],
@@ -10505,7 +10505,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -10563,7 +10563,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",
@@ -10661,7 +10661,7 @@
           "name": "Layout",
           "slots": [
             {
-              "description": "可以包含 [`<mdui-top-app-bar>`](/docs/2/components/top-app-bar)、[`<mdui-bottom-app-bar>`](/docs/2/components/bottom-app-bar)、[`<mdui-navigation-bar>`](/docs/2/components/navigation-bar)、[`<mdui-navigation-drawer>`](/docs/2/components/navigation-drawer)、[`<mdui-navigation-rail>`](/docs/2/components/navigation-rail)、`<mdui-layout-item>`、`<mdui-layout-main>` 元素",
+              "description": "可以包含 [`<mdui-top-app-bar>`](/zh-cn/docs/2/components/top-app-bar)、[`<mdui-bottom-app-bar>`](/zh-cn/docs/2/components/bottom-app-bar)、[`<mdui-navigation-bar>`](/zh-cn/docs/2/components/navigation-bar)、[`<mdui-navigation-drawer>`](/zh-cn/docs/2/components/navigation-drawer)、[`<mdui-navigation-rail>`](/zh-cn/docs/2/components/navigation-rail)、`<mdui-layout-item>`、`<mdui-layout-main>` 元素",
               "name": ""
             }
           ],
@@ -10728,7 +10728,7 @@
           "name": "LinearProgress",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -10747,7 +10747,7 @@
               },
               "privacy": "public",
               "default": "1",
-              "description": "进度指示器的最大值。默认为 `1`",
+              "description": "进度条的最大值。默认为 `1`",
               "attribute": "max",
               "reflects": true
             },
@@ -10758,7 +10758,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "进度指示器的当前值。如果未指定该值，则处于不确定状态",
+              "description": "进度条的当前值。如果未指定该值，则处于不确定状态",
               "attribute": "value"
             }
           ],
@@ -10769,7 +10769,7 @@
                 "text": "number"
               },
               "default": "1",
-              "description": "进度指示器的最大值。默认为 `1`",
+              "description": "进度条的最大值。默认为 `1`",
               "fieldName": "max"
             },
             {
@@ -10777,7 +10777,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "进度指示器的当前值。如果未指定该值，则处于不确定状态",
+              "description": "进度条的当前值。如果未指定该值，则处于不确定状态",
               "fieldName": "value"
             }
           ],
@@ -10785,7 +10785,7 @@
             "name": "MduiElement",
             "package": "@mdui/shared/base/mdui-element.js"
           },
-          "summary": "线性进度指示器组件\n\n```html\n<mdui-linear-progress></mdui-linear-progress>\n```",
+          "summary": "线性进度条组件\n\n```html\n<mdui-linear-progress></mdui-linear-progress>\n```",
           "tagName": "mdui-linear-progress",
           "customElement": true
         }
@@ -10819,11 +10819,11 @@
           "name": "ListItem",
           "cssProperties": [
             {
-              "description": "列表项的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "列表项的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
-              "description": "指定了 `rounded` 属性时，列表项的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "指定了 `rounded` 属性时，列表项的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-rounded"
             }
           ],
@@ -10950,7 +10950,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否禁用该列表项，禁用后，列表项将变为灰色，且其中的 [`<mdui-checkbox>`](/docs/2/components/checkbox)、[`<mdui-radio>`](/docs/2/components/radio)、[`<mdui-switch>`](/docs/2/components/switch) 等也将禁用",
+              "description": "是否禁用该列表项，禁用后，列表项将变为灰色，且其中的 [`<mdui-checkbox>`](/zh-cn/docs/2/components/checkbox)、[`<mdui-radio>`](/zh-cn/docs/2/components/radio)、[`<mdui-switch>`](/zh-cn/docs/2/components/switch) 等也将禁用",
               "attribute": "disabled",
               "reflects": true
             },
@@ -10974,7 +10974,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否使列表项不可点击。设置后，列表项中的 [`<mdui-checkbox>`](/docs/2/components/checkbox)、[`<mdui-radio>`](/docs/2/components/radio)、[`<mdui-switch>`](/docs/2/components/switch) 等仍可交互",
+              "description": "是否使列表项不可点击。设置后，列表项中的 [`<mdui-checkbox>`](/zh-cn/docs/2/components/checkbox)、[`<mdui-radio>`](/zh-cn/docs/2/components/radio)、[`<mdui-switch>`](/zh-cn/docs/2/components/switch) 等仍可交互",
               "attribute": "nonclickable",
               "reflects": true
             },
@@ -11459,7 +11459,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否禁用该列表项，禁用后，列表项将变为灰色，且其中的 [`<mdui-checkbox>`](/docs/2/components/checkbox)、[`<mdui-radio>`](/docs/2/components/radio)、[`<mdui-switch>`](/docs/2/components/switch) 等也将禁用",
+              "description": "是否禁用该列表项，禁用后，列表项将变为灰色，且其中的 [`<mdui-checkbox>`](/zh-cn/docs/2/components/checkbox)、[`<mdui-radio>`](/zh-cn/docs/2/components/radio)、[`<mdui-switch>`](/zh-cn/docs/2/components/switch) 等也将禁用",
               "fieldName": "disabled"
             },
             {
@@ -11477,7 +11477,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否使列表项不可点击。设置后，列表项中的 [`<mdui-checkbox>`](/docs/2/components/checkbox)、[`<mdui-radio>`](/docs/2/components/radio)、[`<mdui-switch>`](/docs/2/components/switch) 等仍可交互",
+              "description": "是否使列表项不可点击。设置后，列表项中的 [`<mdui-checkbox>`](/zh-cn/docs/2/components/checkbox)、[`<mdui-radio>`](/zh-cn/docs/2/components/radio)、[`<mdui-switch>`](/zh-cn/docs/2/components/switch) 等仍可交互",
               "fieldName": "nonclickable"
             },
             {
@@ -12708,13 +12708,13 @@
           "name": "Menu",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
           "slots": [
             {
-              "description": "子菜单项（`<mdui-menu-item>`）、分割线（[`<mdui-divider>`](/docs/2/components/divider)）等元素",
+              "description": "子菜单项（`<mdui-menu-item>`）、分隔线（[`<mdui-divider>`](/zh-cn/docs/2/components/divider)）等元素",
               "name": ""
             }
           ],
@@ -13168,7 +13168,7 @@
           "name": "NavigationBarItem",
           "cssProperties": [
             {
-              "description": "指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-indicator"
             }
           ],
@@ -13857,7 +13857,7 @@
           "name": "NavigationBar",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -14051,7 +14051,7 @@
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
               "privacy": "public",
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "attribute": "scroll-target",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -14065,7 +14065,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "attribute": "scroll-threshold",
               "reflects": true,
               "inheritedFrom": {
@@ -14349,7 +14349,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -14445,7 +14445,7 @@
               "type": {
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "fieldName": "scrollTarget",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -14457,7 +14457,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "fieldName": "scrollThreshold",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -14469,7 +14469,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",
@@ -14521,7 +14521,7 @@
           "name": "NavigationDrawer",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -14535,13 +14535,13 @@
               "name": "overlay"
             },
             {
-              "description": "抽屉栏容器",
+              "description": "抽屉导航栏容器",
               "name": "panel"
             }
           ],
           "slots": [
             {
-              "description": "抽屉栏中的内容",
+              "description": "抽屉导航栏中的内容",
               "name": ""
             }
           ],
@@ -14554,7 +14554,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否打开抽屉栏",
+              "description": "是否打开抽屉导航栏",
               "attribute": "open",
               "reflects": true
             },
@@ -14566,7 +14566,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "抽屉栏打开时，是否显示遮罩层\n\n在窄屏设备上（屏幕宽度小于 [`--mdui-breakpoint-md`](/docs/2/styles/design-tokens#breakpoint)），会始终显示遮罩层，无视该参数",
+              "description": "抽屉导航栏打开时，是否显示遮罩层\n\n在窄屏设备上（屏幕宽度小于 [`--mdui-breakpoint-md`](/zh-cn/docs/2/styles/design-tokens#breakpoint)），会始终显示遮罩层，无视该参数",
               "attribute": "modal",
               "reflects": true
             },
@@ -14578,7 +14578,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "在有遮罩层的情况下，按下 ESC 键是否关闭抽屉栏",
+              "description": "在有遮罩层的情况下，按下 ESC 键是否关闭抽屉导航栏",
               "attribute": "close-on-esc",
               "reflects": true
             },
@@ -14590,7 +14590,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "点击遮罩层时，是否关闭抽屉栏",
+              "description": "点击遮罩层时，是否关闭抽屉导航栏",
               "attribute": "close-on-overlay-click",
               "reflects": true
             },
@@ -14602,7 +14602,7 @@
               },
               "privacy": "public",
               "default": "'left'",
-              "description": "抽屉栏的位置。可选值包括：\n\n* `left`：左侧\n* `right`：右侧",
+              "description": "抽屉导航栏的位置。可选值包括：\n\n* `left`：左侧\n* `right`：右侧",
               "attribute": "placement",
               "reflects": true
             },
@@ -14614,7 +14614,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "默认情况下，抽屉栏相对于 `body` 元素显示。当该参数设置为 `true` 时，抽屉栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative; overflow: hidden;`。",
+              "description": "默认情况下，抽屉导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，抽屉导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative; overflow: hidden;`。",
               "attribute": "contained",
               "reflects": true
             },
@@ -14760,7 +14760,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -14805,19 +14805,19 @@
           ],
           "events": [
             {
-              "description": "抽屉栏打开之前触发。可以通过调用 `event.preventDefault()` 阻止抽屉栏打开",
+              "description": "抽屉导航栏打开之前触发。可以通过调用 `event.preventDefault()` 阻止抽屉导航栏打开",
               "name": "open"
             },
             {
-              "description": "抽屉栏打开动画完成之后触发",
+              "description": "抽屉导航栏打开动画完成之后触发",
               "name": "opened"
             },
             {
-              "description": "抽屉栏关闭之前触发。可以通过调用 `event.preventDefault()` 阻止抽屉栏关闭",
+              "description": "抽屉导航栏关闭之前触发。可以通过调用 `event.preventDefault()` 阻止抽屉导航栏关闭",
               "name": "close"
             },
             {
-              "description": "抽屉栏关闭动画完成之后触发",
+              "description": "抽屉导航栏关闭动画完成之后触发",
               "name": "closed"
             },
             {
@@ -14832,7 +14832,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否打开抽屉栏",
+              "description": "是否打开抽屉导航栏",
               "fieldName": "open"
             },
             {
@@ -14841,7 +14841,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "抽屉栏打开时，是否显示遮罩层\n\n在窄屏设备上（屏幕宽度小于 [`--mdui-breakpoint-md`](/docs/2/styles/design-tokens#breakpoint)），会始终显示遮罩层，无视该参数",
+              "description": "抽屉导航栏打开时，是否显示遮罩层\n\n在窄屏设备上（屏幕宽度小于 [`--mdui-breakpoint-md`](/zh-cn/docs/2/styles/design-tokens#breakpoint)），会始终显示遮罩层，无视该参数",
               "fieldName": "modal"
             },
             {
@@ -14850,7 +14850,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "在有遮罩层的情况下，按下 ESC 键是否关闭抽屉栏",
+              "description": "在有遮罩层的情况下，按下 ESC 键是否关闭抽屉导航栏",
               "fieldName": "closeOnEsc"
             },
             {
@@ -14859,7 +14859,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "点击遮罩层时，是否关闭抽屉栏",
+              "description": "点击遮罩层时，是否关闭抽屉导航栏",
               "fieldName": "closeOnOverlayClick"
             },
             {
@@ -14868,7 +14868,7 @@
                 "text": "| /*左侧*/ 'left'\n    | /*右侧*/ 'right'"
               },
               "default": "'left'",
-              "description": "抽屉栏的位置。可选值包括：\n\n* `left`：左侧\n* `right`：右侧",
+              "description": "抽屉导航栏的位置。可选值包括：\n\n* `left`：左侧\n* `right`：右侧",
               "fieldName": "placement"
             },
             {
@@ -14877,7 +14877,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "默认情况下，抽屉栏相对于 `body` 元素显示。当该参数设置为 `true` 时，抽屉栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative; overflow: hidden;`。",
+              "description": "默认情况下，抽屉导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，抽屉导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative; overflow: hidden;`。",
               "fieldName": "contained"
             },
             {
@@ -14893,7 +14893,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",
@@ -14905,7 +14905,7 @@
             "name": "LayoutItemBase",
             "module": "components/layout/layout-item-base.js"
           },
-          "summary": "侧边抽屉栏组件\n\n```html\n<mdui-navigation-drawer>content</mdui-navigation-drawer>\n```",
+          "summary": "抽屉导航栏组件\n\n```html\n<mdui-navigation-drawer>content</mdui-navigation-drawer>\n```",
           "tagName": "mdui-navigation-drawer",
           "customElement": true
         }
@@ -14939,7 +14939,7 @@
           "name": "NavigationRailItem",
           "cssProperties": [
             {
-              "description": "指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-indicator"
             }
           ],
@@ -15637,7 +15637,7 @@
           "name": "NavigationRail",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -15717,7 +15717,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "默认情况下，导航栏相对于 `body` 元素显示。当该参数设置为 `true` 时，导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。",
+              "description": "默认情况下，导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。",
               "attribute": "contained",
               "reflects": true
             },
@@ -15729,7 +15729,7 @@
               },
               "privacy": "public",
               "default": "false",
-              "description": "是否在导航栏和页面内容之间添加分割线",
+              "description": "是否在导航栏和页面内容之间添加分隔线",
               "attribute": "divider",
               "reflects": true
             },
@@ -15864,7 +15864,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -15946,7 +15946,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "默认情况下，导航栏相对于 `body` 元素显示。当该参数设置为 `true` 时，导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。",
+              "description": "默认情况下，导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，导航栏将相对于其父元素显示。\n\n**Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。",
               "fieldName": "contained"
             },
             {
@@ -15955,7 +15955,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "是否在导航栏和页面内容之间添加分割线",
+              "description": "是否在导航栏和页面内容之间添加分隔线",
               "fieldName": "divider"
             },
             {
@@ -15963,7 +15963,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",
@@ -16057,7 +16057,7 @@
               },
               "privacy": "public",
               "default": "''",
-              "description": "单选框组的名称，将于表单数据一起提交",
+              "description": "单选框组当前选中的值，将与表单数据一起提交",
               "attribute": "value",
               "reflects": true
             },
@@ -16313,7 +16313,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "单选框组的名称，将于表单数据一起提交",
+              "description": "单选框组当前选中的值，将与表单数据一起提交",
               "fieldName": "value"
             },
             {
@@ -17046,7 +17046,7 @@
                 "text": "number[]"
               },
               "privacy": "public",
-              "description": "滑块的值，为数组格式，将于表单数据一起提交。\n\n**NOTE**：该属性无法通过 HTML 属性设置初始值，如果要修改该值，只能通过修改 JavaScript 属性值实现。"
+              "description": "滑块的值，为数组格式，将与表单数据一起提交。\n\n**NOTE**：该属性无法通过 HTML 属性设置初始值，如果要修改该值，只能通过修改 JavaScript 属性值实现。"
             },
             {
               "kind": "field",
@@ -17889,7 +17889,7 @@
           "name": "SegmentedButtonGroup",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             }
           ],
@@ -19562,7 +19562,7 @@
               "name": "chip__delete-icon"
             },
             {
-              "description": "文本框，即 [`<mdui-text-field>`](/docs/2/components/text-field) 元素",
+              "description": "文本框，即 [`<mdui-text-field>`](/zh-cn/docs/2/components/text-field) 元素",
               "name": "text-field"
             },
             {
@@ -19618,7 +19618,7 @@
               "name": "text-field__error"
             },
             {
-              "description": "下拉菜单，即 [`<mdui-menu>`](/docs/2/components/menu) 元素",
+              "description": "下拉菜单，即 [`<mdui-menu>`](/zh-cn/docs/2/components/menu) 元素",
               "name": "menu"
             }
           ],
@@ -20671,7 +20671,7 @@
               },
               "privacy": "public",
               "default": "0",
-              "description": "滑块的值，将于表单数据一起提交",
+              "description": "滑块的值，将与表单数据一起提交",
               "attribute": "value"
             },
             {
@@ -21363,7 +21363,7 @@
                 "text": "number"
               },
               "default": "0",
-              "description": "滑块的值，将于表单数据一起提交",
+              "description": "滑块的值，将与表单数据一起提交",
               "fieldName": "value"
             },
             {
@@ -22229,7 +22229,7 @@
           "name": "Snackbar",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -22614,11 +22614,11 @@
           "name": "Switch",
           "cssProperties": [
             {
-              "description": "组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
-              "description": "组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-thumb"
             }
           ],
@@ -22750,7 +22750,7 @@
               },
               "privacy": "public",
               "default": "'on'",
-              "description": "开关的值，将于表单数据一起提交",
+              "description": "开关的值，将与表单数据一起提交",
               "attribute": "value",
               "reflects": true
             },
@@ -23220,7 +23220,7 @@
                 "text": "string"
               },
               "default": "'on'",
-              "description": "开关的值，将于表单数据一起提交",
+              "description": "开关的值，将与表单数据一起提交",
               "fieldName": "value"
             },
             {
@@ -26036,11 +26036,11 @@
           "name": "Tooltip",
           "cssProperties": [
             {
-              "description": "当 variant=\"plain\" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "当 variant=\"plain\" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-plain"
             },
             {
-              "description": "当 variant=\"rich\" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "当 variant=\"rich\" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner-rich"
             },
             {
@@ -26629,7 +26629,7 @@
           "name": "TopAppBar",
           "cssProperties": [
             {
-              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)",
+              "description": "组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)",
               "name": "--shape-corner"
             },
             {
@@ -26815,7 +26815,7 @@
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
               "privacy": "public",
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "attribute": "scroll-target",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -26829,7 +26829,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "attribute": "scroll-threshold",
               "reflects": true,
               "inheritedFrom": {
@@ -27087,7 +27087,7 @@
                 "text": "number | undefined"
               },
               "privacy": "public",
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "attribute": "order",
               "reflects": true,
               "inheritedFrom": {
@@ -27189,7 +27189,7 @@
               "type": {
                 "text": "string | HTMLElement | JQ<HTMLElement> | undefined"
               },
-              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
+              "description": "需要监听其滚动事件的元素。值可以是 CSS 选择器、DOM 元素、或 [JQ 对象](/zh-cn/docs/2/functions/jq)。默认监听 `window` 的滚动事件",
               "fieldName": "scrollTarget",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -27201,7 +27201,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "在滚动多少距离之后触发滚动行为，单位为 `px`",
+              "description": "触发滚动行为所需的滚动距离，单位为 `px`",
               "fieldName": "scrollThreshold",
               "inheritedFrom": {
                 "name": "ScrollBehaviorMixin",
@@ -27213,7 +27213,7 @@
               "type": {
                 "text": "number | undefined"
               },
-              "description": "该组件在 [`<mdui-layout>`](/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
+              "description": "该组件在 [`<mdui-layout>`](/zh-cn/docs/2/components/layout) 中的布局顺序，按从小到大排序。默认为 `0`",
               "fieldName": "order",
               "inheritedFrom": {
                 "name": "LayoutItemBase",

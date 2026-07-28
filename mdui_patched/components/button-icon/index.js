@@ -1,6 +1,7 @@
 import { __decorate } from "tslib";
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { HasSlotController } from '@mdui/shared/controllers/has-slot.js';
 import { watch } from '@mdui/shared/decorators/watch.js';
@@ -29,7 +30,7 @@ import { style } from './style.js';
  * @csspart selected-icon 选中状态的图标
  * @csspart loading - 加载中状态的 `<mdui-circular-progress>` 元素
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let ButtonIcon = class ButtonIcon extends ButtonBase {
     constructor() {
@@ -91,7 +92,7 @@ let ButtonIcon = class ButtonIcon extends ButtonBase {
                 ? html `<mdui-icon part="icon" class="icon" name="${this.icon}"></mdui-icon>`
                 : nothingTemplate;
         const selectedIcon = () => this.hasSlotController.test('selected-icon') || this.selectedIcon
-            ? html `<slot name="selected-icon" part="selected-icon" class="selected-icon"><mdui-icon name="${this.selectedIcon}"></mdui-icon></slot>`
+            ? html `<slot name="selected-icon" part="selected-icon" class="selected-icon"><mdui-icon name="${ifDefined(this.selectedIcon)}"></mdui-icon></slot>`
             : icon();
         return this.selected ? selectedIcon() : icon();
     }

@@ -26,9 +26,9 @@ import type { CSSResultGroup, PropertyValues, TemplateResult } from 'lit';
  *
  * @event change - 菜单项选中状态变化时触发
  *
- * @slot - 子菜单项（`<mdui-menu-item>`）、分割线（[`<mdui-divider>`](/docs/2/components/divider)）等元素
+ * @slot - 子菜单项（`<mdui-menu-item>`）、分隔线（[`<mdui-divider>`](/zh-cn/docs/2/components/divider)）等元素
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 export declare class Menu extends MduiElement<MenuEventMap> {
     static styles: CSSResultGroup;

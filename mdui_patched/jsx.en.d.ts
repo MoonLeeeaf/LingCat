@@ -22,13 +22,13 @@ declare global {
           */
           'src'?: string;
         /**
-          * Image resizing method, similar to the native CSS [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit). Possible values:
+          * Image resizing method, similar to the CSS [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property. Possible values:
          * 
-         * * `contain`: Scales the image to fit within the box while maintaining the aspect ratio. The image will be "letterboxed" if the aspect ratios do not match.
-         * * `cover`: Scales the image to fill the box while maintaining the aspect ratio. The image will be clipped if the aspect ratios do not match.
-         * * `fill`: Default. Scales the image to fill the box. The image will be stretched if the aspect ratios do not match.
+         * * `contain`: Scales the image to fit within the box while preserving aspect ratio. The image will be "letterboxed" if the aspect ratios do not match.
+         * * `cover`: Scales the image to fill the box while preserving aspect ratio. The image will be clipped if the aspect ratios do not match.
+         * * `fill`: Default. Scales the image to fill the box; the image may be stretched if aspect ratios do not match.
          * * `none`: No resizing.
-         * * `scale-down`: Scales as if `none` or `contain` were specified, choosing the smaller result.
+         * * `scale-down`: Scales the image down to fit. Behaves like `none` or `contain`, whichever results in the smaller image.
           * @see https://www.mdui.org/en/docs/2/components/avatar#attributes-fit
           */
           'fit'?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
@@ -53,9 +53,9 @@ declare global {
         */
         'mdui-badge': {
           /**
-          * Defines the badge shape. Possible values:
+          * Defines the badge size. Possible values:
          * * `small`: A small badge without text.
-         * * `large`: A large badge with displayed text.
+         * * `large`: A large badge with text.
           * @see https://www.mdui.org/en/docs/2/components/badge#attributes-variant
           */
           'variant'?: 'small' | 'large';
@@ -77,34 +77,34 @@ declare global {
         */
         'mdui-bottom-app-bar': {
           /**
-          * Hides the bottom app bar when set.
+          * Whether the bottom app bar is hidden.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-hide
           */
           'hide'?: boolean;
         /**
-          * When set, detaches the [`<mdui-fab>`](https://www.mdui.org/en/docs/2/components/fab) from the bottom app bar. The [`<mdui-fab>`](https://www.mdui.org/en/docs/2/components/fab) remains on the page even after the app bar is hidden.
+          * If set, detaches the [`<mdui-fab>`](/en/docs/2/components/fab) from the bottom app bar. The [`<mdui-fab>`](/en/docs/2/components/fab) remains on the page even after the app bar is hidden.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-fab-detach
           */
           'fab-detach'?: boolean;
         /**
-          * Defines the scroll behavior. Possible values:
+          * Specifies the scroll behavior. Possible values:
          * 
          * * `hide`: Hides when scrolling.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-scroll-behavior
           */
           'scroll-behavior'?: 'hide' | 'shrink' | 'elevate';
         /**
-          * The element that listens for scroll events. Accepts a CSS selector, DOM element, or [JQ object](https://www.mdui.org/en/docs/2/functions/jq). Defaults to `window`.
+          * The element to watch for scroll events. Accepts a CSS selector, a DOM element, or a [JQ object](/en/docs/2/functions/jq). Defaults to `window`.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-scroll-target
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * The scroll distance (in pixels) that triggers the scroll behavior.
+          * The scroll distance (in pixels) required to trigger the scroll behavior.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-scroll-threshold
           */
           'scroll-threshold'?: number;
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/bottom-app-bar#attributes-order
           */
           'order'?: number;
@@ -119,11 +119,11 @@ declare global {
         */
         'mdui-button-icon': {
           /**
-          * Defines the icon button style. Possible values:
+          * Defines the icon button variant. Possible values:
          * * `standard`: For low-priority actions.
-         * * `filled`: Has the strongest visual effect, suitable for high-priority actions.
-         * * `tonal`: A visual effect between `filled` and `outlined`, suitable for medium to high-priority actions.
-         * * `outlined`: For medium-priority actions.
+         * * `filled`: Has the strongest visual emphasis and works well for high-priority actions.
+         * * `tonal`: Blends `filled` and `outlined`, and works well for medium- to high-priority actions.
+         * * `outlined`: For medium-priority or secondary actions.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-variant
           */
           'variant'?: 'standard' | 'filled' | 'tonal' | 'outlined';
@@ -138,68 +138,68 @@ declare global {
           */
           'selected-icon'?: string;
         /**
-          * Indicates if the button is selectable.
+          * Makes the button selectable.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-selectable
           */
           'selectable'?: boolean;
         /**
-          * Indicates if the button is selected.
+          * Indicates whether the button is selected.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-selected
           */
           'selected'?: boolean;
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary one (i.e., when `target="_blank"`).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-tabindex
           */
           'tabindex'?: number;
@@ -214,34 +214,34 @@ declare global {
           */
           'loading'?: boolean;
         /**
-          * The button's name, which is submitted with form data.
+          * The button name submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-name
           */
           'name'?: string;
         /**
-          * The button's value, which is submitted with form data.
+          * The button value submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-value
           */
           'value'?: string;
         /**
-          * Defines the button's default behavior. The default is `button`. Possible values:
+          * Specifies the button's default action. Default: `button`. Possible values:
          * 
          * * `submit`: Submits the form data to the server.
-         * * `reset`: Resets all the controls to their initial values.
-         * * `button`: No default behavior, does nothing when pressed by default.
+         * * `reset`: Restores all controls to their initial values.
+         * * `button`: Does nothing by default.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-type
           */
           'type'?: 'submit' | 'reset' | 'button';
         /**
-          * Associates the button with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the button is associated with its parent `<form>`, if any.
+          * Associates the button with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the button uses its parent `<form>`, if any.
          * 
-         * This attribute allows button elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the button target any form in the document, not just the one it is nested in.
          * 
          * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button-icon#attributes-form
@@ -255,11 +255,11 @@ declare global {
           */
           'formaction'?: string;
         /**
-          * Specifies the form data encoding method. Possible values:
+          * Specifies how to encode the form data. Possible values:
          * 
-         * * `application/x-www-form-urlencoded`: Default if the attribute is not used.
-         * * `multipart/form-data`: Used for `<input>` elements with `type` set to `file`.
-         * * `text/plain`: For debugging, not for real form submission.
+         * * `application/x-www-form-urlencoded`: Default when the attribute is omitted.
+         * * `multipart/form-data`: Used for `<input>` elements with `type="file"`.
+         * * `text/plain`: Useful for debugging, but not for actual form submissions.
          * 
          * Overrides the `enctype` attribute of the button's form owner.
          * 
@@ -270,8 +270,8 @@ declare global {
         /**
           * Specifies the HTTP method for form submission. Possible values:
          * 
-         * * `post`: Form data included in HTTP request body.
-         * * `get`: Form data appended to `action` URL.
+         * * `post`: Sends the form data in the request body.
+         * * `get`: Appends the form data to the `action` URL.
          * 
          * Overrides the `method` attribute of the button's form owner.
          * 
@@ -287,12 +287,12 @@ declare global {
           */
           'formnovalidate'?: boolean;
         /**
-          * Specifies where to display the form submission response. Possible values:
+          * Specifies where to open the response after form submission. Possible values:
          * 
-         * * `_self`: Current browsing context. (Default).
+         * * `_self`: Current browsing context (default).
          * * `_blank`: New tab or window.
-         * * `_parent`: Parent browsing context or `_self` if no parent.
-         * * `_top`: Topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Parent browsing context, or `_self` if there is no parent.
+         * * `_top`: Topmost browsing context, or `_self` if there are no ancestors.
          * 
          * Overrides the `target` attribute of the button's form owner.
          * 
@@ -311,17 +311,17 @@ declare global {
         */
         'mdui-button': {
           /**
-          * Defines the button style. Possible values:
-         * * `elevated`: A shadowed button for visual distinction.
+          * Defines the button variant. Possible values:
+         * * `elevated`: A button with a shadow for visual emphasis.
          * * `filled`: Used for final actions like 'Save' or 'Confirm'.
-         * * `tonal`: A mix between `filled` and `outlined`, suitable for medium to high-priority actions.
+         * * `tonal`: Blends `filled` and `outlined`, and works well for medium- to high-priority actions.
          * * `outlined`: A bordered button for medium-priority and secondary actions.
          * * `text`: A text button for low-priority actions.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-variant
           */
           'variant'?: 'elevated' | 'filled' | 'tonal' | 'outlined' | 'text';
         /**
-          * If set, the button will fill the width of its parent element.
+          * If set, the button expands to fill the width of its container.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-full-width
           */
           'full-width'?: boolean;
@@ -336,58 +336,58 @@ declare global {
           */
           'end-icon'?: string;
         /**
-          * The URL for the hyperlink. If provided, the component is rendered as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to download the linked URL.
+          * Downloads the linked URL.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to open the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
+         * * `alternate`: An alternate version of the current document.
          * * `author`: The author of the current document or article.
          * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
          * * `help`: A link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary one (i.e., when `target="_blank"`).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Specifies that the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Defines the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-tabindex
           */
           'tabindex'?: number;
@@ -402,34 +402,34 @@ declare global {
           */
           'loading'?: boolean;
         /**
-          * The button's name, which is submitted with form data.
+          * The button name submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-name
           */
           'name'?: string;
         /**
-          * The button's value, which is submitted with form data.
+          * The button value submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-value
           */
           'value'?: string;
         /**
-          * Defines the button's default behavior. The default is `button`. Possible values:
+          * Specifies the button's default action. Default: `button`. Possible values:
          * 
          * * `submit`: Submits the form data to the server.
-         * * `reset`: Resets all the controls to their initial values.
-         * * `button`: No default behavior, does nothing when pressed by default.
+         * * `reset`: Restores all controls to their initial values.
+         * * `button`: Does nothing by default.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-type
           */
           'type'?: 'submit' | 'reset' | 'button';
         /**
-          * Associates the button with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the button is associated with its parent `<form>`, if any.
+          * Associates the button with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the button uses its parent `<form>`, if any.
          * 
-         * This attribute allows button elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the button target any form in the document, not just the one it is nested in.
          * 
          * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/button#attributes-form
@@ -443,11 +443,11 @@ declare global {
           */
           'formaction'?: string;
         /**
-          * Specifies the form data encoding method. Possible values:
+          * Specifies how to encode the form data. Possible values:
          * 
-         * * `application/x-www-form-urlencoded`: Default if the attribute is not used.
-         * * `multipart/form-data`: Used for `<input>` elements with `type` set to `file`.
-         * * `text/plain`: For debugging, not for real form submission.
+         * * `application/x-www-form-urlencoded`: Default when the attribute is omitted.
+         * * `multipart/form-data`: Used for `<input>` elements with `type="file"`.
+         * * `text/plain`: Useful for debugging, but not for actual form submissions.
          * 
          * Overrides the `enctype` attribute of the button's form owner.
          * 
@@ -458,8 +458,8 @@ declare global {
         /**
           * Specifies the HTTP method for form submission. Possible values:
          * 
-         * * `post`: Form data included in HTTP request body.
-         * * `get`: Form data appended to `action` URL.
+         * * `post`: Sends the form data in the request body.
+         * * `get`: Appends the form data to the `action` URL.
          * 
          * Overrides the `method` attribute of the button's form owner.
          * 
@@ -475,12 +475,12 @@ declare global {
           */
           'formnovalidate'?: boolean;
         /**
-          * Specifies where to display the form submission response. Possible values:
+          * Specifies where to open the response after form submission. Possible values:
          * 
-         * * `_self`: Current browsing context. (Default).
+         * * `_self`: Current browsing context (default).
          * * `_blank`: New tab or window.
-         * * `_parent`: Parent browsing context or `_self` if no parent.
-         * * `_top`: Topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Parent browsing context, or `_self` if there is no parent.
+         * * `_top`: Topmost browsing context, or `_self` if there are no ancestors.
          * 
          * Overrides the `target` attribute of the button's form owner.
          * 
@@ -499,15 +499,15 @@ declare global {
         */
         'mdui-card': {
           /**
-          * Defines the card style. Possible values:
-         * * `elevated`: Shadowed, providing more visual separation from the background than `filled`, but less than `outlined`.
-         * * `filled`: Provides minimal visual separation from the background.
-         * * `outlined`: Bordered, providing maximum visual separation from the background.
+          * Defines the card variant. Possible values:
+         * * `elevated`: Shadowed, offering more separation from the background than `filled`, but less than `outlined`.
+         * * `filled`: Provides minimal separation from the background.
+         * * `outlined`: Bordered, providing the most separation from the background.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-variant
           */
           'variant'?: 'elevated' | 'filled' | 'outlined';
         /**
-          * Makes the card clickable. When set, a mouse hover effect and click ripple effect are added.
+          * Makes the card clickable. If set, hover and click ripple effects are added.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-clickable
           */
           'clickable'?: boolean;
@@ -517,58 +517,58 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates a new browsing context when the hyperlink would otherwise open in a top-level context that is not auxiliary (for example, when `target="_blank"` is specified).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/card#attributes-tabindex
           */
           'tabindex'?: number;
@@ -583,7 +583,7 @@ declare global {
         */
         'mdui-checkbox': {
           /**
-          * Dsiables the checkbox.
+          * Disables the checkbox.
           * @see https://www.mdui.org/en/docs/2/components/checkbox#attributes-disabled
           */
           'disabled'?: boolean;
@@ -598,14 +598,14 @@ declare global {
           */
           'indeterminate'?: boolean;
         /**
-          * Requires the checkbox to be checked for form submission.
+          * The checkbox must be checked to submit the form.
           * @see https://www.mdui.org/en/docs/2/components/checkbox#attributes-required
           */
           'required'?: boolean;
         /**
-          * Associates the checkbox with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the checkbox is associated with its parent `<form>`, if any.
+          * Associates the checkbox with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the checkbox uses its parent `<form>`, if any.
          * 
-         * This attribute allows checkbox elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the checkbox work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/checkbox#attributes-form
           */
           'form'?: string;
@@ -635,12 +635,12 @@ declare global {
           */
           'indeterminate-icon'?: string;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/checkbox#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/checkbox#attributes-tabindex
           */
           'tabindex'?: number;
@@ -655,17 +655,17 @@ declare global {
         */
         'mdui-chip': {
           /**
-          * Defines the chip type. Possible values:
+          * Defines the chip variant. Possible values:
          * 
-         * * `assist`: Displays auxiliary actions related to the context, such as sharing and favoriting on a meal ordering page.
-         * * `filter`: Filters content, like search results on a search results page.
-         * * `input`: Represents fragments of user input, such as contacts in the 'To' field in Gmail.
-         * * `suggestion`: Provides dynamically generated suggestions to simplify user actions, like message predictions in a chat application.
+         * * `assist`: Shows contextual actions, such as sharing or favoriting on a meal-ordering page.
+         * * `filter`: Filters content, such as search results.
+         * * `input`: Represents user input, such as contacts in Gmail's 'To' field.
+         * * `suggestion`: Shows dynamic suggestions that help users act more quickly, such as message suggestions in a chat app.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-variant
           */
           'variant'?: 'assist' | 'filter' | 'input' | 'suggestion';
         /**
-          * Gives the chip a shadow.
+          * Adds a shadow to the chip.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-elevated
           */
           'elevated'?: boolean;
@@ -680,7 +680,7 @@ declare global {
           */
           'selected'?: boolean;
         /**
-          * Makes the chip deletable. When set, a delete icon appears on the right.
+          * Makes the chip deletable. If set, a delete icon appears on the right.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-deletable
           */
           'deletable'?: boolean;
@@ -705,58 +705,58 @@ declare global {
           */
           'delete-icon'?: string;
         /**
-          * The URL for the hyperlink. If provided, the component is rendered as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to download the linked URL.
+          * Downloads the linked URL.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to open the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
+         * * `alternate`: An alternate version of the current document.
          * * `author`: The author of the current document or article.
          * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
          * * `help`: A link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary one (i.e., when `target="_blank"`).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Specifies that the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Defines the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-tabindex
           */
           'tabindex'?: number;
@@ -771,34 +771,34 @@ declare global {
           */
           'loading'?: boolean;
         /**
-          * The button's name, which is submitted with form data.
+          * The button name submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-name
           */
           'name'?: string;
         /**
-          * The button's value, which is submitted with form data.
+          * The button value submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-value
           */
           'value'?: string;
         /**
-          * Defines the button's default behavior. The default is `button`. Possible values:
+          * Specifies the button's default action. Default: `button`. Possible values:
          * 
          * * `submit`: Submits the form data to the server.
-         * * `reset`: Resets all the controls to their initial values.
-         * * `button`: No default behavior, does nothing when pressed by default.
+         * * `reset`: Restores all controls to their initial values.
+         * * `button`: Does nothing by default.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-type
           */
           'type'?: 'submit' | 'reset' | 'button';
         /**
-          * Associates the button with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the button is associated with its parent `<form>`, if any.
+          * Associates the button with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the button uses its parent `<form>`, if any.
          * 
-         * This attribute allows button elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the button target any form in the document, not just the one it is nested in.
          * 
          * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/chip#attributes-form
@@ -812,11 +812,11 @@ declare global {
           */
           'formaction'?: string;
         /**
-          * Specifies the form data encoding method. Possible values:
+          * Specifies how to encode the form data. Possible values:
          * 
-         * * `application/x-www-form-urlencoded`: Default if the attribute is not used.
-         * * `multipart/form-data`: Used for `<input>` elements with `type` set to `file`.
-         * * `text/plain`: For debugging, not for real form submission.
+         * * `application/x-www-form-urlencoded`: Default when the attribute is omitted.
+         * * `multipart/form-data`: Used for `<input>` elements with `type="file"`.
+         * * `text/plain`: Useful for debugging, but not for actual form submissions.
          * 
          * Overrides the `enctype` attribute of the button's form owner.
          * 
@@ -827,8 +827,8 @@ declare global {
         /**
           * Specifies the HTTP method for form submission. Possible values:
          * 
-         * * `post`: Form data included in HTTP request body.
-         * * `get`: Form data appended to `action` URL.
+         * * `post`: Sends the form data in the request body.
+         * * `get`: Appends the form data to the `action` URL.
          * 
          * Overrides the `method` attribute of the button's form owner.
          * 
@@ -844,12 +844,12 @@ declare global {
           */
           'formnovalidate'?: boolean;
         /**
-          * Specifies where to display the form submission response. Possible values:
+          * Specifies where to open the response after form submission. Possible values:
          * 
-         * * `_self`: Current browsing context. (Default).
+         * * `_self`: Current browsing context (default).
          * * `_blank`: New tab or window.
-         * * `_parent`: Parent browsing context or `_self` if no parent.
-         * * `_top`: Topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Parent browsing context, or `_self` if there is no parent.
+         * * `_top`: Topmost browsing context, or `_self` if there are no ancestors.
          * 
          * Overrides the `target` attribute of the button's form owner.
          * 
@@ -879,7 +879,7 @@ declare global {
           'value'?: number;
         } & HTMLElementProps;
       /**
-        * Collapse Item Component  It should be used in conjunction with the `<mdui-collapse>` component 
+        * Collapse Item Component  Use with the `<mdui-collapse>` component 
        * 
        * ```html
        * <mdui-collapse>
@@ -906,13 +906,13 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * Identifies the element that triggers the collapse on click. This can be a CSS selector, a DOM element, or a [JQ object](https://www.mdui.org/en/docs/2/functions/jq). By default, the entire header area is the trigger.
+          * The element that toggles collapse on click. This can be a CSS selector, a DOM element, or a [JQ object](/en/docs/2/functions/jq). By default, the entire header area is the trigger.
           * @see https://www.mdui.org/en/docs/2/components/collapse#collapse-item-attributes-trigger
           */
           'trigger'?: string | HTMLElement | JQ<HTMLElement>;
         } & HTMLElementProps;
       /**
-        * Collapse Panel Component  It should be used in conjunction with the `<mdui-collapse-item>` component 
+        * Collapse Panel Component  Use with the `<mdui-collapse-item>` component 
        * 
        * ```html
        * <mdui-collapse>
@@ -931,7 +931,7 @@ declare global {
         /**
           * Specifies the open `<mdui-collapse-item>` value.
          * 
-         * Note: The HTML attribute is always a string and can only be initially set when `accordion` is `true`. The JavaScript property value is a string when `accordion` is `true` and a string array when `accordion` is `false`. To modify this value when `accordion` is `false`, you must change the JavaScript property.
+         * **Note**: The HTML attribute is always a string and can only be set initially when `accordion` is `true`. The JavaScript property is a string when `accordion` is `true` and a string array when `accordion` is `false`. To change this value when `accordion` is `false`, update the JavaScript property.
           * @see https://www.mdui.org/en/docs/2/components/collapse#collapse-attributes-value
           */
           'value'?: string | string[];
@@ -961,7 +961,7 @@ declare global {
           */
           'headline'?: string;
         /**
-          * Sets the text below the title. Alternatively, use `slot="description"`.
+          * The text displayed below the title. Alternatively, use `slot="description"`.
           * @see https://www.mdui.org/en/docs/2/components/dialog#attributes-description
           */
           'description'?: string;
@@ -971,7 +971,7 @@ declare global {
           */
           'open'?: boolean;
         /**
-          * Sets the dialog to full-screen.
+          * Displays the dialog in full-screen mode.
           * @see https://www.mdui.org/en/docs/2/components/dialog#attributes-fullscreen
           */
           'fullscreen'?: boolean;
@@ -1042,20 +1042,20 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * Defines the trigger method for the dropdown. Supports multiple space-separated values. Possible values:
+          * Defines how the dropdown opens. Multiple space-separated values are supported. Possible values:
          * 
-         * * `click`: Trigger on click.
-         * * `hover`: Trigger on mouse hover.
-         * * `focus`: Trigger on focus.
-         * * `contextmenu`: Trigger on right-click or touch long press.
+         * * `click`: Triggers on click.
+         * * `hover`: Triggers on mouse hover.
+         * * `focus`: Triggers on focus.
+         * * `contextmenu`: Triggers on right-click or long press.
          * * `manual`: If used, the dropdown can only be opened and closed programmatically, and no other trigger methods can be specified.
           * @see https://www.mdui.org/en/docs/2/components/dropdown#attributes-trigger
           */
           'trigger'?: 'click' | 'hover' | 'focus' | 'contextmenu' | 'manual' | string;
         /**
-          * Sets the position of the dropdown. Possible values:
+          * Sets the dropdown position. Possible values:
          * 
-         * * `auto`: Automatically determine the position.
+         * * `auto`: Automatically determined.
          * * `top-start`: Above and left-aligned.
          * * `top`: Above and centered.
          * * `top-end`: Above and right-aligned.
@@ -1072,7 +1072,7 @@ declare global {
           */
           'placement'?: 'auto' | 'top-start' | 'top' | 'top-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end' | 'right-start' | 'right' | 'right-end';
         /**
-          * Keeps the dropdown open after clicking an [`<mdui-menu-item>`](https://www.mdui.org/en/docs/2/components/menu#menu-item-api).
+          * Prevents the dropdown from closing when a [`<mdui-menu-item>`](/en/docs/2/components/menu#menu-item-api) is clicked.
           * @see https://www.mdui.org/en/docs/2/components/dropdown#attributes-stay-open-on-click
           */
           'stay-open-on-click'?: boolean;
@@ -1087,7 +1087,7 @@ declare global {
           */
           'close-delay'?: number;
         /**
-          * Opens the dropdown at the cursor position. This is typically used for context menus.
+          * Opens the dropdown at the pointer position. This is typically used for context menus.
           * @see https://www.mdui.org/en/docs/2/components/dropdown#attributes-open-on-pointer
           */
           'open-on-pointer'?: boolean;
@@ -1113,9 +1113,9 @@ declare global {
           'variant'?: 'primary' | 'surface' | 'secondary' | 'tertiary';
         /**
           * Sets the FAB size. Possible values:
-         * * `normal`: Sets the FAB to a normal size.
-         * * `small`: Sets the FAB to a small size.
-         * * `large`: Sets the FAB to a large size.
+         * * `normal`: Normal size.
+         * * `small`: Small size.
+         * * `large`: Large size.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-size
           */
           'size'?: 'normal' | 'small' | 'large';
@@ -1125,63 +1125,63 @@ declare global {
           */
           'icon'?: string;
         /**
-          * Indicates if the FAB is in the extended state.
+          * Extends the FAB to show text alongside the icon.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-extended
           */
           'extended'?: boolean;
         /**
-          * The URL for the hyperlink. If provided, the component is rendered as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to download the linked URL.
+          * Downloads the linked URL.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to open the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
+         * * `alternate`: An alternate version of the current document.
          * * `author`: The author of the current document or article.
          * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
          * * `help`: A link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary one (i.e., when `target="_blank"`).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Specifies that the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Defines the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-tabindex
           */
           'tabindex'?: number;
@@ -1196,34 +1196,34 @@ declare global {
           */
           'loading'?: boolean;
         /**
-          * The button's name, which is submitted with form data.
+          * The button name submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-name
           */
           'name'?: string;
         /**
-          * The button's value, which is submitted with form data.
+          * The button value submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-value
           */
           'value'?: string;
         /**
-          * Defines the button's default behavior. The default is `button`. Possible values:
+          * Specifies the button's default action. Default: `button`. Possible values:
          * 
          * * `submit`: Submits the form data to the server.
-         * * `reset`: Resets all the controls to their initial values.
-         * * `button`: No default behavior, does nothing when pressed by default.
+         * * `reset`: Restores all controls to their initial values.
+         * * `button`: Does nothing by default.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-type
           */
           'type'?: 'submit' | 'reset' | 'button';
         /**
-          * Associates the button with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the button is associated with its parent `<form>`, if any.
+          * Associates the button with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the button uses its parent `<form>`, if any.
          * 
-         * This attribute allows button elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the button target any form in the document, not just the one it is nested in.
          * 
          * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/fab#attributes-form
@@ -1237,11 +1237,11 @@ declare global {
           */
           'formaction'?: string;
         /**
-          * Specifies the form data encoding method. Possible values:
+          * Specifies how to encode the form data. Possible values:
          * 
-         * * `application/x-www-form-urlencoded`: Default if the attribute is not used.
-         * * `multipart/form-data`: Used for `<input>` elements with `type` set to `file`.
-         * * `text/plain`: For debugging, not for real form submission.
+         * * `application/x-www-form-urlencoded`: Default when the attribute is omitted.
+         * * `multipart/form-data`: Used for `<input>` elements with `type="file"`.
+         * * `text/plain`: Useful for debugging, but not for actual form submissions.
          * 
          * Overrides the `enctype` attribute of the button's form owner.
          * 
@@ -1252,8 +1252,8 @@ declare global {
         /**
           * Specifies the HTTP method for form submission. Possible values:
          * 
-         * * `post`: Form data included in HTTP request body.
-         * * `get`: Form data appended to `action` URL.
+         * * `post`: Sends the form data in the request body.
+         * * `get`: Appends the form data to the `action` URL.
          * 
          * Overrides the `method` attribute of the button's form owner.
          * 
@@ -1269,12 +1269,12 @@ declare global {
           */
           'formnovalidate'?: boolean;
         /**
-          * Specifies where to display the form submission response. Possible values:
+          * Specifies where to open the response after form submission. Possible values:
          * 
-         * * `_self`: Current browsing context. (Default).
+         * * `_self`: Current browsing context (default).
          * * `_blank`: New tab or window.
-         * * `_parent`: Parent browsing context or `_self` if no parent.
-         * * `_top`: Topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Parent browsing context, or `_self` if there is no parent.
+         * * `_top`: Topmost browsing context, or `_self` if there are no ancestors.
          * 
          * Overrides the `target` attribute of the button's form owner.
          * 
@@ -1317,17 +1317,17 @@ declare global {
         */
         'mdui-layout-item': {
           /**
-          * Determines the component's position. Possible values:
+          * Determines where the component is placed. Possible values:
          * 
-         * * `top`: Positions the component at the top.
-         * * `bottom`: Positions the component at the bottom.
-         * * `left`: Positions the component on the left.
-         * * `right`: Positions the component on the right.
+         * * `top`: Places the component at the top.
+         * * `bottom`: Places the component at the bottom.
+         * * `left`: Places the component on the left.
+         * * `right`: Places the component on the right.
           * @see https://www.mdui.org/en/docs/2/components/layout#layout-item-attributes-placement
           */
           'placement'?: 'top' | 'bottom' | 'left' | 'right';
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/layout#layout-item-attributes-order
           */
           'order'?: number;
@@ -1387,7 +1387,7 @@ declare global {
           'value'?: number;
         } & HTMLElementProps;
       /**
-        * List Item Component  It should be used in conjunction with the `<mdui-list>` component 
+        * List Item Component  Use with the `<mdui-list>` component 
        * 
        * ```html
        * <mdui-list>
@@ -1405,11 +1405,11 @@ declare global {
           */
           'headline'?: string;
         /**
-          * Line limit for main text. Truncates after exceeding. Default is no limit. Possible values:
+          * Maximum number of lines for the main text. Overflow text is truncated. Default is no limit. Possible values:
          * 
-         * * `1`: Single-line text, truncates after exceeding
-         * * `2`: Double-line text, truncates after exceeding.
-         * * `3`: Triple-line text, truncates after exceeding.
+         * * `1`: Single-line text that truncates when it overflows.
+         * * `2`: Two-line text that truncates when it overflows.
+         * * `3`: Three-line text that truncates when it overflows.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-headline-line
           */
           'headline-line'?: 1 | 2 | 3;
@@ -1419,11 +1419,11 @@ declare global {
           */
           'description'?: string;
         /**
-          * Line limit for subtext. Truncates after exceeding. Default is no limit. Possible values:
+          * Maximum number of lines for the subtext. Overflow text is truncated. Default is no limit. Possible values:
          * 
-         * * `1`: Single-line text, truncates after exceeding
-         * * `2`: Double-line text, truncates after exceeding.
-         * * `3`: Triple-line text, truncates after exceeding.
+         * * `1`: Single-line text that truncates when it overflows.
+         * * `2`: Two-line text that truncates when it overflows.
+         * * `3`: Three-line text that truncates when it overflows.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-description-line
           */
           'description-line'?: 1 | 2 | 3;
@@ -1438,93 +1438,93 @@ declare global {
           */
           'end-icon'?: string;
         /**
-          * Disables the list item. Grays out the item and disables elements like [`<mdui-checkbox>`](https://www.mdui.org/en/docs/2/components/checkbox), [`<mdui-radio>`](https://www.mdui.org/en/docs/2/components/radio), [`<mdui-switch>`](https://www.mdui.org/en/docs/2/components/switch).
+          * Disables the list item. It dims the item and disables interactive elements like [`<mdui-checkbox>`](/en/docs/2/components/checkbox), [`<mdui-radio>`](/en/docs/2/components/radio), and [`<mdui-switch>`](/en/docs/2/components/switch).
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-disabled
           */
           'disabled'?: boolean;
         /**
-          * Activates the list item.
+          * Marks the list item as active.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-active
           */
           'active'?: boolean;
         /**
-          * Makes the list item non-clickable. Elements like [`<mdui-checkbox>`](https://www.mdui.org/en/docs/2/components/checkbox), [`<mdui-radio>`](https://www.mdui.org/en/docs/2/components/radio), [`<mdui-switch>`](https://www.mdui.org/en/docs/2/components/switch) remain interactive.
+          * Disables the list item's default click action, but interactive elements like [`<mdui-checkbox>`](/en/docs/2/components/checkbox), [`<mdui-radio>`](/en/docs/2/components/radio), and [`<mdui-switch>`](/en/docs/2/components/switch) inside it remain functional.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-nonclickable
           */
           'nonclickable'?: boolean;
         /**
-          * Applies rounded style to the list item.
+          * Applies a rounded appearance to the list item.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-rounded
           */
           'rounded'?: boolean;
         /**
           * Vertical alignment of the list item. Possible values:
          * 
-         * * `start`: Top alignment.
-         * * `center`: Center alignment.
-         * * `end`: Bottom alignment.
+         * * `start`: Aligns to the top.
+         * * `center`: Aligns to the center.
+         * * `end`: Aligns to the bottom.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-alignment
           */
           'alignment'?: 'start' | 'center' | 'end';
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates a new browsing context when the hyperlink would otherwise open in a top-level context that is not auxiliary (for example, when `target="_blank"` is specified).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/list#list-item-attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * List Subheader Component  It should be used in conjunction with the `<mdui-list>` component 
+        * List Subheader Component  Use with the `<mdui-list>` component 
        * 
        * ```html
        * <mdui-list>
@@ -1539,7 +1539,7 @@ declare global {
           
         } & HTMLElementProps;
       /**
-        * List Component  It should be used in conjunction with the `<mdui-list-item>` component 
+        * List Component  Use with the `<mdui-list-item>` component 
        * 
        * ```html
        * <mdui-list>
@@ -1601,64 +1601,64 @@ declare global {
           */
           'submenu-open'?: boolean;
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates a new browsing context when the hyperlink would otherwise open in a top-level context that is not auxiliary (for example, when `target="_blank"` is specified).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-item-attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * Menu Component  It should be used in conjunction with the `<mdui-menu-item>` component 
+        * Menu Component  Use with the `<mdui-menu-item>` component 
        * 
        * ```html
        * <mdui-menu>
@@ -1670,7 +1670,7 @@ declare global {
         */
         'mdui-menu': {
           /**
-          * Defines the selectable state of menu items. Defaults to non-selectable. Possible values:
+          * Controls whether menu items can be selected. They are not selectable by default. Possible values:
          * 
          * * `single`: Only one item can be selected at a time.
          * * `multiple`: Multiple items can be selected.
@@ -1680,7 +1680,7 @@ declare global {
         /**
           * The value of the selected `<mdui-menu-item>`.
          * 
-         * Note: The HTML attribute is always a string and can only be set as an initial value when `selects="single"`. The JavaScript property value is a string when `selects="single"` and an array of strings when `selects="multiple"`. In `selects="multiple"`, this value can only be modified by changing the JavaScript property.
+         * **Note**: The HTML attribute always accepts a string and can only be used as an initial value when `selects="single"`. The JavaScript property is a string when `selects="single"` and an array of strings when `selects="multiple"`. When `selects="multiple"`, update the JavaScript property to change this value.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-attributes-value
           */
           'value'?: string | string[];
@@ -1690,28 +1690,28 @@ declare global {
           */
           'dense'?: boolean;
         /**
-          * Defines the trigger method for submenus. Supports multiple values separated by spaces. Possible values:
+          * Defines how submenus open. Multiple space-separated values are supported. Possible values:
          * 
-         * * `click`: Open submenu when clicking on a menu item.
-         * * `hover`: Open submenu when hovering over a menu item.
-         * * `focus`: Open submenu when focusing on a menu item.
-         * * `manual`: Only programmatically open and close submenus, no other trigger methods can be specified.
+         * * `click`: Opens the submenu when the menu item is clicked.
+         * * `hover`: Opens the submenu when hovering over a menu item.
+         * * `focus`: Opens the submenu when the menu item receives focus.
+         * * `manual`: Submenus can only be opened and closed programmatically; no other trigger methods can be specified.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-attributes-submenu-trigger
           */
           'submenu-trigger'?: 'click' | 'hover' | 'focus' | 'manual' | string;
         /**
-          * Specifies the delay (in milliseconds) for opening a submenu via hover.
+          * The delay (in milliseconds) before a submenu opens on hover.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-attributes-submenu-open-delay
           */
           'submenu-open-delay'?: number;
         /**
-          * Specifies the delay (in milliseconds) for closing a submenu via hover.
+          * The delay (in milliseconds) before a submenu closes on hover.
           * @see https://www.mdui.org/en/docs/2/components/menu#menu-attributes-submenu-close-delay
           */
           'submenu-close-delay'?: number;
         } & HTMLElementProps;
       /**
-        * Navigation Bar Item Component  It should be used in conjunction with the `<mdui-navigation-bar>` component 
+        * Navigation Bar Item Component  Use with the `<mdui-navigation-bar>` component 
        * 
        * ```html
        * <mdui-navigation-bar>
@@ -1739,64 +1739,64 @@ declare global {
           */
           'value'?: string;
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates a new browsing context when the hyperlink would otherwise open in a top-level context that is not auxiliary (for example, when `target="_blank"` is specified).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-item-attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * Navigation Bar Component  It should be used in conjunction with the `<mdui-navigation-bar-item>` component 
+        * Navigation Bar Component  Use with the `<mdui-navigation-bar-item>` component 
        * 
        * ```html
        * <mdui-navigation-bar>
@@ -1809,14 +1809,14 @@ declare global {
         */
         'mdui-navigation-bar': {
           /**
-          * Hides the navigation bar when set.
+          * Whether the navigation bar is hidden.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-attributes-hide
           */
           'hide'?: boolean;
         /**
-          * Specifies the visibility of the text. Possible values:
+          * Specifies when the text is shown. Possible values:
          * 
-         * * `auto`: Visible if there are 3 or fewer options, otherwise only the selected state is visible.
+         * * `auto`: Visible if there are 3 or fewer items; otherwise, only visible in the selected state.
          * * `selected`: Only visible in the selected state.
          * * `labeled`: Always visible.
          * * `unlabeled`: Never visible.
@@ -1836,17 +1836,17 @@ declare global {
           */
           'scroll-behavior'?: 'hide' | 'shrink' | 'elevate';
         /**
-          * The element that listens for scroll events. Accepts a CSS selector, DOM element, or [JQ object](https://www.mdui.org/en/docs/2/functions/jq). Defaults to `window`.
+          * The element to watch for scroll events. Accepts a CSS selector, a DOM element, or a [JQ object](/en/docs/2/functions/jq). Defaults to `window`.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-attributes-scroll-target
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * The scroll distance (in pixels) that triggers the scroll behavior.
+          * The scroll distance (in pixels) required to trigger the scroll behavior.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-attributes-scroll-threshold
           */
           'scroll-threshold'?: number;
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/navigation-bar#navigation-bar-attributes-order
           */
           'order'?: number;
@@ -1868,7 +1868,7 @@ declare global {
         /**
           * Displays an overlay when open.
          * 
-         * On narrow devices (screen width < [`--mdui-breakpoint-md`](https://www.mdui.org/en/docs/2/styles/design-tokens#breakpoint)), the overlay always displays.
+         * On narrow devices (screen width < [`--mdui-breakpoint-md`](/en/docs/2/styles/design-tokens#breakpoint)), the overlay is always displayed.
           * @see https://www.mdui.org/en/docs/2/components/navigation-drawer#attributes-modal
           */
           'modal'?: boolean;
@@ -1883,28 +1883,28 @@ declare global {
           */
           'close-on-overlay-click'?: boolean;
         /**
-          * Sets the drawer's display position. Possible values:
+          * Sets the drawer's position. Possible values:
          * 
-         * * `left`: Display on the left side.
-         * * `right`: Display on the right side.
+         * * `left`: Displays on the left side.
+         * * `right`: Displays on the right side.
           * @see https://www.mdui.org/en/docs/2/components/navigation-drawer#attributes-placement
           */
           'placement'?: 'left' | 'right';
         /**
-          * By default, the navigation drawer displays relative to the `body` element. When set, it displays relative to its parent element.
+          * By default, the navigation drawer is positioned relative to the `body` element. If set, it is positioned relative to its parent element.
          * 
-         * Note: You must add `position: relative; overflow: hidden;` style to the parent element when this attribute is set.
+         * **Note**: You must manually set `position: relative; overflow: hidden;` on the parent element when this attribute is set.
           * @see https://www.mdui.org/en/docs/2/components/navigation-drawer#attributes-contained
           */
           'contained'?: boolean;
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/navigation-drawer#attributes-order
           */
           'order'?: number;
         } & HTMLElementProps;
       /**
-        * Navigation Rail Item Component  It should be used in conjunction with the `<mdui-navigation-rail>` component 
+        * Navigation Rail Item Component  Use with the `<mdui-navigation-rail>` component 
        * 
        * ```html
        * <mdui-navigation-rail>
@@ -1932,64 +1932,64 @@ declare global {
           */
           'value'?: string;
         /**
-          * The URL for the hyperlink. If specified, the component renders as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to treat the linked URL as a download.
+          * Downloads the linked URL.
          * 
-         * **Note**:  This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to display the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent exists.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors exist.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
-         * * `author`: Author of the current document or article.
-         * * `bookmark`: Permanent link for the nearest ancestor section.
+         * * `alternate`: An alternate version of the current document.
+         * * `author`: The author of the current document or article.
+         * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
-         * * `help`: Link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `help`: A link to context-sensitive help.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates a new browsing context when the hyperlink would otherwise open in a top-level context that is not auxiliary (for example, when `target="_blank"` is specified).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-item-attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * Navigation Rail Component  It should be used in conjunction with the `<mdui-navigation-rail-item>` component 
+        * Navigation Rail Component  Use with the `<mdui-navigation-rail-item>` component 
        * 
        * ```html
        * <mdui-navigation-rail>
@@ -2007,15 +2007,15 @@ declare global {
           */
           'value'?: string;
         /**
-          * Sets the navigation bar's position. Possible values:
+          * Sets the navigation rail's position. Possible values:
          * 
-         * * `left`: Display on the left.
-         * * `right`: Display on the right.
+         * * `left`: Displays on the left.
+         * * `right`: Displays on the right.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-attributes-placement
           */
           'placement'?: 'left' | 'right';
         /**
-          * Sets the alignment of `<mdui-navigation-rail-item>`. Possible values:
+          * Sets the alignment of `<mdui-navigation-rail-item>` elements. Possible values:
          * 
          * * `start`: Aligns to the top.
          * * `center`: Aligns to the center.
@@ -2024,25 +2024,25 @@ declare global {
           */
           'alignment'?: 'start' | 'center' | 'end';
         /**
-          * By default, the navigation rail displays relative to the `body` element. When set, it displays relative to its parent element.
+          * By default, the navigation rail is positioned relative to the `body` element. If set, it is positioned relative to its parent element.
          * 
-         * Note: You must add `position: relative; overflow: hidden;` style to the parent element when this attribute is set.
+         * **Note**: You must manually set `position: relative;` on the parent element when this attribute is set.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-attributes-contained
           */
           'contained'?: boolean;
         /**
-          * Adds a divider between the navigation bar and the page content.
+          * Adds a divider between the navigation rail and the page content.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-attributes-divider
           */
           'divider'?: boolean;
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/navigation-rail#navigation-rail-attributes-order
           */
           'order'?: number;
         } & HTMLElementProps;
       /**
-        * Radio Group Component  It should be used in conjunction with the `<mdui-radio>` component 
+        * Radio Group Component  Use with the `<mdui-radio>` component 
        * 
        * ```html
        * <mdui-radio-group value="chinese">
@@ -2054,14 +2054,14 @@ declare global {
         */
         'mdui-radio-group': {
           /**
-          * Disables the radio group when set.
+          * Disables the radio group.
           * @see https://www.mdui.org/en/docs/2/components/radio#radio-group-attributes-disabled
           */
           'disabled'?: boolean;
         /**
-          * Associates the radio group with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the radio group is associated with its parent `<form>`, if any.
+          * Associates the radio group with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the radio group uses its parent `<form>`, if any.
          * 
-         * This attribute allows radio group elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the radio group work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/radio#radio-group-attributes-form
           */
           'form'?: string;
@@ -2082,7 +2082,7 @@ declare global {
           'required'?: boolean;
         } & HTMLElementProps;
       /**
-        * Radio Component  It should be used in conjunction with the `<mdui-radio-group>` component 
+        * Radio Component  Use with the `<mdui-radio-group>` component 
        * 
        * ```html
        * <mdui-radio-group value="chinese">
@@ -2099,7 +2099,7 @@ declare global {
           */
           'value'?: string;
         /**
-          * Disables the radio when set.
+          * Disables the radio.
           * @see https://www.mdui.org/en/docs/2/components/radio#radio-attributes-disabled
           */
           'disabled'?: boolean;
@@ -2119,12 +2119,12 @@ declare global {
           */
           'checked-icon'?: string;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/radio#radio-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/radio#radio-attributes-tabindex
           */
           'tabindex'?: number;
@@ -2139,12 +2139,12 @@ declare global {
         */
         'mdui-range-slider': {
           /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/range-slider#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/range-slider#attributes-tabindex
           */
           'tabindex'?: number;
@@ -2169,7 +2169,7 @@ declare global {
           */
           'tickmarks'?: boolean;
         /**
-          * Hides the tooltip.
+          * Hides the value label.
           * @see https://www.mdui.org/en/docs/2/components/range-slider#attributes-nolabel
           */
           'nolabel'?: boolean;
@@ -2179,20 +2179,20 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * Associates the slider with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the slider is associated with its parent `<form>`, if any.
+          * Associates the slider with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the slider uses its parent `<form>`, if any.
          * 
-         * This attribute allows slider elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the slider work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/range-slider#attributes-form
           */
           'form'?: string;
         /**
-          * Specifies the slider's name, which is submitted with the form data.
+          * Specifies the slider's name, which is submitted with form data.
           * @see https://www.mdui.org/en/docs/2/components/range-slider#attributes-name
           */
           'name'?: string;
         } & HTMLElementProps;
       /**
-        * Segmented Button Group Component  It should be used in conjunction with the `<mdui-segmented-button>` component 
+        * Segmented Button Group Component  Use with the `<mdui-segmented-button>` component 
        * 
        * ```html
        * <mdui-segmented-button-group>
@@ -2205,12 +2205,12 @@ declare global {
         */
         'mdui-segmented-button-group': {
           /**
-          * If set, the segmented button group will fill the width of its parent element.
+          * If set, the segmented button group expands to fill the width of its container.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-group-attributes-full-width
           */
           'full-width'?: boolean;
         /**
-          * Defines selectable states. Default is non-selectable. Possible values:
+          * Controls whether the segmented button group can be selected. By default, it is not selectable. Possible values:
          * 
          * * `single`: Only one can be selected.
          * * `multiple`: Multiple selections are allowed.
@@ -2218,7 +2218,7 @@ declare global {
           */
           'selects'?: 'single' | 'multiple';
         /**
-          * Disables the segmented button group when set.
+          * Disables the segmented button group.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-group-attributes-disabled
           */
           'disabled'?: boolean;
@@ -2228,9 +2228,9 @@ declare global {
           */
           'required'?: boolean;
         /**
-          * Associates the segmented button group with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the segmented button group is associated with its parent `<form>`, if any.
+          * Associates the segmented button group with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the segmented button group uses its parent `<form>`, if any.
          * 
-         * This attribute allows segmented button group elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the segmented button group work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-group-attributes-form
           */
           'form'?: string;
@@ -2242,13 +2242,13 @@ declare global {
         /**
           * The value of the selected `<mdui-segmented-button>`. This value is submitted with form data.
          * 
-         * Note: The HTML attribute is always a string and can only be set as an initial value when `selects="single"`. The JavaScript property is a string when `selects="single"` and an array of strings when `selects="multiple"`. In `selects="multiple"`, this value can only be modified by changing the JavaScript property.
+         * **Note**: The HTML attribute always accepts a string and can only be used as an initial value when `selects="single"`. The JavaScript property is a string when `selects="single"` and an array of strings when `selects="multiple"`. When `selects="multiple"`, update the JavaScript property to change this value.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-group-attributes-value
           */
           'value'?: string | string[];
         } & HTMLElementProps;
       /**
-        * Segmented Button Component  It should be used in conjunction with the `<mdui-segmented-button-group>` component 
+        * Segmented Button Component  Use with the `<mdui-segmented-button-group>` component 
        * 
        * ```html
        * <mdui-segmented-button-group>
@@ -2276,58 +2276,58 @@ declare global {
           */
           'selected-icon'?: string;
         /**
-          * The URL for the hyperlink. If provided, the component is rendered as an `<a>` element and can use link-related attributes.
+          * The URL for the link. When set, the component renders as an `<a>` element and supports link-related attributes.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-href
           */
           'href'?: string;
         /**
-          * Instructs the browser to download the linked URL.
+          * Downloads the linked URL.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-download
           */
           'download'?: string;
         /**
-          * Defines where to open the linked URL. Possible values:
+          * Controls where the linked URL opens. Possible values:
          * 
          * * `_blank`: Opens in a new tab or window.
-         * * `_parent`: Opens in the parent browsing context or `_self` if no parent.
-         * * `_self`: Opens in the current browsing context. (Default).
-         * * `_top`: Opens in the topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Opens in the parent browsing context, or `_self` if there is no parent.
+         * * `_self`: Opens in the current browsing context (default).
+         * * `_top`: Opens in the topmost browsing context, or `_self` if there are no ancestors.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-target
           */
           'target'?: '_blank' | '_parent' | '_self' | '_top';
         /**
           * Specifies the relationship of the linked URL as space-separated link types. Possible values:
          * 
-         * * `alternate`: Alternate versions of the current document.
+         * * `alternate`: An alternate version of the current document.
          * * `author`: The author of the current document or article.
          * * `bookmark`: The permalink for the nearest ancestor section.
          * * `external`: The referenced document is not part of the same site as the current document.
          * * `help`: A link to context-sensitive help.
-         * * `license`: Indicates that the main content of the current document is covered by the copyright license described by the referenced document.
-         * * `me`: Indicates that the current document represents the person who owns the linked content.
-         * * `next`: Indicates that the current document is part of a series and the next document in the series is the referenced document.
-         * * `nofollow`: Indicates that the current document's original author or publisher does not endorse the referenced document.
-         * * `noreferrer`: No `Referer` header will be included. Also has the same effect as `noopener`.
-         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary browsing context (i.e., has "`_blank`" as `target` attribute value).
-         * * `prev`: Indicates that the current document is part of a series and the previous document in the series is the referenced document.
+         * * `license`: Content covered by the copyright license described by the referenced document.
+         * * `me`: Links to content owned by the current document's author.
+         * * `next`: The next document in the series.
+         * * `nofollow`: Not endorsed by the original author or publisher.
+         * * `noreferrer`: Prevents the `Referer` header from being sent. Same effect as `noopener`.
+         * * `opener`: Creates an auxiliary browsing context if the hyperlink would otherwise create a top-level browsing context that is not an auxiliary one (i.e., when `target="_blank"`).
+         * * `prev`: The previous document in the series.
          * * `search`: Links to a resource that can be used to search through the current document and its related pages.
-         * * `tag`: Gives a tag (identified by the given address) that applies to the current document.
+         * * `tag`: Marks the current document with the given tag.
          * 
-         * **Note**: This is only available when `href` is specified.
+         * **Note**: Only available when `href` is specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-rel
           */
           'rel'?: 'alternate' | 'author' | 'bookmark' | 'external' | 'help' | 'license' | 'me' | 'next' | 'nofollow' | 'noreferrer' | 'opener' | 'prev' | 'search' | 'tag';
         /**
-          * Specifies that the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Defines the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-tabindex
           */
           'tabindex'?: number;
@@ -2342,34 +2342,34 @@ declare global {
           */
           'loading'?: boolean;
         /**
-          * The button's name, which is submitted with form data.
+          * The button name submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-name
           */
           'name'?: string;
         /**
-          * The button's value, which is submitted with form data.
+          * The button value submitted with form data.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-value
           */
           'value'?: string;
         /**
-          * Defines the button's default behavior. The default is `button`. Possible values:
+          * Specifies the button's default action. Default: `button`. Possible values:
          * 
          * * `submit`: Submits the form data to the server.
-         * * `reset`: Resets all the controls to their initial values.
-         * * `button`: No default behavior, does nothing when pressed by default.
+         * * `reset`: Restores all controls to their initial values.
+         * * `button`: Does nothing by default.
          * 
-         * **Note**: This is only available when `href` is not specified.
+         * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-type
           */
           'type'?: 'submit' | 'reset' | 'button';
         /**
-          * Associates the button with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the button is associated with its parent `<form>`, if any.
+          * Associates the button with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the button uses its parent `<form>`, if any.
          * 
-         * This attribute allows button elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the button target any form in the document, not just the one it is nested in.
          * 
          * **Note**: Only available when `href` is not specified.
           * @see https://www.mdui.org/en/docs/2/components/segmented-button#segmented-button-attributes-form
@@ -2383,11 +2383,11 @@ declare global {
           */
           'formaction'?: string;
         /**
-          * Specifies the form data encoding method. Possible values:
+          * Specifies how to encode the form data. Possible values:
          * 
-         * * `application/x-www-form-urlencoded`: Default if the attribute is not used.
-         * * `multipart/form-data`: Used for `<input>` elements with `type` set to `file`.
-         * * `text/plain`: For debugging, not for real form submission.
+         * * `application/x-www-form-urlencoded`: Default when the attribute is omitted.
+         * * `multipart/form-data`: Used for `<input>` elements with `type="file"`.
+         * * `text/plain`: Useful for debugging, but not for actual form submissions.
          * 
          * Overrides the `enctype` attribute of the button's form owner.
          * 
@@ -2398,8 +2398,8 @@ declare global {
         /**
           * Specifies the HTTP method for form submission. Possible values:
          * 
-         * * `post`: Form data included in HTTP request body.
-         * * `get`: Form data appended to `action` URL.
+         * * `post`: Sends the form data in the request body.
+         * * `get`: Appends the form data to the `action` URL.
          * 
          * Overrides the `method` attribute of the button's form owner.
          * 
@@ -2415,12 +2415,12 @@ declare global {
           */
           'formnovalidate'?: boolean;
         /**
-          * Specifies where to display the form submission response. Possible values:
+          * Specifies where to open the response after form submission. Possible values:
          * 
-         * * `_self`: Current browsing context. (Default).
+         * * `_self`: Current browsing context (default).
          * * `_blank`: New tab or window.
-         * * `_parent`: Parent browsing context or `_self` if no parent.
-         * * `_top`: Topmost browsing context or `_self` if no ancestors.
+         * * `_parent`: Parent browsing context, or `_self` if there is no parent.
+         * * `_top`: Topmost browsing context, or `_self` if there are no ancestors.
          * 
          * Overrides the `target` attribute of the button's form owner.
          * 
@@ -2430,7 +2430,7 @@ declare global {
           'formtarget'?: '_self' | '_blank' | '_parent' | '_top';
         } & HTMLElementProps;
       /**
-        * Select Component  It should be used in conjunction with the `<mdui-menu-item>` component 
+        * Select Component  Use with the `<mdui-menu-item>` component 
        * 
        * ```html
        * <mdui-select>
@@ -2442,10 +2442,10 @@ declare global {
         */
         'mdui-select': {
           /**
-          * Defines the select style. Possible values:
+          * Defines the select variant. Possible values:
          * 
-         * * `filled`: Solid background, strong visual emphasis.
-         * * `outlined`: Bordered, less visual emphasis.
+         * * `filled`: Solid background with strong visual emphasis.
+         * * `outlined`: Bordered with lighter visual emphasis.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-variant
           */
           'variant'?: 'filled' | 'outlined';
@@ -2462,7 +2462,7 @@ declare global {
         /**
           * Value of the select, which is submitted with form data.
          * 
-         * If `multiple` is not set, the value is a string; if set, it's an array of strings. HTML attributes can only set string values; array values must be set via JavaScript property.
+         * If `multiple` is not set, the value is a string; otherwise, it is an array of strings. HTML attributes can only set string values; array values must be set via the JavaScript property.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-value
           */
           'value'?: string | string[];
@@ -2482,12 +2482,12 @@ declare global {
           */
           'helper'?: string;
         /**
-          * Allows the select to be cleared.
+          * Makes the select clearable.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-clearable
           */
           'clearable'?: boolean;
         /**
-          * Material Icons name for the clear button displayed on the right of the select when clearable. Alternatively, use `slot="clear-icon"`.
+          * Material Icons name for the clear button displayed on the right when clearable. Alternatively, use `slot="clear-icon"`.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-clear-icon
           */
           'clear-icon'?: string;
@@ -2531,9 +2531,9 @@ declare global {
           */
           'error-icon'?: string;
         /**
-          * Associates the select with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the select is associated with its parent `<form>`, if any.
+          * Associates the select with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the select uses its parent `<form>`, if any.
          * 
-         * This attribute allows select elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the select work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-form
           */
           'form'?: string;
@@ -2553,12 +2553,12 @@ declare global {
           */
           'required'?: boolean;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/select#attributes-tabindex
           */
           'tabindex'?: number;
@@ -2578,12 +2578,12 @@ declare global {
           */
           'value'?: number;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/slider#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/slider#attributes-tabindex
           */
           'tabindex'?: number;
@@ -2608,7 +2608,7 @@ declare global {
           */
           'tickmarks'?: boolean;
         /**
-          * Hides the tooltip.
+          * Hides the value label.
           * @see https://www.mdui.org/en/docs/2/components/slider#attributes-nolabel
           */
           'nolabel'?: boolean;
@@ -2618,14 +2618,14 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * Associates the slider with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the slider is associated with its parent `<form>`, if any.
+          * Associates the slider with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the slider uses its parent `<form>`, if any.
          * 
-         * This attribute allows slider elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the slider work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/slider#attributes-form
           */
           'form'?: string;
         /**
-          * Specifies the slider's name, which is submitted with the form data.
+          * Specifies the slider's name, which is submitted with form data.
           * @see https://www.mdui.org/en/docs/2/components/slider#attributes-name
           */
           'name'?: string;
@@ -2647,12 +2647,12 @@ declare global {
         /**
           * Snackbar placement. Default is `bottom`. Possible values:
          * 
-         * * `top`: Top, centered.
-         * * `top-start`: Top, left-aligned.
-         * * `top-end`: Top, right-aligned.
-         * * `bottom`: Bottom, centered.
-         * * `bottom-start`: Bottom, left-aligned.
-         * * `bottom-end`: Bottom, right-aligned.
+         * * `top`: Top center.
+         * * `top-start`: Top left.
+         * * `top-end`: Top right.
+         * * `bottom`: Bottom center.
+         * * `bottom-start`: Bottom left.
+         * * `bottom-end`: Bottom right.
           * @see https://www.mdui.org/en/docs/2/components/snackbar#attributes-placement
           */
           'placement'?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end';
@@ -2662,7 +2662,7 @@ declare global {
           */
           'action'?: string;
         /**
-          * Indicates if the action button is in the loading state.
+          * Whether the action button is in a loading state.
           * @see https://www.mdui.org/en/docs/2/components/snackbar#attributes-action-loading
           */
           'action-loading'?: boolean;
@@ -2685,12 +2685,12 @@ declare global {
           */
           'message-line'?: 1 | 2;
         /**
-          * Automatically closes the Snackbar after a specified time (in milliseconds). Set to `0` to disable auto-closing. Default is 5 seconds.
+          * Automatically closes the Snackbar after the given delay (in milliseconds). Set to `0` to disable auto-close. Default is `5000`.
           * @see https://www.mdui.org/en/docs/2/components/snackbar#attributes-auto-close-delay
           */
           'auto-close-delay'?: number;
         /**
-          * Closes the Snackbar when clicking or touching outside the Snackbar area.
+          * Closes the Snackbar when the user clicks or touches outside it.
           * @see https://www.mdui.org/en/docs/2/components/snackbar#attributes-close-on-outside-click
           */
           'close-on-outside-click'?: boolean;
@@ -2720,19 +2720,19 @@ declare global {
           */
           'unchecked-icon'?: string;
         /**
-          * The Material Icons name for the checked state. Alternatively, use `slot="checked-icon"`. Defaults to the `check` icon; an empty string removes the default icon.
+          * The Material Icons name for the checked state. Alternatively, use `slot="checked-icon"`. Defaults to the `check` icon; setting an empty string removes the default icon.
           * @see https://www.mdui.org/en/docs/2/components/switch#attributes-checked-icon
           */
           'checked-icon'?: string;
         /**
-          * The switch must be checked when submitting the form.
+          * The switch must be checked before the form is submitted.
           * @see https://www.mdui.org/en/docs/2/components/switch#attributes-required
           */
           'required'?: boolean;
         /**
-          * Associates the switch with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the switch is associated with its parent `<form>`, if any.
+          * Associates the switch with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the switch uses its parent `<form>`, if any.
          * 
-         * This attribute allows switch elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the switch work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/switch#attributes-form
           */
           'form'?: string;
@@ -2747,18 +2747,18 @@ declare global {
           */
           'value'?: string;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/switch#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/switch#attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * Tab Panel Component  It should be used in conjunction with the `<mdui-tabs>` and `<mdui-tab>` components 
+        * Tab Panel Component  Use with the `<mdui-tabs>` and `<mdui-tab>` components 
        * 
        * ```html
        * <mdui-tabs value="tab-1">
@@ -2781,7 +2781,7 @@ declare global {
           'value'?: string;
         } & HTMLElementProps;
       /**
-        * Tab Component  It should be used in conjunction with the `<mdui-tabs>` and `<mdui-tab-panel>` components 
+        * Tab Component  Use with the `<mdui-tabs>` and `<mdui-tab-panel>` components 
        * 
        * ```html
        * <mdui-tabs value="tab-1">
@@ -2813,18 +2813,18 @@ declare global {
           */
           'inline'?: boolean;
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/tabs#tab-attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/tabs#tab-attributes-tabindex
           */
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * Tabs Component  It should be used in conjunction with the `<mdui-tab>` and `<mdui-tab-panel>` components 
+        * Tabs Component  Use with the `<mdui-tab>` and `<mdui-tab-panel>` components 
        * 
        * ```html
        * <mdui-tabs value="tab-1">
@@ -2841,10 +2841,10 @@ declare global {
         */
         'mdui-tabs': {
           /**
-          * Defines the tab shape. Possible values:
+          * Defines the tab variant. Possible values:
          * 
-         * * `primary`: Located below `<mdui-top-app-bar>`, used for switching between main application pages.
-         * * `secondary`: Located within the page, used for switching between related content groups.
+         * * `primary`: Sits below `<mdui-top-app-bar>` and is used to switch between main application pages.
+         * * `secondary`: Sits within the page and is used to switch between related content groups.
           * @see https://www.mdui.org/en/docs/2/components/tabs#tabs-attributes-variant
           */
           'variant'?: 'primary' | 'secondary';
@@ -2856,23 +2856,23 @@ declare global {
         /**
           * Defines the tab position. Default is `top-start`. Possible values:
          * 
-         * * `top-start`: Top, left-aligned.
-         * * `top`: Top, center-aligned.
-         * * `top-end`: Top, right-aligned.
-         * * `bottom-start`: Bottom, left-aligned.
-         * * `bottom`: Bottom, center-aligned.
-         * * `bottom-end`: Bottom, right-aligned.
-         * * `left-start`: Left, top-aligned.
-         * * `left`: Left, center-aligned.
-         * * `left-end`: Left, bottom-aligned.
-         * * `right-start`: Right, top-aligned.
-         * * `right`: Right, center-aligned.
-         * * `right-end`: Right, bottom-aligned.
+         * * `top-start`: Top left.
+         * * `top`: Top centered.
+         * * `top-end`: Top right.
+         * * `bottom-start`: Bottom left.
+         * * `bottom`: Bottom, centered.
+         * * `bottom-end`: Bottom right.
+         * * `left-start`: Left top.
+         * * `left`: Left, centered.
+         * * `left-end`: Left bottom.
+         * * `right-start`: Right top.
+         * * `right`: Right, centered.
+         * * `right-end`: Right bottom.
           * @see https://www.mdui.org/en/docs/2/components/tabs#tabs-attributes-placement
           */
           'placement'?: 'top-start' | 'top' | 'top-end' | 'bottom-start' | 'bottom' | 'bottom-end' | 'left-start' | 'left' | 'left-end' | 'right-start' | 'right' | 'right-end';
         /**
-          * If set, the tabs will fill the width of its parent element.
+          * If set, the tabs will fill the width of their parent element.
           * @see https://www.mdui.org/en/docs/2/components/tabs#tabs-attributes-full-width
           */
           'full-width'?: boolean;
@@ -2887,10 +2887,10 @@ declare global {
         */
         'mdui-text-field': {
           /**
-          * Defines the text field style. Default is `filled`. Possible values:
+          * Defines the text field variant. Default is `filled`. Possible values:
          * 
-         * * `filled`: Text field with background color, providing a stronger visual effect.
-         * * `outlined`: Text field with border, providing a subtler visual effect.
+         * * `filled`: Text field with a background color for stronger visual emphasis.
+         * * `outlined`: Text field with a border for subtler visual emphasis.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-variant
           */
           'variant'?: 'filled' | 'outlined';
@@ -2898,28 +2898,28 @@ declare global {
           * Specifies the text field type. Default is `text`. Possible values:
          * 
          * * `text`: Standard text field.
-         * * `number`: Allows only numeric input. Devices with dynamic keyboards will display a numeric keyboard.
-         * * `password`: Masks the input for password confidentiality.
-         * * `url`: Validates URL format. Devices with dynamic keyboards will display a URL-specific keyboard.
-         * * `email`: Validates email format. Devices with dynamic keyboards will display an email-specific keyboard.
-         * * `search`: Changes the enter icon to a search icon on devices with dynamic keyboards.
-         * * `tel`: Displays a phone number keyboard on devices with dynamic keyboards.
-         * * `hidden`: Hides the control, but its value will still be submitted to the server.
-         * * `date`: Activates a date picker or a numeric scroll wheel for year, month, and day in supported browsers.
-         * * `datetime-local`: Activates a date and time picker in supported browsers, excluding time zone.
-         * * `month`: Allows input for year and month, excluding time zone.
-         * * `time`: Allows time input, excluding time zone.
-         * * `week`: Allows input for dates consisting of a year and week, excluding time zone.
+         * * `number`: Allows numeric input only. Virtual keyboards on mobile devices show a numeric layout.
+         * * `password`: Hides the password as you type.
+         * * `url`: Validates URL format. Virtual keyboards on mobile devices show a URL-specific layout.
+         * * `email`: Validates email format. Virtual keyboards on mobile devices show an email-specific layout.
+         * * `search`: Shows a search icon on the Enter key in virtual keyboards.
+         * * `tel`: Displays a phone keypad on virtual keyboards.
+         * * `hidden`: Hides the control, but its value is still submitted to the server.
+         * * `date`: Opens a date picker or a numeric scroll wheel for year, month, and day in supported browsers.
+         * * `datetime-local`: Activates a date and time picker in supported browsers, without a time zone.
+         * * `month`: Allows entering a year and month without a time zone.
+         * * `time`: Allows time input without a time zone.
+         * * `week`: Allows entering a year and week without a time zone.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-type
           */
           'type'?: 'text' | 'number' | 'password' | 'url' | 'email' | 'search' | 'tel' | 'hidden' | 'date' | 'datetime-local' | 'month' | 'time' | 'week';
         /**
-          * The name of text field, which is submitted with form data.
+          * The name of the text field, which is submitted with form data.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-name
           */
           'name'?: string;
         /**
-          * The value of text field, which is submitted with form data.
+          * The value of the text field, which is submitted with form data.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-value
           */
           'value'?: string;
@@ -2939,17 +2939,17 @@ declare global {
           */
           'helper'?: string;
         /**
-          * If set, the helper text is only displayed when the text field is focused.
+          * Shows the helper text only when the text field is focused.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-helper-on-focus
           */
           'helper-on-focus'?: boolean;
         /**
-          * If set, the text field can be cleared.
+          * Makes the text field clearable.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-clearable
           */
           'clearable'?: boolean;
         /**
-          * Material Icons name displayed on the right when the text field is clearable. Alternatively, use `slot="clear-icon"`.
+          * Material Icons name shown on the right when the text field is clearable. Alternatively, use `slot="clear-icon"`.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-clear-icon
           */
           'clear-icon'?: string;
@@ -2979,14 +2979,14 @@ declare global {
           */
           'end-icon'?: string;
         /**
-          * Material Icons name displayed on the right side of the text field when the form field validation fails. Alternatively, use `slot="error-icon"`.
+          * Material Icons name displayed on the right side of the text field when form field validation fails. Alternatively, use `slot="error-icon"`.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-error-icon
           */
           'error-icon'?: string;
         /**
-          * Associates the text field with a `<form>` element. The value should be the `id` of a `<form>` in the same document. If not set, the text field is associated with its parent `<form>`, if any.
+          * Associates the text field with a `<form>` element. Set this to the `id` of a `<form>` in the same document. If omitted, the text field uses its parent `<form>`, if any.
          * 
-         * This attribute allows text field elements to be associated with `<form>`s anywhere in the document, not just inside a `<form>`.
+         * This lets the text field work with any form in the document, not just the one it is nested in.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-form
           */
           'form'?: string;
@@ -3001,7 +3001,7 @@ declare global {
           */
           'disabled'?: boolean;
         /**
-          * The field must be filled in before the form is submitted.
+          * The field must be filled out before the form is submitted.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-required
           */
           'required'?: boolean;
@@ -3011,7 +3011,7 @@ declare global {
           */
           'rows'?: number;
         /**
-          * Allows the text field height to adjust automatically based on the input content.
+          * Automatically adjusts the height of the text field based on its content.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-autosize
           */
           'autosize'?: boolean;
@@ -3051,7 +3051,7 @@ declare global {
           */
           'max'?: number;
         /**
-          * The step interval during increment and decrement when `type` is `number`.
+          * The step interval for increment/decrement when `type` is `number`.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-step
           */
           'step'?: number;
@@ -3061,7 +3061,7 @@ declare global {
           */
           'pattern'?: string;
         /**
-          * Adds a toggle button for showing and hiding the password when `type` is `password`.
+          * Adds a toggle button to show or hide the password when `type` is `password`.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-toggle-password
           */
           'toggle-password'?: boolean;
@@ -3096,10 +3096,10 @@ declare global {
           */
           'autocomplete'?: string;
         /**
-          * Customizes the Enter key text or icon on the virtual keyboard. The effect varies based on the device and language. Possible values:
+          * Customizes the Enter key text or icon on the virtual keyboard. The effect varies by device and language. Possible values:
          * 
          * * `enter`: Inserts a new line, typically used in a multi-line text field.
-         * * `done`: Indicates input completion, closes the virtual keyboard.
+         * * `done`: Indicates completion and closes the virtual keyboard.
          * * `go`: Navigates to the target of the entered text.
          * * `next`: Moves to the next text field.
          * * `previous`: Moves to the previous text field.
@@ -3109,31 +3109,31 @@ declare global {
           */
           'enterkeyhint'?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send';
         /**
-          * Enable spell checking.
+          * Enables spell checking.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-spellcheck
           */
           'spellcheck'?: boolean;
         /**
           * Customizes the virtual keyboard. Possible values:
          * 
-         * * `none`: No virtual keyboard. This is useful for custom input controls.
+         * * `none`: No virtual keyboard. Useful for custom input controls.
          * * `text`: Standard text input keyboard.
          * * `decimal`: Decimal input keyboard. This includes a period `.` or comma `,` and numbers.
-         * * `numeric`: Numeric keyboard. This displays numbers 0-9.
-         * * `tel`: Phone number keyboard. This includes numbers 0-9, asterisk `*`, and hash `#` keys.
-         * * `search`: Search-optimized virtual keyboard. 'Search' is displayed on the submit button.
-         * * `email`: Email-optimized virtual keyboard. This typically includes `@ .`.
-         * * `url`: URL-optimized virtual keyboard. This typically includes `. / #`.
+         * * `numeric`: Numeric keyboard. This displays numbers 0–9.
+         * * `tel`: Phone number keyboard. This includes numbers 0–9, asterisk `*`, and hash `#` keys.
+         * * `search`: Search-optimized virtual keyboard. 'Search' appears on the submit button.
+         * * `email`: Email-optimized virtual keyboard. This typically includes `@` and `.`.
+         * * `url`: URL-optimized virtual keyboard. This typically includes `.`, `/`, and `#`.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-inputmode
           */
           'inputmode'?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
         /**
-          * Determines if the element should be focused when the page loads.
+          * Whether the element is focused when the page loads.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-autofocus
           */
           'autofocus'?: boolean;
         /**
-          * Specifies the order in which the element receives focus when navigating with the Tab key.
+          * The element's tab order when navigating with the Tab key.
           * @see https://www.mdui.org/en/docs/2/components/text-field#attributes-tabindex
           */
           'tabindex'?: number;
@@ -3150,48 +3150,48 @@ declare global {
         */
         'mdui-tooltip': {
           /**
-          * Defines the tooltip shape. Default is `plain`. Possible values:
+          * Defines the tooltip variant. Default is `plain`. Possible values:
          * 
-         * * `plain`: For simple single-line text.
-         * * `rich`: For text including a title, body text, and action buttons.
+         * * `plain`: For simple, single-line text.
+         * * `rich`: For tooltips with a title, body text, and action buttons.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-variant
           */
           'variant'?: 'plain' | 'rich';
         /**
           * Sets the tooltip position. Default is `auto`. Possible values:
          * 
-         * * `auto`: Position is determined automatically.
-         * * `top-left`: Top-left corner.
-         * * `top-start`: Top, left-aligned.
-         * * `top`: Top, centered.
-         * * `top-end`: Top, right-aligned.
-         * * `top-right`: Top-right corner.
-         * * `bottom-left`: Bottom-left corner.
-         * * `bottom-start`: Bottom, left-aligned.
-         * * `bottom`: Bottom, centered.
-         * * `bottom-end`: Bottom, right-aligned.
-         * * `bottom-right`: Bottom-right corner.
-         * * `left-start`: Left, top-aligned.
-         * * `left`: Left, centered.
-         * * `left-end`: Left, bottom-aligned.
-         * * `right-start`: Right, top-aligned.
-         * * `right`: Right, centered.
-         * * `right-end`: Right, bottom-aligned.
+         * * `auto`: Automatically determined. For `variant="plain"`, prefers `top`; for `variant="rich"`, prefers `bottom-right`.
+         * * `top-left`: Top left.
+         * * `top-start`: Top start.
+         * * `top`: Top center.
+         * * `top-end`: Top end.
+         * * `top-right`: Top right.
+         * * `bottom-left`: Bottom left.
+         * * `bottom-start`: Bottom start.
+         * * `bottom`: Bottom center.
+         * * `bottom-end`: Bottom end.
+         * * `bottom-right`: Bottom right.
+         * * `left-start`: Left start.
+         * * `left`: Left center.
+         * * `left-end`: Left end.
+         * * `right-start`: Right start.
+         * * `right`: Right center.
+         * * `right-end`: Right end.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-placement
           */
           'placement'?: 'auto' | 'top-left' | 'top-start' | 'top' | 'top-end' | 'top-right' | 'bottom-left' | 'bottom-start' | 'bottom' | 'bottom-end' | 'bottom-right' | 'left-start' | 'left' | 'left-end' | 'right-start' | 'right' | 'right-end';
         /**
-          * Sets the delay in milliseconds before the tooltip appears on hover.
+          * The delay (in milliseconds) before the tooltip appears on hover.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-open-delay
           */
           'open-delay'?: number;
         /**
-          * Sets the delay in milliseconds before the tooltip disappears on hover.
+          * The delay (in milliseconds) before the tooltip disappears on hover.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-close-delay
           */
           'close-delay'?: number;
         /**
-          * Sets the tooltip title. Only applicable when `variant="rich"`. Alternatively, use `slot="headline"`.
+          * Sets the tooltip title. Only applies when `variant="rich"`. Alternatively, use `slot="headline"`.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-headline
           */
           'headline'?: string;
@@ -3201,12 +3201,12 @@ declare global {
           */
           'content'?: string;
         /**
-          * Defines the trigger method. Supports multiple values separated by spaces. Possible values:
+          * Defines how the tooltip opens. Multiple space-separated values are supported. Possible values:
          * 
-         * * `click`: Triggered on click.
-         * * `hover`: Triggered on mouse hover.
-         * * `focus`: Triggered on focus.
-         * * `manual`: Can only open and close the tooltip programmatically, cannot specify other trigger methods.
+         * * `click`: Triggers on click.
+         * * `hover`: Triggers on mouse hover.
+         * * `focus`: Triggers on focus.
+         * * `manual`: Can only be opened and closed programmatically; no other trigger methods can be specified.
           * @see https://www.mdui.org/en/docs/2/components/tooltip#attributes-trigger
           */
           'trigger'?: 'click' | 'hover' | 'focus' | 'manual' | string;
@@ -3222,7 +3222,7 @@ declare global {
           'open'?: boolean;
         } & HTMLElementProps;
       /**
-        * Top App Bar Title Component  It should be used in conjunction with the `<mdui-top-app-bar>` component 
+        * Top App Bar Title Component  Use with the `<mdui-top-app-bar>` component 
        * 
        * ```html
        * <mdui-top-app-bar>
@@ -3252,9 +3252,9 @@ declare global {
         */
         'mdui-top-app-bar': {
           /**
-          * Defines the top app bar style. Default is `small`. Possible values:
+          * Defines the top app bar variant. Default is `small`. Possible values:
          * 
-         * * `center-aligned`: Small app bar with a center-aligned title.
+         * * `center-aligned`: A small app bar with a centered title.
          * * `small`: Small app bar.
          * * `medium`: Medium-sized app bar.
          * * `large`: Large-sized app bar.
@@ -3262,36 +3262,36 @@ declare global {
           */
           'variant'?: 'center-aligned' | 'small' | 'medium' | 'large';
         /**
-          * Hide the top app bar.
+          * Whether the top app bar is hidden.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-hide
           */
           'hide'?: boolean;
         /**
-          * Shrinks the app bar to `small` style. Only applicable for `medium` or `large` variants.
+          * Shrinks the app bar to the `small` variant. Only applies to `medium` or `large` variants.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-shrink
           */
           'shrink'?: boolean;
         /**
-          * Defines the scroll behavior. Accepts multiple space-separated values. Possible values:
+          * Defines the scroll behavior. Multiple space-separated values are accepted. Possible values:
          * 
          * * `hide`: Hides when scrolling.
-         * * `shrink`: Shrinks when scrolling for medium to large app bars.
+         * * `shrink`: Shrinks when scrolling (for medium to large app bars).
          * * `elevate`: Increases elevation when scrolling.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-scroll-behavior
           */
           'scroll-behavior'?: 'hide' | 'shrink' | 'elevate';
         /**
-          * The element that listens for scroll events. Accepts a CSS selector, DOM element, or [JQ object](https://www.mdui.org/en/docs/2/functions/jq). Defaults to `window`.
+          * The element to watch for scroll events. Accepts a CSS selector, a DOM element, or a [JQ object](/en/docs/2/functions/jq). Defaults to `window`.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-scroll-target
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * The scroll distance (in pixels) that triggers the scroll behavior.
+          * The scroll distance (in pixels) required to trigger the scroll behavior.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-scroll-threshold
           */
           'scroll-threshold'?: number;
         /**
-          * Specifies the layout order within the [`<mdui-layout>`](https://www.mdui.org/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
+          * Specifies the layout order within the [`<mdui-layout>`](/en/docs/2/components/layout) component. Items are sorted in ascending order. The default value is `0`.
           * @see https://www.mdui.org/en/docs/2/components/top-app-bar#top-app-bar-attributes-order
           */
           'order'?: number;

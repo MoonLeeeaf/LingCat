@@ -2,18 +2,18 @@ import { __decorate } from "tslib";
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import '@mdui/icons-shared/check.js';
+import '@mdui/icons-shared/clear.js';
 import cc from 'classcat';
 import { HasSlotController } from '@mdui/shared/controllers/has-slot.js';
 import { watch } from '@mdui/shared/decorators/watch.js';
 import { booleanConverter } from '@mdui/shared/helpers/decorator.js';
 import { nothingTemplate } from '@mdui/shared/helpers/template.js';
-import '@mdui/shared/icons/check.js';
-import '@mdui/shared/icons/clear.js';
 import { ButtonBase } from '../button/button-base.js';
 import '../icon.js';
 import { style } from './style.js';
 /**
- * @summary 纸片组件
+ * @summary 标签组件
  *
  * ```html
  * <mdui-chip>Chip</mdui-chip>
@@ -25,27 +25,27 @@ import { style } from './style.js';
  * @event change - 选中状态变更时触发
  * @event delete - 点击删除图标时触发
  *
- * @slot - 纸片文本
+ * @slot - 标签文本
  * @slot icon - 左侧元素
  * @slot end-icon - 右侧元素
  * @slot selected-icon - 选中状态下的左侧元素
  * @slot delete-icon - 可删除时的右侧删除元素
  *
  * @csspart button - 内部的 `<button>` 或 `<a>` 元素
- * @csspart label - 纸片文本
+ * @csspart label - 标签文本
  * @csspart icon - 左侧图标
  * @csspart end-icon - 右侧图标
  * @csspart selected-icon - 选中状态下的左侧图标
  * @csspart delete-icon - 可删除时的右侧删除图标
  * @csspart loading - 加载中状态的 `<mdui-circular-progress>` 元素
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let Chip = class Chip extends ButtonBase {
     constructor() {
         super();
         /**
-         * 纸片的形状。可选值包括：
+         * 标签的形状。可选值包括：
          *
          * * `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能
          * * `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果
@@ -66,7 +66,7 @@ let Chip = class Chip extends ButtonBase {
          */
         this.selected = false;
         /**
-         * 是否可删除。为 `true` 时，纸片右侧会显示删除图标
+         * 是否可删除。为 `true` 时，标签右侧会显示删除图标
          */
         this.deletable = false;
         this.rippleRef = createRef();

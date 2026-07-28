@@ -31,9 +31,9 @@ import { style } from './style.js';
  * @csspart icon - 左侧的图标
  * @csspart loading - 加载中状态的 `<mdui-circular-progress>` 元素
  *
- * @cssprop --shape-corner-small - `size="small"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
- * @cssprop --shape-corner-normal - `size="normal"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
- * @cssprop --shape-corner-large - `size="large"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-small - `size="small"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-normal - `size="normal"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-large - `size="large"` 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let Fab = class Fab extends ButtonBase {
     constructor() {

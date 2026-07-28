@@ -1,3 +1,5 @@
+import '@mdui/icons-shared/arrow-right.js';
+import '@mdui/icons-shared/check.js';
 import '@mdui/jq/methods/css.js';
 import '@mdui/jq/methods/height.js';
 import '@mdui/jq/methods/innerHeight.js';
@@ -5,8 +7,6 @@ import '@mdui/jq/methods/innerWidth.js';
 import '@mdui/jq/methods/width.js';
 import '@mdui/jq/static/contains.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/arrow-right.js';
-import '@mdui/shared/icons/check.js';
 import '../icon.js';
 import type { Ripple } from '../ripple/index.js';
 import type { CSSResultGroup, PropertyValues, TemplateResult } from 'lit';

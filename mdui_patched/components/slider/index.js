@@ -35,7 +35,7 @@ let Slider = class Slider extends SliderBase {
     constructor() {
         super(...arguments);
         /**
-         * 滑块的值，将于表单数据一起提交
+         * 滑块的值，将与表单数据一起提交
          */
         this.value = 0;
         /**

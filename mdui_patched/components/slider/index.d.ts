@@ -24,7 +24,7 @@ import type { CSSResultGroup, PropertyValues, TemplateResult } from 'lit';
 export declare class Slider extends SliderBase<SliderEventMap> implements FormControl {
     static styles: CSSResultGroup;
     /**
-     * 滑块的值，将于表单数据一起提交
+     * 滑块的值，将与表单数据一起提交
      */
     value: number;
     /**

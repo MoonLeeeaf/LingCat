@@ -14,7 +14,7 @@ declare const Card_base: import("@lit/reactive-element/decorators/base.js").Cons
  *
  * @slot - 卡片的内容
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 export declare class Card extends Card_base<CardEventMap> {
     static styles: CSSResultGroup;

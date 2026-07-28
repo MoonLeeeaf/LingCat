@@ -1,6 +1,6 @@
 {
   "name": "mdui",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "实现 material you 设计规范的 Web Components 组件库",
   "type": "module",
   "main": "mdui.js",
@@ -52,13 +52,14 @@
     "@lit/localize": "^0.12.2",
     "@lit/reactive-element": "^2.1.0",
     "@material/material-color-utilities": "^0.3.0",
-    "@floating-ui/utils": "^0.2.9",
+    "@floating-ui/utils": "^0.2.10",
     "classcat": "^5.0.5",
     "is-promise": "^4.0.0",
     "lit": "^3.3.0",
-    "ssr-window": "^5.0.0",
+    "ssr-window": "^5.0.1",
     "tslib": "^2.8.1",
-    "@mdui/shared": "^1.0.8",
+    "@mdui/shared": "^1.0.9",
+    "@mdui/icons-shared": "^1.0.0",
     "@mdui/jq": "^3.0.3"
   }
 }

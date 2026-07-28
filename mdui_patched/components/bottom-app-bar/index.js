@@ -27,7 +27,7 @@ import { style } from './style.js';
  *
  * @slot - 底部应用栏内部的元素
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 let BottomAppBar = class BottomAppBar extends ScrollBehaviorMixin(LayoutItemBase) {
@@ -38,7 +38,7 @@ let BottomAppBar = class BottomAppBar extends ScrollBehaviorMixin(LayoutItemBase
          */
         this.hide = false;
         /**
-         * 是否让底部应用栏中的 [`<mdui-fab>`](/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/docs/2/components/fab) 仍会停留在页面上
+         * 是否让底部应用栏中的 [`<mdui-fab>`](/zh-cn/docs/2/components/fab) 组件脱离应用栏。如果为 `true`，则当应用栏隐藏后，[`<mdui-fab>`](/zh-cn/docs/2/components/fab) 仍会停留在页面上
          */
         this.fabDetach = false;
     }

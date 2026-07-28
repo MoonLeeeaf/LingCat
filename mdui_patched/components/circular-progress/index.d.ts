@@ -1,7 +1,7 @@
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
 import type { CSSResultGroup, TemplateResult } from 'lit';
 /**
- * @summary 圆形进度指示器组件
+ * @summary 环形进度条组件
  *
  * ```html
  * <mdui-circular-progress></mdui-circular-progress>
@@ -10,11 +10,11 @@ import type { CSSResultGroup, TemplateResult } from 'lit';
 export declare class CircularProgress extends MduiElement<CircularProgressEventMap> {
     static styles: CSSResultGroup;
     /**
-     * 进度指示器的最大值。默认为 `1`
+     * 进度条的最大值。默认为 `1`
      */
     max: number;
     /**
-     * 进度指示器的当前值。如果未指定该值，则显示为不确定状态
+     * 进度条的当前值。如果未指定该值，则显示为不确定状态
      */
     value?: number;
     protected render(): TemplateResult;

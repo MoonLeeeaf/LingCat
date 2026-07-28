@@ -1,5 +1,5 @@
+import '@mdui/icons-shared/check.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/check.js';
 import '../icon.js';
 import type { Ripple } from '../ripple/index.js';
 import type { FormControl } from '@mdui/jq/shared/form.js';
@@ -26,8 +26,8 @@ declare const Switch_base: import("@lit/reactive-element/decorators/base.js").Co
  * @csspart unchecked-icon - 未选中状态的图标
  * @csspart checked-icon 选中状态的图标
  *
- * @cssprop --shape-corner - 组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
- * @cssprop --shape-corner-thumb - 组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-thumb - 组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 export declare class Switch extends Switch_base<SwitchEventMap> implements FormControl {
     static styles: CSSResultGroup;
@@ -68,7 +68,7 @@ export declare class Switch extends Switch_base<SwitchEventMap> implements FormC
      */
     name: string;
     /**
-     * 开关的值，将于表单数据一起提交
+     * 开关的值，将与表单数据一起提交
      */
     value: string;
     /**

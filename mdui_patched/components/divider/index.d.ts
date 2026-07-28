@@ -1,7 +1,7 @@
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
 import type { CSSResultGroup, TemplateResult } from 'lit';
 /**
- * @summary 分割线组件
+ * @summary 分隔线组件
  *
  * ```html
  * <mdui-divider></mdui-divider>
@@ -10,7 +10,7 @@ import type { CSSResultGroup, TemplateResult } from 'lit';
 export declare class Divider extends MduiElement<DividerEventMap> {
     static styles: CSSResultGroup;
     /**
-     * 是否为垂直分割线
+     * 是否为垂直分隔线
      */
     vertical: boolean;
     /**

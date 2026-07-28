@@ -1,4 +1,4 @@
-import '@mdui/shared/icons/check.js';
+import '@mdui/icons-shared/check.js';
 import { ButtonBase } from '../button/button-base.js';
 import '../icon.js';
 import type { Ripple } from '../ripple/index.js';

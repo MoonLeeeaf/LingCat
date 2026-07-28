@@ -22,7 +22,7 @@ declare global {
           */
           'src'?: string;
         /**
-          * 图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) 属性相同。可选值包括：
+          * 图片如何适应容器框，与原生的 [`object-fit`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit) 属性相同。可选值包括：
          * 
          * * `contain`：保持图片原有尺寸比例，内容会被等比例缩放
          * * `cover`：保持图片原有尺寸比例，但部分内容可能被剪切
@@ -100,7 +100,7 @@ declare global {
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * 在滚动多少距离之后触发滚动行为，单位为 `px`
+          * 触发滚动行为所需的滚动距离，单位为 `px`
           * @see https://www.mdui.org/zh-cn/docs/2/components/bottom-app-bar#attributes-scroll-threshold
           */
           'scroll-threshold'?: number;
@@ -633,7 +633,7 @@ declare global {
           */
           'name'?: string;
         /**
-          * 复选框的值，将于表单数据一起提交
+          * 复选框的值，将与表单数据一起提交
           * @see https://www.mdui.org/zh-cn/docs/2/components/checkbox#attributes-value
           */
           'value'?: string;
@@ -664,7 +664,7 @@ declare global {
           'tabindex'?: number;
         } & HTMLElementProps;
       /**
-        * 纸片组件
+        * 标签组件
        * 
        * ```html
        * <mdui-chip>Chip</mdui-chip>
@@ -673,7 +673,7 @@ declare global {
         */
         'mdui-chip': {
           /**
-          * 纸片的形状。可选值包括：
+          * 标签的形状。可选值包括：
          * 
          * * `assist`：用于显示与当前上下文相关的辅助操作，如在点餐页面提供分享、收藏等功能
          * * `filter`：用于对内容进行筛选，如在搜索结果页过滤搜索结果
@@ -698,7 +698,7 @@ declare global {
           */
           'selected'?: boolean;
         /**
-          * 是否可删除。为 `true` 时，纸片右侧会显示删除图标
+          * 是否可删除。为 `true` 时，标签右侧会显示删除图标
           * @see https://www.mdui.org/zh-cn/docs/2/components/chip#attributes-deletable
           */
           'deletable'?: boolean;
@@ -883,7 +883,7 @@ declare global {
           'formtarget'?: '_self' | '_blank' | '_parent' | '_top';
         } & HTMLElementProps;
       /**
-        * 圆形进度指示器组件
+        * 环形进度条组件
        * 
        * ```html
        * <mdui-circular-progress></mdui-circular-progress>
@@ -892,12 +892,12 @@ declare global {
         */
         'mdui-circular-progress': {
           /**
-          * 进度指示器的最大值。默认为 `1`
+          * 进度条的最大值。默认为 `1`
           * @see https://www.mdui.org/zh-cn/docs/2/components/circular-progress#attributes-max
           */
           'max'?: number;
         /**
-          * 进度指示器的当前值。如果未指定该值，则显示为不确定状态
+          * 进度条的当前值。如果未指定该值，则显示为不确定状态
           * @see https://www.mdui.org/zh-cn/docs/2/components/circular-progress#attributes-value
           */
           'value'?: number;
@@ -1016,7 +1016,7 @@ declare global {
           'stacked-actions'?: boolean;
         } & HTMLElementProps;
       /**
-        * 分割线组件
+        * 分隔线组件
        * 
        * ```html
        * <mdui-divider></mdui-divider>
@@ -1025,7 +1025,7 @@ declare global {
         */
         'mdui-divider': {
           /**
-          * 是否为垂直分割线
+          * 是否为垂直分隔线
           * @see https://www.mdui.org/zh-cn/docs/2/components/divider#attributes-vertical
           */
           'vertical'?: boolean;
@@ -1397,7 +1397,7 @@ declare global {
           'full-height'?: boolean;
         } & HTMLElementProps;
       /**
-        * 线性进度指示器组件
+        * 线性进度条组件
        * 
        * ```html
        * <mdui-linear-progress></mdui-linear-progress>
@@ -1406,12 +1406,12 @@ declare global {
         */
         'mdui-linear-progress': {
           /**
-          * 进度指示器的最大值。默认为 `1`
+          * 进度条的最大值。默认为 `1`
           * @see https://www.mdui.org/zh-cn/docs/2/components/linear-progress#attributes-max
           */
           'max'?: number;
         /**
-          * 进度指示器的当前值。如果未指定该值，则处于不确定状态
+          * 进度条的当前值。如果未指定该值，则处于不确定状态
           * @see https://www.mdui.org/zh-cn/docs/2/components/linear-progress#attributes-value
           */
           'value'?: number;
@@ -1879,7 +1879,7 @@ declare global {
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * 在滚动多少距离之后触发滚动行为，单位为 `px`
+          * 触发滚动行为所需的滚动距离，单位为 `px`
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-bar#navigation-bar-attributes-scroll-threshold
           */
           'scroll-threshold'?: number;
@@ -1890,7 +1890,7 @@ declare global {
           'order'?: number;
         } & HTMLElementProps;
       /**
-        * 侧边抽屉栏组件
+        * 抽屉导航栏组件
        * 
        * ```html
        * <mdui-navigation-drawer>content</mdui-navigation-drawer>
@@ -1899,29 +1899,29 @@ declare global {
         */
         'mdui-navigation-drawer': {
           /**
-          * 是否打开抽屉栏
+          * 是否打开抽屉导航栏
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-drawer#attributes-open
           */
           'open'?: boolean;
         /**
-          * 抽屉栏打开时，是否显示遮罩层
+          * 抽屉导航栏打开时，是否显示遮罩层
          * 
          * 在窄屏设备上（屏幕宽度小于 [`--mdui-breakpoint-md`](https://www.mdui.org/zh-cn/docs/2/styles/design-tokens#breakpoint)），会始终显示遮罩层，无视该参数
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-drawer#attributes-modal
           */
           'modal'?: boolean;
         /**
-          * 在有遮罩层的情况下，按下 ESC 键是否关闭抽屉栏
+          * 在有遮罩层的情况下，按下 ESC 键是否关闭抽屉导航栏
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-drawer#attributes-close-on-esc
           */
           'close-on-esc'?: boolean;
         /**
-          * 点击遮罩层时，是否关闭抽屉栏
+          * 点击遮罩层时，是否关闭抽屉导航栏
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-drawer#attributes-close-on-overlay-click
           */
           'close-on-overlay-click'?: boolean;
         /**
-          * 抽屉栏的位置。可选值包括：
+          * 抽屉导航栏的位置。可选值包括：
          * 
          * * `left`：左侧
          * * `right`：右侧
@@ -1929,7 +1929,7 @@ declare global {
           */
           'placement'?: 'left' | 'right';
         /**
-          * 默认情况下，抽屉栏相对于 `body` 元素显示。当该参数设置为 `true` 时，抽屉栏将相对于其父元素显示。
+          * 默认情况下，抽屉导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，抽屉导航栏将相对于其父元素显示。
          * 
          * **Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative; overflow: hidden;`。
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-drawer#attributes-contained
@@ -2064,14 +2064,14 @@ declare global {
           */
           'alignment'?: 'start' | 'center' | 'end';
         /**
-          * 默认情况下，导航栏相对于 `body` 元素显示。当该参数设置为 `true` 时，导航栏将相对于其父元素显示。
+          * 默认情况下，导航栏相对于 `body` 元素显示。当该属性设置为 `true` 时，导航栏将相对于其父元素显示。
          * 
          * **Note**：设置该属性时，必须在父元素上手动设置样式 `position: relative;`。
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-rail#navigation-rail-attributes-contained
           */
           'contained'?: boolean;
         /**
-          * 是否在导航栏和页面内容之间添加分割线
+          * 是否在导航栏和页面内容之间添加分隔线
           * @see https://www.mdui.org/zh-cn/docs/2/components/navigation-rail#navigation-rail-attributes-divider
           */
           'divider'?: boolean;
@@ -2111,7 +2111,7 @@ declare global {
           */
           'name'?: string;
         /**
-          * 单选框组的名称，将于表单数据一起提交
+          * 单选框组当前选中的值，将与表单数据一起提交
           * @see https://www.mdui.org/zh-cn/docs/2/components/radio#radio-group-attributes-value
           */
           'value'?: string;
@@ -2619,7 +2619,7 @@ declare global {
         */
         'mdui-slider': {
           /**
-          * 滑块的值，将于表单数据一起提交
+          * 滑块的值，将与表单数据一起提交
           * @see https://www.mdui.org/zh-cn/docs/2/components/slider#attributes-value
           */
           'value'?: number;
@@ -2790,7 +2790,7 @@ declare global {
           */
           'name'?: string;
         /**
-          * 开关的值，将于表单数据一起提交
+          * 开关的值，将与表单数据一起提交
           * @see https://www.mdui.org/zh-cn/docs/2/components/switch#attributes-value
           */
           'value'?: string;
@@ -3334,7 +3334,7 @@ declare global {
           */
           'scroll-target'?: string | HTMLElement | JQ<HTMLElement>;
         /**
-          * 在滚动多少距离之后触发滚动行为，单位为 `px`
+          * 触发滚动行为所需的滚动距离，单位为 `px`
           * @see https://www.mdui.org/zh-cn/docs/2/components/top-app-bar#top-app-bar-attributes-scroll-threshold
           */
           'scroll-threshold'?: number;

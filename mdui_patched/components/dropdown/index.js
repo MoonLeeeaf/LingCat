@@ -2,6 +2,7 @@ import { __decorate } from "tslib";
 import { html } from 'lit';
 import { customElement, property, queryAssignedElements, } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+// eslint-disable-next-line import/extensions
 import { getOverflowAncestors } from '@floating-ui/utils/dom';
 import { $ } from '@mdui/jq/$.js';
 import '@mdui/jq/methods/height.js';
@@ -36,7 +37,7 @@ import { style } from './style.js';
  * @event closed - 下拉组件关闭动画完成时，事件被触发
  *
  * @slot - 下拉组件的内容
- * @slot trigger - 触发下拉组件的元素，例如 [`<mdui-button>`](/docs/2/components/button) 元素
+ * @slot trigger - 触发下拉组件的元素，例如 [`<mdui-button>`](/zh-cn/docs/2/components/button) 元素
  *
  * @csspart trigger - 触发下拉组件的元素的容器，即 `trigger` slot 的容器
  * @csspart panel - 下拉组件内容的容器
@@ -83,7 +84,7 @@ let Dropdown = class Dropdown extends MduiElement {
          */
         this.placement = 'auto';
         /**
-         * 点击 [`<mdui-menu-item>`](/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态
+         * 点击 [`<mdui-menu-item>`](/zh-cn/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态
          */
         this.stayOpenOnClick = false;
         /**
@@ -314,9 +315,15 @@ let Dropdown = class Dropdown extends MduiElement {
         this.open = !this.open;
     }
     onPanelClick(e) {
+        const $target = $(e.target);
         if (!this.disabled &&
             !this.stayOpenOnClick &&
-            $(e.target).is('mdui-menu-item')) {
+            $target.is('mdui-menu-item')) {
+            // 如果点击的是有子菜单的菜单项，不关闭 dropdown。hasSubmenu 是 menu-item 的私有方法
+            const menuItem = e.target;
+            if (menuItem.hasSubmenu) {
+                return;
+            }
             this.open = false;
         }
     }

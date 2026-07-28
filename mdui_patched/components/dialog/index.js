@@ -47,7 +47,7 @@ import { style } from './style.js';
  * @csspart description - 副文本部分，位于 body 中
  * @csspart action - 底部操作按钮
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 let Dialog = class Dialog extends MduiElement {
@@ -272,12 +272,11 @@ let Dialog = class Dialog extends MduiElement {
         const hasDescription = !!this.description || this.hasSlotController.test('description');
         const hasHeader = hasIcon || hasHeadline || this.hasSlotController.test('header');
         const hasBody = hasDescription || hasDefaultSlot;
-        // modify: 移除了 tabindex="0", 换为 tabindex
-        return html`<div ${ref(this.overlayRef)} part="overlay" class="overlay" @click="${this.onOverlayClick}" tabindex="-1"></div><div ${ref(this.panelRef)} part="panel" class="panel ${classMap({
+        return html `<div ${ref(this.overlayRef)} part="overlay" class="overlay" @click="${this.onOverlayClick}" tabindex="-1"></div><div ${ref(this.panelRef)} part="panel" class="panel ${classMap({
             'has-icon': hasIcon,
             'has-description': hasDescription,
             'has-default': hasDefaultSlot,
-        })}" tabindex>${when(hasHeader, () => html`<slot name="header" part="header" class="header">${when(hasIcon, () => this.renderIcon())} ${when(hasHeadline, () => this.renderHeadline())}</slot>`)} ${when(hasBody, () => html`<div ${ref(this.bodyRef)} part="body" class="body">${when(hasDescription, () => this.renderDescription())}<slot></slot></div>`)} ${when(hasActionSlot, () => html`<slot name="action" part="action" class="action"></slot>`)}</div>`;
+        })}" tabindex="0">${when(hasHeader, () => html `<slot name="header" part="header" class="header">${when(hasIcon, () => this.renderIcon())} ${when(hasHeadline, () => this.renderHeadline())}</slot>`)} ${when(hasBody, () => html `<div ${ref(this.bodyRef)} part="body" class="body">${when(hasDescription, () => this.renderDescription())}<slot></slot></div>`)} ${when(hasActionSlot, () => html `<slot name="action" part="action" class="action"></slot>`)}</div>`;
     }
     onOverlayClick() {
         this.emit('overlay-click');
@@ -287,15 +286,15 @@ let Dialog = class Dialog extends MduiElement {
         this.open = false;
     }
     renderIcon() {
-        return html`<slot name="icon" part="icon" class="icon">${this.icon
-            ? html`<mdui-icon name="${this.icon}"></mdui-icon>`
+        return html `<slot name="icon" part="icon" class="icon">${this.icon
+            ? html `<mdui-icon name="${this.icon}"></mdui-icon>`
             : nothingTemplate}</slot>`;
     }
     renderHeadline() {
-        return html`<slot name="headline" part="headline" class="headline">${this.headline}</slot>`;
+        return html `<slot name="headline" part="headline" class="headline">${this.headline}</slot>`;
     }
     renderDescription() {
-        return html`<slot name="description" part="description" class="description">${this.description}</slot>`;
+        return html `<slot name="description" part="description" class="description">${this.description}</slot>`;
     }
 };
 Dialog.styles = [componentStyle, style];

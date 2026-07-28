@@ -2,6 +2,7 @@ import { __decorate } from "tslib";
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
+import '@mdui/icons-shared/clear.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
 import { watch } from '@mdui/shared/decorators/watch.js';
 import { animateTo, stopAnimations } from '@mdui/shared/helpers/animate.js';
@@ -10,7 +11,6 @@ import { booleanConverter } from '@mdui/shared/helpers/decorator.js';
 import { getDuration, getEasing } from '@mdui/shared/helpers/motion.js';
 import { observeResize } from '@mdui/shared/helpers/observeResize.js';
 import { nothingTemplate } from '@mdui/shared/helpers/template.js';
-import '@mdui/shared/icons/clear.js';
 import { componentStyle } from '@mdui/shared/lit-styles/component-style.js';
 import '../button-icon.js';
 import '../button.js';
@@ -43,7 +43,7 @@ let reordering = false;
  * @csspart close-button - 关闭按钮
  * @csspart close-icon - 关闭按钮中的图标
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 let Snackbar = class Snackbar extends MduiElement {
@@ -312,7 +312,6 @@ __decorate([
 ], Snackbar.prototype, "closeIcon", void 0);
 __decorate([
     property({ type: Number, reflect: true, attribute: 'message-line' })
-    // eslint-disable-next-line prettier/prettier
 ], Snackbar.prototype, "messageLine", void 0);
 __decorate([
     property({ type: Number, reflect: true, attribute: 'auto-close-delay' })

@@ -6,7 +6,7 @@ import { booleanConverter } from '@mdui/shared/helpers/decorator.js';
 import { componentStyle } from '@mdui/shared/lit-styles/component-style.js';
 import { style } from './style.js';
 /**
- * @summary 分割线组件
+ * @summary 分隔线组件
  *
  * ```html
  * <mdui-divider></mdui-divider>
@@ -16,7 +16,7 @@ let Divider = class Divider extends MduiElement {
     constructor() {
         super(...arguments);
         /**
-         * 是否为垂直分割线
+         * 是否为垂直分隔线
          */
         this.vertical = false;
         /**

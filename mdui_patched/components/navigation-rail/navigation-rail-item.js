@@ -41,7 +41,7 @@ import { navigationRailItemStyle } from './navigation-rail-item-style.js';
  * @csspart active-icon - 激活状态的图标
  * @csspart label - 文本内容
  *
- * @cssprop --shape-corner-indicator - 指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-indicator - 指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let NavigationRailItem = class NavigationRailItem extends AnchorMixin(RippleMixin(FocusableMixin(MduiElement))) {
     constructor() {

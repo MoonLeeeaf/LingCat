@@ -3,6 +3,7 @@ import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { when } from 'lit/directives/when.js';
+// eslint-disable-next-line import/extensions
 import { getOverflowAncestors } from '@floating-ui/utils/dom';
 import { $ } from '@mdui/jq/$.js';
 import '@mdui/jq/methods/css.js';
@@ -45,8 +46,8 @@ import { style } from './style.js';
  * @csspart content - 正文
  * @csspart action - 操作按钮
  *
- * @cssprop --shape-corner-plain - 当 variant="plain" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
- * @cssprop --shape-corner-rich - 当 variant="rich" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-plain - 当 variant="plain" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-rich - 当 variant="rich" 时，组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  * @cssprop --z-index - 组件的 CSS `z-index` 值
  */
 let Tooltip = class Tooltip extends MduiElement {

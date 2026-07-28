@@ -83,7 +83,7 @@
       "name": "--mdui-color-primary-light",
       "description": {
         "kind": "markdown",
-        "value": "**Primary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-primary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n```\n"
+        "value": "**Primary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-primary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -96,7 +96,7 @@
       "name": "--mdui-color-primary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**Primary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-primary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n```\n"
+        "value": "**Primary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-primary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -109,7 +109,7 @@
       "name": "--mdui-color-on-primary-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-primary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n```\n"
+        "value": "**On Primary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-primary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -122,7 +122,7 @@
       "name": "--mdui-color-on-primary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-primary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n```\n"
+        "value": "**On Primary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-primary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -135,7 +135,7 @@
       "name": "--mdui-color-inverse-primary-light",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Primary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-inverse-primary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n```\n"
+        "value": "**Inverse Primary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-inverse-primary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -148,7 +148,7 @@
       "name": "--mdui-color-secondary-light",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-secondary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n```\n"
+        "value": "**Secondary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-secondary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -161,7 +161,7 @@
       "name": "--mdui-color-secondary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-secondary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n```\n"
+        "value": "**Secondary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-secondary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -174,7 +174,7 @@
       "name": "--mdui-color-on-secondary-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n```\n"
+        "value": "**On Secondary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -187,7 +187,7 @@
       "name": "--mdui-color-on-secondary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n```\n"
+        "value": "**On Secondary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -200,7 +200,7 @@
       "name": "--mdui-color-tertiary-light",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-tertiary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n```\n"
+        "value": "**Tertiary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-tertiary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -213,7 +213,7 @@
       "name": "--mdui-color-tertiary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-tertiary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n```\n"
+        "value": "**Tertiary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-tertiary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -226,7 +226,7 @@
       "name": "--mdui-color-on-tertiary-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n```\n"
+        "value": "**On Tertiary**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -239,7 +239,7 @@
       "name": "--mdui-color-on-tertiary-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n```\n"
+        "value": "**On Tertiary Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -252,7 +252,7 @@
       "name": "--mdui-color-surface-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n```\n"
+        "value": "**Surface**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -265,7 +265,7 @@
       "name": "--mdui-color-surface-dim-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Dim**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-dim-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n```\n"
+        "value": "**Surface Dim**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-dim-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -278,7 +278,7 @@
       "name": "--mdui-color-surface-bright-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Bright**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-bright-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n```\n"
+        "value": "**Surface Bright**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-bright-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -291,7 +291,7 @@
       "name": "--mdui-color-surface-container-lowest-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Lowest**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n```\n"
+        "value": "**Surface Container Lowest**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -304,7 +304,7 @@
       "name": "--mdui-color-surface-container-low-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Low**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-container-low-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n```\n"
+        "value": "**Surface Container Low**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-container-low-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -317,7 +317,7 @@
       "name": "--mdui-color-surface-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n```\n"
+        "value": "**Surface Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -330,7 +330,7 @@
       "name": "--mdui-color-surface-container-high-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container High**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-container-high-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n```\n"
+        "value": "**Surface Container High**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-container-high-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -343,7 +343,7 @@
       "name": "--mdui-color-surface-container-highest-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Highest**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-container-highest-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n```\n"
+        "value": "**Surface Container Highest**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-container-highest-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -356,7 +356,7 @@
       "name": "--mdui-color-surface-variant-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Variant**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-variant-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n```\n"
+        "value": "**Surface Variant**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-variant-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -369,7 +369,7 @@
       "name": "--mdui-color-on-surface-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-surface-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n```\n"
+        "value": "**On Surface**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-surface-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -382,7 +382,7 @@
       "name": "--mdui-color-on-surface-variant-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface Variant**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-surface-variant-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n```\n"
+        "value": "**On Surface Variant**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-surface-variant-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -395,7 +395,7 @@
       "name": "--mdui-color-inverse-surface-light",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Surface**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-inverse-surface-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n```\n"
+        "value": "**Inverse Surface**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-inverse-surface-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -408,7 +408,7 @@
       "name": "--mdui-color-inverse-on-surface-light",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse On Surface**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n```\n"
+        "value": "**Inverse On Surface**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -421,7 +421,7 @@
       "name": "--mdui-color-background-light",
       "description": {
         "kind": "markdown",
-        "value": "**Background**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-background-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n```\n"
+        "value": "**Background**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-background-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -434,7 +434,7 @@
       "name": "--mdui-color-on-background-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Background**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-background-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n```\n"
+        "value": "**On Background**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-background-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -447,7 +447,7 @@
       "name": "--mdui-color-error-light",
       "description": {
         "kind": "markdown",
-        "value": "**Error**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-error-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n```\n"
+        "value": "**Error**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-error-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -460,7 +460,7 @@
       "name": "--mdui-color-error-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**Error Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-error-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n```\n"
+        "value": "**Error Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-error-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -473,7 +473,7 @@
       "name": "--mdui-color-on-error-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Error**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-error-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n```\n"
+        "value": "**On Error**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-error-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -486,7 +486,7 @@
       "name": "--mdui-color-on-error-container-light",
       "description": {
         "kind": "markdown",
-        "value": "**On Error Container**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-on-error-container-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n```\n"
+        "value": "**On Error Container**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-on-error-container-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -499,7 +499,7 @@
       "name": "--mdui-color-outline-light",
       "description": {
         "kind": "markdown",
-        "value": "**Outline**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-outline-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n```\n"
+        "value": "**Outline**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-outline-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -512,7 +512,7 @@
       "name": "--mdui-color-outline-variant-light",
       "description": {
         "kind": "markdown",
-        "value": "**Outline Variant**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-outline-variant-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n```\n"
+        "value": "**Outline Variant**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-outline-variant-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -525,7 +525,7 @@
       "name": "--mdui-color-shadow-light",
       "description": {
         "kind": "markdown",
-        "value": "**Shadow**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-shadow-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n```\n"
+        "value": "**Shadow**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-shadow-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -538,7 +538,7 @@
       "name": "--mdui-color-surface-tint-color-light",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Tint Color**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-surface-tint-color-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n```\n"
+        "value": "**Surface Tint Color**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-surface-tint-color-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -551,7 +551,7 @@
       "name": "--mdui-color-scrim-light",
       "description": {
         "kind": "markdown",
-        "value": "**Scrim**\n\n亮色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变亮色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置亮色模式颜色值 */\n:root {\n  --mdui-color-scrim-light: 255, 0, 0;\n}\n\n/* 读取亮色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n```\n"
+        "value": "**Scrim**\n\n浅色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变浅色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置浅色模式颜色值 */\n:root {\n  --mdui-color-scrim-light: 255, 0, 0;\n}\n\n/* 读取浅色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim-light));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -564,7 +564,7 @@
       "name": "--mdui-color-primary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Primary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-primary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n```\n"
+        "value": "**Primary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-primary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -577,7 +577,7 @@
       "name": "--mdui-color-primary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Primary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-primary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n```\n"
+        "value": "**Primary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-primary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -590,7 +590,7 @@
       "name": "--mdui-color-on-primary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-primary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n```\n"
+        "value": "**On Primary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-primary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -603,7 +603,7 @@
       "name": "--mdui-color-on-primary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-primary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n```\n"
+        "value": "**On Primary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-primary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -616,7 +616,7 @@
       "name": "--mdui-color-inverse-primary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Primary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-inverse-primary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n```\n"
+        "value": "**Inverse Primary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-inverse-primary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -629,7 +629,7 @@
       "name": "--mdui-color-secondary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-secondary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n```\n"
+        "value": "**Secondary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-secondary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -642,7 +642,7 @@
       "name": "--mdui-color-secondary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-secondary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n```\n"
+        "value": "**Secondary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-secondary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -655,7 +655,7 @@
       "name": "--mdui-color-on-secondary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n```\n"
+        "value": "**On Secondary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -668,7 +668,7 @@
       "name": "--mdui-color-on-secondary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n```\n"
+        "value": "**On Secondary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-secondary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -681,7 +681,7 @@
       "name": "--mdui-color-tertiary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-tertiary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n```\n"
+        "value": "**Tertiary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-tertiary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -694,7 +694,7 @@
       "name": "--mdui-color-tertiary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-tertiary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n```\n"
+        "value": "**Tertiary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-tertiary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -707,7 +707,7 @@
       "name": "--mdui-color-on-tertiary-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n```\n"
+        "value": "**On Tertiary**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -720,7 +720,7 @@
       "name": "--mdui-color-on-tertiary-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n```\n"
+        "value": "**On Tertiary Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -733,7 +733,7 @@
       "name": "--mdui-color-surface-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n```\n"
+        "value": "**Surface**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -746,7 +746,7 @@
       "name": "--mdui-color-surface-dim-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Dim**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-dim-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n```\n"
+        "value": "**Surface Dim**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-dim-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -759,7 +759,7 @@
       "name": "--mdui-color-surface-bright-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Bright**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-bright-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n```\n"
+        "value": "**Surface Bright**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-bright-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -772,7 +772,7 @@
       "name": "--mdui-color-surface-container-lowest-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Lowest**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n```\n"
+        "value": "**Surface Container Lowest**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -785,7 +785,7 @@
       "name": "--mdui-color-surface-container-low-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Low**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-container-low-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n```\n"
+        "value": "**Surface Container Low**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-container-low-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -798,7 +798,7 @@
       "name": "--mdui-color-surface-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n```\n"
+        "value": "**Surface Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -811,7 +811,7 @@
       "name": "--mdui-color-surface-container-high-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container High**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-container-high-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n```\n"
+        "value": "**Surface Container High**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-container-high-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -824,7 +824,7 @@
       "name": "--mdui-color-surface-container-highest-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Highest**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-container-highest-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n```\n"
+        "value": "**Surface Container Highest**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-container-highest-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -837,7 +837,7 @@
       "name": "--mdui-color-surface-variant-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Variant**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-variant-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n```\n"
+        "value": "**Surface Variant**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-variant-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -850,7 +850,7 @@
       "name": "--mdui-color-on-surface-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-surface-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n```\n"
+        "value": "**On Surface**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-surface-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -863,7 +863,7 @@
       "name": "--mdui-color-on-surface-variant-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface Variant**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-surface-variant-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n```\n"
+        "value": "**On Surface Variant**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-surface-variant-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -876,7 +876,7 @@
       "name": "--mdui-color-inverse-surface-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Surface**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-inverse-surface-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n```\n"
+        "value": "**Inverse Surface**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-inverse-surface-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -889,7 +889,7 @@
       "name": "--mdui-color-inverse-on-surface-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse On Surface**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n```\n"
+        "value": "**Inverse On Surface**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -902,7 +902,7 @@
       "name": "--mdui-color-background-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Background**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-background-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n```\n"
+        "value": "**Background**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-background-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -915,7 +915,7 @@
       "name": "--mdui-color-on-background-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Background**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-background-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n```\n"
+        "value": "**On Background**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-background-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -928,7 +928,7 @@
       "name": "--mdui-color-error-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Error**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-error-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n```\n"
+        "value": "**Error**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-error-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -941,7 +941,7 @@
       "name": "--mdui-color-error-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Error Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-error-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n```\n"
+        "value": "**Error Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-error-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -954,7 +954,7 @@
       "name": "--mdui-color-on-error-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Error**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-error-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n```\n"
+        "value": "**On Error**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-error-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -967,7 +967,7 @@
       "name": "--mdui-color-on-error-container-dark",
       "description": {
         "kind": "markdown",
-        "value": "**On Error Container**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-on-error-container-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n```\n"
+        "value": "**On Error Container**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-on-error-container-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -980,7 +980,7 @@
       "name": "--mdui-color-outline-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Outline**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-outline-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n```\n"
+        "value": "**Outline**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-outline-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -993,7 +993,7 @@
       "name": "--mdui-color-outline-variant-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Outline Variant**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-outline-variant-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n```\n"
+        "value": "**Outline Variant**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-outline-variant-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -1006,7 +1006,7 @@
       "name": "--mdui-color-shadow-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Shadow**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-shadow-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n```\n"
+        "value": "**Shadow**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-shadow-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -1019,7 +1019,7 @@
       "name": "--mdui-color-surface-tint-color-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Tint Color**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-surface-tint-color-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n```\n"
+        "value": "**Surface Tint Color**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-surface-tint-color-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -1032,7 +1032,7 @@
       "name": "--mdui-color-scrim-dark",
       "description": {
         "kind": "markdown",
-        "value": "**Scrim**\n\n暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变暗色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置暗色模式颜色值 */\n:root {\n  --mdui-color-scrim-dark: 255, 0, 0;\n}\n\n/* 读取暗色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n```\n"
+        "value": "**Scrim**\n\n深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n修改该属性可以改变深色模式下的颜色值。\n\n**示例**：\n```css\n/* 设置深色模式颜色值 */\n:root {\n  --mdui-color-scrim-dark: 255, 0, 0;\n}\n\n/* 读取深色模式颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim-dark));\n}\n\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n```\n"
       },
       "references": [
         {
@@ -1045,7 +1045,7 @@
       "name": "--mdui-color-primary",
       "description": {
         "kind": "markdown",
-        "value": "**Primary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-primary-light` 和 `--mdui-color-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-primary-light: 255, 0, 0;\n  --mdui-color-primary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Primary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-primary-light` 和 `--mdui-color-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-primary-light: 255, 0, 0;\n  --mdui-color-primary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1058,7 +1058,7 @@
       "name": "--mdui-color-primary-container",
       "description": {
         "kind": "markdown",
-        "value": "**Primary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-primary-container-light` 和 `--mdui-color-primary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-primary-container-light: 255, 0, 0;\n  --mdui-color-primary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Primary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-primary-container-light` 和 `--mdui-color-primary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-primary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-primary-container-light: 255, 0, 0;\n  --mdui-color-primary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1071,7 +1071,7 @@
       "name": "--mdui-color-on-primary",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-primary-light` 和 `--mdui-color-on-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-primary-light: 255, 0, 0;\n  --mdui-color-on-primary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Primary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-primary-light` 和 `--mdui-color-on-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-primary-light: 255, 0, 0;\n  --mdui-color-on-primary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1084,7 +1084,7 @@
       "name": "--mdui-color-on-primary-container",
       "description": {
         "kind": "markdown",
-        "value": "**On Primary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-primary-container-light` 和 `--mdui-color-on-primary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-primary-container-light: 255, 0, 0;\n  --mdui-color-on-primary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Primary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-primary-container-light` 和 `--mdui-color-on-primary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-primary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-primary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-primary-container-light: 255, 0, 0;\n  --mdui-color-on-primary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1097,7 +1097,7 @@
       "name": "--mdui-color-inverse-primary",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Primary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-primary-light` 和 `--mdui-color-inverse-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-inverse-primary-light: 255, 0, 0;\n  --mdui-color-inverse-primary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Inverse Primary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-primary-light` 和 `--mdui-color-inverse-primary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-primary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-primary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-inverse-primary-light: 255, 0, 0;\n  --mdui-color-inverse-primary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1110,7 +1110,7 @@
       "name": "--mdui-color-secondary",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-secondary-light` 和 `--mdui-color-secondary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-secondary-light: 255, 0, 0;\n  --mdui-color-secondary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Secondary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-secondary-light` 和 `--mdui-color-secondary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-secondary-light: 255, 0, 0;\n  --mdui-color-secondary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1123,7 +1123,7 @@
       "name": "--mdui-color-secondary-container",
       "description": {
         "kind": "markdown",
-        "value": "**Secondary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-secondary-container-light` 和 `--mdui-color-secondary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-secondary-container-light: 255, 0, 0;\n  --mdui-color-secondary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Secondary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-secondary-container-light` 和 `--mdui-color-secondary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-secondary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-secondary-container-light: 255, 0, 0;\n  --mdui-color-secondary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1136,7 +1136,7 @@
       "name": "--mdui-color-on-secondary",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-secondary-light` 和 `--mdui-color-on-secondary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-secondary-light: 255, 0, 0;\n  --mdui-color-on-secondary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Secondary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-secondary-light` 和 `--mdui-color-on-secondary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-secondary-light: 255, 0, 0;\n  --mdui-color-on-secondary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1149,7 +1149,7 @@
       "name": "--mdui-color-on-secondary-container",
       "description": {
         "kind": "markdown",
-        "value": "**On Secondary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-secondary-container-light` 和 `--mdui-color-on-secondary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-secondary-container-light: 255, 0, 0;\n  --mdui-color-on-secondary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Secondary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-secondary-container-light` 和 `--mdui-color-on-secondary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-secondary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-secondary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-secondary-container-light: 255, 0, 0;\n  --mdui-color-on-secondary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1162,7 +1162,7 @@
       "name": "--mdui-color-tertiary",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-tertiary-light` 和 `--mdui-color-tertiary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-tertiary-light: 255, 0, 0;\n  --mdui-color-tertiary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Tertiary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-tertiary-light` 和 `--mdui-color-tertiary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-tertiary-light: 255, 0, 0;\n  --mdui-color-tertiary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1175,7 +1175,7 @@
       "name": "--mdui-color-tertiary-container",
       "description": {
         "kind": "markdown",
-        "value": "**Tertiary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-tertiary-container-light` 和 `--mdui-color-tertiary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-tertiary-container-light: 255, 0, 0;\n  --mdui-color-tertiary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Tertiary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-tertiary-container-light` 和 `--mdui-color-tertiary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-tertiary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-tertiary-container-light: 255, 0, 0;\n  --mdui-color-tertiary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1188,7 +1188,7 @@
       "name": "--mdui-color-on-tertiary",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-tertiary-light` 和 `--mdui-color-on-tertiary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-tertiary-light: 255, 0, 0;\n  --mdui-color-on-tertiary-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Tertiary**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-tertiary-light` 和 `--mdui-color-on-tertiary-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-tertiary-light: 255, 0, 0;\n  --mdui-color-on-tertiary-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1201,7 +1201,7 @@
       "name": "--mdui-color-on-tertiary-container",
       "description": {
         "kind": "markdown",
-        "value": "**On Tertiary Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-tertiary-container-light` 和 `--mdui-color-on-tertiary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-light: 255, 0, 0;\n  --mdui-color-on-tertiary-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Tertiary Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-tertiary-container-light` 和 `--mdui-color-on-tertiary-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-tertiary-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-tertiary-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-tertiary-container-light: 255, 0, 0;\n  --mdui-color-on-tertiary-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1214,7 +1214,7 @@
       "name": "--mdui-color-surface",
       "description": {
         "kind": "markdown",
-        "value": "**Surface**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-light` 和 `--mdui-color-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-light: 255, 0, 0;\n  --mdui-color-surface-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-light` 和 `--mdui-color-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-light: 255, 0, 0;\n  --mdui-color-surface-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1227,7 +1227,7 @@
       "name": "--mdui-color-surface-dim",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Dim**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-dim-light` 和 `--mdui-color-surface-dim-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-dim-light: 255, 0, 0;\n  --mdui-color-surface-dim-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Dim**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-dim-light` 和 `--mdui-color-surface-dim-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-dim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-dim), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-dim-light: 255, 0, 0;\n  --mdui-color-surface-dim-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1240,7 +1240,7 @@
       "name": "--mdui-color-surface-bright",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Bright**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-bright-light` 和 `--mdui-color-surface-bright-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-bright-light: 255, 0, 0;\n  --mdui-color-surface-bright-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Bright**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-bright-light` 和 `--mdui-color-surface-bright-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-bright));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-bright), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-bright-light: 255, 0, 0;\n  --mdui-color-surface-bright-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1253,7 +1253,7 @@
       "name": "--mdui-color-surface-container-lowest",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Lowest**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-lowest-light` 和 `--mdui-color-surface-container-lowest-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-light: 255, 0, 0;\n  --mdui-color-surface-container-lowest-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Container Lowest**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-lowest-light` 和 `--mdui-color-surface-container-lowest-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-lowest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-lowest), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-lowest-light: 255, 0, 0;\n  --mdui-color-surface-container-lowest-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1266,7 +1266,7 @@
       "name": "--mdui-color-surface-container-low",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Low**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-low-light` 和 `--mdui-color-surface-container-low-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-low-light: 255, 0, 0;\n  --mdui-color-surface-container-low-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Container Low**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-low-light` 和 `--mdui-color-surface-container-low-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-low));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-low), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-low-light: 255, 0, 0;\n  --mdui-color-surface-container-low-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1279,7 +1279,7 @@
       "name": "--mdui-color-surface-container",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-light` 和 `--mdui-color-surface-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-light: 255, 0, 0;\n  --mdui-color-surface-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-light` 和 `--mdui-color-surface-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-light: 255, 0, 0;\n  --mdui-color-surface-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1292,7 +1292,7 @@
       "name": "--mdui-color-surface-container-high",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container High**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-high-light` 和 `--mdui-color-surface-container-high-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-high-light: 255, 0, 0;\n  --mdui-color-surface-container-high-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Container High**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-high-light` 和 `--mdui-color-surface-container-high-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-high));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-high), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-high-light: 255, 0, 0;\n  --mdui-color-surface-container-high-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1305,7 +1305,7 @@
       "name": "--mdui-color-surface-container-highest",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Container Highest**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-highest-light` 和 `--mdui-color-surface-container-highest-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-highest-light: 255, 0, 0;\n  --mdui-color-surface-container-highest-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Container Highest**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-container-highest-light` 和 `--mdui-color-surface-container-highest-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-container-highest));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-container-highest), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-container-highest-light: 255, 0, 0;\n  --mdui-color-surface-container-highest-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1318,7 +1318,7 @@
       "name": "--mdui-color-surface-variant",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Variant**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-variant-light` 和 `--mdui-color-surface-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-variant-light: 255, 0, 0;\n  --mdui-color-surface-variant-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Variant**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-variant-light` 和 `--mdui-color-surface-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-variant), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-variant-light: 255, 0, 0;\n  --mdui-color-surface-variant-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1331,7 +1331,7 @@
       "name": "--mdui-color-on-surface",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-surface-light` 和 `--mdui-color-on-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-surface-light: 255, 0, 0;\n  --mdui-color-on-surface-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Surface**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-surface-light` 和 `--mdui-color-on-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-surface-light: 255, 0, 0;\n  --mdui-color-on-surface-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1344,7 +1344,7 @@
       "name": "--mdui-color-on-surface-variant",
       "description": {
         "kind": "markdown",
-        "value": "**On Surface Variant**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-surface-variant-light` 和 `--mdui-color-on-surface-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-surface-variant-light: 255, 0, 0;\n  --mdui-color-on-surface-variant-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Surface Variant**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-surface-variant-light` 和 `--mdui-color-on-surface-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-surface-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-surface-variant), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-surface-variant-light: 255, 0, 0;\n  --mdui-color-on-surface-variant-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1357,7 +1357,7 @@
       "name": "--mdui-color-inverse-surface",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse Surface**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-surface-light` 和 `--mdui-color-inverse-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-inverse-surface-light: 255, 0, 0;\n  --mdui-color-inverse-surface-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Inverse Surface**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-surface-light` 和 `--mdui-color-inverse-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-surface), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-inverse-surface-light: 255, 0, 0;\n  --mdui-color-inverse-surface-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1370,7 +1370,7 @@
       "name": "--mdui-color-inverse-on-surface",
       "description": {
         "kind": "markdown",
-        "value": "**Inverse On Surface**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-on-surface-light` 和 `--mdui-color-inverse-on-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-light: 255, 0, 0;\n  --mdui-color-inverse-on-surface-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Inverse On Surface**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-inverse-on-surface-light` 和 `--mdui-color-inverse-on-surface-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-inverse-on-surface));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-inverse-on-surface), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-inverse-on-surface-light: 255, 0, 0;\n  --mdui-color-inverse-on-surface-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1383,7 +1383,7 @@
       "name": "--mdui-color-background",
       "description": {
         "kind": "markdown",
-        "value": "**Background**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-background-light` 和 `--mdui-color-background-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-background-light: 255, 0, 0;\n  --mdui-color-background-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Background**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-background-light` 和 `--mdui-color-background-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-background), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-background-light: 255, 0, 0;\n  --mdui-color-background-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1396,7 +1396,7 @@
       "name": "--mdui-color-on-background",
       "description": {
         "kind": "markdown",
-        "value": "**On Background**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-background-light` 和 `--mdui-color-on-background-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-background-light: 255, 0, 0;\n  --mdui-color-on-background-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Background**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-background-light` 和 `--mdui-color-on-background-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-background));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-background), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-background-light: 255, 0, 0;\n  --mdui-color-on-background-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1409,7 +1409,7 @@
       "name": "--mdui-color-error",
       "description": {
         "kind": "markdown",
-        "value": "**Error**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-error-light` 和 `--mdui-color-error-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-error-light: 255, 0, 0;\n  --mdui-color-error-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Error**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-error-light` 和 `--mdui-color-error-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-error-light: 255, 0, 0;\n  --mdui-color-error-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1422,7 +1422,7 @@
       "name": "--mdui-color-error-container",
       "description": {
         "kind": "markdown",
-        "value": "**Error Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-error-container-light` 和 `--mdui-color-error-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-error-container-light: 255, 0, 0;\n  --mdui-color-error-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Error Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-error-container-light` 和 `--mdui-color-error-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-error-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-error-container-light: 255, 0, 0;\n  --mdui-color-error-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1435,7 +1435,7 @@
       "name": "--mdui-color-on-error",
       "description": {
         "kind": "markdown",
-        "value": "**On Error**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-error-light` 和 `--mdui-color-on-error-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-error-light: 255, 0, 0;\n  --mdui-color-on-error-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Error**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-error-light` 和 `--mdui-color-on-error-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-error-light: 255, 0, 0;\n  --mdui-color-on-error-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1448,7 +1448,7 @@
       "name": "--mdui-color-on-error-container",
       "description": {
         "kind": "markdown",
-        "value": "**On Error Container**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-error-container-light` 和 `--mdui-color-on-error-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-on-error-container-light: 255, 0, 0;\n  --mdui-color-on-error-container-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**On Error Container**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-on-error-container-light` 和 `--mdui-color-on-error-container-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-on-error-container));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-on-error-container), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-on-error-container-light: 255, 0, 0;\n  --mdui-color-on-error-container-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1461,7 +1461,7 @@
       "name": "--mdui-color-outline",
       "description": {
         "kind": "markdown",
-        "value": "**Outline**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-outline-light` 和 `--mdui-color-outline-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-outline-light: 255, 0, 0;\n  --mdui-color-outline-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Outline**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-outline-light` 和 `--mdui-color-outline-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-outline-light: 255, 0, 0;\n  --mdui-color-outline-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1474,7 +1474,7 @@
       "name": "--mdui-color-outline-variant",
       "description": {
         "kind": "markdown",
-        "value": "**Outline Variant**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-outline-variant-light` 和 `--mdui-color-outline-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-outline-variant-light: 255, 0, 0;\n  --mdui-color-outline-variant-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Outline Variant**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-outline-variant-light` 和 `--mdui-color-outline-variant-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-outline-variant));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-outline-variant), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-outline-variant-light: 255, 0, 0;\n  --mdui-color-outline-variant-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1487,7 +1487,7 @@
       "name": "--mdui-color-shadow",
       "description": {
         "kind": "markdown",
-        "value": "**Shadow**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-shadow-light` 和 `--mdui-color-shadow-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-shadow-light: 255, 0, 0;\n  --mdui-color-shadow-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Shadow**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-shadow-light` 和 `--mdui-color-shadow-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-shadow));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-shadow), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-shadow-light: 255, 0, 0;\n  --mdui-color-shadow-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1500,7 +1500,7 @@
       "name": "--mdui-color-surface-tint-color",
       "description": {
         "kind": "markdown",
-        "value": "**Surface Tint Color**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-tint-color-light` 和 `--mdui-color-surface-tint-color-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-surface-tint-color-light: 255, 0, 0;\n  --mdui-color-surface-tint-color-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Surface Tint Color**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-surface-tint-color-light` 和 `--mdui-color-surface-tint-color-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-surface-tint-color));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-surface-tint-color), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-surface-tint-color-light: 255, 0, 0;\n  --mdui-color-surface-tint-color-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {
@@ -1513,7 +1513,7 @@
       "name": "--mdui-color-scrim",
       "description": {
         "kind": "markdown",
-        "value": "**Scrim**\n\n自动适配亮色模式和暗色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-scrim-light` 和 `--mdui-color-scrim-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n\n/* 分别设置亮色模式、暗色模式的颜色值 */\n:root {\n  --mdui-color-scrim-light: 255, 0, 0;\n  --mdui-color-scrim-dark: 255, 0, 0;\n}\n```\n"
+        "value": "**Scrim**\n\n自动适配浅色模式和深色模式的 RGB 颜色值，RGB 三色用 `,` 分隔。\n\n若要设置该颜色值，建议分别设置 `--mdui-color-scrim-light` 和 `--mdui-color-scrim-dark`。\n\n**示例**：\n```css\n/* 读取自动适配的颜色值 */\n.element {\n  color: rgb(var(--mdui-color-scrim));\n}\n\n/* 读取自动适配的颜色值，并添加不透明度 */\n.element {\n  color: rgba(var(--mdui-color-scrim), 0.5);\n}\n\n/* 分别设置浅色模式、深色模式的颜色值 */\n:root {\n  --mdui-color-scrim-light: 255, 0, 0;\n  --mdui-color-scrim-dark: 255, 0, 0;\n}\n```\n"
       },
       "references": [
         {

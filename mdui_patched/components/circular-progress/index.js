@@ -7,7 +7,7 @@ import { MduiElement } from '@mdui/shared/base/mdui-element.js';
 import { componentStyle } from '@mdui/shared/lit-styles/component-style.js';
 import { style } from './style.js';
 /**
- * @summary 圆形进度指示器组件
+ * @summary 环形进度条组件
  *
  * ```html
  * <mdui-circular-progress></mdui-circular-progress>
@@ -17,7 +17,7 @@ let CircularProgress = class CircularProgress extends MduiElement {
     constructor() {
         super(...arguments);
         /**
-         * 进度指示器的最大值。默认为 `1`
+         * 进度条的最大值。默认为 `1`
          */
         this.max = 1;
     }

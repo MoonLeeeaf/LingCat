@@ -43,7 +43,7 @@ let RadioGroup = class RadioGroup extends MduiElement {
          */
         this.name = '';
         /**
-         * 单选框组的名称，将于表单数据一起提交
+         * 单选框组当前选中的值，将与表单数据一起提交
          */
         this.value = '';
         /**

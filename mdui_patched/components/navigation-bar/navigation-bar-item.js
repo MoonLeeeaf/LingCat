@@ -40,7 +40,7 @@ import { navigationBarItemStyle } from './navigation-bar-item-style.js';
  * @csspart active-icon - 激活状态的图标
  * @csspart label - 导航项文本
  *
- * @cssprop --shape-corner-indicator - 指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-indicator - 指示器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let NavigationBarItem = class NavigationBarItem extends AnchorMixin(RippleMixin(FocusableMixin(MduiElement))) {
     constructor() {

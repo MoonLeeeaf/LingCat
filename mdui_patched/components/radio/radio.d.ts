@@ -1,6 +1,6 @@
+import '@mdui/icons-shared/circle.js';
+import '@mdui/icons-shared/radio-button-unchecked.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
-import '@mdui/shared/icons/circle.js';
-import '@mdui/shared/icons/radio-button-unchecked.js';
 import '../icon.js';
 import type { Ripple } from '../ripple/index.js';
 import type { CSSResultGroup, PropertyValues, TemplateResult } from 'lit';

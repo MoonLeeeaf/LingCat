@@ -5,6 +5,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import '@mdui/icons-shared/check.js';
 import { MduiElement } from '@mdui/shared/base/mdui-element.js';
 import { FormController, formResets } from '@mdui/shared/controllers/form.js';
 import { HasSlotController } from '@mdui/shared/controllers/has-slot.js';
@@ -12,7 +13,6 @@ import { defaultValue } from '@mdui/shared/decorators/default-value.js';
 import { watch } from '@mdui/shared/decorators/watch.js';
 import { booleanConverter } from '@mdui/shared/helpers/decorator.js';
 import { nothingTemplate } from '@mdui/shared/helpers/template.js';
-import '@mdui/shared/icons/check.js';
 import { componentStyle } from '@mdui/shared/lit-styles/component-style.js';
 import { FocusableMixin } from '@mdui/shared/mixins/focusable.js';
 import '../icon.js';
@@ -39,8 +39,8 @@ import { style } from './style.js';
  * @csspart unchecked-icon - 未选中状态的图标
  * @csspart checked-icon 选中状态的图标
  *
- * @cssprop --shape-corner - 组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
- * @cssprop --shape-corner-thumb - 组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件轨道的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner-thumb - 组件图标容器的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let Switch = class Switch extends RippleMixin(FocusableMixin(MduiElement)) {
     constructor() {
@@ -66,7 +66,7 @@ let Switch = class Switch extends RippleMixin(FocusableMixin(MduiElement)) {
          */
         this.name = '';
         /**
-         * 开关的值，将于表单数据一起提交
+         * 开关的值，将与表单数据一起提交
          */
         this.value = 'on';
         /**

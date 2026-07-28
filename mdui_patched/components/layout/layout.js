@@ -16,7 +16,7 @@ import { layoutStyle } from './layout-style.js';
  * </mdui-layout>
  * ```
  *
- * @slot - 可以包含 [`<mdui-top-app-bar>`](/docs/2/components/top-app-bar)、[`<mdui-bottom-app-bar>`](/docs/2/components/bottom-app-bar)、[`<mdui-navigation-bar>`](/docs/2/components/navigation-bar)、[`<mdui-navigation-drawer>`](/docs/2/components/navigation-drawer)、[`<mdui-navigation-rail>`](/docs/2/components/navigation-rail)、`<mdui-layout-item>`、`<mdui-layout-main>` 元素
+ * @slot - 可以包含 [`<mdui-top-app-bar>`](/zh-cn/docs/2/components/top-app-bar)、[`<mdui-bottom-app-bar>`](/zh-cn/docs/2/components/bottom-app-bar)、[`<mdui-navigation-bar>`](/zh-cn/docs/2/components/navigation-bar)、[`<mdui-navigation-drawer>`](/zh-cn/docs/2/components/navigation-drawer)、[`<mdui-navigation-rail>`](/zh-cn/docs/2/components/navigation-rail)、`<mdui-layout-item>`、`<mdui-layout-main>` 元素
  */
 let Layout = class Layout extends MduiElement {
     constructor() {

@@ -34,7 +34,7 @@ import { segmentedButtonGroupStyle } from './segmented-button-group-style.js';
  *
  * @slot - `<mdui-segmented-button>` 组件
  *
- * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/docs/2/styles/design-tokens#shape-corner)
+ * @cssprop --shape-corner - 组件的圆角大小。可以指定一个具体的像素值；但更推荐引用[设计令牌](/zh-cn/docs/2/styles/design-tokens#shape-corner)
  */
 let SegmentedButtonGroup = class SegmentedButtonGroup extends MduiElement {
     constructor() {
@@ -342,7 +342,6 @@ __decorate([
 ], SegmentedButtonGroup.prototype, "fullWidth", void 0);
 __decorate([
     property({ reflect: true })
-    // eslint-disable-next-line prettier/prettier
 ], SegmentedButtonGroup.prototype, "selects", void 0);
 __decorate([
     property({

@@ -37,7 +37,7 @@ export declare class RadioGroup extends MduiElement<RadioGroupEventMap> implemen
      */
     name: string;
     /**
-     * 单选框组的名称，将于表单数据一起提交
+     * 单选框组当前选中的值，将与表单数据一起提交
      */
     value: string;
     /**

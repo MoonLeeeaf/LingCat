@@ -22,7 +22,7 @@ import type { CSSResultGroup, PropertyValues, TemplateResult } from 'lit';
  * @event closed - 下拉组件关闭动画完成时，事件被触发
  *
  * @slot - 下拉组件的内容
- * @slot trigger - 触发下拉组件的元素，例如 [`<mdui-button>`](/docs/2/components/button) 元素
+ * @slot trigger - 触发下拉组件的元素，例如 [`<mdui-button>`](/zh-cn/docs/2/components/button) 元素
  *
  * @csspart trigger - 触发下拉组件的元素的容器，即 `trigger` slot 的容器
  * @csspart panel - 下拉组件内容的容器
@@ -68,7 +68,7 @@ export declare class Dropdown extends MduiElement<DropdownEventMap> {
      */
     placement: /*自动判断位置*/ 'auto' | /*上方左对齐*/ 'top-start' | /*上方居中*/ 'top' | /*上方右对齐*/ 'top-end' | /*下方左对齐*/ 'bottom-start' | /*下方居中*/ 'bottom' | /*下方右对齐*/ 'bottom-end' | /*左侧顶部对齐*/ 'left-start' | /*左侧居中*/ 'left' | /*左侧底部对齐*/ 'left-end' | /*右侧顶部对齐*/ 'right-start' | /*右侧居中*/ 'right' | /*右侧底部对齐*/ 'right-end';
     /**
-     * 点击 [`<mdui-menu-item>`](/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态
+     * 点击 [`<mdui-menu-item>`](/zh-cn/docs/2/components/menu#menu-item-api) 后，下拉组件是否保持打开状态
      */
     stayOpenOnClick: boolean;
     /**
