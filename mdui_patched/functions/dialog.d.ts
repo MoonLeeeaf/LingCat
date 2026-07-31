@@ -10,6 +10,7 @@ interface Action {
      * 按钮文本
      */
     text: string;
+    variant?: string;
     /**
      * 点击按钮时的回调函数。
      * 函数参数为 dialog 实例，`this` 也指向 dialog 实例。

@@ -53,7 +53,7 @@ export const dialog = (options) => {
             const mergedAction = Object.assign({}, defaultAction, action);
             $(`<mdui-button
         slot="action"
-        variant="text"
+        variant="${mergedAction.variant || 'text'}"
       >${mergedAction.text}</mdui-button>`)
                 .appendTo($dialog)
                 .on('click', function () {
