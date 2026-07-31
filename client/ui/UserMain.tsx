@@ -25,9 +25,10 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     }
 }
 
-function ChatListItem({ chat, setActiveChat }: { chat: IChat, setActiveChat: Function }) {
+function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, activeChat?: IChat, setActiveChat: Function }) {
     return <mdui-dropdown trigger="hover">
         <mdui-list-item
+            active={activeChat?.id == chat.id}
             slot='trigger'
             key={chat.id}
             rounded
@@ -297,21 +298,21 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                             {!loadingRecent && recentChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {recentChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                            {recentChats.filter(chatFilter).map(chat => <ChatListItem activeChat={activeChat} chat={chat} setActiveChat={setActiveChat} />)}
                         </>,
                         favourited: <>
                             {loadingFavourited && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingFavourited && favouritedChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {favouritedChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                            {favouritedChats.filter(chatFilter).map(chat => <ChatListItem activeChat={activeChat} chat={chat} setActiveChat={setActiveChat} />)}
                         </>,
                         all: <>
                             {loadingAll && <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />}
                             {!loadingAll && allChats.length === 0 && (
                                 <mdui-list-item rounded>暂无对话</mdui-list-item>
                             )}
-                            {allChats.filter(chatFilter).map(chat => <ChatListItem chat={chat} setActiveChat={setActiveChat} />)}
+                            {allChats.filter(chatFilter).map(chat => <ChatListItem activeChat={activeChat} chat={chat} setActiveChat={setActiveChat} />)}
                         </>,
                         search: <>
                             <mdui-text-field variant="outlined"
