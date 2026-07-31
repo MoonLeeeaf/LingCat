@@ -1,6 +1,4 @@
-/// <reference types="vite/client" />
-
-/// <reference types="mdui/jsx.zh-cn.d.ts" />
+/// <reference types="./env.d.ts" />
 
 import 'mdui/mdui.css'
 import 'mdui'

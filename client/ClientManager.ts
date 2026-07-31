@@ -3,6 +3,8 @@ import fs from './fs.ts'
 import { IUser } from 'lingcat-protocol'
 import ProfileCache from './ProfileCache.ts'
 
+const default_server = location.protocol + '//' + location.host
+
 export default class ClientManager {
     static client: LingCatClient
 
@@ -17,18 +19,20 @@ export default class ClientManager {
         return this.me
     }
     static listServerPublicKeys() {
-        return fs.readdirSync('/public_keys')
+        return [...fs.readdirSync('/public_keys'), '内置']
     }
     static listUserSessions() {
         return fs.readdirSync('/sessions')
     }
     static setServerPublicKey(name: string, data: Uint8Array) {
+        if (name == '内置') return
         fs.writeFileSync('/public_keys/' + name, data)
     }
     static removeServerPublicKey(name: string) {
         fs.unlinkSync('/public_keys/' + name)
     }
     static getServerPublicKey(name: string) {
+        if (name == '内置') return Buffer.from(__PUBLIC_KEY__, 'hex')
         return fs.readFileSync('/public_keys/' + name)
     }
     static setUserSession(name: string, token: string, server: string) {
@@ -63,12 +67,16 @@ export default class ClientManager {
         }
     }
     static initClient(userSessionName: string) {
-        const { server } = this.getUserSession(userSessionName)
+        let { server }: { server?: string } = this.getUserSession(userSessionName)
+        if (server.trim() == '')
+            server = undefined
         this.client = new LingCatClient({
-            server_ws: server,
-            server_http: server,
-            server_public_key: this.getServerPublicKey(new URL(server).host)
+            server_ws: server || default_server,
+            server_http: server || default_server,
+            server_public_key: this.getServerPublicKey(server ? new URL(server).host : '内置')
         })
         this.client.init()
     }
 }
+
+

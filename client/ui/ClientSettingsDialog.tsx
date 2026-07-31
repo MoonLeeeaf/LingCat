@@ -7,6 +7,8 @@ import showSnackbar from "./showSnackbar.ts"
 import LingCatClient, { UserApi } from "lingcat-client-protocol"
 import tipError from "./tipError.ts"
 
+const default_server = location.protocol + '//' + location.host
+
 function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
     const [k, setK] = React.useState(Date.now() + '')
 
@@ -130,14 +132,10 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
     const mLoginAccount = React.useRef<TextField>(undefined)
     const mLoginPassword = React.useRef<TextField>(undefined)
 
-    React.useEffect(() => {
-        mLoginServer.current!.value = location.protocol + '//' + location.host
-    }, [])
-
     const child = <>
         <span slot="headline">登录</span>
 
-        <mdui-text-field label="服务端 HTTP 地址" ref={mLoginServer as any}></mdui-text-field>
+        <mdui-text-field label="服务端 HTTP 地址 (留空为当前页)" ref={mLoginServer as any}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
         <mdui-text-field label="用户名 / 用户 ID" ref={mLoginAccount as any}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
@@ -164,10 +162,12 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                                 message: '注册中...'
                             })
 
+                            const isEmpty = mLoginServer.current!.value.trim() == ''
+
                             const client = new LingCatClient({
-                                server_ws: mLoginServer.current!.value,
-                                server_http: mLoginServer.current!.value,
-                                server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
+                                server_ws: isEmpty ? default_server : mLoginServer.current!.value,
+                                server_http: isEmpty ? default_server : mLoginServer.current!.value,
+                                server_public_key: ClientManager.getServerPublicKey(isEmpty ? '内置' : new URL(mLoginServer.current!.value).host)
                             })
 
                             client.onInit = async () => {
@@ -210,10 +210,12 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                     message: '登录中...'
                 })
 
+                const isEmpty = mLoginServer.current!.value.trim() == ''
+
                 const client = new LingCatClient({
-                    server_ws: mLoginServer.current!.value,
-                    server_http: mLoginServer.current!.value,
-                    server_public_key: ClientManager.getServerPublicKey(new URL(mLoginServer.current!.value).host)
+                    server_ws: isEmpty ? default_server : mLoginServer.current!.value,
+                    server_http: isEmpty ? default_server : mLoginServer.current!.value,
+                    server_public_key: ClientManager.getServerPublicKey(isEmpty ? '内置' : new URL(mLoginServer.current!.value).host)
                 })
 
                 client.onInit = async () => {
@@ -223,7 +225,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                             account: mLoginAccount.current!.value,
                         })
 
-                        ClientManager.setUserSession(mLoginAccount.current!.value, token, client.server_ws)
+                        ClientManager.setUserSession(mLoginAccount.current!.value, token, isEmpty ? '' : client.server_ws)
                         ClientManager.setActiveUserSessionName(mLoginAccount.current!.value)
 
                         client.disconnect()

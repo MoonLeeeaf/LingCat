@@ -7,9 +7,24 @@ import node_path from 'node:path'
 
 const path = base_data_path + '/page'
 
+const default_public_key_path = base_data_path + '/key/public'
+
 try {
     fs.unlinkSync(path)
 } catch(e) {}
+
+function publicKeyPlugin() {
+    return {
+        name: 'public-key-plugin',
+        config() {
+            return {
+                define: {
+                    __PUBLIC_KEY__: JSON.stringify(fs.readFileSync(default_public_key_path, 'hex'))
+                }
+            }
+        }
+    }
+}
 
 export default defineConfig({
     plugins: [
@@ -22,6 +37,7 @@ export default defineConfig({
                 process: true,
             },
         }),
+        publicKeyPlugin(),
     ],
     build: {
         sourcemap: true,
