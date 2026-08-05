@@ -190,51 +190,51 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
 
     return <>
         <mdui-dialog ref={createGroupDialogRef} close-on-overlay-click headline="创建群组">
-                <mdui-text-field
-                    ref={groupNameInputRef}
-                    placeholder="群组名称 (必填)"
-                    variant="outlined"
-                    style={{ width: '100%', marginBottom: '12px' }}
-                    required
-                />
-                <mdui-text-field
-                    ref={groupUniqueInputRef}
-                    placeholder="群标识符 (可选)"
-                    variant="outlined"
-                    style={{ width: '100%', marginBottom: '12px' }}
-                />
+            <mdui-text-field
+                ref={groupNameInputRef}
+                placeholder="群组名称 (必填)"
+                variant="outlined"
+                style={{ width: '100%', marginBottom: '12px' }}
+                required
+            />
+            <mdui-text-field
+                ref={groupUniqueInputRef}
+                placeholder="群标识符 (可选)"
+                variant="outlined"
+                style={{ width: '100%', marginBottom: '12px' }}
+            />
 
-                <mdui-button slot="action" variant="text" onClick={() => createGroupDialogRef.current!.open = false}>
-                    取消
-                </mdui-button>
-                <mdui-button slot="action" variant="filled" onClick={async () => {
-                    const title = groupNameInputRef.current?.value?.trim()
-                    if (!title) {
-                        showSnackbar({ message: '请输入群组名称' })
-                        return
-                    }
-                    const unique = groupUniqueInputRef.current?.value?.trim() || undefined
+            <mdui-button slot="action" variant="text" onClick={() => createGroupDialogRef.current!.open = false}>
+                取消
+            </mdui-button>
+            <mdui-button slot="action" variant="filled" onClick={async () => {
+                const title = groupNameInputRef.current?.value?.trim()
+                if (!title) {
+                    showSnackbar({ message: '请输入群组名称' })
+                    return
+                }
+                const unique = groupUniqueInputRef.current?.value?.trim() || undefined
 
-                    try {
-                        const chat_id = await ChatApi.createGroup(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            title,
-                            unique,
-                        })
-                        createGroupDialogRef.current!.open = false
-                        showSnackbar({ message: `创建成功` })
-                        const chatInfo = await ChatApi.queryChatInfo(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            chat_id: chat_id,
-                        })
-                        setActiveChat(chatInfo)
+                try {
+                    const chat_id = await ChatApi.createGroup(ClientManager.client, {
+                        access_token: ClientManager.getActiveUserSession().token,
+                        title,
+                        unique,
+                    })
+                    createGroupDialogRef.current!.open = false
+                    showSnackbar({ message: `创建成功` })
+                    const chatInfo = await ChatApi.queryChatInfo(ClientManager.client, {
+                        access_token: ClientManager.getActiveUserSession().token,
+                        chat_id: chat_id,
+                    })
+                    setActiveChat(chatInfo)
 
-                        groupNameInputRef.current!.value = ''
-                        groupUniqueInputRef.current!.value = ''
-                    } catch (e) {
-                        tipError(e, '创建群组失败')
-                    } 
-                }}>创建</mdui-button>
+                    groupNameInputRef.current!.value = ''
+                    groupUniqueInputRef.current!.value = ''
+                } catch (e) {
+                    tipError(e, '创建群组失败')
+                }
+            }}>创建</mdui-button>
         </mdui-dialog>
         <mdui-dialog ref={addFavouriteChatDialogRef} close-on-overlay-click headline="添加收藏对话">
             <mdui-text-field
@@ -323,7 +323,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                                     setSearchKeyword(val)
                                     debouncedSearch(val)
                                 }}
-                                style={{ width: '100%', marginBottom: '16px' }}
+                                style={{ width: '100%', paddingBottom: '10px' }}
                                 clearable></mdui-text-field>
                             {searching && <mdui-circular-progress style={{ margin: '20px auto', display: 'block' }} />}
                             {!searching && searchKeyword.trim() !== '' && searchResults.length == 0 && (
@@ -334,6 +334,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                             <mdui-list style={{ overflowY: 'auto' }}>
                                 {searchResults.map(chat => (
                                     <mdui-list-item
+                                        active={activeChat?.id == chat.id}
                                         key={chat.id}
                                         rounded
                                         onClick={() => {
