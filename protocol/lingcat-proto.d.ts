@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs/minimal.js";
+import * as $protobuf from "protobufjs";
 import Long = require("long");
 
 /** Namespace lingcat. */

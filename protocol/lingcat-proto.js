@@ -154,7 +154,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             EncryptedMessage.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -561,7 +561,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IUser.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -1021,7 +1021,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IChat.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -1510,7 +1510,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IFile.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -1926,7 +1926,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IMessage.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -2339,7 +2339,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Error_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -2632,7 +2632,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             HandShake_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -2923,7 +2923,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             HandShake_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -3247,7 +3247,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Ping_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -3523,7 +3523,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Ping_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -3830,7 +3830,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Registration_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4126,7 +4126,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Registration_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4397,7 +4397,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Login_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4676,7 +4676,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Login_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4936,7 +4936,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Upload_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5196,7 +5196,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Upload_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5456,7 +5456,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Access_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5716,7 +5716,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Access_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5987,7 +5987,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Authorize_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6255,7 +6255,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Authorize_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6496,7 +6496,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_User_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6775,7 +6775,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_My_User_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7035,7 +7035,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_User_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7296,7 +7296,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_My_User_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7628,7 +7628,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Profile_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7942,7 +7942,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Profile_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8194,7 +8194,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Avatar_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8480,7 +8480,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Avatar_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8732,7 +8732,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Send_Chat_Message_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9029,7 +9029,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Send_Chat_Message_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9289,7 +9289,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Receive_Chat_Message_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9615,7 +9615,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Messages_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9945,7 +9945,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Messages_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10231,7 +10231,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_Chat_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10510,7 +10510,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_Chat_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10782,7 +10782,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Or_Create_Private_Chat_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11061,7 +11061,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Or_Create_Private_Chat_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11358,7 +11358,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11653,7 +11653,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11965,7 +11965,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Favourite_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12260,7 +12260,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Favourite_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12566,7 +12566,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Search_My_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12864,7 +12864,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Search_My_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13150,7 +13150,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Another_User_From_Private_Chat_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13429,7 +13429,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Another_User_From_Private_Chat_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13711,7 +13711,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Set_Chat_Favourited_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13997,7 +13997,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Set_Chat_Favourited_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14238,7 +14238,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_User_Id_By_Username_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14517,7 +14517,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_User_Id_By_Username_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14788,7 +14788,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Resolve_Chat_Identifier_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15067,7 +15067,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Resolve_Chat_Identifier_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15316,7 +15316,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Chats_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15577,11 +15577,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Create_Group_Request.encodeDelimited = function(message, writer) {
-<<<<<<< HEAD
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
-=======
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
->>>>>>> 59ffeac (基本的创建群组)
             };
 
             /**
@@ -15877,7 +15873,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Create_Group_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
