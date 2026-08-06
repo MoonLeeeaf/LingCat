@@ -107,11 +107,18 @@ export default class ChatApi {
                 if (chat == null)
                     return sendError(sendPackage, mPackage.method_id, 'Chat doesn\'t exists', Code.Not_Found)
 
-                const hideForNonMember = {
-                    settings: '{}'
+                const settings = JSON.parse(chat.settings)
+                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId)){
+                    /**
+                     * 仅入群方式对非对话成员可见
+                     */
+                    chat.settings = JSON.stringify({
+                        allow_join: settings.allow_join
+                    })
+                    chat.last_message_id = 0
+                    chat.last_message_text = undefined
+                    chat.last_message_time = 0
                 }
-                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId))
-                    hideForNonMember.settings = chat.settings
 
                 sendPackage(Package.encode({
                     method_id: Methods.Query_Chat_Info_Response,
