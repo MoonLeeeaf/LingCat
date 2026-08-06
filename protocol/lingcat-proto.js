@@ -2195,6 +2195,325 @@ export const lingcat = $root.lingcat = (() => {
             return IMessage;
         })();
 
+        classes.IChatAdmin = (function() {
+
+            /**
+             * Properties of a IChatAdmin.
+             * @typedef {Object} lingcat.classes.IChatAdmin.$Properties
+             * @property {string|null} [userId] IChatAdmin userId
+             * @property {string|null} [role] IChatAdmin role
+             * @property {string|null} [permissions] IChatAdmin permissions
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IChatAdmin.
+             * @memberof lingcat.classes
+             * @interface IIChatAdmin
+             * @augments lingcat.classes.IChatAdmin.$Properties
+             * @deprecated Use lingcat.classes.IChatAdmin.$Properties instead.
+             */
+
+            /**
+             * Shape of a IChatAdmin.
+             * @typedef {lingcat.classes.IChatAdmin.$Properties} lingcat.classes.IChatAdmin.$Shape
+             */
+
+            /**
+             * Constructs a new IChatAdmin.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IChatAdmin.
+             * @constructor
+             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IChatAdmin = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IChatAdmin userId.
+             * @member {string} userId
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.userId = "";
+
+            /**
+             * IChatAdmin role.
+             * @member {string} role
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.role = "";
+
+            /**
+             * IChatAdmin permissions.
+             * @member {string} permissions
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.permissions = "";
+
+            /**
+             * Creates a new IChatAdmin instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IChatAdmin} IChatAdmin instance
+             * @type {{
+             *   (properties: lingcat.classes.IChatAdmin.$Shape): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
+             *   (properties?: lingcat.classes.IChatAdmin.$Properties): lingcat.classes.IChatAdmin;
+             * }}
+             */
+            IChatAdmin.create = function(properties) {
+                return new IChatAdmin(properties);
+            };
+
+            /**
+             * Encodes the specified IChatAdmin message. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IChatAdmin.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId") && message.userId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role") && message.role !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.role);
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions") && message.permissions !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.permissions);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IChatAdmin message, length delimited. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IChatAdmin.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IChatAdmin.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IChatAdmin(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.userId = value;
+                            else
+                                delete message.userId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.role = value;
+                            else
+                                delete message.role;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.permissions = value;
+                            else
+                                delete message.permissions;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IChatAdmin.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a IChatAdmin message.
+             * @function verify
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IChatAdmin.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
+                    if (!$util.isString(message.role))
+                        return "role: string expected";
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
+                    if (!$util.isString(message.permissions))
+                        return "permissions: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a IChatAdmin message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IChatAdmin} IChatAdmin
+             */
+            IChatAdmin.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IChatAdmin)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IChatAdmin: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IChatAdmin();
+                if (object.userId != null)
+                    if (typeof object.userId !== "string" || object.userId.length)
+                        message.userId = $String(object.userId);
+                if (object.role != null)
+                    if (typeof object.role !== "string" || object.role.length)
+                        message.role = $String(object.role);
+                if (object.permissions != null)
+                    if (typeof object.permissions !== "string" || object.permissions.length)
+                        message.permissions = $String(object.permissions);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IChatAdmin message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin} message IChatAdmin
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IChatAdmin.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.userId = "";
+                    object.role = "";
+                    object.permissions = "";
+                }
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
+                    object.role = message.role;
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
+                    object.permissions = message.permissions;
+                return object;
+            };
+
+            /**
+             * Converts this IChatAdmin to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IChatAdmin.prototype.toJSON = function() {
+                return IChatAdmin.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IChatAdmin
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IChatAdmin.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IChatAdmin";
+            };
+
+            return IChatAdmin;
+        })();
+
         return classes;
     })();
 
@@ -8077,39 +8396,41 @@ export const lingcat = $root.lingcat = (() => {
             return Update_My_Profile_Response;
         })();
 
-        methods.Update_Chat_Avatar_Request = (function() {
+        methods.Update_Chat_Profile_Request = (function() {
 
             /**
-             * Properties of an Update_Chat_Avatar_Request.
-             * @typedef {Object} lingcat.methods.Update_Chat_Avatar_Request.$Properties
-             * @property {string|null} [accessToken] Update_Chat_Avatar_Request accessToken
-             * @property {string|null} [chatId] Update_Chat_Avatar_Request chatId
-             * @property {string|null} [fileHash] Update_Chat_Avatar_Request fileHash
+             * Properties of an Update_Chat_Profile_Request.
+             * @typedef {Object} lingcat.methods.Update_Chat_Profile_Request.$Properties
+             * @property {string|null} [accessToken] Update_Chat_Profile_Request accessToken
+             * @property {string|null} [chatId] Update_Chat_Profile_Request chatId
+             * @property {string|null} [avatarFileHash] Update_Chat_Profile_Request avatarFileHash
+             * @property {string|null} [title] Update_Chat_Profile_Request title
+             * @property {string|null} [description] Update_Chat_Profile_Request description
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of an Update_Chat_Avatar_Request.
+             * Properties of an Update_Chat_Profile_Request.
              * @memberof lingcat.methods
-             * @interface IUpdate_Chat_Avatar_Request
-             * @augments lingcat.methods.Update_Chat_Avatar_Request.$Properties
-             * @deprecated Use lingcat.methods.Update_Chat_Avatar_Request.$Properties instead.
+             * @interface IUpdate_Chat_Profile_Request
+             * @augments lingcat.methods.Update_Chat_Profile_Request.$Properties
+             * @deprecated Use lingcat.methods.Update_Chat_Profile_Request.$Properties instead.
              */
 
             /**
-             * Shape of an Update_Chat_Avatar_Request.
-             * @typedef {lingcat.methods.Update_Chat_Avatar_Request.$Properties} lingcat.methods.Update_Chat_Avatar_Request.$Shape
+             * Shape of an Update_Chat_Profile_Request.
+             * @typedef {lingcat.methods.Update_Chat_Profile_Request.$Properties} lingcat.methods.Update_Chat_Profile_Request.$Shape
              */
 
             /**
-             * Constructs a new Update_Chat_Avatar_Request.
+             * Constructs a new Update_Chat_Profile_Request.
              * @memberof lingcat.methods
-             * @classdesc Represents an Update_Chat_Avatar_Request.
+             * @classdesc Represents an Update_Chat_Profile_Request.
              * @constructor
-             * @param {lingcat.methods.Update_Chat_Avatar_Request.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Update_Chat_Profile_Request.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Update_Chat_Avatar_Request = function (properties) {
+            const Update_Chat_Profile_Request = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -8117,55 +8438,92 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Update_Chat_Avatar_Request accessToken.
+             * Update_Chat_Profile_Request accessToken.
              * @member {string} accessToken
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @instance
              */
-            Update_Chat_Avatar_Request.prototype.accessToken = "";
+            Update_Chat_Profile_Request.prototype.accessToken = "";
 
             /**
-             * Update_Chat_Avatar_Request chatId.
+             * Update_Chat_Profile_Request chatId.
              * @member {string} chatId
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @instance
              */
-            Update_Chat_Avatar_Request.prototype.chatId = "";
+            Update_Chat_Profile_Request.prototype.chatId = "";
 
             /**
-             * Update_Chat_Avatar_Request fileHash.
-             * @member {string} fileHash
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * Update_Chat_Profile_Request avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @instance
              */
-            Update_Chat_Avatar_Request.prototype.fileHash = "";
+            Update_Chat_Profile_Request.prototype.avatarFileHash = null;
 
             /**
-             * Creates a new Update_Chat_Avatar_Request instance using the specified properties.
+             * Update_Chat_Profile_Request title.
+             * @member {string|null|undefined} title
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
+             * @instance
+             */
+            Update_Chat_Profile_Request.prototype.title = null;
+
+            /**
+             * Update_Chat_Profile_Request description.
+             * @member {string|null|undefined} description
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
+             * @instance
+             */
+            Update_Chat_Profile_Request.prototype.description = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_Chat_Profile_Request.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_Chat_Profile_Request.prototype, "_title", {
+                get: $util.oneOfGetter($oneOfFields = ["title"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_Chat_Profile_Request.prototype, "_description", {
+                get: $util.oneOfGetter($oneOfFields = ["description"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Update_Chat_Profile_Request instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Request.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Update_Chat_Avatar_Request} Update_Chat_Avatar_Request instance
+             * @param {lingcat.methods.Update_Chat_Profile_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Chat_Profile_Request} Update_Chat_Profile_Request instance
              * @type {{
-             *   (properties: lingcat.methods.Update_Chat_Avatar_Request.$Shape): lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape;
-             *   (properties?: lingcat.methods.Update_Chat_Avatar_Request.$Properties): lingcat.methods.Update_Chat_Avatar_Request;
+             *   (properties: lingcat.methods.Update_Chat_Profile_Request.$Shape): lingcat.methods.Update_Chat_Profile_Request & lingcat.methods.Update_Chat_Profile_Request.$Shape;
+             *   (properties?: lingcat.methods.Update_Chat_Profile_Request.$Properties): lingcat.methods.Update_Chat_Profile_Request;
              * }}
              */
-            Update_Chat_Avatar_Request.create = function(properties) {
-                return new Update_Chat_Avatar_Request(properties);
+            Update_Chat_Profile_Request.create = function(properties) {
+                return new Update_Chat_Profile_Request(properties);
             };
 
             /**
-             * Encodes the specified Update_Chat_Avatar_Request message. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Request.verify|verify} messages.
+             * Encodes the specified Update_Chat_Profile_Request message. Does not implicitly {@link lingcat.methods.Update_Chat_Profile_Request.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Request.$Properties} message Update_Chat_Avatar_Request message or plain object to encode
+             * @param {lingcat.methods.Update_Chat_Profile_Request.$Properties} message Update_Chat_Profile_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_Chat_Avatar_Request.encode = function (message, writer, _depth) {
+            Update_Chat_Profile_Request.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -8176,8 +8534,12 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
                 if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash") && message.fileHash !== "")
-                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.fileHash);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.avatarFileHash);
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.title);
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.description);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -8185,37 +8547,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Update_Chat_Avatar_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Request.verify|verify} messages.
+             * Encodes the specified Update_Chat_Profile_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Profile_Request.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Request.$Properties} message Update_Chat_Avatar_Request message or plain object to encode
+             * @param {lingcat.methods.Update_Chat_Profile_Request.$Properties} message Update_Chat_Profile_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_Chat_Avatar_Request.encodeDelimited = function(message, writer) {
+            Update_Chat_Profile_Request.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an Update_Chat_Avatar_Request message from the specified reader or buffer.
+             * Decodes an Update_Chat_Profile_Request message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape} Update_Chat_Avatar_Request
+             * @returns {lingcat.methods.Update_Chat_Profile_Request & lingcat.methods.Update_Chat_Profile_Request.$Shape} Update_Chat_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_Chat_Avatar_Request.decode = function (reader, length, _end, _depth, _target) {
+            Update_Chat_Profile_Request.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Avatar_Request(), value;
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Profile_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8246,10 +8608,22 @@ export const lingcat = $root.lingcat = (() => {
                     case 3: {
                             if (wireType !== 2)
                                 break;
-                            if ((value = reader.stringVerify()).length)
-                                message.fileHash = value;
-                            else
-                                delete message.fileHash;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.title = reader.stringVerify();
+                            message._title = "title";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.description = reader.stringVerify();
+                            message._description = "description";
                             continue;
                         }
                     }
@@ -8265,88 +8639,104 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an Update_Chat_Avatar_Request message from the specified reader or buffer, length delimited.
+             * Decodes an Update_Chat_Profile_Request message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_Chat_Avatar_Request & lingcat.methods.Update_Chat_Avatar_Request.$Shape} Update_Chat_Avatar_Request
+             * @returns {lingcat.methods.Update_Chat_Profile_Request & lingcat.methods.Update_Chat_Profile_Request.$Shape} Update_Chat_Profile_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_Chat_Avatar_Request.decodeDelimited = function(reader) {
+            Update_Chat_Profile_Request.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an Update_Chat_Avatar_Request message.
+             * Verifies an Update_Chat_Profile_Request message.
              * @function verify
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Update_Chat_Avatar_Request.verify = function (message, _depth) {
+            Update_Chat_Profile_Request.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                let properties = {};
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     if (!$util.isString(message.accessToken))
                         return "accessToken: string expected";
                 if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
                     if (!$util.isString(message.chatId))
                         return "chatId: string expected";
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
-                    if (!$util.isString(message.fileHash))
-                        return "fileHash: string expected";
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title")) {
+                    properties._title = 1;
+                    if (!$util.isString(message.title))
+                        return "title: string expected";
+                }
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description")) {
+                    properties._description = 1;
+                    if (!$util.isString(message.description))
+                        return "description: string expected";
+                }
                 return null;
             };
 
             /**
-             * Creates an Update_Chat_Avatar_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_Chat_Profile_Request message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Update_Chat_Avatar_Request} Update_Chat_Avatar_Request
+             * @returns {lingcat.methods.Update_Chat_Profile_Request} Update_Chat_Profile_Request
              */
-            Update_Chat_Avatar_Request.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Update_Chat_Avatar_Request)
+            Update_Chat_Profile_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Chat_Profile_Request)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Update_Chat_Avatar_Request: object expected");
+                    throw $TypeError(".lingcat.methods.Update_Chat_Profile_Request: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                let message = new $root.lingcat.methods.Update_Chat_Avatar_Request();
+                let message = new $root.lingcat.methods.Update_Chat_Profile_Request();
                 if (object.accessToken != null)
                     if (typeof object.accessToken !== "string" || object.accessToken.length)
                         message.accessToken = $String(object.accessToken);
                 if (object.chatId != null)
                     if (typeof object.chatId !== "string" || object.chatId.length)
                         message.chatId = $String(object.chatId);
-                if (object.fileHash != null)
-                    if (typeof object.fileHash !== "string" || object.fileHash.length)
-                        message.fileHash = $String(object.fileHash);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                if (object.title != null)
+                    message.title = $String(object.title);
+                if (object.description != null)
+                    message.description = $String(object.description);
                 return message;
             };
 
             /**
-             * Creates a plain object from an Update_Chat_Avatar_Request message. Also converts values to other types if specified.
+             * Creates a plain object from an Update_Chat_Profile_Request message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Request} message Update_Chat_Avatar_Request
+             * @param {lingcat.methods.Update_Chat_Profile_Request} message Update_Chat_Profile_Request
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Update_Chat_Avatar_Request.toObject = function (message, options, _depth) {
+            Update_Chat_Profile_Request.toObject = function (message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === $undefined)
@@ -8357,75 +8747,78 @@ export const lingcat = $root.lingcat = (() => {
                 if (options.defaults) {
                     object.accessToken = "";
                     object.chatId = "";
-                    object.fileHash = "";
                 }
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     object.accessToken = message.accessToken;
                 if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
                     object.chatId = message.chatId;
-                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
-                    object.fileHash = message.fileHash;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    object.title = message.title;
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    object.description = message.description;
                 return object;
             };
 
             /**
-             * Converts this Update_Chat_Avatar_Request to JSON.
+             * Converts this Update_Chat_Profile_Request to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Update_Chat_Avatar_Request.prototype.toJSON = function() {
-                return Update_Chat_Avatar_Request.toObject(this, $protobuf.util.toJSONOptions);
+            Update_Chat_Profile_Request.prototype.toJSON = function() {
+                return Update_Chat_Profile_Request.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Update_Chat_Avatar_Request
+             * Gets the type url for Update_Chat_Profile_Request
              * @function getTypeUrl
-             * @memberof lingcat.methods.Update_Chat_Avatar_Request
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Update_Chat_Avatar_Request.getTypeUrl = function(prefix) {
+            Update_Chat_Profile_Request.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Update_Chat_Avatar_Request";
+                return prefix + "/lingcat.methods.Update_Chat_Profile_Request";
             };
 
-            return Update_Chat_Avatar_Request;
+            return Update_Chat_Profile_Request;
         })();
 
-        methods.Update_Chat_Avatar_Response = (function() {
+        methods.Update_Chat_Profile_Response = (function() {
 
             /**
-             * Properties of an Update_Chat_Avatar_Response.
-             * @typedef {Object} lingcat.methods.Update_Chat_Avatar_Response.$Properties
+             * Properties of an Update_Chat_Profile_Response.
+             * @typedef {Object} lingcat.methods.Update_Chat_Profile_Response.$Properties
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of an Update_Chat_Avatar_Response.
+             * Properties of an Update_Chat_Profile_Response.
              * @memberof lingcat.methods
-             * @interface IUpdate_Chat_Avatar_Response
-             * @augments lingcat.methods.Update_Chat_Avatar_Response.$Properties
-             * @deprecated Use lingcat.methods.Update_Chat_Avatar_Response.$Properties instead.
+             * @interface IUpdate_Chat_Profile_Response
+             * @augments lingcat.methods.Update_Chat_Profile_Response.$Properties
+             * @deprecated Use lingcat.methods.Update_Chat_Profile_Response.$Properties instead.
              */
 
             /**
-             * Shape of an Update_Chat_Avatar_Response.
-             * @typedef {lingcat.methods.Update_Chat_Avatar_Response.$Properties} lingcat.methods.Update_Chat_Avatar_Response.$Shape
+             * Shape of an Update_Chat_Profile_Response.
+             * @typedef {lingcat.methods.Update_Chat_Profile_Response.$Properties} lingcat.methods.Update_Chat_Profile_Response.$Shape
              */
 
             /**
-             * Constructs a new Update_Chat_Avatar_Response.
+             * Constructs a new Update_Chat_Profile_Response.
              * @memberof lingcat.methods
-             * @classdesc Represents an Update_Chat_Avatar_Response.
+             * @classdesc Represents an Update_Chat_Profile_Response.
              * @constructor
-             * @param {lingcat.methods.Update_Chat_Avatar_Response.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Update_Chat_Profile_Response.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Update_Chat_Avatar_Response = function (properties) {
+            const Update_Chat_Profile_Response = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -8433,31 +8826,31 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a new Update_Chat_Avatar_Response instance using the specified properties.
+             * Creates a new Update_Chat_Profile_Response instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Response.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Update_Chat_Avatar_Response} Update_Chat_Avatar_Response instance
+             * @param {lingcat.methods.Update_Chat_Profile_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Chat_Profile_Response} Update_Chat_Profile_Response instance
              * @type {{
-             *   (properties: lingcat.methods.Update_Chat_Avatar_Response.$Shape): lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape;
-             *   (properties?: lingcat.methods.Update_Chat_Avatar_Response.$Properties): lingcat.methods.Update_Chat_Avatar_Response;
+             *   (properties: lingcat.methods.Update_Chat_Profile_Response.$Shape): lingcat.methods.Update_Chat_Profile_Response & lingcat.methods.Update_Chat_Profile_Response.$Shape;
+             *   (properties?: lingcat.methods.Update_Chat_Profile_Response.$Properties): lingcat.methods.Update_Chat_Profile_Response;
              * }}
              */
-            Update_Chat_Avatar_Response.create = function(properties) {
-                return new Update_Chat_Avatar_Response(properties);
+            Update_Chat_Profile_Response.create = function(properties) {
+                return new Update_Chat_Profile_Response(properties);
             };
 
             /**
-             * Encodes the specified Update_Chat_Avatar_Response message. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Response.verify|verify} messages.
+             * Encodes the specified Update_Chat_Profile_Response message. Does not implicitly {@link lingcat.methods.Update_Chat_Profile_Response.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Response.$Properties} message Update_Chat_Avatar_Response message or plain object to encode
+             * @param {lingcat.methods.Update_Chat_Profile_Response.$Properties} message Update_Chat_Profile_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_Chat_Avatar_Response.encode = function (message, writer, _depth) {
+            Update_Chat_Profile_Response.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -8471,37 +8864,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Update_Chat_Avatar_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Avatar_Response.verify|verify} messages.
+             * Encodes the specified Update_Chat_Profile_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Profile_Response.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Response.$Properties} message Update_Chat_Avatar_Response message or plain object to encode
+             * @param {lingcat.methods.Update_Chat_Profile_Response.$Properties} message Update_Chat_Profile_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Update_Chat_Avatar_Response.encodeDelimited = function(message, writer) {
+            Update_Chat_Profile_Response.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an Update_Chat_Avatar_Response message from the specified reader or buffer.
+             * Decodes an Update_Chat_Profile_Response message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape} Update_Chat_Avatar_Response
+             * @returns {lingcat.methods.Update_Chat_Profile_Response & lingcat.methods.Update_Chat_Profile_Response.$Shape} Update_Chat_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_Chat_Avatar_Response.decode = function (reader, length, _end, _depth, _target) {
+            Update_Chat_Profile_Response.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Avatar_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Profile_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8521,30 +8914,30 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an Update_Chat_Avatar_Response message from the specified reader or buffer, length delimited.
+             * Decodes an Update_Chat_Profile_Response message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Update_Chat_Avatar_Response & lingcat.methods.Update_Chat_Avatar_Response.$Shape} Update_Chat_Avatar_Response
+             * @returns {lingcat.methods.Update_Chat_Profile_Response & lingcat.methods.Update_Chat_Profile_Response.$Shape} Update_Chat_Profile_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Update_Chat_Avatar_Response.decodeDelimited = function(reader) {
+            Update_Chat_Profile_Response.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an Update_Chat_Avatar_Response message.
+             * Verifies an Update_Chat_Profile_Response message.
              * @function verify
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Update_Chat_Avatar_Response.verify = function (message, _depth) {
+            Update_Chat_Profile_Response.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
@@ -8555,64 +8948,64 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates an Update_Chat_Avatar_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates an Update_Chat_Profile_Response message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Update_Chat_Avatar_Response} Update_Chat_Avatar_Response
+             * @returns {lingcat.methods.Update_Chat_Profile_Response} Update_Chat_Profile_Response
              */
-            Update_Chat_Avatar_Response.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Update_Chat_Avatar_Response)
+            Update_Chat_Profile_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Chat_Profile_Response)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Update_Chat_Avatar_Response: object expected");
+                    throw $TypeError(".lingcat.methods.Update_Chat_Profile_Response: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                return new $root.lingcat.methods.Update_Chat_Avatar_Response();
+                return new $root.lingcat.methods.Update_Chat_Profile_Response();
             };
 
             /**
-             * Creates a plain object from an Update_Chat_Avatar_Response message. Also converts values to other types if specified.
+             * Creates a plain object from an Update_Chat_Profile_Response message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
-             * @param {lingcat.methods.Update_Chat_Avatar_Response} message Update_Chat_Avatar_Response
+             * @param {lingcat.methods.Update_Chat_Profile_Response} message Update_Chat_Profile_Response
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Update_Chat_Avatar_Response.toObject = function () {
+            Update_Chat_Profile_Response.toObject = function () {
                 return {};
             };
 
             /**
-             * Converts this Update_Chat_Avatar_Response to JSON.
+             * Converts this Update_Chat_Profile_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Update_Chat_Avatar_Response.prototype.toJSON = function() {
-                return Update_Chat_Avatar_Response.toObject(this, $protobuf.util.toJSONOptions);
+            Update_Chat_Profile_Response.prototype.toJSON = function() {
+                return Update_Chat_Profile_Response.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Update_Chat_Avatar_Response
+             * Gets the type url for Update_Chat_Profile_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.Update_Chat_Avatar_Response
+             * @memberof lingcat.methods.Update_Chat_Profile_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Update_Chat_Avatar_Response.getTypeUrl = function(prefix) {
+            Update_Chat_Profile_Response.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Update_Chat_Avatar_Response";
+                return prefix + "/lingcat.methods.Update_Chat_Profile_Response";
             };
 
-            return Update_Chat_Avatar_Response;
+            return Update_Chat_Profile_Response;
         })();
 
         methods.Send_Chat_Message_Request = (function() {
@@ -16036,6 +16429,2762 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return Create_Group_Response;
+        })();
+
+        methods.Join_Group_Request = (function() {
+
+            /**
+             * Properties of a Join_Group_Request.
+             * @typedef {Object} lingcat.methods.Join_Group_Request.$Properties
+             * @property {string|null} [accessToken] Join_Group_Request accessToken
+             * @property {string|null} [chatId] Join_Group_Request chatId
+             * @property {string|null} [answer] Join_Group_Request answer
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Join_Group_Request.
+             * @memberof lingcat.methods
+             * @interface IJoin_Group_Request
+             * @augments lingcat.methods.Join_Group_Request.$Properties
+             * @deprecated Use lingcat.methods.Join_Group_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Join_Group_Request.
+             * @typedef {lingcat.methods.Join_Group_Request.$Properties} lingcat.methods.Join_Group_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Join_Group_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Join_Group_Request.
+             * @constructor
+             * @param {lingcat.methods.Join_Group_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Join_Group_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Join_Group_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Join_Group_Request
+             * @instance
+             */
+            Join_Group_Request.prototype.accessToken = "";
+
+            /**
+             * Join_Group_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Join_Group_Request
+             * @instance
+             */
+            Join_Group_Request.prototype.chatId = "";
+
+            /**
+             * Join_Group_Request answer.
+             * @member {string|null|undefined} answer
+             * @memberof lingcat.methods.Join_Group_Request
+             * @instance
+             */
+            Join_Group_Request.prototype.answer = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Join_Group_Request.prototype, "_answer", {
+                get: $util.oneOfGetter($oneOfFields = ["answer"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Join_Group_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {lingcat.methods.Join_Group_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Join_Group_Request} Join_Group_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Join_Group_Request.$Shape): lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape;
+             *   (properties?: lingcat.methods.Join_Group_Request.$Properties): lingcat.methods.Join_Group_Request;
+             * }}
+             */
+            Join_Group_Request.create = function(properties) {
+                return new Join_Group_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Join_Group_Request message. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {lingcat.methods.Join_Group_Request.$Properties} message Join_Group_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Join_Group_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.answer != null && $Object.hasOwnProperty.call(message, "answer"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.answer);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Join_Group_Request message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {lingcat.methods.Join_Group_Request.$Properties} message Join_Group_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Join_Group_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Join_Group_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Join_Group_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Group_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            message.answer = reader.stringVerify();
+                            message._answer = "answer";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Join_Group_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Join_Group_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Join_Group_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Join_Group_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.answer != null && $Object.hasOwnProperty.call(message, "answer")) {
+                    properties._answer = 1;
+                    if (!$util.isString(message.answer))
+                        return "answer: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Join_Group_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Join_Group_Request} Join_Group_Request
+             */
+            Join_Group_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Join_Group_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Join_Group_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Join_Group_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.answer != null)
+                    message.answer = $String(object.answer);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Join_Group_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {lingcat.methods.Join_Group_Request} message Join_Group_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Join_Group_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.answer != null && $Object.hasOwnProperty.call(message, "answer"))
+                    object.answer = message.answer;
+                return object;
+            };
+
+            /**
+             * Converts this Join_Group_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Join_Group_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Join_Group_Request.prototype.toJSON = function() {
+                return Join_Group_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Join_Group_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Join_Group_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Join_Group_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Join_Group_Request";
+            };
+
+            return Join_Group_Request;
+        })();
+
+        methods.Join_Group_Response = (function() {
+
+            /**
+             * Properties of a Join_Group_Response.
+             * @typedef {Object} lingcat.methods.Join_Group_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Join_Group_Response.
+             * @memberof lingcat.methods
+             * @interface IJoin_Group_Response
+             * @augments lingcat.methods.Join_Group_Response.$Properties
+             * @deprecated Use lingcat.methods.Join_Group_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Join_Group_Response.
+             * @typedef {lingcat.methods.Join_Group_Response.$Properties} lingcat.methods.Join_Group_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Join_Group_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Join_Group_Response.
+             * @constructor
+             * @param {lingcat.methods.Join_Group_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Join_Group_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Join_Group_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {lingcat.methods.Join_Group_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Join_Group_Response} Join_Group_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Join_Group_Response.$Shape): lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape;
+             *   (properties?: lingcat.methods.Join_Group_Response.$Properties): lingcat.methods.Join_Group_Response;
+             * }}
+             */
+            Join_Group_Response.create = function(properties) {
+                return new Join_Group_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Join_Group_Response message. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {lingcat.methods.Join_Group_Response.$Properties} message Join_Group_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Join_Group_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Join_Group_Response message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {lingcat.methods.Join_Group_Response.$Properties} message Join_Group_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Join_Group_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Join_Group_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Join_Group_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Group_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Join_Group_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Join_Group_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Join_Group_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Join_Group_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Join_Group_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Join_Group_Response} Join_Group_Response
+             */
+            Join_Group_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Join_Group_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Join_Group_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Join_Group_Response();
+            };
+
+            /**
+             * Creates a plain object from a Join_Group_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {lingcat.methods.Join_Group_Response} message Join_Group_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Join_Group_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Join_Group_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Join_Group_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Join_Group_Response.prototype.toJSON = function() {
+                return Join_Group_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Join_Group_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Join_Group_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Join_Group_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Join_Group_Response";
+            };
+
+            return Join_Group_Response;
+        })();
+
+        methods.Remove_Chat_Member_Request = (function() {
+
+            /**
+             * Properties of a Remove_Chat_Member_Request.
+             * @typedef {Object} lingcat.methods.Remove_Chat_Member_Request.$Properties
+             * @property {string|null} [accessToken] Remove_Chat_Member_Request accessToken
+             * @property {string|null} [chatId] Remove_Chat_Member_Request chatId
+             * @property {string|null} [targetUserId] Remove_Chat_Member_Request targetUserId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Remove_Chat_Member_Request.
+             * @memberof lingcat.methods
+             * @interface IRemove_Chat_Member_Request
+             * @augments lingcat.methods.Remove_Chat_Member_Request.$Properties
+             * @deprecated Use lingcat.methods.Remove_Chat_Member_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Remove_Chat_Member_Request.
+             * @typedef {lingcat.methods.Remove_Chat_Member_Request.$Properties} lingcat.methods.Remove_Chat_Member_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Remove_Chat_Member_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Remove_Chat_Member_Request.
+             * @constructor
+             * @param {lingcat.methods.Remove_Chat_Member_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Remove_Chat_Member_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Remove_Chat_Member_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @instance
+             */
+            Remove_Chat_Member_Request.prototype.accessToken = "";
+
+            /**
+             * Remove_Chat_Member_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @instance
+             */
+            Remove_Chat_Member_Request.prototype.chatId = "";
+
+            /**
+             * Remove_Chat_Member_Request targetUserId.
+             * @member {string} targetUserId
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @instance
+             */
+            Remove_Chat_Member_Request.prototype.targetUserId = "";
+
+            /**
+             * Creates a new Remove_Chat_Member_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Remove_Chat_Member_Request} Remove_Chat_Member_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Remove_Chat_Member_Request.$Shape): lingcat.methods.Remove_Chat_Member_Request & lingcat.methods.Remove_Chat_Member_Request.$Shape;
+             *   (properties?: lingcat.methods.Remove_Chat_Member_Request.$Properties): lingcat.methods.Remove_Chat_Member_Request;
+             * }}
+             */
+            Remove_Chat_Member_Request.create = function(properties) {
+                return new Remove_Chat_Member_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Remove_Chat_Member_Request message. Does not implicitly {@link lingcat.methods.Remove_Chat_Member_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Request.$Properties} message Remove_Chat_Member_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Remove_Chat_Member_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.targetUserId != null && $Object.hasOwnProperty.call(message, "targetUserId") && message.targetUserId !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.targetUserId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Remove_Chat_Member_Request message, length delimited. Does not implicitly {@link lingcat.methods.Remove_Chat_Member_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Request.$Properties} message Remove_Chat_Member_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Remove_Chat_Member_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Remove_Chat_Member_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Remove_Chat_Member_Request & lingcat.methods.Remove_Chat_Member_Request.$Shape} Remove_Chat_Member_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Remove_Chat_Member_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Member_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.targetUserId = value;
+                            else
+                                delete message.targetUserId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Remove_Chat_Member_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Remove_Chat_Member_Request & lingcat.methods.Remove_Chat_Member_Request.$Shape} Remove_Chat_Member_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Remove_Chat_Member_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Remove_Chat_Member_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Remove_Chat_Member_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.targetUserId != null && $Object.hasOwnProperty.call(message, "targetUserId"))
+                    if (!$util.isString(message.targetUserId))
+                        return "targetUserId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Remove_Chat_Member_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Remove_Chat_Member_Request} Remove_Chat_Member_Request
+             */
+            Remove_Chat_Member_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Remove_Chat_Member_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Remove_Chat_Member_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Remove_Chat_Member_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.targetUserId != null)
+                    if (typeof object.targetUserId !== "string" || object.targetUserId.length)
+                        message.targetUserId = $String(object.targetUserId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Remove_Chat_Member_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Request} message Remove_Chat_Member_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Remove_Chat_Member_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                    object.targetUserId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.targetUserId != null && $Object.hasOwnProperty.call(message, "targetUserId"))
+                    object.targetUserId = message.targetUserId;
+                return object;
+            };
+
+            /**
+             * Converts this Remove_Chat_Member_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Remove_Chat_Member_Request.prototype.toJSON = function() {
+                return Remove_Chat_Member_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Remove_Chat_Member_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Remove_Chat_Member_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Remove_Chat_Member_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Remove_Chat_Member_Request";
+            };
+
+            return Remove_Chat_Member_Request;
+        })();
+
+        methods.Remove_Chat_Member_Response = (function() {
+
+            /**
+             * Properties of a Remove_Chat_Member_Response.
+             * @typedef {Object} lingcat.methods.Remove_Chat_Member_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Remove_Chat_Member_Response.
+             * @memberof lingcat.methods
+             * @interface IRemove_Chat_Member_Response
+             * @augments lingcat.methods.Remove_Chat_Member_Response.$Properties
+             * @deprecated Use lingcat.methods.Remove_Chat_Member_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Remove_Chat_Member_Response.
+             * @typedef {lingcat.methods.Remove_Chat_Member_Response.$Properties} lingcat.methods.Remove_Chat_Member_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Remove_Chat_Member_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Remove_Chat_Member_Response.
+             * @constructor
+             * @param {lingcat.methods.Remove_Chat_Member_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Remove_Chat_Member_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Remove_Chat_Member_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Remove_Chat_Member_Response} Remove_Chat_Member_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Remove_Chat_Member_Response.$Shape): lingcat.methods.Remove_Chat_Member_Response & lingcat.methods.Remove_Chat_Member_Response.$Shape;
+             *   (properties?: lingcat.methods.Remove_Chat_Member_Response.$Properties): lingcat.methods.Remove_Chat_Member_Response;
+             * }}
+             */
+            Remove_Chat_Member_Response.create = function(properties) {
+                return new Remove_Chat_Member_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Remove_Chat_Member_Response message. Does not implicitly {@link lingcat.methods.Remove_Chat_Member_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Response.$Properties} message Remove_Chat_Member_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Remove_Chat_Member_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Remove_Chat_Member_Response message, length delimited. Does not implicitly {@link lingcat.methods.Remove_Chat_Member_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Response.$Properties} message Remove_Chat_Member_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Remove_Chat_Member_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Remove_Chat_Member_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Remove_Chat_Member_Response & lingcat.methods.Remove_Chat_Member_Response.$Shape} Remove_Chat_Member_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Remove_Chat_Member_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Member_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Remove_Chat_Member_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Remove_Chat_Member_Response & lingcat.methods.Remove_Chat_Member_Response.$Shape} Remove_Chat_Member_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Remove_Chat_Member_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Remove_Chat_Member_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Remove_Chat_Member_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Remove_Chat_Member_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Remove_Chat_Member_Response} Remove_Chat_Member_Response
+             */
+            Remove_Chat_Member_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Remove_Chat_Member_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Remove_Chat_Member_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Remove_Chat_Member_Response();
+            };
+
+            /**
+             * Creates a plain object from a Remove_Chat_Member_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {lingcat.methods.Remove_Chat_Member_Response} message Remove_Chat_Member_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Remove_Chat_Member_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Remove_Chat_Member_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Remove_Chat_Member_Response.prototype.toJSON = function() {
+                return Remove_Chat_Member_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Remove_Chat_Member_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Remove_Chat_Member_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Remove_Chat_Member_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Remove_Chat_Member_Response";
+            };
+
+            return Remove_Chat_Member_Response;
+        })();
+
+        methods.Update_Chat_Settings_Request = (function() {
+
+            /**
+             * Properties of an Update_Chat_Settings_Request.
+             * @typedef {Object} lingcat.methods.Update_Chat_Settings_Request.$Properties
+             * @property {string|null} [accessToken] Update_Chat_Settings_Request accessToken
+             * @property {string|null} [chatId] Update_Chat_Settings_Request chatId
+             * @property {string|null} [settings] Update_Chat_Settings_Request settings
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Update_Chat_Settings_Request.
+             * @memberof lingcat.methods
+             * @interface IUpdate_Chat_Settings_Request
+             * @augments lingcat.methods.Update_Chat_Settings_Request.$Properties
+             * @deprecated Use lingcat.methods.Update_Chat_Settings_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of an Update_Chat_Settings_Request.
+             * @typedef {lingcat.methods.Update_Chat_Settings_Request.$Properties} lingcat.methods.Update_Chat_Settings_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Update_Chat_Settings_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Update_Chat_Settings_Request.
+             * @constructor
+             * @param {lingcat.methods.Update_Chat_Settings_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Update_Chat_Settings_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Update_Chat_Settings_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @instance
+             */
+            Update_Chat_Settings_Request.prototype.accessToken = "";
+
+            /**
+             * Update_Chat_Settings_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @instance
+             */
+            Update_Chat_Settings_Request.prototype.chatId = "";
+
+            /**
+             * Update_Chat_Settings_Request settings.
+             * @member {string} settings
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @instance
+             */
+            Update_Chat_Settings_Request.prototype.settings = "";
+
+            /**
+             * Creates a new Update_Chat_Settings_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Chat_Settings_Request} Update_Chat_Settings_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Update_Chat_Settings_Request.$Shape): lingcat.methods.Update_Chat_Settings_Request & lingcat.methods.Update_Chat_Settings_Request.$Shape;
+             *   (properties?: lingcat.methods.Update_Chat_Settings_Request.$Properties): lingcat.methods.Update_Chat_Settings_Request;
+             * }}
+             */
+            Update_Chat_Settings_Request.create = function(properties) {
+                return new Update_Chat_Settings_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Update_Chat_Settings_Request message. Does not implicitly {@link lingcat.methods.Update_Chat_Settings_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Request.$Properties} message Update_Chat_Settings_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Chat_Settings_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.settings != null && $Object.hasOwnProperty.call(message, "settings") && message.settings !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.settings);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Update_Chat_Settings_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Settings_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Request.$Properties} message Update_Chat_Settings_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Chat_Settings_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Update_Chat_Settings_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Chat_Settings_Request & lingcat.methods.Update_Chat_Settings_Request.$Shape} Update_Chat_Settings_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Chat_Settings_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Settings_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.settings = value;
+                            else
+                                delete message.settings;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Update_Chat_Settings_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Chat_Settings_Request & lingcat.methods.Update_Chat_Settings_Request.$Shape} Update_Chat_Settings_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Chat_Settings_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Update_Chat_Settings_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Update_Chat_Settings_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.settings != null && $Object.hasOwnProperty.call(message, "settings"))
+                    if (!$util.isString(message.settings))
+                        return "settings: string expected";
+                return null;
+            };
+
+            /**
+             * Creates an Update_Chat_Settings_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Update_Chat_Settings_Request} Update_Chat_Settings_Request
+             */
+            Update_Chat_Settings_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Chat_Settings_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Update_Chat_Settings_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Update_Chat_Settings_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.settings != null)
+                    if (typeof object.settings !== "string" || object.settings.length)
+                        message.settings = $String(object.settings);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Update_Chat_Settings_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Request} message Update_Chat_Settings_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Update_Chat_Settings_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                    object.settings = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.settings != null && $Object.hasOwnProperty.call(message, "settings"))
+                    object.settings = message.settings;
+                return object;
+            };
+
+            /**
+             * Converts this Update_Chat_Settings_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Update_Chat_Settings_Request.prototype.toJSON = function() {
+                return Update_Chat_Settings_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Update_Chat_Settings_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Update_Chat_Settings_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Update_Chat_Settings_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Update_Chat_Settings_Request";
+            };
+
+            return Update_Chat_Settings_Request;
+        })();
+
+        methods.Update_Chat_Settings_Response = (function() {
+
+            /**
+             * Properties of an Update_Chat_Settings_Response.
+             * @typedef {Object} lingcat.methods.Update_Chat_Settings_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Update_Chat_Settings_Response.
+             * @memberof lingcat.methods
+             * @interface IUpdate_Chat_Settings_Response
+             * @augments lingcat.methods.Update_Chat_Settings_Response.$Properties
+             * @deprecated Use lingcat.methods.Update_Chat_Settings_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of an Update_Chat_Settings_Response.
+             * @typedef {lingcat.methods.Update_Chat_Settings_Response.$Properties} lingcat.methods.Update_Chat_Settings_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Update_Chat_Settings_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Update_Chat_Settings_Response.
+             * @constructor
+             * @param {lingcat.methods.Update_Chat_Settings_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Update_Chat_Settings_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Update_Chat_Settings_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Chat_Settings_Response} Update_Chat_Settings_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Update_Chat_Settings_Response.$Shape): lingcat.methods.Update_Chat_Settings_Response & lingcat.methods.Update_Chat_Settings_Response.$Shape;
+             *   (properties?: lingcat.methods.Update_Chat_Settings_Response.$Properties): lingcat.methods.Update_Chat_Settings_Response;
+             * }}
+             */
+            Update_Chat_Settings_Response.create = function(properties) {
+                return new Update_Chat_Settings_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Update_Chat_Settings_Response message. Does not implicitly {@link lingcat.methods.Update_Chat_Settings_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Response.$Properties} message Update_Chat_Settings_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Chat_Settings_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Update_Chat_Settings_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Chat_Settings_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Response.$Properties} message Update_Chat_Settings_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Chat_Settings_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Update_Chat_Settings_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Chat_Settings_Response & lingcat.methods.Update_Chat_Settings_Response.$Shape} Update_Chat_Settings_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Chat_Settings_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Settings_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Update_Chat_Settings_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Chat_Settings_Response & lingcat.methods.Update_Chat_Settings_Response.$Shape} Update_Chat_Settings_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Chat_Settings_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Update_Chat_Settings_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Update_Chat_Settings_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates an Update_Chat_Settings_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Update_Chat_Settings_Response} Update_Chat_Settings_Response
+             */
+            Update_Chat_Settings_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Chat_Settings_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Update_Chat_Settings_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Update_Chat_Settings_Response();
+            };
+
+            /**
+             * Creates a plain object from an Update_Chat_Settings_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {lingcat.methods.Update_Chat_Settings_Response} message Update_Chat_Settings_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Update_Chat_Settings_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Update_Chat_Settings_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Update_Chat_Settings_Response.prototype.toJSON = function() {
+                return Update_Chat_Settings_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Update_Chat_Settings_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Update_Chat_Settings_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Update_Chat_Settings_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Update_Chat_Settings_Response";
+            };
+
+            return Update_Chat_Settings_Response;
+        })();
+
+        methods.Get_Chat_Admins_Request = (function() {
+
+            /**
+             * Properties of a Get_Chat_Admins_Request.
+             * @typedef {Object} lingcat.methods.Get_Chat_Admins_Request.$Properties
+             * @property {string|null} [accessToken] Get_Chat_Admins_Request accessToken
+             * @property {string|null} [chatId] Get_Chat_Admins_Request chatId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Chat_Admins_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_Chat_Admins_Request
+             * @augments lingcat.methods.Get_Chat_Admins_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_Chat_Admins_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Chat_Admins_Request.
+             * @typedef {lingcat.methods.Get_Chat_Admins_Request.$Properties} lingcat.methods.Get_Chat_Admins_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Chat_Admins_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Chat_Admins_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_Chat_Admins_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Chat_Admins_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Chat_Admins_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @instance
+             */
+            Get_Chat_Admins_Request.prototype.accessToken = "";
+
+            /**
+             * Get_Chat_Admins_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @instance
+             */
+            Get_Chat_Admins_Request.prototype.chatId = "";
+
+            /**
+             * Creates a new Get_Chat_Admins_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Chat_Admins_Request} Get_Chat_Admins_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Chat_Admins_Request.$Shape): lingcat.methods.Get_Chat_Admins_Request & lingcat.methods.Get_Chat_Admins_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_Chat_Admins_Request.$Properties): lingcat.methods.Get_Chat_Admins_Request;
+             * }}
+             */
+            Get_Chat_Admins_Request.create = function(properties) {
+                return new Get_Chat_Admins_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Admins_Request message. Does not implicitly {@link lingcat.methods.Get_Chat_Admins_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Request.$Properties} message Get_Chat_Admins_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Admins_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Admins_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_Chat_Admins_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Request.$Properties} message Get_Chat_Admins_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Admins_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Chat_Admins_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Chat_Admins_Request & lingcat.methods.Get_Chat_Admins_Request.$Shape} Get_Chat_Admins_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Admins_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Admins_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Chat_Admins_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Chat_Admins_Request & lingcat.methods.Get_Chat_Admins_Request.$Shape} Get_Chat_Admins_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Admins_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Chat_Admins_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Chat_Admins_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_Chat_Admins_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Chat_Admins_Request} Get_Chat_Admins_Request
+             */
+            Get_Chat_Admins_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Chat_Admins_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Chat_Admins_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Chat_Admins_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Chat_Admins_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Request} message Get_Chat_Admins_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Chat_Admins_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                return object;
+            };
+
+            /**
+             * Converts this Get_Chat_Admins_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Chat_Admins_Request.prototype.toJSON = function() {
+                return Get_Chat_Admins_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Chat_Admins_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Chat_Admins_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Chat_Admins_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Chat_Admins_Request";
+            };
+
+            return Get_Chat_Admins_Request;
+        })();
+
+        methods.Get_Chat_Admins_Response = (function() {
+
+            /**
+             * Properties of a Get_Chat_Admins_Response.
+             * @typedef {Object} lingcat.methods.Get_Chat_Admins_Response.$Properties
+             * @property {Array.<lingcat.classes.IChatAdmin.$Properties>|null} [admins] Get_Chat_Admins_Response admins
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Chat_Admins_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_Chat_Admins_Response
+             * @augments lingcat.methods.Get_Chat_Admins_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_Chat_Admins_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Chat_Admins_Response.
+             * @typedef {lingcat.methods.Get_Chat_Admins_Response.$Properties} lingcat.methods.Get_Chat_Admins_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Chat_Admins_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Chat_Admins_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_Chat_Admins_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Chat_Admins_Response = function (properties) {
+                this.admins = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Chat_Admins_Response admins.
+             * @member {Array.<lingcat.classes.IChatAdmin.$Properties>} admins
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @instance
+             */
+            Get_Chat_Admins_Response.prototype.admins = $util.emptyArray;
+
+            /**
+             * Creates a new Get_Chat_Admins_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Chat_Admins_Response} Get_Chat_Admins_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Chat_Admins_Response.$Shape): lingcat.methods.Get_Chat_Admins_Response & lingcat.methods.Get_Chat_Admins_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_Chat_Admins_Response.$Properties): lingcat.methods.Get_Chat_Admins_Response;
+             * }}
+             */
+            Get_Chat_Admins_Response.create = function(properties) {
+                return new Get_Chat_Admins_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Admins_Response message. Does not implicitly {@link lingcat.methods.Get_Chat_Admins_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Response.$Properties} message Get_Chat_Admins_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Admins_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.admins != null && message.admins.length)
+                    for (let i = 0; i < message.admins.length; ++i)
+                        $root.lingcat.classes.IChatAdmin.encode(message.admins[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Admins_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_Chat_Admins_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Response.$Properties} message Get_Chat_Admins_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Admins_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Chat_Admins_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Chat_Admins_Response & lingcat.methods.Get_Chat_Admins_Response.$Shape} Get_Chat_Admins_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Admins_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Admins_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.admins && message.admins.length))
+                                message.admins = [];
+                            message.admins.push($root.lingcat.classes.IChatAdmin.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Chat_Admins_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Chat_Admins_Response & lingcat.methods.Get_Chat_Admins_Response.$Shape} Get_Chat_Admins_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Admins_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Chat_Admins_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Chat_Admins_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.admins != null && $Object.hasOwnProperty.call(message, "admins")) {
+                    if (!$Array.isArray(message.admins))
+                        return "admins: array expected";
+                    for (let i = 0; i < message.admins.length; ++i) {
+                        let error = $root.lingcat.classes.IChatAdmin.verify(message.admins[i], _depth + 1);
+                        if (error)
+                            return "admins." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Chat_Admins_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Chat_Admins_Response} Get_Chat_Admins_Response
+             */
+            Get_Chat_Admins_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Chat_Admins_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Chat_Admins_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Chat_Admins_Response();
+                if (object.admins) {
+                    if (!$Array.isArray(object.admins))
+                        throw $TypeError(".lingcat.methods.Get_Chat_Admins_Response.admins: array expected");
+                    message.admins = $Array(object.admins.length);
+                    for (let i = 0; i < object.admins.length; ++i) {
+                        if (!$util.isObject(object.admins[i]))
+                            throw $TypeError(".lingcat.methods.Get_Chat_Admins_Response.admins: object expected");
+                        message.admins[i] = $root.lingcat.classes.IChatAdmin.fromObject(object.admins[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Chat_Admins_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Admins_Response} message Get_Chat_Admins_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Chat_Admins_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.admins = [];
+                if (message.admins && message.admins.length) {
+                    object.admins = $Array(message.admins.length);
+                    for (let j = 0; j < message.admins.length; ++j)
+                        object.admins[j] = $root.lingcat.classes.IChatAdmin.toObject(message.admins[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_Chat_Admins_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Chat_Admins_Response.prototype.toJSON = function() {
+                return Get_Chat_Admins_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Chat_Admins_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Chat_Admins_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Chat_Admins_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Chat_Admins_Response";
+            };
+
+            return Get_Chat_Admins_Response;
+        })();
+
+        methods.Get_Chat_Members_Request = (function() {
+
+            /**
+             * Properties of a Get_Chat_Members_Request.
+             * @typedef {Object} lingcat.methods.Get_Chat_Members_Request.$Properties
+             * @property {string|null} [accessToken] Get_Chat_Members_Request accessToken
+             * @property {string|null} [chatId] Get_Chat_Members_Request chatId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Chat_Members_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_Chat_Members_Request
+             * @augments lingcat.methods.Get_Chat_Members_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_Chat_Members_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Chat_Members_Request.
+             * @typedef {lingcat.methods.Get_Chat_Members_Request.$Properties} lingcat.methods.Get_Chat_Members_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Chat_Members_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Chat_Members_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_Chat_Members_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Chat_Members_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Chat_Members_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @instance
+             */
+            Get_Chat_Members_Request.prototype.accessToken = "";
+
+            /**
+             * Get_Chat_Members_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @instance
+             */
+            Get_Chat_Members_Request.prototype.chatId = "";
+
+            /**
+             * Creates a new Get_Chat_Members_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Chat_Members_Request} Get_Chat_Members_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Chat_Members_Request.$Shape): lingcat.methods.Get_Chat_Members_Request & lingcat.methods.Get_Chat_Members_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_Chat_Members_Request.$Properties): lingcat.methods.Get_Chat_Members_Request;
+             * }}
+             */
+            Get_Chat_Members_Request.create = function(properties) {
+                return new Get_Chat_Members_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Members_Request message. Does not implicitly {@link lingcat.methods.Get_Chat_Members_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Request.$Properties} message Get_Chat_Members_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Members_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Members_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_Chat_Members_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Request.$Properties} message Get_Chat_Members_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Members_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Chat_Members_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Chat_Members_Request & lingcat.methods.Get_Chat_Members_Request.$Shape} Get_Chat_Members_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Members_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Members_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Chat_Members_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Chat_Members_Request & lingcat.methods.Get_Chat_Members_Request.$Shape} Get_Chat_Members_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Members_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Chat_Members_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Chat_Members_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_Chat_Members_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Chat_Members_Request} Get_Chat_Members_Request
+             */
+            Get_Chat_Members_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Chat_Members_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Chat_Members_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Chat_Members_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Chat_Members_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Request} message Get_Chat_Members_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Chat_Members_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                return object;
+            };
+
+            /**
+             * Converts this Get_Chat_Members_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Chat_Members_Request.prototype.toJSON = function() {
+                return Get_Chat_Members_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Chat_Members_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Chat_Members_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Chat_Members_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Chat_Members_Request";
+            };
+
+            return Get_Chat_Members_Request;
+        })();
+
+        methods.Get_Chat_Members_Response = (function() {
+
+            /**
+             * Properties of a Get_Chat_Members_Response.
+             * @typedef {Object} lingcat.methods.Get_Chat_Members_Response.$Properties
+             * @property {Array.<lingcat.classes.IUser.$Properties>|null} [members] Get_Chat_Members_Response members
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Chat_Members_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_Chat_Members_Response
+             * @augments lingcat.methods.Get_Chat_Members_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_Chat_Members_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Chat_Members_Response.
+             * @typedef {lingcat.methods.Get_Chat_Members_Response.$Properties} lingcat.methods.Get_Chat_Members_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Chat_Members_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Chat_Members_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_Chat_Members_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Chat_Members_Response = function (properties) {
+                this.members = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Chat_Members_Response members.
+             * @member {Array.<lingcat.classes.IUser.$Properties>} members
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @instance
+             */
+            Get_Chat_Members_Response.prototype.members = $util.emptyArray;
+
+            /**
+             * Creates a new Get_Chat_Members_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Chat_Members_Response} Get_Chat_Members_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Chat_Members_Response.$Shape): lingcat.methods.Get_Chat_Members_Response & lingcat.methods.Get_Chat_Members_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_Chat_Members_Response.$Properties): lingcat.methods.Get_Chat_Members_Response;
+             * }}
+             */
+            Get_Chat_Members_Response.create = function(properties) {
+                return new Get_Chat_Members_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Members_Response message. Does not implicitly {@link lingcat.methods.Get_Chat_Members_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Response.$Properties} message Get_Chat_Members_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Members_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.members != null && message.members.length)
+                    for (let i = 0; i < message.members.length; ++i)
+                        $root.lingcat.classes.IUser.encode(message.members[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Chat_Members_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_Chat_Members_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Response.$Properties} message Get_Chat_Members_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Chat_Members_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Chat_Members_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Chat_Members_Response & lingcat.methods.Get_Chat_Members_Response.$Shape} Get_Chat_Members_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Members_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Members_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.members && message.members.length))
+                                message.members = [];
+                            message.members.push($root.lingcat.classes.IUser.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Chat_Members_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Chat_Members_Response & lingcat.methods.Get_Chat_Members_Response.$Shape} Get_Chat_Members_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Chat_Members_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Chat_Members_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Chat_Members_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.members != null && $Object.hasOwnProperty.call(message, "members")) {
+                    if (!$Array.isArray(message.members))
+                        return "members: array expected";
+                    for (let i = 0; i < message.members.length; ++i) {
+                        let error = $root.lingcat.classes.IUser.verify(message.members[i], _depth + 1);
+                        if (error)
+                            return "members." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Chat_Members_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Chat_Members_Response} Get_Chat_Members_Response
+             */
+            Get_Chat_Members_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Chat_Members_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Chat_Members_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Chat_Members_Response();
+                if (object.members) {
+                    if (!$Array.isArray(object.members))
+                        throw $TypeError(".lingcat.methods.Get_Chat_Members_Response.members: array expected");
+                    message.members = $Array(object.members.length);
+                    for (let i = 0; i < object.members.length; ++i) {
+                        if (!$util.isObject(object.members[i]))
+                            throw $TypeError(".lingcat.methods.Get_Chat_Members_Response.members: object expected");
+                        message.members[i] = $root.lingcat.classes.IUser.fromObject(object.members[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Chat_Members_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {lingcat.methods.Get_Chat_Members_Response} message Get_Chat_Members_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Chat_Members_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.members = [];
+                if (message.members && message.members.length) {
+                    object.members = $Array(message.members.length);
+                    for (let j = 0; j < message.members.length; ++j)
+                        object.members[j] = $root.lingcat.classes.IUser.toObject(message.members[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_Chat_Members_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Chat_Members_Response.prototype.toJSON = function() {
+                return Get_Chat_Members_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Chat_Members_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Chat_Members_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Chat_Members_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Chat_Members_Response";
+            };
+
+            return Get_Chat_Members_Response;
         })();
 
         return methods;

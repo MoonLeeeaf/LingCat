@@ -54,3 +54,9 @@ message IMessage {
     string text = 5;
     uint64 time = 6;
 }
+
+message IChatAdmin {
+    string user_id = 1;
+    string role = 2;
+    string permissions = 3;
+}

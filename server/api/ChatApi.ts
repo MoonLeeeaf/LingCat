@@ -1,4 +1,4 @@
-import { Code, IChat, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
+import { AvailableChatSettings, Code, IChat, IChatSettings, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
 import type { ISendPackageFunction } from "./ISendPackageFunction.ts"
 import TokenManager from "./TokenManager.ts"
 import UserChatLinker from "../data/UserChatLinker.ts"
@@ -7,6 +7,9 @@ import MessageDataBase from "../data/MessageDataBase.ts"
 import WebSocket from "ws"
 import ChatDataBase from "../data/ChatDataBase.ts"
 import UserDataBase from "../data/UserDataBase.ts"
+import ChatAdminLinker from "../data/ChatAdminLinker.ts"
+import { db } from "../data/db.ts"
+import FileManager from "../data/FileManager.ts"
 
 async function IChatToProtoChat(c: IChat, user_id?: string) {
     let a: LingCatProto.classes.IChat.$Properties = {
@@ -22,15 +25,30 @@ async function IChatToProtoChat(c: IChat, user_id?: string) {
         lastMessageText: c.last_message_text,
     }
     if (c.type == 'private' && user_id) {
-        const anotherUser = await UserDataBase.queryUserById((await UserChatLinker.getAnotherUserInPrivateChat(c.id, user_id))!)
-
-        a = {
-            ...a,
-            avatarFileHash: anotherUser?.avatar_file_hash,
-            title: anotherUser?.nickname,
+        const anotherUserId = await UserChatLinker.getAnotherUserInPrivateChat(c.id, user_id)
+        if (anotherUserId) {
+            const anotherUser = await UserDataBase.queryUserById(anotherUserId)
+            if (anotherUser) {
+                a.avatarFileHash = anotherUser.avatar_file_hash
+                a.title = anotherUser.nickname
+            }
         }
     }
     return a
+}
+
+function IUserToProtoUser(user: IUser) {
+    return {
+        id: user.id,
+        username: user.username,
+        nickname: user.nickname,
+        description: user.description,
+        avatarFileHash: user.avatar_file_hash,
+    } as LingCatProto.classes.IUser.$Properties
+}
+
+function broadcastToUserClients(clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } }, user_id: string, func: (func: (mPackage: Package) => void) => void) {
+    Object.values(clients_emiter[user_id] || []).forEach(func)
 }
 
 export default class ChatApi {
@@ -60,28 +78,26 @@ export default class ChatApi {
                     time,
                 })
 
-                    ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => [
-                        Object.values(clients_emiter[v] || []).forEach((func) => {
-                            func(Package.encode({
-                                method_id: Methods.Receive_Chat_Message_Event,
-                                flags: 0,
-                                data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
-                                    msg: {
-                                        text: data.text,
-                                        chatId: data.chatId,
-                                        senderUserId: user_id,
-                                        time: Date.now(),
-                                        id: msg_id,
-                                    }
-                                }).finish()
-                            }))
-                            setTimeout(() => func(Package.encode({
-                                method_id: Methods.Update_My_Chats_Event,
-                                flags: 0,
-                                data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
-                            })), 50)
-                        })
-                    ])
+                    ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => broadcastToUserClients(clients_emiter, v, (func) => {
+                        func(Package.encode({
+                            method_id: Methods.Receive_Chat_Message_Event,
+                            flags: 0,
+                            data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
+                                msg: {
+                                    text: data.text,
+                                    chatId: data.chatId,
+                                    senderUserId: user_id,
+                                    time: Date.now(),
+                                    id: msg_id,
+                                }
+                            }).finish()
+                        }))
+                        setTimeout(() => func(Package.encode({
+                            method_id: Methods.Update_My_Chats_Event,
+                            flags: 0,
+                            data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
+                        })), 50)
+                    }))
 
                 sendPackage(Package.encode({
                     method_id: Methods.Send_Chat_Message_Response,
@@ -108,7 +124,7 @@ export default class ChatApi {
                     return sendError(sendPackage, mPackage.method_id, 'Chat doesn\'t exists', Code.Not_Found)
 
                 const settings = JSON.parse(chat.settings)
-                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId)){
+                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId)) {
                     /**
                      * 仅入群方式对非对话成员可见
                      */
@@ -229,7 +245,7 @@ export default class ChatApi {
                 const data = LingCatProto.methods.Get_My_Chats_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
                 const chats = await Promise.all((await UserChatLinker.queryChatsOfUser(user_id, {
-                    limit: data.limit || 1000,
+                    limit: data.limit != undefined ? data.limit : 1000,
                     offset: data.offset || 0,
                 })).map((c) => IChatToProtoChat(c, user_id)))
                 sendPackage(Package.encode({
@@ -355,25 +371,242 @@ export default class ChatApi {
              * ===============================
              */
             case Methods.Create_Group_Request: {
-                const data = LingCatProto.methods.Create_Group_Request.decode(mPackage.data);
-                const creator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id;
+                const data = LingCatProto.methods.Create_Group_Request.decode(mPackage.data)
+                const creator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
 
                 if (!data.title || data.title.trim() === '') {
-                    return sendError(sendPackage, mPackage.method_id, 'Group title cannot be empty', Code.Bad_Request);
+                    return sendError(sendPackage, mPackage.method_id, 'Group title cannot be empty', Code.Bad_Request)
                 }
 
                 const chat_id = await ChatDataBase.createGroup({
                     title: data.title.trim(),
                     unique: data.unique || undefined,
-                });
+                })
 
-                await UserChatLinker.linkUserAndChat(creator_id, chat_id);
+                await UserChatLinker.linkUserAndChat(creator_id, chat_id)
+                await ChatAdminLinker.addAdmin(chat_id, creator_id, 'owner')
 
                 sendPackage(Package.encode({
                     method_id: Methods.Create_Group_Response,
                     flags: 0,
                     data: LingCatProto.methods.Create_Group_Response.encode({
                         chatId: chat_id,
+                    }).finish()
+                }))
+                break
+            }
+            case Methods.Join_Group_Request: {
+                const data = LingCatProto.methods.Join_Group_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                if (await UserChatLinker.isUserChatLinked(user_id, chat.id)) {
+                    sendPackage(Package.encode({
+                        method_id: Methods.Join_Group_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.Join_Group_Response.encode({}).finish()
+                    }))
+                    break
+                }
+
+                const settings = JSON.parse(chat.settings || '{}') as IChatSettings
+
+                // 判断入群方式
+                if (!settings.allow_join) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot join this group', Code.Forbidden);
+                }
+
+                // 加入群组
+                await UserChatLinker.linkUserAndChat(user_id, chat.id)
+
+                /* ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => broadcastToUserClients(clients_emiter, v, (func) => {
+                        func(Package.encode({
+                            method_id: Methods.Receive_Chat_Message_Event,
+                            flags: 0,
+                            data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
+                                msg: {
+                                    text: data.text,
+                                    chatId: data.chatId,
+                                    senderUserId: user_id,
+                                    time: Date.now(),
+                                    id: msg_id,
+                                }
+                            }).finish()
+                        }))
+                        setTimeout(() => func(Package.encode({
+                            method_id: Methods.Update_My_Chats_Event,
+                            flags: 0,
+                            data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
+                        })), 50)
+                    })) */
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Join_Group_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Join_Group_Response.encode({}).finish()
+                }))
+                break
+            }
+            case Methods.Remove_Chat_Member_Request: {
+                const data = LingCatProto.methods.Remove_Chat_Member_Request.decode(mPackage.data)
+                const operator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                if (!await ChatAdminLinker.checkAdminPermission(chat.id, operator_id, 'kick')) {
+                    return sendError(sendPackage, mPackage.method_id, 'Permission denied', Code.Forbidden)
+                }
+
+                if (await ChatAdminLinker.isOwner(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot remove the group owner', Code.Forbidden)
+                }
+
+                if (!await ChatAdminLinker.isOwner(chat.id, operator_id) && await ChatAdminLinker.isAdmin(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot remove the group admin', Code.Forbidden)
+                }
+
+                if (data.targetUserId == operator_id) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot remove yourself', Code.Forbidden)
+                }
+
+                if (!await UserChatLinker.isUserChatLinked(data.targetUserId, chat.id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'User is not in the chat', Code.Not_Found)
+                }
+
+                await UserChatLinker.unlinkUserAndChat(data.targetUserId, chat.id)
+                await ChatAdminLinker.removeAdmin(chat.id, data.targetUserId)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Remove_Chat_Member_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Remove_Chat_Member_Response.encode({}).finish()
+                }))
+                break
+            }
+            case Methods.Update_Chat_Settings_Request: {
+                const data = LingCatProto.methods.Update_Chat_Settings_Request.decode(mPackage.data)
+                const operator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                if (!await ChatAdminLinker.checkAdminPermission(chat.id, operator_id, 'edit_settings')) {
+                    return sendError(sendPackage, mPackage.method_id, 'Permission denied', Code.Forbidden)
+                }
+
+                const settings = JSON.parse(chat.settings || '{}')
+
+                const applySettings = JSON.parse(data.settings)
+                Object.keys(applySettings).forEach((k) => {
+                    if (AvailableChatSettings[k])
+                        settings[k] = applySettings[k]
+                })
+
+                await ChatDataBase.updateSettings(chat.id, settings)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Update_Chat_Settings_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Update_Chat_Settings_Response.encode({}).finish()
+                }))
+                break
+            }
+            case Methods.Update_Chat_Profile_Request: {
+                const data = LingCatProto.methods.Update_Chat_Profile_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) {
+                    return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+                }
+
+                if (chat.type == 'private') {
+                    return sendError(sendPackage, mPackage.method_id, 'Private chats cannot update profile', Code.Forbidden)
+                }
+
+                if (!await ChatAdminLinker.checkAdminPermission(chat.id, user_id, 'edit_info')) {
+                    return sendError(sendPackage, mPackage.method_id, 'Permission denied', Code.Forbidden)
+                }
+
+                if (data.avatarFileHash != '' && data.avatarFileHash) {
+                    if (await FileManager.queryFileByHash(data.avatarFileHash) == null) {
+                        return sendError(sendPackage, mPackage.method_id, 'File does not exist', Code.Not_Found)
+                    }
+                    await ChatDataBase.updateAvatarFileHash(chat.id, data.avatarFileHash)
+                }
+
+                if (data.title) {
+                    await ChatDataBase.updateTitle(chat.id, data.title.trim())
+                }
+                if (data.description) {
+                    await ChatDataBase.updateDescription(chat.id, data.description)
+                }
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Update_Chat_Profile_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Update_Chat_Profile_Response.encode({}).finish()
+                }))
+                break
+            }
+            /**
+             * ===============================
+             *        获取群管理员列表
+             * ===============================
+             */
+            case Methods.Get_Chat_Admins_Request: {
+                const data = LingCatProto.methods.Get_Chat_Admins_Request.decode(mPackage.data);
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id;
+                const chat = await ChatDataBase.queryChatById(data.chatId);
+                if (!chat) {
+                    return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found);
+                }
+
+                if (!await UserChatLinker.isUserChatLinked(user_id, chat.id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
+                }
+
+                const admins = await ChatAdminLinker.queryAdminsOfChat(chat.id);
+                // 将数据库记录转换为 proto 格式
+                const adminInfos = admins.map(admin => ({
+                    userId: admin.user_id,
+                    role: admin.role,
+                    permissions: admin.permissions,
+                }))
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_Chat_Admins_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_Chat_Admins_Response.encode({
+                        admins: adminInfos,
+                    }).finish()
+                }));
+                break;
+            }
+
+            /**
+             * ===============================
+             *        获取群成员列表
+             * ===============================
+             */
+            case Methods.Get_Chat_Members_Request: {
+                const data = LingCatProto.methods.Get_Chat_Members_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) {
+                    return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+                }
+
+                if (!await UserChatLinker.isUserChatLinked(user_id, chat.id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden)
+                }
+
+                const memberIds = await UserChatLinker.queryUsersOfChat(chat.id)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_Chat_Members_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_Chat_Members_Response.encode({
+                        members: (await UserDataBase.queryUsersByIds(memberIds)).map((v) => IUserToProtoUser(v)),
                     }).finish()
                 }))
                 break

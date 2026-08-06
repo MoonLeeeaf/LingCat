@@ -12,6 +12,25 @@ export const AvailableChatSettings = {
     allow_join: 'boolean'
 }
 
+export type IChatSettings = {
+    allow_join: boolean
+}
+
+export const AvailableChatAdminPermissions = [
+    /**
+     * 基础权限
+     */
+    'edit_info',
+    'edit_settings',
+    'approve',
+    'kick',
+    'delete_message',
+    'mute',
+    'pin',
+]
+
+export type AvailableChatAdminPermission = typeof AvailableChatAdminPermissions[number]
+
 export interface IChat {
     id: string
     // 私聊拿到的是对方的 title
@@ -42,4 +61,12 @@ export interface IMessage {
     chat_id: string
     text: string
     time: number
+}
+
+export type AdminRole = 'owner' | 'admin'
+
+export interface IChatAdmin {
+    user_id: string
+    role: AdminRole
+    permissions: string
 }

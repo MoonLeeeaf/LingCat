@@ -16,8 +16,8 @@ export default class Methods {
     static Query_User_Info_Response = 0x14
     static Update_My_Profile_Request = 0x15
     static Update_My_Profile_Response = 0x16
-    static Update_Chat_Avatar_Request = 0x17
-    static Update_Chat_Avatar_Response = 0x18
+    static Update_Chat_Profile_Request = 0x17
+    static Update_Chat_Profile_Response = 0x18
     static Query_My_User_Info_Request = 0x19
     static Query_My_User_Info_Response = 0x20
     static Request_File_Access_Request = 0x21
@@ -48,6 +48,16 @@ export default class Methods {
     static Set_Chat_Admin_Response = 0x48
     static Resolve_Chat_Identifier_Request = 0x49
     static Resolve_Chat_Identifier_Response = 0x50
+    static Join_Group_Request = 0x51
+    static Join_Group_Response = 0x52
+    static Remove_Chat_Member_Request = 0x53
+    static Remove_Chat_Member_Response = 0x54
+    static Update_Chat_Settings_Request = 0x55
+    static Update_Chat_Settings_Response = 0x56
+    static Get_Chat_Admins_Request = 0x57
+    static Get_Chat_Admins_Response = 0x58
+    static Get_Chat_Members_Request = 0x59
+    static Get_Chat_Members_Response = 0x60
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32

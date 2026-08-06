@@ -1,4 +1,4 @@
-import { IChat, IMessage, IUser, LingCatProto, Methods } from "lingcat-protocol"
+import { IChat, IChatAdmin, IMessage, IUser, LingCatProto, Methods } from "lingcat-protocol"
 import LingCatClient from "./LingCatClient.ts"
 import decodeOrThrow from "./decodeOrThrow.ts"
 
@@ -17,31 +17,188 @@ function protoChatToIChat(chat: LingCatProto.classes.IChat.$Properties) {
     } as IChat
 }
 
+function protoUserToIUser(proto: LingCatProto.classes.IUser.$Properties) {
+    return {
+        id: proto.id,
+        username: proto.username,
+        nickname: proto.nickname,
+        description: proto.description,
+        avatar_file_hash: proto.avatarFileHash,
+    } as IUser
+}
+
 export default class ChatApi {
     /**
-     * 更新对话头像
-     * @returns 
+     * 加入群组
+     * @param client
+     * @param params
      */
-    static async updateChatAvvatar(client: LingCatClient, {
+    static async joinGroup(client: LingCatClient, {
         access_token,
         chat_id,
-        file_hash,
+        answer,
         timeout,
     }: {
         access_token: string
         chat_id: string
-        file_hash: string
+        answer?: string
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.Update_Chat_Avatar_Response>(LingCatProto.methods.Update_Chat_Avatar_Response, (await client.invoke({
-            method_id: Methods.Update_Chat_Avatar_Request,
-            data: LingCatProto.methods.Update_Chat_Avatar_Request.encode({
+        decodeOrThrow<LingCatProto.methods.Join_Group_Response>(LingCatProto.methods.Join_Group_Response, (await client.invoke({
+            method_id: Methods.Join_Group_Request,
+            data: LingCatProto.methods.Join_Group_Request.encode({
                 accessToken: access_token,
                 chatId: chat_id,
-                fileHash: file_hash,
+                answer,
             }).finish(),
             timeout,
         })).data)
+    }
+    /**
+     * 移除群成员
+     * @param client
+     * @param params
+     */
+    static async removeChatMember(client: LingCatClient, {
+        access_token,
+        chat_id,
+        target_user_id,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        target_user_id: string
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Remove_Chat_Member_Response>(LingCatProto.methods.Remove_Chat_Member_Response, (await client.invoke({
+            method_id: Methods.Remove_Chat_Member_Request,
+            data: LingCatProto.methods.Remove_Chat_Member_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                targetUserId: target_user_id,
+            }).finish(),
+            timeout,
+        })).data)
+    }
+    /**
+     * 更新群设置（JSON 格式）
+     * @param client
+     * @param params
+     */
+    static async updateChatSettings(client: LingCatClient, {
+        access_token,
+        chat_id,
+        settings,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        // 例如 { allow_join: true }
+        settings: Record<string, any>
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Update_Chat_Settings_Response>(LingCatProto.methods.Update_Chat_Settings_Response, (await client.invoke({
+            method_id: Methods.Update_Chat_Settings_Request,
+            data: LingCatProto.methods.Update_Chat_Settings_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                settings: JSON.stringify(settings),
+            }).finish(),
+            timeout,
+        })).data)
+    }
+    /**
+     * 更新群资料（头像、标题、描述）
+     * @param client
+     * @param params
+     */
+    static async updateChatProfile(client: LingCatClient, {
+        access_token,
+        chat_id,
+        avatar_file_hash,
+        title,
+        description,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        avatar_file_hash?: string
+        title?: string
+        description?: string
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Update_Chat_Profile_Response>(LingCatProto.methods.Update_Chat_Profile_Response, (await client.invoke({
+            method_id: Methods.Update_Chat_Profile_Request,
+            data: LingCatProto.methods.Update_Chat_Profile_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                avatarFileHash: avatar_file_hash,
+                title,
+                description,
+            }).finish(),
+            timeout,
+        })).data)
+    }
+    /**
+     * 获取群管理员列表
+     * @param client
+     * @param params
+     */
+    static async getChatAdmins(client: LingCatClient, {
+        access_token,
+        chat_id,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        timeout?: number
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Get_Chat_Admins_Request,
+            data: LingCatProto.methods.Get_Chat_Admins_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+            }).finish(),
+            timeout,
+        })
+        const decoded = decodeOrThrow<LingCatProto.methods.Get_Chat_Admins_Response>(
+            LingCatProto.methods.Get_Chat_Admins_Response,
+            response.data
+        )
+        return decoded.admins.map((admin) => ({
+            user_id: admin.userId,
+            role: admin.role,
+            // 服务端返回的是 JSON 字符串
+            permissions: admin.permissions,
+        }) as IChatAdmin)
+    }
+    /**
+     * 获取群成员列表
+     * @param client
+     * @param params
+     */
+    static async getChatMembers(client: LingCatClient, {
+        access_token,
+        chat_id,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        timeout?: number
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Get_Chat_Members_Request,
+            data: LingCatProto.methods.Get_Chat_Members_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+            }).finish(),
+            timeout,
+        })
+        const decoded = decodeOrThrow<LingCatProto.methods.Get_Chat_Members_Response>(
+            LingCatProto.methods.Get_Chat_Members_Response,
+            response.data
+        )
+        return (decoded.members || []).map((v) => protoUserToIUser(v))
     }
     /**
      * 创建/获取私聊对话的 ID
@@ -223,8 +380,7 @@ export default class ChatApi {
                 favourited,
             }).finish(),
             timeout,
-        })).data
-        )
+        })).data)
     }
     // 获取我的收藏对话
     static async getMyFavouriteChats(client: LingCatClient, {

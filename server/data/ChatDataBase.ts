@@ -14,6 +14,7 @@ const tableName = 'Chats';
     table.string('id').unique().notNullable()
     table.string('chat_unique').unique()
     table.string('title')
+    table.string('description')
     table.string('avatar_file_hash')
     table.string('type').notNullable()
     table.string('settings').defaultTo('{}').notNullable()
@@ -114,6 +115,16 @@ export default class ChatDataBase {
             else
                 throw { message: s, cause: e, code: Code.Internal_Server_Error }
         }
+    }
+    static async updateAvatarFileHash(id: string, avatar_file_hash: string | null) {
+        await db<IServerChat>('Chats')
+            .update({ avatar_file_hash })
+            .where('id', id);
+    }
+    static async updateDescription(id: string, description: string) {
+        await db<IServerChat>('Chats')
+            .update({ description })
+            .where('id', id);
     }
 
     static async updateSettings(id: string, settings: object) {

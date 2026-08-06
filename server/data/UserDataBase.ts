@@ -60,6 +60,11 @@ export default class UserDataBase {
     static async queryUserById(id: string) {
         return await db<IServerUser>(tableName).where('id', id).first()
     }
+    static async queryUsersByIds(ids: string[]) {
+        return await db<IServerUser>(tableName)
+            .whereIn('id', ids)
+            .select('*')
+    }
     static async queryUserByUserName(username: string) {
         return await db<IServerUser>(tableName).where('username', username).first()
     }

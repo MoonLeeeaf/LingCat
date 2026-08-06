@@ -106,13 +106,15 @@ message Update_My_Profile_Request {
 
 message Update_My_Profile_Response {}
 
-message Update_Chat_Avatar_Request {
+message Update_Chat_Profile_Request {
     string access_token = 1;
     string chat_id = 2;
-    string file_hash = 3;
+    optional string avatar_file_hash = 3;
+    optional string title = 4;
+    optional string description = 5;
 }
 
-message Update_Chat_Avatar_Response {}
+message Update_Chat_Profile_Response {}
 
 message Send_Chat_Message_Request {
     string access_token = 1;
@@ -236,4 +238,46 @@ message Create_Group_Request {
 
 message Create_Group_Response {
     string chat_id = 1;
+}
+
+message Join_Group_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    optional string answer = 3;
+}
+
+message Join_Group_Response {}
+
+message Remove_Chat_Member_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string target_user_id = 3;
+}
+
+message Remove_Chat_Member_Response {}
+
+message Update_Chat_Settings_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string settings = 3;
+}
+
+message Update_Chat_Settings_Response {}
+
+message Get_Chat_Admins_Request {
+    string access_token = 1;
+    string chat_id = 2;
+}
+
+message Get_Chat_Admins_Response {
+    repeated IChatAdmin admins = 1;
+}
+
+message Get_Chat_Members_Request {
+    string access_token = 1;
+    string chat_id = 2;
+}
+
+message Get_Chat_Members_Response {
+    repeated IUser members = 1;
 }
