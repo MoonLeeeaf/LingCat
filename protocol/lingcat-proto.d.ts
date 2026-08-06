@@ -3456,6 +3456,9 @@ export namespace lingcat {
             /** Update_Chat_Profile_Request description. */
             description?: (string|null);
 
+            /** Update_Chat_Profile_Request unique. */
+            unique?: (string|null);
+
             /**
              * Creates a new Update_Chat_Profile_Request instance using the specified properties.
              * @param [properties] Properties to set
@@ -3554,6 +3557,9 @@ export namespace lingcat {
 
                 /** Update_Chat_Profile_Request description */
                 description?: (string|null);
+
+                /** Update_Chat_Profile_Request unique */
+                unique?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

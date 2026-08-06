@@ -8538,6 +8538,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [avatarFileHash] Update_Chat_Profile_Request avatarFileHash
              * @property {string|null} [title] Update_Chat_Profile_Request title
              * @property {string|null} [description] Update_Chat_Profile_Request description
+             * @property {string|null} [unique] Update_Chat_Profile_Request unique
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -8609,6 +8610,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             Update_Chat_Profile_Request.prototype.description = null;
 
+            /**
+             * Update_Chat_Profile_Request unique.
+             * @member {string|null|undefined} unique
+             * @memberof lingcat.methods.Update_Chat_Profile_Request
+             * @instance
+             */
+            Update_Chat_Profile_Request.prototype.unique = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -8627,6 +8636,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(Update_Chat_Profile_Request.prototype, "_description", {
                 get: $util.oneOfGetter($oneOfFields = ["description"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Update_Chat_Profile_Request.prototype, "_unique", {
+                get: $util.oneOfGetter($oneOfFields = ["unique"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -8672,6 +8687,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 4, wireType 2 =*/34).string(message.title);
                 if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
                     writer.uint32(/* id 5, wireType 2 =*/42).string(message.description);
+                if (message.unique != null && $Object.hasOwnProperty.call(message, "unique"))
+                    writer.uint32(/* id 6, wireType 2 =*/50).string(message.unique);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -8758,6 +8775,13 @@ export const lingcat = $root.lingcat = (() => {
                             message._description = "description";
                             continue;
                         }
+                    case 6: {
+                            if (wireType !== 2)
+                                break;
+                            message.unique = reader.stringVerify();
+                            message._unique = "unique";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -8823,6 +8847,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.description))
                         return "description: string expected";
                 }
+                if (message.unique != null && $Object.hasOwnProperty.call(message, "unique")) {
+                    properties._unique = 1;
+                    if (!$util.isString(message.unique))
+                        return "unique: string expected";
+                }
                 return null;
             };
 
@@ -8856,6 +8885,8 @@ export const lingcat = $root.lingcat = (() => {
                     message.title = $String(object.title);
                 if (object.description != null)
                     message.description = $String(object.description);
+                if (object.unique != null)
+                    message.unique = $String(object.unique);
                 return message;
             };
 
@@ -8890,6 +8921,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.title = message.title;
                 if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
                     object.description = message.description;
+                if (message.unique != null && $Object.hasOwnProperty.call(message, "unique"))
+                    object.unique = message.unique;
                 return object;
             };
 

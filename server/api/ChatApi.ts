@@ -545,6 +545,9 @@ export default class ChatApi {
                 if (data.title) {
                     await ChatDataBase.updateTitle(chat.id, data.title.trim())
                 }
+                if (data.unique) {
+                    await ChatDataBase.updateUnique(chat.id, data.unique.trim())
+                }
                 if (data.description) {
                     await ChatDataBase.updateDescription(chat.id, data.description)
                 }

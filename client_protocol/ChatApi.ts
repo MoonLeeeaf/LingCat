@@ -126,6 +126,7 @@ export default class ChatApi {
         avatar_file_hash,
         title,
         description,
+        unique,
         timeout,
     }: {
         access_token: string
@@ -133,6 +134,7 @@ export default class ChatApi {
         avatar_file_hash?: string
         title?: string
         description?: string
+        unique?: string
         timeout?: number
     }) {
         decodeOrThrow<LingCatProto.methods.Update_Chat_Profile_Response>(LingCatProto.methods.Update_Chat_Profile_Response, (await client.invoke({
@@ -142,6 +144,7 @@ export default class ChatApi {
                 chatId: chat_id,
                 avatarFileHash: avatar_file_hash,
                 title,
+                unique,
                 description,
             }).finish(),
             timeout,

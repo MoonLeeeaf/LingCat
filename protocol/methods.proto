@@ -112,6 +112,7 @@ message Update_Chat_Profile_Request {
     optional string avatar_file_hash = 3;
     optional string title = 4;
     optional string description = 5;
+    optional string unique = 6;
 }
 
 message Update_Chat_Profile_Response {}

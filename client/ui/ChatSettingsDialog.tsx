@@ -170,6 +170,37 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                             // @ts-ignore
                                             dlg.querySelector('#description').value = profile?.description
                                         }}>更改简介</mdui-list-item>
+                                        <mdui-list-item icon="info" rounded onClick={() => {
+                                            const dlg = dialog({
+                                                headline: "更改标识符",
+                                                body: `<mdui-text-field label="标识符" id="unique"></mdui-text-field>`,
+                                                closeOnEsc: true,
+                                                closeOnOverlayClick: true,
+                                                actions: [{
+                                                    text: "取消",
+                                                    onClick: () => true,
+                                                }, {
+                                                    text: "更改",
+                                                    variant: 'tonal',
+                                                    onClick: async () => {
+                                                        // @ts-ignore
+                                                        const unique = dlg.querySelector('#unique').value
+                                                        try {
+                                                            await ChatApi.updateChatProfile(ClientManager.client, {
+                                                                access_token: ClientManager.getActiveUserSession().token,
+                                                                chat_id,
+                                                                unique,
+                                                            })
+                                                        } catch (e) {
+                                                            console.log(e)
+                                                            tipError(e, '更改标识符失败')
+                                                        }
+                                                    },
+                                                }]
+                                            })
+                                            // @ts-ignore
+                                            dlg.querySelector('#unique').value = profile?.chat_unique
+                                        }}>更改标识符</mdui-list-item>
                                     </mdui-list>
                                 </mdui-tab-panel>
                                 <mdui-tab-panel slot="panel" value="入群">TODO</mdui-tab-panel>
