@@ -1,6 +1,6 @@
 import Package from './Package.ts'
 import Methods from './Methods.ts'
-import { type IUser, type IChat, type ChatType, type IMessage } from './classes-interfaces.ts'
+import { type IUser, type IChat, type ChatType, type IMessage, AvailableChatSettings } from './classes-interfaces.ts'
 import { lingcat } from './lingcat-proto.js'
 import Code from './Code.ts'
 import SecureKey from './SecureKey.ts'
@@ -16,6 +16,7 @@ export {
 
     lingcat as LingCatProto,
     Code,
+    AvailableChatSettings,
 }
 export type {
     IUser,
