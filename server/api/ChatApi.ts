@@ -49,7 +49,7 @@ export default class ChatApi {
                 if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId))
                     return sendError(sendPackage, mPackage.method_id, "用户不属于此对话", Code.Forbidden)
 
-                if (ChatDataBase.queryChatById(data.chatId) == null)
+                if (await ChatDataBase.queryChatById(data.chatId) == null)
                     return sendError(sendPackage, mPackage.method_id, "对话不存在", Code.Not_Found)
 
                 const time = Date.now()
