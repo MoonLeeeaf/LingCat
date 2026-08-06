@@ -25,6 +25,17 @@ message IUser {
     optional string avatar_file_hash = 5;
 }
 
+message IChatAdmin {
+    string id = 1;
+    optional string username = 2;
+    string nickname = 3;
+    optional string description = 4;
+    optional string avatar_file_hash = 5;
+    
+    string role = 6;
+    string permissions = 7;
+}
+
 message IChat {
     string id = 1;
     optional string title = 2;
@@ -53,10 +64,4 @@ message IMessage {
     string chat_id = 4;
     string text = 5;
     uint64 time = 6;
-}
-
-message IChatAdmin {
-    string user_id = 1;
-    string role = 2;
-    string permissions = 3;
 }

@@ -1,6 +1,6 @@
 import knex from 'knex'
 import { base_data_path } from '../config.ts'
-import { Code, type IChat, type ChatType, AvailableChatSettings, AvailableChatAdminPermissions, type AvailableChatAdminPermission, type AdminRole } from 'lingcat-protocol'
+import { Code, type IChat, type ChatType, AvailableChatSettings, AvailableChatAdminPermissions, type AvailableChatAdminPermission, type AdminRole, IChatAdmin } from 'lingcat-protocol'
 import crypto from 'node:crypto'
 import { db } from "./db.ts"
 
@@ -43,9 +43,9 @@ export default class ChatAdminLinker {
     }
     static async getUserPermissions(chat_id: string, user_id: string): Promise<Record<AvailableChatAdminPermission, boolean>> {
         const record = await db<IChatAdminLink>(tableName)
-        .where({ chat_id, user_id })
-        .select('permissions', 'role')
-        .first()
+            .where({ chat_id, user_id })
+            .select('permissions', 'role')
+            .first()
         if (!record) return {}
         if (record.role === 'owner') {
             const perm = {}
@@ -67,9 +67,18 @@ export default class ChatAdminLinker {
         return perms[permission] == true
     }
     static async queryAdminsOfChat(chat_id: string) {
-        return await db<IChatAdminLink>(tableName)
-            .where('chat_id', chat_id)
-            .select('user_id', 'role', 'permissions') as { user_id: string, role: AdminRole, permissions: string }[]
+        const rows = await db(tableName + ' as cal')
+            .join('Users as u', 'cal.user_id', 'u.id')
+            .where('cal.chat_id', chat_id)
+            .select(
+                'u.*',
+                'cal.role',
+                'cal.permissions'
+            ) as IChatAdmin[]
+        const ownerPermissions = {}
+        AvailableChatAdminPermissions.forEach((v) => ownerPermissions[v] = true)
+        rows[rows.findIndex((v) => v.role == 'owner')].permissions = JSON.stringify(ownerPermissions)
+        return rows
     }
     static async updateAdminPermissions(chat_id: string, user_id: string, permissions: string) {
         await db<IChatAdminLink>(tableName).update({ permissions }).where({ user_id, chat_id })
@@ -85,6 +94,7 @@ export default class ChatAdminLinker {
             .ignore()
     }
     static async removeAdmin(chat_id: string, user_id: string) {
+        if (await this.isOwner(chat_id, user_id)) return
         await db(tableName)
             .where({ user_id, chat_id })
             .del()

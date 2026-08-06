@@ -1,4 +1,4 @@
-import { AvailableChatSettings, Code, IChat, IChatSettings, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
+import { AvailableChatSettings, Code, IChat, IChatAdmin, IChatSettings, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
 import type { ISendPackageFunction } from "./ISendPackageFunction.ts"
 import TokenManager from "./TokenManager.ts"
 import UserChatLinker from "../data/UserChatLinker.ts"
@@ -45,6 +45,14 @@ function IUserToProtoUser(user: IUser) {
         description: user.description,
         avatarFileHash: user.avatar_file_hash,
     } as LingCatProto.classes.IUser.$Properties
+}
+
+function IChatAdminToProtoAdmin(user: IChatAdmin) {
+    return {
+        ...IUserToProtoUser(user),
+        role: user.role,
+        permissions: user.permissions,
+    } as LingCatProto.classes.IChatAdmin.$Properties
 }
 
 function broadcastToUserClients(clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } }, user_id: string, func: (func: (mPackage: Package) => void) => void) {
@@ -565,13 +573,8 @@ export default class ChatApi {
                     return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
                 }
 
-                const admins = await ChatAdminLinker.queryAdminsOfChat(chat.id);
-                // 将数据库记录转换为 proto 格式
-                const adminInfos = admins.map(admin => ({
-                    userId: admin.user_id,
-                    role: admin.role,
-                    permissions: admin.permissions,
-                }))
+                const admins = await ChatAdminLinker.queryAdminsOfChat(chat.id)
+                const adminInfos = admins.map(admin => IChatAdminToProtoAdmin(admin))
 
                 sendPackage(Package.encode({
                     method_id: Methods.Get_Chat_Admins_Response,

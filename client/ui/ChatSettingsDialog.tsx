@@ -96,7 +96,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
         return CircleProgressDialog.show('加载中...')
     }} />)
         : (
-            <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc headline="群组设定">
+            <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc headline="对话设定">
                 <input accept="image/*" type="file" name="上传对话头像" ref={uploadChatAvatarRef} style={{ display: 'none' }}></input>
                 {
                     ({

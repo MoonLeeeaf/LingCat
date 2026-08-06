@@ -27,6 +27,14 @@ function protoUserToIUser(proto: LingCatProto.classes.IUser.$Properties) {
     } as IUser
 }
 
+function protoChatAdminToIChatAdmin(proto: LingCatProto.classes.IChatAdmin.$Properties) {
+    return {
+        ...protoUserToIUser(proto),
+        role: proto.role,
+        permissions: proto.permissions,
+    } as IChatAdmin
+}
+
 export default class ChatApi {
     /**
      * 加入群组
@@ -165,12 +173,7 @@ export default class ChatApi {
             LingCatProto.methods.Get_Chat_Admins_Response,
             response.data
         )
-        return decoded.admins.map((admin) => ({
-            user_id: admin.userId,
-            role: admin.role,
-            // 服务端返回的是 JSON 字符串
-            permissions: admin.permissions,
-        }) as IChatAdmin)
+        return decoded.admins.map((admin) => protoChatAdminToIChatAdmin(admin))
     }
     /**
      * 获取群成员列表

@@ -284,6 +284,159 @@ export namespace lingcat {
         }
 
         /**
+         * Properties of a IChatAdmin.
+         * @deprecated Use lingcat.classes.IChatAdmin.$Properties instead.
+         */
+        interface IIChatAdmin extends lingcat.classes.IChatAdmin.$Properties {
+        }
+
+        /** Represents a IChatAdmin. */
+        class IChatAdmin {
+
+            /**
+             * Constructs a new IChatAdmin.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IChatAdmin.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IChatAdmin id. */
+            id: string;
+
+            /** IChatAdmin username. */
+            username?: (string|null);
+
+            /** IChatAdmin nickname. */
+            nickname: string;
+
+            /** IChatAdmin description. */
+            description?: (string|null);
+
+            /** IChatAdmin avatarFileHash. */
+            avatarFileHash?: (string|null);
+
+            /** IChatAdmin role. */
+            role: string;
+
+            /** IChatAdmin permissions. */
+            permissions: string;
+
+            /**
+             * Creates a new IChatAdmin instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IChatAdmin instance
+             */
+            static create(properties: lingcat.classes.IChatAdmin.$Shape): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
+            static create(properties?: lingcat.classes.IChatAdmin.$Properties): lingcat.classes.IChatAdmin;
+
+            /**
+             * Encodes the specified IChatAdmin message. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @param message IChatAdmin message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IChatAdmin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IChatAdmin message, length delimited. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @param message IChatAdmin message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IChatAdmin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
+
+            /**
+             * Verifies a IChatAdmin message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IChatAdmin message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IChatAdmin
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IChatAdmin;
+
+            /**
+             * Creates a plain object from a IChatAdmin message. Also converts values to other types if specified.
+             * @param message IChatAdmin
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IChatAdmin, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IChatAdmin to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IChatAdmin
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IChatAdmin {
+
+            /** Properties of a IChatAdmin. */
+            interface $Properties {
+
+                /** IChatAdmin id */
+                id?: (string|null);
+
+                /** IChatAdmin username */
+                username?: (string|null);
+
+                /** IChatAdmin nickname */
+                nickname?: (string|null);
+
+                /** IChatAdmin description */
+                description?: (string|null);
+
+                /** IChatAdmin avatarFileHash */
+                avatarFileHash?: (string|null);
+
+                /** IChatAdmin role */
+                role?: (string|null);
+
+                /** IChatAdmin permissions */
+                permissions?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IChatAdmin. */
+            type $Shape = lingcat.classes.IChatAdmin.$Properties;
+        }
+
+        /**
          * Properties of a IChat.
          * @deprecated Use lingcat.classes.IChat.$Properties instead.
          */
@@ -740,135 +893,6 @@ export namespace lingcat {
 
             /** Shape of a IMessage. */
             type $Shape = lingcat.classes.IMessage.$Properties;
-        }
-
-        /**
-         * Properties of a IChatAdmin.
-         * @deprecated Use lingcat.classes.IChatAdmin.$Properties instead.
-         */
-        interface IIChatAdmin extends lingcat.classes.IChatAdmin.$Properties {
-        }
-
-        /** Represents a IChatAdmin. */
-        class IChatAdmin {
-
-            /**
-             * Constructs a new IChatAdmin.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: lingcat.classes.IChatAdmin.$Properties);
-
-            /** Unknown fields preserved while decoding when enabled */
-            $unknowns?: Uint8Array[];
-
-            /** IChatAdmin userId. */
-            userId: string;
-
-            /** IChatAdmin role. */
-            role: string;
-
-            /** IChatAdmin permissions. */
-            permissions: string;
-
-            /**
-             * Creates a new IChatAdmin instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns IChatAdmin instance
-             */
-            static create(properties: lingcat.classes.IChatAdmin.$Shape): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
-            static create(properties?: lingcat.classes.IChatAdmin.$Properties): lingcat.classes.IChatAdmin;
-
-            /**
-             * Encodes the specified IChatAdmin message. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
-             * @param message IChatAdmin message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encode(message: lingcat.classes.IChatAdmin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified IChatAdmin message, length delimited. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
-             * @param message IChatAdmin message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encodeDelimited(message: lingcat.classes.IChatAdmin.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a IChatAdmin message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
-
-            /**
-             * Decodes a IChatAdmin message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
-
-            /**
-             * Verifies a IChatAdmin message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a IChatAdmin message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns IChatAdmin
-             */
-            static fromObject(object: { [k: string]: any }): lingcat.classes.IChatAdmin;
-
-            /**
-             * Creates a plain object from a IChatAdmin message. Also converts values to other types if specified.
-             * @param message IChatAdmin
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            static toObject(message: lingcat.classes.IChatAdmin, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this IChatAdmin to JSON.
-             * @returns JSON object
-             */
-            toJSON(): { [k: string]: any };
-
-            /**
-             * Gets the type url for IChatAdmin
-             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-             * @returns The type url
-             */
-            static getTypeUrl(prefix?: string): string;
-        }
-
-        namespace IChatAdmin {
-
-            /** Properties of a IChatAdmin. */
-            interface $Properties {
-
-                /** IChatAdmin userId */
-                userId?: (string|null);
-
-                /** IChatAdmin role */
-                role?: (string|null);
-
-                /** IChatAdmin permissions */
-                permissions?: (string|null);
-
-                /** Unknown fields preserved while decoding when enabled */
-                $unknowns?: Uint8Array[];
-            }
-
-            /** Shape of a IChatAdmin. */
-            type $Shape = lingcat.classes.IChatAdmin.$Properties;
         }
     }
 

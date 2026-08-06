@@ -794,6 +794,457 @@ export const lingcat = $root.lingcat = (() => {
             return IUser;
         })();
 
+        classes.IChatAdmin = (function() {
+
+            /**
+             * Properties of a IChatAdmin.
+             * @typedef {Object} lingcat.classes.IChatAdmin.$Properties
+             * @property {string|null} [id] IChatAdmin id
+             * @property {string|null} [username] IChatAdmin username
+             * @property {string|null} [nickname] IChatAdmin nickname
+             * @property {string|null} [description] IChatAdmin description
+             * @property {string|null} [avatarFileHash] IChatAdmin avatarFileHash
+             * @property {string|null} [role] IChatAdmin role
+             * @property {string|null} [permissions] IChatAdmin permissions
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IChatAdmin.
+             * @memberof lingcat.classes
+             * @interface IIChatAdmin
+             * @augments lingcat.classes.IChatAdmin.$Properties
+             * @deprecated Use lingcat.classes.IChatAdmin.$Properties instead.
+             */
+
+            /**
+             * Shape of a IChatAdmin.
+             * @typedef {lingcat.classes.IChatAdmin.$Properties} lingcat.classes.IChatAdmin.$Shape
+             */
+
+            /**
+             * Constructs a new IChatAdmin.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IChatAdmin.
+             * @constructor
+             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IChatAdmin = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IChatAdmin id.
+             * @member {string} id
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.id = "";
+
+            /**
+             * IChatAdmin username.
+             * @member {string|null|undefined} username
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.username = null;
+
+            /**
+             * IChatAdmin nickname.
+             * @member {string} nickname
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.nickname = "";
+
+            /**
+             * IChatAdmin description.
+             * @member {string|null|undefined} description
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.description = null;
+
+            /**
+             * IChatAdmin avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.avatarFileHash = null;
+
+            /**
+             * IChatAdmin role.
+             * @member {string} role
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.role = "";
+
+            /**
+             * IChatAdmin permissions.
+             * @member {string} permissions
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.permissions = "";
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IChatAdmin.prototype, "_username", {
+                get: $util.oneOfGetter($oneOfFields = ["username"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IChatAdmin.prototype, "_description", {
+                get: $util.oneOfGetter($oneOfFields = ["description"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IChatAdmin.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new IChatAdmin instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IChatAdmin} IChatAdmin instance
+             * @type {{
+             *   (properties: lingcat.classes.IChatAdmin.$Shape): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
+             *   (properties?: lingcat.classes.IChatAdmin.$Properties): lingcat.classes.IChatAdmin;
+             * }}
+             */
+            IChatAdmin.create = function(properties) {
+                return new IChatAdmin(properties);
+            };
+
+            /**
+             * Encodes the specified IChatAdmin message. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IChatAdmin.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id") && message.id !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.username);
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname") && message.nickname !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.description);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.avatarFileHash);
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role") && message.role !== "")
+                    writer.uint32(/* id 6, wireType 2 =*/50).string(message.role);
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions") && message.permissions !== "")
+                    writer.uint32(/* id 7, wireType 2 =*/58).string(message.permissions);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IChatAdmin message, length delimited. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IChatAdmin.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IChatAdmin.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IChatAdmin(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.id = value;
+                            else
+                                delete message.id;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.username = reader.stringVerify();
+                            message._username = "username";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.nickname = value;
+                            else
+                                delete message.nickname;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.description = reader.stringVerify();
+                            message._description = "description";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    case 6: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.role = value;
+                            else
+                                delete message.role;
+                            continue;
+                        }
+                    case 7: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.permissions = value;
+                            else
+                                delete message.permissions;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IChatAdmin message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IChatAdmin.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a IChatAdmin message.
+             * @function verify
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IChatAdmin.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username")) {
+                    properties._username = 1;
+                    if (!$util.isString(message.username))
+                        return "username: string expected";
+                }
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description")) {
+                    properties._description = 1;
+                    if (!$util.isString(message.description))
+                        return "description: string expected";
+                }
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
+                    if (!$util.isString(message.role))
+                        return "role: string expected";
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
+                    if (!$util.isString(message.permissions))
+                        return "permissions: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a IChatAdmin message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IChatAdmin} IChatAdmin
+             */
+            IChatAdmin.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IChatAdmin)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IChatAdmin: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IChatAdmin();
+                if (object.id != null)
+                    if (typeof object.id !== "string" || object.id.length)
+                        message.id = $String(object.id);
+                if (object.username != null)
+                    message.username = $String(object.username);
+                if (object.nickname != null)
+                    if (typeof object.nickname !== "string" || object.nickname.length)
+                        message.nickname = $String(object.nickname);
+                if (object.description != null)
+                    message.description = $String(object.description);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                if (object.role != null)
+                    if (typeof object.role !== "string" || object.role.length)
+                        message.role = $String(object.role);
+                if (object.permissions != null)
+                    if (typeof object.permissions !== "string" || object.permissions.length)
+                        message.permissions = $String(object.permissions);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IChatAdmin message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {lingcat.classes.IChatAdmin} message IChatAdmin
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IChatAdmin.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.id = "";
+                    object.nickname = "";
+                    object.role = "";
+                    object.permissions = "";
+                }
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    object.id = message.id;
+                if (message.username != null && $Object.hasOwnProperty.call(message, "username"))
+                    object.username = message.username;
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    object.nickname = message.nickname;
+                if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                    object.description = message.description;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
+                    object.role = message.role;
+                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
+                    object.permissions = message.permissions;
+                return object;
+            };
+
+            /**
+             * Converts this IChatAdmin to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IChatAdmin.prototype.toJSON = function() {
+                return IChatAdmin.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IChatAdmin
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IChatAdmin
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IChatAdmin.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IChatAdmin";
+            };
+
+            return IChatAdmin;
+        })();
+
         classes.IChat = (function() {
 
             /**
@@ -2193,325 +2644,6 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return IMessage;
-        })();
-
-        classes.IChatAdmin = (function() {
-
-            /**
-             * Properties of a IChatAdmin.
-             * @typedef {Object} lingcat.classes.IChatAdmin.$Properties
-             * @property {string|null} [userId] IChatAdmin userId
-             * @property {string|null} [role] IChatAdmin role
-             * @property {string|null} [permissions] IChatAdmin permissions
-             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
-             */
-
-            /**
-             * Properties of a IChatAdmin.
-             * @memberof lingcat.classes
-             * @interface IIChatAdmin
-             * @augments lingcat.classes.IChatAdmin.$Properties
-             * @deprecated Use lingcat.classes.IChatAdmin.$Properties instead.
-             */
-
-            /**
-             * Shape of a IChatAdmin.
-             * @typedef {lingcat.classes.IChatAdmin.$Properties} lingcat.classes.IChatAdmin.$Shape
-             */
-
-            /**
-             * Constructs a new IChatAdmin.
-             * @memberof lingcat.classes
-             * @classdesc Represents a IChatAdmin.
-             * @constructor
-             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
-             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
-             */
-            const IChatAdmin = function (properties) {
-                if (properties)
-                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
-                            this[keys[i]] = properties[keys[i]];
-            };
-
-            /**
-             * IChatAdmin userId.
-             * @member {string} userId
-             * @memberof lingcat.classes.IChatAdmin
-             * @instance
-             */
-            IChatAdmin.prototype.userId = "";
-
-            /**
-             * IChatAdmin role.
-             * @member {string} role
-             * @memberof lingcat.classes.IChatAdmin
-             * @instance
-             */
-            IChatAdmin.prototype.role = "";
-
-            /**
-             * IChatAdmin permissions.
-             * @member {string} permissions
-             * @memberof lingcat.classes.IChatAdmin
-             * @instance
-             */
-            IChatAdmin.prototype.permissions = "";
-
-            /**
-             * Creates a new IChatAdmin instance using the specified properties.
-             * @function create
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {lingcat.classes.IChatAdmin.$Properties=} [properties] Properties to set
-             * @returns {lingcat.classes.IChatAdmin} IChatAdmin instance
-             * @type {{
-             *   (properties: lingcat.classes.IChatAdmin.$Shape): lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape;
-             *   (properties?: lingcat.classes.IChatAdmin.$Properties): lingcat.classes.IChatAdmin;
-             * }}
-             */
-            IChatAdmin.create = function(properties) {
-                return new IChatAdmin(properties);
-            };
-
-            /**
-             * Encodes the specified IChatAdmin message. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
-             * @function encode
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            IChatAdmin.encode = function (message, writer, _depth) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId") && message.userId !== "")
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
-                if (message.role != null && $Object.hasOwnProperty.call(message, "role") && message.role !== "")
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.role);
-                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions") && message.permissions !== "")
-                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.permissions);
-                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
-                    for (let i = 0; i < message.$unknowns.length; ++i)
-                        writer.raw(message.$unknowns[i]);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified IChatAdmin message, length delimited. Does not implicitly {@link lingcat.classes.IChatAdmin.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {lingcat.classes.IChatAdmin.$Properties} message IChatAdmin message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            IChatAdmin.encodeDelimited = function(message, writer) {
-                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
-            };
-
-            /**
-             * Decodes a IChatAdmin message from the specified reader or buffer.
-             * @function decode
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            IChatAdmin.decode = function (reader, length, _end, _depth, _target) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $Reader.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IChatAdmin(), value;
-                while (reader.pos < end) {
-                    let start = reader.pos;
-                    let tag = reader.tag();
-                    if (tag === _end) {
-                        _end = $undefined;
-                        break;
-                    }
-                    let wireType = tag & 7;
-                    switch (tag >>>= 3) {
-                    case 1: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.stringVerify()).length)
-                                message.userId = value;
-                            else
-                                delete message.userId;
-                            continue;
-                        }
-                    case 2: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.stringVerify()).length)
-                                message.role = value;
-                            else
-                                delete message.role;
-                            continue;
-                        }
-                    case 3: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.stringVerify()).length)
-                                message.permissions = value;
-                            else
-                                delete message.permissions;
-                            continue;
-                        }
-                    }
-                    reader.skipType(wireType, _depth, tag);
-                    if (!reader.discardUnknown) {
-                        $util.makeProp(message, "$unknowns", false);
-                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
-                    }
-                }
-                if (_end !== $undefined)
-                    throw $Error("missing end group");
-                return message;
-            };
-
-            /**
-             * Decodes a IChatAdmin message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.classes.IChatAdmin & lingcat.classes.IChatAdmin.$Shape} IChatAdmin
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            IChatAdmin.decodeDelimited = function(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a IChatAdmin message.
-             * @function verify
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            IChatAdmin.verify = function (message, _depth) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    return "max depth exceeded";
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
-                    if (!$util.isString(message.userId))
-                        return "userId: string expected";
-                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
-                    if (!$util.isString(message.role))
-                        return "role: string expected";
-                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
-                    if (!$util.isString(message.permissions))
-                        return "permissions: string expected";
-                return null;
-            };
-
-            /**
-             * Creates a IChatAdmin message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.classes.IChatAdmin} IChatAdmin
-             */
-            IChatAdmin.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.classes.IChatAdmin)
-                    return object;
-                if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.classes.IChatAdmin: object expected");
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let message = new $root.lingcat.classes.IChatAdmin();
-                if (object.userId != null)
-                    if (typeof object.userId !== "string" || object.userId.length)
-                        message.userId = $String(object.userId);
-                if (object.role != null)
-                    if (typeof object.role !== "string" || object.role.length)
-                        message.role = $String(object.role);
-                if (object.permissions != null)
-                    if (typeof object.permissions !== "string" || object.permissions.length)
-                        message.permissions = $String(object.permissions);
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a IChatAdmin message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {lingcat.classes.IChatAdmin} message IChatAdmin
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            IChatAdmin.toObject = function (message, options, _depth) {
-                if (!options)
-                    options = {};
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let object = {};
-                if (options.defaults) {
-                    object.userId = "";
-                    object.role = "";
-                    object.permissions = "";
-                }
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
-                    object.userId = message.userId;
-                if (message.role != null && $Object.hasOwnProperty.call(message, "role"))
-                    object.role = message.role;
-                if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
-                    object.permissions = message.permissions;
-                return object;
-            };
-
-            /**
-             * Converts this IChatAdmin to JSON.
-             * @function toJSON
-             * @memberof lingcat.classes.IChatAdmin
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            IChatAdmin.prototype.toJSON = function() {
-                return IChatAdmin.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            /**
-             * Gets the type url for IChatAdmin
-             * @function getTypeUrl
-             * @memberof lingcat.classes.IChatAdmin
-             * @static
-             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-             * @returns {string} The type url
-             */
-            IChatAdmin.getTypeUrl = function(prefix) {
-                if (prefix === $undefined)
-                    prefix = "type.googleapis.com";
-                return prefix + "/lingcat.classes.IChatAdmin";
-            };
-
-            return IChatAdmin;
         })();
 
         return classes;

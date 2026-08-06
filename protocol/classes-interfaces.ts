@@ -65,8 +65,7 @@ export interface IMessage {
 
 export type AdminRole = 'owner' | 'admin'
 
-export interface IChatAdmin {
-    user_id: string
+export interface IChatAdmin extends IUser {
     role: AdminRole
     permissions: string
 }
