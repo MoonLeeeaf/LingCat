@@ -1,7 +1,7 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
 import ReloadableImage from "./ReloadableImage.tsx"
-import { dialog, Dialog } from "mdui"
+import { $, dialog, Dialog, Tabs } from "mdui"
 import useEventListener from "./useEventListener.ts"
 import { IChat, IUser } from "lingcat-protocol"
 import EffectOnly from "./EffectOnly.tsx"
@@ -73,6 +73,14 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
         setTimeout(() => {
             ref.current!.open = true
             uploadChatAvatarRef.current!.addEventListener('change', onAvatarChange)
+
+            $(tabsRef.current!.shadowRoot).append(`
+                <style>
+                    .container {
+                        background-color: inherit !important;
+                    }
+                </style>
+            `)
         }, 10)
 
         return () => {
@@ -82,6 +90,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
     }, [loading])
 
     const uploadChatAvatarRef = React.useRef<HTMLInputElement>(null)
+    const tabsRef = React.useRef<Tabs>(null)
 
     return loading ? (<EffectOnly deps={[]} effect={() => {
         return CircleProgressDialog.show('加载中...')
@@ -92,7 +101,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                 {
                     ({
                         group: (
-                            <mdui-tabs value="资料">
+                            <mdui-tabs value="资料" ref={tabsRef}>
                                 <mdui-tab value="资料">资料</mdui-tab>
                                 <mdui-tab value="入群">入群</mdui-tab>
 
