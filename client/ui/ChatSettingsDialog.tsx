@@ -64,6 +64,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                 showSnackbar({
                     message: "更新头像成功! 请刷新页面"
                 })
+                delete ProfileCache.chat_info[chat_id]
             } catch (e) {
                 console.log(e)
                 tipError(e, '更新头像失败')
@@ -129,6 +130,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                                                 chat_id,
                                                                 title,
                                                             })
+                                                            delete ProfileCache.chat_info[chat_id]
                                                         } catch (e) {
                                                             console.log(e)
                                                             tipError(e, '更改标题失败')
@@ -160,6 +162,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                                                 chat_id,
                                                                 description,
                                                             })
+                                                            delete ProfileCache.chat_info[chat_id]
                                                         } catch (e) {
                                                             console.log(e)
                                                             tipError(e, '更改简介失败')
@@ -191,12 +194,13 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                                                 chat_id,
                                                                 unique,
                                                             })
+                                                            delete ProfileCache.chat_info[chat_id]
                                                         } catch (e) {
                                                             console.log(e)
                                                             tipError(e, '更改标识符失败')
                                                         }
                                                     },
-                                                }]
+                                                }] 
                                             })
                                             // @ts-ignore
                                             dlg.querySelector('#unique').value = profile?.chat_unique
