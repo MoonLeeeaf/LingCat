@@ -108,7 +108,10 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                     <span slot="description">{({
                                         admin: "管理员",
                                         owner: "所有者",
-                                    })[v.role]}<br></br>权能: {Object.keys(JSON.parse(v.permissions)).join(', ')}</span>
+                                    })[v.role]}<br></br>权能: {(() => {
+                                        const perms = JSON.parse(v.permissions)
+                                        return Object.keys(perms).filter((v) => perms[v]).join(', ')
+                                    })()}</span>
                                 </mdui-list-item>)
                             }
                         </mdui-list>
