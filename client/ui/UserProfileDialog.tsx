@@ -74,7 +74,7 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
                 <mdui-list>
                     <mdui-list-item icon="info" rounded>{profile?.id}<span slot="description">用户 ID</span></mdui-list-item>
                     {profile?.username && <mdui-list-item icon="alternate_email" rounded>{profile?.username}<span slot="description">用户名</span></mdui-list-item>}
-                    {profile?.description && <mdui-list-item icon="info" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
+                    {profile?.description && <mdui-list-item icon="description" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
                     {isMe && <mdui-list-item icon="edit" rounded onClick={() => EditMyProfileDialog.show()}>编辑资料</mdui-list-item>}
                     <mdui-list-item icon="chat" rounded onClick={async () => {
                         try {

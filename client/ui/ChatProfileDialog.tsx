@@ -85,7 +85,7 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                         private: "私聊",
                     })[profile?.type!]}<span slot="description">对话类型</span></mdui-list-item>
                     {profile?.chat_unique && <mdui-list-item icon="alternate_email" rounded>{profile?.title}<span slot="description">对话标识符</span></mdui-list-item>}
-                    {profile?.description && <mdui-list-item icon="info" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
+                    {profile?.description && <mdui-list-item icon="description" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
                     {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async () => UserProfileDialog.show(
                         await ChatApi.getAnotherUserFromPrivateChat(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token,
