@@ -8,6 +8,10 @@ export interface IUser {
 
 export type ChatType = 'private' | 'group'
 
+export const AvailableChatSettings = {
+    allow_join: 'boolean'
+}
+
 export interface IChat {
     id: string
     // 私聊拿到的是对方的 title

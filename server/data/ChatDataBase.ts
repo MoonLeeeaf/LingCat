@@ -1,6 +1,6 @@
 import knex from 'knex'
 import { base_data_path } from '../config.ts'
-import { Code, type IChat, type ChatType } from 'lingcat-protocol'
+import { Code, type IChat, type ChatType, AvailableChatSettings } from 'lingcat-protocol'
 import crypto from 'node:crypto'
 import { db } from "./db.ts"
 
@@ -121,13 +121,13 @@ export default class ChatDataBase {
     }
     static async updateSetting(id: string, key: string, value: string | boolean | number | Array<any>) {
         if (this.settings[key] == null)
-            throw { message: '设置项不存在!', code: Code.Bad_Request }
+            throw { message: '设置项 ' + key + ' 不存在!', code: Code.Bad_Request }
         if (this.settings[key] != typeof value)
-            if (this.settings[key] == 'list') {
+            if (this.settings[key] == 'array') {
                 if (!(value instanceof Array))
-                    throw { message: '设置项值类型错误!', code: Code.Bad_Request }
+                    throw { message: '设置项 ' + key + ' 值类型错误!', code: Code.Bad_Request }
             } else {
-                throw { message: '设置项值类型错误!', code: Code.Bad_Request }
+                throw { message: '设置项 ' + key + ' 值类型错误!', code: Code.Bad_Request }
             }
         const chat = await this.queryChatById(id)
         if (!chat)
@@ -137,7 +137,5 @@ export default class ChatDataBase {
         this.updateSettings(id, settings)
     }
 
-    static settings = {
-        allow_join: 'boolean'
-    }
+    static settings = AvailableChatSettings
 }
