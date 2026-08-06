@@ -110,7 +110,7 @@ export default class ChatApi {
                 const hideForNonMember = {
                     settings: '{}'
                 }
-                if (await UserChatLinker.isUserChatLinked(user_id, data.chatId))
+                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId))
                     hideForNonMember.settings = chat.settings
 
                 sendPackage(Package.encode({
