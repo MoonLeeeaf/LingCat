@@ -18,6 +18,7 @@ import ImageViewerDialog from "../ImageViewerDialog.tsx"
 import VideoViewerDialog from "../VideoViewerDialog.tsx"
 import MduiPatchedTextAreaElement from "../MduiPatchedTextAreaElement.ts"
 import escapeHtml from "../escapeHtml.ts"
+import ChatSettingsDialog from "../ChatSettingsDialog.tsx"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -383,6 +384,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
             }}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
+            <mdui-button-icon icon="settings" style={{ marginRight: '4px' }} onClick={() => ChatSettingsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>
         </mdui-top-app-bar>
 
