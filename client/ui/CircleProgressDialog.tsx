@@ -14,7 +14,7 @@ export default function CircleProgressDialog({ text, onClose }: { text: string, 
 
     return (
         <mdui-dialog ref={ref}>
-            <div style={{ display: 'flex', alignItems: 'center', }}>
+            <div style={{ display: 'flex', alignItems: 'center', overflowY: 'hidden' }}>
                 <mdui-circular-progress style={{ marginLeft: '3px' }} />
                 <span style={{ marginLeft: '20px' }}>{text}</span>
             </div>

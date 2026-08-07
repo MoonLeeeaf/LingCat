@@ -16,6 +16,7 @@ import tipError from "./tipError.ts"
 import ChatProfileDialog from "./ChatProfileDialog.tsx"
 import showSnackbar from "./showSnackbar.ts"
 import useEventListener from "./useEventListener.ts"
+import CircleProgressDialog from "./CircleProgressDialog.tsx"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -50,9 +51,17 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
 }
 
 export default function UserMain({ profile, setProfile, drawerRef, mSettingsDialog, mLoginDialog }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>, mSettingsDialog: React.RefObject<Dialog | undefined>, mLoginDialog: React.RefObject<Dialog | undefined> }) {
+    const [loadingProfile, setLoadingProfile] = React.useState(true)
+
     React.useEffect(() => {
         ; (async () => {
-            ClientManager.initClient(ClientManager.getActiveUserSessionName()!)
+            try {
+                ClientManager.initClient(ClientManager.getActiveUserSessionName()!)
+            } catch (e) {
+                console.log(e)
+                mLoginDialog.current!.open = true
+                setLoadingProfile(false)
+            }
             ClientManager.client.onInit = async () => {
                 try {
                     await UserApi.authorize(ClientManager.client, {
@@ -74,6 +83,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                     tipError(e, "验证用户失败, 请重新登录")
                     mLoginDialog.current!.open = true
                 }
+                setLoadingProfile(false)
             }
         })()
     }, [setProfile])
@@ -187,6 +197,12 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     const createGroupDialogRef = React.useRef<Dialog>(null)
     const groupNameInputRef = React.useRef<TextField>(null)
     const groupUniqueInputRef = React.useRef<TextField>(null)
+
+    React.useEffect(() => {
+        if (!loadingProfile)
+            return
+        return CircleProgressDialog.show('加载中...')
+    }, [loadingProfile])
 
     return <>
         <mdui-dialog ref={createGroupDialogRef} close-on-overlay-click headline="创建群组">
@@ -356,7 +372,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
         </mdui-navigation-drawer>
         <mdui-layout-main style={{
             flexGrow: 1,
-            display: 'flex'
+            display: 'flex',
         }}>
             {
                 activeChat
