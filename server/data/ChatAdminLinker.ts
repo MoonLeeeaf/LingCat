@@ -73,7 +73,8 @@ export default class ChatAdminLinker {
             .select(
                 'u.*',
                 'cal.role',
-                'cal.permissions'
+                'cal.permissions',
+                'cal.chat_id as belong_to_chat_id'
             ) as IChatAdmin[]
         const ownerPermissions = {}
         AvailableChatAdminPermissions.forEach((v) => ownerPermissions[v] = true)

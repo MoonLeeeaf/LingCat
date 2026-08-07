@@ -34,6 +34,7 @@ message IChatAdmin {
     
     string role = 6;
     string permissions = 7;
+    string belong_to_chat_id = 8;
 }
 
 message IChat {

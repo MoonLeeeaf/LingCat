@@ -806,6 +806,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [avatarFileHash] IChatAdmin avatarFileHash
              * @property {string|null} [role] IChatAdmin role
              * @property {string|null} [permissions] IChatAdmin permissions
+             * @property {string|null} [belongToChatId] IChatAdmin belongToChatId
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -893,6 +894,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             IChatAdmin.prototype.permissions = "";
 
+            /**
+             * IChatAdmin belongToChatId.
+             * @member {string} belongToChatId
+             * @memberof lingcat.classes.IChatAdmin
+             * @instance
+             */
+            IChatAdmin.prototype.belongToChatId = "";
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -960,6 +969,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 6, wireType 2 =*/50).string(message.role);
                 if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions") && message.permissions !== "")
                     writer.uint32(/* id 7, wireType 2 =*/58).string(message.permissions);
+                if (message.belongToChatId != null && $Object.hasOwnProperty.call(message, "belongToChatId") && message.belongToChatId !== "")
+                    writer.uint32(/* id 8, wireType 2 =*/66).string(message.belongToChatId);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -1064,6 +1075,15 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.permissions;
                             continue;
                         }
+                    case 8: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.belongToChatId = value;
+                            else
+                                delete message.belongToChatId;
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -1135,6 +1155,9 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
                     if (!$util.isString(message.permissions))
                         return "permissions: string expected";
+                if (message.belongToChatId != null && $Object.hasOwnProperty.call(message, "belongToChatId"))
+                    if (!$util.isString(message.belongToChatId))
+                        return "belongToChatId: string expected";
                 return null;
             };
 
@@ -1174,6 +1197,9 @@ export const lingcat = $root.lingcat = (() => {
                 if (object.permissions != null)
                     if (typeof object.permissions !== "string" || object.permissions.length)
                         message.permissions = $String(object.permissions);
+                if (object.belongToChatId != null)
+                    if (typeof object.belongToChatId !== "string" || object.belongToChatId.length)
+                        message.belongToChatId = $String(object.belongToChatId);
                 return message;
             };
 
@@ -1199,6 +1225,7 @@ export const lingcat = $root.lingcat = (() => {
                     object.nickname = "";
                     object.role = "";
                     object.permissions = "";
+                    object.belongToChatId = "";
                 }
                 if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
                     object.id = message.id;
@@ -1214,6 +1241,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.role = message.role;
                 if (message.permissions != null && $Object.hasOwnProperty.call(message, "permissions"))
                     object.permissions = message.permissions;
+                if (message.belongToChatId != null && $Object.hasOwnProperty.call(message, "belongToChatId"))
+                    object.belongToChatId = message.belongToChatId;
                 return object;
             };
 

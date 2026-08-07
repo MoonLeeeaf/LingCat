@@ -3,7 +3,7 @@ import React from 'react'
 import ReloadableImage from "./ReloadableImage.tsx"
 import { $, dialog, Dialog, Tabs } from "mdui"
 import useEventListener from "./useEventListener.ts"
-import { IChat, IChatAdmin, IUser } from "lingcat-protocol"
+import { AvailableChatAdminPermissions, IChat, IChatAdmin, IUser } from "lingcat-protocol"
 import EffectOnly from "./EffectOnly.tsx"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ClientManager from "../ClientManager.ts"
@@ -22,30 +22,44 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
     ref = ref || React.useRef<Dialog>(undefined)
 
     const [loading, setLoading] = React.useState(true)
+    const [iAmOwner, setIAmOwner] = React.useState(false)
+    const [iAmAdmin, setIAmAdmin] = React.useState(false)
     const [members, setMembers] = React.useState<IUser[]>()
     const [admins, setAdmins] = React.useState<IChatAdmin[]>()
+
+    const refreshData = React.useCallback(async () => {
+        try {
+            const members = await ChatApi.getChatMembers(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id,
+            })
+            setMembers(members)
+        } catch (e) {
+            tipError(e, '加载成员列表失败')
+        }
+        try {
+            const admins = await ChatApi.getChatAdmins(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id,
+            })
+            setAdmins(admins)
+
+            const me = await ClientManager.getMe()
+
+            setIAmAdmin(!!admins?.find(a => (a.id == me.id)))
+            setIAmOwner(!!admins?.find(a => (a.id == me.id && a.role == 'owner')))
+        } catch (e) {
+            tipError(e, '加载管理员列表失败')
+        }
+    }, [chat_id])
 
     React.useEffect(() => {
         (async () => {
             try {
-                const members = await ChatApi.getChatMembers(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                    chat_id,
-                })
-                setMembers(members)
-            } catch (e) {
-                tipError(e, '加载成员列表失败')
+                await refreshData()
+            } finally {
+                setLoading(false)
             }
-            try {
-                const admins = await ChatApi.getChatAdmins(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                    chat_id,
-                })
-                setAdmins(admins)
-            } catch (e) {
-                tipError(e, '加载管理员列表失败')
-            }
-            setLoading(false)
         })()
     }, [chat_id])
 
@@ -60,7 +74,7 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
             $(tabsRef.current!.shadowRoot).append(`
                 <style>
                     .container {
-                        background-color: inherit !important;
+                        background-color: inherit !important
                     }
                 </style>
             `)
@@ -71,7 +85,6 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
         }
     }, [loading])
 
-    const uploadChatAvatarRef = React.useRef<HTMLInputElement>(null)
     const tabsRef = React.useRef<Tabs>(null)
 
     return loading ? (<EffectOnly deps={[]} effect={() => {
@@ -86,33 +99,129 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                     <mdui-tab-panel slot="panel" value="成员">
                         <mdui-list>
                             {
-                                members?.map((v) => <mdui-list-item rounded onClick={() => UserProfileDialog.show(v.id)}>
-                                    <Avatar
-                                        slot="icon"
-                                        src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
-                                    />
-                                    {v.nickname}
-                                </mdui-list-item>)
+                                members?.map((v) => (
+                                    <mdui-dropdown trigger="hover">
+                                        <mdui-list-item slot="trigger" rounded onClick={() => UserProfileDialog.show(v.id)}>
+                                            <Avatar
+                                                slot="icon"
+                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
+                                            />
+                                            {v.nickname}
+                                        </mdui-list-item>
+                                        <mdui-menu>
+                                            {iAmAdmin && <mdui-menu-item icon="delete" onClick={() => dialog({
+                                                headline: "提示",
+                                                body: "确定要从对话中移除 " + v.nickname + ' 吗?',
+                                                closeOnEsc: true,
+                                                closeOnOverlayClick: true,
+                                                actions: [{
+                                                    text: "取消",
+                                                    onClick: () => true
+                                                }, {
+                                                    text: "确定",
+                                                    variant: 'tonal',
+                                                    onClick: async () => {
+                                                        try {
+                                                            await ChatApi.removeChatMember(ClientManager.client, {
+                                                                access_token: ClientManager.getActiveUserSession().token,
+                                                                chat_id,
+                                                                target_user_id: v.id,
+                                                            })
+                                                            showSnackbar({ message: '已移除成员' })
+                                                            await refreshData()
+                                                        } catch (e) {
+                                                            tipError(e, '移除成员失败')
+                                                        }
+                                                    }
+                                                }]
+                                            })}>移除成员</mdui-menu-item>}
+                                            {iAmOwner && <mdui-menu-item icon="admin_panel_settings" onClick={() => dialog({
+                                                headline: "提示",
+                                                body: "确定要添加 " + v.nickname + ' 为管理员吗?',
+                                                closeOnEsc: true,
+                                                closeOnOverlayClick: true,
+                                                actions: [{
+                                                    text: "取消",
+                                                    onClick: () => true
+                                                }, {
+                                                    text: "确定",
+                                                    variant: 'tonal',
+                                                    onClick: async () => {
+                                                        try {
+                                                            await ChatApi.addChatAdmin(ClientManager.client, {
+                                                                access_token: ClientManager.getActiveUserSession().token,
+                                                                chat_id,
+                                                                target_user_id: v.id,
+                                                                permissions: {},
+                                                            });
+                                                            showSnackbar({ message: '已添加为管理员' })
+                                                            await refreshData()
+                                                        } catch (e) {
+                                                            tipError(e, '添加管理员失败')
+                                                        }
+                                                    }
+                                                }]
+                                            })}>添加为管理员</mdui-menu-item>}
+                                        </mdui-menu>
+                                    </mdui-dropdown>
+                                ))
                             }
                         </mdui-list>
                     </mdui-tab-panel>
                     <mdui-tab-panel slot="panel" value="管理员">
                         <mdui-list>
                             {
-                                admins?.map((v) => <mdui-list-item rounded onClick={() => UserProfileDialog.show(v.id)}>
-                                    <Avatar
-                                        slot="icon"
-                                        src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
-                                    />
-                                    {v.nickname}
-                                    <span slot="description">{({
-                                        admin: "管理员",
-                                        owner: "所有者",
-                                    })[v.role]}<br></br>权能: {(() => {
-                                        const perms = JSON.parse(v.permissions)
-                                        return Object.keys(perms).filter((v) => perms[v]).join(', ')
-                                    })()}</span>
-                                </mdui-list-item>)
+                                admins?.map((v) =>
+                                    <mdui-dropdown trigger="hover">
+                                        <mdui-list-item slot="trigger" rounded onClick={() => UserProfileDialog.show(v.id)}>
+                                            <Avatar
+                                                slot="icon"
+                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
+                                            />
+                                            {v.nickname}
+                                            <span slot="description">{({
+                                                admin: "管理员",
+                                                owner: "所有者",
+                                            })[v.role]}<br></br>权能: {(() => {
+                                                const perms = JSON.parse(v.permissions)
+                                                return Object.keys(perms).filter((v) => perms[v]).join(', ')
+                                            })()}</span>
+                                        </mdui-list-item>
+                                        <mdui-menu>
+                                            {
+                                                iAmOwner && <>
+                                                    <mdui-menu-item icon="edit" onClick={() => EditAdminDialog.show(chat_id, v)}>编辑权能</mdui-menu-item>
+                                                    <mdui-menu-item icon="delete" onClick={() => dialog({
+                                                        headline: "提示",
+                                                        body: "确定要移除管理员 " + v.nickname + ' 吗?',
+                                                        closeOnEsc: true,
+                                                        closeOnOverlayClick: true,
+                                                        actions: [{
+                                                            text: "取消",
+                                                            onClick: () => true
+                                                        }, {
+                                                            text: "确定",
+                                                            variant: 'tonal',
+                                                            onClick: async () => {
+                                                                try {
+                                                                    await ChatApi.removeChatAdmin(ClientManager.client, {
+                                                                        access_token: ClientManager.getActiveUserSession().token,
+                                                                        chat_id,
+                                                                        target_user_id: v.id,
+                                                                    });
+                                                                    showSnackbar({ message: '已移除该管理员' })
+                                                                    await refreshData()
+                                                                } catch (e) {
+                                                                    tipError(e, '移除管理员失败')
+                                                                }
+                                                            }
+                                                        }]
+                                                    })}>移除管理员</mdui-menu-item>
+                                                </>
+                                            }
+                                        </mdui-menu>
+                                    </mdui-dropdown>
+                                )
                             }
                         </mdui-list>
                     </mdui-tab-panel>
@@ -234,5 +343,5 @@ EditAdminDialog.show = function (chat_id: string, admin: IChatAdmin) {
         root.unmount()
         container.remove()
     }
-    root.render(<ChatMembersAndAdminsDialog chat_id={chat_id} onClose={onClose} />)
+    root.render(<EditAdminDialog admin={admin} chat_id={chat_id} onClose={onClose} />)
 }

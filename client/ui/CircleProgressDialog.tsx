@@ -1,32 +1,28 @@
-import { $, Dialog, dialog } from 'mdui'
 import React from 'react'
+import ReactClient from 'react-dom/client'
+import { Dialog } from 'mdui'
 import useEventListener from './useEventListener.ts'
-import ReactClient from "react-dom/client"
 
-const closeList: { [k: string]: () => void } = {}
-export default function CircleProgressDialog({ ref, text, closeId, onClose }: { closeId?: string, ref?: React.RefObject<any>, text: string, onClose?: () => void }) {
-     ref = ref || React.useRef<Dialog>(undefined)
+export default function CircleProgressDialog({ text, onClose }: { text: string, onClose?: () => void }) {
+    const ref = React.useRef<Dialog>(null)
 
     useEventListener(ref, 'closed', () => onClose?.())
 
-    closeId && (closeList[closeId] = () => ref.current!.open = false)
-    
-    return <mdui-dialog ref={ref}>
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-        }}>
-            <mdui-circular-progress style={{
-                marginLeft: '3px',
-            }}></mdui-circular-progress>
-            <span style={{
-                marginLeft: '20px',
-            }}>{text}</span>
-        </div>
-    </mdui-dialog>
+    React.useEffect(() => {
+        if (ref.current) ref.current.open = true
+    }, [])
+
+    return (
+        <mdui-dialog ref={ref}>
+            <div style={{ display: 'flex', alignItems: 'center', }}>
+                <mdui-circular-progress style={{ marginLeft: '3px' }} />
+                <span style={{ marginLeft: '20px' }}>{text}</span>
+            </div>
+        </mdui-dialog>
+    )
 }
 
-CircleProgressDialog.show = function(text: string) {
+CircleProgressDialog.show = function (text: string) {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const root = ReactClient.createRoot(container)
@@ -36,9 +32,8 @@ CircleProgressDialog.show = function(text: string) {
         container.remove()
     }
 
-    const closeId = new Date().toTimeString()
+    root.render(<CircleProgressDialog text={text} onClose={onClose} />)
 
-    root.render(<CircleProgressDialog text={text} closeId={closeId} onClose={onClose} />)
-
-    return () => closeList[closeId]?.()
+    // 返回关闭函数，调用即销毁
+    return onClose
 }

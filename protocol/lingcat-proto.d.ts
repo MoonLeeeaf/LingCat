@@ -323,6 +323,9 @@ export namespace lingcat {
             /** IChatAdmin permissions. */
             permissions: string;
 
+            /** IChatAdmin belongToChatId. */
+            belongToChatId: string;
+
             /**
              * Creates a new IChatAdmin instance using the specified properties.
              * @param [properties] Properties to set
@@ -427,6 +430,9 @@ export namespace lingcat {
 
                 /** IChatAdmin permissions */
                 permissions?: (string|null);
+
+                /** IChatAdmin belongToChatId */
+                belongToChatId?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

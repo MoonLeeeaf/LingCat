@@ -52,6 +52,7 @@ function IChatAdminToProtoAdmin(user: IChatAdmin) {
         ...IUserToProtoUser(user),
         role: user.role,
         permissions: user.permissions,
+        belongToChatId: user.belong_to_chat_id,
     } as LingCatProto.classes.IChatAdmin.$Properties
 }
 

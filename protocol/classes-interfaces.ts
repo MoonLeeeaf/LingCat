@@ -68,4 +68,5 @@ export type AdminRole = 'owner' | 'admin'
 export interface IChatAdmin extends IUser {
     role: AdminRole
     permissions: string
+    belong_to_chat_id: string
 }
