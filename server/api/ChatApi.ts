@@ -291,6 +291,10 @@ export default class ChatApi {
                     return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found);
                 }
 
+                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
+                }
+
                 await UserChatLinker.setUserChatFavourited(user_id, data.chatId, data.favourited)
 
                 sendPackage(Package.encode({
