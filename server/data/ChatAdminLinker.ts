@@ -77,7 +77,8 @@ export default class ChatAdminLinker {
             ) as IChatAdmin[]
         const ownerPermissions = {}
         AvailableChatAdminPermissions.forEach((v) => ownerPermissions[v] = true)
-        rows[rows.findIndex((v) => v.role == 'owner')].permissions = JSON.stringify(ownerPermissions)
+        const ownerIndex = rows.findIndex((v) => v.role == 'owner')
+        ownerIndex != -1 && (rows[ownerIndex].permissions = JSON.stringify(ownerPermissions))
         return rows
     }
     static async updateAdminPermissions(chat_id: string, user_id: string, permissions: string) {
