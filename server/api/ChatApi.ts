@@ -394,6 +394,20 @@ export default class ChatApi {
                 await UserChatLinker.linkUserAndChat(creator_id, chat_id)
                 await ChatAdminLinker.addAdmin(chat_id, creator_id, 'owner')
 
+                const time = Date.now()
+                const msg_id = await MessageDataBase.addMessage({
+                    text: '群组已被创建',
+                    chat_id: chat_id,
+                    system: true,
+                    time,
+                })
+
+                broadcastToUserClients(clients_emiter, creator_id, (func) => func(Package.encode({
+                    method_id: Methods.Update_My_Chats_Event,
+                    flags: 0,
+                    data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
+                })))
+
                 sendPackage(Package.encode({
                     method_id: Methods.Create_Group_Response,
                     flags: 0,
