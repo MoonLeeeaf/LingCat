@@ -171,6 +171,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                             })
 
                             client.onInit = async () => {
+                                client.onInit = () => void(0)
                                 // @ts-ignore
                                 const password = dlg.querySelector('#password').value
                                 // @ts-ignore
@@ -219,6 +220,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                 })
 
                 client.onInit = async () => {
+                    client.onInit = () => void(0)
                     try {
                         const token = await UserApi.login(client, {
                             password: mLoginPassword.current!.value,
