@@ -18,7 +18,7 @@ import UserProfileDialog from "./UserProfileDialog.tsx"
 import ImageViewerDialog from "./ImageViewerDialog.tsx"
 import showSnackbar from "./showSnackbar.ts"
 
-export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: () => void }) {
+export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: Function }) {
     ref = ref || React.useRef<Dialog>(undefined)
 
     const [loading, setLoading] = React.useState(true)
@@ -122,6 +122,110 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
 }
 
 ChatMembersAndAdminsDialog.show = function (chat_id: string) {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = ReactClient.createRoot(container)
+
+    /**
+     * 长点记性!!!!!!!!!!
+     * Dropdown 放在 Dialog 里面
+     * 会导致 Dropdown 关闭时
+     * 反而触发 Dialog 的 onClose!!!!!
+     */
+    const onClose = (e: Event) => {
+        if ((e.target as HTMLElement).tagName.toLowerCase() == 'mdui-dialog') {
+            root.unmount()
+            container.remove()
+        }
+    }
+    root.render(<ChatMembersAndAdminsDialog chat_id={chat_id} onClose={onClose} />)
+}
+
+function EditAdminDialog({ ref, chat_id, admin, onClose }: { ref?: React.RefObject<any>, chat_id: string, admin: IChatAdmin, onClose?: () => void }) {
+    ref = ref || React.useRef<Dialog>(undefined)
+    const [localPerms, setLocalPerms] = React.useState<Record<string, boolean>>(() => {
+        // 初始化为管理员当前的权限（解析 JSON）
+        try {
+            return JSON.parse(admin.permissions || '{}')
+        } catch {
+            return {}
+        }
+    })
+    const [saving, setSaving] = React.useState(false)
+
+    React.useEffect(() => {
+        const eventName = 'closed'
+        ref.current!.addEventListener(eventName, onClose)
+        setTimeout(() => ref.current!.open = true, 10)
+        return () => ref.current?.removeEventListener(eventName, onClose)
+    }, [])
+
+    const togglePermission = (perm: string) => {
+        setLocalPerms(prev => ({
+            ...prev,
+            [perm]: !prev[perm],
+        }))
+    }
+
+    const handleSave = async () => {
+        setSaving(true)
+        try {
+            await ChatApi.editChatAdminPermissions(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id,
+                target_user_id: admin.id,
+                permissions: localPerms,
+            })
+            showSnackbar({ message: '权限已更新' })
+            ref.current!.open = false
+            onClose?.()
+        } catch (e) {
+            tipError(e, '更新权限失败')
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const avatar = admin?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(admin.avatar_file_hash) : default_avatar
+
+    return (
+        <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar onClick={() => UserProfileDialog.show(admin.id)} src={avatar} />
+                <div style={{
+                    display: 'flex',
+                    marginLeft: '15px',
+                    marginRight: '15px',
+                    flexDirection: 'column',
+                    wordBreak: 'break-word',
+                }}>
+                    <span style={{
+                        fontSize: '1.25rem'
+                    }}>{admin?.nickname} ({admin.role == 'owner' ? '所有者' : '管理员'})</span>
+                </div>
+            </div>
+            <mdui-list>
+                {AvailableChatAdminPermissions.map(perm => (
+                    <mdui-list-item
+                        key={perm}
+                        rounded
+                        disabled={admin.role == 'owner'}
+                        onClick={() => togglePermission(perm)}>
+                        {perm}
+                        <mdui-switch disabled={admin.role == 'owner'} slot="end-icon" checked={!!localPerms[perm]} checked-icon="" onChange={() => togglePermission(perm)} />
+                    </mdui-list-item>
+                ))}
+            </mdui-list>
+
+            <mdui-button slot="action" variant="text" onClick={() => ref.current!.open = false}>取消</mdui-button>
+            {admin.role != 'owner' && <mdui-button slot="action" variant="text" onClick={handleSave} disabled={saving}>
+                {saving ? '保存中...' : '保存'}
+            </mdui-button>}
+        </mdui-dialog>
+    )
+}
+
+EditAdminDialog.show = function (chat_id: string, admin: IChatAdmin) {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const root = ReactClient.createRoot(container)
