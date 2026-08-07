@@ -92,7 +92,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
                 requestAnimationFrame(() => {
                     setTimeout(() => {
-                        virtuosoRef.current?.scrollToIndex(msgs[msgs.length - 1].id)
+                        virtuosoRef.current?.scrollToIndex(msgs[msgs.length - 1]?.id)
                         setTimeout(() => {
                             virtuosoRef.current?.scrollTo({
                                 top: 10000000000,

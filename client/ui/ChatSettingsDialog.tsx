@@ -75,7 +75,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
             ref.current!.open = true
             uploadChatAvatarRef.current!.addEventListener('change', onAvatarChange)
 
-            $(tabsRef.current!.shadowRoot).append(`
+            $(tabsRef.current?.shadowRoot).append(`
                 <style>
                     .container {
                         background-color: inherit !important;
@@ -86,7 +86,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
 
         return () => {
             ref.current?.removeEventListener(eventName, onClose)
-            uploadChatAvatarRef.current!.removeEventListener('change', onAvatarChange)
+            uploadChatAvatarRef.current?.removeEventListener('change', onAvatarChange)
         }
     }, [loading])
 
