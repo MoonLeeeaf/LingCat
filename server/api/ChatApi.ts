@@ -332,7 +332,7 @@ export default class ChatApi {
 
                 // 2. 如果没找到，尝试作为 chat_unique（群号）查找
                 if (!chat_id) {
-                    chat = await ChatDataBase.queryChatByUnique(identifier);
+                    chat = await ChatDataBase.queryChatByUnique(identifier)
                     if (chat) {
                         chat_id = chat.id;
                     }
@@ -340,10 +340,10 @@ export default class ChatApi {
 
                 // 3. 如果仍没找到，尝试作为 username 或 user_id 处理（生成私聊）
                 if (!chat_id) {
-                    let targetUser = await UserDataBase.queryUserByUserName(identifier);
+                    let targetUser = await UserDataBase.queryUserByUserName(identifier)
                     if (!targetUser) {
                         // 尝试作为 user_id 查找
-                        targetUser = await UserDataBase.queryUserById(identifier);
+                        targetUser = await UserDataBase.queryUserById(identifier)
                     }
                     if (targetUser) {
                         if (targetUser.id == user_id) {
@@ -361,9 +361,9 @@ export default class ChatApi {
                     return sendError(sendPackage, mPackage.method_id, 'Cannot resolve identifier to any chat', Code.Not_Found);
                 }
 
-                if (!await UserChatLinker.isUserChatLinked(user_id, chat_id)) {
+                /* if (!await UserChatLinker.isUserChatLinked(user_id, chat_id)) {
                     return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden);
-                }
+                } */
 
                 sendPackage(Package.encode({
                     method_id: Methods.Resolve_Chat_Identifier_Response,
