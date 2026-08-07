@@ -63,7 +63,7 @@ export default class UserApi {
         session_id: string
         timeout?: number
     }) {
-        return decodeOrThrow(LingCatProto.methods.Authorize_Response, (await client.invoke({
+        decodeOrThrow<LingCatProto.methods.Authorize_Response>(LingCatProto.methods.Authorize_Response, (await client.invoke({
             method_id: Methods.Authorize_Request,
             data: LingCatProto.methods.Authorize_Request.encode({
                 accessToken: access_token,
