@@ -108,19 +108,37 @@ export default function Message({
             display: 'flex',
             marginTop: '25px',
             marginBottom: '20px',
+        }}
+        onContextMenu={(e) => {
+            if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+            if (isMobileUI()) return
+            e.preventDefault()
+            setDropDownOpen(!isDropDownOpen)
+        }}
+        onClick={(e) => {
+            if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+            if (!isMobileUI()) {
+                isDropDownOpen && setDropDownOpen(false)
+                return
+            }
+            e.preventDefault()
+            setDropDownOpen(!isDropDownOpen)
         }}>
-            <mdui-card
-                variant="filled"
-                style={{
-                    alignSelf: 'center',
-                    paddingTop: '8px',
-                    paddingBottom: '8px',
-                    paddingLeft: '17px',
-                    paddingRight: '17px',
-                    fontSize: '92%',
-                }}>
-                <Markdown value={message} renderer={defaultRender} breaks={true} />
-            </mdui-card>
+            <mdui-dropdown ref={dropDownRef} open={isDropDownOpen} trigger="manual">
+                <mdui-card slot="trigger"
+                    variant="filled"
+                    style={{
+                        alignSelf: 'center',
+                        paddingLeft: '5px',
+                        paddingRight: '5px',
+                        fontSize: '92%',
+                    }}>
+                    <Markdown value={message} renderer={defaultRender} breaks={true} />
+                </mdui-card>
+                <mdui-menu>
+                    {messageMenus}
+                </mdui-menu>
+            </mdui-dropdown>
         </div>
         : <div
             slot="trigger"
