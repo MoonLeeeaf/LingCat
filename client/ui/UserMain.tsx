@@ -191,12 +191,56 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
     }, [profile?.id])
     // profile 加载完成后触发
 
-    const addFavouriteChatDialogRef = React.useRef<Dialog>(null)
-    const addFavouriteChatInputRef = React.useRef<TextField>(null)
+    const openChatDialogRef = React.useRef<Dialog>(null)
+    const openChatInputRef = React.useRef<TextField>(null)
+    const onOpenChatEnter = async () => {
+        try {
+            const chat_id = await ChatApi.resolveChatIdentifier(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                identifier: openChatInputRef.current!.value,
+            })
+            setActiveChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id,
+            }))
+
+            openChatDialogRef.current!.open = false
+        } catch (e) {
+            tipError(e, '打开对话失败')
+        }
+    }
 
     const createGroupDialogRef = React.useRef<Dialog>(null)
     const groupNameInputRef = React.useRef<TextField>(null)
     const groupUniqueInputRef = React.useRef<TextField>(null)
+    const createGroupFunc = async () => {
+        const title = groupNameInputRef.current?.value?.trim()
+        if (!title) {
+            showSnackbar({ message: '请输入群组名称' })
+            return
+        }
+        const unique = groupUniqueInputRef.current?.value?.trim() || undefined
+
+        try {
+            const chat_id = await ChatApi.createGroup(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                title,
+                unique,
+            })
+            createGroupDialogRef.current!.open = false
+            showSnackbar({ message: `创建成功` })
+            const chatInfo = await ChatApi.queryChatInfo(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id: chat_id,
+            })
+            setActiveChat(chatInfo)
+
+            groupNameInputRef.current!.value = ''
+            groupUniqueInputRef.current!.value = ''
+        } catch (e) {
+            tipError(e, '创建群组失败')
+        }
+    }
 
     React.useEffect(() => {
         if (!loadingProfile)
@@ -212,75 +256,38 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 variant="outlined"
                 style={{ width: '100%', marginBottom: '12px' }}
                 required
+                onKeyDown={(e) => {
+                    e.key == "Enter" && groupUniqueInputRef.current!.focus()
+                }}
             />
             <mdui-text-field
                 ref={groupUniqueInputRef}
                 placeholder="群标识符 (可选)"
                 variant="outlined"
                 style={{ width: '100%', marginBottom: '12px' }}
+                onKeyDown={(e) => {
+                    e.key == "Enter" && createGroupFunc()
+                }}
             />
 
             <mdui-button slot="action" variant="text" onClick={() => createGroupDialogRef.current!.open = false}>
                 取消
             </mdui-button>
-            <mdui-button slot="action" variant="filled" onClick={async () => {
-                const title = groupNameInputRef.current?.value?.trim()
-                if (!title) {
-                    showSnackbar({ message: '请输入群组名称' })
-                    return
-                }
-                const unique = groupUniqueInputRef.current?.value?.trim() || undefined
-
-                try {
-                    const chat_id = await ChatApi.createGroup(ClientManager.client, {
-                        access_token: ClientManager.getActiveUserSession().token,
-                        title,
-                        unique,
-                    })
-                    createGroupDialogRef.current!.open = false
-                    showSnackbar({ message: `创建成功` })
-                    const chatInfo = await ChatApi.queryChatInfo(ClientManager.client, {
-                        access_token: ClientManager.getActiveUserSession().token,
-                        chat_id: chat_id,
-                    })
-                    setActiveChat(chatInfo)
-
-                    groupNameInputRef.current!.value = ''
-                    groupUniqueInputRef.current!.value = ''
-                } catch (e) {
-                    tipError(e, '创建群组失败')
-                }
-            }}>创建</mdui-button>
+            <mdui-button slot="action" variant="filled" onClick={() => createGroupFunc()}>创建</mdui-button>
         </mdui-dialog>
-        <mdui-dialog ref={addFavouriteChatDialogRef} close-on-overlay-click headline="添加收藏对话">
+        <mdui-dialog ref={openChatDialogRef} close-on-overlay-click headline="打开对话">
             <mdui-text-field
-                placeholder="输入对话标识符 / ID 或用户名 / ID"
+                label="对话标识符 / 用户名 / ID"
                 variant="outlined"
-                ref={addFavouriteChatInputRef}
+                ref={openChatInputRef}
                 style={{ width: '100%' }}
+                onKeyDown={(e) => {
+                    e.key == 'Enter' && onOpenChatEnter()
+                }}
                 clearable>
-                <mdui-button-icon slot="end-icon" icon="add" onClick={async () => {
-                    try {
-                        const chat_id = await ChatApi.resolveChatIdentifier(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            identifier: addFavouriteChatInputRef.current!.value,
-                        })
-                        await ChatApi.setChatFavourited(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            chat_id,
-                            favourited: true,
-                        })
-
-                        addFavouriteChatDialogRef.current!.open = false
-                        showSnackbar({
-                            message: "成功"
-                        })
-                    } catch (e) {
-                        tipError(e, '添加收藏对话失败')
-                    }
-                }}></mdui-button-icon>
             </mdui-text-field>
-            <mdui-button variant="text" onClick={() => addFavouriteChatDialogRef.current!.open = false} slot="action">取消</mdui-button>
+            <mdui-button variant="text" onClick={() => openChatDialogRef.current!.open = false} slot="action">取消</mdui-button>
+            <mdui-button variant="text" onClick={() => onOpenChatEnter()} slot="action">打开</mdui-button>
         </mdui-dialog>
         <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
             <mdui-navigation-rail ref={navigationRef} contained alignment="center" value="recent">
@@ -289,10 +296,10 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 <mdui-dropdown trigger="hover" slot="top">
                     <mdui-button-icon icon="add" slot="trigger"></mdui-button-icon>
                     <mdui-menu>
-                        <mdui-menu-item onClick={() => {
-                            addFavouriteChatDialogRef.current!.open = true
-                        }}>添加收藏对话</mdui-menu-item>
-                        <mdui-menu-item onClick={() => {
+                        <mdui-menu-item icon="open_in_new" onClick={() => {
+                            openChatDialogRef.current!.open = true
+                        }}>打开对话</mdui-menu-item>
+                        <mdui-menu-item icon="group_add" onClick={() => {
                             createGroupDialogRef.current!.open = true
                         }}>创建群组</mdui-menu-item>
                     </mdui-menu>
