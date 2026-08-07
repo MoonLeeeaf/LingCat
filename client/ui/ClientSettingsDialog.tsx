@@ -49,7 +49,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
                                             onClick: () => true
                                         }, {
                                             text: "确定",
-                                            variant: 'tonal',
+                                            variant: 'text',
                                             onClick: () => {
                                                 ClientManager.removeServerPublicKey(fileName)
                                                 setK(Date.now() + '')
@@ -73,7 +73,7 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
             <mdui-text-field autosize label="服务端公钥 (Hex)" ref={mAddKeyPublicKey as any}></mdui-text-field>
 
             <mdui-button slot="action" variant="text" onClick={() => mAddKeyDialog.current!.open = false}>取消</mdui-button>
-            <mdui-button slot="action" variant="tonal" onClick={() => {
+            <mdui-button slot="action" variant="text" onClick={() => {
                 ClientManager.setServerPublicKey(mAddKeyServerHost.current!.value, Buffer.from(mAddKeyPublicKey.current!.value.trim(), 'hex'))
                 mAddKeyDialog.current!.open = false
                 setK(Date.now() + '')
@@ -110,7 +110,7 @@ function SwitchUserDialog({ ref, mLoginDialog }: { ref: any, mLoginDialog: any }
                                         onClick: () => true
                                     }, {
                                         text: "确定",
-                                        variant: 'tonal',
+                                        variant: 'text',
                                         onClick: () => {
                                             ClientManager.removeUserSession(fileName)
                                             setK(Date.now() + '')
@@ -155,7 +155,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
                     onClick: () => true,
                 }, {
                     text: "注册",
-                    variant: 'tonal',
+                    variant: 'text',
                     onClick: async () => {
                         try {
                             showSnackbar({
@@ -205,7 +205,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
             // @ts-ignore
             dlg.querySelector('#password').value = mLoginPassword.current!.value
         }}>注册</mdui-button>
-        <mdui-button slot="action" variant="tonal" onClick={() => {
+        <mdui-button slot="action" variant="text" onClick={() => {
             try {
                 showSnackbar({
                     message: '登录中...'

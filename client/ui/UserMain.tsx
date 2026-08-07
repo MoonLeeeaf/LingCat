@@ -273,7 +273,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
             <mdui-button slot="action" variant="text" onClick={() => createGroupDialogRef.current!.open = false}>
                 取消
             </mdui-button>
-            <mdui-button slot="action" variant="filled" onClick={() => createGroupFunc()}>创建</mdui-button>
+            <mdui-button slot="action" variant="text" onClick={() => createGroupFunc()}>创建</mdui-button>
         </mdui-dialog>
         <mdui-dialog ref={openChatDialogRef} close-on-overlay-click headline="打开对话">
             <mdui-text-field
