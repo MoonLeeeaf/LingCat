@@ -3,7 +3,7 @@ import React from 'react'
 import ReloadableImage from "./ReloadableImage.tsx"
 import { $, dialog, Dialog, Tabs } from "mdui"
 import useEventListener from "./useEventListener.ts"
-import { IChat, IUser } from "lingcat-protocol"
+import { IChat, IChatSettings, IUser } from "lingcat-protocol"
 import EffectOnly from "./EffectOnly.tsx"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ClientManager from "../ClientManager.ts"
@@ -78,7 +78,7 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
             $(tabsRef.current?.shadowRoot).append(`
                 <style>
                     .container {
-                        background-color: inherit !important;
+                        background-color: inherit !important
                     }
                 </style>
             `)
@@ -92,6 +92,59 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
 
     const uploadChatAvatarRef = React.useRef<HTMLInputElement>(null)
     const tabsRef = React.useRef<Tabs>(null)
+
+    const [localSettings, setLocalSettings] = React.useState<IChatSettings>({} as any)
+
+    React.useEffect(() => {
+        if (profile?.settings) {
+            try {
+                const parsed = JSON.parse(profile.settings)
+                setLocalSettings(parsed)
+            } catch { }
+        }
+    }, [profile])
+
+    const [isSaving, setIsSaving] = React.useState(false)
+
+    // 更新设置的函数
+    const updateSetting = async (key: keyof IChatSettings, value: boolean) => {
+        if (isSaving) return // 防止并发
+        setIsSaving(true)
+
+        // 1. 乐观更新 UI
+        const newSettings = { ...localSettings, [key]: value }
+        setLocalSettings(newSettings)
+
+        try {
+            // 2. 发送请求
+            await ChatApi.updateChatSettings(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id,
+                settings: newSettings,
+            })
+            // 3. 更新缓存
+            if (profile) {
+                profile.settings = JSON.stringify(newSettings)
+                // 如果 ProfileCache 有缓存，手动更新
+                if (ProfileCache.chat_info) {
+                    ProfileCache.chat_info[chat_id] = profile
+                }
+            }
+        } catch (e) {
+            // 4. 失败回滚
+            tipError(e, '更新设置失败')
+            if (profile?.settings) {
+                try {
+                    const parsed = JSON.parse(profile.settings)
+                    setLocalSettings(parsed)
+                } catch { }
+            } else {
+                setLocalSettings({} as any)
+            }
+        } finally {
+            setIsSaving(false)
+        }
+    }
 
     return loading ? (<EffectOnly deps={[]} effect={() => {
         return CircleProgressDialog.show('加载中...')
@@ -200,14 +253,29 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                                             tipError(e, '更改标识符失败')
                                                         }
                                                     },
-                                                }] 
+                                                }]
                                             })
                                             // @ts-ignore
                                             dlg.querySelector('#unique').value = profile?.chat_unique
                                         }}>更改标识符</mdui-list-item>
                                     </mdui-list>
                                 </mdui-tab-panel>
-                                <mdui-tab-panel slot="panel" value="入群">TODO</mdui-tab-panel>
+                                <mdui-tab-panel slot="panel" value="入群">
+                                    <mdui-list>
+                                        <mdui-list-item rounded onClick={() => {
+                                            updateSetting('allow_join', !localSettings.allow_join)
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                                <span style={{ flex: 1 }}>允许加入</span>
+                                                <mdui-switch
+                                                    checked={localSettings.allow_join || false}
+                                                    disabled={isSaving}
+                                                    checked-icon=""
+                                                />
+                                            </div>
+                                        </mdui-list-item>
+                                    </mdui-list>
+                                </mdui-tab-panel>
                             </mdui-tabs>
                         ),
                         private: <span slot="description">暂无可以设定的内容</span>,
