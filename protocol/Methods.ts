@@ -58,6 +58,12 @@ export default class Methods {
     static Get_Chat_Admins_Response = 0x58
     static Get_Chat_Members_Request = 0x59
     static Get_Chat_Members_Response = 0x60
+    static Add_Chat_Admin_Request = 0x61
+    static Add_Chat_Admin_Response = 0x62
+    static Edit_Chat_Admin_Permissions_Request = 0x63
+    static Edit_Chat_Admin_Permissions_Response = 0x64
+    static Remove_Chat_Admin_Request = 0x65
+    static Remove_Chat_Admin_Response = 0x66
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32

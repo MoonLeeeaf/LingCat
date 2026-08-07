@@ -82,7 +82,40 @@ export default class ChatAdminLinker {
         return rows
     }
     static async updateAdminPermissions(chat_id: string, user_id: string, permissions: string) {
-        await db<IChatAdminLink>(tableName).update({ permissions }).where({ user_id, chat_id })
+        let permsObj: Record<string, boolean>
+        try {
+            permsObj = JSON.parse(permissions)
+        } catch (e) {
+            throw {
+                message: '权限数据不是有效的 JSON 格式',
+                cause: e,
+                code: Code.Bad_Request,
+            }
+        }
+
+        // 2. 校验权限名称是否在白名单内
+        const validKeys = new Set(AvailableChatAdminPermissions)
+        const invalidKeys = Object.keys(permsObj).filter(key => !validKeys.has(key))
+        if (invalidKeys.length > 0) {
+            throw {
+                message: `非法权限名称: ${invalidKeys.join(', ')}`,
+                code: Code.Bad_Request,
+            }
+        }
+
+        // 3. 确保权限值为布尔类型
+        for (const [key, value] of Object.entries(permsObj)) {
+            if (typeof value !== 'boolean') {
+                throw {
+                    message: `权限 "${key}" 的值必须是布尔类型`,
+                    code: Code.Bad_Request,
+                }
+            }
+        }
+
+        await db<IChatAdminLink>(tableName)
+            .update({ permissions: JSON.stringify(permsObj) })
+            .where({ user_id, chat_id })
     }
     static async addAdmin(chat_id: string, user_id: string, role?: AdminRole) {
         await db<IChatAdminLink>(tableName)

@@ -37,6 +37,86 @@ function protoChatAdminToIChatAdmin(proto: LingCatProto.classes.IChatAdmin.$Prop
 
 export default class ChatApi {
     /**
+     * 添加管理员（仅群主可操作）
+     */
+    static async addChatAdmin(client: LingCatClient, {
+        access_token,
+        chat_id,
+        target_user_id,
+        permissions,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        target_user_id: string
+        permissions?: Record<string, boolean>
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Add_Chat_Admin_Response>(LingCatProto.methods.Add_Chat_Admin_Response, (await client.invoke({
+            method_id: Methods.Add_Chat_Admin_Request,
+            data: LingCatProto.methods.Add_Chat_Admin_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                targetUserId: target_user_id,
+                permissions: permissions ? JSON.stringify(permissions) : undefined,
+            }).finish(),
+            timeout,
+        })).data)
+    }
+
+    /**
+     * 修改管理员权限（仅群主或拥有 manage_admins 权限的管理员可操作）
+     */
+    static async editChatAdminPermissions(client: LingCatClient, {
+        access_token,
+        chat_id,
+        target_user_id,
+        permissions,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        target_user_id: string
+        permissions: Record<string, boolean>
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Edit_Chat_Admin_Permissions_Response>(LingCatProto.methods.Edit_Chat_Admin_Permissions_Response, (await client.invoke({
+            method_id: Methods.Edit_Chat_Admin_Permissions_Request,
+            data: LingCatProto.methods.Edit_Chat_Admin_Permissions_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                targetUserId: target_user_id,
+                permissions: JSON.stringify(permissions),
+            }).finish(),
+            timeout,
+        })).data)
+    }
+
+    /**
+     * 删除管理员（仅群主或拥有 manage_admins 权限的管理员可操作）
+     */
+    static async removeChatAdmin(client: LingCatClient, {
+        access_token,
+        chat_id,
+        target_user_id,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        target_user_id: string
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Remove_Chat_Admin_Response>(LingCatProto.methods.Remove_Chat_Admin_Response, (await client.invoke({
+            method_id: Methods.Remove_Chat_Admin_Request,
+            data: LingCatProto.methods.Remove_Chat_Admin_Request.encode({
+                accessToken: access_token,
+                chatId: chat_id,
+                targetUserId: target_user_id,
+            }).finish(),
+            timeout,
+        })).data)
+    }
+    /**
      * 加入群组
      * @param client
      * @param params

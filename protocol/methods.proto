@@ -282,3 +282,29 @@ message Get_Chat_Members_Request {
 message Get_Chat_Members_Response {
     repeated IUser members = 1;
 }
+
+message Add_Chat_Admin_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string target_user_id = 3;
+    optional string permissions = 4;
+}
+
+message Add_Chat_Admin_Response {}
+
+message Edit_Chat_Admin_Permissions_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string target_user_id = 3;
+    string permissions = 4;
+}
+
+message Edit_Chat_Admin_Permissions_Response {}
+
+message Remove_Chat_Admin_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string target_user_id = 3;
+}
+
+message Remove_Chat_Admin_Response {}

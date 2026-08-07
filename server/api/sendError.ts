@@ -11,4 +11,5 @@ export default function sendError(sendPackage: ISendPackageFunction, method_id: 
             code,
         }).finish(),
     }))
+    return true
 }

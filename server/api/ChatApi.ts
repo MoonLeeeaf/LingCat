@@ -631,6 +631,134 @@ export default class ChatApi {
                 }))
                 break
             }
+            /**
+             * 添加管理员
+             */
+            case Methods.Add_Chat_Admin_Request: {
+                const data = LingCatProto.methods.Add_Chat_Admin_Request.decode(mPackage.data)
+                const operator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                if (!await ChatAdminLinker.isOwner(chat.id, operator_id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Only the group owner can add admins', Code.Forbidden)
+                }
+
+                if (data.targetUserId === operator_id) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot add yourself as admin', Code.Forbidden)
+                }
+
+                if (!await UserChatLinker.isUserChatLinked(data.targetUserId, chat.id)) {
+                    return sendError(sendPackage, mPackage.method_id, 'User is not a member of this chat', Code.Not_Found)
+                }
+
+                if (await ChatAdminLinker.isAdmin(chat.id, data.targetUserId)) {
+                    return sendPackage(Package.encode({
+                        method_id: Methods.Add_Chat_Admin_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.Add_Chat_Admin_Response.encode({}).finish()
+                    }))
+                }
+
+                let permissions = '{}'
+                if (data.permissions) {
+                    try {
+                        JSON.parse(data.permissions)
+                        permissions = data.permissions
+                    } catch {
+                        return sendError(sendPackage, mPackage.method_id, 'Invalid permissions JSON', Code.Bad_Request)
+                    }
+                }
+
+                await ChatAdminLinker.addAdmin(chat.id, data.targetUserId, 'admin')
+                await ChatAdminLinker.updateAdminPermissions(chat.id, data.targetUserId, permissions)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Add_Chat_Admin_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Add_Chat_Admin_Response.encode({}).finish()
+                }))
+                break
+            }
+            /**
+             * 修改管理员权限
+             */
+            case Methods.Edit_Chat_Admin_Permissions_Request: {
+                const data = LingCatProto.methods.Edit_Chat_Admin_Permissions_Request.decode(mPackage.data)
+                const operator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                // 只有群主或拥有 manage_admins 权限的管理员可以编辑
+                if (!await ChatAdminLinker.isOwner(chat.id, operator_id) /* &&
+                    !await ChatAdminLinker.checkAdminPermission(chat.id, operator_id, 'manage_admins') */) {
+                    return sendError(sendPackage, mPackage.method_id, 'Permission denied', Code.Forbidden)
+                }
+
+                // 不能修改群主自己的权限
+                if (await ChatAdminLinker.isOwner(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot edit the group owner\'s permissions', Code.Forbidden)
+                }
+
+                // 检查目标是否是管理员
+                if (!await ChatAdminLinker.isAdmin(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'User is not an admin', Code.Not_Found)
+                }
+
+                // 验证权限 JSON
+                try {
+                    JSON.parse(data.permissions)
+                } catch {
+                    return sendError(sendPackage, mPackage.method_id, 'Invalid permissions JSON', Code.Bad_Request);
+                }
+
+                await ChatAdminLinker.updateAdminPermissions(chat.id, data.targetUserId, data.permissions)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Edit_Chat_Admin_Permissions_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Edit_Chat_Admin_Permissions_Response.encode({}).finish()
+                }))
+            }
+            /**
+             * 删除管理员
+             */
+            case Methods.Remove_Chat_Admin_Request: {
+                const data = LingCatProto.methods.Remove_Chat_Admin_Request.decode(mPackage.data)
+                const operator_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                const chat = await ChatDataBase.queryChatById(data.chatId)
+                if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+
+                // 只有群主或拥有 manage_admins 权限的管理员可以移除管理员
+                if (!await ChatAdminLinker.isOwner(chat.id, operator_id)/*  &&
+                    !await ChatAdminLinker.checkAdminPermission(chat.id, operator_id, 'manage_admins') */) {
+                    return sendError(sendPackage, mPackage.method_id, 'Permission denied', Code.Forbidden)
+                }
+
+                // 不能移除群主
+                if (await ChatAdminLinker.isOwner(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot remove the group owner', Code.Forbidden)
+                }
+
+                // 不能移除自己（除非是群主移除自己，但群主已经是 owner，上面拦住了）
+                if (data.targetUserId === operator_id) {
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot remove yourself as admin', Code.Forbidden)
+                }
+
+                // 检查目标是否是管理员
+                if (!await ChatAdminLinker.isAdmin(chat.id, data.targetUserId)) {
+                    return sendError(sendPackage, mPackage.method_id, 'User is not an admin', Code.Not_Found)
+                }
+
+                await ChatAdminLinker.removeAdmin(chat.id, data.targetUserId)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Remove_Chat_Admin_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Remove_Chat_Admin_Response.encode({}).finish()
+                }))
+                break
+            }
             default: {
                 return false
             }
