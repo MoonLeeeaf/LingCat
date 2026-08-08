@@ -119,11 +119,11 @@ export default class ChatApi {
         })).data)
     }
     /**
-     * 加入群组
+     * 加入对话
      * @param client
      * @param params
      */
-    static async joinGroup(client: LingCatClient, {
+    static async joinChat(client: LingCatClient, {
         access_token,
         chat_id,
         answer,
@@ -134,15 +134,18 @@ export default class ChatApi {
         answer?: string
         timeout?: number
     }) {
-        decodeOrThrow<LingCatProto.methods.Join_Group_Response>(LingCatProto.methods.Join_Group_Response, (await client.invoke({
-            method_id: Methods.Join_Group_Request,
-            data: LingCatProto.methods.Join_Group_Request.encode({
+        const re = decodeOrThrow<LingCatProto.methods.Join_Chat_Response>(LingCatProto.methods.Join_Chat_Response, (await client.invoke({
+            method_id: Methods.Join_Chat_Request,
+            data: LingCatProto.methods.Join_Chat_Request.encode({
                 accessToken: access_token,
                 chatId: chat_id,
                 answer,
             }).finish(),
             timeout,
         })).data)
+        return {
+            pending_approval: re.pendingApproval,
+        }
     }
     /**
      * 移除群成员

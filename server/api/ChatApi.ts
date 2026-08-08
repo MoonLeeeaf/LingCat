@@ -425,17 +425,20 @@ export default class ChatApi {
                 }))
                 break
             }
-            case Methods.Join_Group_Request: {
-                const data = LingCatProto.methods.Join_Group_Request.decode(mPackage.data)
+            case Methods.Join_Chat_Request: {
+                const data = LingCatProto.methods.Join_Chat_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
                 const chat = await ChatDataBase.queryChatById(data.chatId)
                 if (!chat) return sendError(sendPackage, mPackage.method_id, 'Chat not found', Code.Not_Found)
+                if (chat.type != 'group') return sendError(sendPackage, mPackage.method_id, 'Chat type is not group', Code.Bad_Request)
 
                 if (await UserChatLinker.isUserChatLinked(user_id, chat.id)) {
                     sendPackage(Package.encode({
-                        method_id: Methods.Join_Group_Response,
+                        method_id: Methods.Join_Chat_Response,
                         flags: 0,
-                        data: LingCatProto.methods.Join_Group_Response.encode({}).finish()
+                        data: LingCatProto.methods.Join_Chat_Response.encode({
+                            pendingApproval: false,
+                        }).finish()
                     }))
                     break
                 }
@@ -444,22 +447,31 @@ export default class ChatApi {
 
                 // 判断入群方式
                 if (!settings.allow_join) {
-                    return sendError(sendPackage, mPackage.method_id, 'Cannot join this group', Code.Forbidden);
+                    return sendError(sendPackage, mPackage.method_id, 'Cannot join this group', Code.Forbidden)
                 }
 
-                // 加入群组
+                // 加入对话
                 await UserChatLinker.linkUserAndChat(user_id, chat.id)
 
-                /* ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => broadcastToUserClients(clients_emiter, v, (func) => {
+                const time = Date.now()
+                const msg = (await UserDataBase.queryUserById(user_id))?.nickname + " 加入了对话"
+                const msg_id = await MessageDataBase.addMessage({
+                    text: msg,
+                    chat_id: data.chatId,
+                    system: true,
+                    time,
+                })
+
+                    ; (await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) => broadcastToUserClients(clients_emiter, v, (func) => {
                         func(Package.encode({
                             method_id: Methods.Receive_Chat_Message_Event,
                             flags: 0,
                             data: LingCatProto.methods.Receive_Chat_Message_Event.encode({
                                 msg: {
-                                    text: data.text,
+                                    text: msg,
                                     chatId: data.chatId,
-                                    senderUserId: user_id,
-                                    time: Date.now(),
+                                    system: true,
+                                    time: time,
                                     id: msg_id,
                                 }
                             }).finish()
@@ -469,12 +481,12 @@ export default class ChatApi {
                             flags: 0,
                             data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
                         })), 50)
-                    })) */
+                    }))
 
                 sendPackage(Package.encode({
-                    method_id: Methods.Join_Group_Response,
+                    method_id: Methods.Join_Chat_Response,
                     flags: 0,
-                    data: LingCatProto.methods.Join_Group_Response.encode({}).finish()
+                    data: LingCatProto.methods.Join_Chat_Response.encode({}).finish()
                 }))
                 break
             }

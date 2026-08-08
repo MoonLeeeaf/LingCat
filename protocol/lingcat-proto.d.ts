@@ -6849,243 +6849,249 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a Join_Group_Request.
-         * @deprecated Use lingcat.methods.Join_Group_Request.$Properties instead.
+         * Properties of a Join_Chat_Request.
+         * @deprecated Use lingcat.methods.Join_Chat_Request.$Properties instead.
          */
-        interface IJoin_Group_Request extends lingcat.methods.Join_Group_Request.$Properties {
+        interface IJoin_Chat_Request extends lingcat.methods.Join_Chat_Request.$Properties {
         }
 
-        /** Represents a Join_Group_Request. */
-        class Join_Group_Request {
+        /** Represents a Join_Chat_Request. */
+        class Join_Chat_Request {
 
             /**
-             * Constructs a new Join_Group_Request.
+             * Constructs a new Join_Chat_Request.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.Join_Group_Request.$Properties);
+            constructor(properties?: lingcat.methods.Join_Chat_Request.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** Join_Group_Request accessToken. */
+            /** Join_Chat_Request accessToken. */
             accessToken: string;
 
-            /** Join_Group_Request chatId. */
+            /** Join_Chat_Request chatId. */
             chatId: string;
 
-            /** Join_Group_Request answer. */
+            /** Join_Chat_Request answer. */
             answer?: (string|null);
 
             /**
-             * Creates a new Join_Group_Request instance using the specified properties.
+             * Creates a new Join_Chat_Request instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Join_Group_Request instance
+             * @returns Join_Chat_Request instance
              */
-            static create(properties: lingcat.methods.Join_Group_Request.$Shape): lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape;
-            static create(properties?: lingcat.methods.Join_Group_Request.$Properties): lingcat.methods.Join_Group_Request;
+            static create(properties: lingcat.methods.Join_Chat_Request.$Shape): lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape;
+            static create(properties?: lingcat.methods.Join_Chat_Request.$Properties): lingcat.methods.Join_Chat_Request;
 
             /**
-             * Encodes the specified Join_Group_Request message. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
-             * @param message Join_Group_Request message or plain object to encode
+             * Encodes the specified Join_Chat_Request message. Does not implicitly {@link lingcat.methods.Join_Chat_Request.verify|verify} messages.
+             * @param message Join_Chat_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.Join_Group_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Join_Chat_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Join_Group_Request message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
-             * @param message Join_Group_Request message or plain object to encode
+             * Encodes the specified Join_Chat_Request message, length delimited. Does not implicitly {@link lingcat.methods.Join_Chat_Request.verify|verify} messages.
+             * @param message Join_Chat_Request message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.Join_Group_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Join_Chat_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a Join_Group_Request message from the specified reader or buffer.
+             * Decodes a Join_Chat_Request message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @returns {lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape} Join_Chat_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape;
 
             /**
-             * Decodes a Join_Group_Request message from the specified reader or buffer, length delimited.
+             * Decodes a Join_Chat_Request message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @returns {lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape} Join_Chat_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape;
 
             /**
-             * Verifies a Join_Group_Request message.
+             * Verifies a Join_Chat_Request message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a Join_Group_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates a Join_Chat_Request message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Join_Group_Request
+             * @returns Join_Chat_Request
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Join_Group_Request;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Join_Chat_Request;
 
             /**
-             * Creates a plain object from a Join_Group_Request message. Also converts values to other types if specified.
-             * @param message Join_Group_Request
+             * Creates a plain object from a Join_Chat_Request message. Also converts values to other types if specified.
+             * @param message Join_Chat_Request
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.Join_Group_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Join_Chat_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Join_Group_Request to JSON.
+             * Converts this Join_Chat_Request to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Join_Group_Request
+             * Gets the type url for Join_Chat_Request
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Join_Group_Request {
+        namespace Join_Chat_Request {
 
-            /** Properties of a Join_Group_Request. */
+            /** Properties of a Join_Chat_Request. */
             interface $Properties {
 
-                /** Join_Group_Request accessToken */
+                /** Join_Chat_Request accessToken */
                 accessToken?: (string|null);
 
-                /** Join_Group_Request chatId */
+                /** Join_Chat_Request chatId */
                 chatId?: (string|null);
 
-                /** Join_Group_Request answer */
+                /** Join_Chat_Request answer */
                 answer?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a Join_Group_Request. */
-            type $Shape = lingcat.methods.Join_Group_Request.$Properties;
+            /** Shape of a Join_Chat_Request. */
+            type $Shape = lingcat.methods.Join_Chat_Request.$Properties;
         }
 
         /**
-         * Properties of a Join_Group_Response.
-         * @deprecated Use lingcat.methods.Join_Group_Response.$Properties instead.
+         * Properties of a Join_Chat_Response.
+         * @deprecated Use lingcat.methods.Join_Chat_Response.$Properties instead.
          */
-        interface IJoin_Group_Response extends lingcat.methods.Join_Group_Response.$Properties {
+        interface IJoin_Chat_Response extends lingcat.methods.Join_Chat_Response.$Properties {
         }
 
-        /** Represents a Join_Group_Response. */
-        class Join_Group_Response {
+        /** Represents a Join_Chat_Response. */
+        class Join_Chat_Response {
 
             /**
-             * Constructs a new Join_Group_Response.
+             * Constructs a new Join_Chat_Response.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.methods.Join_Group_Response.$Properties);
+            constructor(properties?: lingcat.methods.Join_Chat_Response.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
+            /** Join_Chat_Response pendingApproval. */
+            pendingApproval: boolean;
+
             /**
-             * Creates a new Join_Group_Response instance using the specified properties.
+             * Creates a new Join_Chat_Response instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns Join_Group_Response instance
+             * @returns Join_Chat_Response instance
              */
-            static create(properties: lingcat.methods.Join_Group_Response.$Shape): lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape;
-            static create(properties?: lingcat.methods.Join_Group_Response.$Properties): lingcat.methods.Join_Group_Response;
+            static create(properties: lingcat.methods.Join_Chat_Response.$Shape): lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape;
+            static create(properties?: lingcat.methods.Join_Chat_Response.$Properties): lingcat.methods.Join_Chat_Response;
 
             /**
-             * Encodes the specified Join_Group_Response message. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
-             * @param message Join_Group_Response message or plain object to encode
+             * Encodes the specified Join_Chat_Response message. Does not implicitly {@link lingcat.methods.Join_Chat_Response.verify|verify} messages.
+             * @param message Join_Chat_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.methods.Join_Group_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.methods.Join_Chat_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Join_Group_Response message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
-             * @param message Join_Group_Response message or plain object to encode
+             * Encodes the specified Join_Chat_Response message, length delimited. Does not implicitly {@link lingcat.methods.Join_Chat_Response.verify|verify} messages.
+             * @param message Join_Chat_Response message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.methods.Join_Group_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.methods.Join_Chat_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes a Join_Group_Response message from the specified reader or buffer.
+             * Decodes a Join_Chat_Response message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @returns {lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape} Join_Chat_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape;
 
             /**
-             * Decodes a Join_Group_Response message from the specified reader or buffer, length delimited.
+             * Decodes a Join_Chat_Response message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @returns {lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape} Join_Chat_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape;
 
             /**
-             * Verifies a Join_Group_Response message.
+             * Verifies a Join_Chat_Response message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a Join_Group_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates a Join_Chat_Response message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns Join_Group_Response
+             * @returns Join_Chat_Response
              */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Join_Group_Response;
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Join_Chat_Response;
 
             /**
-             * Creates a plain object from a Join_Group_Response message. Also converts values to other types if specified.
-             * @param message Join_Group_Response
+             * Creates a plain object from a Join_Chat_Response message. Also converts values to other types if specified.
+             * @param message Join_Chat_Response
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.methods.Join_Group_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.methods.Join_Chat_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this Join_Group_Response to JSON.
+             * Converts this Join_Chat_Response to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for Join_Group_Response
+             * Gets the type url for Join_Chat_Response
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace Join_Group_Response {
+        namespace Join_Chat_Response {
 
-            /** Properties of a Join_Group_Response. */
+            /** Properties of a Join_Chat_Response. */
             interface $Properties {
+
+                /** Join_Chat_Response pendingApproval */
+                pendingApproval?: (boolean|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of a Join_Group_Response. */
-            type $Shape = lingcat.methods.Join_Group_Response.$Properties;
+            /** Shape of a Join_Chat_Response. */
+            type $Shape = lingcat.methods.Join_Chat_Response.$Properties;
         }
 
         /**

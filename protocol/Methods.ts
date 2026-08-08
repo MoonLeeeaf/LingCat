@@ -48,8 +48,8 @@ export default class Methods {
     static Set_Chat_Admin_Response = 0x48
     static Resolve_Chat_Identifier_Request = 0x49
     static Resolve_Chat_Identifier_Response = 0x50
-    static Join_Group_Request = 0x51
-    static Join_Group_Response = 0x52
+    static Join_Chat_Request = 0x51
+    static Join_Chat_Response = 0x52
     static Remove_Chat_Member_Request = 0x53
     static Remove_Chat_Member_Response = 0x54
     static Update_Chat_Settings_Request = 0x55

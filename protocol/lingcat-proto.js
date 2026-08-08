@@ -16654,39 +16654,39 @@ export const lingcat = $root.lingcat = (() => {
             return Create_Group_Response;
         })();
 
-        methods.Join_Group_Request = (function() {
+        methods.Join_Chat_Request = (function() {
 
             /**
-             * Properties of a Join_Group_Request.
-             * @typedef {Object} lingcat.methods.Join_Group_Request.$Properties
-             * @property {string|null} [accessToken] Join_Group_Request accessToken
-             * @property {string|null} [chatId] Join_Group_Request chatId
-             * @property {string|null} [answer] Join_Group_Request answer
+             * Properties of a Join_Chat_Request.
+             * @typedef {Object} lingcat.methods.Join_Chat_Request.$Properties
+             * @property {string|null} [accessToken] Join_Chat_Request accessToken
+             * @property {string|null} [chatId] Join_Chat_Request chatId
+             * @property {string|null} [answer] Join_Chat_Request answer
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of a Join_Group_Request.
+             * Properties of a Join_Chat_Request.
              * @memberof lingcat.methods
-             * @interface IJoin_Group_Request
-             * @augments lingcat.methods.Join_Group_Request.$Properties
-             * @deprecated Use lingcat.methods.Join_Group_Request.$Properties instead.
+             * @interface IJoin_Chat_Request
+             * @augments lingcat.methods.Join_Chat_Request.$Properties
+             * @deprecated Use lingcat.methods.Join_Chat_Request.$Properties instead.
              */
 
             /**
-             * Shape of a Join_Group_Request.
-             * @typedef {lingcat.methods.Join_Group_Request.$Properties} lingcat.methods.Join_Group_Request.$Shape
+             * Shape of a Join_Chat_Request.
+             * @typedef {lingcat.methods.Join_Chat_Request.$Properties} lingcat.methods.Join_Chat_Request.$Shape
              */
 
             /**
-             * Constructs a new Join_Group_Request.
+             * Constructs a new Join_Chat_Request.
              * @memberof lingcat.methods
-             * @classdesc Represents a Join_Group_Request.
+             * @classdesc Represents a Join_Chat_Request.
              * @constructor
-             * @param {lingcat.methods.Join_Group_Request.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Join_Chat_Request.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Join_Group_Request = function (properties) {
+            const Join_Chat_Request = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -16694,64 +16694,64 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Join_Group_Request accessToken.
+             * Join_Chat_Request accessToken.
              * @member {string} accessToken
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @instance
              */
-            Join_Group_Request.prototype.accessToken = "";
+            Join_Chat_Request.prototype.accessToken = "";
 
             /**
-             * Join_Group_Request chatId.
+             * Join_Chat_Request chatId.
              * @member {string} chatId
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @instance
              */
-            Join_Group_Request.prototype.chatId = "";
+            Join_Chat_Request.prototype.chatId = "";
 
             /**
-             * Join_Group_Request answer.
+             * Join_Chat_Request answer.
              * @member {string|null|undefined} answer
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @instance
              */
-            Join_Group_Request.prototype.answer = null;
+            Join_Chat_Request.prototype.answer = null;
 
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
             // Virtual OneOf for proto3 optional field
-            $Object.defineProperty(Join_Group_Request.prototype, "_answer", {
+            $Object.defineProperty(Join_Chat_Request.prototype, "_answer", {
                 get: $util.oneOfGetter($oneOfFields = ["answer"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
             /**
-             * Creates a new Join_Group_Request instance using the specified properties.
+             * Creates a new Join_Chat_Request instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
-             * @param {lingcat.methods.Join_Group_Request.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Join_Group_Request} Join_Group_Request instance
+             * @param {lingcat.methods.Join_Chat_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Join_Chat_Request} Join_Chat_Request instance
              * @type {{
-             *   (properties: lingcat.methods.Join_Group_Request.$Shape): lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape;
-             *   (properties?: lingcat.methods.Join_Group_Request.$Properties): lingcat.methods.Join_Group_Request;
+             *   (properties: lingcat.methods.Join_Chat_Request.$Shape): lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape;
+             *   (properties?: lingcat.methods.Join_Chat_Request.$Properties): lingcat.methods.Join_Chat_Request;
              * }}
              */
-            Join_Group_Request.create = function(properties) {
-                return new Join_Group_Request(properties);
+            Join_Chat_Request.create = function(properties) {
+                return new Join_Chat_Request(properties);
             };
 
             /**
-             * Encodes the specified Join_Group_Request message. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
+             * Encodes the specified Join_Chat_Request message. Does not implicitly {@link lingcat.methods.Join_Chat_Request.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
-             * @param {lingcat.methods.Join_Group_Request.$Properties} message Join_Group_Request message or plain object to encode
+             * @param {lingcat.methods.Join_Chat_Request.$Properties} message Join_Chat_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Join_Group_Request.encode = function (message, writer, _depth) {
+            Join_Chat_Request.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
@@ -16771,37 +16771,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Join_Group_Request message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Request.verify|verify} messages.
+             * Encodes the specified Join_Chat_Request message, length delimited. Does not implicitly {@link lingcat.methods.Join_Chat_Request.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
-             * @param {lingcat.methods.Join_Group_Request.$Properties} message Join_Group_Request message or plain object to encode
+             * @param {lingcat.methods.Join_Chat_Request.$Properties} message Join_Chat_Request message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Join_Group_Request.encodeDelimited = function(message, writer) {
+            Join_Chat_Request.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes a Join_Group_Request message from the specified reader or buffer.
+             * Decodes a Join_Chat_Request message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @returns {lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape} Join_Chat_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Join_Group_Request.decode = function (reader, length, _end, _depth, _target) {
+            Join_Chat_Request.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Group_Request(), value;
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Chat_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -16849,30 +16849,30 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes a Join_Group_Request message from the specified reader or buffer, length delimited.
+             * Decodes a Join_Chat_Request message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Join_Group_Request & lingcat.methods.Join_Group_Request.$Shape} Join_Group_Request
+             * @returns {lingcat.methods.Join_Chat_Request & lingcat.methods.Join_Chat_Request.$Shape} Join_Chat_Request
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Join_Group_Request.decodeDelimited = function(reader) {
+            Join_Chat_Request.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a Join_Group_Request message.
+             * Verifies a Join_Chat_Request message.
              * @function verify
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Join_Group_Request.verify = function (message, _depth) {
+            Join_Chat_Request.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
@@ -16895,23 +16895,23 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a Join_Group_Request message from a plain object. Also converts values to their respective internal types.
+             * Creates a Join_Chat_Request message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Join_Group_Request} Join_Group_Request
+             * @returns {lingcat.methods.Join_Chat_Request} Join_Chat_Request
              */
-            Join_Group_Request.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Join_Group_Request)
+            Join_Chat_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Join_Chat_Request)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Join_Group_Request: object expected");
+                    throw $TypeError(".lingcat.methods.Join_Chat_Request: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                let message = new $root.lingcat.methods.Join_Group_Request();
+                let message = new $root.lingcat.methods.Join_Chat_Request();
                 if (object.accessToken != null)
                     if (typeof object.accessToken !== "string" || object.accessToken.length)
                         message.accessToken = $String(object.accessToken);
@@ -16924,15 +16924,15 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a plain object from a Join_Group_Request message. Also converts values to other types if specified.
+             * Creates a plain object from a Join_Chat_Request message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
-             * @param {lingcat.methods.Join_Group_Request} message Join_Group_Request
+             * @param {lingcat.methods.Join_Chat_Request} message Join_Chat_Request
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Join_Group_Request.toObject = function (message, options, _depth) {
+            Join_Chat_Request.toObject = function (message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === $undefined)
@@ -16954,63 +16954,64 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Converts this Join_Group_Request to JSON.
+             * Converts this Join_Chat_Request to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Join_Group_Request.prototype.toJSON = function() {
-                return Join_Group_Request.toObject(this, $protobuf.util.toJSONOptions);
+            Join_Chat_Request.prototype.toJSON = function() {
+                return Join_Chat_Request.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Join_Group_Request
+             * Gets the type url for Join_Chat_Request
              * @function getTypeUrl
-             * @memberof lingcat.methods.Join_Group_Request
+             * @memberof lingcat.methods.Join_Chat_Request
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Join_Group_Request.getTypeUrl = function(prefix) {
+            Join_Chat_Request.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Join_Group_Request";
+                return prefix + "/lingcat.methods.Join_Chat_Request";
             };
 
-            return Join_Group_Request;
+            return Join_Chat_Request;
         })();
 
-        methods.Join_Group_Response = (function() {
+        methods.Join_Chat_Response = (function() {
 
             /**
-             * Properties of a Join_Group_Response.
-             * @typedef {Object} lingcat.methods.Join_Group_Response.$Properties
+             * Properties of a Join_Chat_Response.
+             * @typedef {Object} lingcat.methods.Join_Chat_Response.$Properties
+             * @property {boolean|null} [pendingApproval] Join_Chat_Response pendingApproval
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of a Join_Group_Response.
+             * Properties of a Join_Chat_Response.
              * @memberof lingcat.methods
-             * @interface IJoin_Group_Response
-             * @augments lingcat.methods.Join_Group_Response.$Properties
-             * @deprecated Use lingcat.methods.Join_Group_Response.$Properties instead.
+             * @interface IJoin_Chat_Response
+             * @augments lingcat.methods.Join_Chat_Response.$Properties
+             * @deprecated Use lingcat.methods.Join_Chat_Response.$Properties instead.
              */
 
             /**
-             * Shape of a Join_Group_Response.
-             * @typedef {lingcat.methods.Join_Group_Response.$Properties} lingcat.methods.Join_Group_Response.$Shape
+             * Shape of a Join_Chat_Response.
+             * @typedef {lingcat.methods.Join_Chat_Response.$Properties} lingcat.methods.Join_Chat_Response.$Shape
              */
 
             /**
-             * Constructs a new Join_Group_Response.
+             * Constructs a new Join_Chat_Response.
              * @memberof lingcat.methods
-             * @classdesc Represents a Join_Group_Response.
+             * @classdesc Represents a Join_Chat_Response.
              * @constructor
-             * @param {lingcat.methods.Join_Group_Response.$Properties=} [properties] Properties to set
+             * @param {lingcat.methods.Join_Chat_Response.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const Join_Group_Response = function (properties) {
+            const Join_Chat_Response = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -17018,37 +17019,47 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Creates a new Join_Group_Response instance using the specified properties.
+             * Join_Chat_Response pendingApproval.
+             * @member {boolean} pendingApproval
+             * @memberof lingcat.methods.Join_Chat_Response
+             * @instance
+             */
+            Join_Chat_Response.prototype.pendingApproval = false;
+
+            /**
+             * Creates a new Join_Chat_Response instance using the specified properties.
              * @function create
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
-             * @param {lingcat.methods.Join_Group_Response.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Join_Group_Response} Join_Group_Response instance
+             * @param {lingcat.methods.Join_Chat_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Join_Chat_Response} Join_Chat_Response instance
              * @type {{
-             *   (properties: lingcat.methods.Join_Group_Response.$Shape): lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape;
-             *   (properties?: lingcat.methods.Join_Group_Response.$Properties): lingcat.methods.Join_Group_Response;
+             *   (properties: lingcat.methods.Join_Chat_Response.$Shape): lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape;
+             *   (properties?: lingcat.methods.Join_Chat_Response.$Properties): lingcat.methods.Join_Chat_Response;
              * }}
              */
-            Join_Group_Response.create = function(properties) {
-                return new Join_Group_Response(properties);
+            Join_Chat_Response.create = function(properties) {
+                return new Join_Chat_Response(properties);
             };
 
             /**
-             * Encodes the specified Join_Group_Response message. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
+             * Encodes the specified Join_Chat_Response message. Does not implicitly {@link lingcat.methods.Join_Chat_Response.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
-             * @param {lingcat.methods.Join_Group_Response.$Properties} message Join_Group_Response message or plain object to encode
+             * @param {lingcat.methods.Join_Chat_Response.$Properties} message Join_Chat_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Join_Group_Response.encode = function (message, writer, _depth) {
+            Join_Chat_Response.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
+                if (message.pendingApproval != null && $Object.hasOwnProperty.call(message, "pendingApproval") && message.pendingApproval !== false)
+                    writer.uint32(/* id 1, wireType 0 =*/8).bool(message.pendingApproval);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -17056,37 +17067,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified Join_Group_Response message, length delimited. Does not implicitly {@link lingcat.methods.Join_Group_Response.verify|verify} messages.
+             * Encodes the specified Join_Chat_Response message, length delimited. Does not implicitly {@link lingcat.methods.Join_Chat_Response.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
-             * @param {lingcat.methods.Join_Group_Response.$Properties} message Join_Group_Response message or plain object to encode
+             * @param {lingcat.methods.Join_Chat_Response.$Properties} message Join_Chat_Response message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            Join_Group_Response.encodeDelimited = function(message, writer) {
+            Join_Chat_Response.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes a Join_Group_Response message from the specified reader or buffer.
+             * Decodes a Join_Chat_Response message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @returns {lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape} Join_Chat_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Join_Group_Response.decode = function (reader, length, _end, _depth, _target) {
+            Join_Chat_Response.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Group_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Chat_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -17094,7 +17105,19 @@ export const lingcat = $root.lingcat = (() => {
                         _end = $undefined;
                         break;
                     }
-                    reader.skipType(tag & 7, _depth, tag);
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.bool())
+                                message.pendingApproval = value;
+                            else
+                                delete message.pendingApproval;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
@@ -17106,98 +17129,116 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes a Join_Group_Response message from the specified reader or buffer, length delimited.
+             * Decodes a Join_Chat_Response message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Join_Group_Response & lingcat.methods.Join_Group_Response.$Shape} Join_Group_Response
+             * @returns {lingcat.methods.Join_Chat_Response & lingcat.methods.Join_Chat_Response.$Shape} Join_Chat_Response
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            Join_Group_Response.decodeDelimited = function(reader) {
+            Join_Chat_Response.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies a Join_Group_Response message.
+             * Verifies a Join_Chat_Response message.
              * @function verify
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            Join_Group_Response.verify = function (message, _depth) {
+            Join_Chat_Response.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                if (message.pendingApproval != null && $Object.hasOwnProperty.call(message, "pendingApproval"))
+                    if (typeof message.pendingApproval !== "boolean")
+                        return "pendingApproval: boolean expected";
                 return null;
             };
 
             /**
-             * Creates a Join_Group_Response message from a plain object. Also converts values to their respective internal types.
+             * Creates a Join_Chat_Response message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Join_Group_Response} Join_Group_Response
+             * @returns {lingcat.methods.Join_Chat_Response} Join_Chat_Response
              */
-            Join_Group_Response.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Join_Group_Response)
+            Join_Chat_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Join_Chat_Response)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Join_Group_Response: object expected");
+                    throw $TypeError(".lingcat.methods.Join_Chat_Response: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                return new $root.lingcat.methods.Join_Group_Response();
+                let message = new $root.lingcat.methods.Join_Chat_Response();
+                if (object.pendingApproval != null)
+                    if (object.pendingApproval)
+                        message.pendingApproval = $Boolean(object.pendingApproval);
+                return message;
             };
 
             /**
-             * Creates a plain object from a Join_Group_Response message. Also converts values to other types if specified.
+             * Creates a plain object from a Join_Chat_Response message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
-             * @param {lingcat.methods.Join_Group_Response} message Join_Group_Response
+             * @param {lingcat.methods.Join_Chat_Response} message Join_Chat_Response
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            Join_Group_Response.toObject = function () {
-                return {};
+            Join_Chat_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.pendingApproval = false;
+                if (message.pendingApproval != null && $Object.hasOwnProperty.call(message, "pendingApproval"))
+                    object.pendingApproval = message.pendingApproval;
+                return object;
             };
 
             /**
-             * Converts this Join_Group_Response to JSON.
+             * Converts this Join_Chat_Response to JSON.
              * @function toJSON
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            Join_Group_Response.prototype.toJSON = function() {
-                return Join_Group_Response.toObject(this, $protobuf.util.toJSONOptions);
+            Join_Chat_Response.prototype.toJSON = function() {
+                return Join_Chat_Response.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for Join_Group_Response
+             * Gets the type url for Join_Chat_Response
              * @function getTypeUrl
-             * @memberof lingcat.methods.Join_Group_Response
+             * @memberof lingcat.methods.Join_Chat_Response
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            Join_Group_Response.getTypeUrl = function(prefix) {
+            Join_Chat_Response.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Join_Group_Response";
+                return prefix + "/lingcat.methods.Join_Chat_Response";
             };
 
-            return Join_Group_Response;
+            return Join_Chat_Response;
         })();
 
         methods.Remove_Chat_Member_Request = (function() {

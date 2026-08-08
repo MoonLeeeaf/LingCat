@@ -72,7 +72,13 @@ function FileAttachment({ src, name }: { src: string, name: string }) {
     </a>
 }
 
-export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
+export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
+    const [chat, setChat] = React.useState(chatObj)
+
+    React.useEffect(() => {
+        setChat(chatObj)
+    }, [chatObj])
+
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
     const containerRef = React.useRef<HTMLDivElement>(null)
 
@@ -80,6 +86,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
 
     React.useEffect(() => {
         (async () => {
+            if (!chat.is_member) return
             loadingRef.current = true
             try {
                 const msgs = await ChatApi.getChatMessages(ClientManager.client, {
@@ -110,6 +117,7 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
         })()
 
         function callback(mPackage: Package) {
+            if (!chat.is_member) return
             const { appendMessages } = useChatMessageStore.getState()
             // TODO: 向 lingcat-client-protocol 添加全局的监听方法
             if (mPackage.method_id == Methods.Receive_Chat_Message_Event) {
@@ -154,10 +162,10 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
     const loadingRef = React.useRef(false)
     const isAtBottomRef = React.useRef(false)
     const atTopStateChange = React.useCallback((atTop: boolean) => {
-        console.log('top', atTop, loadingRef.current)
         if (!atTop || loadingRef.current) return
 
         (async () => {
+            if (!chat.is_member) return
             loadingRef.current = true
 
             try {
@@ -188,13 +196,13 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
         })()
     }, [chat])
     const atBottomStateChange = React.useCallback((atBottom: boolean) => {
-        console.log('bottom', atBottom, loadingRef.current)
         if (!atBottom || loadingRef.current) {
             isAtBottomRef.current = atBottom
             return
         }
 
         (async () => {
+            if (!chat.is_member) return
             loadingRef.current = true
             isAtBottomRef.current = true
 
@@ -390,8 +398,45 @@ export default function ChatFragment({ chat, drawerRef }: { chat: IChat, drawerR
             <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>
         </mdui-top-app-bar>
 
-        <div id={id} style={{ display: 'flex', width: '100%' }}>
-            <MessageContainer ref={containerRef}>
+        <div id={id} style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: chat.is_member ? undefined : 'center',
+        }}>
+            <div style={{
+                display: chat.is_member ? 'none' : undefined,
+                alignSelf: 'center',
+            }}>
+                <mdui-button onClick={async () => {
+                    try {
+                        const re = await ChatApi.joinChat(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token,
+                            chat_id: chat.id,
+                        })
+                        if (re.pending_approval) return showSnackbar({
+                            message: "已发送加入对话申请"
+                        })
+                    } catch (e) {
+                        console.log(e)
+                        tipError(e, "加入对话失败")
+                    }
+                    try {
+                        setChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token,
+                            chat_id: chat.id,
+                        }))
+                        showSnackbar({
+                            message: "已加入对话"
+                        })
+                    } catch (e) {
+                        console.log(e)
+                        tipError(e, "重新打开对话失败")
+                    }
+                }}>申请加入对话</mdui-button>
+            </div>
+            <MessageContainer ref={containerRef} style={{
+                display: chat.is_member ? 'flex' : 'none'
+            }}>
                 <Virtuoso
                     ref={virtuosoRef}
                     style={{ overflowY: 'auto' }}
