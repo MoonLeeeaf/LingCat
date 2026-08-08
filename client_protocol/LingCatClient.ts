@@ -27,7 +27,9 @@ export default class LingCatClient {
     }
 
     getFileUrlByHash(hash: string) {
-        return this.server_http + '/uploaded_files/' + hash
+        return this.server_http.endsWith('/')
+            ? (this.server_http + 'uploaded_files/' + hash)
+            : (this.server_http + '/uploaded_files/' + hash)
     }
 
     on_package_listeners: Function[] = []
