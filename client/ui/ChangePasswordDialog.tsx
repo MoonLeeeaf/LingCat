@@ -32,10 +32,6 @@ export default function ChangePasswordDialog({ ref, onClose }: { ref?: React.Ref
             showSnackbar({ message: '两次输入的密码不一致' })
             return
         }
-        if (newPassword === oldPassword) {
-            showSnackbar({ message: '新密码不能与旧密码相同' })
-            return
-        }
 
         setLoading(true)
         try {
