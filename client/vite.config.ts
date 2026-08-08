@@ -27,6 +27,7 @@ function publicKeyPlugin() {
 }
 
 export default defineConfig({
+    base: './',
     plugins: [
         react(),
         nodePolyfills({
