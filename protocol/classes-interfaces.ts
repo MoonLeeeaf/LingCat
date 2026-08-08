@@ -33,7 +33,9 @@ export type AvailableChatAdminPermission = typeof AvailableChatAdminPermissions[
 
 export interface IChat {
     id: string
-    // 私聊拿到的是对方的 title
+    /**
+     * 私聊拿到的是对方的 title
+     */
     title?: string | null
     chat_unique?: string | null
     type: ChatType
@@ -42,7 +44,9 @@ export interface IChat {
     last_message_id: number
     last_message_time: number
     last_message_text?: string
-    // 私聊拿到的是对方的 description
+    /**
+     * 私聊拿到的是对方的 description
+     */
     description?: string | null
 }
 
