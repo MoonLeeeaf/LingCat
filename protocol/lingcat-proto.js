@@ -3,7 +3,7 @@ import $protobuf from "protobufjs/minimal.js";
 
 // Common aliases
 const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
-const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $BigInt = $util.global.BigInt, $Boolean = $util.global.Boolean;
+const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $Boolean = $util.global.Boolean, $BigInt = $util.global.BigInt;
 
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
@@ -1289,6 +1289,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {number|Long|null} [lastMessageTime] IChat lastMessageTime
              * @property {string|null} [description] IChat description
              * @property {string|null} [lastMessageText] IChat lastMessageText
+             * @property {boolean|null} [isMember] IChat isMember
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -1400,6 +1401,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             IChat.prototype.lastMessageText = null;
 
+            /**
+             * IChat isMember.
+             * @member {boolean} isMember
+             * @memberof lingcat.classes.IChat
+             * @instance
+             */
+            IChat.prototype.isMember = false;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -1485,6 +1494,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 9, wireType 2 =*/74).string(message.description);
                 if (message.lastMessageText != null && $Object.hasOwnProperty.call(message, "lastMessageText"))
                     writer.uint32(/* id 10, wireType 2 =*/82).string(message.lastMessageText);
+                if (message.isMember != null && $Object.hasOwnProperty.call(message, "isMember") && message.isMember !== false)
+                    writer.uint32(/* id 11, wireType 0 =*/88).bool(message.isMember);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -1612,6 +1623,15 @@ export const lingcat = $root.lingcat = (() => {
                             message._lastMessageText = "lastMessageText";
                             continue;
                         }
+                    case 11: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.bool())
+                                message.isMember = value;
+                            else
+                                delete message.isMember;
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -1696,6 +1716,9 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.lastMessageText))
                         return "lastMessageText: string expected";
                 }
+                if (message.isMember != null && $Object.hasOwnProperty.call(message, "isMember"))
+                    if (typeof message.isMember !== "boolean")
+                        return "isMember: boolean expected";
                 return null;
             };
 
@@ -1749,6 +1772,9 @@ export const lingcat = $root.lingcat = (() => {
                     message.description = $String(object.description);
                 if (object.lastMessageText != null)
                     message.lastMessageText = $String(object.lastMessageText);
+                if (object.isMember != null)
+                    if (object.isMember)
+                        message.isMember = $Boolean(object.isMember);
                 return message;
             };
 
@@ -1779,6 +1805,7 @@ export const lingcat = $root.lingcat = (() => {
                         object.lastMessageTime = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
                     } else
                         object.lastMessageTime = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                    object.isMember = false;
                 }
                 if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
                     object.id = message.id;
@@ -1805,6 +1832,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.description = message.description;
                 if (message.lastMessageText != null && $Object.hasOwnProperty.call(message, "lastMessageText"))
                     object.lastMessageText = message.lastMessageText;
+                if (message.isMember != null && $Object.hasOwnProperty.call(message, "isMember"))
+                    object.isMember = message.isMember;
                 return object;
             };
 

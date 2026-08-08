@@ -48,6 +48,7 @@ message IChat {
     uint64 last_message_time = 8;
     optional string description = 9;
     optional string last_message_text = 10; 
+    bool is_member = 11;
 }
 
 message IFile {

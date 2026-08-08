@@ -48,6 +48,14 @@ export interface IChat {
      * 私聊拿到的是对方的 description
      */
     description?: string | null
+    /**
+     * (客户端状态) 是否为对话成员
+     * 
+     * 服务端存储层永远为 undefined
+     * 
+     * 只有在 ChatApi 返回客户端时 才有明确的值 或未被设置 == false
+     */
+    is_member?: boolean
 }
 
 export interface IFile {

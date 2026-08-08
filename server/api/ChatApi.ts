@@ -11,7 +11,7 @@ import ChatAdminLinker from "../data/ChatAdminLinker.ts"
 import { db } from "../data/db.ts"
 import FileManager from "../data/FileManager.ts"
 
-async function IChatToProtoChat(c: IChat, user_id?: string) {
+async function IChatToProtoChat(c: IChat, user_id?: string, isMember?: boolean) {
     let a: LingCatProto.classes.IChat.$Properties = {
         id: c.id,
         title: c.title,
@@ -23,6 +23,7 @@ async function IChatToProtoChat(c: IChat, user_id?: string) {
         lastMessageTime: c.last_message_time,
         description: c.description,
         lastMessageText: c.last_message_text,
+        isMember: isMember == undefined ? c.is_member : isMember,
     }
     if (c.type == 'private' && user_id) {
         const anotherUserId = await UserChatLinker.getAnotherUserInPrivateChat(c.id, user_id)
@@ -132,8 +133,10 @@ export default class ChatApi {
                 if (chat == null)
                     return sendError(sendPackage, mPackage.method_id, 'Chat doesn\'t exists', Code.Not_Found)
 
+                const isMember = await UserChatLinker.isUserChatLinked(user_id, data.chatId)
+
                 const settings = JSON.parse(chat.settings)
-                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId)) {
+                if (!isMember) {
                     /**
                      * 仅入群方式对非对话成员可见
                      */
@@ -149,7 +152,7 @@ export default class ChatApi {
                     method_id: Methods.Query_Chat_Info_Response,
                     flags: 0,
                     data: LingCatProto.methods.Query_Chat_Info_Response.encode({
-                        info: await IChatToProtoChat(chat, user_id),
+                        info: await IChatToProtoChat(chat, user_id, isMember),
                     }).finish()
                 }))
                 break
@@ -256,7 +259,7 @@ export default class ChatApi {
                 const chats = await Promise.all((await UserChatLinker.queryChatsOfUser(user_id, {
                     limit: data.limit != undefined ? data.limit : 1000,
                     offset: data.offset || 0,
-                })).map((c) => IChatToProtoChat(c, user_id)))
+                })).map((c) => IChatToProtoChat(c, user_id, true)))
                 sendPackage(Package.encode({
                     method_id: Methods.Get_My_Chats_Response,
                     flags: 0,
@@ -278,7 +281,7 @@ export default class ChatApi {
                     method_id: Methods.Get_My_Favourite_Chats_Response,
                     flags: 0,
                     data: LingCatProto.methods.Get_My_Favourite_Chats_Response.encode({
-                        chats: await Promise.all(chats.map((c) => IChatToProtoChat(c, user_id))),
+                        chats: await Promise.all(chats.map((c) => IChatToProtoChat(c, user_id, true))),
                     }).finish()
                 }))
                 break
@@ -315,7 +318,7 @@ export default class ChatApi {
                     method_id: Methods.Search_My_Chats_Response,
                     flags: 0,
                     data: LingCatProto.methods.Search_My_Chats_Response.encode({
-                        chats: await Promise.all(limited.map((c) => IChatToProtoChat(c, user_id))),
+                        chats: await Promise.all(limited.map((c) => IChatToProtoChat(c, user_id, true))),
                     }).finish()
                 }))
                 break

@@ -491,6 +491,9 @@ export namespace lingcat {
             /** IChat lastMessageText. */
             lastMessageText?: (string|null);
 
+            /** IChat isMember. */
+            isMember: boolean;
+
             /**
              * Creates a new IChat instance using the specified properties.
              * @param [properties] Properties to set
@@ -604,6 +607,9 @@ export namespace lingcat {
 
                 /** IChat lastMessageText */
                 lastMessageText?: (string|null);
+
+                /** IChat isMember */
+                isMember?: (boolean|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

@@ -14,6 +14,7 @@ function protoChatToIChat(chat: LingCatProto.classes.IChat.$Properties) {
         last_message_time: chat.lastMessageTime,
         last_message_text: chat.lastMessageText,
         description: chat.description,
+        is_member: chat.isMember,
     } as IChat
 }
 
