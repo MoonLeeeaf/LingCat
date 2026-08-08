@@ -15,6 +15,17 @@ function TextContainer({ children }: { children: React.ReactNode }) {
     </div>
 }
 
+function TextContainerSystem({ children }: { children: React.ReactNode }) {
+    return <div style={{
+        paddingTop: '8px',
+        paddingBottom: '8px',
+        paddingLeft: '17px',
+        paddingRight: '17px',
+    }}>
+        {children}
+    </div>
+}
+
 export default function Message({
     message,
     senderName,
@@ -53,7 +64,10 @@ export default function Message({
 
             const flushCache = () => {
                 if (cache.length > 0) {
-                    elements.push(<TextContainer>{cache}</TextContainer>)
+                    if (isSystem)
+                        elements.push(<TextContainerSystem>{cache}</TextContainerSystem>)
+                    else
+                        elements.push(<TextContainer>{cache}</TextContainer>)
                     cache = []
                 }
             }
@@ -109,28 +123,26 @@ export default function Message({
             marginTop: '25px',
             marginBottom: '20px',
         }}
-        onContextMenu={(e) => {
-            if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
-            if (isMobileUI()) return
-            e.preventDefault()
-            setDropDownOpen(!isDropDownOpen)
-        }}
-        onClick={(e) => {
-            if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
-            if (!isMobileUI()) {
-                isDropDownOpen && setDropDownOpen(false)
-                return
-            }
-            e.preventDefault()
-            setDropDownOpen(!isDropDownOpen)
-        }}>
+            onContextMenu={(e) => {
+                if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+                if (isMobileUI()) return
+                e.preventDefault()
+                setDropDownOpen(!isDropDownOpen)
+            }}
+            onClick={(e) => {
+                if ((e.target as HTMLElement).tagName.toLowerCase() != 'div') return
+                if (!isMobileUI()) {
+                    isDropDownOpen && setDropDownOpen(false)
+                    return
+                }
+                e.preventDefault()
+                setDropDownOpen(!isDropDownOpen)
+            }}>
             <mdui-dropdown ref={dropDownRef} open={isDropDownOpen} trigger="manual">
                 <mdui-card slot="trigger"
                     variant="filled"
                     style={{
                         alignSelf: 'center',
-                        paddingLeft: '5px',
-                        paddingRight: '5px',
                         fontSize: '92%',
                     }}>
                     <Markdown value={message} renderer={defaultRender} breaks={true} />
