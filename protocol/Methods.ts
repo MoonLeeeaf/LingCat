@@ -64,6 +64,10 @@ export default class Methods {
     static Edit_Chat_Admin_Permissions_Response = 0x64
     static Remove_Chat_Admin_Request = 0x65
     static Remove_Chat_Admin_Response = 0x66
+    static Verify_Password_Identity_Request = 0x67
+    static Verify_Password_Identity_Response = 0x68
+    static Change_Password_Request = 0x69
+    static Change_Password_Response = 0x70
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32

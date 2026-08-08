@@ -160,6 +160,67 @@ export default class UserApi {
                 }))
                 break
             }
+            case Methods.Verify_Password_Identity_Request: {
+                const data = LingCatProto.methods.Verify_Password_Identity_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+
+                // 1. 获取用户信息
+                const user = await UserDataBase.queryUserById(user_id)
+                if (!user) {
+                    return sendError(sendPackage, mPackage.method_id, 'User not found', Code.Not_Found)
+                }
+
+                // 2. 验证旧密码（如果你提供了 old_password 字段）
+                if (data.oldPassword) {
+                    const hashedInput = UserDataBase.hashifyPassword(data.oldPassword)
+                    if (user.password !== hashedInput) {
+                        return sendError(sendPackage, mPackage.method_id, 'Incorrect password', Code.Forbidden)
+                    }
+                } else {
+                    // 如果未来扩展其他验证方式（如邮箱验证码），在这里添加 else if
+                    return sendError(sendPackage, mPackage.method_id, 'No valid credential provided', Code.Bad_Request)
+                }
+
+                // 3. 签发一次性 change_token（有效期 5 分钟）
+                const changeToken = TokenManager.signChangePasswordTokenForUser(user_id)
+
+                // 4. 返回响应
+                sendPackage(Package.encode({
+                    method_id: Methods.Verify_Password_Identity_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Verify_Password_Identity_Response.encode({
+                        changeToken,
+                    }).finish()
+                }))
+                break
+            }
+            case Methods.Change_Password_Request: {
+                const data = LingCatProto.methods.Change_Password_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+            
+                // 1. 验证 change_token
+                const tokenPayload = await TokenManager.verifyChangePasswordToken(data.changeToken, user_id)
+                if (!tokenPayload) {
+                    return sendError(sendPackage, mPackage.method_id, 'Invalid or expired change token', Code.Forbidden)
+                }
+            
+                // 2. 更新密码
+                const hashedNew = UserDataBase.hashifyPassword(data.newPassword)
+                await UserDataBase.updateRawPassWord(user_id, hashedNew)
+            
+                // 3. （可选）使所有现有 access_token 失效，或让用户重新登录
+                // 这里可以调用 TokenManager 的黑名单或直接让用户重新登录
+                
+                // 不过这个还没有进行设计......
+                // 不好办呐, 不好办呐
+            
+                sendPackage(Package.encode({
+                    method_id: Methods.Change_Password_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Change_Password_Response.encode({}).finish()
+                }))
+                break
+            }
             default: {
                 return false
             }

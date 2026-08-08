@@ -186,4 +186,57 @@ export default class UserApi {
             timeout,
         })).data)
     }
+    /**
+     * 验证身份并获取修改密码的临时令牌
+     * @returns change_token
+     */
+    static async verifyPasswordIdentity(client: LingCatClient, {
+        access_token,
+        old_password,
+        timeout,
+    }: {
+        access_token: string
+        old_password: string
+        timeout?: number
+    }) {
+        const response = await client.invoke({
+            method_id: Methods.Verify_Password_Identity_Request,
+            data: LingCatProto.methods.Verify_Password_Identity_Request.encode({
+                accessToken: access_token,
+                oldPassword: old_password,
+            }).finish(),
+            timeout,
+        })
+        return decodeOrThrow<LingCatProto.methods.Verify_Password_Identity_Response>(
+            LingCatProto.methods.Verify_Password_Identity_Response,
+            response.data
+        ).changeToken
+    }
+    /**
+     * 修改密码（需先获取 change_token）
+     */
+    static async changePassword(client: LingCatClient, {
+        access_token,
+        change_token,
+        new_password,
+        timeout,
+    }: {
+        access_token: string
+        change_token: string
+        new_password: string
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Change_Password_Response>(
+            LingCatProto.methods.Change_Password_Response,
+            (await client.invoke({
+                method_id: Methods.Change_Password_Request,
+                data: LingCatProto.methods.Change_Password_Request.encode({
+                    accessToken: access_token,
+                    changeToken: change_token,
+                    newPassword: new_password,
+                }).finish(),
+                timeout,
+            })).data
+        )
+    }
 }

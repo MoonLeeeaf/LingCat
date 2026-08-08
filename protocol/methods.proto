@@ -310,3 +310,21 @@ message Remove_Chat_Admin_Request {
 }
 
 message Remove_Chat_Admin_Response {}
+
+message Verify_Password_Identity_Request {
+    string access_token = 1;
+    optional string old_password = 2;
+    // optional string verification_code = 3;
+}
+
+message Verify_Password_Identity_Response {
+    string change_token = 1;
+}
+
+message Change_Password_Request {
+    string access_token = 1;
+    string change_token = 2;
+    string new_password = 3;
+}
+
+message Change_Password_Response {}

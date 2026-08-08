@@ -68,9 +68,9 @@ function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
         <mdui-dialog close-on-overlay-click close-on-esc ref={mAddKeyDialog as any}>
             <span slot="headline">添加服务端公钥</span>
 
-            <mdui-text-field label="服务端 Host (如 127.0.0.1:80)" ref={mAddKeyServerHost as any}></mdui-text-field>
+            <mdui-text-field variant="outlined" label="服务端 Host (如 127.0.0.1:80)" ref={mAddKeyServerHost as any}></mdui-text-field>
             <div style={{ paddingTop: '15px' }}></div>
-            <mdui-text-field autosize label="服务端公钥 (Hex)" ref={mAddKeyPublicKey as any}></mdui-text-field>
+            <mdui-text-field variant="outlined" autosize label="服务端公钥 (Hex)" ref={mAddKeyPublicKey as any}></mdui-text-field>
 
             <mdui-button slot="action" variant="text" onClick={() => mAddKeyDialog.current!.open = false}>取消</mdui-button>
             <mdui-button slot="action" variant="text" onClick={() => {
@@ -135,11 +135,11 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
     const child = <>
         <span slot="headline">登录</span>
 
-        <mdui-text-field label="服务端 HTTP 地址 (留空为当前页)" ref={mLoginServer as any}></mdui-text-field>
+        <mdui-text-field variant="outlined" label="服务端 HTTP 地址 (留空为当前页)" ref={mLoginServer as any}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
-        <mdui-text-field label="用户名 / 用户 ID" ref={mLoginAccount as any}></mdui-text-field>
+        <mdui-text-field variant="outlined" label="用户名 / 用户 ID" ref={mLoginAccount as any}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
-        <mdui-text-field label="密码" type="password" ref={mLoginPassword as any}></mdui-text-field>
+        <mdui-text-field variant="outlined" label="密码" type="password" ref={mLoginPassword as any}></mdui-text-field>
 
 
         <mdui-button slot="action" variant="text" onClick={() => mSettingsDialog.current!.open = true}>设置</mdui-button>
@@ -147,7 +147,7 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
         <mdui-button slot="action" variant="text" onClick={() => {
             const dlg = dialog({
                 headline: "注册",
-                body: `<mdui-text-field label="用户名 (可选)" id="username"></mdui-text-field><div style="padding-top: 15px"></div><mdui-text-field label="昵称" id="nickname"></mdui-text-field><div style="padding-top: 15px"></div><mdui-text-field label="密码" type="password" id="password"></mdui-text-field>`,
+                body: `<mdui-text-field variant="outlined" label="用户名 (可选)" id="username"></mdui-text-field><div style="padding-top: 15px"></div><mdui-text-field variant="outlined" label="昵称" id="nickname"></mdui-text-field><div style="padding-top: 15px"></div><mdui-text-field variant="outlined" label="密码" type="password" id="password"></mdui-text-field>`,
                 closeOnEsc: true,
                 closeOnOverlayClick: true,
                 actions: [{
@@ -254,9 +254,8 @@ function LoginDialog({ mSettingsDialog, mLoginDialog, allowClose }: { mSettingsD
     </mdui-dialog>
 }
 
-export default function ClientSettingsDialog({ mSettingsDialog, mLoginDialog }: { mSettingsDialog: any, mLoginDialog: any }) {
+export default function ClientSettingsDialog({ mSettingsDialog, mLoginDialog, mSwitchUserDialog }: { mSettingsDialog: any, mSwitchUserDialog: any, mLoginDialog: any }) {
     const mServerPublicKeysSettingDialog = React.useRef<Dialog>(undefined)
-    const mSwitchUserDialog = React.useRef<Dialog>(undefined)
     const mSwitchUserLoginDialog = React.useRef<Dialog>(undefined)
 
     return <>

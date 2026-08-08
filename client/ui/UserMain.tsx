@@ -17,6 +17,7 @@ import ChatProfileDialog from "./ChatProfileDialog.tsx"
 import showSnackbar from "./showSnackbar.ts"
 import useEventListener from "./useEventListener.ts"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
+import ChangePasswordDialog from "./ChangePasswordDialog.tsx"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -50,7 +51,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
     </mdui-dropdown>
 }
 
-export default function UserMain({ profile, setProfile, drawerRef, mSettingsDialog, mLoginDialog }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>, mSettingsDialog: React.RefObject<Dialog | undefined>, mLoginDialog: React.RefObject<Dialog | undefined> }) {
+export default function UserMain({ profile, setProfile, drawerRef, mSettingsDialog, mLoginDialog, mSwitchUserDialog }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>, mSettingsDialog: React.RefObject<Dialog | undefined>, mLoginDialog: React.RefObject<Dialog | undefined>, mSwitchUserDialog: React.RefObject<Dialog | undefined> }) {
     const [loadingProfile, setLoadingProfile] = React.useState(true)
 
     React.useEffect(() => {
@@ -291,7 +292,14 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
         </mdui-dialog>
         <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
             <mdui-navigation-rail ref={navigationRef} contained alignment="center" value="recent">
-                <Avatar slot="top" onClick={() => UserProfileDialog.show(profile?.id!)} src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
+                <mdui-dropdown trigger="hover" slot="top">
+                    <Avatar slot="trigger" src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
+                    <mdui-menu>
+                        <mdui-menu-item icon="info" onClick={() => UserProfileDialog.show(profile?.id!)}>我的资料</mdui-menu-item>
+                        <mdui-menu-item icon="switch_account" onClick={() => mSwitchUserDialog.current!.open = true}>切换账号</mdui-menu-item>
+                        <mdui-menu-item icon="edit" onClick={() => ChangePasswordDialog.show()}>修改密码</mdui-menu-item>
+                    </mdui-menu>
+                </mdui-dropdown>
 
                 <mdui-dropdown trigger="hover" slot="top">
                     <mdui-button-icon icon="add" slot="trigger"></mdui-button-icon>

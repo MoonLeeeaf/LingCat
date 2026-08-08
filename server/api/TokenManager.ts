@@ -4,7 +4,7 @@ import crypto from 'node:crypto'
 import { config } from '../config.ts'
 import UserDataBase from '../data/UserDataBase.ts'
 
-export type TokenType = 'access' | 'file_upload' | 'file_access'
+export type TokenType = 'access' | 'file_upload' | 'file_access' | 'change_password'
 
 const secret = config.token_secret ? Buffer.from(config.token_secret) : crypto.randomBytes(16)
 
@@ -33,6 +33,14 @@ export default class TokenManager {
             expiresIn: '1h',
         })
     }
+    static signChangePasswordTokenForUser(user_id: string) {
+        return jwt.sign({
+            user_id,
+            type: 'change_password',
+        }, secret, {
+            expiresIn: '5m',
+        })
+    }
 
     static async verifyAccessToken(token: string, user_id?: string) {
         return await TokenManager.verifyToken(token, 'access', user_id) as { user_id: string, type: 'access' }
@@ -44,6 +52,9 @@ export default class TokenManager {
 
     static async verifyFileAccessToken(token: string, user_id?: string) {
         return await TokenManager.verifyToken(token, 'file_access', user_id) as { user_id: string, type: 'file_access' }
+    }
+    static async verifyChangePasswordToken(token: string, user_id?: string) {
+        return await TokenManager.verifyToken(token, 'change_password', user_id) as { user_id: string, type: 'change_password' }
     }
 
     static async verifyToken(token: string, type: TokenType, user_id?: string) {

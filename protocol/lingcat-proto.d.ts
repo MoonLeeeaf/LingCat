@@ -8785,5 +8785,485 @@ export namespace lingcat {
             /** Shape of a Remove_Chat_Admin_Response. */
             type $Shape = lingcat.methods.Remove_Chat_Admin_Response.$Properties;
         }
+
+        /**
+         * Properties of a Verify_Password_Identity_Request.
+         * @deprecated Use lingcat.methods.Verify_Password_Identity_Request.$Properties instead.
+         */
+        interface IVerify_Password_Identity_Request extends lingcat.methods.Verify_Password_Identity_Request.$Properties {
+        }
+
+        /** Represents a Verify_Password_Identity_Request. */
+        class Verify_Password_Identity_Request {
+
+            /**
+             * Constructs a new Verify_Password_Identity_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Verify_Password_Identity_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Verify_Password_Identity_Request accessToken. */
+            accessToken: string;
+
+            /** Verify_Password_Identity_Request oldPassword. */
+            oldPassword?: (string|null);
+
+            /**
+             * Creates a new Verify_Password_Identity_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Verify_Password_Identity_Request instance
+             */
+            static create(properties: lingcat.methods.Verify_Password_Identity_Request.$Shape): lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape;
+            static create(properties?: lingcat.methods.Verify_Password_Identity_Request.$Properties): lingcat.methods.Verify_Password_Identity_Request;
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Request message. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Request.verify|verify} messages.
+             * @param message Verify_Password_Identity_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Verify_Password_Identity_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Request message, length delimited. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Request.verify|verify} messages.
+             * @param message Verify_Password_Identity_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Verify_Password_Identity_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Verify_Password_Identity_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape} Verify_Password_Identity_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape;
+
+            /**
+             * Decodes a Verify_Password_Identity_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape} Verify_Password_Identity_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape;
+
+            /**
+             * Verifies a Verify_Password_Identity_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Verify_Password_Identity_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Verify_Password_Identity_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Verify_Password_Identity_Request;
+
+            /**
+             * Creates a plain object from a Verify_Password_Identity_Request message. Also converts values to other types if specified.
+             * @param message Verify_Password_Identity_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Verify_Password_Identity_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Verify_Password_Identity_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Verify_Password_Identity_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Verify_Password_Identity_Request {
+
+            /** Properties of a Verify_Password_Identity_Request. */
+            interface $Properties {
+
+                /** Verify_Password_Identity_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Verify_Password_Identity_Request oldPassword */
+                oldPassword?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Verify_Password_Identity_Request. */
+            type $Shape = lingcat.methods.Verify_Password_Identity_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Verify_Password_Identity_Response.
+         * @deprecated Use lingcat.methods.Verify_Password_Identity_Response.$Properties instead.
+         */
+        interface IVerify_Password_Identity_Response extends lingcat.methods.Verify_Password_Identity_Response.$Properties {
+        }
+
+        /** Represents a Verify_Password_Identity_Response. */
+        class Verify_Password_Identity_Response {
+
+            /**
+             * Constructs a new Verify_Password_Identity_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Verify_Password_Identity_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Verify_Password_Identity_Response changeToken. */
+            changeToken: string;
+
+            /**
+             * Creates a new Verify_Password_Identity_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Verify_Password_Identity_Response instance
+             */
+            static create(properties: lingcat.methods.Verify_Password_Identity_Response.$Shape): lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape;
+            static create(properties?: lingcat.methods.Verify_Password_Identity_Response.$Properties): lingcat.methods.Verify_Password_Identity_Response;
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Response message. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Response.verify|verify} messages.
+             * @param message Verify_Password_Identity_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Verify_Password_Identity_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Response message, length delimited. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Response.verify|verify} messages.
+             * @param message Verify_Password_Identity_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Verify_Password_Identity_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Verify_Password_Identity_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape} Verify_Password_Identity_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape;
+
+            /**
+             * Decodes a Verify_Password_Identity_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape} Verify_Password_Identity_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape;
+
+            /**
+             * Verifies a Verify_Password_Identity_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Verify_Password_Identity_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Verify_Password_Identity_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Verify_Password_Identity_Response;
+
+            /**
+             * Creates a plain object from a Verify_Password_Identity_Response message. Also converts values to other types if specified.
+             * @param message Verify_Password_Identity_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Verify_Password_Identity_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Verify_Password_Identity_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Verify_Password_Identity_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Verify_Password_Identity_Response {
+
+            /** Properties of a Verify_Password_Identity_Response. */
+            interface $Properties {
+
+                /** Verify_Password_Identity_Response changeToken */
+                changeToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Verify_Password_Identity_Response. */
+            type $Shape = lingcat.methods.Verify_Password_Identity_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Change_Password_Request.
+         * @deprecated Use lingcat.methods.Change_Password_Request.$Properties instead.
+         */
+        interface IChange_Password_Request extends lingcat.methods.Change_Password_Request.$Properties {
+        }
+
+        /** Represents a Change_Password_Request. */
+        class Change_Password_Request {
+
+            /**
+             * Constructs a new Change_Password_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Change_Password_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Change_Password_Request accessToken. */
+            accessToken: string;
+
+            /** Change_Password_Request changeToken. */
+            changeToken: string;
+
+            /** Change_Password_Request newPassword. */
+            newPassword: string;
+
+            /**
+             * Creates a new Change_Password_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Change_Password_Request instance
+             */
+            static create(properties: lingcat.methods.Change_Password_Request.$Shape): lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape;
+            static create(properties?: lingcat.methods.Change_Password_Request.$Properties): lingcat.methods.Change_Password_Request;
+
+            /**
+             * Encodes the specified Change_Password_Request message. Does not implicitly {@link lingcat.methods.Change_Password_Request.verify|verify} messages.
+             * @param message Change_Password_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Change_Password_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Change_Password_Request message, length delimited. Does not implicitly {@link lingcat.methods.Change_Password_Request.verify|verify} messages.
+             * @param message Change_Password_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Change_Password_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Change_Password_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape} Change_Password_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape;
+
+            /**
+             * Decodes a Change_Password_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape} Change_Password_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape;
+
+            /**
+             * Verifies a Change_Password_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Change_Password_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Change_Password_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Change_Password_Request;
+
+            /**
+             * Creates a plain object from a Change_Password_Request message. Also converts values to other types if specified.
+             * @param message Change_Password_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Change_Password_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Change_Password_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Change_Password_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Change_Password_Request {
+
+            /** Properties of a Change_Password_Request. */
+            interface $Properties {
+
+                /** Change_Password_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Change_Password_Request changeToken */
+                changeToken?: (string|null);
+
+                /** Change_Password_Request newPassword */
+                newPassword?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Change_Password_Request. */
+            type $Shape = lingcat.methods.Change_Password_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Change_Password_Response.
+         * @deprecated Use lingcat.methods.Change_Password_Response.$Properties instead.
+         */
+        interface IChange_Password_Response extends lingcat.methods.Change_Password_Response.$Properties {
+        }
+
+        /** Represents a Change_Password_Response. */
+        class Change_Password_Response {
+
+            /**
+             * Constructs a new Change_Password_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Change_Password_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Change_Password_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Change_Password_Response instance
+             */
+            static create(properties: lingcat.methods.Change_Password_Response.$Shape): lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape;
+            static create(properties?: lingcat.methods.Change_Password_Response.$Properties): lingcat.methods.Change_Password_Response;
+
+            /**
+             * Encodes the specified Change_Password_Response message. Does not implicitly {@link lingcat.methods.Change_Password_Response.verify|verify} messages.
+             * @param message Change_Password_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Change_Password_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Change_Password_Response message, length delimited. Does not implicitly {@link lingcat.methods.Change_Password_Response.verify|verify} messages.
+             * @param message Change_Password_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Change_Password_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Change_Password_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape} Change_Password_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape;
+
+            /**
+             * Decodes a Change_Password_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape} Change_Password_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape;
+
+            /**
+             * Verifies a Change_Password_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Change_Password_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Change_Password_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Change_Password_Response;
+
+            /**
+             * Creates a plain object from a Change_Password_Response message. Also converts values to other types if specified.
+             * @param message Change_Password_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Change_Password_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Change_Password_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Change_Password_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Change_Password_Response {
+
+            /** Properties of a Change_Password_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Change_Password_Response. */
+            type $Shape = lingcat.methods.Change_Password_Response.$Properties;
+        }
     }
 }

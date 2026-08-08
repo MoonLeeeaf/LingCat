@@ -8,7 +8,7 @@ import { IUser } from "lingcat-protocol"
 export default function Main() {
     const mSettingsDialog = React.useRef<Dialog>(undefined)
     const mLoginDialog = React.useRef<Dialog>(undefined)
-
+    const mSwitchUserDialog = React.useRef<Dialog>(undefined)
     const [profile, setProfile] = React.useState<IUser>()
 
     const drawerRef = React.useRef<NavigationDrawer>(undefined)
@@ -47,12 +47,13 @@ export default function Main() {
                             <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
                         </div>
                     </div>
-                    : <UserMain mLoginDialog={mLoginDialog} mSettingsDialog={mSettingsDialog} profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
+                    : <UserMain mLoginDialog={mLoginDialog} mSwitchUserDialog={mSwitchUserDialog} mSettingsDialog={mSettingsDialog} profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
             }
 
             <ClientSettingsDialog
                 mLoginDialog={mLoginDialog}
-                mSettingsDialog={mSettingsDialog} />
+                mSettingsDialog={mSettingsDialog}
+                mSwitchUserDialog={mSwitchUserDialog} />
         </mdui-layout>
     )
 }

@@ -21131,6 +21131,1101 @@ export const lingcat = $root.lingcat = (() => {
             return Remove_Chat_Admin_Response;
         })();
 
+        methods.Verify_Password_Identity_Request = (function() {
+
+            /**
+             * Properties of a Verify_Password_Identity_Request.
+             * @typedef {Object} lingcat.methods.Verify_Password_Identity_Request.$Properties
+             * @property {string|null} [accessToken] Verify_Password_Identity_Request accessToken
+             * @property {string|null} [oldPassword] Verify_Password_Identity_Request oldPassword
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Verify_Password_Identity_Request.
+             * @memberof lingcat.methods
+             * @interface IVerify_Password_Identity_Request
+             * @augments lingcat.methods.Verify_Password_Identity_Request.$Properties
+             * @deprecated Use lingcat.methods.Verify_Password_Identity_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Verify_Password_Identity_Request.
+             * @typedef {lingcat.methods.Verify_Password_Identity_Request.$Properties} lingcat.methods.Verify_Password_Identity_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Verify_Password_Identity_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Verify_Password_Identity_Request.
+             * @constructor
+             * @param {lingcat.methods.Verify_Password_Identity_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Verify_Password_Identity_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Verify_Password_Identity_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @instance
+             */
+            Verify_Password_Identity_Request.prototype.accessToken = "";
+
+            /**
+             * Verify_Password_Identity_Request oldPassword.
+             * @member {string|null|undefined} oldPassword
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @instance
+             */
+            Verify_Password_Identity_Request.prototype.oldPassword = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Verify_Password_Identity_Request.prototype, "_oldPassword", {
+                get: $util.oneOfGetter($oneOfFields = ["oldPassword"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Verify_Password_Identity_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Verify_Password_Identity_Request} Verify_Password_Identity_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Verify_Password_Identity_Request.$Shape): lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape;
+             *   (properties?: lingcat.methods.Verify_Password_Identity_Request.$Properties): lingcat.methods.Verify_Password_Identity_Request;
+             * }}
+             */
+            Verify_Password_Identity_Request.create = function(properties) {
+                return new Verify_Password_Identity_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Request message. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Request.$Properties} message Verify_Password_Identity_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Verify_Password_Identity_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.oldPassword != null && $Object.hasOwnProperty.call(message, "oldPassword"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.oldPassword);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Request message, length delimited. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Request.$Properties} message Verify_Password_Identity_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Verify_Password_Identity_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Verify_Password_Identity_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape} Verify_Password_Identity_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Verify_Password_Identity_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Verify_Password_Identity_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.oldPassword = reader.stringVerify();
+                            message._oldPassword = "oldPassword";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Verify_Password_Identity_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Verify_Password_Identity_Request & lingcat.methods.Verify_Password_Identity_Request.$Shape} Verify_Password_Identity_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Verify_Password_Identity_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Verify_Password_Identity_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Verify_Password_Identity_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.oldPassword != null && $Object.hasOwnProperty.call(message, "oldPassword")) {
+                    properties._oldPassword = 1;
+                    if (!$util.isString(message.oldPassword))
+                        return "oldPassword: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Verify_Password_Identity_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Verify_Password_Identity_Request} Verify_Password_Identity_Request
+             */
+            Verify_Password_Identity_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Verify_Password_Identity_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Verify_Password_Identity_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Verify_Password_Identity_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.oldPassword != null)
+                    message.oldPassword = $String(object.oldPassword);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Verify_Password_Identity_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Request} message Verify_Password_Identity_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Verify_Password_Identity_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.oldPassword != null && $Object.hasOwnProperty.call(message, "oldPassword"))
+                    object.oldPassword = message.oldPassword;
+                return object;
+            };
+
+            /**
+             * Converts this Verify_Password_Identity_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Verify_Password_Identity_Request.prototype.toJSON = function() {
+                return Verify_Password_Identity_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Verify_Password_Identity_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Verify_Password_Identity_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Verify_Password_Identity_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Verify_Password_Identity_Request";
+            };
+
+            return Verify_Password_Identity_Request;
+        })();
+
+        methods.Verify_Password_Identity_Response = (function() {
+
+            /**
+             * Properties of a Verify_Password_Identity_Response.
+             * @typedef {Object} lingcat.methods.Verify_Password_Identity_Response.$Properties
+             * @property {string|null} [changeToken] Verify_Password_Identity_Response changeToken
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Verify_Password_Identity_Response.
+             * @memberof lingcat.methods
+             * @interface IVerify_Password_Identity_Response
+             * @augments lingcat.methods.Verify_Password_Identity_Response.$Properties
+             * @deprecated Use lingcat.methods.Verify_Password_Identity_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Verify_Password_Identity_Response.
+             * @typedef {lingcat.methods.Verify_Password_Identity_Response.$Properties} lingcat.methods.Verify_Password_Identity_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Verify_Password_Identity_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Verify_Password_Identity_Response.
+             * @constructor
+             * @param {lingcat.methods.Verify_Password_Identity_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Verify_Password_Identity_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Verify_Password_Identity_Response changeToken.
+             * @member {string} changeToken
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @instance
+             */
+            Verify_Password_Identity_Response.prototype.changeToken = "";
+
+            /**
+             * Creates a new Verify_Password_Identity_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Verify_Password_Identity_Response} Verify_Password_Identity_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Verify_Password_Identity_Response.$Shape): lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape;
+             *   (properties?: lingcat.methods.Verify_Password_Identity_Response.$Properties): lingcat.methods.Verify_Password_Identity_Response;
+             * }}
+             */
+            Verify_Password_Identity_Response.create = function(properties) {
+                return new Verify_Password_Identity_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Response message. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Response.$Properties} message Verify_Password_Identity_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Verify_Password_Identity_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken") && message.changeToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.changeToken);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Verify_Password_Identity_Response message, length delimited. Does not implicitly {@link lingcat.methods.Verify_Password_Identity_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Response.$Properties} message Verify_Password_Identity_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Verify_Password_Identity_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Verify_Password_Identity_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape} Verify_Password_Identity_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Verify_Password_Identity_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Verify_Password_Identity_Response(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.changeToken = value;
+                            else
+                                delete message.changeToken;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Verify_Password_Identity_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Verify_Password_Identity_Response & lingcat.methods.Verify_Password_Identity_Response.$Shape} Verify_Password_Identity_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Verify_Password_Identity_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Verify_Password_Identity_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Verify_Password_Identity_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken"))
+                    if (!$util.isString(message.changeToken))
+                        return "changeToken: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Verify_Password_Identity_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Verify_Password_Identity_Response} Verify_Password_Identity_Response
+             */
+            Verify_Password_Identity_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Verify_Password_Identity_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Verify_Password_Identity_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Verify_Password_Identity_Response();
+                if (object.changeToken != null)
+                    if (typeof object.changeToken !== "string" || object.changeToken.length)
+                        message.changeToken = $String(object.changeToken);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Verify_Password_Identity_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {lingcat.methods.Verify_Password_Identity_Response} message Verify_Password_Identity_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Verify_Password_Identity_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.changeToken = "";
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken"))
+                    object.changeToken = message.changeToken;
+                return object;
+            };
+
+            /**
+             * Converts this Verify_Password_Identity_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Verify_Password_Identity_Response.prototype.toJSON = function() {
+                return Verify_Password_Identity_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Verify_Password_Identity_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Verify_Password_Identity_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Verify_Password_Identity_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Verify_Password_Identity_Response";
+            };
+
+            return Verify_Password_Identity_Response;
+        })();
+
+        methods.Change_Password_Request = (function() {
+
+            /**
+             * Properties of a Change_Password_Request.
+             * @typedef {Object} lingcat.methods.Change_Password_Request.$Properties
+             * @property {string|null} [accessToken] Change_Password_Request accessToken
+             * @property {string|null} [changeToken] Change_Password_Request changeToken
+             * @property {string|null} [newPassword] Change_Password_Request newPassword
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Change_Password_Request.
+             * @memberof lingcat.methods
+             * @interface IChange_Password_Request
+             * @augments lingcat.methods.Change_Password_Request.$Properties
+             * @deprecated Use lingcat.methods.Change_Password_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Change_Password_Request.
+             * @typedef {lingcat.methods.Change_Password_Request.$Properties} lingcat.methods.Change_Password_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Change_Password_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Change_Password_Request.
+             * @constructor
+             * @param {lingcat.methods.Change_Password_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Change_Password_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Change_Password_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Change_Password_Request
+             * @instance
+             */
+            Change_Password_Request.prototype.accessToken = "";
+
+            /**
+             * Change_Password_Request changeToken.
+             * @member {string} changeToken
+             * @memberof lingcat.methods.Change_Password_Request
+             * @instance
+             */
+            Change_Password_Request.prototype.changeToken = "";
+
+            /**
+             * Change_Password_Request newPassword.
+             * @member {string} newPassword
+             * @memberof lingcat.methods.Change_Password_Request
+             * @instance
+             */
+            Change_Password_Request.prototype.newPassword = "";
+
+            /**
+             * Creates a new Change_Password_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {lingcat.methods.Change_Password_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Change_Password_Request} Change_Password_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Change_Password_Request.$Shape): lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape;
+             *   (properties?: lingcat.methods.Change_Password_Request.$Properties): lingcat.methods.Change_Password_Request;
+             * }}
+             */
+            Change_Password_Request.create = function(properties) {
+                return new Change_Password_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Change_Password_Request message. Does not implicitly {@link lingcat.methods.Change_Password_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {lingcat.methods.Change_Password_Request.$Properties} message Change_Password_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Change_Password_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken") && message.changeToken !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.changeToken);
+                if (message.newPassword != null && $Object.hasOwnProperty.call(message, "newPassword") && message.newPassword !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.newPassword);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Change_Password_Request message, length delimited. Does not implicitly {@link lingcat.methods.Change_Password_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {lingcat.methods.Change_Password_Request.$Properties} message Change_Password_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Change_Password_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Change_Password_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape} Change_Password_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Change_Password_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Change_Password_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.changeToken = value;
+                            else
+                                delete message.changeToken;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.newPassword = value;
+                            else
+                                delete message.newPassword;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Change_Password_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Change_Password_Request & lingcat.methods.Change_Password_Request.$Shape} Change_Password_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Change_Password_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Change_Password_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Change_Password_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken"))
+                    if (!$util.isString(message.changeToken))
+                        return "changeToken: string expected";
+                if (message.newPassword != null && $Object.hasOwnProperty.call(message, "newPassword"))
+                    if (!$util.isString(message.newPassword))
+                        return "newPassword: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Change_Password_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Change_Password_Request} Change_Password_Request
+             */
+            Change_Password_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Change_Password_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Change_Password_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Change_Password_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.changeToken != null)
+                    if (typeof object.changeToken !== "string" || object.changeToken.length)
+                        message.changeToken = $String(object.changeToken);
+                if (object.newPassword != null)
+                    if (typeof object.newPassword !== "string" || object.newPassword.length)
+                        message.newPassword = $String(object.newPassword);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Change_Password_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {lingcat.methods.Change_Password_Request} message Change_Password_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Change_Password_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.changeToken = "";
+                    object.newPassword = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.changeToken != null && $Object.hasOwnProperty.call(message, "changeToken"))
+                    object.changeToken = message.changeToken;
+                if (message.newPassword != null && $Object.hasOwnProperty.call(message, "newPassword"))
+                    object.newPassword = message.newPassword;
+                return object;
+            };
+
+            /**
+             * Converts this Change_Password_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Change_Password_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Change_Password_Request.prototype.toJSON = function() {
+                return Change_Password_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Change_Password_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Change_Password_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Change_Password_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Change_Password_Request";
+            };
+
+            return Change_Password_Request;
+        })();
+
+        methods.Change_Password_Response = (function() {
+
+            /**
+             * Properties of a Change_Password_Response.
+             * @typedef {Object} lingcat.methods.Change_Password_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Change_Password_Response.
+             * @memberof lingcat.methods
+             * @interface IChange_Password_Response
+             * @augments lingcat.methods.Change_Password_Response.$Properties
+             * @deprecated Use lingcat.methods.Change_Password_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Change_Password_Response.
+             * @typedef {lingcat.methods.Change_Password_Response.$Properties} lingcat.methods.Change_Password_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Change_Password_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Change_Password_Response.
+             * @constructor
+             * @param {lingcat.methods.Change_Password_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Change_Password_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Change_Password_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {lingcat.methods.Change_Password_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Change_Password_Response} Change_Password_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Change_Password_Response.$Shape): lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape;
+             *   (properties?: lingcat.methods.Change_Password_Response.$Properties): lingcat.methods.Change_Password_Response;
+             * }}
+             */
+            Change_Password_Response.create = function(properties) {
+                return new Change_Password_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Change_Password_Response message. Does not implicitly {@link lingcat.methods.Change_Password_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {lingcat.methods.Change_Password_Response.$Properties} message Change_Password_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Change_Password_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Change_Password_Response message, length delimited. Does not implicitly {@link lingcat.methods.Change_Password_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {lingcat.methods.Change_Password_Response.$Properties} message Change_Password_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Change_Password_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Change_Password_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape} Change_Password_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Change_Password_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Change_Password_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Change_Password_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Change_Password_Response & lingcat.methods.Change_Password_Response.$Shape} Change_Password_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Change_Password_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Change_Password_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Change_Password_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Change_Password_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Change_Password_Response} Change_Password_Response
+             */
+            Change_Password_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Change_Password_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Change_Password_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Change_Password_Response();
+            };
+
+            /**
+             * Creates a plain object from a Change_Password_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {lingcat.methods.Change_Password_Response} message Change_Password_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Change_Password_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Change_Password_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Change_Password_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Change_Password_Response.prototype.toJSON = function() {
+                return Change_Password_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Change_Password_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Change_Password_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Change_Password_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Change_Password_Response";
+            };
+
+            return Change_Password_Response;
+        })();
+
         return methods;
     })();
 
