@@ -3,7 +3,7 @@ import fs from './fs.ts'
 import { IUser } from 'lingcat-protocol'
 import ProfileCache from './ProfileCache.ts'
 
-const default_server = location.protocol + '//' + location.host
+const default_server = location.protocol + '//' + location.host + location.pathname
 
 export default class ClientManager {
     static client: LingCatClient

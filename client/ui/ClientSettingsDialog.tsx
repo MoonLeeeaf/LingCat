@@ -7,7 +7,7 @@ import showSnackbar from "./showSnackbar.ts"
 import LingCatClient, { UserApi } from "lingcat-client-protocol"
 import tipError from "./tipError.ts"
 
-const default_server = location.protocol + '//' + location.host
+const default_server = location.protocol + '//' + location.host + location.pathname
 
 function ServerPublicKeysSettingDialog({ ref }: { ref: any }) {
     const [k, setK] = React.useState(Date.now() + '')
