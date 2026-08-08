@@ -4,7 +4,7 @@ import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
 import default_avatar from '../default_avatar.png'
 import { IChat, IMessage, IUser, Methods, Package } from "lingcat-protocol"
-import UserProfileDialog from "./UserProfileDialog.tsx"
+import UserProfileDialog from "./viewer/UserProfileDialog.tsx"
 import ClientManager from "../ClientManager.ts"
 import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
 import { Virtuoso } from "react-virtuoso"
@@ -13,11 +13,11 @@ import ChatFragment from "./chat/ChatFragment.tsx"
 import Avatar from "./Avatar.tsx"
 import AppState from "./AppState.ts"
 import tipError from "./tipError.ts"
-import ChatProfileDialog from "./ChatProfileDialog.tsx"
+import ChatProfileDialog from "./viewer/ChatProfileDialog.tsx"
 import showSnackbar from "./showSnackbar.ts"
 import useEventListener from "./useEventListener.ts"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
-import ChangePasswordDialog from "./ChangePasswordDialog.tsx"
+import ChangePasswordDialog from "./main/ChangePasswordDialog.tsx"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout

@@ -2,12 +2,12 @@ import { Dialog } from 'mdui'
 import PinchZoom from 'pinch-zoom-element/dist/pinch-zoom'
 import ReactClient from "react-dom/client"
 import React from 'react'
-import useEventListener from './useEventListener.ts'
+import useEventListener from '../useEventListener.ts'
 
-export default function ImageViewerDialog({ src, onClose }: { src: string, onClose?: () => void }) {
+export default function VideoViewerDialog({ src, onClose }: { src: string, onClose?: () => void }) {
     const dialogRef = React.useRef<Dialog>(null)
     const innerRef = React.useRef<PinchZoom>(null)
-    const [uniqueClass] = React.useState(() => `image-viewer-${Math.random().toString(36).substr(2, 8)}`)
+    const [uniqueClass] = React.useState(() => `video-viewer-${Math.random().toString(36).substr(2, 8)}`)
 
     useEventListener(dialogRef, 'closed', () => {
         onClose?.()
@@ -73,14 +73,20 @@ export default function ImageViewerDialog({ src, onClose }: { src: string, onClo
                     width: '100%',
                     height: '100%',
                 }}>
-                {src && <img src={src} alt="预览" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                <video
+                    src={src}
+                    controls
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                    }} />
                 {/* @ts-ignore */}
             </pinch-zoom>
         </mdui-dialog>
     )
 }
 
-ImageViewerDialog.show = function (src: string) {
+VideoViewerDialog.show = function (src: string) {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const root = ReactClient.createRoot(container)
@@ -89,5 +95,5 @@ ImageViewerDialog.show = function (src: string) {
         root.unmount()
         container.remove()
     }
-    root.render(<ImageViewerDialog src={src} onClose={onClose} />)
+    root.render(<VideoViewerDialog src={src} onClose={onClose} />)
 }

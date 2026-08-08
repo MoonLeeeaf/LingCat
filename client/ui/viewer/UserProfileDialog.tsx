@@ -1,19 +1,19 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
-import ReloadableImage from "./ReloadableImage.tsx"
+import ReloadableImage from "../ReloadableImage.tsx"
 import { Dialog } from "mdui"
-import useEventListener from "./useEventListener.ts"
+import useEventListener from "../useEventListener.ts"
 import { IUser } from "lingcat-protocol"
-import EffectOnly from "./EffectOnly.tsx"
-import CircleProgressDialog from "./CircleProgressDialog.tsx"
-import ClientManager from "../ClientManager.ts"
-import default_avatar from '../default_avatar.png'
+import EffectOnly from "../EffectOnly.tsx"
+import CircleProgressDialog from "../CircleProgressDialog.tsx"
+import ClientManager from "../../ClientManager.ts"
+import default_avatar from '../../default_avatar.png'
 import { ChatApi, UserApi } from "lingcat-client-protocol"
-import Avatar from "./Avatar.tsx"
-import tipError from "./tipError.ts"
-import EditMyProfileDialog from "./EditMyProfileDialog.tsx"
-import ProfileCache from "../ProfileCache.ts"
-import AppState from "./AppState.ts"
+import Avatar from "../Avatar.tsx"
+import tipError from "../tipError.ts"
+import EditMyProfileDialog from "../main/EditMyProfileDialog.tsx"
+import ProfileCache from "../../ProfileCache.ts"
+import AppState from "../AppState.ts"
 import ImageViewerDialog from "./ImageViewerDialog.tsx"
 
 export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: React.RefObject<any>, user_id: string, onClose?: () => void }) {

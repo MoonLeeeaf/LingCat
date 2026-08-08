@@ -1,17 +1,15 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
-import ReloadableImage from "./ReloadableImage.tsx"
 import { Dialog, TextField } from "mdui"
-import useEventListener from "./useEventListener.ts"
 import type { IUser } from "lingcat-protocol"
-import EffectOnly from "./EffectOnly.tsx"
-import CircleProgressDialog from "./CircleProgressDialog.tsx"
-import ClientManager from "../ClientManager.ts"
-import default_avatar from '../default_avatar.png'
+import EffectOnly from "../EffectOnly.tsx"
+import CircleProgressDialog from "../CircleProgressDialog.tsx"
+import ClientManager from "../../ClientManager.ts"
+import default_avatar from '../../default_avatar.png'
 import { UserApi, FileApi } from "lingcat-client-protocol"
-import Avatar from "./Avatar.tsx"
-import tipError from "./tipError.ts"
-import showSnackbar from "./showSnackbar.ts"
+import Avatar from "../Avatar.tsx"
+import tipError from "../tipError.ts"
+import showSnackbar from "../showSnackbar.ts"
 
 export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)

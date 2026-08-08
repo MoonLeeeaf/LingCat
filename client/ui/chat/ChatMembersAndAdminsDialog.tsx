@@ -1,22 +1,16 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
-import ReloadableImage from "./ReloadableImage.tsx"
 import { $, dialog, Dialog, Tabs } from "mdui"
-import useEventListener from "./useEventListener.ts"
-import { AvailableChatAdminPermissions, IChat, IChatAdmin, IUser } from "lingcat-protocol"
-import EffectOnly from "./EffectOnly.tsx"
-import CircleProgressDialog from "./CircleProgressDialog.tsx"
-import ClientManager from "../ClientManager.ts"
-import default_avatar from '../default_avatar.png'
-import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
-import Avatar from "./Avatar.tsx"
-import tipError from "./tipError.ts"
-import EditMyProfileDialog from "./EditMyProfileDialog.tsx"
-import ProfileCache from "../ProfileCache.ts"
-import AppState from "./AppState.ts"
-import UserProfileDialog from "./UserProfileDialog.tsx"
-import ImageViewerDialog from "./ImageViewerDialog.tsx"
-import showSnackbar from "./showSnackbar.ts"
+import { AvailableChatAdminPermissions, IChatAdmin, IUser } from "lingcat-protocol"
+import EffectOnly from "../EffectOnly.tsx"
+import CircleProgressDialog from "../CircleProgressDialog.tsx"
+import ClientManager from "../../ClientManager.ts"
+import default_avatar from '../../default_avatar.png'
+import { ChatApi } from "lingcat-client-protocol"
+import Avatar from "../Avatar.tsx"
+import tipError from "../tipError.ts"
+import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
+import showSnackbar from "../showSnackbar.ts"
 
 export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: Function }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -119,7 +113,6 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                                     onClick: () => true
                                                 }, {
                                                     text: "确定",
-                                                    variant: 'tonal',
                                                     onClick: async () => {
                                                         try {
                                                             await ChatApi.removeChatMember(ClientManager.client, {
@@ -145,7 +138,6 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                                     onClick: () => true
                                                 }, {
                                                     text: "确定",
-                                                    variant: 'tonal',
                                                     onClick: async () => {
                                                         try {
                                                             await ChatApi.addChatAdmin(ClientManager.client, {
@@ -201,7 +193,6 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                                             onClick: () => true
                                                         }, {
                                                             text: "确定",
-                                                            variant: 'tonal',
                                                             onClick: async () => {
                                                                 try {
                                                                     await ChatApi.removeChatAdmin(ClientManager.client, {

@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactClient from 'react-dom/client'
 import { Dialog } from 'mdui'
-import ClientManager from '../ClientManager.ts'
+import ClientManager from '../../ClientManager.ts'
 import { UserApi } from 'lingcat-client-protocol'
-import showSnackbar from './showSnackbar.ts'
-import tipError from './tipError.ts'
+import showSnackbar from '../showSnackbar.ts'
+import tipError from '../tipError.ts'
 
 export default function ChangePasswordDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
