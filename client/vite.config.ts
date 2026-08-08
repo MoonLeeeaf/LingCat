@@ -10,7 +10,7 @@ const path = base_data_path + '/page'
 const default_public_key_path = base_data_path + '/key/public'
 
 try {
-    fs.unlinkSync(path)
+    fs.rmSync(path, { recursive: true, force: true })
 } catch(e) {}
 
 function publicKeyPlugin() {
