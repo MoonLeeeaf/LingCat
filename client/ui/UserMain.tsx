@@ -20,6 +20,7 @@ import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ChangePasswordDialog from "./main/ChangePasswordDialog.tsx"
 import Markdown, { ReactRenderer } from "marked-react"
 import ProfileCache from "../ProfileCache.ts"
+import ClientSettingsDialog, { LoginDialog, SwitchUserDialog } from "./ClientSettingsDialog.tsx"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -84,7 +85,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
     </mdui-dropdown>
 }
 
-export default function UserMain({ profile, setProfile, drawerRef, mSettingsDialog, mLoginDialog, mSwitchUserDialog }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>, mSettingsDialog: React.RefObject<Dialog | undefined>, mLoginDialog: React.RefObject<Dialog | undefined>, mSwitchUserDialog: React.RefObject<Dialog | undefined> }) {
+export default function UserMain({ profile, setProfile, drawerRef }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>}) {
     const [loadingProfile, setLoadingProfile] = React.useState(true)
 
     React.useEffect(() => {
@@ -93,7 +94,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 ClientManager.initClient(ClientManager.getActiveUserSessionName()!)
             } catch (e) {
                 console.log(e)
-                mLoginDialog.current!.open = true
+                LoginDialog.show({ allowClose: false })
                 setLoadingProfile(false)
             }
             ClientManager.client.onInit = async () => {
@@ -115,7 +116,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                     setProfile(await ClientManager.getMe())
                 } catch (e) {
                     tipError(e, "验证用户失败, 请重新登录")
-                    mLoginDialog.current!.open = true
+                    LoginDialog.show({ allowClose: false })
                 }
                 setLoadingProfile(false)
             }
@@ -380,7 +381,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                     <Avatar slot="trigger" src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
                     <mdui-menu>
                         <mdui-menu-item icon="info" onClick={() => UserProfileDialog.show(profile?.id!)}>我的资料</mdui-menu-item>
-                        <mdui-menu-item icon="switch_account" onClick={() => mSwitchUserDialog.current!.open = true}>切换账号</mdui-menu-item>
+                        <mdui-menu-item icon="switch_account" onClick={() => SwitchUserDialog.show()}>切换账号</mdui-menu-item>
                         <mdui-menu-item icon="edit" onClick={() => ChangePasswordDialog.show()}>修改密码</mdui-menu-item>
                     </mdui-menu>
                 </mdui-dropdown>
@@ -402,7 +403,7 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
                 <mdui-navigation-rail-item icon="chat--outlined" active-icon="chat" value="all"></mdui-navigation-rail-item>
                 <mdui-navigation-rail-item icon="search" value="search"></mdui-navigation-rail-item>
 
-                <mdui-button-icon icon="settings" slot="bottom" onClick={() => mSettingsDialog.current!.open = true}></mdui-button-icon>
+                <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
             </mdui-navigation-rail>
             <mdui-list style={{ marginLeft: 'calc(5px + 5rem)', marginRight: '5px' }}>
                 <mdui-text-field variant="outlined" ref={filterInputRef} placeholder="从中查找..." style={{ width: '100%', display: navigationSelected != 'search' ? undefined : 'none', paddingBottom: '10px' }}></mdui-text-field>

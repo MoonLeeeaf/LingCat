@@ -1,14 +1,11 @@
 import { dialog, Dialog, NavigationDrawer, TextField } from "mdui"
 import ClientManager from "../ClientManager.ts"
-import ClientSettingsDialog from "./ClientSettingsDialog.tsx"
+import ClientSettingsDialog, { LoginDialog } from "./ClientSettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
 import React from 'react'
 import { IUser } from "lingcat-protocol"
 
 export default function Main() {
-    const mSettingsDialog = React.useRef<Dialog>(undefined)
-    const mLoginDialog = React.useRef<Dialog>(undefined)
-    const mSwitchUserDialog = React.useRef<Dialog>(undefined)
     const [profile, setProfile] = React.useState<IUser>()
 
     const drawerRef = React.useRef<NavigationDrawer>(undefined)
@@ -21,12 +18,12 @@ export default function Main() {
                 actions: [{
                     text: "打开设置",
                     variant: 'tonal',
-                    onClick: () => mSettingsDialog.current!.open = true
+                    onClick: () => ClientSettingsDialog.show()
                 }]
             })
         else
             if (ClientManager.listUserSessions().length == 0) {
-                mLoginDialog.current!.open = true
+                LoginDialog.show({ allowClose: false })
             }
     }, [])
 
@@ -42,18 +39,13 @@ export default function Main() {
                         <div style={{
                             alignSelf: 'center',
                         }}>
-                            <mdui-button onClick={() => mSettingsDialog.current!.open = true}>打开设置</mdui-button>
+                            <mdui-button onClick={() => ClientSettingsDialog.show()}>打开设置</mdui-button>
                             <div style={{ height: '10px' }}></div>
                             <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
                         </div>
                     </div>
-                    : <UserMain mLoginDialog={mLoginDialog} mSwitchUserDialog={mSwitchUserDialog} mSettingsDialog={mSettingsDialog} profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
+                    : <UserMain profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
             }
-
-            <ClientSettingsDialog
-                mLoginDialog={mLoginDialog}
-                mSettingsDialog={mSettingsDialog}
-                mSwitchUserDialog={mSwitchUserDialog} />
         </mdui-layout>
     )
 }
