@@ -5,7 +5,7 @@ import ChatMessage from "./ChatMessage.tsx"
 import { useChatMessageStore } from "./useChatMessageStore.ts"
 import { IChat, IMessage, LingCatProto, Methods, Package } from "lingcat-protocol"
 import React from "react"
-import { NavigationDrawer, TextField } from "mdui"
+import { dialog, NavigationDrawer, TextField } from "mdui"
 import { ChatApi, FileApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
@@ -20,6 +20,7 @@ import MduiPatchedTextAreaElement from "../MduiPatchedTextAreaElement.ts"
 import escapeHtml from "../escapeHtml.ts"
 import ChatSettingsDialog from "./ChatSettingsDialog.tsx"
 import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
+import ProfileCache from "../../ProfileCache.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -70,6 +71,54 @@ function FileAttachment({ src, name }: { src: string, name: string }) {
             </span>
         </mdui-card>
     </a>
+}
+
+const render: Partial<ReactRenderer> = {
+    image(src, alt, _title) {
+        // console.log('image', src)
+        const type = /^(Video|File|UserMention|ChatMention)=.*/.exec(alt)?.[1]
+        const fileType = /^(Video|File)=.*/.exec(alt)?.[1] || 'Image'
+        if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(src)) {
+            const url = ClientManager.client.getFileUrlByHash(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!)
+            // 注意返回的元素必须是函数式组件
+            // 否则无法识别为独立的元素
+            // 使用 React.createElement(() => <component />) 会导致不必要的开销
+            // 且移动端会导致严重问题
+            return ({
+                Image: <ReloadableImage src={url} alt={alt} onClick={() => ImageViewerDialog.show(url)} style={{
+                    width: '100%',
+                    maxHeight: "300px",
+                    objectFit: 'cover',
+                    display: 'block',
+                }} />,
+                Video: <VideoAttachment src={url} />,
+                File: <FileAttachment src={url} name={/^Video|File=(.*)/.exec(alt)?.[1] || 'Unnamed file'} />,
+            })?.[fileType] || <em>{'<'}无法解析的消息元素{'>'}</em>
+        } else {
+            switch (type) {
+                case "UserMention":
+                    return <span
+                        style={{
+                            color: "rgb(var(--mdui-color-primary))",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            UserProfileDialog.show(/^lingcat:\/\/user\?id=(.*)/.exec(src)?.[1]!)
+                        }}>{/^UserMention=(.*)/.exec(alt)?.[1]}</span>
+                case "ChatMention":
+                    return <span
+                        style={{
+                            color: "rgb(var(--mdui-color-primary))",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            ChatProfileDialog.show(/^lingcat:\/\/chat\?id=(.*)/.exec(src)?.[1]!)
+                        }}>{/^ChatMention=(.*)/.exec(alt)?.[1]}</span>
+            }
+        }
+
+        return <ReloadableImage src={src} alt={alt} />
+    },
 }
 
 export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
@@ -297,32 +346,6 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         endSendingSnack()
     }
 
-    const render: Partial<ReactRenderer> = {
-        image(src, alt, _title) {
-            console.log('image', src)
-            const type = /^(Video|File)=.*/.exec(alt)?.[1]
-            const fileType = /^(Video|File)=.*/.exec(alt)?.[1] || 'Image'
-            if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(src)) {
-                const url = ClientManager.client.getFileUrlByHash(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!)
-                // 注意返回的元素必须是函数式组件
-                // 否则无法识别为独立的元素
-                // 使用 React.createElement(() => <component />) 会导致不必要的开销
-                // 且移动端会导致严重问题
-                return ({
-                    Image: <ReloadableImage src={url} alt={alt} onClick={() => ImageViewerDialog.show(url)} style={{
-                        width: '100%',
-                        maxHeight: "300px",
-                        objectFit: 'cover',
-                        display: 'block',
-                    }} />,
-                    Video: <VideoAttachment src={url} />,
-                    File: <FileAttachment src={url} name={/^Video|File=(.*)/.exec(alt)?.[1] || 'Unnamed file'} />,
-                })?.[fileType] || <em>{'<'}无法解析的消息元素{'>'}</em>
-            }
-            return <ReloadableImage src={src} alt={alt} />
-        },
-    }
-
     const attachFileInputRef = React.useRef<HTMLInputElement>(null)
     const cachedFiles = React.useRef<{ [fileName: string]: ArrayBuffer }>({})
     const cachedFileUrls = React.useRef<{ [fileName: string]: string }>({})
@@ -449,9 +472,33 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         if (id == null) return <div style={{ height: '0.5px' }}></div>
                         const msg = messageMap.get(id);
                         if (!msg) return <div style={{ height: '0.5px' }}></div>
-                        return <ChatMessage onAvatarClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)} render={render} msg={msg} messageMenus={<>
-                            <mdui-menu-item icon="info">Info</mdui-menu-item>
-                        </>} />
+                        return <ChatMessage
+                            onAvatarClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)}
+                            render={render}
+                            msg={msg}
+                            avatarMenus={<>
+                                <mdui-menu-item icon="info" onClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)}>用户资料</mdui-menu-item>
+                                <mdui-menu-item icon="alternate_email" onClick={async () => insertText(`![UserMention=@${((await ProfileCache.queryUserInfo(msg.sender_user_id!)).nickname)}](lingcat://user?id=${msg.sender_user_id}) `)}>提及用户</mdui-menu-item>
+                            </>}
+                            messageMenus={<>
+                                <mdui-menu-item icon="info" onClick={() => dialog({
+                                    headline: "Info",
+                                    body: `<span style="word-break: break-word;">${Object.keys(msg)
+                                        // @ts-ignore 懒
+                                        .map((k) => `${k} = ${msg[k]}`)
+                                        .join('<br><br>')}<span>`,
+                                    closeOnEsc: true,
+                                    closeOnOverlayClick: true,
+                                    actions: [
+                                        {
+                                            text: "关闭",
+                                            onClick: () => {
+                                                return true
+                                            },
+                                        }
+                                    ]
+                                })}>Info</mdui-menu-item>
+                            </>} />
                     }} />
 
                 <div style={{

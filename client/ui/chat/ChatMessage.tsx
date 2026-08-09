@@ -15,12 +15,14 @@ export default function ChatMessage({
     hideSender,
     onAvatarClick,
     messageMenus,
+    avatarMenus,
     render,
 }: {
     msg: IMessage
     hideSender?: boolean
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
+    avatarMenus?: React.ReactNode
     render?: Render
 }) {
     const [isMe, setIsMe] = React.useState(false)
@@ -40,5 +42,5 @@ export default function ChatMessage({
         })()
     }, [msg.sender_user_id])
 
-    return <Message time={msg.time} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
+    return <Message time={msg.time} avatarMenus={avatarMenus} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
 }

@@ -37,6 +37,7 @@ export default function Message({
     onAvatarClick,
     time,
     messageMenus,
+    avatarMenus,
 }: {
     message: string
     avatar: string
@@ -47,6 +48,7 @@ export default function Message({
     isAtRight?: boolean
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
+    avatarMenus?: React.ReactNode
     time?: number,
 }) {
     const defaultRender: Render = {
@@ -100,19 +102,25 @@ export default function Message({
         ...render,
     }
 
-    const [isLongPress, setIsLongPress] = React.useState(false)
-    const longPressTimer = React.useRef<NodeJS.Timeout | null>(null)
-
     const dropDownRef = React.useRef<Dropdown>(null)
     useEventListener(dropDownRef, 'closed', () => {
         setDropDownOpen(false)
     })
 
+    const avatarDropDownRef = React.useRef<Dropdown>(null)
+    useEventListener(avatarDropDownRef, 'closed', () => {
+        setAvatarDropDownOpen(false)
+    })
+
     const [isDropDownOpen, setDropDownOpen_] = React.useState(false)
+    const [isAvatarDropDownOpen, setAvatarDropDownOpen_] = React.useState(false)
 
     function setDropDownOpen(open: boolean) {
         setDropDownOpen_(open)
+    }
 
+    function setAvatarDropDownOpen(open: boolean) {
+        setAvatarDropDownOpen_(open)
     }
 
     return isSystem
@@ -138,6 +146,7 @@ export default function Message({
                 e.preventDefault()
                 setDropDownOpen(!isDropDownOpen)
             }}>
+            <div style={{ display: 'none' }} ref={avatarDropDownRef as any} />
             <mdui-dropdown ref={dropDownRef} open={isDropDownOpen} trigger="manual">
                 <mdui-card slot="trigger"
                     variant="filled"
@@ -195,15 +204,33 @@ export default function Message({
                     {
                         // 发送者头像
                     }
-                    <mdui-avatar
-                        onClick={() => onAvatarClick?.()}
-                        slot="trigger"
-                        src={avatar}
-                        style={{
-                            width: "43px",
-                            height: "43px",
-                            margin: "11px"
-                        }} />
+                    <mdui-dropdown ref={avatarDropDownRef} open={isAvatarDropDownOpen} trigger="manual">
+                        <mdui-avatar
+                            onContextMenu={(e) => {
+                                if (isMobileUI()) return
+                                e.preventDefault()
+                                setAvatarDropDownOpen(!isDropDownOpen)
+                            }}
+                            onClick={(e) => {
+                                if (!isMobileUI()) {
+                                    onAvatarClick?.()
+                                    isAvatarDropDownOpen && setAvatarDropDownOpen(false)
+                                    return
+                                }
+                                e.preventDefault()
+                                setAvatarDropDownOpen(!isDropDownOpen)
+                            }}
+                            slot="trigger"
+                            src={avatar}
+                            style={{
+                                width: "43px",
+                                height: "43px",
+                                margin: "11px"
+                            }} />
+                        <mdui-menu>
+                            {avatarMenus}
+                        </mdui-menu>
+                    </mdui-dropdown>
                     {
                         // 发送者昵称(右)
                         !isAtRight && <span
