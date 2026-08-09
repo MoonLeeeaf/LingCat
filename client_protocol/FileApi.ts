@@ -73,8 +73,8 @@ export default class UserApi {
             json = JSON.parse(text)
         } catch (e) {
             throw {
-                message: e,
-                cause: e,
+                message: text,
+                cause: text,
                 code: re.status,
             }
         }
