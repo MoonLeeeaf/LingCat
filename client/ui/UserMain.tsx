@@ -18,6 +18,7 @@ import showSnackbar from "./showSnackbar.ts"
 import useEventListener from "./useEventListener.ts"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ChangePasswordDialog from "./main/ChangePasswordDialog.tsx"
+import Markdown, { ReactRenderer } from "marked-react"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -25,6 +26,34 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
         clearTimeout(timer)
         timer = setTimeout(() => fn(...args), delay)
     }
+}
+
+const render: Partial<ReactRenderer> = {
+    text(text) {
+        // console.log('text', text)
+        return text
+    },
+    heading(children, _heading) {
+        // console.log('heading', children)
+        return <span>{children}</span>
+    },
+    paragraph(children) {
+        return <span>{children}</span>
+    },
+    code(code, lang) {
+        return <span>{code}</span>
+    },
+    image(src, alt, _title) {
+        // console.log('image', src)
+        return <span>{
+            ({
+                Video: "[视频]",
+                File: "[文件]",
+                UserMention: /^UserMention=(.*)/.exec(alt)?.[1]!,
+                ChatMention: /^ChatMention=(.*)/.exec(alt)?.[1]!,
+            })[/^(Video|File|UserMention|ChatMention)=.*/.exec(alt)?.[1]!] || '[图片]'
+        }</span>
+    },
 }
 
 function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, activeChat?: IChat, setActiveChat: Function }) {
@@ -39,11 +68,14 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
                 // drawerRef.current && (drawerRef.current.open = false) // 移动端关闭抽屉
             }}
             headline={chat.title || ''}
-            description={chat.last_message_text}>
+            description-line={2}>
             <Avatar
                 slot="icon"
                 src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
             />
+            <span slot="description">
+                <Markdown renderer={render} value={chat.last_message_text} />
+            </span>
         </mdui-list-item>
         <mdui-menu>
             <mdui-menu-item onClick={() => ChatProfileDialog.show(chat.id)} icon="info">对话信息</mdui-menu-item>
