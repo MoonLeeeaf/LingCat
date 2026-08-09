@@ -59,7 +59,7 @@ export default class UserApi {
         // form.append('hash', sha256Hex(new TextEncoder().encode('file_upload'), buffer))
         belong_to_chat_id && form.append('belong_to_chat_id', belong_to_chat_id)
 
-        const re = await fetch(client.server_http + '/upload_file', {
+        const re = await fetch(client.server_http + (client.server_http.endsWith('/') ? '' : '/') + 'upload_file', {
             method: 'POST',
             headers: {
                 Token: file_upload_token
