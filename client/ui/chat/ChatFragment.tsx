@@ -171,6 +171,8 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             // TODO: 向 lingcat-client-protocol 添加全局的监听方法
             if (mPackage.method_id == Methods.Receive_Chat_Message_Event) {
                 const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data).msg
+                if (chat.id != raw?.chatId) return
+
                 appendMessages([{
                     id: raw?.id!,
                     text: raw?.text!,
