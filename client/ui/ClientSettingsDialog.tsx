@@ -123,6 +123,8 @@ function SwitchUserDialog({ onClose }: { onClose: (e: Event) => void }) {
         return () => dialog.removeEventListener('closed', onClose)
     }, [onClose])
 
+    const currentSession = ClientManager.getActiveUserSessionName()
+
     return <mdui-dialog close-on-overlay-click close-on-esc ref={ref}>
         <span slot="headline">切换用户</span>
 
@@ -132,7 +134,7 @@ function SwitchUserDialog({ onClose }: { onClose: (e: Event) => void }) {
             <div key={k}>{
                 ClientManager.listUserSessions().map((fileName) => {
                     return <mdui-dropdown trigger="hover" key={fileName}>
-                        <mdui-list-item slot="trigger" rounded onClick={() => {
+                        <mdui-list-item active={currentSession == fileName} slot="trigger" rounded onClick={() => {
                             ClientManager.setActiveUserSessionName(fileName)
                             location.reload()
                         }}>{fileName}</mdui-list-item>
