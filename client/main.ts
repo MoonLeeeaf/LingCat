@@ -11,4 +11,6 @@ import Main from './ui/Main.tsx'
 
 import './ui/MduiPatchedTextAreaElement.ts'
 
+if ("Notification" in window && Notification.permission == "default") Notification.requestPermission()
+
 ReactDOM.createRoot(document.getElementById('app')!).render(React.createElement(Main))

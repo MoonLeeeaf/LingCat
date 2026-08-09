@@ -3,7 +3,7 @@ import Message from "./chat-layout/Message.tsx"
 import MessageContainer from "./chat-layout/MessageContainer.tsx"
 import React from "react"
 import default_avatar from '../default_avatar.png'
-import { IChat, IMessage, IUser, Methods, Package } from "lingcat-protocol"
+import { IChat, IMessage, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
 import UserProfileDialog from "./viewer/UserProfileDialog.tsx"
 import ClientManager from "../ClientManager.ts"
 import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
@@ -19,6 +19,7 @@ import useEventListener from "./useEventListener.ts"
 import CircleProgressDialog from "./CircleProgressDialog.tsx"
 import ChangePasswordDialog from "./main/ChangePasswordDialog.tsx"
 import Markdown, { ReactRenderer } from "marked-react"
+import ProfileCache from "../ProfileCache.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -120,6 +121,57 @@ export default function UserMain({ profile, setProfile, drawerRef, mSettingsDial
             }
         })()
     }, [setProfile])
+
+    React.useEffect(() => {
+        let hidden = false
+        const onVisibilityChange = () => {
+            if (document.hidden) {
+                hidden = true
+            } else {
+                hidden = false
+            }
+        }
+        document.addEventListener('visibilitychange', onVisibilityChange)
+    
+        async function callback(mPackage: Package) {
+            if (!("Notification" in window) || Notification.permission == "denied") return
+            // TODO: 向 lingcat-client-protocol 添加全局的监听方法
+            if (mPackage.method_id == Methods.Receive_Chat_Message_Event) {
+                const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data).msg
+
+                const myId = (await ClientManager.getMe()).id
+                if (raw?.senderUserId == myId) return
+                if (activeChat?.id == raw?.chatId && !hidden) return
+
+                const chat = await ProfileCache.queryChatInfo(raw?.chatId!)
+                const sender = raw?.senderUserId ? await ProfileCache.queryUserInfo(raw?.senderUserId) : undefined
+
+                console.log(new RegExp(`\!\[UserMention=.*?\](lingcat://user\?id=${myId})`).test(raw?.text || ''))
+                if (chat.type == 'private')
+                    new Notification(chat.title + " | 灵猫", {
+                        body: (raw?.system ? '' :(sender?.nickname + ': ')) + raw?.text || '',
+                        icon: chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar,
+                    }).onclick = async () => {
+                        setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
+                    }
+                else if (new RegExp(`!\\[UserMention=?.*?\\]\\(lingcat://user\\?id=${myId}\\)`).test(raw?.text || ''))
+                    new Notification(chat.title + " | 灵猫", {
+                        body: (raw?.system ? '' :(sender?.nickname + ': ')) + raw?.text || '',
+                        icon: raw?.senderUserId
+                            ? (sender?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(sender.avatar_file_hash) : default_avatar)
+                            : (chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar),
+                    }).onclick = async () => {
+                        setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
+                    }
+            }
+        }
+
+        ClientManager.client.addOnReceiveListener(callback)
+        return () => {
+            ClientManager.client.removeOnReceiveListener(callback)
+            document.removeEventListener('visibilitychange', onVisibilityChange)
+        }
+    }, [])
 
     const [activeChat, setActiveChat] = React.useState<IChat>()
     AppState.setActiveChat = setActiveChat
