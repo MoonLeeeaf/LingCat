@@ -105,7 +105,7 @@ public class Package {
                 secret
         );
         if (!success) {
-            throw new Exception("XChaCha encryption failed");
+            throw new EncryptFailException();
         }
 
         // 构建 EncryptedMessage 并序列化
@@ -133,12 +133,11 @@ public class Package {
      * @return       当前实例（链式）
      */
     public Package decrypt(int seq, byte[] secret) throws Exception {
-        // 解析 Protobuf
         EncryptedMessage msg;
         try {
             msg = EncryptedMessage.parseFrom(this.data);
         } catch (InvalidProtocolBufferException e) {
-            throw new Exception("Failed to parse EncryptedMessage", e);
+            throw new InvalidProtocolBufferException("Failed to parse EncryptedMessage", e);
         }
 
         byte[] nonce = msg.getIv().toByteArray();
@@ -158,12 +157,12 @@ public class Package {
         );
 
         if (!success) {
-            throw new Exception("XChaCha decryption failed");
+            throw new DecryptFailException();
         }
 
         // 校验序列号
         if (msg.getSeq() <= seq) {
-            throw new Exception("Invalid seq: expected > " + seq + ", got " + msg.getSeq());
+            throw new InvalidSeqException("Expected > " + seq + ", got " + msg.getSeq());
         }
 
         // 更新自身

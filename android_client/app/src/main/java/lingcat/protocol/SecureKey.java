@@ -41,7 +41,7 @@ public class SecureKey {
             previous = block;
             blockIndex++;
             if (blockIndex > 255) {
-                throw new Exception("HKDF expand too long");
+                throw new HKDFTooLongException("Blobk index = " + blockIndex + " > 255");
             }
         }
         byte[] result = new byte[length];
@@ -58,7 +58,7 @@ public class SecureKey {
     /**
      * sodium.crypto_kx_keypair
      */
-    public static KeyPair All_generateExchangeKeyPair() throws Exception {
+    public static KeyPair All_generateExchangeKeyPair() {
         return lazySodium.cryptoKxKeypair();
     }
 

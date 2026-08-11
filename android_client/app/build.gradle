@@ -49,7 +49,9 @@ protobuf {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
 
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
     implementation 'com.google.protobuf:protobuf-javalite:3.8.0'
     implementation "com.goterl:lazysodium-android:5.2.0@aar"
     implementation "net.java.dev.jna:jna:5.17.0@aar"
