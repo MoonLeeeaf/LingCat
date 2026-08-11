@@ -64,7 +64,7 @@ export default class Package {
 
     encrypt(seq: number, secret: Uint8Array) {
         // public_nonce
-        const iv = sodium.randombytes_buf(sodium.crypto_aead_aegis256_NPUBBYTES)
+        const iv = sodium.randombytes_buf(sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES)
 
         const aad = new Uint8Array(4)
         new DataView(aad.buffer).setUint32(0, seq, false)
@@ -73,7 +73,7 @@ export default class Package {
             seq,
             iv,
             aad,
-            data: sodium.crypto_aead_aegis256_encrypt(this.data, aad, null, iv, secret)
+            data: sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(this.data, aad, null, iv, secret)
         }).finish()
         this.length = this.data.length
         this.flags |= Package.FLAG_ENCRYPTED
@@ -86,7 +86,7 @@ export default class Package {
 
     decrypt(seq: number, secret: Uint8Array) {
         const message = LingCatProto.classes.EncryptedMessage.decode(this.data)
-        this.data = sodium.crypto_aead_aegis256_decrypt(null, message.data, message.aad, message.iv, secret)
+        this.data = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(null, message.data, message.aad, message.iv, secret)
         this.length = this.data.length
         this.isDecrypted = true
         this.flags &= ~Package.FLAG_ENCRYPTED
