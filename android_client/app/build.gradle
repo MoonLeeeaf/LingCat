@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+android {
+    namespace "io.github.moonleeeaf.lingcat"
+
+    compileSdk 34
+    defaultConfig {
+        applicationId "io.github.moonleeeaf.lingcat"
+        minSdk 24
+        targetSdk 34
+        versionCode 1000
+        versionName "0.1.0"
+    }
+    sourceSets {
+        main {
+            proto {
+                srcDir '../../protocol'
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.21.12'
+    }
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.builtins {
+                java {
+                    option "lite"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
+    implementation 'com.google.protobuf:protobuf-javalite:3.8.0'
+    implementation "com.goterl:lazysodium-android:5.2.0@aar"
+    implementation "net.java.dev.jna:jna:5.17.0@aar"
+}
