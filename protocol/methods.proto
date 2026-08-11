@@ -10,7 +10,7 @@ syntax = "proto3";
 
 package lingcat.methods;
 
-import "./classes.proto";
+import "classes.proto";
 
 message Error_Response {
     uint32 request_method = 1;
@@ -89,11 +89,11 @@ message Query_My_User_Info_Request {
 
 /** see { @link classes-interfaces.ts } */
 message Query_User_Info_Response {
-    IUser info = 1;
+    lingcat.classes.IUser info = 1;
 }
 
 message Query_My_User_Info_Response {
-    IUser info = 1;
+    lingcat.classes.IUser info = 1;
 }
 
 message Update_My_Profile_Request {
@@ -128,7 +128,7 @@ message Send_Chat_Message_Response {
 }
 
 message Receive_Chat_Message_Event {
-    IMessage msg = 1;
+    lingcat.classes.IMessage msg = 1;
 }
 
 message Get_Chat_Messages_Request {
@@ -140,7 +140,7 @@ message Get_Chat_Messages_Request {
 }
 
 message Get_Chat_Messages_Response {
-    repeated IMessage messages = 1;
+    repeated lingcat.classes.IMessage messages = 1;
 }
 
 message Query_Chat_Info_Request {
@@ -149,7 +149,7 @@ message Query_Chat_Info_Request {
 }
 
 message Query_Chat_Info_Response {
-    IChat info = 1;
+    lingcat.classes.IChat info = 1;
 }
 
 message Get_Or_Create_Private_Chat_Request {
@@ -169,7 +169,7 @@ message Get_My_Chats_Request {
 }
 
 message Get_My_Chats_Response {
-    repeated IChat chats = 1;
+    repeated lingcat.classes.IChat chats = 1;
 }
 
 // 获取我的收藏对话（分页）
@@ -180,7 +180,7 @@ message Get_My_Favourite_Chats_Request {
 }
 
 message Get_My_Favourite_Chats_Response {
-    repeated IChat chats = 1;
+    repeated lingcat.classes.IChat chats = 1;
 }
 
 // 搜索我的对话（关键词）
@@ -191,7 +191,7 @@ message Search_My_Chats_Request {
 }
 
 message Search_My_Chats_Response {
-    repeated IChat chats = 1;
+    repeated lingcat.classes.IChat chats = 1;
 }
 
 message Get_Another_User_From_Private_Chat_Request {
@@ -273,7 +273,7 @@ message Get_Chat_Admins_Request {
 }
 
 message Get_Chat_Admins_Response {
-    repeated IChatAdmin admins = 1;
+    repeated lingcat.classes.IChatAdmin admins = 1;
 }
 
 message Get_Chat_Members_Request {
@@ -282,7 +282,7 @@ message Get_Chat_Members_Request {
 }
 
 message Get_Chat_Members_Response {
-    repeated IUser members = 1;
+    repeated lingcat.classes.IUser members = 1;
 }
 
 message Add_Chat_Admin_Request {
