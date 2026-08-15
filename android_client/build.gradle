@@ -1,7 +1,11 @@
 buildscript {
     repositories {
-        google()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
         mavenCentral()
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.3.0'
@@ -9,7 +13,11 @@ buildscript {
 }
 allprojects {
     repositories {
-        google()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven' }
         mavenCentral()
+        google()
     }
 }
