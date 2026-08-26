@@ -57,6 +57,11 @@ export default class ClientManager {
     }
     static setActiveUserSessionName(userSessionName: string) {
         fs.writeFileSync('/active_session', userSessionName)
+
+        if ('LingCatClientInterface' in window) {
+            const { token, server } = this.getActiveUserSession()
+            LingCatClientInterface.setCurrentSession(token, server, this.getServerPublicKey(new URL(server).host).toString('hex'))
+        }
     }
     static removeActiveUserSession() {
         fs.unlinkSync('/active_session')
