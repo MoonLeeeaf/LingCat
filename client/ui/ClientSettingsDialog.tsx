@@ -315,7 +315,7 @@ function LoginDialog({ onClose, allowClose, onLoginSuccess }: {
     const child = <>
         <span slot="headline">登录</span>
 
-        <mdui-text-field variant="outlined" label="服务端 HTTP 地址 (留空为当前页)" ref={mLoginServer}></mdui-text-field>
+        <mdui-text-field variant="outlined" label={`服务端 HTTP 地址${new URL(location.href).protocol == 'file:' ? '' : " (留空为当前页)"}`} ref={mLoginServer}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
         <mdui-text-field variant="outlined" label="用户名 / 用户 ID" ref={mLoginAccount}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>

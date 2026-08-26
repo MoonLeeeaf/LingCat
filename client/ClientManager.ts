@@ -5,6 +5,8 @@ import ProfileCache from './ProfileCache.ts'
 
 const default_server = location.protocol + '//' + location.host + location.pathname
 
+const is_inline = new URL(location.href).protocol == 'file:'
+
 export default class ClientManager {
     static client: LingCatClient
 
@@ -19,7 +21,7 @@ export default class ClientManager {
         return this.me
     }
     static listServerPublicKeys() {
-        return [...fs.readdirSync('/public_keys'), '内置']
+        return is_inline ? fs.readdirSync('/public_keys') : [...fs.readdirSync('/public_keys'), '内置']
     }
     static listUserSessions() {
         return fs.readdirSync('/sessions')
