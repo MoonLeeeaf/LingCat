@@ -1,11 +1,26 @@
 package io.github.moonleeeaf.lingcat;
 
+import android.Manifest;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import lingcat.client_protocol.LingCatClient;
@@ -14,22 +29,48 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class MainActivity extends BaseActivity {
-    public static byte[] hexToByte(String hex){
-        int m = 0, n = 0;
-        int byteLen = hex.length() / 2; // 每两个字符描述一个字节
-        byte[] ret = new byte[byteLen];
-        for (int i = 0; i < byteLen; i++) {
-            m = i * 2 + 1;
-            n = m + 1;
-            int intVal = Integer.decode("0x" + hex.substring(i * 2, m) + hex.substring(m, n));
-            ret[i] = (byte) intVal;
-        }
-        return ret;
-    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().hide();
+
+        WebView mWebView = new WebView(this);
+        setContentView(mWebView);
+
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+        settings.setDomStorageEnabled(true);
+        settings.setAllowContentAccess(true);
+        CookieManager.getInstance().setAcceptCookie(true);
+
+        startService(new Intent(MainActivity.this, MessageService.class));
+
+        mWebView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void setCurrentSession(String token, String server, String publicKey) {
+                KV.getKV(MainActivity.this).edit().putString("token", token).putString("server", server).putString("public_key", publicKey).apply();
+
+                stopService(new Intent(MainActivity.this, MessageService.class));
+
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    startService(new Intent(MainActivity.this, MessageService.class));
+                }, 500);
+            }
+        }, "LingCatClientInterface");
+
+        mWebView.loadUrl("file:///android_asset/offline-webpage/index.html");
+
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestPermissions(new String[] {
+                    Manifest.permission.POST_NOTIFICATIONS
+            }, 0);
+        }
+
+        /*
         setContentView(R.layout.main_test);
 
         findViewById(R.id.test).setOnClickListener((view) -> {
@@ -62,5 +103,6 @@ public class MainActivity extends BaseActivity {
                 Snackbar.make(findViewById(android.R.id.content), "初始化成功", Snackbar.LENGTH_LONG).show();
             });
         });
+         */
     }
 }
