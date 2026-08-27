@@ -20,15 +20,18 @@ export default class UserApi {
     }
     static async requestAccessUploadFileToken(client: LingCatClient, {
         access_token,
+        file_hash,
         timeout,
     }: {
         access_token: string
+        file_hash?: string
         timeout?: number
     }) {
         return decodeOrThrow<LingCatProto.methods.Request_File_Access_Response>(LingCatProto.methods.Request_File_Access_Response, (await client.invoke({
             method_id: Methods.Request_File_Access_Request,
             data: LingCatProto.methods.Request_File_Access_Request.encode({
                 accessToken: access_token,
+                fileHash: file_hash,
             }).finish(),
             timeout,
         })).data).token

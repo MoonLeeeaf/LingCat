@@ -5876,6 +5876,7 @@ export const lingcat = $root.lingcat = (() => {
              * Properties of a Request_File_Access_Request.
              * @typedef {Object} lingcat.methods.Request_File_Access_Request.$Properties
              * @property {string|null} [accessToken] Request_File_Access_Request accessToken
+             * @property {string|null} [fileHash] Request_File_Access_Request fileHash
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -5916,6 +5917,23 @@ export const lingcat = $root.lingcat = (() => {
             Request_File_Access_Request.prototype.accessToken = "";
 
             /**
+             * Request_File_Access_Request fileHash.
+             * @member {string|null|undefined} fileHash
+             * @memberof lingcat.methods.Request_File_Access_Request
+             * @instance
+             */
+            Request_File_Access_Request.prototype.fileHash = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Request_File_Access_Request.prototype, "_fileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["fileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
              * Creates a new Request_File_Access_Request instance using the specified properties.
              * @function create
              * @memberof lingcat.methods.Request_File_Access_Request
@@ -5949,6 +5967,8 @@ export const lingcat = $root.lingcat = (() => {
                     throw $Error("max depth exceeded");
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
                     writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.fileHash);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -6005,6 +6025,13 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.accessToken;
                             continue;
                         }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.fileHash = reader.stringVerify();
+                            message._fileHash = "fileHash";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -6048,9 +6075,15 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                let properties = {};
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     if (!$util.isString(message.accessToken))
                         return "accessToken: string expected";
+                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash")) {
+                    properties._fileHash = 1;
+                    if (!$util.isString(message.fileHash))
+                        return "fileHash: string expected";
+                }
                 return null;
             };
 
@@ -6075,6 +6108,8 @@ export const lingcat = $root.lingcat = (() => {
                 if (object.accessToken != null)
                     if (typeof object.accessToken !== "string" || object.accessToken.length)
                         message.accessToken = $String(object.accessToken);
+                if (object.fileHash != null)
+                    message.fileHash = $String(object.fileHash);
                 return message;
             };
 
@@ -6099,6 +6134,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.accessToken = "";
                 if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
                     object.accessToken = message.accessToken;
+                if (message.fileHash != null && $Object.hasOwnProperty.call(message, "fileHash"))
+                    object.fileHash = message.fileHash;
                 return object;
             };
 

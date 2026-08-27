@@ -25,9 +25,10 @@ export default class TokenManager {
             expiresIn: '1h',
         })
     }
-    static signFileAccessTokenForUser(user_id: string) {
+    static signFileAccessTokenForUser(user_id: string, file_hash?: string) {
         return jwt.sign({
             user_id,
+            file_hash,
             type: 'file_access',
         }, secret, {
             expiresIn: '1h',
@@ -51,7 +52,7 @@ export default class TokenManager {
     }
 
     static async verifyFileAccessToken(token: string, user_id?: string) {
-        return await TokenManager.verifyToken(token, 'file_access', user_id) as { user_id: string, type: 'file_access' }
+        return await TokenManager.verifyToken(token, 'file_access', user_id) as { user_id: string, type: 'file_access', file_hash: string | undefined }
     }
     static async verifyChangePasswordToken(token: string, user_id?: string) {
         return await TokenManager.verifyToken(token, 'change_password', user_id) as { user_id: string, type: 'change_password' }

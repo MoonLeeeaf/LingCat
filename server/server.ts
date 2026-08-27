@@ -47,10 +47,15 @@ export default function createLingCatServer(base_data_path: string) {
         if (!token) return res.status(401).send({ message: "Unauthorzied" })
 
         try {
-            const user_id = (await TokenManager.verifyFileAccessToken(token as string)).user_id
+            const tk = await TokenManager.verifyFileAccessToken(token as string)
+            const file_hash = tk.file_hash
+            const user_id = tk.user_id
 
             const file = await FileManager.queryFileByHash(req.params.hash as string)
             if (file == null) return res.status(404).send({ message: "Not Found" })
+
+            if (file_hash != null && file.hash != file_hash) 
+                return res.status(403).send({ message: "You have no access to this file" })
 
             if (file.belong_to_chat_id && await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
                 return res.status(403).send({ message: "This file belongs to a chat you have no access" })

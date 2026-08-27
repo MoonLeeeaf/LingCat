@@ -2262,6 +2262,9 @@ export namespace lingcat {
             /** Request_File_Access_Request accessToken. */
             accessToken: string;
 
+            /** Request_File_Access_Request fileHash. */
+            fileHash?: (string|null);
+
             /**
              * Creates a new Request_File_Access_Request instance using the specified properties.
              * @param [properties] Properties to set
@@ -2348,6 +2351,9 @@ export namespace lingcat {
 
                 /** Request_File_Access_Request accessToken */
                 accessToken?: (string|null);
+
+                /** Request_File_Access_Request fileHash */
+                fileHash?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

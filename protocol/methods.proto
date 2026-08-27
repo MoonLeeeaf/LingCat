@@ -65,6 +65,7 @@ message Request_File_Upload_Response {
 
 message Request_File_Access_Request {
     string access_token = 1;
+    optional string file_hash = 2;
 }
 
 message Request_File_Access_Response {
