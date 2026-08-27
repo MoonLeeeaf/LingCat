@@ -62,18 +62,20 @@ public class MessageService extends Service {
         client.addOnReceiveListener(new LingCatClient.OnReceiveListener() {
             @Override
             public void onReceive(Package pkg) {
-                try {
-                    Classes.IMessage msg =  Methods.Receive_Chat_Message_Event.parseFrom(pkg.getData()).getMsg();
+                if (pkg.getMethodId() == lingcat.protocol.Methods.Receive_Chat_Message_Event) {
+                    try {
+                        Classes.IMessage msg = Methods.Receive_Chat_Message_Event.parseFrom(pkg.getData()).getMsg();
 
-                    getSystemService(NotificationManager.class).notify(0, new NotificationCompat.Builder(MessageService.this, CHANNEL_ID)
-                            .setContentTitle(msg.getChatId() + " | 灵猫")
-                            .setContentText(msg.getText())
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setPriority(NotificationCompat.PRIORITY_MIN)
-                            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                            .build());
-                } catch (InvalidProtocolBufferException e) {
-                    Log.w(TAG, e);
+                        getSystemService(NotificationManager.class).notify(1, new NotificationCompat.Builder(MessageService.this, CHANNEL_ID)
+                                .setContentTitle(msg.getChatId() + " | 灵猫")
+                                .setContentText(msg.getText())
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setPriority(NotificationCompat.PRIORITY_MIN)
+                                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                                .build());
+                    } catch (InvalidProtocolBufferException e) {
+                        Log.w(TAG, e);
+                    }
                 }
             }
         });
