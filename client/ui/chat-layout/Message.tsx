@@ -26,6 +26,41 @@ function TextContainerSystem({ children }: { children: React.ReactNode }) {
     </div>
 }
 
+function ChatQuote({ children }: { children: React.ReactNode }) {
+    const [ellipsis, setEllipsis] = React.useState(true);
+
+    return (
+        <div style={{
+            width: '100%',
+            height: '100%',
+            color: 'rgb(var(--mdui-color-primary))',
+            textDecoration: 'none',
+            cursor: 'pointer',
+            display: 'block',
+        }} onClick={() => {
+            setEllipsis((prev) => !prev)
+        }}>
+            <style>
+                {ellipsis
+                    ? `br { display: none; }`
+                    : `br { display: inline; }`
+                }
+            </style>
+            <span style={{
+                display: 'block',
+                wordWrap: 'break-word',
+                wordBreak: 'break-all',
+                maxWidth: '100%',
+                fontSynthesis: 'style weight',
+                whiteSpace: ellipsis ? 'nowrap' : 'pre-wrap',
+                overflow: ellipsis ? 'hidden' : 'visible',
+                textOverflow: ellipsis ? 'ellipsis' : 'unset',
+            }}>{children}</span>
+        </div>
+    )
+}
+// ChatQuote.inline = true
+
 export default function Message({
     message,
     senderName,
@@ -60,6 +95,11 @@ export default function Message({
             // console.log('heading', children)
             return <span>{children}</span>
         },
+        blockquote(children) {
+            return <div style={{ width: '100%', overflow: 'hidden' }}>
+                <ChatQuote>{children}</ChatQuote>
+            </div>
+        },
         paragraph(children) {
             const elements: React.ReactNode[] = []
             let cache: React.ReactNode[] = []
@@ -77,13 +117,14 @@ export default function Message({
             React.Children.forEach(children, (child) => {
                 if (React.isValidElement(child)) {
                     // 如果是自定义组件（函数组件），视为“块级元素”
-                    if (child.type instanceof Function) {
+                    if (child.type instanceof Function/*  && !(child.type as any).inline */) {
                         // 先输出之前的文本缓存
                         flushCache()
                         // 直接添加图片本身，不包裹额外容器
                         elements.push(child)
                     } else {
                         // 普通内置元素（span, a 等）放入缓存
+                        // 以及内联组件
                         cache.push(child)
                     }
                 } else if (typeof child == 'string') {
