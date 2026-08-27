@@ -45,7 +45,7 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
         return () => ref.current?.removeEventListener(eventName, onClose)
     }, [loading])
 
-    const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar) : default_avatar
+    const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar) : default_avatar
 
     return loading ? (<EffectOnly deps={[]} effect={() => {
         return CircleProgressDialog.show('加载中...')

@@ -11,6 +11,7 @@ import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import showSnackbar from "../showSnackbar.ts"
+import AppState from "../AppState.ts"
 
 export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: Function }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -98,7 +99,7 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                         <mdui-list-item slot="trigger" rounded onClick={() => UserProfileDialog.show(v.id)}>
                                             <Avatar
                                                 slot="icon"
-                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
+                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(v.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
                                             />
                                             {v.nickname}
                                         </mdui-list-item>
@@ -168,7 +169,7 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                         <mdui-list-item slot="trigger" rounded onClick={() => UserProfileDialog.show(v.id)}>
                                             <Avatar
                                                 slot="icon"
-                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHash(v.avatar_file_hash) : default_avatar}
+                                                src={v.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(v.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
                                             />
                                             {v.nickname}
                                             <span slot="description">{({
@@ -286,7 +287,7 @@ function EditAdminDialog({ ref, chat_id, admin, onClose }: { ref?: React.RefObje
         }
     }
 
-    const avatar = admin?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(admin.avatar_file_hash) : default_avatar
+    const avatar = admin?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(admin.avatar_file_hash, AppState.fileAccessToken) : default_avatar
 
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>

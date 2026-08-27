@@ -43,7 +43,7 @@ export default function createLingCatServer(base_data_path: string) {
 
     app.use(cookieParser())
     app.get('/uploaded_files/:hash', async (req, res) => {
-        const token = req.headers.file_access_token || req.cookies.file_access_token
+        const token = req.headers.file_access_token || req.cookies.file_access_token || req.query.file_access_token
         if (!token) return res.status(401).send({ message: "Unauthorzied" })
 
         try {
@@ -158,7 +158,7 @@ export default function createLingCatServer(base_data_path: string) {
         let recvSeq = -1
 
         let user_id_after_authorzied: string | undefined
-        let session_id : string | undefined
+        let session_id: string | undefined
 
         client.on('close', () => {
             if (keySend) {
@@ -229,7 +229,7 @@ export default function createLingCatServer(base_data_path: string) {
                         }
                         case Methods.Authorize_Request: {
                             const data = LingCatProto.methods.Authorize_Request.decode(mPackage.data)
-                            
+
                             user_id_after_authorzied = (await TokenManager.verifyAccessToken(
                                 data.accessToken
                             )).user_id

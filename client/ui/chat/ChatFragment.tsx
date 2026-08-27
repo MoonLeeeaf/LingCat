@@ -21,6 +21,7 @@ import escapeHtml from "../escapeHtml.ts"
 import ChatSettingsDialog from "./ChatSettingsDialog.tsx"
 import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
+import AppState from "../AppState.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -79,7 +80,7 @@ const render: Partial<ReactRenderer> = {
         const type = /^(Video|File|UserMention|ChatMention)=.*/.exec(alt)?.[1]
         const fileType = /^(Video|File)=.*/.exec(alt)?.[1] || 'Image'
         if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(src)) {
-            const url = ClientManager.client.getFileUrlByHash(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!)
+            const url = ClientManager.client.getFileUrlByHashAndToken(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!, AppState.fileAccessToken)
             // 注意返回的元素必须是函数式组件
             // 否则无法识别为独立的元素
             // 使用 React.createElement(() => <component />) 会导致不必要的开销

@@ -7,6 +7,7 @@ import default_avatar from '../../default_avatar.png'
 import React from "react"
 import ProfileCache from "../../ProfileCache.ts"
 import { ReactRenderer } from "marked-react"
+import AppState from "../AppState.ts"
 
 type Render = Partial<ReactRenderer>
 
@@ -42,5 +43,5 @@ export default function ChatMessage({
         })()
     }, [msg.sender_user_id])
 
-    return <Message time={msg.time} avatarMenus={avatarMenus} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
+    return <Message time={msg.time} avatarMenus={avatarMenus} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
 }

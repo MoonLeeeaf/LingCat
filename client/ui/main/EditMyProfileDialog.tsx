@@ -10,6 +10,7 @@ import { UserApi, FileApi } from "lingcat-client-protocol"
 import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
 import showSnackbar from "../showSnackbar.ts"
+import AppState from "../AppState.ts"
 
 export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -93,7 +94,7 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                     display: 'flex',
                     alignItems: 'center',
                 }}>
-                    <Avatar src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile?.avatar_file_hash) : default_avatar} onClick={() => {
+                    <Avatar src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar} onClick={() => {
                         chooseAvatarFileRef.current!.value = ''
                         chooseAvatarFileRef.current!.click()
                     }} style={{

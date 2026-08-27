@@ -73,7 +73,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
             description-line={2}>
             <Avatar
                 slot="icon"
-                src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
+                src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
             />
             <span slot="description">
                 <Markdown renderer={render} value={chat.last_message_text} />
@@ -85,7 +85,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
     </mdui-dropdown>
 }
 
-export default function UserMain({ profile, setProfile, drawerRef }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined>}) {
+export default function UserMain({ profile, setProfile, drawerRef }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [loadingProfile, setLoadingProfile] = React.useState(true)
 
     React.useEffect(() => {
@@ -105,9 +105,12 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                     })
 
                     const updateFileAccessToken = async () => {
-                        document.cookie = "file_access_token=" + await FileApi.requestAccessUploadFileToken(ClientManager.client, {
+                        /* document.cookie = "file_access_token=" + await FileApi.requestAccessUploadFileToken(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token
-                        }) + ';'
+                        }) + ';' */
+                        AppState.fileAccessToken = await FileApi.requestAccessUploadFileToken(ClientManager.client, {
+                            access_token: ClientManager.getActiveUserSession().token
+                        })
                     }
                     const id = setInterval(updateFileAccessToken, 1000 * 60 * 60 * 0.5)
                     await updateFileAccessToken()
@@ -133,7 +136,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             }
         }
         document.addEventListener('visibilitychange', onVisibilityChange)
-    
+
         async function callback(mPackage: Package) {
             if (!("Notification" in window) || Notification.permission == "denied") return
             // TODO: 向 lingcat-client-protocol 添加全局的监听方法
@@ -150,17 +153,17 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                 console.log(new RegExp(`\!\[UserMention=.*?\](lingcat://user\?id=${myId})`).test(raw?.text || ''))
                 if (chat.type == 'private')
                     new Notification(chat.title + " | 灵猫", {
-                        body: (raw?.system ? '' :(sender?.nickname + ': ')) + raw?.text || '',
-                        icon: chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar,
+                        body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
+                        icon: chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar,
                     }).onclick = async () => {
                         setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
                     }
                 else if (new RegExp(`!\\[UserMention=?.*?\\]\\(lingcat://user\\?id=${myId}\\)`).test(raw?.text || ''))
                     new Notification(chat.title + " | 灵猫", {
-                        body: (raw?.system ? '' :(sender?.nickname + ': ')) + raw?.text || '',
+                        body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
                         icon: raw?.senderUserId
-                            ? (sender?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(sender.avatar_file_hash) : default_avatar)
-                            : (chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar),
+                            ? (sender?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(sender.avatar_file_hash, AppState.fileAccessToken) : default_avatar)
+                            : (chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar),
                     }).onclick = async () => {
                         setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
                     }
@@ -378,7 +381,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
             <mdui-navigation-rail ref={navigationRef} contained alignment="center" value="recent">
                 <mdui-dropdown trigger="hover" slot="top">
-                    <Avatar slot="trigger" src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHash(profile.avatar_file_hash) : default_avatar} />
+                    <Avatar slot="trigger" src={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(profile.avatar_file_hash, AppState.fileAccessToken) : default_avatar} />
                     <mdui-menu>
                         <mdui-menu-item icon="info" onClick={() => UserProfileDialog.show(profile?.id!)}>我的资料</mdui-menu-item>
                         <mdui-menu-item icon="switch_account" onClick={() => SwitchUserDialog.show()}>切换账号</mdui-menu-item>
@@ -460,7 +463,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                                         headline={chat.title || '私聊'}>
                                         <Avatar
                                             slot="icon"
-                                            src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHash(chat.avatar_file_hash) : default_avatar}
+                                            src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
                                         />
                                     </mdui-list-item>
                                 ))}

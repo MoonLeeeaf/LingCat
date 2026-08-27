@@ -32,6 +32,10 @@ export default class LingCatClient {
             : (this.server_http + '/uploaded_files/' + hash)
     }
 
+    getFileUrlByHashAndToken(hash: string, file_access_token: string) {
+        return this.getFileUrlByHash(hash) + '?file_access_token=' + file_access_token
+    }
+
     on_package_listeners: Function[] = []
     invoke(option: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
         return this.invoke_internal({
