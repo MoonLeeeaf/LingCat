@@ -27,7 +27,8 @@ function TextContainerSystem({ children }: { children: React.ReactNode }) {
 }
 
 function ChatQuote({ children }: { children: React.ReactNode }) {
-    const [ellipsis, setEllipsis] = React.useState(true);
+    const [ellipsis, setEllipsis] = React.useState(true)
+    const [id, _id] = React.useState('quote' + Date.now() + Math.round(Math.random()))
 
     return (
         <div style={{
@@ -42,11 +43,11 @@ function ChatQuote({ children }: { children: React.ReactNode }) {
         }}>
             <style>
                 {ellipsis
-                    ? `br { display: none; }`
-                    : `br { display: inline; }`
+                    ? `#${id} br { display: none; }`
+                    : `#${id} br { display: inline; }`
                 }
             </style>
-            <span style={{
+            <span id={id} style={{
                 display: 'block',
                 wordWrap: 'break-word',
                 wordBreak: 'break-all',
