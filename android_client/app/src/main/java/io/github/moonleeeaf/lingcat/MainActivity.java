@@ -1,6 +1,9 @@
 package io.github.moonleeeaf.lingcat;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -47,18 +51,51 @@ public class MainActivity extends BaseActivity {
         settings.setAllowContentAccess(true);
         CookieManager.getInstance().setAcceptCookie(true);
 
-        startService(new Intent(MainActivity.this, MessageService.class));
+        // startService(new Intent(MainActivity.this, MessageService.class));
 
         mWebView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void setCurrentSession(String token, String server, String publicKey) {
                 KV.getKV(MainActivity.this).edit().putString("token", token).putString("server", server).putString("public_key", publicKey).apply();
 
-                stopService(new Intent(MainActivity.this, MessageService.class));
+                /* stopService(new Intent(MainActivity.this, MessageService.class));
 
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     startService(new Intent(MainActivity.this, MessageService.class));
-                }, 500);
+                }, 500); */
+            }
+            @JavascriptInterface
+            public void showNotification(String title, String body, String iconUrl) {
+                // 创建通知渠道（Android 8.0+）
+                if (Build.VERSION.SDK_INT >= 26) {
+                    NotificationChannel channel = new NotificationChannel(
+                            "web_notification",
+                            "网页通知",
+                            NotificationManager.IMPORTANCE_HIGH
+                    );
+                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    if (manager != null) {
+                        manager.createNotificationChannel(channel);
+                    }
+                }
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "web_notification")
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setContentIntent(
+                                PendingIntent.getActivity(
+                                        MainActivity.this, 0, new Intent(MainActivity.this, MainActivity.class),
+                                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                )
+                        )
+                        .setAutoCancel(true);
+
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                if (manager != null) {
+                    manager.notify((int) System.currentTimeMillis(), builder.build());
+                }
             }
         }, "LingCatClientInterface");
 
