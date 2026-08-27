@@ -45,6 +45,9 @@ const render: Partial<ReactRenderer> = {
     code(code, lang) {
         return <span>{code}</span>
     },
+    blockquote(children) {
+        return <span>{children}</span>
+    },
     image(src, alt, _title) {
         // console.log('image', src)
         return <span>{
