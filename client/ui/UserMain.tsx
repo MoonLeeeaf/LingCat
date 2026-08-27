@@ -334,7 +334,13 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     React.useEffect(() => {
         if (!loadingProfile)
             return
-        return CircleProgressDialog.show('加载中...')
+        const snackbar = showSnackbar({
+            message: '正在加载资料...',
+            autoCloseDelay: 0,
+        })
+        return () => {
+            snackbar.open = false
+        }
     }, [loadingProfile])
 
     return <>
