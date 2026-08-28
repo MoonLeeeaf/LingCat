@@ -739,6 +739,7 @@ export default class ChatApi {
                     flags: 0,
                     data: LingCatProto.methods.Edit_Chat_Admin_Permissions_Response.encode({}).finish()
                 }))
+                break
             }
             /**
              * 删除管理员
