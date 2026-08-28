@@ -2,5 +2,8 @@
     "name": "lingcat-client-protocol",
     "version": "0.1.0",
     "type": "module",
-    "exports": "./main.ts"
+    "exports": "./main.ts",
+    "dependencies": {
+        "marked": "^17.0.6"
+    }
 }
