@@ -3,7 +3,7 @@ import marked from 'marked'
 type FileType = 'Video' | 'Image' | 'File'
 type MentionType = 'ChatMention' | 'UserMention'
 
-class ChatMention {
+export class ChatMention {
     chat_id?: string
     user_id?: string
     text?: string
@@ -22,7 +22,7 @@ class ChatMention {
     }
 }
 
-class ChatAttachment {
+export class ChatAttachment {
     file_hash: string
     file_name: string
     constructor({
