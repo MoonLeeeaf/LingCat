@@ -110,4 +110,5 @@ message IMessage {
     string text = 5;
     uint64 time = 6;
     repeated IMessageEntity entities = 7;
+    optional uint64 edited_at = 8;
 }

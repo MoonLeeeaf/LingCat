@@ -21,6 +21,8 @@ interface ChatMessageStore {
     // 单条消息追加（WebSocket 实时推送）
     addMessage: (msg: IMessage) => void
 
+    updateMessage: (id: number, patch: Partial<IMessage>) => void
+
     // 清理
     clear: () => void
 }
@@ -114,6 +116,15 @@ export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
             messageMap: newMap,
             sortedIds: newIds,
         })
+    },
+
+    updateMessage: (id: number, patch: Partial<IMessage>) => {
+        const { messageMap } = get()
+        const existing = messageMap.get(id)
+        if (!existing) return
+        const newMap = new Map(messageMap)
+        newMap.set(id, { ...existing, ...patch })
+        set({ messageMap: newMap })
     },
 
     clear: () => {

@@ -450,6 +450,38 @@ export default class ChatApi {
             })).data
         ).id
     }
+    static async editChatMessage(client: LingCatClient, {
+        access_token,
+        chat_id,
+        message_id,
+        text,
+        entities,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        message_id: number
+        text: string
+        entities?: IMessageEntity[]
+        timeout?: number
+    }) {
+        return decodeOrThrow<LingCatProto.methods.Edit_Chat_Message_Response>(
+            LingCatProto.methods.Edit_Chat_Message_Response,
+            (await client.invoke({
+                method_id: Methods.Edit_Chat_Message_Request,
+                data: LingCatProto.methods.Edit_Chat_Message_Request.encode({
+                    accessToken: access_token,
+                    chatId: chat_id,
+                    messageId: message_id,
+                    text,
+                    entities: entities?.map(e => ({
+                        type: e.type, offset: e.offset, length: e.length, data: e.data,
+                    })),
+                }).finish(),
+                timeout,
+            })).data
+        )
+    }
     // 获取我的所有对话
     static async getMyChats(client: LingCatClient, {
         access_token,

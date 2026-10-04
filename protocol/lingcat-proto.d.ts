@@ -1118,6 +1118,9 @@ export namespace lingcat {
             /** IMessage entities. */
             entities: lingcat.classes.IMessageEntity.$Properties[];
 
+            /** IMessage editedAt. */
+            editedAt?: (number|Long|null);
+
             /**
              * Creates a new IMessage instance using the specified properties.
              * @param [properties] Properties to set
@@ -1222,6 +1225,9 @@ export namespace lingcat {
 
                 /** IMessage entities */
                 entities?: (lingcat.classes.IMessageEntity.$Properties[]|null);
+
+                /** IMessage editedAt */
+                editedAt?: (number|Long|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -9600,6 +9606,399 @@ export namespace lingcat {
 
             /** Shape of a Change_Password_Response. */
             type $Shape = lingcat.methods.Change_Password_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Edit_Chat_Message_Request.
+         * @deprecated Use lingcat.methods.Edit_Chat_Message_Request.$Properties instead.
+         */
+        interface IEdit_Chat_Message_Request extends lingcat.methods.Edit_Chat_Message_Request.$Properties {
+        }
+
+        /** Represents an Edit_Chat_Message_Request. */
+        class Edit_Chat_Message_Request {
+
+            /**
+             * Constructs a new Edit_Chat_Message_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Edit_Chat_Message_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Edit_Chat_Message_Request accessToken. */
+            accessToken: string;
+
+            /** Edit_Chat_Message_Request chatId. */
+            chatId: string;
+
+            /** Edit_Chat_Message_Request messageId. */
+            messageId: number;
+
+            /** Edit_Chat_Message_Request text. */
+            text: string;
+
+            /** Edit_Chat_Message_Request entities. */
+            entities: lingcat.classes.IMessageEntity.$Properties[];
+
+            /**
+             * Creates a new Edit_Chat_Message_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Edit_Chat_Message_Request instance
+             */
+            static create(properties: lingcat.methods.Edit_Chat_Message_Request.$Shape): lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape;
+            static create(properties?: lingcat.methods.Edit_Chat_Message_Request.$Properties): lingcat.methods.Edit_Chat_Message_Request;
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Request message. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Request.verify|verify} messages.
+             * @param message Edit_Chat_Message_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Edit_Chat_Message_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Request message, length delimited. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Request.verify|verify} messages.
+             * @param message Edit_Chat_Message_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Edit_Chat_Message_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Edit_Chat_Message_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape} Edit_Chat_Message_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape;
+
+            /**
+             * Decodes an Edit_Chat_Message_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape} Edit_Chat_Message_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape;
+
+            /**
+             * Verifies an Edit_Chat_Message_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Edit_Chat_Message_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Edit_Chat_Message_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Edit_Chat_Message_Request;
+
+            /**
+             * Creates a plain object from an Edit_Chat_Message_Request message. Also converts values to other types if specified.
+             * @param message Edit_Chat_Message_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Edit_Chat_Message_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Edit_Chat_Message_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Edit_Chat_Message_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Edit_Chat_Message_Request {
+
+            /** Properties of an Edit_Chat_Message_Request. */
+            interface $Properties {
+
+                /** Edit_Chat_Message_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Edit_Chat_Message_Request chatId */
+                chatId?: (string|null);
+
+                /** Edit_Chat_Message_Request messageId */
+                messageId?: (number|null);
+
+                /** Edit_Chat_Message_Request text */
+                text?: (string|null);
+
+                /** Edit_Chat_Message_Request entities */
+                entities?: (lingcat.classes.IMessageEntity.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Edit_Chat_Message_Request. */
+            type $Shape = lingcat.methods.Edit_Chat_Message_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Edit_Chat_Message_Response.
+         * @deprecated Use lingcat.methods.Edit_Chat_Message_Response.$Properties instead.
+         */
+        interface IEdit_Chat_Message_Response extends lingcat.methods.Edit_Chat_Message_Response.$Properties {
+        }
+
+        /** Represents an Edit_Chat_Message_Response. */
+        class Edit_Chat_Message_Response {
+
+            /**
+             * Constructs a new Edit_Chat_Message_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Edit_Chat_Message_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Edit_Chat_Message_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Edit_Chat_Message_Response instance
+             */
+            static create(properties: lingcat.methods.Edit_Chat_Message_Response.$Shape): lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape;
+            static create(properties?: lingcat.methods.Edit_Chat_Message_Response.$Properties): lingcat.methods.Edit_Chat_Message_Response;
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Response message. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Response.verify|verify} messages.
+             * @param message Edit_Chat_Message_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Edit_Chat_Message_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Response message, length delimited. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Response.verify|verify} messages.
+             * @param message Edit_Chat_Message_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Edit_Chat_Message_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Edit_Chat_Message_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape} Edit_Chat_Message_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape;
+
+            /**
+             * Decodes an Edit_Chat_Message_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape} Edit_Chat_Message_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape;
+
+            /**
+             * Verifies an Edit_Chat_Message_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Edit_Chat_Message_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Edit_Chat_Message_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Edit_Chat_Message_Response;
+
+            /**
+             * Creates a plain object from an Edit_Chat_Message_Response message. Also converts values to other types if specified.
+             * @param message Edit_Chat_Message_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Edit_Chat_Message_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Edit_Chat_Message_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Edit_Chat_Message_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Edit_Chat_Message_Response {
+
+            /** Properties of an Edit_Chat_Message_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Edit_Chat_Message_Response. */
+            type $Shape = lingcat.methods.Edit_Chat_Message_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Message_Edited_Event.
+         * @deprecated Use lingcat.methods.Message_Edited_Event.$Properties instead.
+         */
+        interface IMessage_Edited_Event extends lingcat.methods.Message_Edited_Event.$Properties {
+        }
+
+        /** Represents a Message_Edited_Event. */
+        class Message_Edited_Event {
+
+            /**
+             * Constructs a new Message_Edited_Event.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Message_Edited_Event.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Message_Edited_Event id. */
+            id: number;
+
+            /** Message_Edited_Event chatId. */
+            chatId: string;
+
+            /** Message_Edited_Event text. */
+            text: string;
+
+            /** Message_Edited_Event entities. */
+            entities: lingcat.classes.IMessageEntity.$Properties[];
+
+            /** Message_Edited_Event editedAt. */
+            editedAt: (number|Long);
+
+            /**
+             * Creates a new Message_Edited_Event instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Message_Edited_Event instance
+             */
+            static create(properties: lingcat.methods.Message_Edited_Event.$Shape): lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape;
+            static create(properties?: lingcat.methods.Message_Edited_Event.$Properties): lingcat.methods.Message_Edited_Event;
+
+            /**
+             * Encodes the specified Message_Edited_Event message. Does not implicitly {@link lingcat.methods.Message_Edited_Event.verify|verify} messages.
+             * @param message Message_Edited_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Message_Edited_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Message_Edited_Event message, length delimited. Does not implicitly {@link lingcat.methods.Message_Edited_Event.verify|verify} messages.
+             * @param message Message_Edited_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Message_Edited_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Message_Edited_Event message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape} Message_Edited_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape;
+
+            /**
+             * Decodes a Message_Edited_Event message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape} Message_Edited_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape;
+
+            /**
+             * Verifies a Message_Edited_Event message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Message_Edited_Event message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Message_Edited_Event
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Message_Edited_Event;
+
+            /**
+             * Creates a plain object from a Message_Edited_Event message. Also converts values to other types if specified.
+             * @param message Message_Edited_Event
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Message_Edited_Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Message_Edited_Event to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Message_Edited_Event
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Message_Edited_Event {
+
+            /** Properties of a Message_Edited_Event. */
+            interface $Properties {
+
+                /** Message_Edited_Event id */
+                id?: (number|null);
+
+                /** Message_Edited_Event chatId */
+                chatId?: (string|null);
+
+                /** Message_Edited_Event text */
+                text?: (string|null);
+
+                /** Message_Edited_Event entities */
+                entities?: (lingcat.classes.IMessageEntity.$Properties[]|null);
+
+                /** Message_Edited_Event editedAt */
+                editedAt?: (number|Long|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Message_Edited_Event. */
+            type $Shape = lingcat.methods.Message_Edited_Event.$Properties;
         }
     }
 }

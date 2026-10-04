@@ -797,6 +797,62 @@ export default class ChatApi {
                 }))
                 break
             }
+            case Methods.Edit_Chat_Message_Request: {
+                const data = LingCatProto.methods.Edit_Chat_Message_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+            
+                if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId))
+                    return sendError(sendPackage, mPackage.method_id, '用户不属于此对话', Code.Forbidden)
+            
+                const msgs = await MessageDataBase.getMessages(data.chatId, {
+                    before: data.messageId + 1,
+                    limit: 1,
+                })
+                const target = msgs.find((m) => m.id === data.messageId)
+                if (!target) return sendError(sendPackage, mPackage.method_id, '消息不存在', Code.Not_Found)
+            
+                if (target.sender_user_id !== user_id)
+                    return sendError(sendPackage, mPackage.method_id, '只能编辑自己发送的消息', Code.Forbidden)
+                if (target.system)
+                    return sendError(sendPackage, mPackage.method_id, '系统消息不可编辑', Code.Forbidden)
+            
+                // const EDIT_WINDOW_MS = 30 * 60 * 1000
+                // if (Date.now() - target.time > EDIT_WINDOW_MS)
+                //     return sendError(sendPackage, mPackage.method_id, '超过可编辑时间', Code.Forbidden)
+            
+                const entities = (data.entities ?? []).map((e) => ({
+                    type: e.type,
+                    offset: e.offset,
+                    length: e.length,
+                    data: e.data,
+                }))
+            
+                await MessageDataBase.editText(data.chatId, data.messageId, data.text, entities.map(protoEntityToIMessageEntity))
+            
+                const editedAt = Date.now()
+                ;(await UserChatLinker.queryUsersOfChat(data.chatId)).forEach((v) =>
+                    broadcastToUserClients(clients_emiter, v, (func) => {
+                        func(Package.encode({
+                            method_id: Methods.Message_Edited_Event,
+                            flags: 0,
+                            data: LingCatProto.methods.Message_Edited_Event.encode({
+                                id: data.messageId,
+                                chatId: data.chatId,
+                                text: data.text,
+                                entities,
+                                editedAt,
+                            }).finish()
+                        }))
+                    })
+                )
+            
+                sendPackage(Package.encode({
+                    method_id: Methods.Edit_Chat_Message_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Edit_Chat_Message_Response.encode({}).finish()
+                }))
+                break
+            }
             default: {
                 return false
             }

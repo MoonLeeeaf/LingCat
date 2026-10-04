@@ -81,6 +81,7 @@ export interface IMessage {
     text: string
     time: number
     entities?: IMessageEntity[]
+    edited_at?: number
 }
 
 export type AdminRole = 'owner' | 'admin'

@@ -3289,6 +3289,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [text] IMessage text
              * @property {number|Long|null} [time] IMessage time
              * @property {Array.<lingcat.classes.IMessageEntity.$Properties>|null} [entities] IMessage entities
+             * @property {number|Long|null} [editedAt] IMessage editedAt
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -3377,6 +3378,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             IMessage.prototype.entities = $util.emptyArray;
 
+            /**
+             * IMessage editedAt.
+             * @member {number|Long|null|undefined} editedAt
+             * @memberof lingcat.classes.IMessage
+             * @instance
+             */
+            IMessage.prototype.editedAt = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -3389,6 +3398,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(IMessage.prototype, "_system", {
                 get: $util.oneOfGetter($oneOfFields = ["system"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMessage.prototype, "_editedAt", {
+                get: $util.oneOfGetter($oneOfFields = ["editedAt"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -3439,6 +3454,8 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.entities != null && message.entities.length)
                     for (let i = 0; i < message.entities.length; ++i)
                         $root.lingcat.classes.IMessageEntity.encode(message.entities[i], writer.uint32(/* id 7, wireType 2 =*/58).fork(), _depth + 1).ldelim();
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt"))
+                    writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.editedAt);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -3544,6 +3561,13 @@ export const lingcat = $root.lingcat = (() => {
                             message.entities.push($root.lingcat.classes.IMessageEntity.decode(reader, reader.uint32(), $undefined, _depth + 1));
                             continue;
                         }
+                    case 8: {
+                            if (wireType !== 0)
+                                break;
+                            message.editedAt = reader.uint64();
+                            message._editedAt = "editedAt";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -3619,6 +3643,11 @@ export const lingcat = $root.lingcat = (() => {
                             return "entities." + error;
                     }
                 }
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt")) {
+                    properties._editedAt = 1;
+                    if (!$util.isInteger(message.editedAt) && !(message.editedAt && $util.isInteger(message.editedAt.low) && $util.isInteger(message.editedAt.high)))
+                        return "editedAt: integer|Long expected";
+                }
                 return null;
             };
 
@@ -3673,6 +3702,15 @@ export const lingcat = $root.lingcat = (() => {
                         message.entities[i] = $root.lingcat.classes.IMessageEntity.fromObject(object.entities[i], _depth + 1);
                     }
                 }
+                if (object.editedAt != null)
+                    if ($util.Long)
+                        message.editedAt = $util.Long.fromValue(object.editedAt, true);
+                    else if (typeof object.editedAt === "string")
+                        message.editedAt = $parseInt(object.editedAt, 10);
+                    else if (typeof object.editedAt === "number")
+                        message.editedAt = object.editedAt;
+                    else if (typeof object.editedAt === "object")
+                        message.editedAt = new $util.LongBits(object.editedAt.low >>> 0, object.editedAt.high >>> 0).toNumber(true);
                 return message;
             };
 
@@ -3727,6 +3765,13 @@ export const lingcat = $root.lingcat = (() => {
                     for (let j = 0; j < message.entities.length; ++j)
                         object.entities[j] = $root.lingcat.classes.IMessageEntity.toObject(message.entities[j], options, _depth + 1);
                 }
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt"))
+                    if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                        object.editedAt = typeof message.editedAt === "number" ? $BigInt(message.editedAt) : $util.Long.fromBits(message.editedAt.low >>> 0, message.editedAt.high >>> 0, true).toBigInt();
+                    else if (typeof message.editedAt === "number")
+                        object.editedAt = options.longs === $String ? $String(message.editedAt) : message.editedAt;
+                    else
+                        object.editedAt = options.longs === $String ? $util.Long.prototype.toString.call(message.editedAt) : options.longs === $Number ? new $util.LongBits(message.editedAt.low >>> 0, message.editedAt.high >>> 0).toNumber(true) : message.editedAt;
                 return object;
             };
 
@@ -23362,6 +23407,1031 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return Change_Password_Response;
+        })();
+
+        methods.Edit_Chat_Message_Request = (function() {
+
+            /**
+             * Properties of an Edit_Chat_Message_Request.
+             * @typedef {Object} lingcat.methods.Edit_Chat_Message_Request.$Properties
+             * @property {string|null} [accessToken] Edit_Chat_Message_Request accessToken
+             * @property {string|null} [chatId] Edit_Chat_Message_Request chatId
+             * @property {number|null} [messageId] Edit_Chat_Message_Request messageId
+             * @property {string|null} [text] Edit_Chat_Message_Request text
+             * @property {Array.<lingcat.classes.IMessageEntity.$Properties>|null} [entities] Edit_Chat_Message_Request entities
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Edit_Chat_Message_Request.
+             * @memberof lingcat.methods
+             * @interface IEdit_Chat_Message_Request
+             * @augments lingcat.methods.Edit_Chat_Message_Request.$Properties
+             * @deprecated Use lingcat.methods.Edit_Chat_Message_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of an Edit_Chat_Message_Request.
+             * @typedef {lingcat.methods.Edit_Chat_Message_Request.$Properties} lingcat.methods.Edit_Chat_Message_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Edit_Chat_Message_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Edit_Chat_Message_Request.
+             * @constructor
+             * @param {lingcat.methods.Edit_Chat_Message_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Edit_Chat_Message_Request = function (properties) {
+                this.entities = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Edit_Chat_Message_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             */
+            Edit_Chat_Message_Request.prototype.accessToken = "";
+
+            /**
+             * Edit_Chat_Message_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             */
+            Edit_Chat_Message_Request.prototype.chatId = "";
+
+            /**
+             * Edit_Chat_Message_Request messageId.
+             * @member {number} messageId
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             */
+            Edit_Chat_Message_Request.prototype.messageId = 0;
+
+            /**
+             * Edit_Chat_Message_Request text.
+             * @member {string} text
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             */
+            Edit_Chat_Message_Request.prototype.text = "";
+
+            /**
+             * Edit_Chat_Message_Request entities.
+             * @member {Array.<lingcat.classes.IMessageEntity.$Properties>} entities
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             */
+            Edit_Chat_Message_Request.prototype.entities = $util.emptyArray;
+
+            /**
+             * Creates a new Edit_Chat_Message_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Edit_Chat_Message_Request} Edit_Chat_Message_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Edit_Chat_Message_Request.$Shape): lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape;
+             *   (properties?: lingcat.methods.Edit_Chat_Message_Request.$Properties): lingcat.methods.Edit_Chat_Message_Request;
+             * }}
+             */
+            Edit_Chat_Message_Request.create = function(properties) {
+                return new Edit_Chat_Message_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Request message. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Request.$Properties} message Edit_Chat_Message_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Edit_Chat_Message_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.messageId != null && $Object.hasOwnProperty.call(message, "messageId") && message.messageId !== 0)
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.messageId);
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text") && message.text !== "")
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.text);
+                if (message.entities != null && message.entities.length)
+                    for (let i = 0; i < message.entities.length; ++i)
+                        $root.lingcat.classes.IMessageEntity.encode(message.entities[i], writer.uint32(/* id 5, wireType 2 =*/42).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Request message, length delimited. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Request.$Properties} message Edit_Chat_Message_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Edit_Chat_Message_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Edit_Chat_Message_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape} Edit_Chat_Message_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Edit_Chat_Message_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Message_Request(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.messageId = value;
+                            else
+                                delete message.messageId;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.text = value;
+                            else
+                                delete message.text;
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.entities && message.entities.length))
+                                message.entities = [];
+                            message.entities.push($root.lingcat.classes.IMessageEntity.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Edit_Chat_Message_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Edit_Chat_Message_Request & lingcat.methods.Edit_Chat_Message_Request.$Shape} Edit_Chat_Message_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Edit_Chat_Message_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Edit_Chat_Message_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Edit_Chat_Message_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.messageId != null && $Object.hasOwnProperty.call(message, "messageId"))
+                    if (!$util.isInteger(message.messageId))
+                        return "messageId: integer expected";
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                    if (!$util.isString(message.text))
+                        return "text: string expected";
+                if (message.entities != null && $Object.hasOwnProperty.call(message, "entities")) {
+                    if (!$Array.isArray(message.entities))
+                        return "entities: array expected";
+                    for (let i = 0; i < message.entities.length; ++i) {
+                        let error = $root.lingcat.classes.IMessageEntity.verify(message.entities[i], _depth + 1);
+                        if (error)
+                            return "entities." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates an Edit_Chat_Message_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Edit_Chat_Message_Request} Edit_Chat_Message_Request
+             */
+            Edit_Chat_Message_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Edit_Chat_Message_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Edit_Chat_Message_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Edit_Chat_Message_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.messageId != null)
+                    if ($Number(object.messageId) !== 0)
+                        message.messageId = object.messageId >>> 0;
+                if (object.text != null)
+                    if (typeof object.text !== "string" || object.text.length)
+                        message.text = $String(object.text);
+                if (object.entities) {
+                    if (!$Array.isArray(object.entities))
+                        throw $TypeError(".lingcat.methods.Edit_Chat_Message_Request.entities: array expected");
+                    message.entities = $Array(object.entities.length);
+                    for (let i = 0; i < object.entities.length; ++i) {
+                        if (!$util.isObject(object.entities[i]))
+                            throw $TypeError(".lingcat.methods.Edit_Chat_Message_Request.entities: object expected");
+                        message.entities[i] = $root.lingcat.classes.IMessageEntity.fromObject(object.entities[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Edit_Chat_Message_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Request} message Edit_Chat_Message_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Edit_Chat_Message_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.entities = [];
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                    object.messageId = 0;
+                    object.text = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.messageId != null && $Object.hasOwnProperty.call(message, "messageId"))
+                    object.messageId = message.messageId;
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                    object.text = message.text;
+                if (message.entities && message.entities.length) {
+                    object.entities = $Array(message.entities.length);
+                    for (let j = 0; j < message.entities.length; ++j)
+                        object.entities[j] = $root.lingcat.classes.IMessageEntity.toObject(message.entities[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Edit_Chat_Message_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Edit_Chat_Message_Request.prototype.toJSON = function() {
+                return Edit_Chat_Message_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Edit_Chat_Message_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Edit_Chat_Message_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Edit_Chat_Message_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Edit_Chat_Message_Request";
+            };
+
+            return Edit_Chat_Message_Request;
+        })();
+
+        methods.Edit_Chat_Message_Response = (function() {
+
+            /**
+             * Properties of an Edit_Chat_Message_Response.
+             * @typedef {Object} lingcat.methods.Edit_Chat_Message_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Edit_Chat_Message_Response.
+             * @memberof lingcat.methods
+             * @interface IEdit_Chat_Message_Response
+             * @augments lingcat.methods.Edit_Chat_Message_Response.$Properties
+             * @deprecated Use lingcat.methods.Edit_Chat_Message_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of an Edit_Chat_Message_Response.
+             * @typedef {lingcat.methods.Edit_Chat_Message_Response.$Properties} lingcat.methods.Edit_Chat_Message_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Edit_Chat_Message_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Edit_Chat_Message_Response.
+             * @constructor
+             * @param {lingcat.methods.Edit_Chat_Message_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Edit_Chat_Message_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Edit_Chat_Message_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Edit_Chat_Message_Response} Edit_Chat_Message_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Edit_Chat_Message_Response.$Shape): lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape;
+             *   (properties?: lingcat.methods.Edit_Chat_Message_Response.$Properties): lingcat.methods.Edit_Chat_Message_Response;
+             * }}
+             */
+            Edit_Chat_Message_Response.create = function(properties) {
+                return new Edit_Chat_Message_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Response message. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Response.$Properties} message Edit_Chat_Message_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Edit_Chat_Message_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Edit_Chat_Message_Response message, length delimited. Does not implicitly {@link lingcat.methods.Edit_Chat_Message_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Response.$Properties} message Edit_Chat_Message_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Edit_Chat_Message_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes an Edit_Chat_Message_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape} Edit_Chat_Message_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Edit_Chat_Message_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Message_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Edit_Chat_Message_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Edit_Chat_Message_Response & lingcat.methods.Edit_Chat_Message_Response.$Shape} Edit_Chat_Message_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Edit_Chat_Message_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies an Edit_Chat_Message_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Edit_Chat_Message_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates an Edit_Chat_Message_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Edit_Chat_Message_Response} Edit_Chat_Message_Response
+             */
+            Edit_Chat_Message_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Edit_Chat_Message_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Edit_Chat_Message_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Edit_Chat_Message_Response();
+            };
+
+            /**
+             * Creates a plain object from an Edit_Chat_Message_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {lingcat.methods.Edit_Chat_Message_Response} message Edit_Chat_Message_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Edit_Chat_Message_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Edit_Chat_Message_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Edit_Chat_Message_Response.prototype.toJSON = function() {
+                return Edit_Chat_Message_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Edit_Chat_Message_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Edit_Chat_Message_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Edit_Chat_Message_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Edit_Chat_Message_Response";
+            };
+
+            return Edit_Chat_Message_Response;
+        })();
+
+        methods.Message_Edited_Event = (function() {
+
+            /**
+             * Properties of a Message_Edited_Event.
+             * @typedef {Object} lingcat.methods.Message_Edited_Event.$Properties
+             * @property {number|null} [id] Message_Edited_Event id
+             * @property {string|null} [chatId] Message_Edited_Event chatId
+             * @property {string|null} [text] Message_Edited_Event text
+             * @property {Array.<lingcat.classes.IMessageEntity.$Properties>|null} [entities] Message_Edited_Event entities
+             * @property {number|Long|null} [editedAt] Message_Edited_Event editedAt
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Message_Edited_Event.
+             * @memberof lingcat.methods
+             * @interface IMessage_Edited_Event
+             * @augments lingcat.methods.Message_Edited_Event.$Properties
+             * @deprecated Use lingcat.methods.Message_Edited_Event.$Properties instead.
+             */
+
+            /**
+             * Shape of a Message_Edited_Event.
+             * @typedef {lingcat.methods.Message_Edited_Event.$Properties} lingcat.methods.Message_Edited_Event.$Shape
+             */
+
+            /**
+             * Constructs a new Message_Edited_Event.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Message_Edited_Event.
+             * @constructor
+             * @param {lingcat.methods.Message_Edited_Event.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Message_Edited_Event = function (properties) {
+                this.entities = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Message_Edited_Event id.
+             * @member {number} id
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             */
+            Message_Edited_Event.prototype.id = 0;
+
+            /**
+             * Message_Edited_Event chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             */
+            Message_Edited_Event.prototype.chatId = "";
+
+            /**
+             * Message_Edited_Event text.
+             * @member {string} text
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             */
+            Message_Edited_Event.prototype.text = "";
+
+            /**
+             * Message_Edited_Event entities.
+             * @member {Array.<lingcat.classes.IMessageEntity.$Properties>} entities
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             */
+            Message_Edited_Event.prototype.entities = $util.emptyArray;
+
+            /**
+             * Message_Edited_Event editedAt.
+             * @member {number|Long} editedAt
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             */
+            Message_Edited_Event.prototype.editedAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * Creates a new Message_Edited_Event instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {lingcat.methods.Message_Edited_Event.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Message_Edited_Event} Message_Edited_Event instance
+             * @type {{
+             *   (properties: lingcat.methods.Message_Edited_Event.$Shape): lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape;
+             *   (properties?: lingcat.methods.Message_Edited_Event.$Properties): lingcat.methods.Message_Edited_Event;
+             * }}
+             */
+            Message_Edited_Event.create = function(properties) {
+                return new Message_Edited_Event(properties);
+            };
+
+            /**
+             * Encodes the specified Message_Edited_Event message. Does not implicitly {@link lingcat.methods.Message_Edited_Event.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {lingcat.methods.Message_Edited_Event.$Properties} message Message_Edited_Event message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Message_Edited_Event.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id") && message.id !== 0)
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text") && message.text !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.text);
+                if (message.entities != null && message.entities.length)
+                    for (let i = 0; i < message.entities.length; ++i)
+                        $root.lingcat.classes.IMessageEntity.encode(message.entities[i], writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt") && (typeof message.editedAt === "object" ? message.editedAt.low || message.editedAt.high : message.editedAt !== 0))
+                    writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.editedAt);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Message_Edited_Event message, length delimited. Does not implicitly {@link lingcat.methods.Message_Edited_Event.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {lingcat.methods.Message_Edited_Event.$Properties} message Message_Edited_Event message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Message_Edited_Event.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a Message_Edited_Event message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape} Message_Edited_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Message_Edited_Event.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Message_Edited_Event(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.id = value;
+                            else
+                                delete message.id;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.text = value;
+                            else
+                                delete message.text;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.entities && message.entities.length))
+                                message.entities = [];
+                            message.entities.push($root.lingcat.classes.IMessageEntity.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 0)
+                                break;
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                                message.editedAt = value;
+                            else
+                                delete message.editedAt;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Message_Edited_Event message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Message_Edited_Event & lingcat.methods.Message_Edited_Event.$Shape} Message_Edited_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Message_Edited_Event.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Message_Edited_Event message.
+             * @function verify
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Message_Edited_Event.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    if (!$util.isInteger(message.id))
+                        return "id: integer expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                    if (!$util.isString(message.text))
+                        return "text: string expected";
+                if (message.entities != null && $Object.hasOwnProperty.call(message, "entities")) {
+                    if (!$Array.isArray(message.entities))
+                        return "entities: array expected";
+                    for (let i = 0; i < message.entities.length; ++i) {
+                        let error = $root.lingcat.classes.IMessageEntity.verify(message.entities[i], _depth + 1);
+                        if (error)
+                            return "entities." + error;
+                    }
+                }
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt"))
+                    if (!$util.isInteger(message.editedAt) && !(message.editedAt && $util.isInteger(message.editedAt.low) && $util.isInteger(message.editedAt.high)))
+                        return "editedAt: integer|Long expected";
+                return null;
+            };
+
+            /**
+             * Creates a Message_Edited_Event message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Message_Edited_Event} Message_Edited_Event
+             */
+            Message_Edited_Event.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Message_Edited_Event)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Message_Edited_Event: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Message_Edited_Event();
+                if (object.id != null)
+                    if ($Number(object.id) !== 0)
+                        message.id = object.id >>> 0;
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.text != null)
+                    if (typeof object.text !== "string" || object.text.length)
+                        message.text = $String(object.text);
+                if (object.entities) {
+                    if (!$Array.isArray(object.entities))
+                        throw $TypeError(".lingcat.methods.Message_Edited_Event.entities: array expected");
+                    message.entities = $Array(object.entities.length);
+                    for (let i = 0; i < object.entities.length; ++i) {
+                        if (!$util.isObject(object.entities[i]))
+                            throw $TypeError(".lingcat.methods.Message_Edited_Event.entities: object expected");
+                        message.entities[i] = $root.lingcat.classes.IMessageEntity.fromObject(object.entities[i], _depth + 1);
+                    }
+                }
+                if (object.editedAt != null)
+                    if (typeof object.editedAt === "object" ? object.editedAt.low || object.editedAt.high : $Number(object.editedAt) !== 0)
+                        if ($util.Long)
+                            message.editedAt = $util.Long.fromValue(object.editedAt, true);
+                        else if (typeof object.editedAt === "string")
+                            message.editedAt = $parseInt(object.editedAt, 10);
+                        else if (typeof object.editedAt === "number")
+                            message.editedAt = object.editedAt;
+                        else if (typeof object.editedAt === "object")
+                            message.editedAt = new $util.LongBits(object.editedAt.low >>> 0, object.editedAt.high >>> 0).toNumber(true);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Message_Edited_Event message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {lingcat.methods.Message_Edited_Event} message Message_Edited_Event
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Message_Edited_Event.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.entities = [];
+                if (options.defaults) {
+                    object.id = 0;
+                    object.chatId = "";
+                    object.text = "";
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, true);
+                        object.editedAt = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                    } else
+                        object.editedAt = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                }
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    object.id = message.id;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                    object.text = message.text;
+                if (message.entities && message.entities.length) {
+                    object.entities = $Array(message.entities.length);
+                    for (let j = 0; j < message.entities.length; ++j)
+                        object.entities[j] = $root.lingcat.classes.IMessageEntity.toObject(message.entities[j], options, _depth + 1);
+                }
+                if (message.editedAt != null && $Object.hasOwnProperty.call(message, "editedAt"))
+                    if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                        object.editedAt = typeof message.editedAt === "number" ? $BigInt(message.editedAt) : $util.Long.fromBits(message.editedAt.low >>> 0, message.editedAt.high >>> 0, true).toBigInt();
+                    else if (typeof message.editedAt === "number")
+                        object.editedAt = options.longs === $String ? $String(message.editedAt) : message.editedAt;
+                    else
+                        object.editedAt = options.longs === $String ? $util.Long.prototype.toString.call(message.editedAt) : options.longs === $Number ? new $util.LongBits(message.editedAt.low >>> 0, message.editedAt.high >>> 0).toNumber(true) : message.editedAt;
+                return object;
+            };
+
+            /**
+             * Converts this Message_Edited_Event to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Message_Edited_Event.prototype.toJSON = function() {
+                return Message_Edited_Event.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Message_Edited_Event
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Message_Edited_Event
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Message_Edited_Event.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Message_Edited_Event";
+            };
+
+            return Message_Edited_Event;
         })();
 
         return methods;

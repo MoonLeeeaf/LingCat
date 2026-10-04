@@ -68,9 +68,12 @@ export default class Methods {
     static Verify_Password_Identity_Response = 0x68
     static Change_Password_Request = 0x69
     static Change_Password_Response = 0x70
+    static Edit_Chat_Message_Request = 0x71
+    static Edit_Chat_Message_Response = 0x72
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32
+    static Message_Edited_Event = 0x73
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

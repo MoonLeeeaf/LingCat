@@ -75,6 +75,8 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                         session_id: 'client-' + Date.now() + '-' + navigator.userAgent
                     })
 
+                    AppState.myId = (await ClientManager.getMe()).id
+
                     const updateFileAccessToken = async () => {
                         /* document.cookie = "file_access_token=" + await FileApi.requestAccessUploadFileToken(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token

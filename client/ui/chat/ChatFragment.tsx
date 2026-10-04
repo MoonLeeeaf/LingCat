@@ -170,6 +170,20 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             if (!chat.is_member) return
             const { appendMessages } = useChatMessageStore.getState()
             // TODO: 向 lingcat-client-protocol 添加全局的监听方法
+            if (mPackage.method_id === Methods.Message_Edited_Event) {
+                const raw = LingCatProto.methods.Message_Edited_Event.decode(mPackage.data)
+                if (chat.id !== raw.chatId) return
+                useChatMessageStore.getState().updateMessage(raw.id, {
+                    text: raw.text,
+                    entities: (raw.entities ?? []).map(e => ({
+                        type: e.type as IMessageEntity['type'],
+                        offset: e.offset ?? 0,
+                        length: e.length ?? 0,
+                        data: e.data ?? undefined,
+                    })),
+                    edited_at: Number(raw.editedAt),
+                })
+            }
             if (mPackage.method_id == Methods.Receive_Chat_Message_Event) {
                 const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data).msg
                 if (chat.id != raw?.chatId) return
@@ -297,7 +311,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
     const { sortedIds } = useChatMessageStore()
 
     const [isMessageSending, setIsMessageSending] = React.useState(false)
-    async function sendMessage() {
+    async function sendOrEditMessage() {
         let text = inputRef.current?.value || ''
         if (text.trim() == '') return
 
@@ -340,12 +354,24 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
 
             const { text: parsedText, entities } = MessageParser.parseMessage(text)
 
-            await ChatApi.sendChatMessage(ClientManager.client, {
-                access_token: ClientManager.getActiveUserSession().token,
-                chat_id: chat.id,
-                text: parsedText,
-                entities,
-            })
+            if (editingMessage) {
+                await ChatApi.editChatMessage(ClientManager.client, {
+                    access_token: ClientManager.getActiveUserSession().token,
+                    chat_id: chat.id,
+                    message_id: editingMessage.id,
+                    text: parsedText,
+                    entities,
+                })
+                setEditingMessage(null)
+            } else {
+                await ChatApi.sendChatMessage(ClientManager.client, {
+                    access_token: ClientManager.getActiveUserSession().token,
+                    chat_id: chat.id,
+                    text: parsedText,
+                    entities,
+                })
+            }
+
             Object.keys(cachedFiles.current).forEach((k) => delete cachedFiles.current[k])
             Object.keys(cachedFileUrls.current).forEach((k) => {
                 URL.revokeObjectURL(cachedFileUrls.current[k])
@@ -412,6 +438,22 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         }
         attachFileInputRef.current!.value = ''
     })
+
+    const [editingMessage, setEditingMessage] = React.useState<IMessage | null>(null)
+    const editMessageOriginText = React.useRef('')
+
+    function startEdit(msg: IMessage) {
+        setEditingMessage(msg)
+        editMessageOriginText.current = inputRef.current!.value
+        // 把原始语法还原到输入框
+        inputRef.current!.value = MessageParser.entitiesToRawRichText(msg.text, msg.entities ?? [])
+        inputRef.current!.focus()
+    }
+
+    function cancelEdit() {
+        setEditingMessage(null)
+        inputRef.current!.value = editMessageOriginText.current
+    }
 
     return <div style={{ position: 'relative', overflow: 'hidden', display: 'flex', width: '100%' }}>
         <div style={{
@@ -490,6 +532,9 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                                 <mdui-menu-item icon="alternate_email" onClick={async () => insertText(`![UserMention=@${((await ProfileCache.queryUserInfo(msg.sender_user_id!)).nickname)}](lingcat://user?id=${msg.sender_user_id}) `)}>提及用户</mdui-menu-item>
                             </>}
                             messageMenus={<>
+                                {msg.sender_user_id === AppState.myId && !msg.system && (
+                                    <mdui-menu-item icon="edit" onClick={() => startEdit(msg)}>编辑</mdui-menu-item>
+                                )}
                                 <mdui-menu-item icon="info" onClick={() => dialog({
                                     headline: "Info",
                                     body: `<span style="word-break: break-word;">${Object.keys(msg)
@@ -513,6 +558,22 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                 <div style={{
                     flexGrow: 1,
                 }}></div>
+                {editingMessage && (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '6px 12px',
+                        background: 'rgba(var(--mdui-color-primary), 0.08)',
+                        borderLeft: '3px solid rgb(var(--mdui-color-primary))',
+                        margin: '0 4px',
+                        borderRadius: '4px',
+                    }}>
+                        <span style={{ flex: 1, fontSize: '90%', opacity: 0.8 }}>
+                            正在编辑消息
+                        </span>
+                        <mdui-button-icon icon="close" onClick={cancelEdit} />
+                    </div>
+                )}
                 <mdui-text-field
                     ref={inputRef}
                     use-patched-textarea
@@ -525,7 +586,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     }}
                     onKeyDown={(event) => {
                         if (event.ctrlKey && event.key == 'Enter')
-                            sendMessage()
+                            sendOrEditMessage()
                     }}
                     onPaste={(event) => {
                         for (const item of event.clipboardData.items) {
@@ -577,7 +638,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     }}>
                     <mdui-button-icon slot="end-icon" icon="attachment" onClick={() => attachFileInputRef.current!.click()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
-                    <mdui-button-icon slot="end-icon" icon="send" onClick={() => sendMessage()}></mdui-button-icon>
+                    <mdui-button-icon slot="end-icon" icon="send" onClick={() => sendOrEditMessage()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '5px' }}></div>
                 </mdui-text-field>
             </MessageContainer>

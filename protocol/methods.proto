@@ -330,3 +330,21 @@ message Change_Password_Request {
 }
 
 message Change_Password_Response {}
+
+message Edit_Chat_Message_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    uint32 message_id = 3;
+    string text = 4;
+    repeated IMessageEntity entities = 5;
+}
+
+message Edit_Chat_Message_Response {}
+
+message Message_Edited_Event {
+    uint32 id = 1;
+    string chat_id = 2;
+    string text = 3;
+    repeated IMessageEntity entities = 4;
+    uint64 edited_at = 5;
+}
