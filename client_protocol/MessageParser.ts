@@ -1,4 +1,4 @@
-import marked from 'marked'
+import { marked } from 'marked'
 
 type FileType = 'Video' | 'Image' | 'File'
 type MentionType = 'ChatMention' | 'UserMention'
