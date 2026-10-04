@@ -6,6 +6,7 @@ export default class LingCatClient {
     server_http: string
     server_public_key: Uint8Array
     client?: WebSocket
+    pingInterval?: ReturnType<typeof setInterval>
     session: {
         keySend?: Uint8Array,
         keyRecv?: Uint8Array,
@@ -58,25 +59,79 @@ export default class LingCatClient {
         })
     }
     invoke_internal({ mPackage, timeout }: { mPackage: Package, timeout?: number }) {
+        const ms = timeout ?? 20000
         return new Promise((res: (mPackage: Package) => void, rej) => {
             const requestId = mPackage.request_id
+            const sock = this.client
+            let done = false
+            let timer: any
+
+            const cleanup = () => {
+                const i = this.on_package_listeners.indexOf(onRecv)
+                if (i >= 0) this.on_package_listeners.splice(i, 1)
+                if (timer) clearTimeout(timer)
+                sock?.removeEventListener('close', onClose)
+            }
             const onRecv = (p: Package) => {
+                if (done) return
                 if (Buffer.compare(p.request_id, requestId) == 0) {
-                    this.on_package_listeners.splice(this.on_package_listeners.indexOf(onRecv))
+                    done = true
+                    cleanup()
                     res(p)
                 }
             }
+            // 连接断开时立刻 reject, 不必等超时
+            const onClose = () => {
+                if (done) return
+                done = true
+                cleanup()
+                rej('Connection closed (' + Methods.getMethodName(mPackage.method_id) + ')')
+            }
             this.on_package_listeners.push(onRecv)
+            sock?.addEventListener('close', onClose)
 
             this.client?.send(mPackage.toBuffer())
 
             console.log("[发]", "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (!mPackage.isDecrypted ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ") : ''))
 
-            timeout && setTimeout(() => rej('Request timeout ' + timeout + 'ms'), timeout)
+            timer = setTimeout(() => {
+                if (done) return
+                done = true
+                cleanup()
+                rej('Request timeout ' + ms + 'ms (' + Methods.getMethodName(mPackage.method_id) + ')')
+            }, ms)
         })
     }
 
     onInit() { }
+
+    /**
+     * 应用层心跳: 定期发 Ping_Request, 让服务端保持/检测连接存活
+     */
+    startPing() {
+        this.stopPing()
+        this.pingInterval = setInterval(() => {
+            const client = this.client
+            const keySend = this.session.keySend
+            if (!client || !keySend || client.readyState !== 1) return
+            try {
+                const pkt = Package.encode({
+                    method_id: Methods.Ping_Request,
+                    flags: 0,
+                    data: LingCatProto.methods.Ping_Request.encode({ time: Date.now() }).finish(),
+                }).encrypt(this.session.sendSeq++, keySend)
+                client.send(pkt.toBuffer())
+            } catch (e) {
+                console.warn('[Client] ping failed', e)
+            }
+        }, 30000)
+    }
+    stopPing() {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval)
+            this.pingInterval = undefined
+        }
+    }
 
     on_receive_listeners: ((mPackage: Package) => void)[] = []
     addOnReceiveListener(func: (mPackage: Package) => void) {
@@ -98,6 +153,7 @@ export default class LingCatClient {
             client.binaryType = 'arraybuffer'
 
             client.addEventListener('close', () => {
+                this.stopPing()
                 client.close()
                 delete this.client
                 on_package_listeners.splice(0, on_package_listeners.length)
@@ -156,14 +212,7 @@ export default class LingCatClient {
 
                                         sharedSecret.fill(0)
 
-                                        /*  const id = setInterval(() => sendPackage(Package.encode({
-                                             method_id: Methods.Ping_Request,
-                                             flags: 0,
-                                             data: LingCatProto.methods.Ping_Request.encode({
-                                                 time: Date.now()
-                                             }).finish()
-                                         }), { forceEncrypt: true }), 15000)
-                                         client?.addEventListener('close', () => clearInterval(id)) */
+                                        this.startPing()
 
                                         this.onInit()
                                     }

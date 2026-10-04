@@ -348,3 +348,77 @@ message Message_Edited_Event {
     repeated IMessageEntity entities = 4;
     uint64 edited_at = 5;
 }
+
+/**
+ * =======================================================
+ *
+ *                   会议 (LiveKit)
+ *
+ * =======================================================
+ */
+
+// 发起会议
+message Start_Meeting_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    optional string title = 3;
+}
+
+message Start_Meeting_Response {
+    string meeting_id = 1;
+    string room = 2;
+    string starter_user_id = 3;
+}
+
+// 获取加入会议所需的 LiveKit 令牌
+message Get_Meeting_Token_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string meeting_id = 3;
+}
+
+message Get_Meeting_Token_Response {
+    string url = 1;
+    string room = 2;
+    string token = 3;
+    uint32 max_participants = 4;
+}
+
+// 结束会议
+message End_Meeting_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string meeting_id = 3;
+}
+
+message End_Meeting_Response {}
+
+// 会议开始事件 (广播给对话成员)
+message Meeting_Started_Event {
+    string chat_id = 1;
+    string meeting_id = 2;
+    string room = 3;
+    string starter_user_id = 4;
+    optional string title = 5;
+}
+
+// 会议结束事件
+message Meeting_Ended_Event {
+    string chat_id = 1;
+    string meeting_id = 2;
+}
+
+// 查询对话中正在进行的会议
+message Get_Active_Meeting_Request {
+    string access_token = 1;
+    string chat_id = 2;
+}
+
+// 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
+message Get_Active_Meeting_Response {
+    string meeting_id = 1;
+    bool has_meeting = 2;
+    string room = 3;
+    string starter_user_id = 4;
+    optional string title = 5;
+}

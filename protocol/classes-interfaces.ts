@@ -9,11 +9,13 @@ export interface IUser {
 export type ChatType = 'private' | 'group'
 
 export const AvailableChatSettings = {
-    allow_join: 'boolean'
+    allow_join: 'boolean',
+    allow_meeting: 'boolean',
 }
 
 export type IChatSettings = {
     allow_join: boolean
+    allow_meeting: boolean
 }
 
 export const AvailableChatAdminPermissions = [

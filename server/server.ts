@@ -20,6 +20,7 @@ import FileApi from './api/FileApi.ts'
 import cookieParser from 'cookie-parser'
 import WebSocket from 'ws'
 import ChatApi from './api/ChatApi.ts'
+import MeetingApi from './api/MeetingApi.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -165,14 +166,28 @@ export default function createLingCatServer(base_data_path: string) {
         let user_id_after_authorzied: string | undefined
         let session_id: string | undefined
 
+        // ws 层心跳: 30s 无 pong 即判定连接已死并 terminate
+        let isAlive = true
+        client.on('pong', () => { isAlive = true })
+        const heartbeat = setInterval(() => {
+            if (!isAlive) {
+                clearInterval(heartbeat)
+                try { client.terminate() } catch (e) { }
+                return
+            }
+            isAlive = false
+            try { client.ping() } catch (e) { }
+        }, 30000)
+
         client.on('close', () => {
+            clearInterval(heartbeat)
             if (keySend) {
                 new Uint8Array(keySend).fill(0)
             }
-            if (keySend) {
-                new Uint8Array(keySend).fill(0)
+            if (keyRecv) {
+                new Uint8Array(keyRecv).fill(0)
             }
-            if (user_id_after_authorzied && session_id) {
+            if (user_id_after_authorzied && session_id && clients_emiter[user_id_after_authorzied]) {
                 delete clients_emiter[user_id_after_authorzied][session_id]
             }
         })
@@ -262,6 +277,7 @@ export default function createLingCatServer(base_data_path: string) {
                         await ServerApi.onCall(sendPackage, mPackage) ||
                         await UserApi.onCall(sendPackage, mPackage) ||
                         await ChatApi.onCall(sendPackage, mPackage, clients_emiter) ||
+                        await MeetingApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await FileApi.onCall(sendPackage, mPackage)
                     )) {
                         console.log('[Server] Method not found:', mPackage.method_id)
@@ -280,9 +296,19 @@ export default function createLingCatServer(base_data_path: string) {
         })
     })
 
+    async function close() {
+        // 先断开所有 ws 连接, 否则 wsServer.close() 会一直等待
+        wsServer.clients.forEach((c) => {
+            try { c.terminate() } catch (e) { }
+        })
+        await new Promise<void>((resolve) => wsServer.close(() => resolve()))
+        await new Promise<void>((resolve) => httpServer.close(() => resolve()))
+    }
+
     return {
         wsServer,
         httpServer,
         app,
+        close,
     }
 }

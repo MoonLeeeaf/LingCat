@@ -21,6 +21,8 @@ import ChangePasswordDialog from "./main/ChangePasswordDialog.tsx"
 import Markdown, { ReactRenderer } from "marked-react"
 import ProfileCache from "../ProfileCache.ts"
 import ClientSettingsDialog, { LoginDialog, SwitchUserDialog } from "./ClientSettingsDialog.tsx"
+import MeetingPanel from "./meeting/MeetingDialog.tsx"
+import { MeetingManager, useMeeting } from "./meeting/MeetingManager.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -58,6 +60,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
 
 export default function UserMain({ profile, setProfile, drawerRef }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [loadingProfile, setLoadingProfile] = React.useState(true)
+    const meeting = useMeeting()
 
     React.useEffect(() => {
         ; (async () => {
@@ -150,8 +153,68 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         }
     }, [])
 
+    React.useEffect(() => {
+        async function onMeeting(p: Package) {
+            if (p.method_id === Methods.Meeting_Started_Event) {
+                const ev = LingCatProto.methods.Meeting_Started_Event.decode(p.data)
+                MeetingManager.onMeetingStarted(ev)
+                if (ev.starterUserId == AppState.myId) return
+                if (MeetingManager.isInMeeting(ev.chatId)) return
+
+                const [starter, chat] = await Promise.all([
+                    ProfileCache.queryUserInfo(ev.starterUserId).catch(() => undefined),
+                    ProfileCache.queryChatInfo(ev.chatId).catch(() => undefined),
+                ])
+                const title = ev.title || chat?.title || '对话'
+                showSnackbar({
+                    message: `${starter?.nickname || '有人'} 在 [${title}] 发起了会议`,
+                    action: '加入',
+                    autoCloseDelay: 0,
+                    onActionClick: async () => {
+                        try {
+                            await MeetingManager.joinMeeting(ev.chatId, ev.meetingId, title)
+                        } catch (e) {
+                            tipError(e, '加入会议失败')
+                        }
+                    },
+                })
+            } else if (p.method_id === Methods.Meeting_Ended_Event) {
+                const ev = LingCatProto.methods.Meeting_Ended_Event.decode(p.data)
+                MeetingManager.onMeetingEnded(ev)
+            }
+        }
+        ClientManager.client.addOnReceiveListener(onMeeting)
+        return () => ClientManager.client.removeOnReceiveListener(onMeeting)
+    }, [])
+
     const [activeChat, setActiveChat] = React.useState<IChat>()
     AppState.setActiveChat = setActiveChat
+
+    // 记住当前打开的对话, 刷新后自动恢复
+    const activeChatStorageKey = profile?.id ? 'lingcat.active_chat.' + profile.id : undefined
+    React.useEffect(() => {
+        if (!activeChatStorageKey || !activeChat?.id) return
+        try { localStorage.setItem(activeChatStorageKey, activeChat.id) } catch { }
+    }, [activeChatStorageKey, activeChat?.id])
+
+    const restoredActiveChatRef = React.useRef(false)
+    React.useEffect(() => {
+        if (restoredActiveChatRef.current || !activeChatStorageKey) return
+        restoredActiveChatRef.current = true
+        let saved: string | null = null
+        try { saved = localStorage.getItem(activeChatStorageKey) } catch { }
+        if (!saved) return
+        ;(async () => {
+            try {
+                setActiveChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                    access_token: ClientManager.getActiveUserSession().token,
+                    chat_id: saved!,
+                }))
+            } catch (e) {
+                console.log('[UserMain] 恢复上次对话失败', e)
+            }
+        })()
+    }, [activeChatStorageKey])
 
     const navigationRef = React.useRef<NavigationRail | NavigationBar>(null)
     const [navigationSelected, setNavigationSelected] = React.useState('recent')
@@ -217,6 +280,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     React.useEffect(() => {
         if (!profile?.id) return
         const refresh = async () => {
+            console.log('[chats] refresh start')
             setLoadingAll(true)
             setLoadingRecent(true)
             setLoadingFavourited(true)
@@ -226,17 +290,21 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                     access_token: token,
                     limit: 1000,
                 })
+                console.log('[chats] getMyChats ->', all.length)
                 setAllChats(all)
                 setRecentChats(all.slice(0, 50))
                 const fav = await ChatApi.getMyFavouriteChats(ClientManager.client, {
                     access_token: token,
                     // limit: 50,
                 })
+                console.log('[chats] getMyFavouriteChats ->', fav.length)
                 setFavouritedChats(fav)
                 AppState.favouritedChats = fav
             } catch (e) {
+                console.error('[chats] refresh failed', e)
                 tipError(e, '刷新对话列表失败')
             } finally {
+                console.log('[chats] refresh done')
                 setLoadingAll(false)
                 setLoadingRecent(false)
                 setLoadingFavourited(false)
@@ -455,7 +523,14 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         <mdui-layout-main style={{
             flexGrow: 1,
             display: 'flex',
+            minWidth: 0,
         }}>
+            {meeting.isActive() && meeting.dock && (
+                <div style={{ width: '50%', height: '100%', minWidth: 0, flexShrink: 0, display: 'flex' }}>
+                    <MeetingPanel mode="docked" />
+                </div>
+            )}
+            <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
             {
                 activeChat
                     ? <ChatFragment chat={activeChat} drawerRef={drawerRef} />
@@ -483,6 +558,8 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                         </div>
                     </div>
             }
+            </div>
         </mdui-layout-main>
+        {meeting.isActive() && !meeting.dock && <MeetingPanel mode="floating" />}
     </>
 }

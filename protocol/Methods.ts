@@ -70,10 +70,20 @@ export default class Methods {
     static Change_Password_Response = 0x70
     static Edit_Chat_Message_Request = 0x71
     static Edit_Chat_Message_Response = 0x72
+    static Start_Meeting_Request = 0x74
+    static Start_Meeting_Response = 0x75
+    static Get_Meeting_Token_Request = 0x76
+    static Get_Meeting_Token_Response = 0x77
+    static End_Meeting_Request = 0x78
+    static End_Meeting_Response = 0x79
+    static Get_Active_Meeting_Request = 0x82
+    static Get_Active_Meeting_Response = 0x83
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32
     static Message_Edited_Event = 0x73
+    static Meeting_Started_Event = 0x80
+    static Meeting_Ended_Event = 0x81
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

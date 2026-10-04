@@ -11,7 +11,6 @@ import default_avatar from '../default_avatar.png'
 import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
 import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
-import EditMyProfileDialog from "../EditMyProfileDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
@@ -269,6 +268,18 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                                                 <span style={{ flex: 1 }}>允许加入</span>
                                                 <mdui-switch
                                                     checked={localSettings.allow_join || false}
+                                                    disabled={isSaving}
+                                                    checked-icon=""
+                                                />
+                                            </div>
+                                        </mdui-list-item>
+                                        <mdui-list-item rounded onClick={() => {
+                                            updateSetting('allow_meeting', !localSettings.allow_meeting)
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                                <span style={{ flex: 1 }}>允许会议 / 屏幕共享</span>
+                                                <mdui-switch
+                                                    checked={localSettings.allow_meeting !== false}
                                                     disabled={isSaving}
                                                     checked-icon=""
                                                 />

@@ -26,24 +26,29 @@ export default class MessageDataBase {
     }) {
         if (!msg.chat_id) throw { message: "chat_id must be provided", code: Code.Bad_Request }
 
-        // 使用事务保证原子性
-        const id = await db.transaction(async (trx) => {
-            const lastRow = await trx(tableName)
-                .where('chat_id', msg.chat_id)
-                .orderBy('id', 'desc')
-                .select('id')
-                .first()
-            const nextId = lastRow ? lastRow.id + 1 : 1
+        // 原子分配群内自增 id:
+        // INSERT ... SELECT COALESCE(MAX(id),0)+1 ... 单条语句执行, SQLite 写锁保证并发下不会出现
+        // "先查 MAX 再插入" 的竞态 (旧实现会导致唯一键冲突或丢号)。
+        const rows: any = await db.raw(
+            `INSERT INTO ${tableName} (chat_id, id, sender_user_id, system, text, entities, time)
+             SELECT ?, COALESCE(MAX(id), 0) + 1, ?, ?, ?, ?, ?
+             FROM ${tableName} WHERE chat_id = ?
+             RETURNING id`,
+            [
+                msg.chat_id,
+                msg.sender_user_id ?? null,
+                msg.system ? 1 : 0,
+                msg.text,
+                JSON.stringify(msg.entities ?? []),
+                msg.time,
+                msg.chat_id,
+            ]
+        )
 
-            await trx(tableName).insert({
-                ...msg,
-                id: nextId,
-                entities: JSON.stringify(msg.entities ?? []),
-            })
+        const rawId = Array.isArray(rows) ? rows[0]?.id : rows?.id
+        const id = typeof rawId === 'string' ? Number(rawId) : (rawId as number)
 
-            return nextId
-        })
-        // 注意: 处理完事务再处理更新
+        // 注意: 处理完插入再处理更新
         await ChatDataBase.updateLastMessage(msg.chat_id, id, msg.time)
         return id
     }

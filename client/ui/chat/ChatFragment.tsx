@@ -22,6 +22,7 @@ import ChatSettingsDialog from "./ChatSettingsDialog.tsx"
 import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
+import { MeetingManager, useMeeting } from "../meeting/MeetingManager.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -129,6 +130,12 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         setChat(chatObj)
     }, [chatObj])
 
+    const meeting = useMeeting()
+
+    React.useEffect(() => {
+        MeetingManager.refreshActiveMeeting(chat.id)
+    }, [chat.id])
+
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
     const containerRef = React.useRef<HTMLDivElement>(null)
 
@@ -191,7 +198,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                 appendMessages([{
                     id: raw?.id!,
                     text: raw?.text!,
-                    time: raw?.time!,
+                    time: Number(raw?.time ?? 0),
                     sender_user_id: raw?.senderUserId,
                     system: raw?.system,
                     chat_id: raw?.chatId!,
@@ -455,6 +462,10 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         inputRef.current!.value = editMessageOriginText.current
     }
 
+    let chatSettings: any = {}
+    try { chatSettings = JSON.parse(chat.settings || '{}') } catch { }
+    const canJoin = chatSettings.allow_join === true
+
     return <div style={{ position: 'relative', overflow: 'hidden', display: 'flex', width: '100%' }}>
         <div style={{
             display: 'none'
@@ -468,10 +479,63 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             }}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
+            <mdui-button-icon icon="videocam" style={{ marginRight: '4px' }} title="会议 / 屏幕共享" onClick={() => {
+                (async () => {
+                    if (MeetingManager.isInMeeting(chat.id)) {
+                        showSnackbar({ message: '你已在此会议中' })
+                        return
+                    }
+                    try {
+                        const active = MeetingManager.getActiveMeeting(chat.id)
+                        if (active)
+                            await MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
+                        else
+                            await MeetingManager.startMeeting(chat)
+                    } catch (e) {
+                        tipError(e, '发起会议失败')
+                    }
+                })()
+            }}></mdui-button-icon>
             <mdui-button-icon icon="group" style={{ marginRight: '4px' }} onClick={() => ChatMembersAndAdminsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="settings" style={{ marginRight: '4px' }} onClick={() => ChatSettingsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>
         </mdui-top-app-bar>
+
+        {!!meeting.getActiveMeeting(chat.id) && (
+            <div style={{
+                position: 'absolute',
+                top: '64px',
+                left: 0,
+                right: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                zIndex: 6,
+                pointerEvents: 'none',
+            }}>
+                <div style={{
+                    pointerEvents: 'auto',
+                    marginTop: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '4px 6px 4px 14px',
+                    borderRadius: '999px',
+                    background: 'rgb(var(--mdui-color-primary-container))',
+                    color: 'rgb(var(--mdui-color-on-primary-container))',
+                    boxShadow: '0 2px 10px rgba(0,0,0,.25)',
+                    fontSize: '13px',
+                }}>
+                    <span>🎥 会议进行中</span>
+                    {meeting.isInMeeting(chat.id)
+                        ? <mdui-button variant="text" onClick={() => MeetingManager.leave()}>离开</mdui-button>
+                        : <mdui-button variant="text" onClick={() => {
+                            const active = meeting.getActiveMeeting(chat.id)!
+                            MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
+                                .catch((e) => tipError(e, '加入会议失败'))
+                        }}>加入</mdui-button>}
+                </div>
+            </div>
+        )}
 
         <div id={id} style={{
             display: 'flex',
@@ -481,33 +545,40 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             <div style={{
                 display: chat.is_member ? 'none' : undefined,
                 alignSelf: 'center',
+                maxWidth: '300px',
+                textAlign: 'center',
             }}>
-                <mdui-button onClick={async () => {
-                    try {
-                        const re = await ChatApi.joinChat(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            chat_id: chat.id,
-                        })
-                        if (re.pending_approval) return showSnackbar({
-                            message: "已发送加入对话申请"
-                        })
-                    } catch (e) {
-                        console.log(e)
-                        tipError(e, "加入对话失败")
-                    }
-                    try {
-                        setChat(await ChatApi.queryChatInfo(ClientManager.client, {
-                            access_token: ClientManager.getActiveUserSession().token,
-                            chat_id: chat.id,
-                        }))
-                        showSnackbar({
-                            message: "已加入对话"
-                        })
-                    } catch (e) {
-                        console.log(e)
-                        tipError(e, "重新打开对话失败")
-                    }
-                }}>申请加入对话</mdui-button>
+                {canJoin
+                    ? <mdui-button onClick={async () => {
+                        try {
+                            await ChatApi.joinChat(ClientManager.client, {
+                                access_token: ClientManager.getActiveUserSession().token,
+                                chat_id: chat.id,
+                            })
+                        } catch (e) {
+                            console.log(e)
+                            tipError(e, "加入对话失败")
+                            return
+                        }
+                        try {
+                            setChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                                access_token: ClientManager.getActiveUserSession().token,
+                                chat_id: chat.id,
+                            }))
+                            showSnackbar({
+                                message: "已加入对话"
+                            })
+                        } catch (e) {
+                            console.log(e)
+                            tipError(e, "重新打开对话失败")
+                        }
+                    }}>加入对话</mdui-button>
+                    : <div>
+                        <div>该群未开放加入</div>
+                        <div style={{ fontSize: '85%', opacity: 0.7, marginTop: '6px' }}>
+                            需群主在「对话设定 → 入群」中开启「允许加入」
+                        </div>
+                    </div>}
             </div>
             <MessageContainer ref={containerRef} style={{
                 display: chat.is_member ? 'flex' : 'none'
