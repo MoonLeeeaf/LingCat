@@ -3,13 +3,12 @@ import { IMessage, IUser } from "lingcat-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
 import Message from "../chat-layout/Message.tsx"
+import RichText from "../chat-layout/RichText.tsx"
+import Markdown, { ReactRenderer } from "marked-react"
 import default_avatar from '../../default_avatar.png'
 import React from "react"
 import ProfileCache from "../../ProfileCache.ts"
-import { ReactRenderer } from "marked-react"
 import AppState from "../AppState.ts"
-
-type Render = Partial<ReactRenderer>
 
 export default function ChatMessage({
     msg,
@@ -17,14 +16,12 @@ export default function ChatMessage({
     onAvatarClick,
     messageMenus,
     avatarMenus,
-    render,
 }: {
     msg: IMessage
     hideSender?: boolean
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
     avatarMenus?: React.ReactNode
-    render?: Render
 }) {
     const [isMe, setIsMe] = React.useState(false)
     const [profile, setProfile] = React.useState<IUser>()
@@ -43,5 +40,21 @@ export default function ChatMessage({
         })()
     }, [msg.sender_user_id])
 
-    return <Message time={msg.time} avatarMenus={avatarMenus} render={render} onAvatarClick={onAvatarClick} messageMenus={messageMenus} isSystem={msg.system || false} message={msg.text} senderName={profile?.nickname || ''} avatar={profile?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar} isAtRight={isMe} hideSender={hideSender} />
+    const content = <RichText text={msg.text} entities={msg.entities || []} />
+
+    return <Message
+        time={msg.time}
+        avatarMenus={avatarMenus}
+        onAvatarClick={onAvatarClick}
+        messageMenus={messageMenus}
+        isSystem={msg.system || false}
+        senderName={profile?.nickname || ''}
+        avatar={profile?.avatar_file_hash
+            ? ClientManager.client.getFileUrlByHashAndToken(profile.avatar_file_hash, AppState.fileAccessToken)
+            : default_avatar}
+        isAtRight={isMe}
+        hideSender={hideSender}
+    >
+        {content}
+    </Message>
 }

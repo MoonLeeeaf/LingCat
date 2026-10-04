@@ -3,10 +3,10 @@ import MessageContainer from "../chat-layout/MessageContainer.tsx"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import ChatMessage from "./ChatMessage.tsx"
 import { useChatMessageStore } from "./useChatMessageStore.ts"
-import { IChat, IMessage, LingCatProto, Methods, Package } from "lingcat-protocol"
+import { IChat, IMessage, IMessageEntity, LingCatProto, Methods, Package } from "lingcat-protocol"
 import React from "react"
 import { dialog, NavigationDrawer, TextField } from "mdui"
-import { ChatApi, FileApi } from "lingcat-client-protocol"
+import { ChatApi, FileApi, MessageParser } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
 import ChatProfileDialog from "../viewer/ChatProfileDialog.tsx"
@@ -181,6 +181,12 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     sender_user_id: raw?.senderUserId,
                     system: raw?.system,
                     chat_id: raw?.chatId!,
+                    entities: (raw?.entities ?? []).map((e) => ({
+                        type: e.type as IMessageEntity['type'],
+                        offset: e.offset ?? 0,
+                        length: e.length ?? 0,
+                        data: e.data ?? undefined,
+                    })),
                 }])
 
                 if (isAtBottomRef.current || isApproximatelyAtBottom(containerRef.current!, 160)) {
@@ -331,10 +337,14 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     text = text.replaceAll('(' + fileName + ')', '(lingcat://file?hash=' + hash + ')')
                 }
             }
+
+            const { text: parsedText, entities } = MessageParser.parseMessage(text)
+
             await ChatApi.sendChatMessage(ClientManager.client, {
                 access_token: ClientManager.getActiveUserSession().token,
                 chat_id: chat.id,
-                text,
+                text: parsedText,
+                entities,
             })
             Object.keys(cachedFiles.current).forEach((k) => delete cachedFiles.current[k])
             Object.keys(cachedFileUrls.current).forEach((k) => {
@@ -371,6 +381,8 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as MduiPatchedTextAreaElement
         input.insertHtml(escapeHtml(text))
     }
+    const cachedFileMimes = React.useRef<{ [fileName: string]: string }>({})
+
     async function addFile(type: string, name_: string, data: Blob | Response) {
         let name = name_
         while (cachedFiles.current[name] != null) {
@@ -379,21 +391,16 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         }
         const blob = data instanceof Blob ? data : await (data as Response).blob()
         cachedFiles.current[name] = await blob.arrayBuffer()
-        const src = URL.createObjectURL(blob)
-        cachedFileUrls.current[name] = src
+        cachedFileUrls.current[name] = URL.createObjectURL(blob)
+        cachedFileMimes.current[name] = blob.type || type || 'application/octet-stream'
         cachedFileNamesCount.current[name] = 1
+
         if (type.startsWith('image/'))
-            insertText(`![图片](${name})`)
+            insertText(`![图片-${name}](${name})`)
         else if (type.startsWith('video/'))
-            insertText(`![Video=${name}](${name})`)
+            insertText(`![视频-${name}](${name})`)
         else
-            insertText(`![File=${name}](${name})`)
-        /* if (type.startsWith('image/'))
-            insertAttachment(`![图片](${name})`, 'image', src)
-        else if (type.startsWith('video/'))
-            insertAttachment(`![Video=${name}](${name})`, 'video', src)
-        else
-            insertAttachment(`![File=${name}](${name})`, 'file', src, name) */
+            insertText(`![文件-${name}](${name})`)
     }
 
     useEventListener(attachFileInputRef, 'change', (_e) => {
@@ -477,7 +484,6 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         if (!msg) return <div style={{ height: '0.5px' }}></div>
                         return <ChatMessage
                             onAvatarClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)}
-                            render={render}
                             msg={msg}
                             avatarMenus={<>
                                 <mdui-menu-item icon="info" onClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)}>用户资料</mdui-menu-item>

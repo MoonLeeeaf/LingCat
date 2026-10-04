@@ -29,38 +29,6 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
         timer = setTimeout(() => fn(...args), delay)
     }
 }
-
-const render: Partial<ReactRenderer> = {
-    text(text) {
-        // console.log('text', text)
-        return text
-    },
-    heading(children, _heading) {
-        // console.log('heading', children)
-        return <span>{children}</span>
-    },
-    paragraph(children) {
-        return <span>{children}</span>
-    },
-    code(code, lang) {
-        return <span>{code}</span>
-    },
-    blockquote(children) {
-        return <span>{children}</span>
-    },
-    image(src, alt, _title) {
-        // console.log('image', src)
-        return <span>{
-            ({
-                Video: "[视频]",
-                File: "[文件]",
-                UserMention: /^UserMention=(.*)/.exec(alt)?.[1]!,
-                ChatMention: /^ChatMention=(.*)/.exec(alt)?.[1]!,
-            })[/^(Video|File|UserMention|ChatMention)=.*/.exec(alt)?.[1]!] || '[图片]'
-        }</span>
-    },
-}
-
 function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, activeChat?: IChat, setActiveChat: Function }) {
     return <mdui-dropdown trigger="hover">
         <mdui-list-item
@@ -79,7 +47,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
                 src={chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
             />
             <span slot="description">
-                <Markdown renderer={render} value={chat.last_message_text} />
+                {chat.last_message_text}
             </span>
         </mdui-list-item>
         <mdui-menu>

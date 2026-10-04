@@ -1,4 +1,4 @@
-import { AvailableChatSettings, Code, IChat, IChatAdmin, IChatSettings, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
+import { AvailableChatSettings, Code, IChat, IChatAdmin, IChatSettings, IMessageEntity, IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
 import type { ISendPackageFunction } from "./ISendPackageFunction.ts"
 import TokenManager from "./TokenManager.ts"
 import UserChatLinker from "../data/UserChatLinker.ts"
@@ -57,6 +57,17 @@ function IChatAdminToProtoAdmin(user: IChatAdmin) {
     } as LingCatProto.classes.IChatAdmin.$Properties
 }
 
+function protoEntityToIMessageEntity(
+    proto: LingCatProto.classes.IMessageEntity.$Properties
+): IMessageEntity {
+    return {
+        type: proto.type as IMessageEntity['type'],
+        offset: proto.offset ?? 0,
+        length: proto.length ?? 0,
+        data: proto.data ?? undefined,
+    }
+}
+
 function broadcastToUserClients(clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } }, user_id: string, func: (func: (mPackage: Package) => void) => void) {
     Object.values(clients_emiter[user_id] || []).forEach(func)
 }
@@ -80,11 +91,16 @@ export default class ChatApi {
                 if (await ChatDataBase.queryChatById(data.chatId) == null)
                     return sendError(sendPackage, mPackage.method_id, "对话不存在", Code.Not_Found)
 
+
                 const time = Date.now()
+
+                const entities = (data.entities ?? []).map(protoEntityToIMessageEntity)
+
                 const msg_id = await MessageDataBase.addMessage({
                     text: data.text,
                     chat_id: data.chatId,
                     sender_user_id: user_id,
+                    entities,
                     time,
                 })
 
@@ -99,6 +115,7 @@ export default class ChatApi {
                                     senderUserId: user_id,
                                     time: Date.now(),
                                     id: msg_id,
+                                    entities,
                                 }
                             }).finish()
                         }))
@@ -234,7 +251,6 @@ export default class ChatApi {
                     before: data.before!,
                     limit: data.limit || undefined,
                 })
-                // console.log(data, msgs)
 
                 sendPackage(Package.encode({
                     method_id: Methods.Get_Chat_Messages_Response,
@@ -247,6 +263,7 @@ export default class ChatApi {
                             text: v.text,
                             time: v.time,
                             system: v.system,
+                            entities: v.entities ?? [],
                         }))
                     }).finish()
                 }))

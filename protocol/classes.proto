@@ -90,6 +90,18 @@ message IFile {
     uint64 uploaded_at = 5;
 }
 
+message IMessageEntity {
+    // 类型: bold, italic, code, strikethrough, spoiler,
+    //       attachment, link, chat_mention, user_mention
+    string type = 1;
+    // UTF-16 码元起始位置
+    uint32 offset = 2;
+    // UTF-16 码元长度
+    uint32 length = 3;
+    // 语义取决于 type，纯样式 entity 可省略
+    optional string data = 4;
+}
+
 message IMessage {
     uint32 id = 1;
     optional string sender_user_id = 2;
@@ -97,4 +109,5 @@ message IMessage {
     string chat_id = 4;
     string text = 5;
     uint64 time = 6;
+    repeated IMessageEntity entities = 7;
 }

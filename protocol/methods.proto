@@ -122,6 +122,7 @@ message Send_Chat_Message_Request {
     string access_token = 1;
     string chat_id = 2; 
     string text = 3; 
+    repeated IMessageEntity entities = 4;
 }
 
 message Send_Chat_Message_Response {

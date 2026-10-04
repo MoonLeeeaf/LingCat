@@ -66,6 +66,13 @@ export interface IFile {
     uploaded_at: number
 }
 
+export interface IMessageEntity {
+    type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention'
+    offset: number
+    length: number
+    data?: string
+}
+
 export interface IMessage {
     id: number
     sender_user_id?: string | null
@@ -73,6 +80,7 @@ export interface IMessage {
     chat_id: string
     text: string
     time: number
+    entities?: IMessageEntity[]
 }
 
 export type AdminRole = 'owner' | 'admin'

@@ -944,6 +944,141 @@ export namespace lingcat {
         }
 
         /**
+         * Properties of a IMessageEntity.
+         * @deprecated Use lingcat.classes.IMessageEntity.$Properties instead.
+         */
+        interface IIMessageEntity extends lingcat.classes.IMessageEntity.$Properties {
+        }
+
+        /** Represents a IMessageEntity. */
+        class IMessageEntity {
+
+            /**
+             * Constructs a new IMessageEntity.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IMessageEntity.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IMessageEntity type. */
+            type: string;
+
+            /** IMessageEntity offset. */
+            offset: number;
+
+            /** IMessageEntity length. */
+            length: number;
+
+            /** IMessageEntity data. */
+            data?: (string|null);
+
+            /**
+             * Creates a new IMessageEntity instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IMessageEntity instance
+             */
+            static create(properties: lingcat.classes.IMessageEntity.$Shape): lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape;
+            static create(properties?: lingcat.classes.IMessageEntity.$Properties): lingcat.classes.IMessageEntity;
+
+            /**
+             * Encodes the specified IMessageEntity message. Does not implicitly {@link lingcat.classes.IMessageEntity.verify|verify} messages.
+             * @param message IMessageEntity message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IMessageEntity.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IMessageEntity message, length delimited. Does not implicitly {@link lingcat.classes.IMessageEntity.verify|verify} messages.
+             * @param message IMessageEntity message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IMessageEntity.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IMessageEntity message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape} IMessageEntity
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape;
+
+            /**
+             * Decodes a IMessageEntity message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape} IMessageEntity
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape;
+
+            /**
+             * Verifies a IMessageEntity message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IMessageEntity message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IMessageEntity
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IMessageEntity;
+
+            /**
+             * Creates a plain object from a IMessageEntity message. Also converts values to other types if specified.
+             * @param message IMessageEntity
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IMessageEntity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IMessageEntity to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IMessageEntity
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IMessageEntity {
+
+            /** Properties of a IMessageEntity. */
+            interface $Properties {
+
+                /** IMessageEntity type */
+                type?: (string|null);
+
+                /** IMessageEntity offset */
+                offset?: (number|null);
+
+                /** IMessageEntity length */
+                length?: (number|null);
+
+                /** IMessageEntity data */
+                data?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IMessageEntity. */
+            type $Shape = lingcat.classes.IMessageEntity.$Properties;
+        }
+
+        /**
          * Properties of a IMessage.
          * @deprecated Use lingcat.classes.IMessage.$Properties instead.
          */
@@ -979,6 +1114,9 @@ export namespace lingcat {
 
             /** IMessage time. */
             time: (number|Long);
+
+            /** IMessage entities. */
+            entities: lingcat.classes.IMessageEntity.$Properties[];
 
             /**
              * Creates a new IMessage instance using the specified properties.
@@ -1081,6 +1219,9 @@ export namespace lingcat {
 
                 /** IMessage time */
                 time?: (number|Long|null);
+
+                /** IMessage entities */
+                entities?: (lingcat.classes.IMessageEntity.$Properties[]|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -3909,6 +4050,9 @@ export namespace lingcat {
             /** Send_Chat_Message_Request text. */
             text: string;
 
+            /** Send_Chat_Message_Request entities. */
+            entities: lingcat.classes.IMessageEntity.$Properties[];
+
             /**
              * Creates a new Send_Chat_Message_Request instance using the specified properties.
              * @param [properties] Properties to set
@@ -4001,6 +4145,9 @@ export namespace lingcat {
 
                 /** Send_Chat_Message_Request text */
                 text?: (string|null);
+
+                /** Send_Chat_Message_Request entities */
+                entities?: (lingcat.classes.IMessageEntity.$Properties[]|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

@@ -3,7 +3,7 @@ import UserApi from "./UserApi.ts"
 import FileApi from './FileApi.ts'
 import ChatApi from './ChatApi.ts'
 
-import MessageParser, { ChatAttachment, ChatMention } from './MessageParser.ts'
+import MessageParser from './MessageParser.ts'
 
 export default LingCatClient
 export {
@@ -12,6 +12,4 @@ export {
     ChatApi,
 
     MessageParser,
-    ChatAttachment, 
-    ChatMention,
 }

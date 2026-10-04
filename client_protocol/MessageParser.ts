@@ -1,100 +1,122 @@
-import { Marked } from 'marked'
+import { IMessageEntity } from 'lingcat-protocol'
 
-type FileType = 'Video' | 'Image' | 'File'
-type MentionType = 'ChatMention' | 'UserMention'
-
-export class ChatMention {
-    chat_id?: string
-    user_id?: string
-    text?: string
-    constructor({
-        user_id,
-        chat_id,
-        text,
-    }: {
-        user_id?: string,
-        chat_id?: string,
-        text: string,
-    }) {
-        this.user_id = user_id
-        this.chat_id = chat_id
-        this.text = text
-    }
-}
-
-export class ChatAttachment {
-    file_hash: string
-    file_name: string
-    constructor({
-        file_hash,
-        file_name
-    }: {
-        file_hash: string,
-        file_name: string
-    }) {
-        this.file_name = file_name
-        this.file_hash = file_hash
-    }
-}
-
+/**
+ * 把用户输入的轻量语法解析为 text + entities
+ * 支持: **bold** *italic* `code` [文字](url) [显示名](user:id) [群名](chat:id) ![文件名称](file:id)
+ */
 export default class MessageParser {
-    static parseWithTransformers(msg: string, {
-        attachment,
-        mention,
-    }: {
-        attachment?: ({ text, fileType, attachment }: { text: string, fileType: FileType, attachment: ChatAttachment }) => string,
-        mention?: ({ text, mentionType, mention }: { text: string, mentionType: MentionType, mention: ChatMention }) => string,
-    }) {
-        return new Marked({
-            async: false,
-            extensions: [
-                {
-                    name: 'text',
-                    renderer: ({ text }) => text,
-                },
-                {
-                    name: 'heading',
-                    renderer({ tokens }) {
-                        return this.parser.parseInline(tokens!)
-                    },
-                },
-                {
-                    name: 'paragraph',
-                    renderer({ tokens }) {
-                        return this.parser.parseInline(tokens!)
-                    },
-                },
-                {
-                    name: 'image',
-                    renderer: ({ text, href }) => {
-                        const mentionType = /^(UserMention|ChatMention)=.*/.exec(text)?.[1] as MentionType
-                        const fileType = (/^(Video|File)=.*/.exec(text)?.[1] || 'Image') as FileType
+    static parseMessage(input: string) {
+        let text = ''
+        const entities: IMessageEntity[] = []
+        let i = 0
 
-                        if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(href)) {
-                            const file_hash = /^lingcat:\/\/file\?hash=(.*)/.exec(href)?.[1]!
-                            let file_name: string = /^(Video|File|Image)=(.*)/.exec(text)?.[2] || text
-                            file_name.trim() == '' && (file_name = 'Unnamed_File')
-                            return attachment ? attachment({ text: text, attachment: new ChatAttachment({ file_hash, file_name }), fileType: fileType, }) : text
-                        }
-                        if (mentionType != null && /^lingcat:\/\/(chat|user)\?id=[A-Za-z0-9]+/.test(href)) {
-                            const id = /^lingcat:\/\/(chat|user)\?id=(.*)/.exec(href)?.[2]!
-                            const label = /^(User|Chat)Mention=(.*)/.exec(text)?.[2] || ''
-                            return mention ? mention({
-                                text: text,
-                                mention: new ChatMention({
-                                    [({
-                                        ChatMention: 'chat_id',
-                                        UserMention: 'user_id',
-                                    })[mentionType]]: id,
-                                    text: label,
-                                }),
-                                mentionType: mentionType,
-                            }) : text
-                        }
-                    },
-                }
-            ]
-        }).parse(msg) as string
+        while (i < input.length) {
+            // 转义: \* → 字面 *
+            if (input[i] === '\\' && i + 1 < input.length) {
+                text += input[i + 1]
+                i += 2
+                continue
+            }
+
+            const rest = input.slice(i)
+
+            // **bold**
+            let m = rest.match(/^\*\*([^*]+)\*\*/)
+            if (m) {
+                entities.push({ type: 'bold', offset: text.length, length: m[1].length })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // *italic*
+            m = rest.match(/^\*([^*]+)\*/)
+            if (m) {
+                entities.push({ type: 'italic', offset: text.length, length: m[1].length })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // `code`
+            m = rest.match(/^`([^`]+)`/)
+            if (m) {
+                entities.push({ type: 'code', offset: text.length, length: m[1].length })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // ~~删除线~~
+            m = rest.match(/^~~([^~]+)~~/)
+            if (m) {
+                entities.push({ type: 'strikethrough', offset: text.length, length: m[1].length })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // ||剧透||
+            m = rest.match(/^\|\|([^|]+)\|\|/)
+            if (m) {
+                entities.push({ type: 'spoiler', offset: text.length, length: m[1].length })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // [@显示名](user:id)
+            m = rest.match(/^\[@([^\]]+)\]\(user:([^)]+)\)/)
+            if (m) {
+                entities.push({ type: 'user_mention', offset: text.length, length: 1 + m[1].length, data: m[2] })
+                text += '@' + m[1]
+                i += m[0].length
+                continue
+            }
+
+            // [@群名](chat:id)
+            m = rest.match(/^\[@([^\]]+)\]\(chat:([^)]+)\)/)
+            if (m) {
+                entities.push({ type: 'chat_mention', offset: text.length, length: 1 + m[1].length, data: m[2] })
+                text += '@' + m[1]
+                i += m[0].length
+                continue
+            }
+
+            // ![文件](lingcat://file?hash=xxx)  或  ![文件](file:xxx)
+            m = rest.match(/^!\[([^\]]+)\]\((?:lingcat:\/\/file\?hash=|file:)([^)]+)\)/)
+            if (m) {
+                // m[1] 可能是 "图片" / "Video=video.mp4" / "File=doc.pdf"
+                // 剥掉 Video= / File= / Image= 前缀，只留文件名
+                let name = m[1]
+                const prefixMatch = name.match(/^(?:Image|Video|File)=/)
+                if (prefixMatch) name = name.slice(prefixMatch[0].length)
+
+                entities.push({
+                    type: 'attachment',
+                    offset: text.length,
+                    length: 4,
+                    data: JSON.stringify({ hash: m[2], name: name || 'Unnamed' }),
+                })
+                text += '[附件]'
+                i += m[0].length
+                continue
+            }
+
+            // [文字](url)
+            m = rest.match(/^\[([^\]]+)\]\(([^)]+)\)/)
+            if (m) {
+                entities.push({ type: 'link', offset: text.length, length: m[1].length, data: m[2] })
+                text += m[1]
+                i += m[0].length
+                continue
+            }
+
+            // 普通字符
+            text += input[i]
+            i++
+        }
+
+        return { text, entities }
     }
-
 }

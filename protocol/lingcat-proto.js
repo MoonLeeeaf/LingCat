@@ -2921,6 +2921,362 @@ export const lingcat = $root.lingcat = (() => {
             return IFile;
         })();
 
+        classes.IMessageEntity = (function() {
+
+            /**
+             * Properties of a IMessageEntity.
+             * @typedef {Object} lingcat.classes.IMessageEntity.$Properties
+             * @property {string|null} [type] IMessageEntity type
+             * @property {number|null} [offset] IMessageEntity offset
+             * @property {number|null} [length] IMessageEntity length
+             * @property {string|null} [data] IMessageEntity data
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IMessageEntity.
+             * @memberof lingcat.classes
+             * @interface IIMessageEntity
+             * @augments lingcat.classes.IMessageEntity.$Properties
+             * @deprecated Use lingcat.classes.IMessageEntity.$Properties instead.
+             */
+
+            /**
+             * Shape of a IMessageEntity.
+             * @typedef {lingcat.classes.IMessageEntity.$Properties} lingcat.classes.IMessageEntity.$Shape
+             */
+
+            /**
+             * Constructs a new IMessageEntity.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IMessageEntity.
+             * @constructor
+             * @param {lingcat.classes.IMessageEntity.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IMessageEntity = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IMessageEntity type.
+             * @member {string} type
+             * @memberof lingcat.classes.IMessageEntity
+             * @instance
+             */
+            IMessageEntity.prototype.type = "";
+
+            /**
+             * IMessageEntity offset.
+             * @member {number} offset
+             * @memberof lingcat.classes.IMessageEntity
+             * @instance
+             */
+            IMessageEntity.prototype.offset = 0;
+
+            /**
+             * IMessageEntity length.
+             * @member {number} length
+             * @memberof lingcat.classes.IMessageEntity
+             * @instance
+             */
+            IMessageEntity.prototype.length = 0;
+
+            /**
+             * IMessageEntity data.
+             * @member {string|null|undefined} data
+             * @memberof lingcat.classes.IMessageEntity
+             * @instance
+             */
+            IMessageEntity.prototype.data = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMessageEntity.prototype, "_data", {
+                get: $util.oneOfGetter($oneOfFields = ["data"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new IMessageEntity instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {lingcat.classes.IMessageEntity.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IMessageEntity} IMessageEntity instance
+             * @type {{
+             *   (properties: lingcat.classes.IMessageEntity.$Shape): lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape;
+             *   (properties?: lingcat.classes.IMessageEntity.$Properties): lingcat.classes.IMessageEntity;
+             * }}
+             */
+            IMessageEntity.create = function(properties) {
+                return new IMessageEntity(properties);
+            };
+
+            /**
+             * Encodes the specified IMessageEntity message. Does not implicitly {@link lingcat.classes.IMessageEntity.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {lingcat.classes.IMessageEntity.$Properties} message IMessageEntity message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IMessageEntity.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.type != null && $Object.hasOwnProperty.call(message, "type") && message.type !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.type);
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset") && message.offset !== 0)
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.offset);
+                if (message.length != null && $Object.hasOwnProperty.call(message, "length") && message.length !== 0)
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.length);
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.data);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IMessageEntity message, length delimited. Does not implicitly {@link lingcat.classes.IMessageEntity.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {lingcat.classes.IMessageEntity.$Properties} message IMessageEntity message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IMessageEntity.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a IMessageEntity message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape} IMessageEntity
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IMessageEntity.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IMessageEntity(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.type = value;
+                            else
+                                delete message.type;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.offset = value;
+                            else
+                                delete message.offset;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.length = value;
+                            else
+                                delete message.length;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.data = reader.stringVerify();
+                            message._data = "data";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IMessageEntity message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IMessageEntity & lingcat.classes.IMessageEntity.$Shape} IMessageEntity
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IMessageEntity.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a IMessageEntity message.
+             * @function verify
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IMessageEntity.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.type != null && $Object.hasOwnProperty.call(message, "type"))
+                    if (!$util.isString(message.type))
+                        return "type: string expected";
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
+                    if (!$util.isInteger(message.offset))
+                        return "offset: integer expected";
+                if (message.length != null && $Object.hasOwnProperty.call(message, "length"))
+                    if (!$util.isInteger(message.length))
+                        return "length: integer expected";
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data")) {
+                    properties._data = 1;
+                    if (!$util.isString(message.data))
+                        return "data: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a IMessageEntity message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IMessageEntity} IMessageEntity
+             */
+            IMessageEntity.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IMessageEntity)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IMessageEntity: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IMessageEntity();
+                if (object.type != null)
+                    if (typeof object.type !== "string" || object.type.length)
+                        message.type = $String(object.type);
+                if (object.offset != null)
+                    if ($Number(object.offset) !== 0)
+                        message.offset = object.offset >>> 0;
+                if (object.length != null)
+                    if ($Number(object.length) !== 0)
+                        message.length = object.length >>> 0;
+                if (object.data != null)
+                    message.data = $String(object.data);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IMessageEntity message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {lingcat.classes.IMessageEntity} message IMessageEntity
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IMessageEntity.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.type = "";
+                    object.offset = 0;
+                    object.length = 0;
+                }
+                if (message.type != null && $Object.hasOwnProperty.call(message, "type"))
+                    object.type = message.type;
+                if (message.offset != null && $Object.hasOwnProperty.call(message, "offset"))
+                    object.offset = message.offset;
+                if (message.length != null && $Object.hasOwnProperty.call(message, "length"))
+                    object.length = message.length;
+                if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
+                    object.data = message.data;
+                return object;
+            };
+
+            /**
+             * Converts this IMessageEntity to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IMessageEntity
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IMessageEntity.prototype.toJSON = function() {
+                return IMessageEntity.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IMessageEntity
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IMessageEntity
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IMessageEntity.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IMessageEntity";
+            };
+
+            return IMessageEntity;
+        })();
+
         classes.IMessage = (function() {
 
             /**
@@ -2932,6 +3288,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [chatId] IMessage chatId
              * @property {string|null} [text] IMessage text
              * @property {number|Long|null} [time] IMessage time
+             * @property {Array.<lingcat.classes.IMessageEntity.$Properties>|null} [entities] IMessage entities
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -2957,6 +3314,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
             const IMessage = function (properties) {
+                this.entities = [];
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -3010,6 +3368,14 @@ export const lingcat = $root.lingcat = (() => {
              * @instance
              */
             IMessage.prototype.time = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * IMessage entities.
+             * @member {Array.<lingcat.classes.IMessageEntity.$Properties>} entities
+             * @memberof lingcat.classes.IMessage
+             * @instance
+             */
+            IMessage.prototype.entities = $util.emptyArray;
 
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
@@ -3070,6 +3436,9 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 5, wireType 2 =*/42).string(message.text);
                 if (message.time != null && $Object.hasOwnProperty.call(message, "time") && (typeof message.time === "object" ? message.time.low || message.time.high : message.time !== 0))
                     writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.time);
+                if (message.entities != null && message.entities.length)
+                    for (let i = 0; i < message.entities.length; ++i)
+                        $root.lingcat.classes.IMessageEntity.encode(message.entities[i], writer.uint32(/* id 7, wireType 2 =*/58).fork(), _depth + 1).ldelim();
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -3167,6 +3536,14 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.time;
                             continue;
                         }
+                    case 7: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.entities && message.entities.length))
+                                message.entities = [];
+                            message.entities.push($root.lingcat.classes.IMessageEntity.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -3233,6 +3610,15 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.time != null && $Object.hasOwnProperty.call(message, "time"))
                     if (!$util.isInteger(message.time) && !(message.time && $util.isInteger(message.time.low) && $util.isInteger(message.time.high)))
                         return "time: integer|Long expected";
+                if (message.entities != null && $Object.hasOwnProperty.call(message, "entities")) {
+                    if (!$Array.isArray(message.entities))
+                        return "entities: array expected";
+                    for (let i = 0; i < message.entities.length; ++i) {
+                        let error = $root.lingcat.classes.IMessageEntity.verify(message.entities[i], _depth + 1);
+                        if (error)
+                            return "entities." + error;
+                    }
+                }
                 return null;
             };
 
@@ -3277,6 +3663,16 @@ export const lingcat = $root.lingcat = (() => {
                             message.time = object.time;
                         else if (typeof object.time === "object")
                             message.time = new $util.LongBits(object.time.low >>> 0, object.time.high >>> 0).toNumber(true);
+                if (object.entities) {
+                    if (!$Array.isArray(object.entities))
+                        throw $TypeError(".lingcat.classes.IMessage.entities: array expected");
+                    message.entities = $Array(object.entities.length);
+                    for (let i = 0; i < object.entities.length; ++i) {
+                        if (!$util.isObject(object.entities[i]))
+                            throw $TypeError(".lingcat.classes.IMessage.entities: object expected");
+                        message.entities[i] = $root.lingcat.classes.IMessageEntity.fromObject(object.entities[i], _depth + 1);
+                    }
+                }
                 return message;
             };
 
@@ -3297,6 +3693,8 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 let object = {};
+                if (options.arrays || options.defaults)
+                    object.entities = [];
                 if (options.defaults) {
                     object.id = 0;
                     object.chatId = "";
@@ -3324,6 +3722,11 @@ export const lingcat = $root.lingcat = (() => {
                         object.time = options.longs === $String ? $String(message.time) : message.time;
                     else
                         object.time = options.longs === $String ? $util.Long.prototype.toString.call(message.time) : options.longs === $Number ? new $util.LongBits(message.time.low >>> 0, message.time.high >>> 0).toNumber(true) : message.time;
+                if (message.entities && message.entities.length) {
+                    object.entities = $Array(message.entities.length);
+                    for (let j = 0; j < message.entities.length; ++j)
+                        object.entities[j] = $root.lingcat.classes.IMessageEntity.toObject(message.entities[j], options, _depth + 1);
+                }
                 return object;
             };
 
@@ -9927,6 +10330,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [accessToken] Send_Chat_Message_Request accessToken
              * @property {string|null} [chatId] Send_Chat_Message_Request chatId
              * @property {string|null} [text] Send_Chat_Message_Request text
+             * @property {Array.<lingcat.classes.IMessageEntity.$Properties>|null} [entities] Send_Chat_Message_Request entities
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -9952,6 +10356,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
             const Send_Chat_Message_Request = function (properties) {
+                this.entities = [];
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -9981,6 +10386,14 @@ export const lingcat = $root.lingcat = (() => {
              * @instance
              */
             Send_Chat_Message_Request.prototype.text = "";
+
+            /**
+             * Send_Chat_Message_Request entities.
+             * @member {Array.<lingcat.classes.IMessageEntity.$Properties>} entities
+             * @memberof lingcat.methods.Send_Chat_Message_Request
+             * @instance
+             */
+            Send_Chat_Message_Request.prototype.entities = $util.emptyArray;
 
             /**
              * Creates a new Send_Chat_Message_Request instance using the specified properties.
@@ -10020,6 +10433,9 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
                 if (message.text != null && $Object.hasOwnProperty.call(message, "text") && message.text !== "")
                     writer.uint32(/* id 3, wireType 2 =*/26).string(message.text);
+                if (message.entities != null && message.entities.length)
+                    for (let i = 0; i < message.entities.length; ++i)
+                        $root.lingcat.classes.IMessageEntity.encode(message.entities[i], writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -10094,6 +10510,14 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.text;
                             continue;
                         }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.entities && message.entities.length))
+                                message.entities = [];
+                            message.entities.push($root.lingcat.classes.IMessageEntity.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -10146,6 +10570,15 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
                     if (!$util.isString(message.text))
                         return "text: string expected";
+                if (message.entities != null && $Object.hasOwnProperty.call(message, "entities")) {
+                    if (!$Array.isArray(message.entities))
+                        return "entities: array expected";
+                    for (let i = 0; i < message.entities.length; ++i) {
+                        let error = $root.lingcat.classes.IMessageEntity.verify(message.entities[i], _depth + 1);
+                        if (error)
+                            return "entities." + error;
+                    }
+                }
                 return null;
             };
 
@@ -10176,6 +10609,16 @@ export const lingcat = $root.lingcat = (() => {
                 if (object.text != null)
                     if (typeof object.text !== "string" || object.text.length)
                         message.text = $String(object.text);
+                if (object.entities) {
+                    if (!$Array.isArray(object.entities))
+                        throw $TypeError(".lingcat.methods.Send_Chat_Message_Request.entities: array expected");
+                    message.entities = $Array(object.entities.length);
+                    for (let i = 0; i < object.entities.length; ++i) {
+                        if (!$util.isObject(object.entities[i]))
+                            throw $TypeError(".lingcat.methods.Send_Chat_Message_Request.entities: object expected");
+                        message.entities[i] = $root.lingcat.classes.IMessageEntity.fromObject(object.entities[i], _depth + 1);
+                    }
+                }
                 return message;
             };
 
@@ -10196,6 +10639,8 @@ export const lingcat = $root.lingcat = (() => {
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
                 let object = {};
+                if (options.arrays || options.defaults)
+                    object.entities = [];
                 if (options.defaults) {
                     object.accessToken = "";
                     object.chatId = "";
@@ -10207,6 +10652,11 @@ export const lingcat = $root.lingcat = (() => {
                     object.chatId = message.chatId;
                 if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
                     object.text = message.text;
+                if (message.entities && message.entities.length) {
+                    object.entities = $Array(message.entities.length);
+                    for (let j = 0; j < message.entities.length; ++j)
+                        object.entities[j] = $root.lingcat.classes.IMessageEntity.toObject(message.entities[j], options, _depth + 1);
+                }
                 return object;
             };
 

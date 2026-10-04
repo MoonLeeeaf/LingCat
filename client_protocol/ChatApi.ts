@@ -1,4 +1,4 @@
-import { IChat, IChatAdmin, IMessage, IUser, LingCatProto, Methods } from "lingcat-protocol"
+import { IChat, IChatAdmin, IMessage, IMessageEntity, IUser, LingCatProto, Methods } from "lingcat-protocol"
 import LingCatClient from "./LingCatClient.ts"
 import decodeOrThrow from "./decodeOrThrow.ts"
 
@@ -35,6 +35,17 @@ function protoChatAdminToIChatAdmin(proto: LingCatProto.classes.IChatAdmin.$Prop
         permissions: proto.permissions,
         belong_to_chat_id: proto.belongToChatId,
     } as IChatAdmin
+}
+
+function protoEntityToIMessageEntity(
+    proto: LingCatProto.classes.IMessageEntity.$Properties
+): IMessageEntity {
+    return {
+        type: proto.type as IMessageEntity['type'],
+        offset: proto.offset!,
+        length: proto.length!,
+        data: proto.data!,
+    }
 }
 
 export default class ChatApi {
@@ -375,30 +386,32 @@ export default class ChatApi {
     }: {
         access_token: string
         chat_id: string
-        // id < before
         before?: number,
-        // id > after
         after?: number,
         limit?: number
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.Get_Chat_Messages_Response>(LingCatProto.methods.Get_Chat_Messages_Response, (await client.invoke({
-            method_id: Methods.Get_Chat_Messages_Request,
-            data: LingCatProto.methods.Get_Chat_Messages_Request.encode({
-                accessToken: access_token,
-                chatId: chat_id,
-                before,
-                after,
-                limit,
-            }).finish(),
-            timeout,
-        })).data).messages.map((v) => ({
+        return decodeOrThrow<LingCatProto.methods.Get_Chat_Messages_Response>(
+            LingCatProto.methods.Get_Chat_Messages_Response,
+            (await client.invoke({
+                method_id: Methods.Get_Chat_Messages_Request,
+                data: LingCatProto.methods.Get_Chat_Messages_Request.encode({
+                    accessToken: access_token,
+                    chatId: chat_id,
+                    before,
+                    after,
+                    limit,
+                }).finish(),
+                timeout,
+            })).data
+        ).messages.map((v) => ({
             id: v.id,
             chat_id: v.chatId,
             sender_user_id: v.senderUserId,
             system: v.system,
             text: v.text,
             time: v.time,
+            entities: v.entities?.map(protoEntityToIMessageEntity),
         })) as IMessage[]
     }
     /**
@@ -409,22 +422,33 @@ export default class ChatApi {
         access_token,
         chat_id,
         text,
+        entities,
         timeout,
     }: {
         access_token: string
         chat_id: string
         text: string
+        entities?: IMessageEntity[]
         timeout?: number
     }) {
-        return decodeOrThrow<LingCatProto.methods.Send_Chat_Message_Response>(LingCatProto.methods.Send_Chat_Message_Response, (await client.invoke({
-            method_id: Methods.Send_Chat_Message_Request,
-            data: LingCatProto.methods.Send_Chat_Message_Request.encode({
-                accessToken: access_token,
-                chatId: chat_id,
-                text,
-            }).finish(),
-            timeout,
-        })).data).id
+        return decodeOrThrow<LingCatProto.methods.Send_Chat_Message_Response>(
+            LingCatProto.methods.Send_Chat_Message_Response,
+            (await client.invoke({
+                method_id: Methods.Send_Chat_Message_Request,
+                data: LingCatProto.methods.Send_Chat_Message_Request.encode({
+                    accessToken: access_token,
+                    chatId: chat_id,
+                    text,
+                    entities: entities?.map(e => ({
+                        type: e.type,
+                        offset: e.offset,
+                        length: e.length,
+                        data: e.data,
+                    })),
+                }).finish(),
+                timeout,
+            })).data
+        ).id
     }
     // 获取我的所有对话
     static async getMyChats(client: LingCatClient, {
