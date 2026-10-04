@@ -119,4 +119,35 @@ export default class MessageParser {
 
         return { text, entities }
     }
+    static entitiesToRawRichText(text: string, entities: IMessageEntity[]): string {
+        if (!entities?.length) return text
+        const sorted = [...entities].sort((a, b) => a.offset - b.offset)
+        let out = ''
+        let cursor = 0
+        for (const e of sorted) {
+            if (e.offset > cursor) out += text.slice(cursor, e.offset)
+            const seg = text.slice(e.offset, e.offset + e.length)
+            switch (e.type) {
+                case 'bold': out += `**${seg}**`; break
+                case 'italic': out += `*${seg}*`; break
+                case 'code': out += '`' + seg + '`'; break
+                case 'strikethrough': out += `~~${seg}~~`; break
+                case 'spoiler': out += `||${seg}||`; break
+                case 'link': out += `[${seg}](${e.data})`; break
+                case 'user_mention': out += `[@${seg.replace(/^@/, '')}](user:${e.data})`; break
+                case 'chat_mention': out += `[@${seg.replace(/^@/, '')}](chat:${e.data})`; break
+                case 'attachment': {
+                    try {
+                        const a = JSON.parse(e.data!)
+                        out += `![${a.name}](file:${a.hash})`
+                    } catch { out += seg }
+                    break
+                }
+                default: out += seg
+            }
+            cursor = e.offset + e.length
+        }
+        if (cursor < text.length) out += text.slice(cursor)
+        return out
+    }
 }
