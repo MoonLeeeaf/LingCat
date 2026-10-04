@@ -1,4 +1,4 @@
-import { marked } from 'marked'
+import { Marked } from 'marked'
 
 type FileType = 'Video' | 'Image' | 'File'
 type MentionType = 'ChatMention' | 'UserMention'
@@ -45,7 +45,7 @@ export default class MessageParser {
         attachment?: ({ text, fileType, attachment }: { text: string, fileType: FileType, attachment: ChatAttachment }) => string,
         mention?: ({ text, mentionType, mention }: { text: string, mentionType: MentionType, mention: ChatMention }) => string,
     }) {
-        return new marked.Marked({
+        return new Marked({
             async: false,
             extensions: [
                 {
