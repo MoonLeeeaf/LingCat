@@ -3,8 +3,7 @@ import react from '@vitejs/plugin-react'
 import { base_data_path } from '../server/config.ts'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import fs from 'node:fs'
-import node_path from 'node:path'
-import { viteSingleFile } from 'vite-plugin-singlefile'
+// import { viteSingleFile } from 'vite-plugin-singlefile'
 
 const path = base_data_path + '/page'
 
@@ -30,7 +29,7 @@ function publicKeyPlugin() {
 export default defineConfig({
     base: './',
     plugins: [
-        viteSingleFile(),
+        // viteSingleFile(),
         react(),
         nodePolyfills({
             include: ['crypto', 'stream', 'vm'],
