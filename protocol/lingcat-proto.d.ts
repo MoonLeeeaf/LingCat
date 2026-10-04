@@ -8,138 +8,321 @@ export namespace lingcat {
     namespace classes {
 
         /**
-         * Properties of an EncryptedMessage.
-         * @deprecated Use lingcat.classes.EncryptedMessage.$Properties instead.
+         * Properties of a Package.
+         * @deprecated Use lingcat.classes.Package.$Properties instead.
          */
-        interface IEncryptedMessage extends lingcat.classes.EncryptedMessage.$Properties {
+        interface IPackage extends lingcat.classes.Package.$Properties {
         }
 
-        /** Represents an EncryptedMessage. */
-        class EncryptedMessage {
+        /** Represents a Package. */
+        class Package {
 
             /**
-             * Constructs a new EncryptedMessage.
+             * Constructs a new Package.
              * @param [properties] Properties to set
              */
-            constructor(properties?: lingcat.classes.EncryptedMessage.$Properties);
+            constructor(properties?: lingcat.classes.Package.$Properties);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
 
-            /** EncryptedMessage seq. */
+            /** Package methodId. */
+            methodId: number;
+
+            /** Package flags. */
+            flags: number;
+
+            /** Package requestId. */
+            requestId: Uint8Array;
+
+            /** Package seq. */
             seq: number;
 
-            /** EncryptedMessage iv. */
-            iv: Uint8Array;
-
-            /** EncryptedMessage data. */
+            /** Package data. */
             data: Uint8Array;
 
-            /** EncryptedMessage aad. */
+            /** Package iv. */
+            iv: Uint8Array;
+
+            /** Package aad. */
             aad: Uint8Array;
 
+            /** Package tag. */
+            tag: Uint8Array;
+
+            /** Package originServer. */
+            originServer?: (string|null);
+
+            /** Package signature. */
+            signature?: (Uint8Array|null);
+
+            /** Package protocolVersion. */
+            protocolVersion?: (number|null);
+
             /**
-             * Creates a new EncryptedMessage instance using the specified properties.
+             * Creates a new Package instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns EncryptedMessage instance
+             * @returns Package instance
              */
-            static create(properties: lingcat.classes.EncryptedMessage.$Shape): lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape;
-            static create(properties?: lingcat.classes.EncryptedMessage.$Properties): lingcat.classes.EncryptedMessage;
+            static create(properties: lingcat.classes.Package.$Shape): lingcat.classes.Package & lingcat.classes.Package.$Shape;
+            static create(properties?: lingcat.classes.Package.$Properties): lingcat.classes.Package;
 
             /**
-             * Encodes the specified EncryptedMessage message. Does not implicitly {@link lingcat.classes.EncryptedMessage.verify|verify} messages.
-             * @param message EncryptedMessage message or plain object to encode
+             * Encodes the specified Package message. Does not implicitly {@link lingcat.classes.Package.verify|verify} messages.
+             * @param message Package message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encode(message: lingcat.classes.EncryptedMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encode(message: lingcat.classes.Package.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified EncryptedMessage message, length delimited. Does not implicitly {@link lingcat.classes.EncryptedMessage.verify|verify} messages.
-             * @param message EncryptedMessage message or plain object to encode
+             * Encodes the specified Package message, length delimited. Does not implicitly {@link lingcat.classes.Package.verify|verify} messages.
+             * @param message Package message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            static encodeDelimited(message: lingcat.classes.EncryptedMessage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+            static encodeDelimited(message: lingcat.classes.Package.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Decodes an EncryptedMessage message from the specified reader or buffer.
+             * Decodes a Package message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns {lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape} EncryptedMessage
+             * @returns {lingcat.classes.Package & lingcat.classes.Package.$Shape} Package
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape;
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.Package & lingcat.classes.Package.$Shape;
 
             /**
-             * Decodes an EncryptedMessage message from the specified reader or buffer, length delimited.
+             * Decodes a Package message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns {lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape} EncryptedMessage
+             * @returns {lingcat.classes.Package & lingcat.classes.Package.$Shape} Package
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape;
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.Package & lingcat.classes.Package.$Shape;
 
             /**
-             * Verifies an EncryptedMessage message.
+             * Verifies a Package message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates an EncryptedMessage message from a plain object. Also converts values to their respective internal types.
+             * Creates a Package message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns EncryptedMessage
+             * @returns Package
              */
-            static fromObject(object: { [k: string]: any }): lingcat.classes.EncryptedMessage;
+            static fromObject(object: { [k: string]: any }): lingcat.classes.Package;
 
             /**
-             * Creates a plain object from an EncryptedMessage message. Also converts values to other types if specified.
-             * @param message EncryptedMessage
+             * Creates a plain object from a Package message. Also converts values to other types if specified.
+             * @param message Package
              * @param [options] Conversion options
              * @returns Plain object
              */
-            static toObject(message: lingcat.classes.EncryptedMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+            static toObject(message: lingcat.classes.Package, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this EncryptedMessage to JSON.
+             * Converts this Package to JSON.
              * @returns JSON object
              */
             toJSON(): { [k: string]: any };
 
             /**
-             * Gets the type url for EncryptedMessage
+             * Gets the type url for Package
              * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns The type url
              */
             static getTypeUrl(prefix?: string): string;
         }
 
-        namespace EncryptedMessage {
+        namespace Package {
 
-            /** Properties of an EncryptedMessage. */
+            /** Properties of a Package. */
             interface $Properties {
 
-                /** EncryptedMessage seq */
+                /** Package methodId */
+                methodId?: (number|null);
+
+                /** Package flags */
+                flags?: (number|null);
+
+                /** Package requestId */
+                requestId?: (Uint8Array|null);
+
+                /** Package seq */
                 seq?: (number|null);
 
-                /** EncryptedMessage iv */
-                iv?: (Uint8Array|null);
-
-                /** EncryptedMessage data */
+                /** Package data */
                 data?: (Uint8Array|null);
 
-                /** EncryptedMessage aad */
+                /** Package iv */
+                iv?: (Uint8Array|null);
+
+                /** Package aad */
                 aad?: (Uint8Array|null);
+
+                /** Package tag */
+                tag?: (Uint8Array|null);
+
+                /** Package originServer */
+                originServer?: (string|null);
+
+                /** Package signature */
+                signature?: (Uint8Array|null);
+
+                /** Package protocolVersion */
+                protocolVersion?: (number|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
             }
 
-            /** Shape of an EncryptedMessage. */
-            type $Shape = lingcat.classes.EncryptedMessage.$Properties;
+            /** Shape of a Package. */
+            type $Shape = lingcat.classes.Package.$Properties;
+        }
+
+        /**
+         * Properties of a FederationPackage.
+         * @deprecated Use lingcat.classes.FederationPackage.$Properties instead.
+         */
+        interface IFederationPackage extends lingcat.classes.FederationPackage.$Properties {
+        }
+
+        /** Represents a FederationPackage. */
+        class FederationPackage {
+
+            /**
+             * Constructs a new FederationPackage.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.FederationPackage.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** FederationPackage originServer. */
+            originServer: string;
+
+            /** FederationPackage targetServer. */
+            targetServer: string;
+
+            /** FederationPackage timestamp. */
+            timestamp: (number|Long);
+
+            /** FederationPackage payload. */
+            payload: Uint8Array;
+
+            /** FederationPackage signature. */
+            signature: Uint8Array;
+
+            /**
+             * Creates a new FederationPackage instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns FederationPackage instance
+             */
+            static create(properties: lingcat.classes.FederationPackage.$Shape): lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape;
+            static create(properties?: lingcat.classes.FederationPackage.$Properties): lingcat.classes.FederationPackage;
+
+            /**
+             * Encodes the specified FederationPackage message. Does not implicitly {@link lingcat.classes.FederationPackage.verify|verify} messages.
+             * @param message FederationPackage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.FederationPackage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified FederationPackage message, length delimited. Does not implicitly {@link lingcat.classes.FederationPackage.verify|verify} messages.
+             * @param message FederationPackage message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.FederationPackage.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a FederationPackage message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape} FederationPackage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape;
+
+            /**
+             * Decodes a FederationPackage message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape} FederationPackage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape;
+
+            /**
+             * Verifies a FederationPackage message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a FederationPackage message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns FederationPackage
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.FederationPackage;
+
+            /**
+             * Creates a plain object from a FederationPackage message. Also converts values to other types if specified.
+             * @param message FederationPackage
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.FederationPackage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this FederationPackage to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for FederationPackage
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace FederationPackage {
+
+            /** Properties of a FederationPackage. */
+            interface $Properties {
+
+                /** FederationPackage originServer */
+                originServer?: (string|null);
+
+                /** FederationPackage targetServer */
+                targetServer?: (string|null);
+
+                /** FederationPackage timestamp */
+                timestamp?: (number|Long|null);
+
+                /** FederationPackage payload */
+                payload?: (Uint8Array|null);
+
+                /** FederationPackage signature */
+                signature?: (Uint8Array|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a FederationPackage. */
+            type $Shape = lingcat.classes.FederationPackage.$Properties;
         }
 
         /**

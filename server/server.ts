@@ -184,7 +184,7 @@ export default function createLingCatServer(base_data_path: string) {
 
                 recvSeq = mPackage.seq
 
-                const isEncrypted = mPackage.isDecrypted
+                const isEncrypted = mPackage.isEncrypted
                 console.log("[收]", req.socket.remoteAddress, "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (isEncrypted ? ("(Encrypted, recvSeq: " + recvSeq + ", current sendSeq: " + sendSeq + ") ") : ''))
 
                 // 如果是加密消息, 同时应该返回加密的消息

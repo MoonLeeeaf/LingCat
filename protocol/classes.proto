@@ -10,11 +10,42 @@ package lingcat.classes;
  * =======================================================
  */
 
-message EncryptedMessage {
-    uint32 seq = 1;
-    bytes iv = 2;
-    bytes data = 3;
-    bytes aad = 4;
+message Package {
+    // 方法 ID
+    uint32 method_id = 1;
+    // 标志位
+    uint32 flags = 2;
+    // 请求 ID
+    bytes request_id = 3;
+    // 序号
+    uint32 seq = 4;
+    
+    // 负载数据（明文或密文）
+    bytes data = 5;
+    
+    // 初始化向量
+    bytes iv = 6;
+    // 附加认证数据
+    bytes aad = 7;
+    // 认证标签
+    bytes tag = 8;
+    
+    // 发送方服务器域名（本地通信为 null）
+    optional string origin_server = 9;
+    // 联邦签名
+    optional bytes signature = 10;
+    // 协议版本
+    optional uint32 protocol_version = 11;
+}
+
+message FederationPackage {
+    string origin_server = 1;
+    string target_server = 2;
+    // 时间戳, 防止重放
+    uint64 timestamp = 3;
+    bytes payload = 4;
+    // 服务端 Ed25519 签名
+    bytes signature = 5;
 }
 
 message IUser {

@@ -3,7 +3,7 @@ import $protobuf from "protobufjs/minimal.js";
 
 // Common aliases
 const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
-const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $Boolean = $util.global.Boolean, $BigInt = $util.global.BigInt;
+const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $BigInt = $util.global.BigInt, $Boolean = $util.global.Boolean;
 
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
@@ -26,40 +26,47 @@ export const lingcat = $root.lingcat = (() => {
          */
         const classes = {};
 
-        classes.EncryptedMessage = (function() {
+        classes.Package = (function() {
 
             /**
-             * Properties of an EncryptedMessage.
-             * @typedef {Object} lingcat.classes.EncryptedMessage.$Properties
-             * @property {number|null} [seq] EncryptedMessage seq
-             * @property {Uint8Array|null} [iv] EncryptedMessage iv
-             * @property {Uint8Array|null} [data] EncryptedMessage data
-             * @property {Uint8Array|null} [aad] EncryptedMessage aad
+             * Properties of a Package.
+             * @typedef {Object} lingcat.classes.Package.$Properties
+             * @property {number|null} [methodId] Package methodId
+             * @property {number|null} [flags] Package flags
+             * @property {Uint8Array|null} [requestId] Package requestId
+             * @property {number|null} [seq] Package seq
+             * @property {Uint8Array|null} [data] Package data
+             * @property {Uint8Array|null} [iv] Package iv
+             * @property {Uint8Array|null} [aad] Package aad
+             * @property {Uint8Array|null} [tag] Package tag
+             * @property {string|null} [originServer] Package originServer
+             * @property {Uint8Array|null} [signature] Package signature
+             * @property {number|null} [protocolVersion] Package protocolVersion
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
             /**
-             * Properties of an EncryptedMessage.
+             * Properties of a Package.
              * @memberof lingcat.classes
-             * @interface IEncryptedMessage
-             * @augments lingcat.classes.EncryptedMessage.$Properties
-             * @deprecated Use lingcat.classes.EncryptedMessage.$Properties instead.
+             * @interface IPackage
+             * @augments lingcat.classes.Package.$Properties
+             * @deprecated Use lingcat.classes.Package.$Properties instead.
              */
 
             /**
-             * Shape of an EncryptedMessage.
-             * @typedef {lingcat.classes.EncryptedMessage.$Properties} lingcat.classes.EncryptedMessage.$Shape
+             * Shape of a Package.
+             * @typedef {lingcat.classes.Package.$Properties} lingcat.classes.Package.$Shape
              */
 
             /**
-             * Constructs a new EncryptedMessage.
+             * Constructs a new Package.
              * @memberof lingcat.classes
-             * @classdesc Represents an EncryptedMessage.
+             * @classdesc Represents a Package.
              * @constructor
-             * @param {lingcat.classes.EncryptedMessage.$Properties=} [properties] Properties to set
+             * @param {lingcat.classes.Package.$Properties=} [properties] Properties to set
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
-            const EncryptedMessage = function (properties) {
+            const Package = function (properties) {
                 if (properties)
                     for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                         if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -67,77 +74,168 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * EncryptedMessage seq.
+             * Package methodId.
+             * @member {number} methodId
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.methodId = 0;
+
+            /**
+             * Package flags.
+             * @member {number} flags
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.flags = 0;
+
+            /**
+             * Package requestId.
+             * @member {Uint8Array} requestId
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.requestId = $util.newBuffer([]);
+
+            /**
+             * Package seq.
              * @member {number} seq
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @instance
              */
-            EncryptedMessage.prototype.seq = 0;
+            Package.prototype.seq = 0;
 
             /**
-             * EncryptedMessage iv.
-             * @member {Uint8Array} iv
-             * @memberof lingcat.classes.EncryptedMessage
-             * @instance
-             */
-            EncryptedMessage.prototype.iv = $util.newBuffer([]);
-
-            /**
-             * EncryptedMessage data.
+             * Package data.
              * @member {Uint8Array} data
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @instance
              */
-            EncryptedMessage.prototype.data = $util.newBuffer([]);
+            Package.prototype.data = $util.newBuffer([]);
 
             /**
-             * EncryptedMessage aad.
+             * Package iv.
+             * @member {Uint8Array} iv
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.iv = $util.newBuffer([]);
+
+            /**
+             * Package aad.
              * @member {Uint8Array} aad
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @instance
              */
-            EncryptedMessage.prototype.aad = $util.newBuffer([]);
+            Package.prototype.aad = $util.newBuffer([]);
 
             /**
-             * Creates a new EncryptedMessage instance using the specified properties.
+             * Package tag.
+             * @member {Uint8Array} tag
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.tag = $util.newBuffer([]);
+
+            /**
+             * Package originServer.
+             * @member {string|null|undefined} originServer
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.originServer = null;
+
+            /**
+             * Package signature.
+             * @member {Uint8Array|null|undefined} signature
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.signature = null;
+
+            /**
+             * Package protocolVersion.
+             * @member {number|null|undefined} protocolVersion
+             * @memberof lingcat.classes.Package
+             * @instance
+             */
+            Package.prototype.protocolVersion = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Package.prototype, "_originServer", {
+                get: $util.oneOfGetter($oneOfFields = ["originServer"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Package.prototype, "_signature", {
+                get: $util.oneOfGetter($oneOfFields = ["signature"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Package.prototype, "_protocolVersion", {
+                get: $util.oneOfGetter($oneOfFields = ["protocolVersion"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Package instance using the specified properties.
              * @function create
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
-             * @param {lingcat.classes.EncryptedMessage.$Properties=} [properties] Properties to set
-             * @returns {lingcat.classes.EncryptedMessage} EncryptedMessage instance
+             * @param {lingcat.classes.Package.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.Package} Package instance
              * @type {{
-             *   (properties: lingcat.classes.EncryptedMessage.$Shape): lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape;
-             *   (properties?: lingcat.classes.EncryptedMessage.$Properties): lingcat.classes.EncryptedMessage;
+             *   (properties: lingcat.classes.Package.$Shape): lingcat.classes.Package & lingcat.classes.Package.$Shape;
+             *   (properties?: lingcat.classes.Package.$Properties): lingcat.classes.Package;
              * }}
              */
-            EncryptedMessage.create = function(properties) {
-                return new EncryptedMessage(properties);
+            Package.create = function(properties) {
+                return new Package(properties);
             };
 
             /**
-             * Encodes the specified EncryptedMessage message. Does not implicitly {@link lingcat.classes.EncryptedMessage.verify|verify} messages.
+             * Encodes the specified Package message. Does not implicitly {@link lingcat.classes.Package.verify|verify} messages.
              * @function encode
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
-             * @param {lingcat.classes.EncryptedMessage.$Properties} message EncryptedMessage message or plain object to encode
+             * @param {lingcat.classes.Package.$Properties} message Package message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            EncryptedMessage.encode = function (message, writer, _depth) {
+            Package.encode = function (message, writer, _depth) {
                 if (!writer)
                     writer = $Writer.create();
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
+                if (message.methodId != null && $Object.hasOwnProperty.call(message, "methodId") && message.methodId !== 0)
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.methodId);
+                if (message.flags != null && $Object.hasOwnProperty.call(message, "flags") && message.flags !== 0)
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.flags);
+                if (message.requestId != null && $Object.hasOwnProperty.call(message, "requestId") && message.requestId.length)
+                    writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.requestId);
                 if (message.seq != null && $Object.hasOwnProperty.call(message, "seq") && message.seq !== 0)
-                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.seq);
-                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv") && message.iv.length)
-                    writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.iv);
+                    writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.seq);
                 if (message.data != null && $Object.hasOwnProperty.call(message, "data") && message.data.length)
-                    writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.data);
+                    writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.data);
+                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv") && message.iv.length)
+                    writer.uint32(/* id 6, wireType 2 =*/50).bytes(message.iv);
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad") && message.aad.length)
-                    writer.uint32(/* id 4, wireType 2 =*/34).bytes(message.aad);
+                    writer.uint32(/* id 7, wireType 2 =*/58).bytes(message.aad);
+                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag") && message.tag.length)
+                    writer.uint32(/* id 8, wireType 2 =*/66).bytes(message.tag);
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer"))
+                    writer.uint32(/* id 9, wireType 2 =*/74).string(message.originServer);
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature"))
+                    writer.uint32(/* id 10, wireType 2 =*/82).bytes(message.signature);
+                if (message.protocolVersion != null && $Object.hasOwnProperty.call(message, "protocolVersion"))
+                    writer.uint32(/* id 11, wireType 0 =*/88).uint32(message.protocolVersion);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -145,37 +243,37 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Encodes the specified EncryptedMessage message, length delimited. Does not implicitly {@link lingcat.classes.EncryptedMessage.verify|verify} messages.
+             * Encodes the specified Package message, length delimited. Does not implicitly {@link lingcat.classes.Package.verify|verify} messages.
              * @function encodeDelimited
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
-             * @param {lingcat.classes.EncryptedMessage.$Properties} message EncryptedMessage message or plain object to encode
+             * @param {lingcat.classes.Package.$Properties} message Package message or plain object to encode
              * @param {$protobuf.Writer} [writer] Writer to encode to
              * @returns {$protobuf.Writer} Writer
              */
-            EncryptedMessage.encodeDelimited = function(message, writer) {
+            Package.encodeDelimited = function(message, writer) {
                 return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
-             * Decodes an EncryptedMessage message from the specified reader or buffer.
+             * Decodes a Package message from the specified reader or buffer.
              * @function decode
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
              * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape} EncryptedMessage
+             * @returns {lingcat.classes.Package & lingcat.classes.Package.$Shape} Package
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            EncryptedMessage.decode = function (reader, length, _end, _depth, _target) {
+            Package.decode = function (reader, length, _end, _depth, _target) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.EncryptedMessage(), value;
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.Package(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -189,21 +287,39 @@ export const lingcat = $root.lingcat = (() => {
                             if (wireType !== 0)
                                 break;
                             if (value = reader.uint32())
+                                message.methodId = value;
+                            else
+                                delete message.methodId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.flags = value;
+                            else
+                                delete message.flags;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.requestId = value;
+                            else
+                                delete message.requestId;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
                                 message.seq = value;
                             else
                                 delete message.seq;
                             continue;
                         }
-                    case 2: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.bytes()).length)
-                                message.iv = value;
-                            else
-                                delete message.iv;
-                            continue;
-                        }
-                    case 3: {
+                    case 5: {
                             if (wireType !== 2)
                                 break;
                             if ((value = reader.bytes()).length)
@@ -212,13 +328,52 @@ export const lingcat = $root.lingcat = (() => {
                                 delete message.data;
                             continue;
                         }
-                    case 4: {
+                    case 6: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.iv = value;
+                            else
+                                delete message.iv;
+                            continue;
+                        }
+                    case 7: {
                             if (wireType !== 2)
                                 break;
                             if ((value = reader.bytes()).length)
                                 message.aad = value;
                             else
                                 delete message.aad;
+                            continue;
+                        }
+                    case 8: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.tag = value;
+                            else
+                                delete message.tag;
+                            continue;
+                        }
+                    case 9: {
+                            if (wireType !== 2)
+                                break;
+                            message.originServer = reader.stringVerify();
+                            message._originServer = "originServer";
+                            continue;
+                        }
+                    case 10: {
+                            if (wireType !== 2)
+                                break;
+                            message.signature = reader.bytes();
+                            message._signature = "signature";
+                            continue;
+                        }
+                    case 11: {
+                            if (wireType !== 0)
+                                break;
+                            message.protocolVersion = reader.uint32();
+                            message._protocolVersion = "protocolVersion";
                             continue;
                         }
                     }
@@ -234,103 +389,158 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             /**
-             * Decodes an EncryptedMessage message from the specified reader or buffer, length delimited.
+             * Decodes a Package message from the specified reader or buffer, length delimited.
              * @function decodeDelimited
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
              * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.classes.EncryptedMessage & lingcat.classes.EncryptedMessage.$Shape} EncryptedMessage
+             * @returns {lingcat.classes.Package & lingcat.classes.Package.$Shape} Package
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            EncryptedMessage.decodeDelimited = function(reader) {
+            Package.decodeDelimited = function(reader) {
                 if (!(reader instanceof $Reader))
                     reader = new $Reader(reader);
                 return this.decode(reader, reader.uint32());
             };
 
             /**
-             * Verifies an EncryptedMessage message.
+             * Verifies a Package message.
              * @function verify
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
              * @param {Object.<string,*>} message Plain object to verify
              * @returns {string|null} `null` if valid, otherwise the reason why it is not
              */
-            EncryptedMessage.verify = function (message, _depth) {
+            Package.verify = function (message, _depth) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     return "max depth exceeded";
+                let properties = {};
+                if (message.methodId != null && $Object.hasOwnProperty.call(message, "methodId"))
+                    if (!$util.isInteger(message.methodId))
+                        return "methodId: integer expected";
+                if (message.flags != null && $Object.hasOwnProperty.call(message, "flags"))
+                    if (!$util.isInteger(message.flags))
+                        return "flags: integer expected";
+                if (message.requestId != null && $Object.hasOwnProperty.call(message, "requestId"))
+                    if (!(message.requestId && typeof message.requestId.length === "number" || $util.isString(message.requestId)))
+                        return "requestId: buffer expected";
                 if (message.seq != null && $Object.hasOwnProperty.call(message, "seq"))
                     if (!$util.isInteger(message.seq))
                         return "seq: integer expected";
-                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv"))
-                    if (!(message.iv && typeof message.iv.length === "number" || $util.isString(message.iv)))
-                        return "iv: buffer expected";
                 if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
                     if (!(message.data && typeof message.data.length === "number" || $util.isString(message.data)))
                         return "data: buffer expected";
+                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv"))
+                    if (!(message.iv && typeof message.iv.length === "number" || $util.isString(message.iv)))
+                        return "iv: buffer expected";
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad"))
                     if (!(message.aad && typeof message.aad.length === "number" || $util.isString(message.aad)))
                         return "aad: buffer expected";
+                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag"))
+                    if (!(message.tag && typeof message.tag.length === "number" || $util.isString(message.tag)))
+                        return "tag: buffer expected";
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer")) {
+                    properties._originServer = 1;
+                    if (!$util.isString(message.originServer))
+                        return "originServer: string expected";
+                }
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature")) {
+                    properties._signature = 1;
+                    if (!(message.signature && typeof message.signature.length === "number" || $util.isString(message.signature)))
+                        return "signature: buffer expected";
+                }
+                if (message.protocolVersion != null && $Object.hasOwnProperty.call(message, "protocolVersion")) {
+                    properties._protocolVersion = 1;
+                    if (!$util.isInteger(message.protocolVersion))
+                        return "protocolVersion: integer expected";
+                }
                 return null;
             };
 
             /**
-             * Creates an EncryptedMessage message from a plain object. Also converts values to their respective internal types.
+             * Creates a Package message from a plain object. Also converts values to their respective internal types.
              * @function fromObject
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
              * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.classes.EncryptedMessage} EncryptedMessage
+             * @returns {lingcat.classes.Package} Package
              */
-            EncryptedMessage.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.classes.EncryptedMessage)
+            Package.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.Package)
                     return object;
                 if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.classes.EncryptedMessage: object expected");
+                    throw $TypeError(".lingcat.classes.Package: object expected");
                 if (_depth === $undefined)
                     _depth = 0;
                 if (_depth > $util.recursionLimit)
                     throw $Error("max depth exceeded");
-                let message = new $root.lingcat.classes.EncryptedMessage();
+                let message = new $root.lingcat.classes.Package();
+                if (object.methodId != null)
+                    if ($Number(object.methodId) !== 0)
+                        message.methodId = object.methodId >>> 0;
+                if (object.flags != null)
+                    if ($Number(object.flags) !== 0)
+                        message.flags = object.flags >>> 0;
+                if (object.requestId != null)
+                    if (object.requestId.length)
+                        if (typeof object.requestId === "string")
+                            $util.base64.decode(object.requestId, message.requestId = $util.newBuffer($util.base64.length(object.requestId)), 0);
+                        else if (object.requestId.length >= 0)
+                            message.requestId = object.requestId;
                 if (object.seq != null)
                     if ($Number(object.seq) !== 0)
                         message.seq = object.seq >>> 0;
-                if (object.iv != null)
-                    if (object.iv.length)
-                        if (typeof object.iv === "string")
-                            $util.base64.decode(object.iv, message.iv = $util.newBuffer($util.base64.length(object.iv)), 0);
-                        else if (object.iv.length >= 0)
-                            message.iv = object.iv;
                 if (object.data != null)
                     if (object.data.length)
                         if (typeof object.data === "string")
                             $util.base64.decode(object.data, message.data = $util.newBuffer($util.base64.length(object.data)), 0);
                         else if (object.data.length >= 0)
                             message.data = object.data;
+                if (object.iv != null)
+                    if (object.iv.length)
+                        if (typeof object.iv === "string")
+                            $util.base64.decode(object.iv, message.iv = $util.newBuffer($util.base64.length(object.iv)), 0);
+                        else if (object.iv.length >= 0)
+                            message.iv = object.iv;
                 if (object.aad != null)
                     if (object.aad.length)
                         if (typeof object.aad === "string")
                             $util.base64.decode(object.aad, message.aad = $util.newBuffer($util.base64.length(object.aad)), 0);
                         else if (object.aad.length >= 0)
                             message.aad = object.aad;
+                if (object.tag != null)
+                    if (object.tag.length)
+                        if (typeof object.tag === "string")
+                            $util.base64.decode(object.tag, message.tag = $util.newBuffer($util.base64.length(object.tag)), 0);
+                        else if (object.tag.length >= 0)
+                            message.tag = object.tag;
+                if (object.originServer != null)
+                    message.originServer = $String(object.originServer);
+                if (object.signature != null)
+                    if (typeof object.signature === "string")
+                        $util.base64.decode(object.signature, message.signature = $util.newBuffer($util.base64.length(object.signature)), 0);
+                    else if (object.signature.length >= 0)
+                        message.signature = object.signature;
+                if (object.protocolVersion != null)
+                    message.protocolVersion = object.protocolVersion >>> 0;
                 return message;
             };
 
             /**
-             * Creates a plain object from an EncryptedMessage message. Also converts values to other types if specified.
+             * Creates a plain object from a Package message. Also converts values to other types if specified.
              * @function toObject
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
-             * @param {lingcat.classes.EncryptedMessage} message EncryptedMessage
+             * @param {lingcat.classes.Package} message Package
              * @param {$protobuf.IConversionOptions} [options] Conversion options
              * @returns {Object.<string,*>} Plain object
              */
-            EncryptedMessage.toObject = function (message, options, _depth) {
+            Package.toObject = function (message, options, _depth) {
                 if (!options)
                     options = {};
                 if (_depth === $undefined)
@@ -339,14 +549,16 @@ export const lingcat = $root.lingcat = (() => {
                     throw $Error("max depth exceeded");
                 let object = {};
                 if (options.defaults) {
-                    object.seq = 0;
+                    object.methodId = 0;
+                    object.flags = 0;
                     if (options.bytes === $String)
-                        object.iv = "";
+                        object.requestId = "";
                     else {
-                        object.iv = [];
+                        object.requestId = [];
                         if (options.bytes !== $Array)
-                            object.iv = $util.newBuffer(object.iv);
+                            object.requestId = $util.newBuffer(object.requestId);
                     }
+                    object.seq = 0;
                     if (options.bytes === $String)
                         object.data = "";
                     else {
@@ -355,50 +567,489 @@ export const lingcat = $root.lingcat = (() => {
                             object.data = $util.newBuffer(object.data);
                     }
                     if (options.bytes === $String)
+                        object.iv = "";
+                    else {
+                        object.iv = [];
+                        if (options.bytes !== $Array)
+                            object.iv = $util.newBuffer(object.iv);
+                    }
+                    if (options.bytes === $String)
                         object.aad = "";
                     else {
                         object.aad = [];
                         if (options.bytes !== $Array)
                             object.aad = $util.newBuffer(object.aad);
                     }
+                    if (options.bytes === $String)
+                        object.tag = "";
+                    else {
+                        object.tag = [];
+                        if (options.bytes !== $Array)
+                            object.tag = $util.newBuffer(object.tag);
+                    }
                 }
+                if (message.methodId != null && $Object.hasOwnProperty.call(message, "methodId"))
+                    object.methodId = message.methodId;
+                if (message.flags != null && $Object.hasOwnProperty.call(message, "flags"))
+                    object.flags = message.flags;
+                if (message.requestId != null && $Object.hasOwnProperty.call(message, "requestId"))
+                    object.requestId = options.bytes === $String ? $util.base64.encode(message.requestId, 0, message.requestId.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.requestId) : message.requestId;
                 if (message.seq != null && $Object.hasOwnProperty.call(message, "seq"))
                     object.seq = message.seq;
-                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv"))
-                    object.iv = options.bytes === $String ? $util.base64.encode(message.iv, 0, message.iv.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.iv) : message.iv;
                 if (message.data != null && $Object.hasOwnProperty.call(message, "data"))
                     object.data = options.bytes === $String ? $util.base64.encode(message.data, 0, message.data.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.data) : message.data;
+                if (message.iv != null && $Object.hasOwnProperty.call(message, "iv"))
+                    object.iv = options.bytes === $String ? $util.base64.encode(message.iv, 0, message.iv.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.iv) : message.iv;
                 if (message.aad != null && $Object.hasOwnProperty.call(message, "aad"))
                     object.aad = options.bytes === $String ? $util.base64.encode(message.aad, 0, message.aad.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.aad) : message.aad;
+                if (message.tag != null && $Object.hasOwnProperty.call(message, "tag"))
+                    object.tag = options.bytes === $String ? $util.base64.encode(message.tag, 0, message.tag.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.tag) : message.tag;
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer"))
+                    object.originServer = message.originServer;
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature"))
+                    object.signature = options.bytes === $String ? $util.base64.encode(message.signature, 0, message.signature.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.signature) : message.signature;
+                if (message.protocolVersion != null && $Object.hasOwnProperty.call(message, "protocolVersion"))
+                    object.protocolVersion = message.protocolVersion;
                 return object;
             };
 
             /**
-             * Converts this EncryptedMessage to JSON.
+             * Converts this Package to JSON.
              * @function toJSON
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @instance
              * @returns {Object.<string,*>} JSON object
              */
-            EncryptedMessage.prototype.toJSON = function() {
-                return EncryptedMessage.toObject(this, $protobuf.util.toJSONOptions);
+            Package.prototype.toJSON = function() {
+                return Package.toObject(this, $protobuf.util.toJSONOptions);
             };
 
             /**
-             * Gets the type url for EncryptedMessage
+             * Gets the type url for Package
              * @function getTypeUrl
-             * @memberof lingcat.classes.EncryptedMessage
+             * @memberof lingcat.classes.Package
              * @static
              * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
              * @returns {string} The type url
              */
-            EncryptedMessage.getTypeUrl = function(prefix) {
+            Package.getTypeUrl = function(prefix) {
                 if (prefix === $undefined)
                     prefix = "type.googleapis.com";
-                return prefix + "/lingcat.classes.EncryptedMessage";
+                return prefix + "/lingcat.classes.Package";
             };
 
-            return EncryptedMessage;
+            return Package;
+        })();
+
+        classes.FederationPackage = (function() {
+
+            /**
+             * Properties of a FederationPackage.
+             * @typedef {Object} lingcat.classes.FederationPackage.$Properties
+             * @property {string|null} [originServer] FederationPackage originServer
+             * @property {string|null} [targetServer] FederationPackage targetServer
+             * @property {number|Long|null} [timestamp] FederationPackage timestamp
+             * @property {Uint8Array|null} [payload] FederationPackage payload
+             * @property {Uint8Array|null} [signature] FederationPackage signature
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a FederationPackage.
+             * @memberof lingcat.classes
+             * @interface IFederationPackage
+             * @augments lingcat.classes.FederationPackage.$Properties
+             * @deprecated Use lingcat.classes.FederationPackage.$Properties instead.
+             */
+
+            /**
+             * Shape of a FederationPackage.
+             * @typedef {lingcat.classes.FederationPackage.$Properties} lingcat.classes.FederationPackage.$Shape
+             */
+
+            /**
+             * Constructs a new FederationPackage.
+             * @memberof lingcat.classes
+             * @classdesc Represents a FederationPackage.
+             * @constructor
+             * @param {lingcat.classes.FederationPackage.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const FederationPackage = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * FederationPackage originServer.
+             * @member {string} originServer
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             */
+            FederationPackage.prototype.originServer = "";
+
+            /**
+             * FederationPackage targetServer.
+             * @member {string} targetServer
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             */
+            FederationPackage.prototype.targetServer = "";
+
+            /**
+             * FederationPackage timestamp.
+             * @member {number|Long} timestamp
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             */
+            FederationPackage.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * FederationPackage payload.
+             * @member {Uint8Array} payload
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             */
+            FederationPackage.prototype.payload = $util.newBuffer([]);
+
+            /**
+             * FederationPackage signature.
+             * @member {Uint8Array} signature
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             */
+            FederationPackage.prototype.signature = $util.newBuffer([]);
+
+            /**
+             * Creates a new FederationPackage instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {lingcat.classes.FederationPackage.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.FederationPackage} FederationPackage instance
+             * @type {{
+             *   (properties: lingcat.classes.FederationPackage.$Shape): lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape;
+             *   (properties?: lingcat.classes.FederationPackage.$Properties): lingcat.classes.FederationPackage;
+             * }}
+             */
+            FederationPackage.create = function(properties) {
+                return new FederationPackage(properties);
+            };
+
+            /**
+             * Encodes the specified FederationPackage message. Does not implicitly {@link lingcat.classes.FederationPackage.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {lingcat.classes.FederationPackage.$Properties} message FederationPackage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            FederationPackage.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer") && message.originServer !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.originServer);
+                if (message.targetServer != null && $Object.hasOwnProperty.call(message, "targetServer") && message.targetServer !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.targetServer);
+                if (message.timestamp != null && $Object.hasOwnProperty.call(message, "timestamp") && (typeof message.timestamp === "object" ? message.timestamp.low || message.timestamp.high : message.timestamp !== 0))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.timestamp);
+                if (message.payload != null && $Object.hasOwnProperty.call(message, "payload") && message.payload.length)
+                    writer.uint32(/* id 4, wireType 2 =*/34).bytes(message.payload);
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature") && message.signature.length)
+                    writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.signature);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified FederationPackage message, length delimited. Does not implicitly {@link lingcat.classes.FederationPackage.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {lingcat.classes.FederationPackage.$Properties} message FederationPackage message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            FederationPackage.encodeDelimited = function(message, writer) {
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
+            };
+
+            /**
+             * Decodes a FederationPackage message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape} FederationPackage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            FederationPackage.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.FederationPackage(), value;
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.originServer = value;
+                            else
+                                delete message.originServer;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.targetServer = value;
+                            else
+                                delete message.targetServer;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                                message.timestamp = value;
+                            else
+                                delete message.timestamp;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.payload = value;
+                            else
+                                delete message.payload;
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.bytes()).length)
+                                message.signature = value;
+                            else
+                                delete message.signature;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a FederationPackage message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.FederationPackage & lingcat.classes.FederationPackage.$Shape} FederationPackage
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            FederationPackage.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a FederationPackage message.
+             * @function verify
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            FederationPackage.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer"))
+                    if (!$util.isString(message.originServer))
+                        return "originServer: string expected";
+                if (message.targetServer != null && $Object.hasOwnProperty.call(message, "targetServer"))
+                    if (!$util.isString(message.targetServer))
+                        return "targetServer: string expected";
+                if (message.timestamp != null && $Object.hasOwnProperty.call(message, "timestamp"))
+                    if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
+                        return "timestamp: integer|Long expected";
+                if (message.payload != null && $Object.hasOwnProperty.call(message, "payload"))
+                    if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
+                        return "payload: buffer expected";
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature"))
+                    if (!(message.signature && typeof message.signature.length === "number" || $util.isString(message.signature)))
+                        return "signature: buffer expected";
+                return null;
+            };
+
+            /**
+             * Creates a FederationPackage message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.FederationPackage} FederationPackage
+             */
+            FederationPackage.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.FederationPackage)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.FederationPackage: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.FederationPackage();
+                if (object.originServer != null)
+                    if (typeof object.originServer !== "string" || object.originServer.length)
+                        message.originServer = $String(object.originServer);
+                if (object.targetServer != null)
+                    if (typeof object.targetServer !== "string" || object.targetServer.length)
+                        message.targetServer = $String(object.targetServer);
+                if (object.timestamp != null)
+                    if (typeof object.timestamp === "object" ? object.timestamp.low || object.timestamp.high : $Number(object.timestamp) !== 0)
+                        if ($util.Long)
+                            message.timestamp = $util.Long.fromValue(object.timestamp, true);
+                        else if (typeof object.timestamp === "string")
+                            message.timestamp = $parseInt(object.timestamp, 10);
+                        else if (typeof object.timestamp === "number")
+                            message.timestamp = object.timestamp;
+                        else if (typeof object.timestamp === "object")
+                            message.timestamp = new $util.LongBits(object.timestamp.low >>> 0, object.timestamp.high >>> 0).toNumber(true);
+                if (object.payload != null)
+                    if (object.payload.length)
+                        if (typeof object.payload === "string")
+                            $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
+                        else if (object.payload.length >= 0)
+                            message.payload = object.payload;
+                if (object.signature != null)
+                    if (object.signature.length)
+                        if (typeof object.signature === "string")
+                            $util.base64.decode(object.signature, message.signature = $util.newBuffer($util.base64.length(object.signature)), 0);
+                        else if (object.signature.length >= 0)
+                            message.signature = object.signature;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a FederationPackage message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {lingcat.classes.FederationPackage} message FederationPackage
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            FederationPackage.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.originServer = "";
+                    object.targetServer = "";
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, true);
+                        object.timestamp = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                    } else
+                        object.timestamp = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                    if (options.bytes === $String)
+                        object.payload = "";
+                    else {
+                        object.payload = [];
+                        if (options.bytes !== $Array)
+                            object.payload = $util.newBuffer(object.payload);
+                    }
+                    if (options.bytes === $String)
+                        object.signature = "";
+                    else {
+                        object.signature = [];
+                        if (options.bytes !== $Array)
+                            object.signature = $util.newBuffer(object.signature);
+                    }
+                }
+                if (message.originServer != null && $Object.hasOwnProperty.call(message, "originServer"))
+                    object.originServer = message.originServer;
+                if (message.targetServer != null && $Object.hasOwnProperty.call(message, "targetServer"))
+                    object.targetServer = message.targetServer;
+                if (message.timestamp != null && $Object.hasOwnProperty.call(message, "timestamp"))
+                    if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                        object.timestamp = typeof message.timestamp === "number" ? $BigInt(message.timestamp) : $util.Long.fromBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0, true).toBigInt();
+                    else if (typeof message.timestamp === "number")
+                        object.timestamp = options.longs === $String ? $String(message.timestamp) : message.timestamp;
+                    else
+                        object.timestamp = options.longs === $String ? $util.Long.prototype.toString.call(message.timestamp) : options.longs === $Number ? new $util.LongBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0).toNumber(true) : message.timestamp;
+                if (message.payload != null && $Object.hasOwnProperty.call(message, "payload"))
+                    object.payload = options.bytes === $String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.payload) : message.payload;
+                if (message.signature != null && $Object.hasOwnProperty.call(message, "signature"))
+                    object.signature = options.bytes === $String ? $util.base64.encode(message.signature, 0, message.signature.length) : options.bytes === $Array ? $Array.prototype.slice.call(message.signature) : message.signature;
+                return object;
+            };
+
+            /**
+             * Converts this FederationPackage to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.FederationPackage
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            FederationPackage.prototype.toJSON = function() {
+                return FederationPackage.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for FederationPackage
+             * @function getTypeUrl
+             * @memberof lingcat.classes.FederationPackage
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            FederationPackage.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.FederationPackage";
+            };
+
+            return FederationPackage;
         })();
 
         classes.IUser = (function() {
