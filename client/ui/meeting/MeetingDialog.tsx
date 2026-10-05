@@ -249,7 +249,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 </mdui-tooltip>
                 <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
-                        icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
+                        icon={m.isSharingScreen ? 'screen_share' : 'stop_screen_share'}
                         onClick={() => onToggleScreenShare()}
                     />
                 </mdui-tooltip>
