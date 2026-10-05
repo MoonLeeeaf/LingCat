@@ -47,11 +47,18 @@ function getOidcConfig(p: OAuth2ProviderConfig): Promise<Configuration> {
     return c
 }
 
+/** 规范化的部署子路径前缀: "lingcat"->"/lingcat", "/lingcat/"->"/lingcat", ""/"/"->"" */
+function basePathPrefix(): string {
+    let b = (config.base_path || '').trim()
+    if (!b || b === '/') return ''
+    if (!b.startsWith('/')) b = '/' + b
+    return b.replace(/\/+$/, '')
+}
+
 function baseUrl(req: any): string {
     const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim()
     const host = String(req.headers['x-forwarded-host'] || req.headers.host || '')
-    const base = (config.base_path || '').replace(/\/+$/, '')   // 子路径部署, 如 '/lingcat'
-    return `${proto}://${host}${base}`
+    return `${proto}://${host}${basePathPrefix()}`
 }
 function redirectUriFor(p: OAuth2ProviderConfig, req: any): string {
     return p.redirect_uri || `${baseUrl(req)}/oauth/${p.id}/callback`
@@ -87,7 +94,7 @@ export function consumeOAuthTicket(ticket: string): string | undefined {
 }
 
 function redirectError(res: any, code: string) {
-    res.redirect('/#oauth_error=' + encodeURIComponent(code))
+    res.redirect(basePathPrefix() + '/#oauth_error=' + encodeURIComponent(code))
 }
 
 interface Profile { subject: string, name?: string, email?: string }
@@ -242,7 +249,7 @@ export function registerOAuthRoutes(app: Express) {
                 if (!entry.userId) return redirectError(res, 'bind_no_user')
                 const r = await OAuthIdentity.link(p.id, profile.subject, entry.userId)
                 if (!r.ok) return redirectError(res, 'already_bound')
-                return res.redirect('/#oauth_bound=' + encodeURIComponent(p.id))
+                return res.redirect(basePathPrefix() + '/#oauth_bound=' + encodeURIComponent(p.id))
             }
 
             // 登录
@@ -260,7 +267,7 @@ export function registerOAuthRoutes(app: Express) {
             const ticket = crypto.randomBytes(24).toString('hex')
             gc()
             tickets.set(ticket, { userId, expiresAt: Date.now() + TICKET_TTL_MS })
-            return res.redirect('/#oauth_ticket=' + ticket)
+            return res.redirect(basePathPrefix() + '/#oauth_ticket=' + ticket)
         } catch (e) {
             console.error('[OAuth] /oauth/:id/callback error', e)
             redirectError(res, 'callback_failed')
