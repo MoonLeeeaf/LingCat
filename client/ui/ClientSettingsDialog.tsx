@@ -326,7 +326,7 @@ function LoginDialog({ onClose, allowClose, onLoginSuccess }: {
             <mdui-button
                 key={p.id}
                 variant="tonal"
-                icon="passkey"
+                icon="key"
                 style={{ marginTop: '16px', width: '100%' }}
                 onClick={() => { location.href = './oauth/' + encodeURIComponent(p.id) + '/login' }}
             >用 {p.display_name || p.id} 登录</mdui-button>

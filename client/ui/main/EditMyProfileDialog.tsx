@@ -133,7 +133,7 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                     return <mdui-button
                         key={p.id}
                         variant={bound ? 'text' : 'tonal'}
-                        icon="passkey"
+                        icon="key"
                         style={{ marginTop: '16px', width: '100%' }}
                         onClick={async () => {
                             const token = ClientManager.getActiveUserSession().token
