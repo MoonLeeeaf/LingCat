@@ -61,6 +61,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             showSnackbar({ message: '打开会议失败, 已改为在当前页面进行' })
             return false
         }
+        if (res == 'focused') MeetingWindowManager.startInWindow(chat.id)
         return res == 'opened' || res == 'focused'
     }
 

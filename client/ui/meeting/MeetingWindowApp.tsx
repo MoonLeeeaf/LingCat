@@ -50,7 +50,20 @@ async function bootstrapSession() {
         })
     }
     try { await updateFileAccessToken() } catch (e) { console.warn('[Meeting] 获取文件访问 token 失败', e) }
-    setInterval(() => { updateFileAccessToken().catch(() => { }) }, 1000 * 60 * 30)
+    const tokenTimer = setInterval(() => { updateFileAccessToken().catch(() => { }) }, 1000 * 60 * 30)
+    window.addEventListener('pagehide', () => clearInterval(tokenTimer), { once: true })
+}
+
+let sessionPromise: Promise<void> | undefined
+
+function connectSession() {
+    if (!sessionPromise) {
+        sessionPromise = bootstrapSession().catch((e) => {
+            sessionPromise = undefined
+            throw e
+        })
+    }
+    return sessionPromise
 }
 
 const centeredStyle: React.CSSProperties = {
@@ -72,9 +85,28 @@ export default function MeetingWindowApp({ req }: { req: MeetingWindowRequest })
     const [stage, setStage] = React.useState<'boot' | 'live' | 'error'>('boot')
     const [error, setError] = React.useState<string>()
     const [closed, setClosed] = React.useState(false)
-    const startedRef = React.useRef(false)
+    const joiningRef = React.useRef(false)
 
     const meetingTitle = req.title ? req.title + ' · 会议' : '会议'
+
+    const joinMeeting = React.useCallback(async () => {
+        if (joiningRef.current) return
+        joiningRef.current = true
+        setError(undefined)
+        setClosed(false)
+        setStage('boot')
+        try {
+            await connectSession()
+            await MeetingManager.startMeeting({ id: req.chatId, title: req.title })
+            setStage('live')
+        } catch (e: any) {
+            console.error('[Meeting] 独立窗口入会失败', e)
+            setError(e?.message || String(e))
+            setStage('error')
+        } finally {
+            joiningRef.current = false
+        }
+    }, [req.chatId, req.title])
 
     React.useEffect(() => {
         document.title = (req.title ? req.title + ' · ' : '') + '会议 | ' + ClientConfigInstance.title
@@ -93,20 +125,18 @@ export default function MeetingWindowApp({ req }: { req: MeetingWindowRequest })
     }, [req.chatId])
 
     React.useEffect(() => {
-        if (startedRef.current) return
-        startedRef.current = true
-        ; (async () => {
-            try {
-                await bootstrapSession()
-                await MeetingManager.startMeeting({ id: req.chatId, title: req.title })
-                setStage('live')
-            } catch (e: any) {
-                console.error('[Meeting] 独立窗口入会失败', e)
-                setError(e?.message || String(e))
-                setStage('error')
+        joinMeeting()
+    }, [joinMeeting])
+
+    React.useEffect(() => {
+        MeetingWindowManager.onStartRequest(() => {
+            if (MeetingManager.room) {
+                try { window.focus() } catch (e) { }
+                return
             }
-        })()
-    }, [])
+            joinMeeting()
+        })
+    }, [joinMeeting])
 
     React.useEffect(() => {
         if (stage != 'live') return
@@ -114,7 +144,7 @@ export default function MeetingWindowApp({ req }: { req: MeetingWindowRequest })
         setClosed(true)
         const timer = setTimeout(() => {
             try { window.close() } catch (e) { }
-        }, 2500)
+        }, 4000)
         return () => clearTimeout(timer)
     }, [stage, meeting.phase, meeting.room, meeting.error])
 
@@ -128,18 +158,24 @@ export default function MeetingWindowApp({ req }: { req: MeetingWindowRequest })
             <div style={centeredStyle}>
                 <div style={{ fontSize: '15px' }}>无法进入会议</div>
                 <div style={{ fontSize: '13px', opacity: 0.7, maxWidth: '420px' }}>{error}</div>
-                <mdui-button onClick={closeWindow}>关闭</mdui-button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <mdui-button variant="tonal" onClick={() => joinMeeting()}>重试</mdui-button>
+                    <mdui-button onClick={closeWindow}>关闭</mdui-button>
+                </div>
             </div>
         </>
     }
 
     if (closed) {
         return <>
-            <PwaTitleBar title="会议" />
+            <PwaTitleBar title={meetingTitle} />
             <div style={centeredStyle}>
                 <div style={{ fontSize: '15px' }}>已退出会议</div>
                 <div style={{ fontSize: '13px', opacity: 0.7 }}>即将自动关闭</div>
-                <mdui-button onClick={closeWindow}>立即关闭</mdui-button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <mdui-button variant="tonal" onClick={() => joinMeeting()}>重新加入</mdui-button>
+                    <mdui-button onClick={closeWindow}>立即关闭</mdui-button>
+                </div>
             </div>
         </>
     }

@@ -19,6 +19,7 @@ type MessageType =
     | 'meeting-window-closed'
     | 'meeting-window-query'
     | 'meeting-window-focus'
+    | 'meeting-window-start'
 
 export function buildMeetingWindowUrl(req: MeetingWindowRequest) {
     const url = new URL(location.href)
@@ -86,6 +87,7 @@ class MeetingWindowManagerImpl {
     private handles = new Map<string, Window | null>()
     private alive = new Set<string>()
     private aliveTimers = new Map<string, ReturnType<typeof setTimeout>>()
+    private startHandler?: () => void
     private listeners = new Set<() => void>()
 
     constructor() {
@@ -138,6 +140,12 @@ class MeetingWindowManagerImpl {
                     try { window.focus() } catch (e) { }
                 }
                 break
+            case 'meeting-window-start':
+                if (isMeetingWindowPage() && parseMeetingWindowRequest()?.chatId == chatId) {
+                    this.post('meeting-window-opened', chatId)
+                    this.startHandler?.()
+                }
+                break
         }
     }
 
@@ -167,6 +175,15 @@ class MeetingWindowManagerImpl {
         this.post('meeting-window-query', chatId)
     }
 
+    onStartRequest(handler: () => void) {
+        this.startHandler = handler
+    }
+
+    startInWindow(chatId: string) {
+        this.post('meeting-window-start', chatId)
+        this.refresh(chatId)
+    }
+
     open(req: MeetingWindowRequest): OpenMeetingWindowResult {
         if (!canOpenMeetingWindow()) return 'unsupported'
 
@@ -176,10 +193,8 @@ class MeetingWindowManagerImpl {
             try { existing.focus() } catch (e) { }
             return 'focused'
         }
-        if (existing) {
-            this.handles.delete(chatId)
-            this.alive.delete(chatId)
-        } else if (this.alive.has(chatId)) {
+        if (existing) this.handles.delete(chatId)
+        if (this.alive.has(chatId)) {
             this.post('meeting-window-focus', chatId)
             this.refresh(chatId)
             return 'focused'

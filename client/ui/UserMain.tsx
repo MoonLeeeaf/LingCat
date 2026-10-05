@@ -64,6 +64,7 @@ function ChatListItem({ chat, setActiveChat, activeChat }: { chat: IChat, active
 export default function UserMain({ profile, setProfile, drawerRef }: { profile: IUser | undefined, setProfile: (a: IUser) => void, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [loadingProfile, setLoadingProfile] = React.useState(true)
     const meeting = useMeeting()
+    const activeChatIdRef = React.useRef<string | undefined>(undefined)
 
     // 分栏模式下拖动分隔条调整会议面板宽度
     const dockRowRef = React.useRef<HTMLDivElement>(null)
@@ -147,7 +148,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
 
                 const myId = AppState.myId || (await ClientManager.getMe()).id
                 if (raw.senderUserId == myId) return
-                if (isAppForeground()) return
+                if (activeChatIdRef.current == raw.chatId && isAppForeground()) return
 
                 const chat = await ProfileCache.queryChatInfo(raw.chatId)
                 if (chat.type != 'private' && !isMentioned(raw.entities, myId)) return
@@ -188,6 +189,10 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
 
     const [activeChat, setActiveChat] = React.useState<IChat>()
     AppState.setActiveChat = setActiveChat
+
+    React.useEffect(() => {
+        activeChatIdRef.current = activeChat?.id
+    }, [activeChat?.id])
 
     React.useEffect(() => {
             document.title = ClientConfigInstance.title + (activeChat?.title ? (' | ' + activeChat?.title) : '')
