@@ -13,6 +13,7 @@ import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
 import UserProfileDialog from "./UserProfileDialog.tsx"
 import ImageViewerDialog from "./ImageViewerDialog.tsx"
+import CopyableListItem from "../CopyableListItem.tsx"
 
 function findFavourited(chatId: string) {
     return AppState.favouritedChats?.findIndex(chat => chat.id == chatId)
@@ -39,11 +40,15 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
 
     React.useEffect(() => {
         if (loading) return
-        const eventName = 'closed'
-        ref.current!.addEventListener(eventName, onClose)
-        setTimeout(() => ref.current!.open = true, 10)
-        return () => ref.current?.removeEventListener(eventName, onClose)
-    }, [loading])
+        const dialog = ref.current!
+        const handleClosed = (e: Event) => {
+            if (e.target !== dialog) return
+            onClose?.()
+        }
+        dialog.addEventListener('closed', handleClosed)
+        setTimeout(() => dialog.open = true, 10)
+        return () => dialog.removeEventListener('closed', handleClosed)
+    }, [loading, onClose])
 
     const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar) : default_avatar
 
@@ -73,7 +78,7 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                     marginTop: "10px",
                 }}></div>
                 <mdui-list>
-                    <mdui-list-item icon="info" rounded>{profile?.id}<span slot="description">对话 ID</span></mdui-list-item>
+                    <CopyableListItem icon="info" value={profile?.id || ''} description="对话 ID" />
                     <mdui-list-item icon={({
                         group: "group",
                         private: "person",
@@ -81,8 +86,8 @@ export default function ChatProfileDialog({ ref, chat_id, onClose }: { ref?: Rea
                         group: "群组",
                         private: "私聊",
                     })[profile?.type!]}<span slot="description">对话类型</span></mdui-list-item>
-                    {profile?.chat_unique && <mdui-list-item icon="alternate_email" rounded>{profile?.chat_unique}<span slot="description">对话标识符</span></mdui-list-item>}
-                    {profile?.description && <mdui-list-item icon="description" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
+                    {profile?.chat_unique && <CopyableListItem icon="alternate_email" value={profile.chat_unique} description="对话标识符" />}
+                    {profile?.description && <CopyableListItem icon="description" value={profile.description} description="简介" />}
                     {profile?.type == 'private' && <mdui-list-item icon="info" rounded onClick={async () => UserProfileDialog.show(
                         await ChatApi.getAnotherUserFromPrivateChat(ClientManager.client, {
                             access_token: ClientManager.getActiveUserSession().token,

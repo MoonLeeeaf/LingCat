@@ -15,6 +15,7 @@ import EditMyProfileDialog from "../main/EditMyProfileDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
 import ImageViewerDialog from "./ImageViewerDialog.tsx"
+import CopyableListItem from "../CopyableListItem.tsx"
 
 export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: React.RefObject<any>, user_id: string, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -38,11 +39,15 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
 
     React.useEffect(() => {
         if (loading) return
-        const eventName = 'closed'
-        ref.current!.addEventListener(eventName, onClose)
-        setTimeout(() => ref.current!.open = true, 10)
-        return () => ref.current?.removeEventListener(eventName, onClose)
-    }, [loading])
+        const dialog = ref.current!
+        const handleClosed = (e: Event) => {
+            if (e.target !== dialog) return
+            onClose?.()
+        }
+        dialog.addEventListener('closed', handleClosed)
+        setTimeout(() => dialog.open = true, 10)
+        return () => dialog.removeEventListener('closed', handleClosed)
+    }, [loading, onClose])
 
     const avatar = profile ? (profile?.avatar_file_hash ? ClientManager.client?.getFileUrlByHashAndToken(profile?.avatar_file_hash, AppState.fileAccessToken) : default_avatar) : default_avatar
 
@@ -72,9 +77,9 @@ export default function UserProfileDialog({ ref, user_id, onClose }: { ref?: Rea
                     marginTop: "10px",
                 }}></div>
                 <mdui-list>
-                    <mdui-list-item icon="info" rounded>{profile?.id}<span slot="description">用户 ID</span></mdui-list-item>
-                    {profile?.username && <mdui-list-item icon="alternate_email" rounded>{profile?.username}<span slot="description">用户名</span></mdui-list-item>}
-                    {profile?.description && <mdui-list-item icon="description" rounded>{profile?.description}<span slot="description">简介</span></mdui-list-item>}
+                    <CopyableListItem icon="info" value={profile?.id || ''} description="用户 ID" />
+                    {profile?.username && <CopyableListItem icon="alternate_email" value={profile.username} description="用户名" />}
+                    {profile?.description && <CopyableListItem icon="description" value={profile.description} description="简介" />}
                     {isMe && <mdui-list-item icon="edit" rounded onClick={() => EditMyProfileDialog.show()}>编辑资料</mdui-list-item>}
                     <mdui-list-item icon="chat" rounded onClick={async () => {
                         try {
