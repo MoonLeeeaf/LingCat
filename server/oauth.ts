@@ -38,13 +38,13 @@ function providerById(id: string): OAuth2ProviderConfig | undefined {
 
 // OIDC 发现文档按 provider 缓存
 const oidcConfigs = new Map<string, Promise<Configuration>>()
-function getOidcConfig(p: OAuth2ProviderConfig): Promise<Configuration> {
+function getOidcConfig(p: OAuth2ProviderConfig) {
     let c = oidcConfigs.get(p.id)
     if (!c) {
         c = discovery(new URL(p.issuer!), p.client_id!, p.client_secret || undefined)
-        oidcConfigs.set(p.id, c)
+        oidcConfigs.set(p.id, c!)
     }
-    return c
+    return c!
 }
 
 /** 规范化的部署子路径前缀: "lingcat"->"/lingcat", "/lingcat/"->"/lingcat", ""/"/"->"" */
@@ -97,7 +97,7 @@ function redirectError(res: any, code: string) {
     res.redirect(basePathPrefix() + '/#oauth_error=' + encodeURIComponent(code))
 }
 
-interface Profile { subject: string, name?: string, email?: string }
+interface Profile { subject: string, name?: string }
 
 async function resolveProfile(
     p: OAuth2ProviderConfig, req: any, redirectUri: string,
@@ -117,7 +117,6 @@ async function resolveProfile(
         return {
             subject: String(claims.sub),
             name: claims.name || claims.preferred_username || undefined,
-            email: claims.email || undefined,
         }
     }
 
@@ -155,13 +154,13 @@ async function resolveProfile(
             'User-Agent': 'LingCat',
         },
     })
+    if (!uiResp.ok) throw new Error(`userinfo 请求失败: ${uiResp.status}`)
     const profile: any = await uiResp.json()
     const sub = profile[p.user_id_claim || 'id'] ?? profile.id ?? profile.sub
     if (sub == null) throw new Error('userinfo 缺少用户标识')
     return {
         subject: String(sub),
         name: profile[p.name_claim || 'name'] || profile.name || profile.login || profile.preferred_username || undefined,
-        email: p.email_claim ? profile[p.email_claim] : (profile.email || undefined),
     }
 }
 
@@ -256,11 +255,17 @@ export function registerOAuthRoutes(app: Express) {
             let userId = await OAuthIdentity.getUserIdBySubject(p.id, profile.subject)
             if (!userId && p.auto_create_user) {
                 const nickname = profile.name || ('user_' + profile.subject.slice(0, 8))
-                userId = await UserDataBase.createUser({
+                const newUserId = await UserDataBase.createUser({
                     nickname,
                     password: crypto.randomBytes(24).toString('hex'),
                 })
-                await OAuthIdentity.link(p.id, profile.subject, userId)
+                const r = await OAuthIdentity.link(p.id, profile.subject, newUserId)
+                if (!r.ok) {
+                    // 并发回调: 另一个请求抢先绑定, 用对方创建的用户
+                    userId = await OAuthIdentity.getUserIdBySubject(p.id, profile.subject)
+                } else {
+                    userId = newUserId
+                }
             }
             if (!userId) return redirectError(res, 'not_bound')
 
