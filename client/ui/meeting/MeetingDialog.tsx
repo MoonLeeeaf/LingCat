@@ -296,26 +296,23 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     <mdui-button-icon icon="play_arrow" variant="tonal" onClick={() => MeetingManager.resumeAudio()}></mdui-button-icon>
                 </mdui-tooltip>
             )}
-            <mdui-tooltip content={m.isMicOn ? '关闭麦克风' : '开启麦克风'}>
-                <mdui-button-icon
+
+            <mdui-dropdown trigger='hover'>
+                <mdui-button-icon slot="trigger"
                     icon={m.isMicOn ? 'mic' : 'mic_off'}
                     onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
                 />
-            </mdui-tooltip>
-            {m.audioInputs.length > 0 && (
-                <mdui-dropdown>
-                    <mdui-button-icon slot="trigger" icon="settings_voice" title="选择麦克风" />
-                    <mdui-menu>
-                        {m.audioInputs.map((d) => (
-                            <mdui-menu-item
-                                key={d.deviceId}
-                                icon={d.deviceId === m.activeAudioInput ? 'check' : undefined}
-                                onClick={() => MeetingManager.setAudioInput(d.deviceId).catch((e) => tipError(e, '切换麦克风失败'))}
-                            >{d.label}</mdui-menu-item>
-                        ))}
-                    </mdui-menu>
-                </mdui-dropdown>
-            )}
+
+                <mdui-menu style={{ display: m.audioInputs.length > 0 ? undefined : 'none' }}>
+                    {m.audioInputs.map((d) => (
+                        <mdui-menu-item
+                            key={d.deviceId}
+                            icon={d.deviceId === m.activeAudioInput ? 'check' : undefined}
+                            onClick={() => MeetingManager.setAudioInput(d.deviceId).catch((e) => tipError(e, '切换麦克风失败'))}
+                        >{d.label}</mdui-menu-item>
+                    ))}
+                </mdui-menu>
+            </mdui-dropdown>
             <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
                 <mdui-button-icon
                     icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
