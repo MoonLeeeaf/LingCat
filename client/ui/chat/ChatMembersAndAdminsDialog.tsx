@@ -103,7 +103,7 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                             />
                                             {v.nickname}
                                         </mdui-list-item>
-                                        <mdui-menu>
+                                        <mdui-menu style={{ display: iAmAdmin ? undefined : 'none' }}>
                                             {iAmAdmin && <mdui-menu-item icon="delete" onClick={() => dialog({
                                                 headline: "提示",
                                                 body: "确定要从对话中移除 " + v.nickname + ' 吗?',
@@ -180,9 +180,7 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                                 return Object.keys(perms).filter((v) => perms[v]).join(', ')
                                             })()}</span>
                                         </mdui-list-item>
-                                        <mdui-menu>
-                                            {
-                                                iAmOwner && <>
+                                        <mdui-menu style={{ display: iAmOwner ? undefined : 'none' }}>
                                                     <mdui-menu-item icon="edit" onClick={() => EditAdminDialog.show(chat_id, v)}>编辑权能</mdui-menu-item>
                                                     <mdui-menu-item icon="delete" onClick={() => dialog({
                                                         headline: "提示",
@@ -209,8 +207,6 @@ export default function ChatMembersAndAdminsDialog({ ref, chat_id, onClose }: { 
                                                             }
                                                         }]
                                                     })}>移除管理员</mdui-menu-item>
-                                                </>
-                                            }
                                         </mdui-menu>
                                     </mdui-dropdown>
                                 )
