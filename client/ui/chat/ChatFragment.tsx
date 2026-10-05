@@ -30,99 +30,6 @@ function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20):
     return scrollTop + clientHeight >= scrollHeight - threshold
 }
 
-function VideoAttachment({ src }: { src: string }) {
-    return <video onClick={() => VideoViewerDialog.show(src)} src={src} style={{
-        maxWidth: "400px",
-        maxHeight: "300px",
-        width: "100%",
-        height: "100%",
-        display: 'block',
-    }}></video>
-}
-
-function FileAttachment({ src, name }: { src: string, name: string }) {
-    return <a style={{
-        width: '100%',
-        height: '100%',
-        textDecoration: 'none',
-        color: 'inherit',
-    }} href={src} download={src}>
-        <mdui-card
-            clickable
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                boxShadow: 'inherit',
-                borderRadius: 'inherit',
-            }}>
-            <mdui-icon
-                name="insert_drive_file"
-                style={{
-                    margin: '13px',
-                    fontSize: '34px',
-                }} />
-            <span
-                style={{
-                    marginRight: '13px',
-                    wordWrap: 'break-word',
-                    wordBreak: 'break-all',
-                    whiteSpace: 'normal',
-                    maxWidth: '100%',
-                }}>
-                {name}
-            </span>
-        </mdui-card>
-    </a>
-}
-
-const render: Partial<ReactRenderer> = {
-    image(src, alt, _title) {
-        // console.log('image', src)
-        const type = /^(Video|File|UserMention|ChatMention)=.*/.exec(alt)?.[1]
-        const fileType = /^(Video|File)=.*/.exec(alt)?.[1] || 'Image'
-        if (fileType != null && /lingcat:\/\/file\?hash=[A-Za-z0-9]+$/.test(src)) {
-            const url = ClientManager.client.getFileUrlByHashAndToken(/^lingcat:\/\/file\?hash=(.*)/.exec(src)?.[1]!, AppState.fileAccessToken)
-            // 注意返回的元素必须是函数式组件
-            // 否则无法识别为独立的元素
-            // 使用 React.createElement(() => <component />) 会导致不必要的开销
-            // 且移动端会导致严重问题
-            return ({
-                Image: <ReloadableImage src={url} alt={alt} onClick={() => ImageViewerDialog.show(url)} style={{
-                    width: '100%',
-                    maxHeight: "300px",
-                    objectFit: 'cover',
-                    display: 'block',
-                }} />,
-                Video: <VideoAttachment src={url} />,
-                File: <FileAttachment src={url} name={/^Video|File=(.*)/.exec(alt)?.[1] || 'Unnamed file'} />,
-            })?.[fileType] || <em>{'<'}无法解析的消息元素{'>'}</em>
-        } else {
-            switch (type) {
-                case "UserMention":
-                    return <span
-                        style={{
-                            color: "rgb(var(--mdui-color-primary))",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => {
-                            UserProfileDialog.show(/^lingcat:\/\/user\?id=(.*)/.exec(src)?.[1]!)
-                        }}>{/^UserMention=(.*)/.exec(alt)?.[1]}</span>
-                case "ChatMention":
-                    return <span
-                        style={{
-                            color: "rgb(var(--mdui-color-primary))",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => {
-                            ChatProfileDialog.show(/^lingcat:\/\/chat\?id=(.*)/.exec(src)?.[1]!)
-                        }}>{/^ChatMention=(.*)/.exec(alt)?.[1]}</span>
-            }
-        }
-
-        return <ReloadableImage src={src} alt={alt} />
-    },
-}
-
 export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [chat, setChat] = React.useState(chatObj)
 
@@ -479,7 +386,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             }}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
-            <mdui-button-icon icon="videocam" style={{ marginRight: '4px' }} title="会议 / 屏幕共享" onClick={() => {
+            <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={() => {
                 (async () => {
                     if (MeetingManager.isInMeeting(chat.id)) {
                         showSnackbar({ message: '你已在此会议中' })
@@ -522,10 +429,10 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     borderRadius: '999px',
                     background: 'rgb(var(--mdui-color-primary-container))',
                     color: 'rgb(var(--mdui-color-on-primary-container))',
-                    boxShadow: '0 2px 10px rgba(0,0,0,.25)',
+                    boxShadow: 'var(--mdui-elevation-level3)',
                     fontSize: '13px',
                 }}>
-                    <span>🎥 会议进行中</span>
+                    <span>会议进行中</span>
                     {meeting.isInMeeting(chat.id)
                         ? <mdui-button variant="text" onClick={() => MeetingManager.leave()}>离开</mdui-button>
                         : <mdui-button variant="text" onClick={() => {
@@ -576,7 +483,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     : <div>
                         <div>该群未开放加入</div>
                         <div style={{ fontSize: '85%', opacity: 0.7, marginTop: '6px' }}>
-                            需群主在「对话设定 → 入群」中开启「允许加入」
+                            需管理员在「对话设定 → 入群」中开启「允许加入」
                         </div>
                     </div>}
             </div>
