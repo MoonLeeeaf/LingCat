@@ -41,5 +41,17 @@ export function AudioPublication({ publication }: { publication?: TrackPublicati
         }
     }, [publication?.track, publication?.isMuted])
 
-    return <audio ref={ref} autoPlay style={{ display: 'none' }} />
+    return <audio
+        ref={ref}
+        autoPlay
+        playsInline
+        style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            opacity: 0,
+            pointerEvents: 'none',
+            left: -9999,
+        }}
+    />
 }
