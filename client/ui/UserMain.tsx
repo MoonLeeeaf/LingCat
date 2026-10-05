@@ -127,7 +127,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                 const chat = await ProfileCache.queryChatInfo(raw?.chatId!)
                 const sender = raw?.senderUserId ? await ProfileCache.queryUserInfo(raw?.senderUserId) : undefined
 
-                console.log(new RegExp(`\!\[UserMention=.*?\](lingcat://user\?id=${myId})`).test(raw?.text || ''))
+                console.log(new RegExp(`\!\[@.*?\](user:${myId})`).test(raw?.text || ''))
                 if (chat.type == 'private')
                     new Notification(chat.title + " | 灵猫", {
                         body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
@@ -135,7 +135,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                     }).onclick = async () => {
                         setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
                     }
-                else if (new RegExp(`!\\[UserMention=?.*?\\]\\(lingcat://user\\?id=${myId}\\)`).test(raw?.text || ''))
+                else if (new RegExp(`!\\[@?.*?\\]\\(user:${myId}\\)`).test(raw?.text || ''))
                     new Notification(chat.title + " | 灵猫", {
                         body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
                         icon: raw?.senderUserId
@@ -172,7 +172,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     AppState.setActiveChat = setActiveChat
 
     React.useEffect(() => {
-            document.title = ClientConfigInstance.title + ' | ' + activeChat?.title
+            document.title = ClientConfigInstance.title + (activeChat?.title ? (' | ' + activeChat?.title) : '')
     }, [activeChat])
 
     // 记住当前打开的对话, 刷新后自动恢复
