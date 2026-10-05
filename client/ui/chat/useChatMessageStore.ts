@@ -46,7 +46,7 @@ export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
         set({
             messageMap: newMap,
             sortedIds: ids,
-            firstItemIndex: ids.length > 0 ? ids[0] : 0,
+            firstItemIndex: 100000,
         })
 
         // 如果指定了 targetSeq，返回它在排序列表中的索引
