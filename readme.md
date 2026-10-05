@@ -9,9 +9,9 @@
 
 本项目是由 **月有阴晴圆缺 (白日梦 / 满月叶)** 使用 Node.js + React 编写的轻量级自部署即时通讯应用. 
 
-- **前端**:MDUI v2（Material Design 3 风格 UI 库, 已根据自己的需求魔改）
-- **后端**:Express + WebSocket + Knex (SQLite)
-- **加密**:X25519 密钥交换 + XChaCha20-Poly1305 会话加密
+- **前端**: MDUI v2（Material Design 3 风格 UI 库, 已根据自己的需求魔改）
+- **后端**: Express + WebSocket + Knex (SQLite)
+- **加密**: X25519 密钥交换 + XChaCha20-Poly1305 会话加密
 
 Android 客户端仍在开发中, 敬请期待. 
 
