@@ -30,6 +30,10 @@ function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20):
     return scrollTop + clientHeight >= scrollHeight - threshold
 }
 
+function formatDuration(seconds: number) {
+    return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`
+}
+
 export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
     const [chat, setChat] = React.useState(chatObj)
 
@@ -229,6 +233,8 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         let text = inputRef.current?.value || ''
         if (text.trim() == '') return
 
+        if (isRecording) stopRecording()
+
         const sendingFilesSnackbar = showSnackbar({
             message: `发送消息到 [${chat.title}]...`,
             autoCloseDelay: 0,
@@ -304,19 +310,6 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
     const cachedFileUrls = React.useRef<{ [fileName: string]: string }>({})
     const cachedFileNamesCount = React.useRef<{ [fileName: string]: number }>({})
 
-    /* function insertAttachment(text: string, type: 'image' | 'video' | 'file', src: string, alt?: string) {
-        const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as MduiPatchedTextAreaElement
-        input.focus()
-        type == 'image' && input.insertHtml(`
-            <span contenteditable="false" style="display:inline-block;"><mdui-card style="max-width: 10%; max-height: 10%"><img src="${src}" style="display: block; width: 100%; height: 100%" /><span style="display:none;">${text}</span></mdui-card>\u200B</span>
-        `.trim())
-        type == 'video' && input.insertHtml(`
-            <span contenteditable="false" style="display:inline-block;"><mdui-card style="max-width: 10%; max-height: 10%"><video src="${src}" style="display: block; width: 100%; height: 100%" /><span style="display:none;">${text}</span></mdui-card>\u200B</span>
-        `.trim())
-        type == 'file' && input.insertHtml(`
-            <span contenteditable="false" style="display:inline-block;"><mdui-card><span style="padding: 10px">${alt}</span></mdui-card>\u200B</span>
-        `.trim())
-    } */
     function insertText(text: string) {
         const input = inputRef.current!.shadowRoot!.querySelector('[part=input]') as MduiPatchedTextAreaElement
         input.insertHtml(escapeHtml(text))
@@ -339,6 +332,8 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             insertText(`![图片-${name}](${name})`)
         else if (type.startsWith('video/'))
             insertText(`![视频-${name}](${name})`)
+        else if (type.startsWith('audio/'))
+            insertText(`![语音-${name}](${name})`)
         else
             insertText(`![文件-${name}](${name})`)
     }
@@ -368,6 +363,112 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         setEditingMessage(null)
         inputRef.current!.value = editMessageOriginText.current
     }
+
+    const [isRecording, setIsRecording] = React.useState(false)
+    const [recordingSeconds, setRecordingSeconds] = React.useState(0)
+    const mediaRecorderRef = React.useRef<MediaRecorder | null>(null)
+    const audioStreamRef = React.useRef<MediaStream | null>(null)
+    const audioChunksRef = React.useRef<Blob[]>([])
+    const recordingTimerRef = React.useRef<ReturnType<typeof setInterval> | null>(null)
+
+    const stopRecording = React.useCallback(() => {
+        const recorder = mediaRecorderRef.current
+        if (recorder && recorder.state !== 'inactive') {
+            recorder.stop()
+        } else {
+            audioStreamRef.current?.getTracks().forEach(t => t.stop())
+            audioStreamRef.current = null
+            mediaRecorderRef.current = null
+            setIsRecording(false)
+            setRecordingSeconds(0)
+            if (recordingTimerRef.current) {
+                clearInterval(recordingTimerRef.current)
+                recordingTimerRef.current = null
+            }
+        }
+    }, [])
+
+    const startRecording = React.useCallback(async () => {
+        if (!navigator.mediaDevices?.getUserMedia) {
+            tipError(new Error('当前环境不支持录音，请使用 HTTPS 访问'), '无法录音')
+            return
+        }
+        
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+            audioStreamRef.current = stream
+
+            const mimeCandidates = [
+                'audio/webm;codecs=opus',
+                'audio/webm',
+                'audio/ogg;codecs=opus',
+                'audio/mp4',
+            ]
+            const mimeType = mimeCandidates.find(t => typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(t)) ?? ''
+
+            const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
+            audioChunksRef.current = []
+            recorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunksRef.current.push(e.data)
+            }
+            recorder.onstop = async () => {
+                stream.getTracks().forEach(t => t.stop())
+                audioStreamRef.current = null
+                mediaRecorderRef.current = null
+
+                const actualMime = recorder.mimeType || mimeType || 'audio/webm'
+                const blob = new Blob(audioChunksRef.current, { type: actualMime })
+                audioChunksRef.current = []
+
+                setIsRecording(false)
+                setRecordingSeconds(0)
+                if (recordingTimerRef.current) {
+                    clearInterval(recordingTimerRef.current)
+                    recordingTimerRef.current = null
+                }
+
+                if (blob.size === 0) return
+
+                const ext = actualMime.includes('webm') ? 'webm'
+                    : actualMime.includes('ogg') ? 'ogg'
+                        : actualMime.includes('mp4') ? 'm4a'
+                            : 'bin'
+                const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')
+                const name = `语音-${ts}.${ext}`
+                try {
+                    await addFile(actualMime, name, blob)
+                } catch (e) {
+                    tipError(e, '添加语音失败')
+                }
+            }
+
+            mediaRecorderRef.current = recorder
+            recorder.start()
+            setIsRecording(true)
+            setRecordingSeconds(0)
+            recordingTimerRef.current = setInterval(() => {
+                setRecordingSeconds(s => s + 1)
+            }, 1000)
+        } catch (e) {
+            tipError(e, '无法访问麦克风')
+        }
+    }, [])
+
+    function toggleRecording() {
+        if (isRecording) stopRecording()
+        else startRecording()
+    }
+
+    React.useEffect(() => {
+        return () => {
+            const recorder = mediaRecorderRef.current
+            if (recorder && recorder.state !== 'inactive') {
+                try { recorder.stop() } catch { }
+            }
+            audioStreamRef.current?.getTracks().forEach(t => t.stop())
+            if (recordingTimerRef.current) clearInterval(recordingTimerRef.current)
+        }
+    }, [])
 
     let chatSettings: any = {}
     try { chatSettings = JSON.parse(chat.settings || '{}') } catch { }
@@ -552,6 +653,31 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         <mdui-button-icon icon="close" onClick={cancelEdit} />
                     </div>
                 )}
+                {isRecording && (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '6px 12px',
+                        background: 'rgba(var(--mdui-color-error), 0.08)',
+                        borderLeft: '3px solid rgb(var(--mdui-color-error))',
+                        margin: '0 4px',
+                        borderRadius: '4px',
+                    }}>
+                        <span style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: 'rgb(var(--mdui-color-error))',
+                            animation: 'lingcat-pulse 1s infinite',
+                        }} />
+                        <style>{`@keyframes lingcat-pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
+                        <span style={{ flex: 1, fontSize: '90%' }}>
+                            正在录音... {formatDuration(recordingSeconds)}
+                        </span>
+                        <mdui-button-icon icon="close" onClick={stopRecording} />
+                    </div>
+                )}
                 <mdui-text-field
                     ref={inputRef}
                     use-patched-textarea
@@ -614,6 +740,14 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                             }
                         }
                     }}>
+
+                    <mdui-button-icon
+                        slot="end-icon"
+                        icon={isRecording ? "stop_circle" : "mic"}
+                        onClick={toggleRecording}
+                        style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
+                    ></mdui-button-icon>
+                    <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
                     <mdui-button-icon slot="end-icon" icon="attachment" onClick={() => attachFileInputRef.current!.click()}></mdui-button-icon>
                     <div slot="end-icon" style={{ paddingRight: '20px' }}></div>
                     <mdui-button-icon slot="end-icon" icon="send" onClick={() => sendOrEditMessage()}></mdui-button-icon>
