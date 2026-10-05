@@ -26,6 +26,8 @@ class MeetingManagerImpl {
     starterUserId?: string
 
     isMicOn = false
+    /** 麦克风降噪 (WebRTC noiseSuppression) */
+    noiseSuppression = true
     isCameraOn = false
     isSharingScreen = false
     /** 是否正在共享电脑/系统声音 */
@@ -41,6 +43,8 @@ class MeetingManagerImpl {
 
     /** 会议面板是否停靠为分栏模式 (左侧画面 / 右侧聊天) */
     dock = false
+    /** 分栏模式下会议面板宽度百分比 (可拖动分隔条调整) */
+    dockWidthPercent = 50
     /** 正在最大化的成员 (通常是某人的屏幕共享) */
     focusedIdentity?: string
 
@@ -121,6 +125,11 @@ class MeetingManagerImpl {
 
     setDock(v: boolean) {
         this.dock = v
+        this.emit()
+    }
+
+    setDockWidthPercent(v: number) {
+        this.dockWidthPercent = Math.min(80, Math.max(20, v))
         this.emit()
     }
 
@@ -223,9 +232,9 @@ class MeetingManagerImpl {
 
             await room.connect(serverUrl, creds.token)
 
-            // 入会由用户手势触发, 默认开启麦克风
+            // 入会由用户手势触发, 默认开启麦克风 (含降噪/回声消除/自动增益)
             try {
-                await room.localParticipant.setMicrophoneEnabled(true)
+                await room.localParticipant.setMicrophoneEnabled(true, this.micCaptureOptions())
             } catch (e) {
                 console.warn('[Meeting] 麦克风开启失败', e)
             }
@@ -243,10 +252,34 @@ class MeetingManagerImpl {
         }
     }
 
+    /** 麦克风采集选项: 降噪 + 回声消除 + 自动增益 */
+    private micCaptureOptions() {
+        return {
+            noiseSuppression: this.noiseSuppression,
+            echoCancellation: true,
+            autoGainControl: true,
+        }
+    }
+
     async toggleMic() {
         const lp = this.room?.localParticipant
         if (!lp) return
-        await lp.setMicrophoneEnabled(!this.isMicOn)
+        await lp.setMicrophoneEnabled(!this.isMicOn, this.micCaptureOptions())
+        this.syncLocalFlags()
+    }
+
+    /** 开关降噪 (正在通话则重启麦克风轨道以生效) */
+    async setNoiseSuppression(enabled: boolean) {
+        this.noiseSuppression = enabled
+        this.emit()
+        const lp = this.room?.localParticipant
+        if (!lp || !this.isMicOn) return
+        try {
+            await lp.setMicrophoneEnabled(false)
+            await lp.setMicrophoneEnabled(true, this.micCaptureOptions())
+        } catch (e) {
+            console.warn('[Meeting] 应用降噪失败', e)
+        }
         this.syncLocalFlags()
     }
 

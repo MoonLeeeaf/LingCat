@@ -299,7 +299,12 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
                 />
 
-                <mdui-menu style={{ display: m.audioInputs.length > 0 ? undefined : 'none' }}>
+                <mdui-menu>
+                    <mdui-menu-item
+                        icon={m.noiseSuppression ? 'check' : undefined}
+                        onClick={() => MeetingManager.setNoiseSuppression(!m.noiseSuppression).catch((e) => tipError(e, '切换降噪失败'))}
+                    >麦克风降噪</mdui-menu-item>
+                    {m.audioInputs.length > 0 && <mdui-divider></mdui-divider>}
                     {m.audioInputs.map((d) => (
                         <mdui-menu-item
                             key={d.deviceId}
