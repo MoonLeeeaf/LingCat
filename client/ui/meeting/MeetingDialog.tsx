@@ -30,6 +30,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const [size, setSize] = React.useState<PanelSize>('normal')
     const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
+    const beforeMinimizeRef = React.useRef<{ size: PanelSize, customSize?: { w: number, h: number } } | null>(null)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
     // 共享屏幕时是否尝试一并分享电脑/系统声音
     const [includeDesktopAudio, setIncludeDesktopAudio] = React.useState(false)
@@ -72,6 +73,24 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     const setSizePreset = (s: PanelSize) => {
         setCustomSize(undefined)
         setSize(s)
+    }
+
+    const onToggleMinimize = () => {
+        if (size === 'minimized') {
+            // 还原到最小化前的尺寸
+            const prev = beforeMinimizeRef.current
+            if (prev) {
+                setSize(prev.size)
+                setCustomSize(prev.customSize)
+            } else {
+                setSize('normal')
+                setCustomSize(undefined)
+            }
+        } else {
+            // 进入最小化前保存当前状态
+            beforeMinimizeRef.current = { size, customSize }
+            setSize('minimized')
+        }
     }
 
     const onPointerDown = (e: React.PointerEvent) => {
@@ -262,23 +281,26 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.setDock(!isDocked)}
                 />
             </mdui-tooltip>
-
-            {!isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
-                <mdui-button-icon
-                    icon={floatingMinimized ? 'open_in_full' : 'minimize'}
-                    onClick={() => setSizePreset(floatingMinimized ? 'normal' : 'minimized')}
-                />
-            </mdui-tooltip>}
-            {!isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
-                <mdui-button-icon
-                    icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
-                    onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
-                />
-            </mdui-tooltip>}
+            {
+                !isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化'}>
+                    <mdui-button-icon
+                        icon={floatingMinimized ? 'open_in_full' : 'minimize'}
+                        onClick={onToggleMinimize}
+                    />
+                </mdui-tooltip>
+            }
+            {
+                !isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
+                    <mdui-button-icon
+                        icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
+                        onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
+                    />
+                </mdui-tooltip>
+            }
             <mdui-tooltip content="离开会议">
                 <mdui-button-icon icon="close" onClick={() => MeetingManager.leave()} />
             </mdui-tooltip>
-        </div>
+        </div >
     )
 
     const controls = !floatingMinimized && (
