@@ -312,7 +312,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                         variant={includeDesktopAudio ? 'tonal' : 'text'}
                         icon={includeDesktopAudio ? 'volume_up' : 'volume_off'}
                         onClick={() => setIncludeDesktopAudio((v) => !v)}
-                    >电脑声音</mdui-button>
+                    ></mdui-button>
                 </mdui-tooltip>
             )}
             <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
@@ -322,7 +322,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 />
             </mdui-tooltip>
             {m.isSharingScreen && (
-                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '🔊 含电脑声音' : '仅屏幕'}</span>
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '含电脑声音' : '仅屏幕'}</span>
             )}
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
         </div>
