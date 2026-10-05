@@ -6,7 +6,7 @@ import EffectOnly from "../EffectOnly.tsx"
 import CircleProgressDialog from "../CircleProgressDialog.tsx"
 import ClientManager from "../../ClientManager.ts"
 import default_avatar from '../../default_avatar.png'
-import { UserApi, FileApi } from "lingcat-client-protocol"
+import { UserApi, FileApi, OAuthApi } from "lingcat-client-protocol"
 import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
 import showSnackbar from "../showSnackbar.ts"
@@ -19,16 +19,22 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
 
     const [loading, setLoading] = React.useState(true)
     const [profile, setProfile] = React.useState<IUser>()
+    const [bindings, setBindings] = React.useState<string[]>([])
 
     React.useEffect(() => {
         (async () => {
+            const token = ClientManager.getActiveUserSession().token
             try {
-                const profile = await UserApi.queryMyUserInfo(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                })
-                setProfile(profile)
+                setProfile(await UserApi.queryMyUserInfo(ClientManager.client, { access_token: token }))
             } catch (e) {
                 tipError(e, '加载失败')
+            }
+            if (ClientConfigInstance.oauthProviders.length > 0) {
+                try {
+                    setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
+                } catch (e) {
+                    console.warn('[OAuth] 获取绑定失败', e)
+                }
             }
             setLoading(false)
         })()
@@ -121,18 +127,30 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="用户名" value={profile?.username || ''} ref={editUserNameRef}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="简介" value={profile?.description || ''} ref={editDescriptionRef}></mdui-text-field>
 
-                {ClientConfigInstance.oauthProviders.map((p) => (
-                    <mdui-button
+                {ClientConfigInstance.oauthProviders.map((p) => {
+                    const bound = bindings.includes(p.id)
+                    const name = p.display_name || p.id
+                    return <mdui-button
                         key={p.id}
-                        variant="tonal"
+                        variant={bound ? 'text' : 'tonal'}
                         icon="passkey"
                         style={{ marginTop: '16px', width: '100%' }}
-                        onClick={() => {
+                        onClick={async () => {
                             const token = ClientManager.getActiveUserSession().token
-                            location.href = './oauth/' + encodeURIComponent(p.id) + '/login?mode=bind&access_token=' + encodeURIComponent(token)
+                            if (!bound) {
+                                location.href = './oauth/' + encodeURIComponent(p.id) + '/login?mode=bind&access_token=' + encodeURIComponent(token)
+                                return
+                            }
+                            try {
+                                await OAuthApi.unbindOAuth(ClientManager.client, { access_token: token, provider: p.id })
+                                setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
+                                showSnackbar({ message: '已解绑 ' + name })
+                            } catch (e) {
+                                tipError(e, '解绑失败')
+                            }
                         }}
-                    >绑定 {p.display_name || p.id}</mdui-button>
-                ))}
+                    >{bound ? '解绑 ' : '绑定 '}{name}</mdui-button>
+                })}
 
                 <mdui-button slot="action" variant="text" onClick={() => ref.current!.open = false}>取消</mdui-button>
                 <mdui-button slot="action" variant="text" onClick={async () => {

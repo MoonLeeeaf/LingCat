@@ -18,12 +18,22 @@ import TokenManager from './api/TokenManager.ts'
 const STATE_TTL_MS = 5 * 60 * 1000
 const TICKET_TTL_MS = 2 * 60 * 1000
 
+// provider 列表在模块加载时计算一次 (配置改动需重启服务端, 与 OIDC 发现缓存一致)
+const PROVIDERS: OAuth2ProviderConfig[] = (config.oauth2 || []).filter((p) => p.enabled !== false && !!p.id)
+{
+    const ids = new Set<string>()
+    for (const p of PROVIDERS) {
+        if (ids.has(p.id)) console.warn('[OAuth] 重复的 provider id:', p.id)
+        ids.add(p.id)
+    }
+}
+
 export function enabledProviders(): OAuth2ProviderConfig[] {
-    return (config.oauth2 || []).filter((p) => p.enabled !== false && p.id)
+    return PROVIDERS
 }
 
 function providerById(id: string): OAuth2ProviderConfig | undefined {
-    return enabledProviders().find((p) => p.id === id)
+    return PROVIDERS.find((p) => p.id === id)
 }
 
 // OIDC 发现文档按 provider 缓存
@@ -40,7 +50,8 @@ function getOidcConfig(p: OAuth2ProviderConfig): Promise<Configuration> {
 function baseUrl(req: any): string {
     const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim()
     const host = String(req.headers['x-forwarded-host'] || req.headers.host || '')
-    return `${proto}://${host}`
+    const base = (config.base_path || '').replace(/\/+$/, '')   // 子路径部署, 如 '/lingcat'
+    return `${proto}://${host}${base}`
 }
 function redirectUriFor(p: OAuth2ProviderConfig, req: any): string {
     return p.redirect_uri || `${baseUrl(req)}/oauth/${p.id}/callback`
@@ -229,8 +240,9 @@ export function registerOAuthRoutes(app: Express) {
             // 绑定
             if (entry.mode === 'bind') {
                 if (!entry.userId) return redirectError(res, 'bind_no_user')
-                await OAuthIdentity.link(p.id, profile.subject, entry.userId)
-                return res.redirect('/#oauth_bound=1')
+                const r = await OAuthIdentity.link(p.id, profile.subject, entry.userId)
+                if (!r.ok) return redirectError(res, 'already_bound')
+                return res.redirect('/#oauth_bound=' + encodeURIComponent(p.id))
             }
 
             // 登录

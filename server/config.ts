@@ -13,6 +13,8 @@ export interface LingCatServerConfig {
     max_file_size?: number
 
     site_title: string
+    /** 部署子路径 (如 '/lingcat'); 用于拼接 OAuth 回调地址, 根路径留空 */
+    base_path?: string
 
     /** 是否启用会议功能 */
     livekit_enabled?: boolean
@@ -84,6 +86,7 @@ const default_config: LingCatServerConfig = {
     token_secret: crypto.randomBytes(16).toString('utf-8'),
 
     site_title: '灵猫',
+    base_path: '',
 
     livekit_enabled: false,
     livekit_url: 'ws://localhost:7880',

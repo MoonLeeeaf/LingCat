@@ -80,6 +80,10 @@ export default class Methods {
     static Get_Active_Meeting_Response = 0x83
     static Exchange_OAuth_Code_Request = 0x84
     static Exchange_OAuth_Code_Response = 0x85
+    static Get_OAuth_Bindings_Request = 0x86
+    static Get_OAuth_Bindings_Response = 0x87
+    static Unbind_OAuth_Request = 0x88
+    static Unbind_OAuth_Response = 0x89
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32

@@ -11524,5 +11524,473 @@ export namespace lingcat {
             /** Shape of an Exchange_OAuth_Code_Response. */
             type $Shape = lingcat.methods.Exchange_OAuth_Code_Response.$Properties;
         }
+
+        /**
+         * Properties of a Get_OAuth_Bindings_Request.
+         * @deprecated Use lingcat.methods.Get_OAuth_Bindings_Request.$Properties instead.
+         */
+        interface IGet_OAuth_Bindings_Request extends lingcat.methods.Get_OAuth_Bindings_Request.$Properties {
+        }
+
+        /** Represents a Get_OAuth_Bindings_Request. */
+        class Get_OAuth_Bindings_Request {
+
+            /**
+             * Constructs a new Get_OAuth_Bindings_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_OAuth_Bindings_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_OAuth_Bindings_Request accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Get_OAuth_Bindings_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_OAuth_Bindings_Request instance
+             */
+            static create(properties: lingcat.methods.Get_OAuth_Bindings_Request.$Shape): lingcat.methods.Get_OAuth_Bindings_Request & lingcat.methods.Get_OAuth_Bindings_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_OAuth_Bindings_Request.$Properties): lingcat.methods.Get_OAuth_Bindings_Request;
+
+            /**
+             * Encodes the specified Get_OAuth_Bindings_Request message. Does not implicitly {@link lingcat.methods.Get_OAuth_Bindings_Request.verify|verify} messages.
+             * @param message Get_OAuth_Bindings_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_OAuth_Bindings_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_OAuth_Bindings_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_OAuth_Bindings_Request.verify|verify} messages.
+             * @param message Get_OAuth_Bindings_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_OAuth_Bindings_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_OAuth_Bindings_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_OAuth_Bindings_Request & lingcat.methods.Get_OAuth_Bindings_Request.$Shape} Get_OAuth_Bindings_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_OAuth_Bindings_Request & lingcat.methods.Get_OAuth_Bindings_Request.$Shape;
+
+            /**
+             * Decodes a Get_OAuth_Bindings_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_OAuth_Bindings_Request & lingcat.methods.Get_OAuth_Bindings_Request.$Shape} Get_OAuth_Bindings_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_OAuth_Bindings_Request & lingcat.methods.Get_OAuth_Bindings_Request.$Shape;
+
+            /**
+             * Verifies a Get_OAuth_Bindings_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_OAuth_Bindings_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_OAuth_Bindings_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_OAuth_Bindings_Request;
+
+            /**
+             * Creates a plain object from a Get_OAuth_Bindings_Request message. Also converts values to other types if specified.
+             * @param message Get_OAuth_Bindings_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_OAuth_Bindings_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_OAuth_Bindings_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_OAuth_Bindings_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_OAuth_Bindings_Request {
+
+            /** Properties of a Get_OAuth_Bindings_Request. */
+            interface $Properties {
+
+                /** Get_OAuth_Bindings_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_OAuth_Bindings_Request. */
+            type $Shape = lingcat.methods.Get_OAuth_Bindings_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_OAuth_Bindings_Response.
+         * @deprecated Use lingcat.methods.Get_OAuth_Bindings_Response.$Properties instead.
+         */
+        interface IGet_OAuth_Bindings_Response extends lingcat.methods.Get_OAuth_Bindings_Response.$Properties {
+        }
+
+        /** Represents a Get_OAuth_Bindings_Response. */
+        class Get_OAuth_Bindings_Response {
+
+            /**
+             * Constructs a new Get_OAuth_Bindings_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_OAuth_Bindings_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_OAuth_Bindings_Response providers. */
+            providers: string[];
+
+            /**
+             * Creates a new Get_OAuth_Bindings_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_OAuth_Bindings_Response instance
+             */
+            static create(properties: lingcat.methods.Get_OAuth_Bindings_Response.$Shape): lingcat.methods.Get_OAuth_Bindings_Response & lingcat.methods.Get_OAuth_Bindings_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_OAuth_Bindings_Response.$Properties): lingcat.methods.Get_OAuth_Bindings_Response;
+
+            /**
+             * Encodes the specified Get_OAuth_Bindings_Response message. Does not implicitly {@link lingcat.methods.Get_OAuth_Bindings_Response.verify|verify} messages.
+             * @param message Get_OAuth_Bindings_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_OAuth_Bindings_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_OAuth_Bindings_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_OAuth_Bindings_Response.verify|verify} messages.
+             * @param message Get_OAuth_Bindings_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_OAuth_Bindings_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_OAuth_Bindings_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_OAuth_Bindings_Response & lingcat.methods.Get_OAuth_Bindings_Response.$Shape} Get_OAuth_Bindings_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_OAuth_Bindings_Response & lingcat.methods.Get_OAuth_Bindings_Response.$Shape;
+
+            /**
+             * Decodes a Get_OAuth_Bindings_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_OAuth_Bindings_Response & lingcat.methods.Get_OAuth_Bindings_Response.$Shape} Get_OAuth_Bindings_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_OAuth_Bindings_Response & lingcat.methods.Get_OAuth_Bindings_Response.$Shape;
+
+            /**
+             * Verifies a Get_OAuth_Bindings_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_OAuth_Bindings_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_OAuth_Bindings_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_OAuth_Bindings_Response;
+
+            /**
+             * Creates a plain object from a Get_OAuth_Bindings_Response message. Also converts values to other types if specified.
+             * @param message Get_OAuth_Bindings_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_OAuth_Bindings_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_OAuth_Bindings_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_OAuth_Bindings_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_OAuth_Bindings_Response {
+
+            /** Properties of a Get_OAuth_Bindings_Response. */
+            interface $Properties {
+
+                /** Get_OAuth_Bindings_Response providers */
+                providers?: (string[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_OAuth_Bindings_Response. */
+            type $Shape = lingcat.methods.Get_OAuth_Bindings_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Unbind_OAuth_Request.
+         * @deprecated Use lingcat.methods.Unbind_OAuth_Request.$Properties instead.
+         */
+        interface IUnbind_OAuth_Request extends lingcat.methods.Unbind_OAuth_Request.$Properties {
+        }
+
+        /** Represents an Unbind_OAuth_Request. */
+        class Unbind_OAuth_Request {
+
+            /**
+             * Constructs a new Unbind_OAuth_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Unbind_OAuth_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Unbind_OAuth_Request accessToken. */
+            accessToken: string;
+
+            /** Unbind_OAuth_Request provider. */
+            provider: string;
+
+            /**
+             * Creates a new Unbind_OAuth_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Unbind_OAuth_Request instance
+             */
+            static create(properties: lingcat.methods.Unbind_OAuth_Request.$Shape): lingcat.methods.Unbind_OAuth_Request & lingcat.methods.Unbind_OAuth_Request.$Shape;
+            static create(properties?: lingcat.methods.Unbind_OAuth_Request.$Properties): lingcat.methods.Unbind_OAuth_Request;
+
+            /**
+             * Encodes the specified Unbind_OAuth_Request message. Does not implicitly {@link lingcat.methods.Unbind_OAuth_Request.verify|verify} messages.
+             * @param message Unbind_OAuth_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Unbind_OAuth_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Unbind_OAuth_Request message, length delimited. Does not implicitly {@link lingcat.methods.Unbind_OAuth_Request.verify|verify} messages.
+             * @param message Unbind_OAuth_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Unbind_OAuth_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Unbind_OAuth_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Unbind_OAuth_Request & lingcat.methods.Unbind_OAuth_Request.$Shape} Unbind_OAuth_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Unbind_OAuth_Request & lingcat.methods.Unbind_OAuth_Request.$Shape;
+
+            /**
+             * Decodes an Unbind_OAuth_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Unbind_OAuth_Request & lingcat.methods.Unbind_OAuth_Request.$Shape} Unbind_OAuth_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Unbind_OAuth_Request & lingcat.methods.Unbind_OAuth_Request.$Shape;
+
+            /**
+             * Verifies an Unbind_OAuth_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Unbind_OAuth_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Unbind_OAuth_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Unbind_OAuth_Request;
+
+            /**
+             * Creates a plain object from an Unbind_OAuth_Request message. Also converts values to other types if specified.
+             * @param message Unbind_OAuth_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Unbind_OAuth_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Unbind_OAuth_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Unbind_OAuth_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Unbind_OAuth_Request {
+
+            /** Properties of an Unbind_OAuth_Request. */
+            interface $Properties {
+
+                /** Unbind_OAuth_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unbind_OAuth_Request provider */
+                provider?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Unbind_OAuth_Request. */
+            type $Shape = lingcat.methods.Unbind_OAuth_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Unbind_OAuth_Response.
+         * @deprecated Use lingcat.methods.Unbind_OAuth_Response.$Properties instead.
+         */
+        interface IUnbind_OAuth_Response extends lingcat.methods.Unbind_OAuth_Response.$Properties {
+        }
+
+        /** Represents an Unbind_OAuth_Response. */
+        class Unbind_OAuth_Response {
+
+            /**
+             * Constructs a new Unbind_OAuth_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Unbind_OAuth_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Unbind_OAuth_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Unbind_OAuth_Response instance
+             */
+            static create(properties: lingcat.methods.Unbind_OAuth_Response.$Shape): lingcat.methods.Unbind_OAuth_Response & lingcat.methods.Unbind_OAuth_Response.$Shape;
+            static create(properties?: lingcat.methods.Unbind_OAuth_Response.$Properties): lingcat.methods.Unbind_OAuth_Response;
+
+            /**
+             * Encodes the specified Unbind_OAuth_Response message. Does not implicitly {@link lingcat.methods.Unbind_OAuth_Response.verify|verify} messages.
+             * @param message Unbind_OAuth_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Unbind_OAuth_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Unbind_OAuth_Response message, length delimited. Does not implicitly {@link lingcat.methods.Unbind_OAuth_Response.verify|verify} messages.
+             * @param message Unbind_OAuth_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Unbind_OAuth_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Unbind_OAuth_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Unbind_OAuth_Response & lingcat.methods.Unbind_OAuth_Response.$Shape} Unbind_OAuth_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Unbind_OAuth_Response & lingcat.methods.Unbind_OAuth_Response.$Shape;
+
+            /**
+             * Decodes an Unbind_OAuth_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Unbind_OAuth_Response & lingcat.methods.Unbind_OAuth_Response.$Shape} Unbind_OAuth_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Unbind_OAuth_Response & lingcat.methods.Unbind_OAuth_Response.$Shape;
+
+            /**
+             * Verifies an Unbind_OAuth_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Unbind_OAuth_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Unbind_OAuth_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Unbind_OAuth_Response;
+
+            /**
+             * Creates a plain object from an Unbind_OAuth_Response message. Also converts values to other types if specified.
+             * @param message Unbind_OAuth_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Unbind_OAuth_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Unbind_OAuth_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Unbind_OAuth_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Unbind_OAuth_Response {
+
+            /** Properties of an Unbind_OAuth_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Unbind_OAuth_Response. */
+            type $Shape = lingcat.methods.Unbind_OAuth_Response.$Properties;
+        }
     }
 }

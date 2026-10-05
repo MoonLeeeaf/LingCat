@@ -46,7 +46,7 @@ export default function createLingCatServer(base_data_path: string) {
 
     app.use(cookieParser())
 
-    // OIDC 登录路由 (/oauth/login, /oauth/callback)
+    // OAuth2 / OIDC 登录路由 (/oauth/:id/login, /oauth/:id/callback)
     registerOAuthRoutes(app)
 
     app.get('/config.json', (req, res) => {

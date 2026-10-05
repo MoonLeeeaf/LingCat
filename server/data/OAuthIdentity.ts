@@ -25,15 +25,20 @@ export default class OAuthIdentity {
         return row?.user_id
     }
 
-    static async link(provider: string, subject: string, user_id: string) {
-        await db<IOAuthIdentity>(tableName)
-            .insert({ provider, subject, user_id, created_at: Date.now() })
-            .onConflict(['provider', 'subject'])
-            .merge({ user_id })
+    /** 绑定; 若该 (provider, subject) 已绑定到其他用户则拒绝, 避免静默改绑 */
+    static async link(provider: string, subject: string, user_id: string): Promise<{ ok: boolean, conflictUserId?: string }> {
+        const existing = await db<IOAuthIdentity>(tableName).where({ provider, subject }).first()
+        if (existing) {
+            if (existing.user_id !== user_id)
+                return { ok: false, conflictUserId: existing.user_id }
+            return { ok: true }   // 幂等
+        }
+        await db<IOAuthIdentity>(tableName).insert({ provider, subject, user_id, created_at: Date.now() })
+        return { ok: true }
     }
 
-    static async unlink(provider: string, subject: string) {
-        await db<IOAuthIdentity>(tableName).where({ provider, subject }).del()
+    static async unlink(provider: string, user_id: string) {
+        await db<IOAuthIdentity>(tableName).where({ provider, user_id }).del()
     }
 
     static async getByUser(user_id: string) {

@@ -426,7 +426,7 @@ message Get_Active_Meeting_Response {
 /**
  * =======================================================
  *
- *                 OIDC 登录 (Pocket ID 等)
+ *              通用 OAuth2 / OIDC 登录
  *
  * =======================================================
  */
@@ -438,3 +438,20 @@ message Exchange_OAuth_Code_Request {
 message Exchange_OAuth_Code_Response {
     string access_token = 1;
 }
+
+// 查询我已绑定的 OAuth 提供方
+message Get_OAuth_Bindings_Request {
+    string access_token = 1;
+}
+
+message Get_OAuth_Bindings_Response {
+    repeated string providers = 1;
+}
+
+// 解绑
+message Unbind_OAuth_Request {
+    string access_token = 1;
+    string provider = 2;
+}
+
+message Unbind_OAuth_Response {}
