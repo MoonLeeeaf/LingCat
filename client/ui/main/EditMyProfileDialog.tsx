@@ -1,6 +1,6 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
-import { Dialog, TextField } from "mdui"
+import { dialog, Dialog, TextField } from "mdui"
 import type { IUser } from "lingcat-protocol"
 import EffectOnly from "../EffectOnly.tsx"
 import CircleProgressDialog from "../CircleProgressDialog.tsx"
@@ -141,13 +141,28 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                                 location.href = './oauth/' + encodeURIComponent(p.id) + '/login?mode=bind&access_token=' + encodeURIComponent(token)
                                 return
                             }
-                            try {
-                                await OAuthApi.unbindOAuth(ClientManager.client, { access_token: token, provider: p.id })
-                                setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
-                                showSnackbar({ message: '已解绑 ' + name })
-                            } catch (e) {
-                                tipError(e, '解绑失败')
-                            }
+                            dialog({
+                                headline: '解绑 ' + name,
+                                body: '解绑后将无法用 ' + name + ' 登录。如果未设置密码, 解绑后将无法再进入此账号。确定继续?',
+                                closeOnEsc: true,
+                                closeOnOverlayClick: true,
+                                actions: [
+                                    { text: '取消', onClick: () => true },
+                                    {
+                                        text: '解绑',
+                                        variant: 'text',
+                                        onClick: async () => {
+                                            try {
+                                                await OAuthApi.unbindOAuth(ClientManager.client, { access_token: token, provider: p.id })
+                                                setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
+                                                showSnackbar({ message: '已解绑 ' + name })
+                                            } catch (e) {
+                                                tipError(e, '解绑失败')
+                                            }
+                                        },
+                                    },
+                                ],
+                            })
                         }}
                     >{bound ? '解绑 ' : '绑定 '}{name}</mdui-button>
                 })}
