@@ -334,7 +334,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 />
             </mdui-tooltip>
             {m.isSharingScreen && (
-                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '含电脑声音' : '仅屏幕'}</span>
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{includeDesktopAudio ? '含电脑声音' : '仅屏幕'}</span>
             )}
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
         </div>
