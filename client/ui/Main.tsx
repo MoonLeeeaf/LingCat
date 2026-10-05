@@ -4,6 +4,7 @@ import ClientSettingsDialog, { LoginDialog } from "./ClientSettingsDialog.tsx"
 import UserMain from "./UserMain.tsx"
 import React from 'react'
 import { IUser } from "lingcat-protocol"
+import PwaTitleBar from "./PwaTitleBar.tsx"
 
 export default function Main() {
     const [profile, setProfile] = React.useState<IUser>()
@@ -28,24 +29,27 @@ export default function Main() {
     }, [])
 
     return (
-        <mdui-layout>
-            {
-                (ClientManager.listUserSessions().length == 0 || ClientManager.listServerPublicKeys().length == 0 || ClientManager.getActiveUserSessionName() == null)
-                    ? <div style={{
-                        display: 'flex',
-                        flex: 1,
-                        justifyContent: 'center',
-                    }}>
-                        <div style={{
-                            alignSelf: 'center',
+        <>
+            <PwaTitleBar />
+            <mdui-layout>
+                {
+                    (ClientManager.listUserSessions().length == 0 || ClientManager.listServerPublicKeys().length == 0 || ClientManager.getActiveUserSessionName() == null)
+                        ? <div style={{
+                            display: 'flex',
+                            flex: 1,
+                            justifyContent: 'center',
                         }}>
-                            <mdui-button onClick={() => ClientSettingsDialog.show()}>打开设置</mdui-button>
-                            <div style={{ height: '10px' }}></div>
-                            <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
+                            <div style={{
+                                alignSelf: 'center',
+                            }}>
+                                <mdui-button onClick={() => ClientSettingsDialog.show()}>打开设置</mdui-button>
+                                <div style={{ height: '10px' }}></div>
+                                <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
+                            </div>
                         </div>
-                    </div>
-                    : <UserMain profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
-            }
-        </mdui-layout>
+                        : <UserMain profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
+                }
+            </mdui-layout>
+        </>
     )
 }

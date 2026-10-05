@@ -25,10 +25,11 @@ function screenPub(p: Participant) {
     return p.getTrackPublication(Track.Source.ScreenShare)
 }
 
-export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) {
+export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | 'window' }) {
     const m = useMeeting()
 
     const [size, setSize] = React.useState<PanelSize>('normal')
+    const [isFullscreen, setIsFullscreen] = React.useState(false)
     const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
     // 共享屏幕时是否尝试一并分享电脑/系统声音
@@ -41,6 +42,8 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const active = m.isActive()
 
+    const isWindow = mode === 'window'
+
     React.useEffect(() => {
         if (mode !== 'floating' || pos != undefined) return
         setPos({
@@ -48,6 +51,14 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             y: Math.max(12, window.innerHeight - SIZES.normal.h - 20),
         })
     }, [mode, pos])
+
+    React.useEffect(() => {
+        if (!isWindow) return
+        const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+        document.addEventListener('fullscreenchange', onChange)
+        onChange()
+        return () => document.removeEventListener('fullscreenchange', onChange)
+    }, [isWindow])
 
     React.useEffect(() => {
         if (pendingFullscreen.current && focusRef.current) {
@@ -68,6 +79,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         ? { w: 295, h: 0 }
         : (customSize ?? SIZES[size as Exclude<PanelSize, 'minimized'>])
     const isDocked = mode === 'docked'
+    const floatingMinimized = mode === 'floating' && size === 'minimized'
 
     const setSizePreset = (s: PanelSize) => {
         setCustomSize(undefined)
@@ -144,7 +156,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             flex: 1,
             overflow: 'auto',
             padding: '8px',
-            display: (!isDocked && size === 'minimized') ? 'none' : undefined,
+            display: floatingMinimized ? 'none' : undefined,
             minHeight: 0,
         }}>
             {m.phase == 'error' && (
@@ -188,7 +200,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     </div>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '6px', alignContent: 'start' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${isWindow ? 280 : 130}px, 1fr))`, gap: '6px', alignContent: 'start' }}>
                     {participants.map((p) => <ParticipantTile
                         key={p.identity}
                         participant={p}
@@ -207,20 +219,25 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         </div>
     )
 
-    const floatingMinimized = !isDocked && size === 'minimized'
+    const toggleFullscreen = () => {
+        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
+        else document.documentElement.requestFullscreen?.().catch(() => { })
+    }
+
+    const draggable = !isDocked && !isWindow
 
     const header = (
         <div
-            onPointerDown={isDocked ? undefined : onPointerDown}
-            onPointerMove={isDocked ? undefined : onPointerMove}
-            onPointerUp={isDocked ? undefined : onPointerUp}
+            onPointerDown={draggable ? onPointerDown : undefined}
+            onPointerMove={draggable ? onPointerMove : undefined}
+            onPointerUp={draggable ? onPointerUp : undefined}
             style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
                 padding: '6px 8px 6px 12px',
                 borderBottom: '1px solid rgb(var(--mdui-color-outline-variant))',
-                cursor: isDocked ? 'default' : 'move',
+                cursor: draggable ? 'move' : 'default',
                 userSelect: 'none',
                 touchAction: 'none',
             }}>
@@ -256,20 +273,27 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 </mdui-tooltip>
             </>}
 
-            <mdui-tooltip content={isDocked ? '切换为悬浮小窗' : '切换为分栏 (左画面 / 右聊天)'}>
+            {!isWindow && <mdui-tooltip content={isDocked ? '切换为悬浮小窗' : '切换为分栏 (左画面 / 右聊天)'}>
                 <mdui-button-icon
                     icon={isDocked ? 'picture_in_picture_alt' : 'view_sidebar'}
                     onClick={() => MeetingManager.setDock(!isDocked)}
                 />
-            </mdui-tooltip>
+            </mdui-tooltip>}
 
-            {!isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
+            {isWindow && <mdui-tooltip content={isFullscreen ? '退出全屏' : '全屏'}>
+                <mdui-button-icon
+                    icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
+                    onClick={toggleFullscreen}
+                />
+            </mdui-tooltip>}
+
+            {!isDocked && !isWindow && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
                 <mdui-button-icon
                     icon={floatingMinimized ? 'open_in_full' : 'minimize'}
                     onClick={() => setSizePreset(floatingMinimized ? 'normal' : 'minimized')}
                 />
             </mdui-tooltip>}
-            {!isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
+            {!isDocked && !isWindow && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
                 <mdui-button-icon
                     icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
                     onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
@@ -340,7 +364,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         </div>
     )
 
-    const resizeHandle = !isDocked && !floatingMinimized && (
+    const resizeHandle = !isDocked && !isWindow && !floatingMinimized && (
         <div
             onPointerDown={onResizePointerDown}
             onPointerMove={onResizePointerMove}
@@ -367,6 +391,43 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             </svg>
         </div>
     )
+
+    if (isWindow) {
+        return <div style={{
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'rgb(var(--mdui-color-surface-container-low))',
+            color: 'rgb(var(--mdui-color-on-surface))',
+            overflow: 'hidden',
+        }}>
+            {header}
+            {body}
+            {controls}
+            {m.audioBlocked && !!m.room && (
+                <div
+                    onClick={() => MeetingManager.resumeAudio()}
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 20,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        background: 'rgba(0,0,0,0.6)',
+                        color: '#fff',
+                        cursor: 'pointer',
+                    }}>
+                    <mdui-icon name="volume_off" style={{ fontSize: '40px' }} />
+                    <div style={{ fontSize: '14px' }}>浏览器拦截了声音, 点击任意位置开启</div>
+                </div>
+            )}
+        </div>
+    }
 
     if (isDocked) {
         return <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'rgb(var(--mdui-color-surface-container-low))', color: 'rgb(var(--mdui-color-on-surface))', overflow: 'hidden' }}>

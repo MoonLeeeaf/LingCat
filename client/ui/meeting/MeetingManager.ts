@@ -161,7 +161,7 @@ class MeetingManagerImpl {
         this.emit()
     }
 
-    async startMeeting(chat: IChat) {
+    async startMeeting(chat: Pick<IChat, 'id' | 'title'>) {
         this.error = undefined
         this.phase = 'connecting'
         this.chatTitle = chat.title ?? undefined

@@ -23,6 +23,7 @@ import ProfileCache from "../ProfileCache.ts"
 import ClientSettingsDialog, { LoginDialog, SwitchUserDialog } from "./ClientSettingsDialog.tsx"
 import MeetingPanel from "./meeting/MeetingDialog.tsx"
 import { MeetingManager, useMeeting } from "./meeting/MeetingManager.ts"
+import { takePendingInAppMeeting } from "./meeting/MeetingWindow.ts"
 import ClientConfigInstance from "../ClientConfig.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
@@ -200,6 +201,26 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             }
         })()
     }, [activeChatStorageKey])
+
+    const pendingMeetingTakenRef = React.useRef(false)
+    React.useEffect(() => {
+        if (!profile?.id || pendingMeetingTakenRef.current) return
+        const req = takePendingInAppMeeting()
+        if (!req) return
+        pendingMeetingTakenRef.current = true
+        ;(async () => {
+            try {
+                const chat = await ChatApi.queryChatInfo(ClientManager.client, {
+                    access_token: ClientManager.getActiveUserSession().token,
+                    chat_id: req.chatId,
+                })
+                setActiveChat(chat)
+                await MeetingManager.startMeeting(chat)
+            } catch (e) {
+                tipError(e, '加入会议失败')
+            }
+        })()
+    }, [profile?.id])
 
     const navigationRef = React.useRef<NavigationRail | NavigationBar>(null)
     const [navigationSelected, setNavigationSelected] = React.useState('recent')

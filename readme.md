@@ -133,6 +133,18 @@ location /rtc {
 
 ---
 
+## PWA 与会议独立窗口
+
+前端自带 `manifest.webmanifest` 与一个最小化的 Service Worker（`client/public/sw.js`，**不缓存任何内容**），用浏览器地址栏的"安装"即可把灵猫装成 PWA。
+
+- 会议在 **已安装的 PWA**（独立窗口运行）中会 **单开一个窗口** 进行：点击通话按钮会打开 `/?meeting=1&chat=<对话ID>`，窗口内是纯会议界面（全屏 / 离开），会议结束后窗口自动关闭，主窗口只保留"会议进行中"的横幅。
+- **Android / iOS 除外**：这两个平台上 `window.open` 会被丢给系统浏览器，因此明确不支持，依旧使用应用内的会议浮窗。
+- **不是 PWA**（普通浏览器标签页 / Android WebView 客户端）时不会单开窗口，会议继续在应用内的浮窗中进行；此时即使手动打开了会议窗口链接，也会自动回退到应用内。
+- 检测逻辑见 `client/pwa.ts`（`display-mode: standalone` 等 + 平台 UA 判定），控制台会打印 `[PWA] 运行环境检测` 便于排查。
+- 已安装的桌面 PWA 通过 **Window Controls Overlay** 自绘标题栏（`display_override: ["window-controls-overlay", "standalone"]` + `client/ui/PwaTitleBar.tsx`），即禁用 Chrome / Edge 自带的标题栏，标题栏颜色会跟随应用主题（同时更新 `theme-color`）。不支持 WCO 的浏览器（含移动端）自动退回系统标题栏，不需要额外适配。
+
+---
+
 ## Nginx 反代
 
 ```nginx

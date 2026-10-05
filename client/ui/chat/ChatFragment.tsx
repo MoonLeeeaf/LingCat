@@ -23,6 +23,7 @@ import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
 import { MeetingManager, useMeeting } from "../meeting/MeetingManager.ts"
+import { MeetingWindowManager, useMeetingWindow } from "../meeting/MeetingWindow.ts"
 import ClientConfigInstance from "../../ClientConfig.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
@@ -43,10 +44,44 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
     }, [chatObj])
 
     const meeting = useMeeting()
+    const meetingWindow = useMeetingWindow()
 
     React.useEffect(() => {
         MeetingManager.refreshActiveMeeting(chat.id)
     }, [chat.id])
+
+    React.useEffect(() => {
+        if (!MeetingWindowManager.isSupported()) return
+        MeetingWindowManager.refresh(chat.id)
+    }, [chat.id])
+
+    const openMeetingWindow = () => {
+        const res = MeetingWindowManager.open({ chatId: chat.id, title: chat.title ?? undefined, start: true })
+        if (res == 'failed') {
+            showSnackbar({ message: '打开会议失败, 已改为在当前页面进行' })
+            return false
+        }
+        return res == 'opened' || res == 'focused'
+    }
+
+    const onCallClick = () => {
+        (async () => {
+            if (MeetingManager.isInMeeting(chat.id)) {
+                showSnackbar({ message: '你已在此会议中' })
+                return
+            }
+            if (meetingWindow.isSupported() && openMeetingWindow()) return
+            try {
+                const active = MeetingManager.getActiveMeeting(chat.id)
+                if (active)
+                    await MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
+                else
+                    await MeetingManager.startMeeting(chat)
+            } catch (e) {
+                tipError(e, '发起会议失败')
+            }
+        })()
+    }
 
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
     const containerRef = React.useRef<HTMLDivElement>(null)
@@ -495,23 +530,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             }}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
-            {ClientConfigInstance.meetingEnabled && <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={() => {
-                (async () => {
-                    if (MeetingManager.isInMeeting(chat.id)) {
-                        showSnackbar({ message: '你已在此会议中' })
-                        return
-                    }
-                    try {
-                        const active = MeetingManager.getActiveMeeting(chat.id)
-                        if (active)
-                            await MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
-                        else
-                            await MeetingManager.startMeeting(chat)
-                    } catch (e) {
-                        tipError(e, '发起会议失败')
-                    }
-                })()
-            }}></mdui-button-icon>}
+            {ClientConfigInstance.meetingEnabled && <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={onCallClick}></mdui-button-icon>}
             <mdui-button-icon icon="group" style={{ marginRight: '4px' }} onClick={() => ChatMembersAndAdminsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="settings" style={{ marginRight: '4px' }} onClick={() => ChatSettingsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>
@@ -542,13 +561,17 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     fontSize: '13px',
                 }}>
                     <span>会议进行中</span>
-                    {meeting.isInMeeting(chat.id)
-                        ? <mdui-button variant="text" onClick={() => MeetingManager.leave()}>离开</mdui-button>
-                        : <mdui-button variant="text" onClick={() => {
-                            const active = meeting.getActiveMeeting(chat.id)!
-                            MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
-                                .catch((e) => tipError(e, '加入会议失败'))
-                        }}>加入</mdui-button>}
+                    {meetingWindow.isSupported()
+                        ? <mdui-button variant="text" onClick={() => openMeetingWindow()}>
+                            {meetingWindow.isOpen(chat.id) ? '回到会议' : '加入'}
+                        </mdui-button>
+                        : (meeting.isInMeeting(chat.id)
+                            ? <mdui-button variant="text" onClick={() => MeetingManager.leave()}>离开</mdui-button>
+                            : <mdui-button variant="text" onClick={() => {
+                                const active = meeting.getActiveMeeting(chat.id)!
+                                MeetingManager.joinMeeting(chat.id, active.meetingId, chat.title ?? undefined)
+                                    .catch((e) => tipError(e, '加入会议失败'))
+                            }}>加入</mdui-button>)}
                 </div>
             </div>
         )}

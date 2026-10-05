@@ -27,10 +27,31 @@
         height: 100%;
         box-sizing: border-box;
         /* iOS 刘海 / 灵动岛 / home indicator 安全区 */
-        padding-top: env(safe-area-inset-top);
+        padding-top: calc(env(safe-area-inset-top) + var(--lc-titlebar-height, env(titlebar-area-height, 0px)));
         padding-right: env(safe-area-inset-right);
         padding-bottom: env(safe-area-inset-bottom);
         padding-left: env(safe-area-inset-left);
+      }
+      .lc-titlebar {
+        position: fixed;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+        font-size: 12px;
+        background: rgb(var(--mdui-color-surface-container-low, 29 27 32));
+        color: rgb(var(--mdui-color-on-surface, 230 224 233));
+        border-bottom: 1px solid rgb(var(--mdui-color-outline-variant, 73 69 79));
+        user-select: none;
+        -webkit-app-region: drag;
+        app-region: drag;
+      }
+      .lc-titlebar .lc-no-drag {
+        -webkit-app-region: no-drag;
+        app-region: no-drag;
       }
     </style>
   </head>
