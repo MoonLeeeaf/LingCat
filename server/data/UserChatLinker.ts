@@ -1,7 +1,7 @@
 import knex from "knex"
 import { base_data_path } from "../config.ts"
 import { db } from "./db.ts"
-import { IChat } from "lingcat-protocol"
+import { IChat, IMessageEntity } from "lingcat-protocol"
 import ChatDataBase from "./ChatDataBase.ts"
 import UserDataBase from "./UserDataBase.ts"
 import MessageDataBase from "./MessageDataBase.ts"
@@ -14,6 +14,22 @@ interface IUserChatLink {
 }
 
 export type { IUserChatLink }
+
+function maskSpoilerForPreview(text: string, entitiesJson: string): string {
+    let entities: IMessageEntity[] = []
+    try { entities = JSON.parse(entitiesJson || '[]') } catch { return text }
+
+    // 从后往前替换，避免 offset 漂移
+    const spoilers = entities
+        .filter(e => e.type === 'spoiler')
+        .sort((a, b) => b.offset - a.offset)
+
+    let out = text
+    for (const s of spoilers) {
+        out = out.slice(0, s.offset) + '▒'.repeat(s.length) + out.slice(s.offset + s.length)
+    }
+    return out
+}
 
 const tableName = 'UserChatLinker';
 (!await db.schema.hasTable(tableName)) && await db.schema.createTable(tableName, (table) => {
@@ -42,11 +58,14 @@ export default class UserChatLinker {
             .where('ucl.user_id', user_id)
             // 按时间从新到旧排列
             .orderBy('c.last_message_time', 'desc')
-            .select('c.*', 'm.text as last_message_text')
+            .select('c.*', 'm.text as last_message_text', 'm.entities as last_message_entities')
             .limit(limit)
             .offset(offset)
         // console.log(query)
-        return (query as IChat[])
+        return (query.map(r => ({
+            ...r,
+            last_message_text: maskSpoilerForPreview(r.last_message_text || '', r.last_message_entities || '[]'),
+        })) as IChat[])
     }
     static async queryFavouriteChatsOfUser(user_id: string, options: {
         limit?: number
