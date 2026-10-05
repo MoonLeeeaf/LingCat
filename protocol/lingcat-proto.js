@@ -3,7 +3,7 @@ import $protobuf from "protobufjs/minimal.js";
 
 // Common aliases
 const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
-const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $RangeError = $util.global.RangeError, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $BigInt = $util.global.BigInt, $Boolean = $util.global.Boolean;
+const $Object = $util.global.Object, $undefined = $util.global.undefined, $Error = $util.global.Error, $TypeError = $util.global.TypeError, $Number = $util.global.Number, $String = $util.global.String, $Array = $util.global.Array, $parseInt = $util.global.parseInt, $BigInt = $util.global.BigInt, $Boolean = $util.global.Boolean;
 
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
@@ -252,7 +252,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Package.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -273,17 +273,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.Package();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.Package(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -392,11 +382,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -795,7 +780,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             FederationPackage.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -816,17 +801,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.FederationPackage();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.FederationPackage(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -887,11 +862,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -1242,7 +1212,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IUser.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -1263,17 +1233,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IUser();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IUser(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -1328,11 +1288,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -1683,7 +1638,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IChatAdmin.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -1704,17 +1659,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IChatAdmin();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IChatAdmin(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -1796,11 +1741,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -2223,7 +2163,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IChat.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -2244,17 +2184,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IChat();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IChat(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -2359,11 +2289,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -2745,7 +2670,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IFile.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -2766,17 +2691,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IFile();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IFile(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -2833,11 +2748,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -3148,7 +3058,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IMessageEntity.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -3169,17 +3079,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IMessageEntity();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IMessageEntity(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -3229,11 +3129,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -3577,7 +3472,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             IMessage.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -3598,17 +3493,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.classes.IMessage();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.classes.IMessage(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -3689,11 +3574,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -4067,7 +3947,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Error_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4088,17 +3968,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Error_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Error_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -4137,11 +4007,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -4375,7 +4240,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             HandShake_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4396,17 +4261,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.HandShake_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.HandShake_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -4431,11 +4286,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -4681,7 +4531,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             HandShake_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -4702,17 +4552,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.HandShake_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.HandShake_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -4755,11 +4595,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -5020,7 +4855,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Ping_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5041,17 +4876,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Ping_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Ping_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -5076,11 +4901,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -5311,7 +5131,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Ping_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5332,17 +5152,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Ping_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Ping_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -5367,11 +5177,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -5633,7 +5438,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Registration_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5654,17 +5459,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.User_Registration_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Registration_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -5705,11 +5500,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -5944,7 +5734,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Registration_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -5965,17 +5755,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.User_Registration_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Registration_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6000,11 +5780,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -6230,7 +6005,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Login_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6251,17 +6026,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.User_Login_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Login_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6295,11 +6060,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -6524,7 +6284,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             User_Login_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6545,17 +6305,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.User_Login_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.User_Login_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6580,11 +6330,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -6799,7 +6544,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Upload_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -6820,17 +6565,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Request_File_Upload_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Upload_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -6855,11 +6590,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -7074,7 +6804,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Upload_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7095,17 +6825,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Request_File_Upload_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Upload_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -7130,11 +6850,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -7369,7 +7084,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Access_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7390,17 +7105,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Request_File_Access_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Access_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -7432,11 +7137,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -7661,7 +7361,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Request_File_Access_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7682,17 +7382,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Request_File_Access_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Request_File_Access_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -7717,11 +7407,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -7947,7 +7632,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Authorize_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -7968,17 +7653,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Authorize_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Authorize_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8012,11 +7687,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -8230,7 +7900,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Authorize_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8251,17 +7921,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Authorize_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Authorize_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8274,11 +7934,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -8486,7 +8141,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_User_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8507,17 +8162,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_User_Info_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_User_Info_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8551,11 +8196,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -8780,7 +8420,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_My_User_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -8801,17 +8441,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_My_User_Info_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_My_User_Info_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -8836,11 +8466,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -9055,7 +8680,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_User_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9076,17 +8701,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_User_Info_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_User_Info_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -9108,11 +8723,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -9331,7 +8941,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_My_User_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9352,17 +8962,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_My_User_Info_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_My_User_Info_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -9384,11 +8984,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -9678,7 +9273,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Profile_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -9699,17 +9294,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_My_Profile_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Profile_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -9762,11 +9347,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -10007,7 +9587,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Profile_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10028,17 +9608,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_My_Profile_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Profile_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -10051,11 +9621,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -10334,7 +9899,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Profile_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10355,17 +9920,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_Chat_Profile_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Profile_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -10427,11 +9982,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -10682,7 +10232,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Profile_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10703,17 +10253,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_Chat_Profile_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Profile_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -10726,11 +10266,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -10962,7 +10497,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Send_Chat_Message_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -10983,17 +10518,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Send_Chat_Message_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Send_Chat_Message_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -11044,11 +10569,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -11308,7 +10828,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Send_Chat_Message_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11329,17 +10849,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Send_Chat_Message_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Send_Chat_Message_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -11364,11 +10874,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -11583,7 +11088,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Receive_Chat_Message_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11604,17 +11109,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Receive_Chat_Message_Event();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Receive_Chat_Message_Event(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -11636,11 +11131,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -11924,7 +11414,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Messages_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -11945,17 +11435,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Messages_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Messages_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -12010,11 +11490,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -12269,7 +11744,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Messages_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12290,17 +11765,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Messages_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Messages_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -12324,11 +11789,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -12570,7 +12030,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_Chat_Info_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12591,17 +12051,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_Chat_Info_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_Chat_Info_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -12635,11 +12085,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -12864,7 +12309,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Query_Chat_Info_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -12885,17 +12330,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Query_Chat_Info_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Query_Chat_Info_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -12917,11 +12352,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -13151,7 +12581,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Or_Create_Private_Chat_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13172,17 +12602,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Or_Create_Private_Chat_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Or_Create_Private_Chat_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -13216,11 +12636,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -13445,7 +12860,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Or_Create_Private_Chat_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13466,17 +12881,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Or_Create_Private_Chat_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Or_Create_Private_Chat_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -13501,11 +12906,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -13757,7 +13157,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -13778,17 +13178,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_My_Chats_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_My_Chats_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -13827,11 +13217,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -14067,7 +13452,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14088,17 +13473,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_My_Chats_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_My_Chats_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -14122,11 +13497,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -14394,7 +13764,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Favourite_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14415,17 +13785,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_My_Favourite_Chats_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_My_Favourite_Chats_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -14464,11 +13824,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -14704,7 +14059,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_My_Favourite_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -14725,17 +14080,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_My_Favourite_Chats_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_My_Favourite_Chats_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -14759,11 +14104,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -15025,7 +14365,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Search_My_Chats_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15046,17 +14386,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Search_My_Chats_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Search_My_Chats_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -15097,11 +14427,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -15338,7 +14663,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Search_My_Chats_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15359,17 +14684,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Search_My_Chats_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Search_My_Chats_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -15393,11 +14708,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -15639,7 +14949,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Another_User_From_Private_Chat_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15660,17 +14970,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Another_User_From_Private_Chat_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Another_User_From_Private_Chat_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -15704,11 +15004,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -15933,7 +15228,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Another_User_From_Private_Chat_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -15954,17 +15249,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Another_User_From_Private_Chat_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Another_User_From_Private_Chat_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -15989,11 +15274,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -16230,7 +15510,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Set_Chat_Favourited_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -16251,17 +15531,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -16304,11 +15574,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -16531,7 +15796,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Set_Chat_Favourited_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -16552,17 +15817,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Set_Chat_Favourited_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -16575,11 +15830,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -16787,7 +16037,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_User_Id_By_Username_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -16808,17 +16058,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -16852,11 +16092,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -17081,7 +16316,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_User_Id_By_Username_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -17102,17 +16337,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_User_Id_By_Username_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -17137,11 +16362,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -17367,7 +16587,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Resolve_Chat_Identifier_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -17388,17 +16608,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -17432,11 +16642,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -17661,7 +16866,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Resolve_Chat_Identifier_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -17682,17 +16887,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Resolve_Chat_Identifier_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -17717,11 +16912,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -17925,7 +17115,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_My_Chats_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -17946,17 +17136,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_My_Chats_Event();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_My_Chats_Event();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -17969,11 +17149,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -18201,7 +17376,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Create_Group_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -18222,17 +17397,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Create_Group_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Create_Group_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -18273,11 +17438,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -18512,7 +17672,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Create_Group_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -18533,17 +17693,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Create_Group_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Create_Group_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -18568,11 +17718,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -18818,7 +17963,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Join_Chat_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -18839,17 +17984,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Join_Chat_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Chat_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -18890,11 +18025,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -19129,7 +18259,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Join_Chat_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -19150,17 +18280,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Join_Chat_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Join_Chat_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -19185,11 +18305,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -19426,7 +18541,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Remove_Chat_Member_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -19447,17 +18562,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Remove_Chat_Member_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Member_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -19500,11 +18605,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -19727,7 +18827,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Remove_Chat_Member_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -19748,17 +18848,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Remove_Chat_Member_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Member_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -19771,11 +18861,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -19994,7 +19079,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Settings_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -20015,17 +19100,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_Chat_Settings_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Settings_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -20068,11 +19143,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -20295,7 +19365,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Update_Chat_Settings_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -20316,17 +19386,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Update_Chat_Settings_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Update_Chat_Settings_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -20339,11 +19399,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -20551,7 +19606,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Admins_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -20572,17 +19627,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Admins_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Admins_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -20616,11 +19661,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -20847,7 +19887,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Admins_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -20868,17 +19908,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Admins_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Admins_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -20902,11 +19932,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -21148,7 +20173,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Members_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -21169,17 +20194,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Members_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Members_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -21213,11 +20228,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -21444,7 +20454,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Chat_Members_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -21465,17 +20475,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Chat_Members_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Chat_Members_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -21499,11 +20499,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -21776,7 +20771,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Add_Chat_Admin_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -21797,17 +20792,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Add_Chat_Admin_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Add_Chat_Admin_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -21857,11 +20842,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -22094,7 +21074,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Add_Chat_Admin_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -22115,17 +21095,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Add_Chat_Admin_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Add_Chat_Admin_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -22138,11 +21108,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -22372,7 +21337,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Edit_Chat_Admin_Permissions_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -22393,17 +21358,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Edit_Chat_Admin_Permissions_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Admin_Permissions_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -22455,11 +21410,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -22691,7 +21641,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Edit_Chat_Admin_Permissions_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -22712,17 +21662,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Edit_Chat_Admin_Permissions_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Admin_Permissions_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -22735,11 +21675,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -22958,7 +21893,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Remove_Chat_Admin_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -22979,17 +21914,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Remove_Chat_Admin_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Admin_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -23032,11 +21957,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -23259,7 +22179,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Remove_Chat_Admin_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -23280,17 +22200,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Remove_Chat_Admin_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Remove_Chat_Admin_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -23303,11 +22213,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -23524,7 +22429,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Verify_Password_Identity_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -23545,17 +22450,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Verify_Password_Identity_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Verify_Password_Identity_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -23587,11 +22482,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -23816,7 +22706,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Verify_Password_Identity_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -23837,17 +22727,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Verify_Password_Identity_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Verify_Password_Identity_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -23872,11 +22752,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -24113,7 +22988,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Change_Password_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -24134,17 +23009,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Change_Password_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Change_Password_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -24187,11 +23052,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -24414,7 +23274,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Change_Password_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -24435,17 +23295,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Change_Password_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Change_Password_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -24458,11 +23308,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -24705,7 +23550,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Edit_Chat_Message_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -24726,17 +23571,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Edit_Chat_Message_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Message_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -24796,11 +23631,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -25058,7 +23888,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Edit_Chat_Message_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -25079,17 +23909,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Edit_Chat_Message_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Edit_Chat_Message_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -25102,11 +23922,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -25349,7 +24164,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Message_Edited_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -25370,17 +24185,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Message_Edited_Event();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Message_Edited_Event(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -25440,11 +24245,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -25760,7 +24560,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Start_Meeting_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -25781,17 +24581,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Start_Meeting_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Start_Meeting_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -25832,11 +24622,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -26093,7 +24878,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Start_Meeting_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -26114,17 +24899,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Start_Meeting_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Start_Meeting_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -26167,11 +24942,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -26427,7 +25197,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Meeting_Token_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -26448,17 +25218,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Meeting_Token_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Meeting_Token_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -26501,11 +25261,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -26772,7 +25527,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Meeting_Token_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -26793,17 +25548,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Meeting_Token_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Meeting_Token_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -26855,11 +25600,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -27124,7 +25864,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             End_Meeting_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -27145,17 +25885,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.End_Meeting_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.End_Meeting_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -27198,11 +25928,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -27425,7 +26150,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             End_Meeting_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -27446,17 +26171,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.End_Meeting_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.End_Meeting_Response();
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -27469,11 +26184,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -27723,7 +26433,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Meeting_Started_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -27744,17 +26454,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Meeting_Started_Event();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Meeting_Started_Event(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -27813,11 +26513,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -28081,7 +26776,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Meeting_Ended_Event.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -28102,17 +26797,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Meeting_Ended_Event();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Meeting_Ended_Event(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -28146,11 +26831,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -28386,7 +27066,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Active_Meeting_Request.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -28407,17 +27087,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Active_Meeting_Request();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Active_Meeting_Request(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -28451,11 +27121,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
@@ -28733,7 +27398,7 @@ export const lingcat = $root.lingcat = (() => {
              * @returns {$protobuf.Writer} Writer
              */
             Get_Active_Meeting_Response.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+                return this.encode(message, writer && writer.len ? writer.fork() : writer).ldelim();
             };
 
             /**
@@ -28754,17 +27419,7 @@ export const lingcat = $root.lingcat = (() => {
                     _depth = 0;
                 if (_depth > $Reader.recursionLimit)
                     throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Get_Active_Meeting_Response();
+                let end = length === $undefined ? reader.len : reader.pos + length, message = _target || new $root.lingcat.methods.Get_Active_Meeting_Response(), value;
                 while (reader.pos < end) {
                     let start = reader.pos;
                     let tag = reader.tag();
@@ -28823,11 +27478,6 @@ export const lingcat = $root.lingcat = (() => {
                         $util.makeProp(message, "$unknowns", false);
                         (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
                     }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
                 }
                 if (_end !== $undefined)
                     throw $Error("missing end group");
