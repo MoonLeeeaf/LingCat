@@ -292,7 +292,9 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             flexWrap: 'wrap',
         }}>
             {m.audioBlocked && (
-                <mdui-button icon="volume_up" variant="tonal" onClick={() => MeetingManager.resumeAudio()}>播放音频</mdui-button>
+                <mdui-tooltip content='恢复音频'>
+                    <mdui-button-icon icon="play_arrow" variant="tonal" onClick={() => MeetingManager.resumeAudio()}></mdui-button-icon>
+                </mdui-tooltip>
             )}
             <mdui-tooltip content={m.isMicOn ? '关闭麦克风' : '开启麦克风'}>
                 <mdui-button-icon
@@ -306,13 +308,12 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                 />
             </mdui-tooltip>
-            {!m.isSharingScreen && (
-                <mdui-tooltip content="共享屏幕时是否包含电脑/系统声音 (需浏览器支持)">
-                    <mdui-button
-                        variant={includeDesktopAudio ? 'tonal' : 'text'}
+            {m.isSharingScreen && (
+                <mdui-tooltip content={includeDesktopAudio ? '关闭系统声音' : '共享系统声音'}>
+                    <mdui-button-icon
                         icon={includeDesktopAudio ? 'volume_up' : 'volume_off'}
                         onClick={() => setIncludeDesktopAudio((v) => !v)}
-                    ></mdui-button>
+                    />
                 </mdui-tooltip>
             )}
             <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
