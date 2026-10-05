@@ -14,6 +14,7 @@ import './ui/MduiPatchedTextAreaElement.ts'
 import ClientConfigInstance from './ClientConfig.ts'
 import { canOpenMeetingWindow, describeRuntime } from './pwa.ts'
 import { clearMeetingWindowParams, parseMeetingWindowRequest, setPendingInAppMeeting } from './ui/meeting/MeetingWindow.ts'
+import { installNotificationPermissionPrompt } from './ui/notify.ts'
 
 function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return
@@ -38,9 +39,8 @@ if (meetingRequest && (meetingRequest.pwa || canOpenMeetingWindow())) {
         clearMeetingWindowParams()
     }
 
-    if ("Notification" in window && Notification.permission == "default") Notification.requestPermission()
-
     registerServiceWorker()
+    installNotificationPermissionPrompt()
 
     root.render(React.createElement(Main))
 }

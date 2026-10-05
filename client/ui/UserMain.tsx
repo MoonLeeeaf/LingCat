@@ -24,6 +24,7 @@ import ClientSettingsDialog, { LoginDialog, SwitchUserDialog } from "./ClientSet
 import MeetingPanel from "./meeting/MeetingDialog.tsx"
 import { MeetingManager, useMeeting } from "./meeting/MeetingManager.ts"
 import { takePendingInAppMeeting } from "./meeting/MeetingWindow.ts"
+import { isAppForeground, isMentioned, notificationBody, notificationSupported, onNotificationClick, showMessageNotification } from "./notify.ts"
 import ClientConfigInstance from "../ClientConfig.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
@@ -105,53 +106,52 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     }, [setProfile])
 
     React.useEffect(() => {
-        let hidden = false
-        const onVisibilityChange = () => {
-            if (document.hidden) {
-                hidden = true
-            } else {
-                hidden = false
-            }
-        }
-        document.addEventListener('visibilitychange', onVisibilityChange)
+        onNotificationClick((chatId) => {
+            (async () => {
+                try {
+                    setActiveChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                        access_token: ClientManager.getActiveUserSession().token,
+                        chat_id: chatId,
+                    }))
+                } catch (e) {
+                    tipError(e, '打开对话失败')
+                }
+            })()
+        })
+    }, [])
 
+    React.useEffect(() => {
         async function callback(mPackage: Package) {
-            if (!("Notification" in window) || Notification.permission == "denied") return
-            // TODO: 向 lingcat-client-protocol 添加全局的监听方法
-            if (mPackage.method_id == Methods.Receive_Chat_Message_Event) {
+            if (mPackage.method_id != Methods.Receive_Chat_Message_Event) return
+            if (!notificationSupported()) return
+            try {
                 const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data).msg
+                if (!raw?.chatId) return
 
-                const myId = (await ClientManager.getMe()).id
-                if (raw?.senderUserId == myId) return
-                if (activeChat?.id == raw?.chatId && !hidden) return
+                const myId = AppState.myId || (await ClientManager.getMe()).id
+                if (raw.senderUserId == myId) return
+                if (isAppForeground()) return
 
-                const chat = await ProfileCache.queryChatInfo(raw?.chatId!)
-                const sender = raw?.senderUserId ? await ProfileCache.queryUserInfo(raw?.senderUserId) : undefined
+                const chat = await ProfileCache.queryChatInfo(raw.chatId)
+                if (chat.type != 'private' && !isMentioned(raw.entities, myId)) return
 
-                console.log(new RegExp(`\!\[@.*?\](user:${myId})`).test(raw?.text || ''))
-                if (chat.type == 'private')
-                    new Notification(chat.title + " | 灵猫", {
-                        body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
-                        icon: chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar,
-                    }).onclick = async () => {
-                        setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
-                    }
-                else if (new RegExp(`!\\[@?.*?\\]\\(user:${myId}\\)`).test(raw?.text || ''))
-                    new Notification(chat.title + " | 灵猫", {
-                        body: (raw?.system ? '' : (sender?.nickname + ': ')) + raw?.text || '',
-                        icon: raw?.senderUserId
-                            ? (sender?.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(sender.avatar_file_hash, AppState.fileAccessToken) : default_avatar)
-                            : (chat.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(chat.avatar_file_hash, AppState.fileAccessToken) : default_avatar),
-                    }).onclick = async () => {
-                        setActiveChat(await ProfileCache.queryChatInfo(raw?.chatId!))
-                    }
+                const sender = raw.senderUserId ? await ProfileCache.queryUserInfo(raw.senderUserId) : undefined
+                const avatar = chat.type == 'private' ? chat.avatar_file_hash : (sender?.avatar_file_hash || chat.avatar_file_hash)
+
+                await showMessageNotification({
+                    chatId: raw.chatId,
+                    title: (chat.title || '灵猫') + ' | 灵猫',
+                    body: (raw.system ? '' : ((sender?.nickname || '新消息') + ': ')) + notificationBody(raw.text || ''),
+                    icon: avatar ? ClientManager.client.getFileUrlByHashAndToken(avatar, AppState.fileAccessToken) : default_avatar,
+                })
+            } catch (e) {
+                console.warn('[Notify] 处理新消息通知失败', e)
             }
         }
 
         ClientManager.client.addOnReceiveListener(callback)
         return () => {
             ClientManager.client.removeOnReceiveListener(callback)
-            document.removeEventListener('visibilitychange', onVisibilityChange)
         }
     }, [])
 
