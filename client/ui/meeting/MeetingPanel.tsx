@@ -37,6 +37,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
     const focusRef = React.useRef<HTMLDivElement>(null)
     const pendingFullscreen = React.useRef(false)
+    const beforeMinimizeRef = React.useRef<{ size: PanelSize, customSize?: { w: number, h: number } } | null>(null)
 
     const active = m.isActive()
 
@@ -82,6 +83,21 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     const setSizePreset = (s: PanelSize) => {
         setCustomSize(undefined)
         setSize(s)
+    }
+    const onToggleMinimize = () => {
+        if (size === 'minimized') {
+            const prev = beforeMinimizeRef.current
+            if (prev) {
+                setSize(prev.size)
+                setCustomSize(prev.customSize)
+            } else {
+                setSize('normal')
+                setCustomSize(undefined)
+            }
+        } else {
+            beforeMinimizeRef.current = { size, customSize }
+            setSize('minimized')
+        }
     }
 
     const onPointerDown = (e: React.PointerEvent) => {
@@ -283,10 +299,10 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                 />
             </mdui-tooltip>}
 
-            {!isDocked && !isWindow && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
+            {!isDocked && !isWindow && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化'}>
                 <mdui-button-icon
                     icon={floatingMinimized ? 'open_in_full' : 'minimize'}
-                    onClick={() => setSizePreset(floatingMinimized ? 'normal' : 'minimized')}
+                    onClick={onToggleMinimize}
                 />
             </mdui-tooltip>}
             {!isDocked && !isWindow && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
