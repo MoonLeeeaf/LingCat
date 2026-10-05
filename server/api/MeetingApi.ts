@@ -8,6 +8,7 @@ import ChatDataBase from '../data/ChatDataBase.ts'
 import ChatAdminLinker from '../data/ChatAdminLinker.ts'
 import UserDataBase from '../data/UserDataBase.ts'
 import MessageDataBase from '../data/MessageDataBase.ts'
+import MeetingDataBase from '../data/MeetingDataBase.ts'
 import sendError from './sendError.ts'
 import { config, livekitHttpUrl } from '../config.ts'
 
@@ -24,16 +25,10 @@ type ClientsEmiter = { [k: string]: { [k: string]: (mPackage: Package) => void }
 
 const MEETING_IDLE_TIMEOUT_MS = 1000 * 60 * 60 * 6
 
+// 会议持久化到数据库, 保证服务端重启/重新部署后仍可继续(加入/查询)同一场会议
 class MeetingStore {
-    private meetings: { [meeting_id: string]: IMeeting } = {}
-
-    create(chat_id: string, starter_user_id: string, title?: string): IMeeting {
-        // 清理过期会议
-        const now = Date.now()
-        for (const id of Object.keys(this.meetings))
-            if (now - this.meetings[id].created_at > MEETING_IDLE_TIMEOUT_MS)
-                delete this.meetings[id]
-
+    async create(chat_id: string, starter_user_id: string, title?: string): Promise<IMeeting> {
+        await MeetingDataBase.removeExpired(Date.now() - MEETING_IDLE_TIMEOUT_MS)
         const id = crypto.randomBytes(8).toString('hex')
         const meeting: IMeeting = {
             id,
@@ -41,37 +36,31 @@ class MeetingStore {
             room: 'lingcat_' + id,
             starter_user_id,
             title: title?.trim() || undefined,
-            created_at: now,
+            created_at: Date.now(),
         }
-        this.meetings[id] = meeting
+        await MeetingDataBase.create(meeting)
         return meeting
     }
 
-    get(id: string) {
-        const m = this.meetings[id]
+    async get(id: string): Promise<IMeeting | undefined> {
+        const m = await MeetingDataBase.get(id)
         if (!m) return undefined
         if (Date.now() - m.created_at > MEETING_IDLE_TIMEOUT_MS) {
-            delete this.meetings[id]
+            await MeetingDataBase.remove(id)
             return undefined
         }
-        return m
+        return { ...m, title: m.title ?? undefined }
     }
 
-    findByChat(chat_id: string): IMeeting | undefined {
-        const now = Date.now()
-        for (const id of Object.keys(this.meetings)) {
-            const m = this.meetings[id]
-            if (now - m.created_at > MEETING_IDLE_TIMEOUT_MS) {
-                delete this.meetings[id]
-                continue
-            }
-            if (m.chat_id == chat_id) return m
-        }
-        return undefined
+    async findByChat(chat_id: string): Promise<IMeeting | undefined> {
+        await MeetingDataBase.removeExpired(Date.now() - MEETING_IDLE_TIMEOUT_MS)
+        const m = await MeetingDataBase.findByChat(chat_id)
+        if (!m) return undefined
+        return { ...m, title: m.title ?? undefined }
     }
 
-    remove(id: string) {
-        delete this.meetings[id]
+    async remove(id: string) {
+        await MeetingDataBase.remove(id)
     }
 }
 
@@ -171,8 +160,8 @@ export default class MeetingApi {
                 if (!await assertMeetingAllowed(sendPackage, mPackage.method_id, user_id, data.chatId)) return
 
                 // 幂等: 该对话已有进行中的会议则复用, 不再新建房间
-                const existing = store.findByChat(data.chatId)
-                const meeting = existing ?? store.create(data.chatId, user_id, data.title!)
+                const existing = await store.findByChat(data.chatId)
+                const meeting = existing ?? await store.create(data.chatId, user_id, data.title!)
 
                 // 仅"新会议"时写入系统消息, 避免重复点击刷屏
                 if (!existing) {
@@ -216,7 +205,7 @@ export default class MeetingApi {
                 if (err) return err
                 if (!await assertMeetingAllowed(sendPackage, mPackage.method_id, user_id, data.chatId)) return
 
-                const meeting = store.get(data.meetingId)
+                const meeting = await store.get(data.meetingId)
                 if (!meeting || meeting.chat_id != data.chatId)
                     return sendError(sendPackage, mPackage.method_id, '会议不存在或已结束', Code.Not_Found)
 
@@ -283,7 +272,7 @@ export default class MeetingApi {
                 if (err) return err
                 if (!await assertMeetingAllowed(sendPackage, mPackage.method_id, user_id, data.chatId)) return
 
-                const meeting = store.get(data.meetingId)
+                const meeting = await store.get(data.meetingId)
                 if (!meeting || meeting.chat_id != data.chatId)
                     return sendError(sendPackage, mPackage.method_id, '会议不存在或已结束', Code.Not_Found)
 
@@ -293,7 +282,7 @@ export default class MeetingApi {
                 if (!isStarter && !isOwner && !isAdmin)
                     return sendError(sendPackage, mPackage.method_id, '无权结束会议', Code.Forbidden)
 
-                store.remove(meeting.id)
+                await store.remove(meeting.id)
 
                 await broadcastSystemMessage(clients_emiter, data.chatId, '会议已结束')
 
@@ -335,7 +324,7 @@ export default class MeetingApi {
                 if (!await UserChatLinker.isUserChatLinked(user_id, data.chatId))
                     return sendError(sendPackage, mPackage.method_id, '用户不属于此对话', Code.Forbidden)
 
-                const meeting = store.findByChat(data.chatId)
+                const meeting = await store.findByChat(data.chatId)
 
                 sendPackage(Package.encode({
                     method_id: Methods.Get_Active_Meeting_Response,
