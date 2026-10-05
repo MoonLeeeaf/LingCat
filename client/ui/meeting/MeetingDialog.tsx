@@ -31,8 +31,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     const [size, setSize] = React.useState<PanelSize>('normal')
     const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
-    // 共享屏幕时是否尝试一并分享电脑/系统声音
-    const [includeDesktopAudio, setIncludeDesktopAudio] = React.useState(false)
 
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
@@ -124,11 +122,10 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 await MeetingManager.stopScreenShare()
                 return
             }
-            const res = await MeetingManager.startScreenShare(includeDesktopAudio)
-            if (includeDesktopAudio && res.audioUnsupported)
-                showSnackbar({ message: '未能分享电脑声音: 当前浏览器/系统不支持, 已仅共享屏幕' })
-            else if (res.audioShared)
-                showSnackbar({ message: '正在共享屏幕与电脑声音' })
+            // 始终尝试带上系统声音
+            const res = await MeetingManager.startScreenShare()
+            if (res.audioUnsupported)
+                showSnackbar({ message: '未能分享系统声音: 当前浏览器/系统不支持, 已仅共享屏幕' })
         } catch (e) {
             tipError(e, '屏幕共享失败')
         }
@@ -319,14 +316,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                 />
             </mdui-tooltip>
-            {m.isSharingScreen && (
-                <mdui-tooltip content={includeDesktopAudio ? '关闭系统声音' : '共享系统声音'}>
-                    <mdui-button-icon
-                        icon={includeDesktopAudio ? 'volume_up' : 'volume_off'}
-                        onClick={() => setIncludeDesktopAudio((v) => !v)}
-                    />
-                </mdui-tooltip>
-            )}
             <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                 <mdui-button-icon
                     icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
@@ -334,7 +323,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 />
             </mdui-tooltip>
             {m.isSharingScreen && (
-                <span style={{ fontSize: '12px', opacity: 0.7 }}>{includeDesktopAudio ? '含电脑声音' : '仅屏幕'}</span>
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '含电脑声音' : '仅屏幕'}</span>
             )}
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
         </div>

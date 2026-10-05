@@ -28,7 +28,7 @@ export function VideoPublication({ publication, muted, style }: {
     />
 }
 
-export function AudioPublication({ publication }: { publication?: TrackPublication }) {
+export function AudioPublication({ publication, muted }: { publication?: TrackPublication, muted?: boolean }) {
     const ref = React.useRef<HTMLAudioElement>(null)
 
     React.useEffect(() => {
@@ -45,6 +45,7 @@ export function AudioPublication({ publication }: { publication?: TrackPublicati
         ref={ref}
         autoPlay
         playsInline
+        muted={muted}
         style={{
             position: 'absolute',
             width: 1,
