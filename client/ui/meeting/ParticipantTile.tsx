@@ -13,9 +13,13 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const screen = participant.getTrackPublication(Track.Source.ScreenShare)
     const camera = participant.getTrackPublication(Track.Source.Camera)
     const mic = participant.getTrackPublication(Track.Source.Microphone)
+    const screenAudio = participant.getTrackPublication(Track.Source.ScreenShareAudio)
+    const screenAudioActive = !!screenAudio?.track
 
     const screenActive = !!screen?.track && !screen.isMuted
-    const primary = screenActive ? screen : camera
+    // 摄像头静音时视为关闭, 否则会渲染一个纯黑的 <video>
+    const cameraActive = !!camera?.track && !camera.isMuted
+    const primary = screenActive ? screen : (cameraActive ? camera : undefined)
     const name = participant.name || participant.identity
     const micMuted = !mic?.track || mic.isMuted
     const speaking = participant.isSpeaking && !micMuted
@@ -34,14 +38,16 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         ...style,
     }}>
         {primary?.track
-            ? <VideoPublication publication={primary} muted={isLocal} />
+            // key: 源变化 (屏幕<->摄像头) 时强制重建 <video>, 避免复用节点残留黑帧
+            ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} />
             : <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', padding: '8px' }}>
                 {micMuted ? '(Muted) ' : ''}{name}
             </div>
         }
 
-        {/* 远端音频播放 */}
+        {/* 远端音频播放: 麦克风 + 电脑/系统声音 (本地不回放, 防回声) */}
         {!isLocal && <AudioPublication publication={mic} />}
+        {!isLocal && <AudioPublication publication={screenAudio} />}
 
         {actions && (
             <div
@@ -65,7 +71,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         }}>
-            {micMuted ? '(Muted) ' : ''}{name}{isLocal ? ' (我)' : ''}{screenActive ? ' · 共享屏幕' : ''}
+            {micMuted ? '(Muted) ' : ''}{name}{isLocal ? ' (我)' : ''}{screenActive ? ' · 共享屏幕' : ''}{screenAudioActive ? ' · 共享声音' : ''}
         </div>
     </div>
 }

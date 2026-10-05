@@ -28,6 +28,8 @@ class MeetingManagerImpl {
     isMicOn = false
     isCameraOn = false
     isSharingScreen = false
+    /** 是否正在共享电脑/系统声音 */
+    isSharingAudio = false
     audioBlocked = false
 
     /** 会议面板是否停靠为分栏模式 (左侧画面 / 右侧聊天) */
@@ -147,6 +149,8 @@ class MeetingManagerImpl {
         this.isCameraOn = !!cam?.track && !cam.isMuted
         const screen = lp?.getTrackPublication(Track.Source.ScreenShare)
         this.isSharingScreen = !!screen?.track
+        const screenAudio = lp?.getTrackPublication(Track.Source.ScreenShareAudio)
+        this.isSharingAudio = !!screenAudio?.track
         this.emit()
     }
 
@@ -201,7 +205,9 @@ class MeetingManagerImpl {
                 ? (location.protocol === 'https:' ? 'wss://' + location.host : 'ws://' + location.host)
                 : creds.url
 
-            const room = new Room({ adaptiveStream: true, dynacast: true })
+            // adaptiveStream 会按元素可见性暂停订阅, 与自定义瓦片(会切换屏幕/摄像头源)配合时
+            // 容易出现"切回摄像头后一直黑屏", 6 人以内无需它
+            const room = new Room({ adaptiveStream: false, dynacast: true })
             this.room = room
             this.bindRoom(room)
 
@@ -240,11 +246,44 @@ class MeetingManagerImpl {
         this.syncLocalFlags()
     }
 
-    async toggleScreenShare() {
+    /**
+     * 开始共享屏幕。withDesktopAudio=true 时尝试一并采集电脑/系统声音;
+     * 失败或浏览器未提供音频轨时自动降级为仅视频。
+     */
+    async startScreenShare(withDesktopAudio: boolean): Promise<{ audioShared: boolean, audioUnsupported: boolean }> {
+        const lp = this.room?.localParticipant
+        if (!lp) return { audioShared: false, audioUnsupported: false }
+
+        if (withDesktopAudio) {
+            try {
+                await lp.setScreenShareEnabled(true, { audio: true, systemAudio: 'include' })
+            } catch (e) {
+                // 例如浏览器不支持 audio / 用户拒绝 -> 降级为纯视频
+                console.warn('[Meeting] 带电脑声音共享失败, 降级为仅视频', e)
+                await lp.setScreenShareEnabled(true)
+                this.syncLocalFlags()
+                return { audioShared: false, audioUnsupported: true }
+            }
+            const got = !!lp.getTrackPublication(Track.Source.ScreenShareAudio)?.track
+            this.syncLocalFlags()
+            return { audioShared: got, audioUnsupported: !got }
+        }
+
+        await lp.setScreenShareEnabled(true)
+        this.syncLocalFlags()
+        return { audioShared: false, audioUnsupported: false }
+    }
+
+    async stopScreenShare() {
         const lp = this.room?.localParticipant
         if (!lp) return
-        await lp.setScreenShareEnabled(!this.isSharingScreen)
+        await lp.setScreenShareEnabled(false)
         this.syncLocalFlags()
+    }
+
+    async toggleScreenShare() {
+        if (this.isSharingScreen) return this.stopScreenShare()
+        return this.startScreenShare(false)
     }
 
     async resumeAudio() {
@@ -275,6 +314,7 @@ class MeetingManagerImpl {
         this.isMicOn = false
         this.isCameraOn = false
         this.isSharingScreen = false
+        this.isSharingAudio = false
         this.audioBlocked = false
         this.roomName = undefined
         this.focusedIdentity = undefined
@@ -294,6 +334,7 @@ class MeetingManagerImpl {
         this.isMicOn = false
         this.isCameraOn = false
         this.isSharingScreen = false
+        this.isSharingAudio = false
         this.emit()
     }
 }

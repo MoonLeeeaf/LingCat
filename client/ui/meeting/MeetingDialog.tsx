@@ -2,6 +2,7 @@ import React from 'react'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import AppState from '../AppState.ts'
 import tipError from '../tipError.ts'
+import showSnackbar from '../showSnackbar.ts'
 import { MeetingManager, useMeeting } from './MeetingManager.ts'
 import ParticipantTile from './ParticipantTile.tsx'
 import { VideoPublication } from './VideoTrack.tsx'
@@ -30,6 +31,8 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     const [size, setSize] = React.useState<PanelSize>('normal')
     const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
+    // 共享屏幕时是否尝试一并分享电脑/系统声音
+    const [includeDesktopAudio, setIncludeDesktopAudio] = React.useState(false)
 
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
@@ -114,6 +117,21 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const onEnd = async () => {
         try { await MeetingManager.endMeeting() } catch (e) { tipError(e, '结束会议失败') }
+    }
+    const onToggleScreenShare = async () => {
+        try {
+            if (m.isSharingScreen) {
+                await MeetingManager.stopScreenShare()
+                return
+            }
+            const res = await MeetingManager.startScreenShare(includeDesktopAudio)
+            if (includeDesktopAudio && res.audioUnsupported)
+                showSnackbar({ message: '未能分享电脑声音: 当前浏览器/系统不支持, 已仅共享屏幕' })
+            else if (res.audioShared)
+                showSnackbar({ message: '正在共享屏幕与电脑声音' })
+        } catch (e) {
+            tipError(e, '屏幕共享失败')
+        }
     }
     const maximize = (id: string) => MeetingManager.setFocused(id)
     const maximizeAndFullscreen = (id: string) => {
@@ -233,7 +251,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
                         icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
-                        onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
+                        onClick={() => onToggleScreenShare()}
                     />
                 </mdui-tooltip>
             </>}
@@ -288,12 +306,24 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                 />
             </mdui-tooltip>
+            {!m.isSharingScreen && (
+                <mdui-tooltip content="共享屏幕时是否包含电脑/系统声音 (需浏览器支持)">
+                    <mdui-button
+                        variant={includeDesktopAudio ? 'tonal' : 'text'}
+                        icon={includeDesktopAudio ? 'volume_up' : 'volume_off'}
+                        onClick={() => setIncludeDesktopAudio((v) => !v)}
+                    >电脑声音</mdui-button>
+                </mdui-tooltip>
+            )}
             <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                 <mdui-button-icon
                     icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
-                    onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
+                    onClick={() => onToggleScreenShare()}
                 />
             </mdui-tooltip>
+            {m.isSharingScreen && (
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '🔊 含电脑声音' : '仅屏幕'}</span>
+            )}
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
         </div>
     )
