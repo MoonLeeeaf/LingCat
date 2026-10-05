@@ -14,6 +14,7 @@ export default function Message({
     time,
     messageMenus,
     avatarMenus,
+    edited_time,
 }: {
     children: React.ReactNode
     avatar: string
@@ -24,7 +25,8 @@ export default function Message({
     onAvatarClick?: () => void
     messageMenus?: React.ReactNode
     avatarMenus?: React.ReactNode
-    time?: number,
+    time?: number
+    edited_time?: number
 }) {
 
     const dropDownRef = React.useRef<Dropdown>(null)
@@ -206,6 +208,15 @@ export default function Message({
                         (() => {
                             const d = new Date(Number.parseInt(time + ''))
                             return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+                        })()
+                    }
+                    {
+                        edited_time && (() => {
+                            const d = new Date(Number.parseInt(edited_time + ''))
+                            return <>
+                                <br></br>
+                                {`${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} (已编辑)`}
+                            </>
                         })()
                     }
                 </span>

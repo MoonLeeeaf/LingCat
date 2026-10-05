@@ -42,6 +42,7 @@ export default function ChatMessage({
 
     return <Message
         time={msg.time}
+        edited_time={msg.edited_at}
         avatarMenus={avatarMenus}
         onAvatarClick={onAvatarClick}
         messageMenus={messageMenus}

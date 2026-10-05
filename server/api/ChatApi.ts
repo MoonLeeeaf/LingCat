@@ -264,6 +264,7 @@ export default class ChatApi {
                             time: v.time,
                             system: v.system,
                             entities: v.entities ?? [],
+                            editedAt: v.edited_at,
                         }))
                     }).finish()
                 }))

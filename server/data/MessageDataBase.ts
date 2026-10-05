@@ -12,6 +12,7 @@ const tableName = 'Messages';
     table.string('text').notNullable()
     table.text('entities').notNullable().defaultTo('[]')
     table.integer('time').notNullable()
+    table.integer('edited_at')
     table.unique(['chat_id', 'id'], 'idx_chat_id')
 })
 
@@ -102,7 +103,7 @@ export default class MessageDataBase {
     }
 
     static async editText(chat_id: string, id: number, text: string, entities?: IMessageEntity[]) {
-        const updates: Record<string, any> = { text }
+        const updates: Record<string, any> = { text, edited_at: Date.now() }
         if (entities !== undefined) {
             updates.entities = JSON.stringify(entities)
         }

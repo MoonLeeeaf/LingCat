@@ -412,6 +412,7 @@ export default class ChatApi {
             text: v.text,
             time: v.time,
             entities: v.entities?.map(protoEntityToIMessageEntity),
+            edited_at: v.editedAt,
         })) as IMessage[]
     }
     /**
