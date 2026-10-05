@@ -302,21 +302,28 @@ class MeetingManagerImpl {
      * 开始共享屏幕, 始终尝试一并共享系统/桌面声音;
      * 浏览器不支持或未采到音频轨时自动降级为仅视频。
      */
-    async startScreenShare(): Promise<{ audioShared: boolean, audioUnsupported: boolean }> {
+    async startScreenShare(withDesktopAudio: boolean): Promise<{ audioShared: boolean, audioUnsupported: boolean }> {
         const lp = this.room?.localParticipant
         if (!lp) return { audioShared: false, audioUnsupported: false }
 
-        try {
-            await lp.setScreenShareEnabled(true, { audio: true, systemAudio: 'include' })
-        } catch (e) {
-            console.warn('[Meeting] 带系统声音共享失败, 降级为仅视频', e)
-            await lp.setScreenShareEnabled(true)
+        if (withDesktopAudio) {
+            try {
+                await lp.setScreenShareEnabled(true, { audio: true, systemAudio: 'include' })
+            } catch (e) {
+                // 例如浏览器不支持 audio / 用户拒绝 -> 降级为纯视频
+                console.warn('[Meeting] 带电脑声音共享失败, 降级为仅视频', e)
+                await lp.setScreenShareEnabled(true)
+                this.syncLocalFlags()
+                return { audioShared: false, audioUnsupported: true }
+            }
+            const got = !!lp.getTrackPublication(Track.Source.ScreenShareAudio)?.track
             this.syncLocalFlags()
-            return { audioShared: false, audioUnsupported: true }
+            return { audioShared: got, audioUnsupported: !got }
         }
-        const got = !!lp.getTrackPublication(Track.Source.ScreenShareAudio)?.track
+
+        await lp.setScreenShareEnabled(true)
         this.syncLocalFlags()
-        return { audioShared: got, audioUnsupported: !got }
+        return { audioShared: false, audioUnsupported: false }
     }
 
     async stopScreenShare() {
@@ -328,7 +335,7 @@ class MeetingManagerImpl {
 
     async toggleScreenShare() {
         if (this.isSharingScreen) return this.stopScreenShare()
-        return this.startScreenShare()
+        return this.startScreenShare(true)
     }
 
     async resumeAudio() {

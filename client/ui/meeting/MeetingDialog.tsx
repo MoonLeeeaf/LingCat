@@ -30,8 +30,8 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const [size, setSize] = React.useState<PanelSize>('normal')
     const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
-    const beforeMinimizeRef = React.useRef<{ size: PanelSize, customSize?: { w: number, h: number } } | null>(null)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
+    const [includeDesktopAudio, setIncludeDesktopAudio] = React.useState(true)
 
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
@@ -71,24 +71,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     const setSizePreset = (s: PanelSize) => {
         setCustomSize(undefined)
         setSize(s)
-    }
-
-    const onToggleMinimize = () => {
-        if (size === 'minimized') {
-            // 还原到最小化前的尺寸
-            const prev = beforeMinimizeRef.current
-            if (prev) {
-                setSize(prev.size)
-                setCustomSize(prev.customSize)
-            } else {
-                setSize('normal')
-                setCustomSize(undefined)
-            }
-        } else {
-            // 进入最小化前保存当前状态
-            beforeMinimizeRef.current = { size, customSize }
-            setSize('minimized')
-        }
     }
 
     const onPointerDown = (e: React.PointerEvent) => {
@@ -141,10 +123,11 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 await MeetingManager.stopScreenShare()
                 return
             }
-            // 始终尝试带上系统声音
-            const res = await MeetingManager.startScreenShare()
-            if (res.audioUnsupported)
+            const res = await MeetingManager.startScreenShare(includeDesktopAudio)
+            if (includeDesktopAudio && res.audioUnsupported)
                 showSnackbar({ message: '未能分享系统声音: 当前浏览器/系统不支持, 已仅共享屏幕' })
+            else if (res.audioShared)
+                showSnackbar({ message: '正在共享屏幕与电脑声音' })
         } catch (e) {
             tipError(e, '屏幕共享失败')
         }
@@ -278,26 +261,23 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.setDock(!isDocked)}
                 />
             </mdui-tooltip>
-            {
-                !isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化'}>
-                    <mdui-button-icon
-                        icon={floatingMinimized ? 'open_in_full' : 'minimize'}
-                        onClick={onToggleMinimize}
-                    />
-                </mdui-tooltip>
-            }
-            {
-                !isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
-                    <mdui-button-icon
-                        icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
-                        onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
-                    />
-                </mdui-tooltip>
-            }
+
+            {!isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
+                <mdui-button-icon
+                    icon={floatingMinimized ? 'open_in_full' : 'minimize'}
+                    onClick={() => setSizePreset(floatingMinimized ? 'normal' : 'minimized')}
+                />
+            </mdui-tooltip>}
+            {!isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
+                <mdui-button-icon
+                    icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
+                    onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
+                />
+            </mdui-tooltip>}
             <mdui-tooltip content="离开会议">
                 <mdui-button-icon icon="close" onClick={() => MeetingManager.leave()} />
             </mdui-tooltip>
-        </div >
+        </div>
     )
 
     const controls = !floatingMinimized && (
@@ -338,6 +318,14 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                 />
             </mdui-tooltip>
+            {m.isSharingScreen && (
+                <mdui-tooltip content={includeDesktopAudio ? '关闭系统声音' : '共享系统声音'}>
+                    <mdui-button-icon
+                        icon={includeDesktopAudio ? 'volume_up' : 'volume_off'}
+                        onClick={() => setIncludeDesktopAudio((v) => !v)}
+                    />
+                </mdui-tooltip>
+            )}
             <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                 <mdui-button-icon
                     icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
