@@ -122,7 +122,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 await MeetingManager.stopScreenShare()
                 return
             }
-            // 始终尝试带上系统声音
             const res = await MeetingManager.startScreenShare()
             if (res.audioUnsupported)
                 showSnackbar({ message: '未能分享系统声音: 当前浏览器/系统不支持, 已仅共享屏幕' })
