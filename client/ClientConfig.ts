@@ -1,6 +1,7 @@
 export interface IClientConfig {
     site_title?: string
     livekit_enabled?: boolean
+    oauth_enabled?: boolean
 }
 
 class ClientConfig {
@@ -31,6 +32,10 @@ class ClientConfig {
 
     get meetingEnabled() {
         return this.config.livekit_enabled
+    }
+
+    get oauthEnabled() {
+        return !!this.config.oauth_enabled
     }
 }
 

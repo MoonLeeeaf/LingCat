@@ -422,3 +422,19 @@ message Get_Active_Meeting_Response {
     string starter_user_id = 4;
     optional string title = 5;
 }
+
+/**
+ * =======================================================
+ *
+ *                 OIDC 登录 (Pocket ID 等)
+ *
+ * =======================================================
+ */
+
+message Exchange_OAuth_Code_Request {
+    string ticket = 1;
+}
+
+message Exchange_OAuth_Code_Response {
+    string access_token = 1;
+}

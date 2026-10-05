@@ -12,6 +12,7 @@ import tipError from "../tipError.ts"
 import showSnackbar from "../showSnackbar.ts"
 import AppState from "../AppState.ts"
 import { cropImageToSquare } from "../imageUtils.ts"
+import ClientConfigInstance from "../../ClientConfig.ts"
 
 export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -119,6 +120,18 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                 }}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="用户名" value={profile?.username || ''} ref={editUserNameRef}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="简介" value={profile?.description || ''} ref={editDescriptionRef}></mdui-text-field>
+
+                {ClientConfigInstance.oauthEnabled && (
+                    <mdui-button
+                        variant="tonal"
+                        icon="passkey"
+                        style={{ marginTop: '16px', width: '100%' }}
+                        onClick={() => {
+                            const token = ClientManager.getActiveUserSession().token
+                            location.href = './oauth/login?mode=bind&access_token=' + encodeURIComponent(token)
+                        }}
+                    >绑定 Pocket ID</mdui-button>
+                )}
 
                 <mdui-button slot="action" variant="text" onClick={() => ref.current!.open = false}>取消</mdui-button>
                 <mdui-button slot="action" variant="text" onClick={async () => {

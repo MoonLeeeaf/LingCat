@@ -28,6 +28,19 @@ export interface LingCatServerConfig {
     max_meeting_participants?: number
     /** 会议令牌有效期 (秒) */
     meeting_token_ttl_seconds?: number
+
+    /**
+     * ===========================
+     *      OIDC 登录 (Pocket ID 等)
+     * ===========================
+     */
+    oauth_enabled?: boolean
+    oauth_issuer?: string
+    oauth_client_id?: string
+    oauth_client_secret?: string
+    oauth_redirect_uri?: string
+    /** 是否允许 OIDC 首次登录自动建号 (策略 A); 默认 false (仅绑定, 策略 B) */
+    oauth_auto_create_user?: boolean
 }
 
 const default_config: LingCatServerConfig = {
@@ -43,6 +56,13 @@ const default_config: LingCatServerConfig = {
     livekit_api_secret: 'secret',
     max_meeting_participants: 6,
     meeting_token_ttl_seconds: 7200,
+
+    oauth_enabled: false,
+    oauth_issuer: '',
+    oauth_client_id: '',
+    oauth_client_secret: '',
+    oauth_redirect_uri: '',
+    oauth_auto_create_user: false,
 }
 
 if (!fileExists(base_data_path + '/config.json'))

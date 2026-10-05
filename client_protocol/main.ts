@@ -3,6 +3,7 @@ import UserApi from "./UserApi.ts"
 import FileApi from './FileApi.ts'
 import ChatApi from './ChatApi.ts'
 import MeetingApi from './MeetingApi.ts'
+import OAuthApi from './OAuthApi.ts'
 
 import MessageParser from './MessageParser.ts'
 
@@ -12,6 +13,7 @@ export {
     FileApi,
     ChatApi,
     MeetingApi,
+    OAuthApi,
 
     MessageParser,
 }

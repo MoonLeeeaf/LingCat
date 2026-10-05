@@ -78,6 +78,8 @@ export default class Methods {
     static End_Meeting_Response = 0x79
     static Get_Active_Meeting_Request = 0x82
     static Get_Active_Meeting_Response = 0x83
+    static Exchange_OAuth_Code_Request = 0x84
+    static Exchange_OAuth_Code_Response = 0x85
 
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32

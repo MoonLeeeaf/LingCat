@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from "protobufjs/minimal.js";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -11289,6 +11289,240 @@ export namespace lingcat {
 
             /** Shape of a Get_Active_Meeting_Response. */
             type $Shape = lingcat.methods.Get_Active_Meeting_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Exchange_OAuth_Code_Request.
+         * @deprecated Use lingcat.methods.Exchange_OAuth_Code_Request.$Properties instead.
+         */
+        interface IExchange_OAuth_Code_Request extends lingcat.methods.Exchange_OAuth_Code_Request.$Properties {
+        }
+
+        /** Represents an Exchange_OAuth_Code_Request. */
+        class Exchange_OAuth_Code_Request {
+
+            /**
+             * Constructs a new Exchange_OAuth_Code_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Exchange_OAuth_Code_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Exchange_OAuth_Code_Request ticket. */
+            ticket: string;
+
+            /**
+             * Creates a new Exchange_OAuth_Code_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Exchange_OAuth_Code_Request instance
+             */
+            static create(properties: lingcat.methods.Exchange_OAuth_Code_Request.$Shape): lingcat.methods.Exchange_OAuth_Code_Request & lingcat.methods.Exchange_OAuth_Code_Request.$Shape;
+            static create(properties?: lingcat.methods.Exchange_OAuth_Code_Request.$Properties): lingcat.methods.Exchange_OAuth_Code_Request;
+
+            /**
+             * Encodes the specified Exchange_OAuth_Code_Request message. Does not implicitly {@link lingcat.methods.Exchange_OAuth_Code_Request.verify|verify} messages.
+             * @param message Exchange_OAuth_Code_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Exchange_OAuth_Code_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Exchange_OAuth_Code_Request message, length delimited. Does not implicitly {@link lingcat.methods.Exchange_OAuth_Code_Request.verify|verify} messages.
+             * @param message Exchange_OAuth_Code_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Exchange_OAuth_Code_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Exchange_OAuth_Code_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Exchange_OAuth_Code_Request & lingcat.methods.Exchange_OAuth_Code_Request.$Shape} Exchange_OAuth_Code_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Exchange_OAuth_Code_Request & lingcat.methods.Exchange_OAuth_Code_Request.$Shape;
+
+            /**
+             * Decodes an Exchange_OAuth_Code_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Exchange_OAuth_Code_Request & lingcat.methods.Exchange_OAuth_Code_Request.$Shape} Exchange_OAuth_Code_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Exchange_OAuth_Code_Request & lingcat.methods.Exchange_OAuth_Code_Request.$Shape;
+
+            /**
+             * Verifies an Exchange_OAuth_Code_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Exchange_OAuth_Code_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Exchange_OAuth_Code_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Exchange_OAuth_Code_Request;
+
+            /**
+             * Creates a plain object from an Exchange_OAuth_Code_Request message. Also converts values to other types if specified.
+             * @param message Exchange_OAuth_Code_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Exchange_OAuth_Code_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Exchange_OAuth_Code_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Exchange_OAuth_Code_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Exchange_OAuth_Code_Request {
+
+            /** Properties of an Exchange_OAuth_Code_Request. */
+            interface $Properties {
+
+                /** Exchange_OAuth_Code_Request ticket */
+                ticket?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Exchange_OAuth_Code_Request. */
+            type $Shape = lingcat.methods.Exchange_OAuth_Code_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Exchange_OAuth_Code_Response.
+         * @deprecated Use lingcat.methods.Exchange_OAuth_Code_Response.$Properties instead.
+         */
+        interface IExchange_OAuth_Code_Response extends lingcat.methods.Exchange_OAuth_Code_Response.$Properties {
+        }
+
+        /** Represents an Exchange_OAuth_Code_Response. */
+        class Exchange_OAuth_Code_Response {
+
+            /**
+             * Constructs a new Exchange_OAuth_Code_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Exchange_OAuth_Code_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Exchange_OAuth_Code_Response accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Exchange_OAuth_Code_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Exchange_OAuth_Code_Response instance
+             */
+            static create(properties: lingcat.methods.Exchange_OAuth_Code_Response.$Shape): lingcat.methods.Exchange_OAuth_Code_Response & lingcat.methods.Exchange_OAuth_Code_Response.$Shape;
+            static create(properties?: lingcat.methods.Exchange_OAuth_Code_Response.$Properties): lingcat.methods.Exchange_OAuth_Code_Response;
+
+            /**
+             * Encodes the specified Exchange_OAuth_Code_Response message. Does not implicitly {@link lingcat.methods.Exchange_OAuth_Code_Response.verify|verify} messages.
+             * @param message Exchange_OAuth_Code_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Exchange_OAuth_Code_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Exchange_OAuth_Code_Response message, length delimited. Does not implicitly {@link lingcat.methods.Exchange_OAuth_Code_Response.verify|verify} messages.
+             * @param message Exchange_OAuth_Code_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Exchange_OAuth_Code_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Exchange_OAuth_Code_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Exchange_OAuth_Code_Response & lingcat.methods.Exchange_OAuth_Code_Response.$Shape} Exchange_OAuth_Code_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Exchange_OAuth_Code_Response & lingcat.methods.Exchange_OAuth_Code_Response.$Shape;
+
+            /**
+             * Decodes an Exchange_OAuth_Code_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Exchange_OAuth_Code_Response & lingcat.methods.Exchange_OAuth_Code_Response.$Shape} Exchange_OAuth_Code_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Exchange_OAuth_Code_Response & lingcat.methods.Exchange_OAuth_Code_Response.$Shape;
+
+            /**
+             * Verifies an Exchange_OAuth_Code_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Exchange_OAuth_Code_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Exchange_OAuth_Code_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Exchange_OAuth_Code_Response;
+
+            /**
+             * Creates a plain object from an Exchange_OAuth_Code_Response message. Also converts values to other types if specified.
+             * @param message Exchange_OAuth_Code_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Exchange_OAuth_Code_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Exchange_OAuth_Code_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Exchange_OAuth_Code_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Exchange_OAuth_Code_Response {
+
+            /** Properties of an Exchange_OAuth_Code_Response. */
+            interface $Properties {
+
+                /** Exchange_OAuth_Code_Response accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Exchange_OAuth_Code_Response. */
+            type $Shape = lingcat.methods.Exchange_OAuth_Code_Response.$Properties;
         }
     }
 }

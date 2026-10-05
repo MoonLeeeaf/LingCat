@@ -13,6 +13,7 @@
         "lingcat-protocol": "*",
         "lingcat-shared": "*",
         "livekit-server-sdk": "^2.19.1",
+        "openid-client": "^6.8.8",
         "sqlite3": "^6.0.1",
         "ws": "^8.19.0"
     },
