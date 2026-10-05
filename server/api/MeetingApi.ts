@@ -172,7 +172,7 @@ export default class MeetingApi {
 
                 // 幂等: 该对话已有进行中的会议则复用, 不再新建房间
                 const existing = store.findByChat(data.chatId)
-                const meeting = existing ?? store.create(data.chatId, user_id, data.title)
+                const meeting = existing ?? store.create(data.chatId, user_id, data.title!)
 
                 // 仅"新会议"时写入系统消息, 避免重复点击刷屏
                 if (!existing) {
