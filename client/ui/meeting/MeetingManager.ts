@@ -26,6 +26,7 @@ class MeetingManagerImpl {
     starterUserId?: string
 
     isMicOn = false
+    isCameraOn = false
     isSharingScreen = false
     audioBlocked = false
 
@@ -142,6 +143,8 @@ class MeetingManagerImpl {
         const lp = this.room?.localParticipant
         const mic = lp?.getTrackPublication(Track.Source.Microphone)
         this.isMicOn = !!mic?.track && !mic.isMuted
+        const cam = lp?.getTrackPublication(Track.Source.Camera)
+        this.isCameraOn = !!cam?.track && !cam.isMuted
         const screen = lp?.getTrackPublication(Track.Source.ScreenShare)
         this.isSharingScreen = !!screen?.track
         this.emit()
@@ -230,6 +233,13 @@ class MeetingManagerImpl {
         this.syncLocalFlags()
     }
 
+    async toggleCamera() {
+        const lp = this.room?.localParticipant
+        if (!lp) return
+        await lp.setCameraEnabled(!this.isCameraOn)
+        this.syncLocalFlags()
+    }
+
     async toggleScreenShare() {
         const lp = this.room?.localParticipant
         if (!lp) return
@@ -263,6 +273,7 @@ class MeetingManagerImpl {
         this.phase = 'idle'
         this.error = undefined
         this.isMicOn = false
+        this.isCameraOn = false
         this.isSharingScreen = false
         this.audioBlocked = false
         this.roomName = undefined
@@ -281,6 +292,7 @@ class MeetingManagerImpl {
         this.room = undefined
         this.phase = 'idle'
         this.isMicOn = false
+        this.isCameraOn = false
         this.isSharingScreen = false
         this.emit()
     }

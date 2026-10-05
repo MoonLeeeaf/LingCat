@@ -35,7 +35,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const active = m.isActive()
 
-    // 初次出现 (悬浮模式) 定位到右下角
     React.useEffect(() => {
         if (mode !== 'floating' || pos != undefined) return
         setPos({
@@ -44,7 +43,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         })
     }, [mode, pos])
 
-    // 最大化某人的屏幕共享后, 如果需要一并进入全屏
     React.useEffect(() => {
         if (pendingFullscreen.current && focusRef.current) {
             pendingFullscreen.current = false
@@ -58,7 +56,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         ? [m.room.localParticipant, ...Array.from(m.room.remoteParticipants.values())]
         : []
 
-    // starter 可结束; 若未知 (异常兜底) 也允许尝试, 由服务端校验权限
     const canEnd = !m.starterUserId || m.starterUserId == AppState.myId
     const focused = participants.find((p) => p.identity === m.focusedIdentity && hasScreenShare(p))
     const dim = size === 'minimized' ? { w: 280, h: 0 } : SIZES[size as Exclude<PanelSize, 'minimized'>]
@@ -68,7 +65,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         if ((e.target as HTMLElement).closest('mdui-button-icon, mdui-button, button')) return
         const p = pos ?? { x: 0, y: 0 }
         dragRef.current = { dx: e.clientX - p.x, dy: e.clientY - p.y }
-        ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+            ; (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
     }
     const onPointerMove = (e: React.PointerEvent) => {
         if (!dragRef.current) return
@@ -90,7 +87,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         MeetingManager.setFocused(id)
     }
 
-    // ============ 主体 ============
     const body = (
         <div style={{
             flex: 1,
@@ -112,7 +108,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 </div>
             )}
             {!!m.room && (focused ? (
-                /* 最大化某人的屏幕共享 */
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
                         <VideoPublication publication={screenPub(focused)} muted={focused instanceof LocalParticipant} />
@@ -120,8 +115,12 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                             {focused.name || focused.identity} · 共享屏幕
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px' }}>
-                            <mdui-button-icon icon="fullscreen" title="全屏" onClick={() => focusRef.current?.requestFullscreen?.().catch(() => { })} />
-                            <mdui-button-icon icon="close_fullscreen" title="退出最大化" onClick={() => MeetingManager.setFocused(undefined)} />
+                            <mdui-tooltip content="全屏">
+                                <mdui-button-icon icon="fullscreen" onClick={() => focusRef.current?.requestFullscreen?.().catch(() => { })} />
+                            </mdui-tooltip>
+                            <mdui-tooltip content="退出最大化">
+                                <mdui-button-icon icon="close_fullscreen" onClick={() => MeetingManager.setFocused(undefined)} />
+                            </mdui-tooltip>
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
@@ -137,15 +136,18 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                     </div>
                 </div>
             ) : (
-                /* 宫格 */
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '6px', alignContent: 'start' }}>
                     {participants.map((p) => <ParticipantTile
                         key={p.identity}
                         participant={p}
                         onClick={() => hasScreenShare(p) && maximize(p.identity)}
                         actions={hasScreenShare(p) ? <>
-                            <mdui-button-icon icon="zoom_out_map" title="最大化" onClick={() => maximize(p.identity)} />
-                            <mdui-button-icon icon="fullscreen" title="全屏" onClick={() => maximizeAndFullscreen(p.identity)} />
+                            <mdui-tooltip content="最大化">
+                                <mdui-button-icon icon="zoom_out_map" onClick={() => maximize(p.identity)} />
+                            </mdui-tooltip>
+                            <mdui-tooltip content="全屏">
+                                <mdui-button-icon icon="fullscreen" onClick={() => maximizeAndFullscreen(p.identity)} />
+                            </mdui-tooltip>
                         </> : undefined}
                     />)}
                 </div>
@@ -155,7 +157,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const floatingMinimized = !isDocked && size === 'minimized'
 
-    // ============ 标题栏 ============
     const header = (
         <div
             onPointerDown={isDocked ? undefined : onPointerDown}
@@ -183,40 +184,51 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             </div>
 
             {floatingMinimized && <>
-                <mdui-button-icon
-                    icon={m.isMicOn ? 'mic' : 'mic_off'}
-                    onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
-                    title={m.isMicOn ? '关闭麦克风' : '开启麦克风'}
-                />
-                <mdui-button-icon
-                    icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
-                    onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
-                    title={m.isSharingScreen ? '停止共享' : '共享屏幕'}
-                />
+                <mdui-tooltip content={m.isMicOn ? '关闭麦克风' : '开启麦克风'}>
+                    <mdui-button-icon
+                        icon={m.isMicOn ? 'mic' : 'mic_off'}
+                        onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
+                    />
+                </mdui-tooltip>
+                <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                    <mdui-button-icon
+                        icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
+                        onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
+                    />
+                </mdui-tooltip>
+                <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
+                    <mdui-button-icon
+                        icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
+                        onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
+                    />
+                </mdui-tooltip>
             </>}
 
-            {/* 分栏 / 小窗 切换 */}
-            <mdui-button-icon
-                icon={isDocked ? 'picture_in_picture_alt' : 'view_sidebar'}
-                onClick={() => MeetingManager.setDock(!isDocked)}
-                title={isDocked ? '切换为悬浮小窗' : '切换为分栏 (左画面 / 右聊天)'}
-            />
+            <mdui-tooltip content={isDocked ? '切换为悬浮小窗' : '切换为分栏 (左画面 / 右聊天)'}>
+                <mdui-button-icon
+                    icon={isDocked ? 'picture_in_picture_alt' : 'view_sidebar'}
+                    onClick={() => MeetingManager.setDock(!isDocked)}
+                />
+            </mdui-tooltip>
 
-            {!isDocked && <mdui-button-icon
-                icon={floatingMinimized ? 'open_in_full' : 'minimize'}
-                onClick={() => setSize(floatingMinimized ? 'normal' : 'minimized')}
-                title={floatingMinimized ? '展开' : '最小化 (继续聊天)'}
-            />}
-            {!isDocked && !floatingMinimized && <mdui-button-icon
-                icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
-                onClick={() => setSize(size === 'expanded' ? 'normal' : 'expanded')}
-                title={size === 'expanded' ? '缩小' : '放大'}
-            />}
-            <mdui-button-icon icon="close" onClick={() => MeetingManager.leave()} title="离开会议" />
+            {!isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
+                <mdui-button-icon
+                    icon={floatingMinimized ? 'open_in_full' : 'minimize'}
+                    onClick={() => setSize(floatingMinimized ? 'normal' : 'minimized')}
+                />
+            </mdui-tooltip>}
+            {!isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
+                <mdui-button-icon
+                    icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
+                    onClick={() => setSize(size === 'expanded' ? 'normal' : 'expanded')}
+                />
+            </mdui-tooltip>}
+            <mdui-tooltip content="离开会议">
+                <mdui-button-icon icon="close" onClick={() => MeetingManager.leave()} />
+            </mdui-tooltip>
         </div>
     )
 
-    // ============ 控制栏 ============
     const controls = !floatingMinimized && (
         <div style={{
             display: 'flex',
@@ -230,16 +242,24 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             {m.audioBlocked && (
                 <mdui-button icon="volume_up" variant="tonal" onClick={() => MeetingManager.resumeAudio()}>播放音频</mdui-button>
             )}
-            <mdui-button-icon
-                icon={m.isMicOn ? 'mic' : 'mic_off'}
-                onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
-                title={m.isMicOn ? '关闭麦克风' : '开启麦克风'}
-            />
-            <mdui-button-icon
-                icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
-                onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
-                title={m.isSharingScreen ? '停止共享' : '共享屏幕'}
-            />
+            <mdui-tooltip content={m.isMicOn ? '关闭麦克风' : '开启麦克风'}>
+                <mdui-button-icon
+                    icon={m.isMicOn ? 'mic' : 'mic_off'}
+                    onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
+                />
+            </mdui-tooltip>
+            <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                <mdui-button-icon
+                    icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
+                    onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
+                />
+            </mdui-tooltip>
+            <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
+                <mdui-button-icon
+                    icon={m.isSharingScreen ? 'stop_screen_share' : 'screen_share'}
+                    onClick={() => MeetingManager.toggleScreenShare().catch((e) => tipError(e, '屏幕共享失败'))}
+                />
+            </mdui-tooltip>
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
         </div>
     )
