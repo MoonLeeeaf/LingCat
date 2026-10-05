@@ -322,14 +322,15 @@ function LoginDialog({ onClose, allowClose, onLoginSuccess }: {
         <div style={{ paddingTop: '15px' }}></div>
         <mdui-text-field variant="outlined" label="密码" type="password" ref={mLoginPassword}></mdui-text-field>
 
-        {ClientConfigInstance.oauthEnabled && (
+        {ClientConfigInstance.oauthProviders.map((p) => (
             <mdui-button
+                key={p.id}
                 variant="tonal"
                 icon="passkey"
                 style={{ marginTop: '16px', width: '100%' }}
-                onClick={() => { location.href = './oauth/login' }}
-            >用 Pocket ID 登录</mdui-button>
-        )}
+                onClick={() => { location.href = './oauth/' + encodeURIComponent(p.id) + '/login' }}
+            >用 {p.display_name || p.id} 登录</mdui-button>
+        ))}
 
         <mdui-button slot="action" variant="text" onClick={() => ClientSettingsDialog.show()}>设置</mdui-button>
         <div slot="action" style={{ flexGrow: 1 }}></div>

@@ -121,17 +121,18 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="用户名" value={profile?.username || ''} ref={editUserNameRef}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="简介" value={profile?.description || ''} ref={editDescriptionRef}></mdui-text-field>
 
-                {ClientConfigInstance.oauthEnabled && (
+                {ClientConfigInstance.oauthProviders.map((p) => (
                     <mdui-button
+                        key={p.id}
                         variant="tonal"
                         icon="passkey"
                         style={{ marginTop: '16px', width: '100%' }}
                         onClick={() => {
                             const token = ClientManager.getActiveUserSession().token
-                            location.href = './oauth/login?mode=bind&access_token=' + encodeURIComponent(token)
+                            location.href = './oauth/' + encodeURIComponent(p.id) + '/login?mode=bind&access_token=' + encodeURIComponent(token)
                         }}
-                    >绑定 Pocket ID</mdui-button>
-                )}
+                    >绑定 {p.display_name || p.id}</mdui-button>
+                ))}
 
                 <mdui-button slot="action" variant="text" onClick={() => ref.current!.open = false}>取消</mdui-button>
                 <mdui-button slot="action" variant="text" onClick={async () => {
