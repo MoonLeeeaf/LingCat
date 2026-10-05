@@ -51,13 +51,13 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         })
     }, [mode, pos])
 
+    // 跟踪浏览器全屏状态, 让按钮能正确切换 (所有模式)
     React.useEffect(() => {
-        if (!isWindow) return
         const onChange = () => setIsFullscreen(!!document.fullscreenElement)
         document.addEventListener('fullscreenchange', onChange)
         onChange()
         return () => document.removeEventListener('fullscreenchange', onChange)
-    }, [isWindow])
+    }, [])
 
     React.useEffect(() => {
         if (pendingFullscreen.current && focusRef.current) {
@@ -190,12 +190,24 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                         <div style={{ position: 'absolute', left: '8px', bottom: '8px', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', background: 'rgba(0,0,0,0.5)', color: '#fff' }}>
                             {focused.name || focused.identity} · 共享屏幕
                         </div>
-                        <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px' }}>
-                            <mdui-tooltip content="全屏">
-                                <mdui-button-icon icon="fullscreen" onClick={() => focusRef.current?.requestFullscreen?.().catch(() => { })} />
+                        <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px', zIndex: 2 }}>
+                            <mdui-tooltip content={isFullscreen ? '退出全屏' : '全屏'}>
+                                <mdui-button-icon
+                                    icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
+                                    onClick={() => {
+                                        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
+                                        else focusRef.current?.requestFullscreen?.().catch(() => { })
+                                    }}
+                                />
                             </mdui-tooltip>
                             <mdui-tooltip content="退出最大化">
-                                <mdui-button-icon icon="close_fullscreen" onClick={() => MeetingManager.setFocused(undefined)} />
+                                <mdui-button-icon
+                                    icon="close_fullscreen"
+                                    onClick={() => {
+                                        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
+                                        MeetingManager.setFocused(undefined)
+                                    }}
+                                />
                             </mdui-tooltip>
                         </div>
                     </div>
