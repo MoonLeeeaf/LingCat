@@ -10,6 +10,9 @@ import React from 'react'
 import Main from './ui/Main.tsx'
 
 import './ui/MduiPatchedTextAreaElement.ts'
+import ClientConfigInstance from './ClientConfig.ts'
+
+await ClientConfigInstance.load()
 
 if ("Notification" in window && Notification.permission == "default") Notification.requestPermission()
 

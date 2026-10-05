@@ -23,6 +23,7 @@ import ProfileCache from "../ProfileCache.ts"
 import ClientSettingsDialog, { LoginDialog, SwitchUserDialog } from "./ClientSettingsDialog.tsx"
 import MeetingPanel from "./meeting/MeetingDialog.tsx"
 import { MeetingManager, useMeeting } from "./meeting/MeetingManager.ts"
+import ClientConfigInstance from "../ClientConfig.ts"
 
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
@@ -189,6 +190,10 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
 
     const [activeChat, setActiveChat] = React.useState<IChat>()
     AppState.setActiveChat = setActiveChat
+
+    React.useEffect(() => {
+            document.title = ClientConfigInstance.title + ' | ' + activeChat?.title
+    }, [activeChat])
 
     // 记住当前打开的对话, 刷新后自动恢复
     const activeChatStorageKey = profile?.id ? 'lingcat.active_chat.' + profile.id : undefined

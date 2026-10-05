@@ -43,6 +43,24 @@ export default function createLingCatServer(base_data_path: string) {
     app.use(express.static(`${base_data_path}/page/`))
 
     app.use(cookieParser())
+    app.get('/config.json', (req, res) => {
+        const pub: Record<string, any> = {}
+        for (const key of [
+            'site_title',
+            'livekit_enabled'
+        ]) {
+            if ((config as any)[key] !== undefined) {
+                pub[key] = (config as any)[key]
+            }
+        }
+    
+        pub.features = {
+            meeting: !!config.livekit_enabled,
+        }
+    
+        res.setHeader('Cache-Control', 'no-cache')   // 配置改了要立刻生效
+        res.json(pub)
+    })
     app.get('/uploaded_files/:hash', async (req, res) => {
         const token = req.headers.file_access_token || req.cookies.file_access_token || req.query.file_access_token
         if (!token) return res.status(401).send({ message: "Unauthorzied" })

@@ -23,6 +23,7 @@ import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
 import { MeetingManager, useMeeting } from "../meeting/MeetingManager.ts"
+import ClientConfigInstance from "../../ClientConfig.ts"
 
 function isApproximatelyAtBottom(scroller: HTMLElement, threshold: number = 20): boolean {
     if (!scroller) return false
@@ -268,7 +269,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         file_upload_token: token,
                         file_data: cachedFiles.current[fileName],
                         mime: cachedFileMimes.current[fileName],
-                        file_name: fileName, 
+                        file_name: fileName,
                     })
                     text = text.replaceAll('(' + fileName + ')', '(lingcat://file?hash=' + hash + ')')
                 }
@@ -494,7 +495,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             }}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
-            <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={() => {
+            {ClientConfigInstance.meetingEnabled && <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={() => {
                 (async () => {
                     if (MeetingManager.isInMeeting(chat.id)) {
                         showSnackbar({ message: '你已在此会议中' })
@@ -510,7 +511,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         tipError(e, '发起会议失败')
                     }
                 })()
-            }}></mdui-button-icon>
+            }}></mdui-button-icon>}
             <mdui-button-icon icon="group" style={{ marginRight: '4px' }} onClick={() => ChatMembersAndAdminsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="settings" style={{ marginRight: '4px' }} onClick={() => ChatSettingsDialog.show(chat.id)}></mdui-button-icon>
             <mdui-button-icon icon="info" style={{ marginRight: '4px' }} onClick={() => ChatProfileDialog.show(chat.id)}></mdui-button-icon>

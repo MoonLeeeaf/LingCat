@@ -12,11 +12,8 @@ export interface LingCatServerConfig {
     token_secret?: string
     max_file_size?: number
 
-    /**
-     * ===========================
-     *     会议 (LiveKit)
-     * ===========================
-     */
+    site_title: string
+
     /** 是否启用会议功能 */
     livekit_enabled?: boolean
     /** 客户端连接 LiveKit 的地址, 例如 ws://localhost:7880 或 wss://livekit.example.com */
@@ -36,6 +33,8 @@ export interface LingCatServerConfig {
 const default_config: LingCatServerConfig = {
     port: 3601,
     token_secret: crypto.randomBytes(16).toString('utf-8'),
+
+    site_title: '灵猫',
 
     livekit_enabled: false,
     livekit_url: 'ws://localhost:7880',
