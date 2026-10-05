@@ -13,6 +13,9 @@ const SIZES = {
     expanded: { w: 800, h: 580 },
 } as const
 
+const MIN_W = 295
+const MIN_H = 200
+
 function hasScreenShare(p: Participant) {
     const s = p.getTrackPublication(Track.Source.ScreenShare)
     return !!s?.track && !s.isMuted
@@ -25,9 +28,11 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     const m = useMeeting()
 
     const [size, setSize] = React.useState<PanelSize>('normal')
+    const [customSize, setCustomSize] = React.useState<{ w: number, h: number } | undefined>(undefined)
     const [pos, setPos] = React.useState<{ x: number, y: number } | undefined>(undefined)
 
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
+    const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
     const focusRef = React.useRef<HTMLDivElement>(null)
     const pendingFullscreen = React.useRef(false)
 
@@ -56,8 +61,15 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
 
     const canEnd = !m.starterUserId || m.starterUserId == AppState.myId
     const focused = participants.find((p) => p.identity === m.focusedIdentity && hasScreenShare(p))
-    const dim = size === 'minimized' ? { w: 280, h: 0 } : SIZES[size as Exclude<PanelSize, 'minimized'>]
+    const dim = size === 'minimized'
+        ? { w: 295, h: 0 }
+        : (customSize ?? SIZES[size as Exclude<PanelSize, 'minimized'>])
     const isDocked = mode === 'docked'
+
+    const setSizePreset = (s: PanelSize) => {
+        setCustomSize(undefined)
+        setSize(s)
+    }
 
     const onPointerDown = (e: React.PointerEvent) => {
         if ((e.target as HTMLElement).closest('mdui-button-icon, mdui-button, button')) return
@@ -73,6 +85,30 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     }
     const onPointerUp = (e: React.PointerEvent) => {
         dragRef.current = null
+        try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { }
+    }
+
+    const onResizePointerDown = (e: React.PointerEvent) => {
+        e.stopPropagation()
+        resizeRef.current = {
+            startX: e.clientX,
+            startY: e.clientY,
+            startW: dim.w,
+            startH: dim.h,
+        }
+            ; (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    }
+    const onResizePointerMove = (e: React.PointerEvent) => {
+        if (!resizeRef.current) return
+        const { startX, startY, startW, startH } = resizeRef.current
+        const maxW = window.innerWidth - (pos?.x ?? 0) - 12
+        const maxH = window.innerHeight - (pos?.y ?? 0) - 12
+        const w = Math.min(Math.max(MIN_W, startW + (e.clientX - startX)), maxW)
+        const h = Math.min(Math.max(MIN_H, startH + (e.clientY - startY)), maxH)
+        setCustomSize({ w, h })
+    }
+    const onResizePointerUp = (e: React.PointerEvent) => {
+        resizeRef.current = null
         try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { }
     }
 
@@ -109,7 +145,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
                         <VideoPublication publication={screenPub(focused)} muted={focused instanceof LocalParticipant} />
-                        <div style={{ position: 'absolute', left: '8px', bottom: '8px', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', background: 'rgba(0,0,0,0.5)' }}>
+                        <div style={{ position: 'absolute', left: '8px', bottom: '8px', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', background: 'rgba(0,0,0,0.5)', color: '#fff' }}>
                             {focused.name || focused.identity} · 共享屏幕
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px' }}>
@@ -165,7 +201,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 alignItems: 'center',
                 gap: '6px',
                 padding: '6px 8px 6px 12px',
-                borderBottom: (floatingMinimized || isDocked) ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(255,255,255,0.08)',
+                borderBottom: '1px solid rgb(var(--mdui-color-outline-variant))',
                 cursor: isDocked ? 'default' : 'move',
                 userSelect: 'none',
                 touchAction: 'none',
@@ -212,13 +248,13 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             {!isDocked && <mdui-tooltip content={floatingMinimized ? '展开' : '最小化 (继续聊天)'}>
                 <mdui-button-icon
                     icon={floatingMinimized ? 'open_in_full' : 'minimize'}
-                    onClick={() => setSize(floatingMinimized ? 'normal' : 'minimized')}
+                    onClick={() => setSizePreset(floatingMinimized ? 'normal' : 'minimized')}
                 />
             </mdui-tooltip>}
             {!isDocked && !floatingMinimized && <mdui-tooltip content={size === 'expanded' ? '缩小' : '放大'}>
                 <mdui-button-icon
                     icon={size === 'expanded' ? 'close_fullscreen' : 'open_in_full'}
-                    onClick={() => setSize(size === 'expanded' ? 'normal' : 'expanded')}
+                    onClick={() => setSizePreset(size === 'expanded' ? 'normal' : 'expanded')}
                 />
             </mdui-tooltip>}
             <mdui-tooltip content="离开会议">
@@ -234,7 +270,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
             justifyContent: 'center',
             gap: '6px',
             padding: '8px',
-            borderTop: '1px solid rgba(255,255,255,0.08)',
+            borderTop: '1px solid rgb(var(--mdui-color-outline-variant))',
             flexWrap: 'wrap',
         }}>
             {m.audioBlocked && (
@@ -259,6 +295,34 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
                 />
             </mdui-tooltip>
             {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
+        </div>
+    )
+
+    const resizeHandle = !isDocked && !floatingMinimized && (
+        <div
+            onPointerDown={onResizePointerDown}
+            onPointerMove={onResizePointerMove}
+            onPointerUp={onResizePointerUp}
+            style={{
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+                width: '18px',
+                height: '18px',
+                cursor: 'nwse-resize',
+                touchAction: 'none',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+                padding: '2px',
+                color: 'rgb(var(--mdui-color-outline))',
+            }}
+        >
+            <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: 'block' }}>
+                <path d="M11 1 L11 11 L1 11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
+                <path d="M11 5 L11 11 L5 11" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
+            </svg>
         </div>
     )
 
@@ -290,5 +354,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         {header}
         {body}
         {controls}
+        {resizeHandle}
     </div>
 }
