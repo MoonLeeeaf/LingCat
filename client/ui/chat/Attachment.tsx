@@ -11,14 +11,7 @@ export interface IAttachmentData {
     name: string
 }
 
-function resolveKind(name: string, mime: string): 'image' | 'video' | 'audio' | 'file' {
-    // 前缀
-    if (name.startsWith('图片-') || name.startsWith('图片_')) return 'image'
-    if (name.startsWith('视频-') || name.startsWith('视频_')) return 'video'
-    if (name.startsWith('语音-') || name.startsWith('语音_')) return 'audio'
-    if (name.startsWith('文件-') || name.startsWith('文件_')) return 'file'
-
-    // MIME 兜底
+function resolveKind(mime: string): 'image' | 'video' | 'audio' | 'file' {
     if (mime.startsWith('image/')) return 'image'
     if (mime.startsWith('audio/')) return 'audio'
     if (mime.startsWith('video/')) return 'video'
@@ -48,7 +41,7 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
         }} />
     }
 
-    const kind = resolveKind(data.name, mime)
+    const kind = resolveKind(mime)
 
     switch (kind) {
         case 'image':

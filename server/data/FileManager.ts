@@ -3,7 +3,6 @@ import { base_data_path } from "../config.ts"
 import { IFile } from "../../protocol/classes-interfaces.ts"
 import node_path from 'node:path'
 import fs from 'node:fs'
-import { fileTypeFromFile } from 'file-type'
 import { db } from "./db.ts"
 
 interface IServerFile extends IFile {
@@ -39,13 +38,11 @@ export default class FileManager {
         await db<IServerFile>(tableName).update({ last_used_time: Date.now() }).where('hash', hash)
     }
 
-    static async uploadFile(hash: string, fileName: string, filePath: string, chatId?: string): Promise<IServerFile> {
+    static async uploadFile(hash: string, fileName: string, filePath: string, mime: string, chatId?: string): Promise<IServerFile> {
         const mFile = await this.queryFileByHash(hash)
         if (mFile) {
             return mFile
         }
-
-        const mime = (await fileTypeFromFile(filePath))?.mime || 'application/octet-stream'
 
         const folder = node_path.join(
             base_data_path,

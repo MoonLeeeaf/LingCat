@@ -18,7 +18,7 @@ import UserChatLinker from './data/UserChatLinker.ts'
 import sendError from './api/sendError.ts'
 import FileApi from './api/FileApi.ts'
 import cookieParser from 'cookie-parser'
-import WebSocket from 'ws'
+import { fileTypeFromFile } from 'file-type'
 import ChatApi from './api/ChatApi.ts'
 import MeetingApi from './api/MeetingApi.ts'
 
@@ -86,6 +86,7 @@ export default function createLingCatServer(base_data_path: string) {
         let hash: string | undefined
         let fileName = ''
         let belong_to_chat_id: string | undefined
+        let mime_from_client: string | undefined
         const path = os.tmpdir() + '/lingcat-upload-tmp-' + crypto.randomBytes(6).toString('hex')
 
         bb.on('field', (name, val) => {
@@ -94,6 +95,9 @@ export default function createLingCatServer(base_data_path: string) {
             }
             if (name == 'belong_to_chat_id') {
                 belong_to_chat_id = val
+            }
+            if (name == 'mime') {
+                mime_from_client = val
             }
         })
 
@@ -126,8 +130,9 @@ export default function createLingCatServer(base_data_path: string) {
                 }
                 return res.status(400).send({ message: "Hash mismatch" })
             }
+            const mime = mime_from_client || (await fileTypeFromFile(path))?.mime || 'application/octet-stream'
             try {
-                await FileManager.uploadFile(hash!, fileName, path, belong_to_chat_id)
+                await FileManager.uploadFile(hash!, fileName, path, mime, belong_to_chat_id)
             } finally {
                 fs.unlinkSync(path)
             }

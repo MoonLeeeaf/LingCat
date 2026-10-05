@@ -266,7 +266,9 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                 if (text.indexOf(fileName) != -1) {
                     const hash = await FileApi.uploadFile(ClientManager.client, {
                         file_upload_token: token,
-                        file_data: cachedFiles.current[fileName]
+                        file_data: cachedFiles.current[fileName],
+                        mime: cachedFileMimes.current[fileName],
+                        file_name: fileName, 
                     })
                     text = text.replaceAll('(' + fileName + ')', '(lingcat://file?hash=' + hash + ')')
                 }
@@ -333,7 +335,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         else if (type.startsWith('video/'))
             insertText(`![视频-${name}](${name})`)
         else if (type.startsWith('audio/'))
-            insertText(`![语音-${name}](${name})`)
+            insertText(`![音频-${name}](${name})`)
         else
             insertText(`![文件-${name}](${name})`)
     }
@@ -393,7 +395,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             tipError(new Error('当前环境不支持录音，请使用 HTTPS 访问'), '无法录音')
             return
         }
-        
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
             audioStreamRef.current = stream
@@ -416,7 +418,12 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                 audioStreamRef.current = null
                 mediaRecorderRef.current = null
 
-                const actualMime = recorder.mimeType || mimeType || 'audio/webm'
+                let actualMime = recorder.mimeType || mimeType || 'audio/webm'
+                // 有时会返回 video/webm, 但我们录的是纯音频
+                if (actualMime.includes('webm') && !actualMime.startsWith('audio/')) {
+                    actualMime = 'audio/webm;codecs=opus'
+                }
+
                 const blob = new Blob(audioChunksRef.current, { type: actualMime })
                 audioChunksRef.current = []
 
@@ -434,7 +441,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                         : actualMime.includes('mp4') ? 'm4a'
                             : 'bin'
                 const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')
-                const name = `语音-${ts}.${ext}`
+                const name = `${ts}.${ext}`
                 try {
                     await addFile(actualMime, name, blob)
                 } catch (e) {
