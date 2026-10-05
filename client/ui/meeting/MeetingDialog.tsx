@@ -13,8 +13,6 @@ const SIZES = {
     expanded: { w: 800, h: 580 },
 } as const
 
-const PANEL_BG = '#141414'
-
 function hasScreenShare(p: Participant) {
     const s = p.getTrackPublication(Track.Source.ScreenShare)
     return !!s?.track && !s.isMuted
@@ -265,7 +263,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
     )
 
     if (isDocked) {
-        return <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: PANEL_BG, color: '#fff', overflow: 'hidden' }}>
+        return <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', background: 'rgb(var(--mdui-color-surface-container-low))', color: 'rgb(var(--mdui-color-on-surface))', overflow: 'hidden' }}>
             {header}
             {body}
             {controls}
@@ -279,14 +277,14 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' }) 
         width: dim.w,
         height: floatingMinimized ? undefined : dim.h,
         zIndex: 2000,
-        background: 'rgba(20,20,20,0.96)',
-        color: '#fff',
-        borderRadius: '12px',
-        boxShadow: '0 8px 30px rgba(0,0,0,.5)',
+        background: 'rgb(var(--mdui-color-surface-container-low))',
+        color: 'rgb(var(--mdui-color-on-surface))',
+        borderRadius: 'var(--mdui-shape-corner-large,1rem)',
+        boxShadow: 'var(--mdui-elevation-level3)',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        border: '1px solid rgba(255,255,255,0.1)',
+        border: '1px solid rgb(var(--mdui-color-outline-variant))',
         visibility: pos == undefined ? 'hidden' : 'visible',
     }}>
         {header}
