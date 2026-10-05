@@ -36,6 +36,9 @@ class MeetingManagerImpl {
     audioInputs: { deviceId: string, label: string }[] = []
     activeAudioInput?: string
 
+    /** 本地静音的成员 (仅影响自己听到的声音) identity -> true */
+    locallyMuted: { [identity: string]: boolean } = {}
+
     /** 会议面板是否停靠为分栏模式 (左侧画面 / 右侧聊天) */
     dock = false
     /** 正在最大化的成员 (通常是某人的屏幕共享) */
@@ -262,6 +265,16 @@ class MeetingManagerImpl {
         }
     }
 
+    /** 本地静音/取消静音某个成员 (只影响自己) */
+    toggleLocalMute(identity: string) {
+        if (this.locallyMuted[identity]) delete this.locallyMuted[identity]
+        else this.locallyMuted[identity] = true
+        this.emit()
+    }
+    isLocallyMuted(identity: string) {
+        return !!this.locallyMuted[identity]
+    }
+
     /** 切换到指定麦克风设备 */
     async setAudioInput(deviceId: string) {
         const room = this.room
@@ -285,28 +298,25 @@ class MeetingManagerImpl {
      * 开始共享屏幕。withDesktopAudio=true 时尝试一并采集电脑/系统声音;
      * 失败或浏览器未提供音频轨时自动降级为仅视频。
      */
-    async startScreenShare(withDesktopAudio: boolean): Promise<{ audioShared: boolean, audioUnsupported: boolean }> {
+    /**
+     * 开始共享屏幕, 始终尝试一并共享系统/桌面声音;
+     * 浏览器不支持或未采到音频轨时自动降级为仅视频。
+     */
+    async startScreenShare(): Promise<{ audioShared: boolean, audioUnsupported: boolean }> {
         const lp = this.room?.localParticipant
         if (!lp) return { audioShared: false, audioUnsupported: false }
 
-        if (withDesktopAudio) {
-            try {
-                await lp.setScreenShareEnabled(true, { audio: true, systemAudio: 'include' })
-            } catch (e) {
-                // 例如浏览器不支持 audio / 用户拒绝 -> 降级为纯视频
-                console.warn('[Meeting] 带电脑声音共享失败, 降级为仅视频', e)
-                await lp.setScreenShareEnabled(true)
-                this.syncLocalFlags()
-                return { audioShared: false, audioUnsupported: true }
-            }
-            const got = !!lp.getTrackPublication(Track.Source.ScreenShareAudio)?.track
+        try {
+            await lp.setScreenShareEnabled(true, { audio: true, systemAudio: 'include' })
+        } catch (e) {
+            console.warn('[Meeting] 带系统声音共享失败, 降级为仅视频', e)
+            await lp.setScreenShareEnabled(true)
             this.syncLocalFlags()
-            return { audioShared: got, audioUnsupported: !got }
+            return { audioShared: false, audioUnsupported: true }
         }
-
-        await lp.setScreenShareEnabled(true)
+        const got = !!lp.getTrackPublication(Track.Source.ScreenShareAudio)?.track
         this.syncLocalFlags()
-        return { audioShared: false, audioUnsupported: false }
+        return { audioShared: got, audioUnsupported: !got }
     }
 
     async stopScreenShare() {
@@ -318,7 +328,7 @@ class MeetingManagerImpl {
 
     async toggleScreenShare() {
         if (this.isSharingScreen) return this.stopScreenShare()
-        return this.startScreenShare(false)
+        return this.startScreenShare()
     }
 
     async resumeAudio() {
@@ -354,6 +364,7 @@ class MeetingManagerImpl {
         this.roomName = undefined
         this.focusedIdentity = undefined
         this.activeAudioInput = undefined
+        this.locallyMuted = {}
         this.emit()
         try {
             room?.disconnect()
@@ -372,6 +383,7 @@ class MeetingManagerImpl {
         this.isSharingScreen = false
         this.isSharingAudio = false
         this.activeAudioInput = undefined
+        this.locallyMuted = {}
         this.emit()
     }
 }
