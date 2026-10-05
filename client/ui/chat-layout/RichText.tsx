@@ -27,6 +27,8 @@ function Spoiler({ children }: { children: React.ReactNode }) {
 function TextContainer({ children }: { children: React.ReactNode }) {
     return <div style={{
         padding: '13px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
     }}>
         {children}
     </div>
@@ -38,6 +40,8 @@ function TextContainerSystem({ children }: { children: React.ReactNode }) {
         paddingBottom: '8px',
         paddingLeft: '17px',
         paddingRight: '17px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
     }}>
         {children}
     </div>
@@ -60,7 +64,6 @@ export default function RichText({ text, entities, isSystem }: IRichTextProps) {
     }
     if (cursor < text.length) segments.push({ text: text.slice(cursor) })
 
-    // 分组：连续的"内联段"合并，attachment 单独成组
     const groups: Array<
         { type: 'inline', segments: typeof segments } |
         { type: 'block', segment: typeof segments[0] }
@@ -84,7 +87,6 @@ export default function RichText({ text, entities, isSystem }: IRichTextProps) {
     }
     flushInline()
 
-    // 渲染
     return <>{groups.map((g, gi) => {
         if (g.type === 'block') {
             return <React.Fragment key={gi}>
@@ -118,6 +120,7 @@ function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number
                 padding: '1px 5px',
                 borderRadius: '4px',
                 fontFamily: 'monospace',
+                whiteSpace: 'pre-wrap',
             }}>{seg.text}</code>
 
         case 'strikethrough':
