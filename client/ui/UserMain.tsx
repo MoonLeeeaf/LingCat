@@ -159,26 +159,6 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             if (p.method_id === Methods.Meeting_Started_Event) {
                 const ev = LingCatProto.methods.Meeting_Started_Event.decode(p.data)
                 MeetingManager.onMeetingStarted(ev)
-                if (ev.starterUserId == AppState.myId) return
-                if (MeetingManager.isInMeeting(ev.chatId)) return
-
-                const [starter, chat] = await Promise.all([
-                    ProfileCache.queryUserInfo(ev.starterUserId).catch(() => undefined),
-                    ProfileCache.queryChatInfo(ev.chatId).catch(() => undefined),
-                ])
-                const title = ev.title || chat?.title || '对话'
-                showSnackbar({
-                    message: `${starter?.nickname || '有人'} 在 [${title}] 发起了会议`,
-                    action: '加入',
-                    autoCloseDelay: 0,
-                    onActionClick: async () => {
-                        try {
-                            await MeetingManager.joinMeeting(ev.chatId, ev.meetingId, title)
-                        } catch (e) {
-                            tipError(e, '加入会议失败')
-                        }
-                    },
-                })
             } else if (p.method_id === Methods.Meeting_Ended_Event) {
                 const ev = LingCatProto.methods.Meeting_Ended_Event.decode(p.data)
                 MeetingManager.onMeetingEnded(ev)
