@@ -11,6 +11,20 @@ export interface IAttachmentData {
     name: string
 }
 
+function resolveKind(name: string, mime: string): 'image' | 'video' | 'audio' | 'file' {
+    // 前缀
+    if (name.startsWith('图片-') || name.startsWith('图片_')) return 'image'
+    if (name.startsWith('视频-') || name.startsWith('视频_')) return 'video'
+    if (name.startsWith('语音-') || name.startsWith('语音_')) return 'audio'
+    if (name.startsWith('文件-') || name.startsWith('文件_')) return 'file'
+
+    // MIME 兜底
+    if (mime.startsWith('image/')) return 'image'
+    if (mime.startsWith('audio/')) return 'audio'
+    if (mime.startsWith('video/')) return 'video'
+    return 'file'
+}
+
 export default function Attachment({ data }: { data: IAttachmentData }) {
     const url = ClientManager.client.getFileUrlByHashAndToken(data.hash, AppState.fileAccessToken)
     const [mime, setMime] = React.useState<string | null>(null)
@@ -34,64 +48,63 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
         }} />
     }
 
-    if (mime.startsWith('image/')) {
-        return <ReloadableImage
-            src={url}
-            alt={data.name}
-            onClick={() => ImageViewerDialog.show(url)}
-            style={{
-                maxWidth: '400px',
-                maxHeight: '300px',
-                width: '100%',
-                objectFit: 'cover',
-                display: 'block',
-                borderRadius: '6px',
-            }}
-        />
-    }
+    const kind = resolveKind(data.name, mime)
 
-    if (mime.startsWith('video/')) {
-        return <video
-            onClick={() => VideoViewerDialog.show(url)}
-            src={url}
-            style={{
-                maxWidth: '400px',
-                maxHeight: '300px',
-                width: '100%',
-                display: 'block',
-                borderRadius: '6px',
-            }}
-        />
+    switch (kind) {
+        case 'image':
+            return <ReloadableImage
+                src={url}
+                alt={data.name}
+                onClick={() => ImageViewerDialog.show(url)}
+                style={{
+                    maxWidth: '400px',
+                    maxHeight: '300px',
+                    width: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    borderRadius: '6px',
+                }}
+            />
+        case 'video':
+            return <video
+                onClick={() => VideoViewerDialog.show(url)}
+                src={url}
+                style={{
+                    maxWidth: '400px',
+                    maxHeight: '300px',
+                    width: '100%',
+                    display: 'block',
+                    borderRadius: '6px',
+                }}
+            />
+        case 'audio':
+            return <audio controls src={url} style={{ display: 'block' }} />
+        default:
+            return <a
+                style={{
+                    display: 'block',
+                    width: '100%',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                }}
+                href={url}
+                download={url}
+            >
+                <mdui-card clickable style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    boxShadow: 'inherit',
+                    borderRadius: 'inherit',
+                }}>
+                    <mdui-icon name="insert_drive_file" style={{ margin: '13px', fontSize: '34px' }} />
+                    <span style={{
+                        marginRight: '13px',
+                        wordWrap: 'break-word',
+                        wordBreak: 'break-all',
+                        whiteSpace: 'normal',
+                        maxWidth: '100%',
+                    }}>{data.name}</span>
+                </mdui-card>
+            </a>
     }
-
-    if (mime.startsWith('audio/')) {
-        return <audio controls src={url} style={{ display: 'block' }} />
-    }
-
-    return <a
-        style={{
-            display: 'block',
-            width: '100%',
-            textDecoration: 'none',
-            color: 'inherit',
-        }}
-        href={url}
-        download={url}
-    >
-        <mdui-card clickable style={{
-            display: 'flex',
-            alignItems: 'center',
-            boxShadow: 'inherit',
-            borderRadius: 'inherit',
-        }}>
-            <mdui-icon name="insert_drive_file" style={{ margin: '13px', fontSize: '34px' }} />
-            <span style={{
-                marginRight: '13px',
-                wordWrap: 'break-word',
-                wordBreak: 'break-all',
-                whiteSpace: 'normal',
-                maxWidth: '100%',
-            }}>{data.name}</span>
-        </mdui-card>
-    </a>
 }
