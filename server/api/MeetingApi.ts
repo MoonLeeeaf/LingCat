@@ -177,7 +177,7 @@ export default class MeetingApi {
                 // 仅"新会议"时写入系统消息, 避免重复点击刷屏
                 if (!existing) {
                     const starter = await UserDataBase.queryUserById(user_id)
-                    await broadcastSystemMessage(clients_emiter, data.chatId, `${starter?.nickname || '有人'} 发起了会议 · 点击右上角视频图标加入`)
+                    await broadcastSystemMessage(clients_emiter, data.chatId, `${starter?.nickname || '有人'} 发起了会议`)
                 }
 
                 await broadcastToChatMembers(clients_emiter, data.chatId, () => Package.encode({
