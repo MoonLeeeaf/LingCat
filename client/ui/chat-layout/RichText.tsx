@@ -7,6 +7,7 @@ import Attachment, { IAttachmentData } from "../chat/Attachment.tsx"
 interface IRichTextProps {
     text: string
     entities: IMessageEntity[]
+    isSystem?: boolean
 }
 
 function Spoiler({ children }: { children: React.ReactNode }) {
@@ -31,8 +32,23 @@ function TextContainer({ children }: { children: React.ReactNode }) {
     </div>
 }
 
-export default function RichText({ text, entities }: IRichTextProps) {
-    if (!entities?.length) return <TextContainer>{text}</TextContainer>
+function TextContainerSystem({ children }: { children: React.ReactNode }) {
+    return <div style={{
+        paddingTop: '8px',
+        paddingBottom: '8px',
+        paddingLeft: '17px',
+        paddingRight: '17px',
+    }}>
+        {children}
+    </div>
+}
+
+export default function RichText({ text, entities, isSystem }: IRichTextProps) {
+    if (!entities?.length)
+        if (isSystem)
+            return <TextContainerSystem>{text}</TextContainerSystem>
+        else
+            return <TextContainer>{text}</TextContainer>
 
     const sorted = [...entities].sort((a, b) => a.offset - b.offset)
     const segments: Array<{ text: string, entity?: IMessageEntity }> = []
@@ -75,9 +91,14 @@ export default function RichText({ text, entities }: IRichTextProps) {
                 {renderSegment(g.segment, 0)}
             </React.Fragment>
         }
-        return <TextContainer key={gi}>
-            {g.segments.map((s, si) => renderSegment(s, si))}
-        </TextContainer>
+        if (isSystem)
+            return <TextContainerSystem key={gi}>
+                {g.segments.map((s, si) => renderSegment(s, si))}
+            </TextContainerSystem>
+        else
+            return <TextContainer key={gi}>
+                {g.segments.map((s, si) => renderSegment(s, si))}
+            </TextContainer>
     })}</>
 }
 

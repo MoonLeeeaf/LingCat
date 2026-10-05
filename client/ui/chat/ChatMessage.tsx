@@ -40,8 +40,6 @@ export default function ChatMessage({
         })()
     }, [msg.sender_user_id])
 
-    const content = <RichText text={msg.text} entities={msg.entities || []} />
-
     return <Message
         time={msg.time}
         avatarMenus={avatarMenus}
@@ -55,6 +53,6 @@ export default function ChatMessage({
         isAtRight={isMe}
         hideSender={hideSender}
     >
-        {content}
+        <RichText text={msg.text} entities={msg.entities || []} isSystem={msg.system!} />
     </Message>
 }
