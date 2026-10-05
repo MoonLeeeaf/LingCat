@@ -6,7 +6,7 @@ import ClientConfigInstance from '../../ClientConfig.ts'
 import AppState from '../AppState.ts'
 import PwaTitleBar from '../PwaTitleBar.tsx'
 import { MeetingManager, useMeeting } from './MeetingManager.ts'
-import MeetingPanel from './MeetingDialog.tsx'
+import MeetingPanel from './MeetingPanel.tsx'
 import { MeetingWindowManager, type MeetingWindowRequest } from './MeetingWindow.ts'
 
 async function bootstrapSession() {
