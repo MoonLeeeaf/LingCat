@@ -36,7 +36,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         {primary?.track
             ? <VideoPublication publication={primary} muted={isLocal} />
             : <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', padding: '8px' }}>
-                {micMuted ? '🔇 ' : ''}{name}
+                {micMuted ? '(Muted) ' : ''}{name}
             </div>
         }
 
@@ -65,7 +65,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         }}>
-            {micMuted ? '🔇 ' : ''}{name}{isLocal ? ' (我)' : ''}{screenActive ? ' · 共享屏幕' : ''}
+            {micMuted ? '(Muted) ' : ''}{name}{isLocal ? ' (我)' : ''}{screenActive ? ' · 共享屏幕' : ''}
         </div>
     </div>
 }
