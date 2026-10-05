@@ -21,6 +21,8 @@ import cookieParser from 'cookie-parser'
 import { fileTypeFromFile } from 'file-type'
 import ChatApi from './api/ChatApi.ts'
 import MeetingApi from './api/MeetingApi.ts'
+import OAuthApi from './api/OAuthApi.ts'
+import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     const app = express()
@@ -43,6 +45,10 @@ export default function createLingCatServer(base_data_path: string) {
     app.use(express.static(`${base_data_path}/page/`))
 
     app.use(cookieParser())
+
+    // OAuth2 / OIDC 登录路由 (/oauth/:id/login, /oauth/:id/callback)
+    registerOAuthRoutes(app)
+
     app.get('/config.json', (req, res) => {
         const pub: Record<string, any> = {}
         for (const key of [
@@ -54,8 +60,16 @@ export default function createLingCatServer(base_data_path: string) {
             }
         }
     
+        // 可用的 OAuth2/OIDC 登录方式 (不含任何密钥)
+        pub.oauth2 = enabledProviders().map((p) => ({
+            id: p.id,
+            display_name: p.display_name || p.id,
+            type: p.type || 'oidc',
+        }))
+
         pub.features = {
             meeting: !!config.livekit_enabled,
+            oauth: enabledProviders().length > 0,
         }
     
         res.setHeader('Cache-Control', 'no-cache')   // 配置改了要立刻生效
@@ -301,6 +315,7 @@ export default function createLingCatServer(base_data_path: string) {
                         await UserApi.onCall(sendPackage, mPackage) ||
                         await ChatApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await MeetingApi.onCall(sendPackage, mPackage, clients_emiter) ||
+                        await OAuthApi.onCall(sendPackage, mPackage) ||
                         await FileApi.onCall(sendPackage, mPackage)
                     )) {
                         console.log('[Server] Method not found:', mPackage.method_id)

@@ -5,6 +5,7 @@ import { AudioLevelBar } from './AudioLevel.tsx'
 import ClientManager from '../../ClientManager.ts'
 import AppState from '../AppState.ts'
 import default_avatar from '../../default_avatar.png'
+import { MeetingManager } from './MeetingManager.ts'
 
 export default function ParticipantTile({ participant, compact, onClick, actions, style }: {
     participant: Participant
@@ -28,6 +29,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const micMuted = !mic?.track || mic.isMuted
     const speaking = participant.isSpeaking && !micMuted
 
+    const [hover, setHover] = React.useState(false)
+    const locallyMuted = !isLocal && MeetingManager.isLocallyMuted(participant.identity)
+
     // 头像: 优先取 LiveKit token metadata 里的 avatar_file_hash
     let meta: any = {}
     try { meta = JSON.parse(participant.metadata || '{}') } catch { }
@@ -36,7 +40,11 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         ? ClientManager.client.getFileUrlByHashAndToken(avatarHash, AppState.fileAccessToken)
         : default_avatar
 
-    return <div onClick={onClick} style={{
+    return <div
+        onClick={onClick}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
         position: 'relative',
         overflow: 'hidden',
         borderRadius: '10px',
@@ -71,17 +79,26 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             </div>
         }
 
-        {/* 远端音频播放: 麦克风 + 电脑/系统声音 (本地不回放, 防回声) */}
-        {!isLocal && <AudioPublication publication={mic} />}
-        {!isLocal && <AudioPublication publication={screenAudio} />}
+        {/* 远端音频播放: 麦克风 + 电脑/系统声音 (本地不回放, 防回声; muted 为本地静音) */}
+        {!isLocal && <AudioPublication publication={mic} muted={locallyMuted} />}
+        {!isLocal && <AudioPublication publication={screenAudio} muted={locallyMuted} />}
 
         {/* 实时音量条 (本地与其他人): 长度随音量变化, 绿/橙/红 */}
         <AudioLevelBar participant={participant} muted={micMuted} />
 
-        {actions && (
+        {(!isLocal || actions) && (
             <div
                 onClick={(e) => e.stopPropagation()}
-                style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px' }}>
+                style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}>
+                {/* 本地静音: 悬停显示, 已静音时常驻 */}
+                {!isLocal && (hover || locallyMuted) && (
+                    <mdui-tooltip content={locallyMuted ? '取消本地静音' : '本地静音(仅自己)'}>
+                        <mdui-button-icon
+                            icon={locallyMuted ? 'volume_off' : 'volume_up'}
+                            onClick={() => MeetingManager.toggleLocalMute(participant.identity)}
+                        />
+                    </mdui-tooltip>
+                )}
                 {actions}
             </div>
         )}

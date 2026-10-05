@@ -12,6 +12,8 @@ import MeetingWindowApp from './ui/meeting/MeetingWindowApp.tsx'
 
 import './ui/MduiPatchedTextAreaElement.ts'
 import ClientConfigInstance from './ClientConfig.ts'
+import showSnackbar from './ui/showSnackbar.ts'
+import { handleOAuthRedirect, takeOAuthMessage } from './oauthLogin.ts'
 import { canOpenMeetingWindow, describeRuntime } from './pwa.ts'
 import { clearMeetingWindowParams, parseMeetingWindowRequest, setPendingInAppMeeting } from './ui/meeting/MeetingWindow.ts'
 import { installNotificationPermissionPrompt } from './ui/notify.ts'
@@ -23,6 +25,8 @@ function registerServiceWorker() {
 }
 
 await ClientConfigInstance.load()
+
+await handleOAuthRedirect()
 
 console.log('[PWA] 运行环境检测', describeRuntime())
 
@@ -43,4 +47,7 @@ if (meetingRequest && (meetingRequest.pwa || canOpenMeetingWindow())) {
     installNotificationPermissionPrompt()
 
     root.render(React.createElement(Main))
+
+    const oauthMsg = takeOAuthMessage()
+    if (oauthMsg) showSnackbar({ message: oauthMsg, autoCloseDelay: 6000 })
 }

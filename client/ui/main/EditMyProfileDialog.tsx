@@ -1,33 +1,40 @@
 import ReactClient from "react-dom/client"
 import React from 'react'
-import { Dialog, TextField } from "mdui"
+import { dialog, Dialog, TextField } from "mdui"
 import type { IUser } from "lingcat-protocol"
 import EffectOnly from "../EffectOnly.tsx"
 import CircleProgressDialog from "../CircleProgressDialog.tsx"
 import ClientManager from "../../ClientManager.ts"
 import default_avatar from '../../default_avatar.png'
-import { UserApi, FileApi } from "lingcat-client-protocol"
+import { UserApi, FileApi, OAuthApi } from "lingcat-client-protocol"
 import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
 import showSnackbar from "../showSnackbar.ts"
 import AppState from "../AppState.ts"
 import { cropImageToSquare } from "../imageUtils.ts"
+import ClientConfigInstance from "../../ClientConfig.ts"
 
 export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
 
     const [loading, setLoading] = React.useState(true)
     const [profile, setProfile] = React.useState<IUser>()
+    const [bindings, setBindings] = React.useState<string[]>([])
 
     React.useEffect(() => {
         (async () => {
+            const token = ClientManager.getActiveUserSession().token
             try {
-                const profile = await UserApi.queryMyUserInfo(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                })
-                setProfile(profile)
+                setProfile(await UserApi.queryMyUserInfo(ClientManager.client, { access_token: token }))
             } catch (e) {
                 tipError(e, '加载失败')
+            }
+            if (ClientConfigInstance.oauthProviders.length > 0) {
+                try {
+                    setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
+                } catch (e) {
+                    console.warn('[OAuth] 获取绑定失败', e)
+                }
             }
             setLoading(false)
         })()
@@ -119,6 +126,46 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                 }}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="用户名" value={profile?.username || ''} ref={editUserNameRef}></mdui-text-field>
                 <mdui-text-field style={{ marginTop: "20px", }} variant="outlined" label="简介" value={profile?.description || ''} ref={editDescriptionRef}></mdui-text-field>
+
+                {ClientConfigInstance.oauthProviders.map((p) => {
+                    const bound = bindings.includes(p.id)
+                    const name = p.display_name || p.id
+                    return <mdui-button
+                        key={p.id}
+                        variant={bound ? 'text' : 'tonal'}
+                        icon="passkey"
+                        style={{ marginTop: '16px', width: '100%' }}
+                        onClick={async () => {
+                            const token = ClientManager.getActiveUserSession().token
+                            if (!bound) {
+                                location.href = './oauth/' + encodeURIComponent(p.id) + '/login?mode=bind&access_token=' + encodeURIComponent(token)
+                                return
+                            }
+                            dialog({
+                                headline: '解绑 ' + name,
+                                body: '解绑后将无法用 ' + name + ' 登录。如果未设置密码, 解绑后将无法再进入此账号。确定继续?',
+                                closeOnEsc: true,
+                                closeOnOverlayClick: true,
+                                actions: [
+                                    { text: '取消', onClick: () => true },
+                                    {
+                                        text: '解绑',
+                                        variant: 'text',
+                                        onClick: async () => {
+                                            try {
+                                                await OAuthApi.unbindOAuth(ClientManager.client, { access_token: token, provider: p.id })
+                                                setBindings(await OAuthApi.getOAuthBindings(ClientManager.client, { access_token: token }))
+                                                showSnackbar({ message: '已解绑 ' + name })
+                                            } catch (e) {
+                                                tipError(e, '解绑失败')
+                                            }
+                                        },
+                                    },
+                                ],
+                            })
+                        }}
+                    >{bound ? '解绑 ' : '绑定 '}{name}</mdui-button>
+                })}
 
                 <mdui-button slot="action" variant="text" onClick={() => ref.current!.open = false}>取消</mdui-button>
                 <mdui-button slot="action" variant="text" onClick={async () => {

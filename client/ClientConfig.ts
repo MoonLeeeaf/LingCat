@@ -1,6 +1,13 @@
+export interface OAuth2ProviderPublic {
+    id: string
+    display_name?: string
+    type?: string
+}
+
 export interface IClientConfig {
     site_title?: string
     livekit_enabled?: boolean
+    oauth2?: OAuth2ProviderPublic[]
 }
 
 class ClientConfig {
@@ -31,6 +38,10 @@ class ClientConfig {
 
     get meetingEnabled() {
         return this.config.livekit_enabled
+    }
+
+    get oauthProviders(): OAuth2ProviderPublic[] {
+        return this.config.oauth2 || []
     }
 }
 

@@ -6,6 +6,7 @@ import useEventListener from "./useEventListener.ts"
 import showSnackbar from "./showSnackbar.ts"
 import LingCatClient, { UserApi } from "lingcat-client-protocol"
 import tipError from "./tipError.ts"
+import ClientConfigInstance from "../ClientConfig.ts"
 
 const default_server = location.protocol + '//' + location.host + location.pathname
 
@@ -320,6 +321,16 @@ function LoginDialog({ onClose, allowClose, onLoginSuccess }: {
         <mdui-text-field variant="outlined" label="用户名 / 用户 ID" ref={mLoginAccount}></mdui-text-field>
         <div style={{ paddingTop: '15px' }}></div>
         <mdui-text-field variant="outlined" label="密码" type="password" ref={mLoginPassword}></mdui-text-field>
+
+        {ClientConfigInstance.oauthProviders.map((p) => (
+            <mdui-button
+                key={p.id}
+                variant="tonal"
+                icon="passkey"
+                style={{ marginTop: '16px', width: '100%' }}
+                onClick={() => { location.href = './oauth/' + encodeURIComponent(p.id) + '/login' }}
+            >用 {p.display_name || p.id} 登录</mdui-button>
+        ))}
 
         <mdui-button slot="action" variant="text" onClick={() => ClientSettingsDialog.show()}>设置</mdui-button>
         <div slot="action" style={{ flexGrow: 1 }}></div>

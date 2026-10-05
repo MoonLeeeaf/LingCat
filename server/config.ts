@@ -13,6 +13,8 @@ export interface LingCatServerConfig {
     max_file_size?: number
 
     site_title: string
+    /** 部署子路径 (如 '/lingcat'); 用于拼接 OAuth 回调地址, 根路径留空 */
+    base_path?: string
 
     /** 是否启用会议功能 */
     livekit_enabled?: boolean
@@ -28,6 +30,55 @@ export interface LingCatServerConfig {
     max_meeting_participants?: number
     /** 会议令牌有效期 (秒) */
     meeting_token_ttl_seconds?: number
+
+    /**
+     * ===========================
+     *      通用 OAuth2 / OIDC 登录
+     * ===========================
+     * 每个数组项是一种登录方式, 可配置任意 OIDC (Pocket ID/Keycloak/Authentik/Auth0...)
+     * 或纯 OAuth2 (GitHub/Gitee...) 提供方。
+     */
+    oauth2?: OAuth2ProviderConfig[]
+}
+
+export interface OAuth2ProviderConfig {
+    /** 唯一标识, 同时用作回调路径 (/oauth/<id>/...) 与 OAuthIdentities.provider */
+    id: string
+    enabled?: boolean
+    /** 'oidc' (有 id_token, 用发现文档) 或 'oauth2' (纯授权码 + userinfo); 默认 'oidc' */
+    type?: 'oidc' | 'oauth2'
+    /** 登录按钮显示名 */
+    display_name?: string
+
+    /** --- OIDC --- */
+    /** 发行者 URL, 用于发现文档, 例如 https://pocket.example.com */
+    issuer?: string
+
+    /** --- 通用 OAuth2 --- */
+    authorization_url?: string
+    token_url?: string
+    userinfo_url?: string
+
+    /** --- 公共 --- */
+    client_id?: string
+    client_secret?: string
+    /** 空格分隔, 例如 "openid profile email"; 纯 OAuth2 例: "read:user user:email" */
+    scopes?: string
+    /** 回调地址; 留空则由请求 Host 推导为 <origin>/oauth/<id>/callback */
+    redirect_uri?: string
+
+    /** 用户信息字段映射 (纯 OAuth2 常用) */
+    user_id_claim?: string
+    name_claim?: string
+    email_claim?: string
+
+    /** token 端点客户端认证方式, 默认 'post' (可选 'basic') */
+    token_auth?: 'post' | 'basic'
+    /** 是否使用 PKCE (OIDC 默认 true; 纯 OAuth2 默认 false, 如 GitHub 不支持) */
+    use_pkce?: boolean
+
+    /** 首次登录是否自动建号; 默认 false (仅绑定, 策略 B) */
+    auto_create_user?: boolean
 }
 
 const default_config: LingCatServerConfig = {
@@ -35,6 +86,7 @@ const default_config: LingCatServerConfig = {
     token_secret: crypto.randomBytes(16).toString('utf-8'),
 
     site_title: '灵猫',
+    base_path: '',
 
     livekit_enabled: false,
     livekit_url: 'ws://localhost:7880',
@@ -43,6 +95,8 @@ const default_config: LingCatServerConfig = {
     livekit_api_secret: 'secret',
     max_meeting_participants: 6,
     meeting_token_ttl_seconds: 7200,
+
+    oauth2: [],
 }
 
 if (!fileExists(base_data_path + '/config.json'))

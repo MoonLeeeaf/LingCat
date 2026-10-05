@@ -65,6 +65,23 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     const [loadingProfile, setLoadingProfile] = React.useState(true)
     const meeting = useMeeting()
 
+    // 分栏模式下拖动分隔条调整会议面板宽度
+    const dockRowRef = React.useRef<HTMLDivElement>(null)
+    const onDockDividerDown = (e: React.PointerEvent) => {
+        e.preventDefault()
+        const onMove = (ev: PointerEvent) => {
+            const rect = dockRowRef.current?.getBoundingClientRect()
+            if (!rect || rect.width <= 0) return
+            MeetingManager.setDockWidthPercent(((ev.clientX - rect.left) / rect.width) * 100)
+        }
+        const onUp = () => {
+            window.removeEventListener('pointermove', onMove)
+            window.removeEventListener('pointerup', onUp)
+        }
+        window.addEventListener('pointermove', onMove)
+        window.addEventListener('pointerup', onUp)
+    }
+
     React.useEffect(() => {
         ; (async () => {
             try {
@@ -531,11 +548,22 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             display: 'flex',
             minWidth: 0,
         }}>
-            {meeting.isActive() && meeting.dock && (
-                <div style={{ width: '50%', height: '100%', minWidth: 0, flexShrink: 0, display: 'flex' }}>
+            <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
+            {meeting.isActive() && meeting.dock && (<>
+                <div style={{ width: meeting.dockWidthPercent + '%', height: '100%', minWidth: 0, flexShrink: 0, display: 'flex' }}>
                     <MeetingPanel mode="docked" />
                 </div>
-            )}
+                {/* 可拖动分隔条: 调整会议面板与聊天的宽度 */}
+                <div
+                    onPointerDown={onDockDividerDown}
+                    title="拖动调整大小"
+                    style={{
+                        width: '6px', flexShrink: 0, cursor: 'col-resize',
+                        background: 'rgb(var(--mdui-color-outline-variant))',
+                        touchAction: 'none', userSelect: 'none',
+                    }}
+                />
+            </>)}
             <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
             {
                 activeChat
@@ -564,6 +592,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
                         </div>
                     </div>
             }
+            </div>
             </div>
         </mdui-layout-main>
         {meeting.isActive() && !meeting.dock && <MeetingPanel mode="floating" />}
