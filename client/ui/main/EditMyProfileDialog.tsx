@@ -11,6 +11,7 @@ import Avatar from "../Avatar.tsx"
 import tipError from "../tipError.ts"
 import showSnackbar from "../showSnackbar.ts"
 import AppState from "../AppState.ts"
+import { cropImageToSquare } from "../imageUtils.ts"
 
 export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefObject<any>, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -46,9 +47,14 @@ export default function EditMyProfileDialog({ ref, onClose }: { ref?: React.RefO
                     access_token: ClientManager.getActiveUserSession().token
                 })
 
+                // 头像统一裁剪为 1:1
+                const cropped = await cropImageToSquare(file, 512)
+
                 const hash = await FileApi.uploadFile(ClientManager.client, {
                     file_upload_token: token,
-                    file_data: file,
+                    file_data: cropped,
+                    mime: 'image/png',
+                    file_name: 'avatar.png',
                 })
 
                 await UserApi.updateMyProfile(ClientManager.client, {

@@ -16,6 +16,7 @@ import AppState from "../AppState.ts"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import ImageViewerDialog from "../viewer/ImageViewerDialog.tsx"
 import showSnackbar from "../showSnackbar.ts"
+import { cropImageToSquare } from "../imageUtils.ts"
 
 export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: React.RefObject<any>, chat_id: string, onClose?: () => void }) {
     ref = ref || React.useRef<Dialog>(undefined)
@@ -49,9 +50,14 @@ export default function ChatSettingsDialog({ ref, chat_id, onClose }: { ref?: Re
                     access_token: ClientManager.getActiveUserSession().token
                 })
 
+                // 头像统一裁剪为 1:1
+                const cropped = await cropImageToSquare(file, 512)
+
                 const hash = await FileApi.uploadFile(ClientManager.client, {
                     file_upload_token: token,
-                    file_data: file,
+                    file_data: cropped,
+                    mime: 'image/png',
+                    file_name: 'avatar.png',
                 })
 
                 await ChatApi.updateChatProfile(ClientManager.client, {

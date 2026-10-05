@@ -32,6 +32,10 @@ class MeetingManagerImpl {
     isSharingAudio = false
     audioBlocked = false
 
+    /** 可选的麦克风输入设备 */
+    audioInputs: { deviceId: string, label: string }[] = []
+    activeAudioInput?: string
+
     /** 会议面板是否停靠为分栏模式 (左侧画面 / 右侧聊天) */
     dock = false
     /** 正在最大化的成员 (通常是某人的屏幕共享) */
@@ -130,6 +134,9 @@ class MeetingManagerImpl {
         room.on(RoomEvent.TrackUnsubscribed, refresh)
         room.on(RoomEvent.TrackMuted, refresh)
         room.on(RoomEvent.TrackUnmuted, refresh)
+        // 活跃说话者变化 -> 重新渲染, 用于本地/其他人的说话音量条
+        room.on(RoomEvent.ActiveSpeakersChanged, refresh)
+        room.on(RoomEvent.MediaDevicesChanged, () => { this.refreshAudioInputs() })
         room.on(RoomEvent.LocalTrackPublished, () => { this.syncLocalFlags() })
         room.on(RoomEvent.LocalTrackUnpublished, () => { this.syncLocalFlags() })
         room.on(RoomEvent.AudioPlaybackStatusChanged, () => {
@@ -219,6 +226,7 @@ class MeetingManagerImpl {
             } catch (e) {
                 console.warn('[Meeting] 麦克风开启失败', e)
             }
+            await this.refreshAudioInputs()
 
             this.audioBlocked = !room.canPlaybackAudio
             this.syncLocalFlags()
@@ -237,6 +245,33 @@ class MeetingManagerImpl {
         if (!lp) return
         await lp.setMicrophoneEnabled(!this.isMicOn)
         this.syncLocalFlags()
+    }
+
+    /** 枚举可用的麦克风输入设备 */
+    async refreshAudioInputs() {
+        try {
+            const devices = await Room.getLocalDevices('audioinput')
+            this.audioInputs = devices.map((d) => ({
+                deviceId: d.deviceId,
+                label: d.label || ('麦克风 ' + d.deviceId.slice(0, 4)),
+            }))
+            this.activeAudioInput = this.room?.getActiveDevice('audioinput') || this.audioInputs[0]?.deviceId
+            this.emit()
+        } catch (e) {
+            console.warn('[Meeting] 枚举麦克风失败', e)
+        }
+    }
+
+    /** 切换到指定麦克风设备 */
+    async setAudioInput(deviceId: string) {
+        const room = this.room
+        if (!room) return false
+        const ok = await room.switchActiveDevice('audioinput', deviceId)
+        if (ok) {
+            this.activeAudioInput = deviceId
+            this.emit()
+        }
+        return ok
     }
 
     async toggleCamera() {
@@ -318,6 +353,7 @@ class MeetingManagerImpl {
         this.audioBlocked = false
         this.roomName = undefined
         this.focusedIdentity = undefined
+        this.activeAudioInput = undefined
         this.emit()
         try {
             room?.disconnect()
@@ -335,6 +371,7 @@ class MeetingManagerImpl {
         this.isCameraOn = false
         this.isSharingScreen = false
         this.isSharingAudio = false
+        this.activeAudioInput = undefined
         this.emit()
     }
 }

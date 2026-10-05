@@ -1,6 +1,10 @@
 import React from 'react'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import { AudioPublication, VideoPublication } from './VideoTrack.tsx'
+import { AudioLevelBar } from './AudioLevel.tsx'
+import ClientManager from '../../ClientManager.ts'
+import AppState from '../AppState.ts'
+import default_avatar from '../../default_avatar.png'
 
 export default function ParticipantTile({ participant, compact, onClick, actions, style }: {
     participant: Participant
@@ -24,6 +28,14 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const micMuted = !mic?.track || mic.isMuted
     const speaking = participant.isSpeaking && !micMuted
 
+    // 头像: 优先取 LiveKit token metadata 里的 avatar_file_hash
+    let meta: any = {}
+    try { meta = JSON.parse(participant.metadata || '{}') } catch { }
+    const avatarHash = meta?.avatar_file_hash as string | null | undefined
+    const avatarUrl = avatarHash
+        ? ClientManager.client.getFileUrlByHashAndToken(avatarHash, AppState.fileAccessToken)
+        : default_avatar
+
     return <div onClick={onClick} style={{
         position: 'relative',
         overflow: 'hidden',
@@ -40,14 +52,31 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         {primary?.track
             // key: 源变化 (屏幕<->摄像头) 时强制重建 <video>, 避免复用节点残留黑帧
             ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} />
-            : <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', padding: '8px' }}>
-                {micMuted ? '(Muted) ' : ''}{name}
+            : <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: compact ? '4px' : '8px', padding: '8px' }}>
+                <img
+                    src={avatarUrl}
+                    alt=""
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = default_avatar }}
+                    style={{
+                        width: compact ? '40px' : '64px',
+                        height: compact ? '40px' : '64px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        background: 'rgba(255,255,255,0.08)',
+                    }}
+                />
+                <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: compact ? '11px' : '13px' }}>
+                    {micMuted ? '(Muted) ' : ''}{name}
+                </div>
             </div>
         }
 
         {/* 远端音频播放: 麦克风 + 电脑/系统声音 (本地不回放, 防回声) */}
         {!isLocal && <AudioPublication publication={mic} />}
         {!isLocal && <AudioPublication publication={screenAudio} />}
+
+        {/* 实时音量条 (本地与其他人): 长度随音量变化, 绿/橙/红 */}
+        <AudioLevelBar participant={participant} muted={micMuted} />
 
         {actions && (
             <div
