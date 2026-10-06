@@ -43,6 +43,7 @@ class MeetingStore {
     }
 
     async get(id: string): Promise<IMeeting | undefined> {
+        await MeetingDataBase.removeExpired(Date.now() - MEETING_IDLE_TIMEOUT_MS)
         const m = await MeetingDataBase.get(id)
         if (!m) return undefined
         if (Date.now() - m.created_at > MEETING_IDLE_TIMEOUT_MS) {

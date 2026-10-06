@@ -21,7 +21,7 @@ const tableName = 'Meetings';
 
 export default class MeetingDataBase {
     static async create(m: IMeetingRecord) {
-        await db<IMeetingRecord>(tableName).insert(m).onConflict('id').merge()
+        await db<IMeetingRecord>(tableName).insert(m)
     }
 
     static async get(id: string) {

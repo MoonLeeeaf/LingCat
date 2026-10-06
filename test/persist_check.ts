@@ -2,8 +2,11 @@ import WS from 'ws'
 ;(globalThis as any).WebSocket = (WS as any).WebSocket ?? WS
 
 import fs from 'node:fs'
+import os from 'node:os'
+import node_path from 'node:path'
 import LingCatClient, { UserApi, MeetingApi } from 'lingcat-client-protocol'
 
+const STATE_FILE = node_path.join(os.tmpdir(), 'lingcat-meeting-state.json')
 const publicKey = fs.readFileSync('./lingcat_data/key/public')
 function mk() {
     const c = new LingCatClient({ server_ws: 'ws://localhost:3601', server_http: 'http://localhost:3601', server_public_key: publicKey })
@@ -12,10 +15,9 @@ function mk() {
     return { c, r }
 }
 async function main() {
-    const st = JSON.parse(fs.readFileSync('/tmp/meeting_state.json', 'utf8'))
-    const acc = 'persistu', pw = 'pw'
+    const st = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
     const A = mk(); await A.r
-    const tok = await UserApi.login(A.c, { account: acc, password: pw })
+    const tok = await UserApi.login(A.c, { account: st.account, password: st.password })
     await UserApi.authorize(A.c, { access_token: tok, session_id: 'c' + Date.now() })
 
     const active = await MeetingApi.getActiveMeeting(A.c, { access_token: tok, chat_id: st.chat_id })

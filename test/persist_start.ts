@@ -2,8 +2,11 @@ import WS from 'ws'
 ;(globalThis as any).WebSocket = (WS as any).WebSocket ?? WS
 
 import fs from 'node:fs'
+import os from 'node:os'
+import node_path from 'node:path'
 import LingCatClient, { UserApi, ChatApi, MeetingApi } from 'lingcat-client-protocol'
 
+const STATE_FILE = node_path.join(os.tmpdir(), 'lingcat-meeting-state.json')
 const publicKey = fs.readFileSync('./lingcat_data/key/public')
 function mk() {
     const c = new LingCatClient({ server_ws: 'ws://localhost:3601', server_http: 'http://localhost:3601', server_public_key: publicKey })
@@ -27,7 +30,13 @@ async function main() {
         chat = await ChatApi.queryChatInfo(A.c, { access_token: tok, chat_id: id })
     }
     const m = await MeetingApi.startMeeting(A.c, { access_token: tok, chat_id: chat.id, title: 'persist' })
-    fs.writeFileSync('/tmp/meeting_state.json', JSON.stringify({ chat_id: chat.id, meeting_id: m.meeting_id, room: m.room }))
+    fs.writeFileSync(STATE_FILE, JSON.stringify({
+        chat_id: chat.id,
+        meeting_id: m.meeting_id,
+        room: m.room,
+        account: acc,
+        password: pw,
+    }))
     console.log('[ok] started', JSON.stringify(m), 'chat', chat.id)
     process.exit(0)
 }
