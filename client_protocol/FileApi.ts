@@ -2,7 +2,7 @@ import { LingCatProto, Methods, sha256Hex } from "lingcat-protocol"
 import LingCatClient from "./LingCatClient.ts"
 import decodeOrThrow from "./decodeOrThrow.ts"
 
-export default class UserApi {
+export default class FileApi {
     static async requestUploadFileToken(client: LingCatClient, {
         access_token,
         timeout,
