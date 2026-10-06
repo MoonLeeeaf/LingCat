@@ -60,7 +60,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         borderRadius: '10px',
         background: '#202020',
         border: speaking ? '2px solid rgb(var(--mdui-color-primary))' : '1px solid rgba(255,255,255,0.08)',
-        minHeight: compact ? '84px' : '160px',
+        // 有视频时按 16:9 显示, 避免画面上下留黑边; 无视频(头像)时保留最小高度
+        aspectRatio: primary?.track ? '16 / 9' : undefined,
+        minHeight: primary?.track ? undefined : (compact ? '84px' : '160px'),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
