@@ -59,14 +59,14 @@ export default function createLingCatServer(base_data_path: string) {
                 pub[key] = (config as any)[key]
             }
         }
-    
+
         // 可用的 OAuth2/OIDC 登录方式 (不含任何密钥)
         pub.oauth2 = enabledProviders().map((p) => ({
             id: p.id,
             display_name: p.display_name || p.id,
             type: p.type || 'oidc',
         }))
-    
+
         res.setHeader('Cache-Control', 'no-cache')   // 配置改了要立刻生效
         res.json(pub)
     })
@@ -82,10 +82,10 @@ export default function createLingCatServer(base_data_path: string) {
             const file = await FileManager.queryFileByHash(req.params.hash as string)
             if (file == null) return res.status(404).send({ message: "Not Found" })
 
-            if (file_hash != null && file.hash != file_hash) 
+            if (file_hash != null && file.hash != file_hash)
                 return res.status(403).send({ message: "You have no access to this file" })
 
-            if (file.belong_to_chat_id && await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
+            if (file.belong_to_chat_id && !await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
                 return res.status(403).send({ message: "This file belongs to a chat you have no access" })
 
             res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
@@ -101,8 +101,9 @@ export default function createLingCatServer(base_data_path: string) {
         const token = req.headers.token
         if (!token) return res.status(401).send({ message: "Unauthorzied" })
 
+        let user_id: string
         try {
-            await TokenManager.verifyFileUploadToken(token as string)
+            user_id = (await TokenManager.verifyFileUploadToken(token as string)).user_id
         } catch (e) {
             return res.status(401).send({ message: "Token is invalid" })
         }
@@ -116,12 +117,15 @@ export default function createLingCatServer(base_data_path: string) {
         let mime_from_client: string | undefined
         const path = os.tmpdir() + '/lingcat-upload-tmp-' + crypto.randomBytes(6).toString('hex')
 
+        let permissionCheck: Promise<boolean> | undefined
+
         bb.on('field', (name, val) => {
             if (name == 'hash') {
                 hash_from_client = val
             }
             if (name == 'belong_to_chat_id') {
                 belong_to_chat_id = val
+                permissionCheck = UserChatLinker.isUserChatLinked(user_id, val)
             }
             if (name == 'mime') {
                 mime_from_client = val
@@ -146,17 +150,19 @@ export default function createLingCatServer(base_data_path: string) {
         })
 
         bb.on('close', async () => {
-            /*
-            if (!hash_from_client) {
-                return res.status(400).send({ message: "Missing client hash" })
-            }
-             */
-            if (hash_from_client && hash != hash_from_client) {
-                if (fs.existsSync(path)) {
-                    fs.unlinkSync(path)
+            if (belong_to_chat_id) {
+                const allowed = await (permissionCheck ?? UserChatLinker.isUserChatLinked(user_id, belong_to_chat_id))
+                if (!allowed) {
+                    if (fs.existsSync(path)) fs.unlinkSync(path)
+                    return res.status(403).send({ message: "You are not a member of this chat" })
                 }
+            }
+
+            if (hash_from_client && hash != hash_from_client) {
+                if (fs.existsSync(path)) fs.unlinkSync(path)
                 return res.status(400).send({ message: "Hash mismatch" })
             }
+
             const mime = mime_from_client || (await fileTypeFromFile(path))?.mime || 'application/octet-stream'
             try {
                 await FileManager.uploadFile(hash!, fileName, path, mime, belong_to_chat_id)
@@ -172,7 +178,6 @@ export default function createLingCatServer(base_data_path: string) {
 
         req.pipe(bb)
     })
-
 
     if (!fileExists(`${base_data_path}/key/`)) {
         console.log('[Server]', '生成服务端密钥...')
