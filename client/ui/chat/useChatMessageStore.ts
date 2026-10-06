@@ -25,6 +25,10 @@ interface ChatMessageStore {
 
     // 清理
     clear: () => void
+
+    scrollToSeqRequest: number | null
+    requestScrollToSeq: (seq: number) => void
+    clearScrollToSeqRequest: () => void
 }
 
 export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
@@ -134,4 +138,9 @@ export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
             firstItemIndex: 0,
         })
     },
+
+    scrollToSeqRequest: null,
+
+    requestScrollToSeq: (seq) => set({ scrollToSeqRequest: seq }),
+    clearScrollToSeqRequest: () => set({ scrollToSeqRequest: null }),
 }))

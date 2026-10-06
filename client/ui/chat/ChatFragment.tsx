@@ -221,12 +221,74 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             })()
     }, [chat.id, chat.is_member])
 
-    const followOutput = React.useCallback((isAtBottom: boolean | undefined) => {
-        // 初始加载完成前, 无条件跟随 (滚到底部)
-        if (!initialScrollDone) return 'auto' as const
-        // 之后只在用户本来就在底部时跟随
-        return isAtBottom ? 'smooth' as const : false
-    }, [initialScrollDone])
+    const scrollToSeqRequest = useChatMessageStore(s => s.scrollToSeqRequest)
+
+    React.useEffect(() => {
+        if (scrollToSeqRequest == null) return
+        const seq = scrollToSeqRequest
+        useChatMessageStore.getState().clearScrollToSeqRequest()
+    
+        const { sortedIds } = useChatMessageStore.getState()
+        const index = sortedIds.indexOf(seq)
+    
+        if (index !== -1) {
+            // 已在窗口内, 直接滚
+            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: 'smooth' })
+            return
+        }
+    
+        // 不在窗口内, 加载目标周围的消息
+        ; (async () => {
+            try {
+                const token = ClientManager.getActiveUserSession().token
+                const [older, newer] = await Promise.all([
+                    // before: seq + 1 → 包含 seq 自己
+                    ChatApi.getChatMessages(ClientManager.client, {
+                        access_token: token, chat_id: chat.id,
+                        before: seq + 1, limit: 30,
+                    }),
+                    // after: seq → 不包含 seq 自己
+                    ChatApi.getChatMessages(ClientManager.client, {
+                        access_token: token, chat_id: chat.id,
+                        after: seq, limit: 30,
+                    }),
+                ])
+    
+                // 合并去重
+                const merged = [...older, ...newer]
+                const seen = new Set<number>()
+                const unique = merged.filter(m => {
+                    if (seen.has(m.id)) return false
+                    seen.add(m.id)
+                    return true
+                })
+    
+                if (unique.length === 0 || !unique.some(m => m.id === seq)) {
+                    showSnackbar({ message: '消息已不存在' })
+                    return
+                }
+    
+                // 完全替换列表
+                useChatMessageStore.getState().initMessages(unique, seq)
+    
+                // 等 Virtuoso 渲染完再滚
+                requestAnimationFrame(() => {
+                    const { sortedIds: newIds } = useChatMessageStore.getState()
+                    const newIndex = newIds.indexOf(seq)
+                    if (newIndex >= 0) {
+                        virtuosoRef.current?.scrollToIndex({
+                            index: newIndex,
+                            align: 'center',
+                            behavior: 'auto',   // 首次定位用 auto, 更稳
+                        })
+                    }
+                })
+            } catch (e) {
+                console.error('跳转消息失败:', e)
+                tipError(e, '无法加载消息')
+            }
+        })()
+    }, [scrollToSeqRequest])
 
     const id = 'a' + Date.now()
     const inputRef = React.useRef<TextField>(null)
@@ -446,9 +508,14 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                 {msg.sender_user_id === AppState.myId && !msg.system && (
                     <mdui-menu-item icon="edit" onClick={() => startEdit(msg)}>编辑</mdui-menu-item>
                 )}
+                <mdui-menu-item icon="reply" onClick={() => {
+                    insertText(`[reply:${msg.id}] `)
+                    // 回复和编辑互斥
+                    if (editingMessage) cancelEdit()
+                }}>回复</mdui-menu-item>
                 <mdui-menu-item icon="info" onClick={() => dialog({
                     headline: "Info",
-                    body: `<span style="word-break: break-word;">${Object.keys(msg).map((k) => `${k} = ${(msg as any)[k]}`).join('<br><br>')}<span>`,
+                    body: `<span style="word-break: break-word;">${Object.keys(msg).map((k) => `${k} = ${JSON.stringify((msg as any)[k])}`).join('<br><br>')}<span>`,
                     closeOnEsc: true,
                     closeOnOverlayClick: true,
                     actions: [{ text: "关闭", onClick: () => true }]
@@ -519,6 +586,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             <MessageContainer ref={containerRef} style={{ display: chat.is_member ? 'flex' : 'none' }}>
                 {sortedIds.length > 0 && (
                     <Virtuoso
+                        ref={virtuosoRef}
                         key={chat.id}
                         style={{ overflowY: 'auto', height: '100%' }}
                         data={sortedIds}

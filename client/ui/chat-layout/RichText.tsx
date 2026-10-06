@@ -3,6 +3,7 @@ import { IMessageEntity } from "lingcat-protocol"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import ChatProfileDialog from "../viewer/ChatProfileDialog.tsx"
 import Attachment, { IAttachmentData } from "../chat/Attachment.tsx"
+import QuoteReply from "../chat/QuoteReply.tsx"
 
 interface IRichTextProps {
     text: string
@@ -78,7 +79,7 @@ export default function RichText({ text, entities, isSystem }: IRichTextProps) {
     }
 
     for (const seg of segments) {
-        if (seg.entity?.type === 'attachment') {
+        if (seg.entity?.type === 'attachment' || seg.entity?.type === 'reply') {
             flushInline()
             groups.push({ type: 'block', segment: seg })
         } else {
@@ -128,6 +129,12 @@ function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number
 
         case 'spoiler':
             return <Spoiler key={i}>{seg.text}</Spoiler>
+
+        case 'reply': {
+            const seq = e.data ? Number(e.data) : NaN
+            if (!Number.isFinite(seq)) return <em key={i}>[无效回复]</em>
+            return <QuoteReply key={i} seq={seq} />
+        }
 
         case 'link':
             return <a

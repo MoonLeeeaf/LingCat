@@ -69,7 +69,7 @@ export interface IFile {
 }
 
 export interface IMessageEntity {
-    type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention'
+    type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention' | 'reply'
     offset: number
     length: number
     data?: string

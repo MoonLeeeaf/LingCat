@@ -112,6 +112,20 @@ export default class MessageParser {
                 continue
             }
 
+            // [reply:12345]
+            m = rest.match(/^\[reply:(\d+)\]/)
+            if (m) {
+                entities.push({
+                    type: 'reply',
+                    offset: text.length,
+                    length: 4,
+                    data: m[1],   // 被回复的消息 id
+                })
+                text += '[回复]'
+                i += m[0].length
+                continue
+            }
+
             // 普通字符
             text += input[i]
             i++
@@ -143,6 +157,7 @@ export default class MessageParser {
                     } catch { out += seg }
                     break
                 }
+                case 'reply': out += `[reply:${e.data}]`; break
                 default: out += seg
             }
             cursor = e.offset + e.length
