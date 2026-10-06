@@ -65,6 +65,24 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     const [loadingProfile, setLoadingProfile] = React.useState(true)
     const meeting = useMeeting()
     const activeChatIdRef = React.useRef<string | undefined>(undefined)
+    const [drawerOpen, setDrawerOpen] = React.useState(true)
+    const toggleDrawer = React.useCallback(() => {
+        const d = drawerRef.current
+        if (d) d.open = !d.open
+    }, [drawerRef])
+    React.useEffect(() => {
+        const d = drawerRef.current
+        if (!d) return
+        setDrawerOpen(d.open)
+        const onOpened = () => setDrawerOpen(true)
+        const onClosed = () => setDrawerOpen(false)
+        d.addEventListener('opened', onOpened as EventListener)
+        d.addEventListener('closed', onClosed as EventListener)
+        return () => {
+            d.removeEventListener('opened', onOpened as EventListener)
+            d.removeEventListener('closed', onClosed as EventListener)
+        }
+    }, [drawerRef])
 
     // 分栏模式下拖动分隔条调整会议面板宽度
     const dockRowRef = React.useRef<HTMLDivElement>(null)
@@ -572,16 +590,14 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
             {
                 activeChat
-                    ? <ChatFragment chat={activeChat} drawerRef={drawerRef} />
+                    ? <ChatFragment chat={activeChat} drawerOpen={drawerOpen} onToggleDrawer={toggleDrawer} />
                     : <div style={{
                         display: 'flex',
                         flexDirection: 'column',
                         width: '100%',
                     }}>
                         <mdui-top-app-bar style={{ position: 'relative' }}>
-                            <mdui-button-icon icon="menu" onClick={() => {
-                                drawerRef.current && (drawerRef.current.open = !drawerRef.current.open)
-                            }}></mdui-button-icon>
+                            <mdui-button-icon icon={drawerOpen ? 'menu_open' : 'menu'} onClick={toggleDrawer}></mdui-button-icon>
                             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
                         </mdui-top-app-bar>
                         <div style={{

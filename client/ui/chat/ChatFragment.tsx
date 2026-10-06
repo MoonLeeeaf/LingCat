@@ -5,7 +5,7 @@ import ChatMessage from "./ChatMessage.tsx"
 import { useChatMessageStore } from "./useChatMessageStore.ts"
 import { IChat, IMessage, IMessageEntity, LingCatProto, Methods, Package } from "lingcat-protocol"
 import React from "react"
-import { dialog, NavigationDrawer, TextField } from "mdui"
+import { dialog, TextField } from "mdui"
 import { ChatApi, FileApi, MessageParser } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
@@ -25,7 +25,7 @@ function formatDuration(seconds: number) {
     return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`
 }
 
-export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat, drawerRef: React.RefObject<NavigationDrawer | undefined> }) {
+export default function ChatFragment({ chat: chatObj, drawerOpen, onToggleDrawer }: { chat: IChat, drawerOpen: boolean, onToggleDrawer: () => void }) {
     const [chat, setChat] = React.useState(chatObj)
     React.useEffect(() => { setChat(chatObj) }, [chatObj])
 
@@ -532,7 +532,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
         </div>
 
         <mdui-top-app-bar scroll-target={'#' + id}>
-            <mdui-button-icon icon="menu" onClick={() => { drawerRef.current && (drawerRef.current.open = !drawerRef.current.open) }}></mdui-button-icon>
+            <mdui-button-icon icon={drawerOpen ? 'menu_open' : 'menu'} onClick={onToggleDrawer}></mdui-button-icon>
             <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>{chat.title}</mdui-top-app-bar-title>
             <div style={{ flexGrow: 1 }}></div>
             {ClientConfigInstance.meetingEnabled && <mdui-button-icon icon="call" style={{ marginRight: '4px' }} onClick={onCallClick}></mdui-button-icon>}
