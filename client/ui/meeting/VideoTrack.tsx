@@ -13,10 +13,16 @@ export function VideoPublication({ publication, muted, style }: {
         const track = publication?.track
         if (!el || !track) return
         track.attach(el)
+        // 覆盖 livekit attach 对 muted 的重置
+        el.muted = !!muted
         return () => {
             track.detach(el)
         }
     }, [publication?.track, publication?.isMuted])
+
+    React.useEffect(() => {
+        if (ref.current) ref.current.muted = !!muted
+    }, [muted])
 
     if (!publication?.track) return null
     return <video
@@ -36,10 +42,18 @@ export function AudioPublication({ publication, muted }: { publication?: TrackPu
         const track = publication?.track
         if (!el || !track) return
         track.attach(el)
+        // livekit 的 attach 会把 el.muted 置为 false (有音轨时), 导致本地静音失效;
+        // 这里在 attach 之后按当前静音状态覆盖回来
+        el.muted = !!muted
         return () => {
             track.detach(el)
         }
     }, [publication?.track, publication?.isMuted])
+
+    // 静音状态变化时立即同步 (元素被复用/重建时同样生效)
+    React.useEffect(() => {
+        if (ref.current) ref.current.muted = !!muted
+    }, [muted])
 
     return <audio
         ref={ref}

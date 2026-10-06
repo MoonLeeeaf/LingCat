@@ -1,5 +1,5 @@
 import React from 'react'
-import { Room, RoomEvent, Track } from 'livekit-client'
+import { Room, RoomEvent, Track, type Participant } from 'livekit-client'
 import { MeetingApi } from 'lingcat-client-protocol'
 import { IChat, Methods, LingCatProto, type Package } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
@@ -40,6 +40,9 @@ class MeetingManagerImpl {
 
     /** 本地静音的成员 (仅影响自己听到的声音) identity -> true */
     locallyMuted: { [identity: string]: boolean } = {}
+
+    /** 已按 metadata 自动决定过本地静音的 identity (用户手动操作后不再自动覆盖) */
+    private autoMuteDecided: { [identity: string]: boolean } = {}
 
     /** 会议本地设置 (持久化到 localStorage) */
     settings = loadMeetingSettings()
@@ -158,15 +161,16 @@ class MeetingManagerImpl {
 
     private bindRoom(room: Room) {
         const refresh = () => this.emit()
-        room.on(RoomEvent.ParticipantConnected, refresh)
+        room.on(RoomEvent.ParticipantConnected, (p) => { this.maybeAutoLocalMute(p); refresh() })
         room.on(RoomEvent.ParticipantDisconnected, refresh)
         room.on(RoomEvent.TrackSubscribed, refresh)
         room.on(RoomEvent.TrackUnsubscribed, refresh)
         room.on(RoomEvent.TrackMuted, refresh)
         room.on(RoomEvent.TrackUnmuted, refresh)
-        // 参与者改名/改元数据 (例: 机器人改成主播备注) -> 重新渲染
+        // 参与者改名/改元数据 (例: 机器人改成主播备注) -> 重新渲染;
+        // 元数据带 auto_local_mute 时自动本地静音
         room.on(RoomEvent.ParticipantNameChanged, refresh)
-        room.on(RoomEvent.ParticipantMetadataChanged, refresh)
+        room.on(RoomEvent.ParticipantMetadataChanged, (_meta, p) => { this.maybeAutoLocalMute(p); refresh() })
         // 活跃说话者变化 -> 重新渲染, 用于本地/其他人的说话音量条
         room.on(RoomEvent.ActiveSpeakersChanged, refresh)
         room.on(RoomEvent.MediaDevicesChanged, () => { this.refreshAudioInputs() })
@@ -264,6 +268,8 @@ class MeetingManagerImpl {
             this.audioBlocked = !room.canPlaybackAudio
             this.startChatBubbles(chatId)
             this.syncLocalFlags()
+            // 对已在房间内、metadata 标记 auto_local_mute 的成员自动本地静音
+            room.remoteParticipants.forEach((p) => this.maybeAutoLocalMute(p))
             this.phase = 'connected'
             this.emit()
         } catch (e: any) {
@@ -322,12 +328,31 @@ class MeetingManagerImpl {
 
     /** 本地静音/取消静音某个成员 (只影响自己) */
     toggleLocalMute(identity: string) {
+        // 用户手动操作过 -> 记录, 之后不再按 metadata 自动覆盖
+        this.autoMuteDecided[identity] = true
         if (this.locallyMuted[identity]) delete this.locallyMuted[identity]
         else this.locallyMuted[identity] = true
         this.emit()
     }
     isLocallyMuted(identity: string) {
         return !!this.locallyMuted[identity]
+    }
+
+    /**
+     * 若参与者 metadata 带 auto_local_mute (如直播流转发), 则自动对其开启本地静音。
+     * 仅在客户端开关 autoMuteStreams 打开、且用户未手动操作过该成员时生效。
+     */
+    private maybeAutoLocalMute(participant: Participant) {
+        if (!this.settings.autoMuteStreams) return
+        if (this.autoMuteDecided[participant.identity]) return
+        let meta: any = {}
+        try { meta = JSON.parse(participant.metadata || '{}') } catch { }
+        if (!meta?.auto_local_mute) return
+        this.autoMuteDecided[participant.identity] = true
+        if (!this.locallyMuted[participant.identity]) {
+            this.locallyMuted[participant.identity] = true
+            this.emit()
+        }
     }
 
     /**
@@ -457,6 +482,7 @@ class MeetingManagerImpl {
         this.focusedIdentity = undefined
         this.activeAudioInput = undefined
         this.locallyMuted = {}
+        this.autoMuteDecided = {}
         this.stopChatBubbles()
         this.emit()
         try {
@@ -477,6 +503,7 @@ class MeetingManagerImpl {
         this.isSharingAudio = false
         this.activeAudioInput = undefined
         this.locallyMuted = {}
+        this.autoMuteDecided = {}
         this.stopChatBubbles()
         this.emit()
     }
@@ -489,9 +516,11 @@ export interface MeetingSettings {
     showLocalMute: boolean
     /** 是否显示摄像头按钮 (关闭可防误触) */
     showCameraButton: boolean
+    /** 直播流等 (metadata.auto_local_mute) 加入时自动本地静音 */
+    autoMuteStreams: boolean
 }
 function loadMeetingSettings(): MeetingSettings {
-    const def: MeetingSettings = { showBubble: true, showLocalMute: true, showCameraButton: true }
+    const def: MeetingSettings = { showBubble: true, showLocalMute: true, showCameraButton: true, autoMuteStreams: true }
     try {
         const raw = localStorage.getItem('lingcat.meeting.settings')
         return raw ? { ...def, ...JSON.parse(raw) } : def
