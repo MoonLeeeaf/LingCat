@@ -249,9 +249,9 @@ class MeetingManagerImpl {
                 ? (location.protocol === 'https:' ? 'wss://' + location.host : 'ws://' + location.host)
                 : creds.url
 
-            // adaptiveStream 会按元素可见性暂停订阅, 与自定义瓦片(会切换屏幕/摄像头源)配合时
-            // 容易出现"切回摄像头后一直黑屏", 6 人以内无需它
-            const room = new Room({ adaptiveStream: false, dynacast: true })
+            // adaptiveStream: 客户端按 <video> 显示尺寸订阅对应 simulcast 层, 小瓦片/不可见时降层或暂停
+            // dynacast: 发布端只发送有订阅者的层
+            const room = new Room({ adaptiveStream: true, dynacast: true })
             this.room = room
             this.bindRoom(room)
 

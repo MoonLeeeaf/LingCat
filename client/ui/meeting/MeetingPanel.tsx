@@ -6,6 +6,7 @@ import showSnackbar from '../showSnackbar.ts'
 import { MeetingManager, useMeeting } from './MeetingManager.ts'
 import ParticipantTile from './ParticipantTile.tsx'
 import { VideoPublication } from './VideoTrack.tsx'
+import { MediaStatsOverlay } from './MediaStats.tsx'
 
 type PanelSize = 'normal' | 'expanded' | 'minimized'
 
@@ -46,6 +47,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
     const focusRef = React.useRef<HTMLDivElement>(null)
+    const focusVideoRef = React.useRef<HTMLVideoElement>(null)
     const settingsRef = React.useRef<any>(null)
     const pendingFullscreen = React.useRef(false)
     const beforeMinimizeRef = React.useRef<{ size: PanelSize, customSize?: { w: number, h: number } } | null>(null)
@@ -244,7 +246,10 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             {!!m.room && (focused ? (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
-                        <VideoPublication publication={focusedPub} muted={focused instanceof LocalParticipant} />
+                        <VideoPublication publication={focusedPub} muted={focused instanceof LocalParticipant} videoRef={focusVideoRef} />
+                        {m.settings.showMediaStats && focusedPub && (
+                            <MediaStatsOverlay publication={focusedPub} videoRef={focusVideoRef} />
+                        )}
                         <div style={{ position: 'absolute', left: '8px', bottom: '8px', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', background: 'rgba(0,0,0,0.5)', color: '#fff' }}>
                             {focused.name || focused.identity} · {focusedSource === 'camera' ? '摄像头' : '共享屏幕'}
                         </div>
