@@ -34,16 +34,17 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             ? (screenActive ? screen : undefined)
             : (screenActive ? screen : (cameraActive ? camera : undefined))
     const showingScreen = !!primary && !!screen && primary === screen
-    const name = participant.name || participant.identity
+    // LiveKit metadata: 头像 hash / 主播备注
+    let meta: any = {}
+    try { meta = JSON.parse(participant.metadata || '{}') } catch { }
+    // 显示名: 优先主播备注 (metadata.remark), 否则用 token 里的名称
+    const name = (meta?.remark as string) || participant.name || participant.identity
     const micMuted = !mic?.track || mic.isMuted
     const speaking = participant.isSpeaking && !micMuted
 
     const [hover, setHover] = React.useState(false)
     const locallyMuted = !isLocal && MeetingManager.isLocallyMuted(participant.identity)
 
-    // 头像: 优先取 LiveKit token metadata 里的 avatar_file_hash
-    let meta: any = {}
-    try { meta = JSON.parse(participant.metadata || '{}') } catch { }
     const avatarHash = meta?.avatar_file_hash as string | null | undefined
     const avatarUrl = avatarHash
         ? ClientManager.client.getFileUrlByHashAndToken(avatarHash, AppState.fileAccessToken)

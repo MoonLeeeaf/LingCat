@@ -236,6 +236,8 @@ export default class MeetingApi {
                     canPublish: true,
                     canSubscribe: true,
                     canPublishData: true,
+                    // 允许参与者修改自己的名称/元数据 (例: 机器人改成主播备注)
+                    canUpdateOwnMetadata: true,
                 })
                 at.roomConfig = new RoomConfiguration({
                     maxParticipants: max_participants,

@@ -164,6 +164,9 @@ class MeetingManagerImpl {
         room.on(RoomEvent.TrackUnsubscribed, refresh)
         room.on(RoomEvent.TrackMuted, refresh)
         room.on(RoomEvent.TrackUnmuted, refresh)
+        // 参与者改名/改元数据 (例: 机器人改成主播备注) -> 重新渲染
+        room.on(RoomEvent.ParticipantNameChanged, refresh)
+        room.on(RoomEvent.ParticipantMetadataChanged, refresh)
         // 活跃说话者变化 -> 重新渲染, 用于本地/其他人的说话音量条
         room.on(RoomEvent.ActiveSpeakersChanged, refresh)
         room.on(RoomEvent.MediaDevicesChanged, () => { this.refreshAudioInputs() })
