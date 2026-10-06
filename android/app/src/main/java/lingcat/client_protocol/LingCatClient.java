@@ -138,6 +138,10 @@ public class LingCatClient {
                 .build();
     }
 
+    public String getServerHttp()   { return serverHttp; }
+    public String getServerWs()     { return serverWs; }
+    public OkHttpClient getOkHttpClient() { return okHttpClient; }
+
     public void setOnInitListener(OnInitListener l) { this.onInitListener = l; }
     public void setOnAuthFailed(Runnable r) { this.onAuthFailed = r; }
     public void setExecutorCallback(ExecutorCallback cb) {
