@@ -127,7 +127,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
                 onClick={(e) => e.stopPropagation()}
                 style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}>
                 {/* 本地静音: 悬停显示, 已静音时常驻 */}
-                {!isLocal && (hover || locallyMuted) && (
+                {MeetingManager.settings.showLocalMute && !isLocal && (hover || locallyMuted) && (
                     <mdui-tooltip content={locallyMuted ? '取消本地静音' : '本地静音(仅自己)'}>
                         <mdui-button-icon
                             icon={locallyMuted ? 'volume_off' : 'volume_up'}

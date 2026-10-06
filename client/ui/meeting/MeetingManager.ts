@@ -41,6 +41,9 @@ class MeetingManagerImpl {
     /** 本地静音的成员 (仅影响自己听到的声音) identity -> true */
     locallyMuted: { [identity: string]: boolean } = {}
 
+    /** 会议本地设置 (持久化到 localStorage) */
+    settings = loadMeetingSettings()
+
     /** 群消息气泡: identity -> { 文本, 时间戳 } (短暂显示在对应瓦片上) */
     bubbles: { [identity: string]: { text: string, at: number } } = {}
     private chatMsgListener?: (p: Package) => void
@@ -132,6 +135,13 @@ class MeetingManagerImpl {
 
     setDock(v: boolean) {
         this.dock = v
+        this.emit()
+    }
+
+    /** 修改并保存会议本地设置 */
+    setMeetingSetting(key: keyof ReturnType<typeof loadMeetingSettings>, value: boolean) {
+        this.settings[key] = value
+        saveMeetingSettings(this.settings)
         this.emit()
     }
 
@@ -467,6 +477,25 @@ class MeetingManagerImpl {
         this.stopChatBubbles()
         this.emit()
     }
+}
+
+export interface MeetingSettings {
+    /** 是否在瓦片上显示群消息气泡 */
+    showBubble: boolean
+    /** 是否显示瓦片上的"本地静音"按钮 */
+    showLocalMute: boolean
+}
+function loadMeetingSettings(): MeetingSettings {
+    const def: MeetingSettings = { showBubble: true, showLocalMute: true }
+    try {
+        const raw = localStorage.getItem('lingcat.meeting.settings')
+        return raw ? { ...def, ...JSON.parse(raw) } : def
+    } catch {
+        return def
+    }
+}
+function saveMeetingSettings(s: MeetingSettings) {
+    try { localStorage.setItem('lingcat.meeting.settings', JSON.stringify(s)) } catch { }
 }
 
 /** 把消息富文本精简成气泡里显示的纯文本 */

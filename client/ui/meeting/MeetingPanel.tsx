@@ -46,6 +46,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     const dragRef = React.useRef<{ dx: number, dy: number } | null>(null)
     const resizeRef = React.useRef<{ startX: number, startY: number, startW: number, startH: number } | null>(null)
     const focusRef = React.useRef<HTMLDivElement>(null)
+    const settingsRef = React.useRef<any>(null)
     const pendingFullscreen = React.useRef(false)
     const beforeMinimizeRef = React.useRef<{ size: PanelSize, customSize?: { w: number, h: number } } | null>(null)
 
@@ -247,7 +248,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                                     compact
                                     participant={t.participant}
                                     prefer={t.source}
-                                    bubble={m.bubbles[t.participant.identity]}
+                                    bubble={m.settings.showBubble ? m.bubbles[t.participant.identity] : undefined}
                                     onClick={() => {
                                         if (t.source === 'auto') return
                                         if (t.participant === focused && t.source === focusedSource) return
@@ -266,7 +267,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                             key={t.key}
                             participant={t.participant}
                             prefer={src}
-                            bubble={m.bubbles[t.participant.identity]}
+                            bubble={m.settings.showBubble ? m.bubbles[t.participant.identity] : undefined}
                             onClick={() => { if (src !== 'auto') maximize(t.participant.identity, src) }}
                             actions={src !== 'auto' ? <>
                                 <mdui-tooltip content={src === 'camera' ? '最大化摄像头' : '最大化共享'}>
@@ -373,56 +374,94 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
             padding: '8px',
             borderTop: '1px solid rgb(var(--mdui-color-outline-variant))',
-            flexWrap: 'wrap',
+            gap: '6px',
         }}>
-            {m.audioBlocked && (
-                <mdui-tooltip content='恢复音频'>
-                    <mdui-button-icon icon="play_arrow" variant="tonal" onClick={() => MeetingManager.resumeAudio()}></mdui-button-icon>
-                </mdui-tooltip>
-            )}
+            <div style={{ flex: 1 }} />
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                flexWrap: 'wrap',
+            }}>
+                {m.audioBlocked && (
+                    <mdui-tooltip content='恢复音频'>
+                        <mdui-button-icon icon="play_arrow" variant="tonal" onClick={() => MeetingManager.resumeAudio()}></mdui-button-icon>
+                    </mdui-tooltip>
+                )}
 
-            <mdui-dropdown trigger='hover'>
-                <mdui-button-icon slot="trigger"
-                    icon={m.isMicOn ? 'mic' : 'mic_off'}
-                    onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
-                />
+                <mdui-dropdown trigger='hover'>
+                    <mdui-button-icon slot="trigger"
+                        icon={m.isMicOn ? 'mic' : 'mic_off'}
+                        onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
+                    />
 
-                <mdui-menu>
-                    <mdui-menu-item
-                        icon={m.noiseSuppression ? 'check' : undefined}
-                        onClick={() => MeetingManager.setNoiseSuppression(!m.noiseSuppression).catch((e) => tipError(e, '切换降噪失败'))}
-                    >麦克风降噪</mdui-menu-item>
-                    {m.audioInputs.length > 0 && <mdui-divider></mdui-divider>}
-                    {m.audioInputs.map((d) => (
+                    <mdui-menu>
                         <mdui-menu-item
-                            key={d.deviceId}
-                            icon={d.deviceId === m.activeAudioInput ? 'check' : undefined}
-                            onClick={() => MeetingManager.setAudioInput(d.deviceId).catch((e) => tipError(e, '切换麦克风失败'))}
-                        >{d.label}</mdui-menu-item>
-                    ))}
-                </mdui-menu>
-            </mdui-dropdown>
-            <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
-                <mdui-button-icon
-                    icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
-                    onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
-                />
-            </mdui-tooltip>
-            <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
-                <mdui-button-icon
-                    icon={m.isSharingScreen ? 'screen_share' : 'stop_screen_share'}
-                    onClick={() => onToggleScreenShare()}
-                />
-            </mdui-tooltip>
-            {m.isSharingScreen && (
-                <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '含电脑声音' : '仅屏幕'}</span>
-            )}
-            {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
+                            icon={m.noiseSuppression ? 'check' : undefined}
+                            onClick={() => MeetingManager.setNoiseSuppression(!m.noiseSuppression).catch((e) => tipError(e, '切换降噪失败'))}
+                        >麦克风降噪</mdui-menu-item>
+                        {m.audioInputs.length > 0 && <mdui-divider></mdui-divider>}
+                        {m.audioInputs.map((d) => (
+                            <mdui-menu-item
+                                key={d.deviceId}
+                                icon={d.deviceId === m.activeAudioInput ? 'check' : undefined}
+                                onClick={() => MeetingManager.setAudioInput(d.deviceId).catch((e) => tipError(e, '切换麦克风失败'))}
+                            >{d.label}</mdui-menu-item>
+                        ))}
+                    </mdui-menu>
+                </mdui-dropdown>
+                <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                    <mdui-button-icon
+                        icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
+                        onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
+                    />
+                </mdui-tooltip>
+                <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
+                    <mdui-button-icon
+                        icon={m.isSharingScreen ? 'screen_share' : 'stop_screen_share'}
+                        onClick={() => onToggleScreenShare()}
+                    />
+                </mdui-tooltip>
+                {m.isSharingScreen && (
+                    <span style={{ fontSize: '12px', opacity: 0.7 }}>{m.isSharingAudio ? '含电脑声音' : '仅屏幕'}</span>
+                )}
+                {canEnd && <mdui-button icon="call_end" variant="tonal" onClick={onEnd}>结束会议</mdui-button>}
+            </div>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                <mdui-tooltip content="会议设置">
+                    <mdui-button-icon icon="settings" onClick={() => { if (settingsRef.current) settingsRef.current.open = true }} />
+                </mdui-tooltip>
+            </div>
         </div>
+    )
+
+    const settingsDialog = (
+        <mdui-dialog ref={settingsRef} close-on-overlay-click close-on-esc headline="会议设置">
+            <mdui-list>
+                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showBubble', !m.settings.showBubble)}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                        <span style={{ flex: 1 }}>消息气泡</span>
+                        <mdui-switch checked={m.settings.showBubble} checked-icon="" />
+                    </div>
+                </mdui-list-item>
+                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showLocalMute', !m.settings.showLocalMute)}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                        <span style={{ flex: 1 }}>本地静音按钮</span>
+                        <mdui-switch checked={m.settings.showLocalMute} checked-icon="" />
+                    </div>
+                </mdui-list-item>
+                <mdui-list-item rounded onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                        <span style={{ flex: 1 }}>摄像头</span>
+                        <mdui-switch checked={m.isCameraOn} checked-icon="" />
+                    </div>
+                </mdui-list-item>
+            </mdui-list>
+            <mdui-button slot="action" variant="text" onClick={() => { if (settingsRef.current) settingsRef.current.open = false }}>关闭</mdui-button>
+        </mdui-dialog>
     )
 
     const resizeHandle = !isDocked && !isWindow && !floatingMinimized && (
@@ -467,6 +506,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             {header}
             {body}
             {controls}
+            {settingsDialog}
             {m.audioBlocked && !!m.room && (
                 <div
                     onClick={() => MeetingManager.resumeAudio()}
@@ -495,6 +535,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             {header}
             {body}
             {controls}
+            {settingsDialog}
         </div>
     }
 
@@ -519,5 +560,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         {body}
         {controls}
         {resizeHandle}
+        {settingsDialog}
     </div>
 }
