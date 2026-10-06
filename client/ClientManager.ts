@@ -2,6 +2,7 @@ import LingCatClient, { UserApi } from 'lingcat-client-protocol'
 import fs from './fs.ts'
 import { IUser } from 'lingcat-protocol'
 import ProfileCache from './ProfileCache.ts'
+import ClientConfigInstance from './ClientConfig.ts'
 
 const default_server = location.protocol + '//' + location.host + location.pathname
 
@@ -77,6 +78,7 @@ export default class ClientManager {
         let { server }: { server?: string } = this.getUserSession(userSessionName)
         if (server.trim() == '')
             server = undefined
+        ClientConfigInstance.loadFrom(server || '').catch(() => { })
         this.client = new LingCatClient({
             server_ws: server || default_server,
             server_http: server || default_server,

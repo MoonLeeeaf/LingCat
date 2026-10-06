@@ -12,19 +12,27 @@ export interface IClientConfig {
 
 class ClientConfig {
     private config: IClientConfig = {}
-    private loaded = false
+    private loadedFrom?: string
 
     async load() {
-        if (this.loaded) return this.config
+        return this.loadFrom('')
+    }
+
+    async loadFrom(serverUrl: string) {
+        if (this.loadedFrom === serverUrl) return this.config
+
+        const base = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl
+        const url = base + '/config.json'
+
         try {
-            const res = await fetch('/config.json', { cache: 'no-store' })
+            const res = await fetch(url, { cache: 'no-store' })
             if (res.ok) {
                 this.config = await res.json()
+                this.loadedFrom = serverUrl
             }
         } catch (e) {
-            console.warn('[ClientConfig] 加载失败, 使用默认值', e)
+            console.warn('[ClientConfig] 加载失败', url, e)
         }
-        this.loaded = true
         return this.config
     }
 
