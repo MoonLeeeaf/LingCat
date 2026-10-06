@@ -100,8 +100,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             <div key={bubble.at} style={{
                 position: 'absolute',
                 left: '6px',
-                right: '6px',
                 bottom: compact ? '26px' : '30px',
+                width: 'fit-content',
+                maxWidth: 'calc(100% - 12px)',
                 padding: '6px 10px',
                 borderRadius: '12px',
                 background: 'rgba(28,28,30,0.9)',
