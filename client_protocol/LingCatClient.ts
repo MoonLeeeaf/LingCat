@@ -1,21 +1,37 @@
 import { Package, Methods, LingCatProto, SecureKey } from 'lingcat-protocol'
 import { toUint8Array } from 'lingcat-shared'
 
+type PendingRequest = {
+    resolve: (p: Package) => void
+    reject: (e: any) => void
+    timer: ReturnType<typeof setTimeout>
+}
+
 export default class LingCatClient {
     server_ws: string
     server_http: string
     server_public_key: Uint8Array
     client?: WebSocket
     pingInterval?: ReturnType<typeof setInterval>
+
+    /** 主动断开标志: 为 true 时 close 事件不触发重连 */
+    private manualDisconnect = false
+
     session: {
         keySend?: Uint8Array,
         keyRecv?: Uint8Array,
         recvSeq: number,
         sendSeq: number,
     } = {
-            recvSeq: -999,
-            sendSeq: -999,
-        }
+        recvSeq: -1,
+        sendSeq: -1,
+    }
+
+    /** 请求级: request_id (hex) -> 挂起中的 invoke */
+    private pendingRequests = new Map<string, PendingRequest>()
+
+    /** 全局事件监听器 (跨重连保持) */
+    on_receive_listeners: ((mPackage: Package) => void)[] = []
 
     constructor(options: {
         server_ws: string,
@@ -37,7 +53,6 @@ export default class LingCatClient {
         return this.getFileUrlByHash(hash) + '?file_access_token=' + file_access_token
     }
 
-    on_package_listeners: Function[] = []
     invoke(option: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
         return this.invoke_internal({
             ...option,
@@ -48,6 +63,7 @@ export default class LingCatClient {
             }).encrypt(this.session.sendSeq++, this.session.keySend!)
         })
     }
+
     invokeUnEncrypted(option: { method_id: number, data: Uint8Array, flags?: number, timeout?: number }) {
         return this.invoke_internal({
             ...option,
@@ -58,62 +74,51 @@ export default class LingCatClient {
             })
         })
     }
-    invoke_internal({ mPackage, timeout }: { mPackage: Package, timeout?: number }) {
+
+    private invoke_internal({ mPackage, timeout }: { mPackage: Package, timeout?: number }): Promise<Package> {
         const ms = timeout ?? 20000
-        return new Promise((res: (mPackage: Package) => void, rej) => {
-            const requestId = mPackage.request_id
-            const sock = this.client
-            let done = false
-            let timer: any
+        return new Promise<Package>((resolve, reject) => {
+            const requestId = Buffer.from(mPackage.request_id).toString('hex')
 
-            const cleanup = () => {
-                const i = this.on_package_listeners.indexOf(onRecv)
-                if (i >= 0) this.on_package_listeners.splice(i, 1)
-                if (timer) clearTimeout(timer)
-                sock?.removeEventListener('close', onClose)
-            }
-            const onRecv = (p: Package) => {
-                if (done) return
-                if (Buffer.compare(p.request_id, requestId) == 0) {
-                    done = true
-                    cleanup()
-                    res(p)
-                }
-            }
-            // 连接断开时立刻 reject, 不必等超时
-            const onClose = () => {
-                if (done) return
-                done = true
-                cleanup()
-                rej('Connection closed (' + Methods.getMethodName(mPackage.method_id) + ')')
-            }
-            this.on_package_listeners.push(onRecv)
-            sock?.addEventListener('close', onClose)
-
-            this.client?.send(mPackage.toBuffer())
-
-            console.log("[发]", "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (!mPackage.isDecrypted ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ") : ''))
-
-            timer = setTimeout(() => {
-                if (done) return
-                done = true
-                cleanup()
-                rej('Request timeout ' + ms + 'ms (' + Methods.getMethodName(mPackage.method_id) + ')')
+            const timer = setTimeout(() => {
+                this.pendingRequests.delete(requestId)
+                reject('Request timeout ' + ms + 'ms (' + Methods.getMethodName(mPackage.method_id) + ')')
             }, ms)
+
+            this.pendingRequests.set(requestId, { resolve, reject, timer })
+
+            const sock = this.client
+            if (!sock || sock.readyState !== WebSocket.OPEN) {
+                clearTimeout(timer)
+                this.pendingRequests.delete(requestId)
+                reject('WebSocket not connected')
+                return
+            }
+
+            sock.send(mPackage.toBuffer())
+
+            console.log(
+                "[发]",
+                "Method:", Methods.getMethodName(mPackage.method_id),
+                "| Flags:", mPackage.flags,
+                "| Data length:", mPackage.length,
+                "| Request ID:", mPackage.request_id,
+                (!mPackage.isDecrypted
+                    ? ("(Encrypted, recvSeq: " + this.session.recvSeq + ", current sendSeq: " + this.session.sendSeq + ") ")
+                    : '')
+            )
         })
     }
 
     onInit() { }
 
-    /**
-     * 应用层心跳: 定期发 Ping_Request, 让服务端保持/检测连接存活
-     */
+    /** 应用层心跳: 定期发 Ping_Request, 让服务端保持/检测连接存活 */
     startPing() {
         this.stopPing()
         this.pingInterval = setInterval(() => {
             const client = this.client
             const keySend = this.session.keySend
-            if (!client || !keySend || client.readyState !== 1) return
+            if (!client || !keySend || client.readyState !== WebSocket.OPEN) return
             try {
                 const pkt = Package.encode({
                     method_id: Methods.Ping_Request,
@@ -126,6 +131,7 @@ export default class LingCatClient {
             }
         }, 30000)
     }
+
     stopPing() {
         if (this.pingInterval) {
             clearInterval(this.pingInterval)
@@ -133,108 +139,146 @@ export default class LingCatClient {
         }
     }
 
-    on_receive_listeners: ((mPackage: Package) => void)[] = []
     addOnReceiveListener(func: (mPackage: Package) => void) {
         this.on_receive_listeners.push(func)
     }
+
     removeOnReceiveListener(func: (mPackage: Package) => void) {
-        this.on_receive_listeners.splice(this.on_receive_listeners.indexOf(func), 1)
+        const i = this.on_receive_listeners.indexOf(func)
+        if (i >= 0) this.on_receive_listeners.splice(i, 1)
+    }
+
+    /** 拒绝所有挂起请求 (连接关闭 / 主动断开时调用) */
+    private rejectAllPending(reason: string) {
+        for (const [, p] of this.pendingRequests) {
+            clearTimeout(p.timer)
+            p.reject(reason)
+        }
+        this.pendingRequests.clear()
     }
 
     init() {
-        if (this.client == null) {
-            this.client = new WebSocket(this.server_ws)
+        if (this.client != null) return
 
-            const client = this.client
-            const session = this.session
-            const on_package_listeners = this.on_package_listeners
-            const on_receive_listeners = this.on_receive_listeners
+        this.manualDisconnect = false
 
-            client.binaryType = 'arraybuffer'
+        const client = new WebSocket(this.server_ws)
+        this.client = client
+        const session = this.session
 
-            client.addEventListener('close', () => {
-                this.stopPing()
-                client.close()
-                delete this.client
-                on_package_listeners.splice(0, on_package_listeners.length)
-                this.init()
-            })
+        client.binaryType = 'arraybuffer'
 
-            client.addEventListener('open', async () => {
-                const keyPair = SecureKey.All_generateExchangeKeyPair()
+        client.addEventListener('close', () => {
+            this.stopPing()
+            this.rejectAllPending('Connection closed')
+            if (this.client === client) this.client = undefined
+            if (this.manualDisconnect) return
+            // 自动重连
+            this.init()
+        })
 
-                // 发送握手请求
-                client?.send(Package.encode({
-                    method_id: Methods.HandShake_Request,
-                    flags: 0,
-                    data: LingCatProto.methods.HandShake_Request.encode({
-                        clientPublicKey: keyPair.publicKey,
-                    }).finish()
-                }).toBuffer())
+        client.addEventListener('open', async () => {
+            const keyPair = SecureKey.All_generateExchangeKeyPair()
 
-                client?.addEventListener('message', async (event) => {
-                    if (event.data instanceof ArrayBuffer) {
-                        try {
-                            let mPackage = Package.decode(toUint8Array(event.data), session.keyRecv!, session.recvSeq)
+            // 发送握手请求 (未加密)
+            client.send(Package.encode({
+                method_id: Methods.HandShake_Request,
+                flags: 0,
+                data: LingCatProto.methods.HandShake_Request.encode({
+                    clientPublicKey: keyPair.publicKey,
+                }).finish()
+            }).toBuffer())
 
-                            session.recvSeq = mPackage.seq
+            client.addEventListener('message', async (event) => {
+                if (!(event.data instanceof ArrayBuffer)) return
+                try {
+                    const mPackage = Package.decode(toUint8Array(event.data), session.keyRecv!, session.recvSeq)
+                    session.recvSeq = mPackage.seq
 
-                            const isEncrypted = mPackage.isDecrypted
-                            console.log("[收]", "Method:", Methods.getMethodName(mPackage.method_id), "| Flags:", mPackage.flags, "| Data length:", mPackage.length, '| Request ID:', mPackage.request_id, (isEncrypted ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ") : ''))
+                    const isEncrypted = mPackage.isDecrypted
+                    console.log(
+                        "[收]",
+                        "Method:", Methods.getMethodName(mPackage.method_id),
+                        "| Flags:", mPackage.flags,
+                        "| Data length:", mPackage.length,
+                        "| Request ID:", mPackage.request_id,
+                        (isEncrypted
+                            ? ("(Encrypted, recvSeq: " + session.recvSeq + ", current sendSeq: " + session.sendSeq + ") ")
+                            : '')
+                    )
 
-                            switch (mPackage.method_id) {
-                                // 握手响应
-                                case Methods.HandShake_Response: {
-                                    const res = LingCatProto.methods.HandShake_Response.decode(mPackage.data)
+                    switch (mPackage.method_id) {
+                        case Methods.HandShake_Response: {
+                            const res = LingCatProto.methods.HandShake_Response.decode(mPackage.data)
 
-                                    // 验证服务端签名的消息
-                                    if (SecureKey.Client_checkSignedMessage(
-                                        res.messageToBeVerify,
-                                        res.serverPublicKey,
-                                        keyPair.publicKey,
-                                        this.server_public_key
-                                    )) {
-                                        console.log('[Client] Server verified!')
-
-                                        session.sendSeq = 0
-                                        session.recvSeq = -1
-
-                                        let sharedSecret = SecureKey.All_getSharedSecret(
-                                            res.serverPublicKey,
-                                            keyPair.privateKey
-                                        )
-
-                                            // 服务端交互所需要的对称密钥
-                                            ; ({ keyRecv: session.keyRecv, keySend: session.keySend } = SecureKey.Client_hkdf(
-                                                sharedSecret,
-                                                res.salt
-                                            ))
-
-                                        sharedSecret.fill(0)
-
-                                        this.startPing()
-
-                                        this.onInit()
-                                    }
-                                    break
-                                }
-                                // Ping 成功
-                                case Methods.Ping_Response: {
-                                    console.log('[Client] Server recv time:', LingCatProto.methods.Ping_Response.decode(mPackage.data).usage + 'ms')
-                                    break
-                                }
+                            const verified = SecureKey.Client_checkSignedMessage(
+                                res.messageToBeVerify,
+                                res.serverPublicKey,
+                                keyPair.publicKey,
+                                this.server_public_key
+                            )
+                            if (!verified) {
+                                console.error('[Client] Server verification failed, closing connection')
+                                client.close()
+                                return
                             }
-                            on_package_listeners.forEach((v) => v(mPackage))
-                            on_receive_listeners.forEach((v) => v(mPackage))
-                        } catch (e) {
-                            console.error(e)
+
+                            console.log('[Client] Server verified!')
+                            session.sendSeq = 0
+                            session.recvSeq = -1
+
+                            const sharedSecret = SecureKey.All_getSharedSecret(
+                                res.serverPublicKey,
+                                keyPair.privateKey
+                            )
+                            ; ({ keyRecv: session.keyRecv, keySend: session.keySend } = SecureKey.Client_hkdf(
+                                sharedSecret,
+                                res.salt
+                            ))
+                            sharedSecret.fill(0)
+
+                            this.startPing()
+                            this.onInit()
+                            break
+                        }
+                        case Methods.Ping_Response: {
+                            console.log(
+                                '[Client] Server recv time:',
+                                LingCatProto.methods.Ping_Response.decode(mPackage.data).usage + 'ms'
+                            )
+                            break
                         }
                     }
-                })
+
+                    // 1. 请求响应匹配
+                    const requestId = Buffer.from(mPackage.request_id).toString('hex')
+                    const pending = this.pendingRequests.get(requestId)
+                    if (pending) {
+                        this.pendingRequests.delete(requestId)
+                        clearTimeout(pending.timer)
+                        pending.resolve(mPackage)
+                    }
+
+                    // 2. 全局事件分发
+                    for (const listener of this.on_receive_listeners) {
+                        try {
+                            listener(mPackage)
+                        } catch (e) {
+                            console.error('[Client] on_receive_listener error', e)
+                        }
+                    }
+                } catch (e) {
+                    console.error(e)
+                }
             })
-        }
+        })
     }
+
     disconnect() {
+        this.manualDisconnect = true
+        this.stopPing()
+        this.rejectAllPending('Client disconnected')
         this.client?.close()
+        this.client = undefined
     }
 }
