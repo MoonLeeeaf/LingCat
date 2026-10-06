@@ -518,9 +518,11 @@ export interface MeetingSettings {
     showCameraButton: boolean
     /** 直播流等 (metadata.auto_local_mute) 加入时自动本地静音 */
     autoMuteStreams: boolean
+    /** 在视频瓦片上显示统计信息 (调试) */
+    showMediaStats: boolean
 }
 function loadMeetingSettings(): MeetingSettings {
-    const def: MeetingSettings = { showBubble: true, showLocalMute: true, showCameraButton: true, autoMuteStreams: true }
+    const def: MeetingSettings = { showBubble: true, showLocalMute: true, showCameraButton: true, autoMuteStreams: true, showMediaStats: false }
     try {
         const raw = localStorage.getItem('lingcat.meeting.settings')
         return raw ? { ...def, ...JSON.parse(raw) } : def

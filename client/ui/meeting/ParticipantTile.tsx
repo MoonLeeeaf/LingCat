@@ -44,7 +44,6 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const speaking = participant.isSpeaking && !micMuted
 
     const [hover, setHover] = React.useState(false)
-    const [showStats, setShowStats] = React.useState(false)
     const videoRef = React.useRef<HTMLVideoElement>(null)
     const locallyMuted = !isLocal && MeetingManager.isLocallyMuted(participant.identity)
 
@@ -129,7 +128,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             </div>
         )}
 
-        {(!isLocal || actions || !!primary?.track) && (
+        {(!isLocal || actions) && (
             <div
                 onClick={(e) => e.stopPropagation()}
                 style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}>
@@ -142,20 +141,12 @@ export default function ParticipantTile({ participant, compact, onClick, actions
                         />
                     </mdui-tooltip>
                 )}
-                {/* 调试统计: 仅在有视频(屏幕共享/摄像头)的瓦片上, 悬停或已开启时显示 */}
-                {!!primary?.track && (hover || showStats) && (
-                    <mdui-tooltip content={showStats ? '隐藏统计信息' : '显示统计信息'}>
-                        <mdui-button-icon
-                            icon={showStats ? 'query_stats' : 'insights'}
-                            onClick={() => setShowStats((v) => !v)}
-                        />
-                    </mdui-tooltip>
-                )}
                 {actions}
             </div>
         )}
 
-        {!!primary?.track && showStats && (
+        {/* 调试统计: 会议设置开启后, 有视频(屏幕共享/摄像头)的瓦片显示 */}
+        {MeetingManager.settings.showMediaStats && !!primary?.track && (
             <MediaStatsOverlay publication={primary} videoRef={videoRef} compact={compact} />
         )}
 
