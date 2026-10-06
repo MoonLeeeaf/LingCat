@@ -1,7 +1,7 @@
 import React from 'react'
 import { Room, RoomEvent, Track } from 'livekit-client'
 import { MeetingApi } from 'lingcat-client-protocol'
-import { IChat } from 'lingcat-protocol'
+import { IChat, Methods, LingCatProto, type Package } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
 
 export type MeetingPhase = 'idle' | 'connecting' | 'connected' | 'error'
@@ -40,6 +40,11 @@ class MeetingManagerImpl {
 
     /** 本地静音的成员 (仅影响自己听到的声音) identity -> true */
     locallyMuted: { [identity: string]: boolean } = {}
+
+    /** 群消息气泡: identity -> 文本 (短暂显示在对应瓦片上) */
+    bubbles: { [identity: string]: string } = {}
+    private chatMsgListener?: (p: Package) => void
+    private bubbleTimers: { [identity: string]: ReturnType<typeof setTimeout> } = {}
 
     /** 会议面板是否停靠为分栏模式 (左侧画面 / 右侧聊天) */
     dock = false
@@ -244,6 +249,7 @@ class MeetingManagerImpl {
             await this.refreshAudioInputs()
 
             this.audioBlocked = !room.canPlaybackAudio
+            this.startChatBubbles(chatId)
             this.syncLocalFlags()
             this.phase = 'connected'
             this.emit()
@@ -309,6 +315,44 @@ class MeetingManagerImpl {
     }
     isLocallyMuted(identity: string) {
         return !!this.locallyMuted[identity]
+    }
+
+    /**
+     * 监听当前对话的群消息, 给发送者在瓦片上冒出对话气泡
+     */
+    private startChatBubbles(chatId: string) {
+        this.stopChatBubbles()
+        const listener = (p: Package) => {
+            if (p.method_id !== Methods.Receive_Chat_Message_Event) return
+            let raw: any
+            try { raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(p.data).msg } catch { return }
+            if (!raw || raw.chatId !== chatId) return
+            if (raw.system || !raw.senderUserId) return
+            const text = bubbleText(raw.text || '')
+            if (!text) return
+            this.setBubble(raw.senderUserId, text)
+        }
+        this.chatMsgListener = listener
+        ClientManager.client?.addOnReceiveListener(listener)
+    }
+    private stopChatBubbles() {
+        if (this.chatMsgListener) {
+            ClientManager.client?.removeOnReceiveListener(this.chatMsgListener)
+            this.chatMsgListener = undefined
+        }
+        Object.values(this.bubbleTimers).forEach((t) => clearTimeout(t))
+        this.bubbleTimers = {}
+        this.bubbles = {}
+    }
+    private setBubble(identity: string, text: string) {
+        this.bubbles[identity] = text
+        if (this.bubbleTimers[identity]) clearTimeout(this.bubbleTimers[identity])
+        this.bubbleTimers[identity] = setTimeout(() => {
+            delete this.bubbles[identity]
+            delete this.bubbleTimers[identity]
+            this.emit()
+        }, 6000)
+        this.emit()
     }
 
     /** 切换到指定麦克风设备 */
@@ -399,6 +443,7 @@ class MeetingManagerImpl {
         this.focusedIdentity = undefined
         this.activeAudioInput = undefined
         this.locallyMuted = {}
+        this.stopChatBubbles()
         this.emit()
         try {
             room?.disconnect()
@@ -418,8 +463,29 @@ class MeetingManagerImpl {
         this.isSharingAudio = false
         this.activeAudioInput = undefined
         this.locallyMuted = {}
+        this.stopChatBubbles()
         this.emit()
     }
+}
+
+/** 把消息富文本精简成气泡里显示的纯文本 */
+function bubbleText(text: string): string {
+    let out = text
+        // 图片/视频/文件/提及: ![alt](url) -> alt(去语义前缀)
+        .replace(/!\[([^\]]*)\]\([^)]*\)/g, (_m, alt: string) => {
+            const eq = alt.indexOf('=')
+            if (eq >= 0) return alt.slice(eq + 1)          // UserMention=@name -> @name
+            if (alt.startsWith('图片')) return '[图片]'
+            if (alt.startsWith('视频')) return '[视频]'
+            if (alt.startsWith('文件')) return '[文件]'
+            return alt
+        })
+        // 普通链接 [label](url) -> label
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim()
+    if (out.length > 100) out = out.slice(0, 100) + '…'
+    return out
 }
 
 export const MeetingManager = new MeetingManagerImpl()

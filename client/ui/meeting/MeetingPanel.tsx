@@ -247,6 +247,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                                     compact
                                     participant={t.participant}
                                     prefer={t.source}
+                                    bubble={m.bubbles[t.participant.identity]}
                                     onClick={() => {
                                         if (t.source === 'auto') return
                                         if (t.participant === focused && t.source === focusedSource) return
@@ -265,6 +266,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                             key={t.key}
                             participant={t.participant}
                             prefer={src}
+                            bubble={m.bubbles[t.participant.identity]}
                             onClick={() => { if (src !== 'auto') maximize(t.participant.identity, src) }}
                             actions={src !== 'auto' ? <>
                                 <mdui-tooltip content={src === 'camera' ? '最大化摄像头' : '最大化共享'}>

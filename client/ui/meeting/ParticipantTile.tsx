@@ -7,7 +7,7 @@ import AppState from '../AppState.ts'
 import default_avatar from '../../default_avatar.png'
 import { MeetingManager } from './MeetingManager.ts'
 
-export default function ParticipantTile({ participant, compact, onClick, actions, style, prefer = 'auto' }: {
+export default function ParticipantTile({ participant, compact, onClick, actions, style, prefer = 'auto', bubble }: {
     participant: Participant
     compact?: boolean
     onClick?: () => void
@@ -15,6 +15,8 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     style?: React.CSSProperties
     /** 显示哪一路: auto 屏幕优先, 或强制 screen / camera */
     prefer?: 'auto' | 'screen' | 'camera'
+    /** 群消息气泡文本 (短暂显示) */
+    bubble?: string
 }) {
     const isLocal = participant instanceof LocalParticipant
     const screen = participant.getTrackPublication(Track.Source.ScreenShare)
@@ -92,6 +94,33 @@ export default function ParticipantTile({ participant, compact, onClick, actions
 
         {/* 实时音量条 (本地与其他人): 长度随音量变化, 绿/橙/红 */}
         <AudioLevelBar participant={participant} muted={micMuted} />
+
+        {/* 群消息气泡 */}
+        {bubble && (
+            <div style={{
+                position: 'absolute',
+                left: '6px',
+                right: '6px',
+                bottom: compact ? '26px' : '30px',
+                padding: '6px 10px',
+                borderRadius: '12px',
+                background: 'rgba(28,28,30,0.9)',
+                color: '#fff',
+                fontSize: compact ? '11px' : '13px',
+                lineHeight: 1.3,
+                boxShadow: '0 2px 10px rgba(0,0,0,.45)',
+                wordBreak: 'break-word',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                zIndex: 2,
+                pointerEvents: 'none',
+                animation: 'lingcat-bubble-in 180ms ease-out',
+            }}>
+                {bubble}
+            </div>
+        )}
 
         {(!isLocal || actions) && (
             <div
