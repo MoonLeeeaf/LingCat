@@ -77,8 +77,6 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         }
     }, [m.focusedIdentity, m.focusedSource])
 
-    if (!active) return null
-
     const participants = m.room
         ? [m.room.localParticipant, ...Array.from(m.room.remoteParticipants.values())]
         : []
@@ -103,6 +101,36 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         if (cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'camera' })
         if (!scr && !cam) tiles.push({ key: p.identity, participant: p, source: 'auto' })
     }
+
+    // 按面板尺寸自动选列数: 让 16:9 瓦片在尽量少列(更大)的前提下铺满面板
+    const bodyRef = React.useRef<HTMLDivElement>(null)
+    const [gridCols, setGridCols] = React.useState<number | undefined>(undefined)
+    React.useEffect(() => {
+        const el = bodyRef.current
+        if (!el) return
+        const gap = 6
+        const compute = () => {
+            const n = tiles.length
+            const W = el.clientWidth - 16
+            const H = el.clientHeight - 16
+            if (!n || W <= 0 || H <= 0) { setGridCols(undefined); return }
+            let cols = n
+            for (let c = 1; c <= n; c++) {
+                const tileW = (W - gap * (c - 1)) / c
+                if (tileW <= 0) continue
+                const tileH = tileW * 9 / 16
+                const rows = Math.ceil(n / c)
+                if (rows * tileH + gap * (rows - 1) <= H) { cols = c; break }
+            }
+            setGridCols(cols)
+        }
+        compute()
+        const ro = new ResizeObserver(compute)
+        ro.observe(el)
+        return () => ro.disconnect()
+    }, [tiles.length, isWindow, mode, m.focusedIdentity])
+
+    if (!active) return null
 
     const dim = size === 'minimized'
         ? { w: 295, h: 0 }
@@ -194,7 +222,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     }
 
     const body = (
-        <div style={{
+        <div ref={bodyRef} style={{
             flex: 1,
             overflow: 'auto',
             padding: '8px',
@@ -260,7 +288,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                     </div>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${isWindow ? 280 : 130}px, 1fr))`, gap: '6px', alignContent: 'start' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: gridCols ? `repeat(${gridCols}, 1fr)` : `repeat(auto-fit, minmax(${isWindow ? 280 : 130}px, 1fr))`, gap: '6px', alignContent: 'start' }}>
                     {tiles.map((t) => {
                         const src = t.source
                         return <ParticipantTile

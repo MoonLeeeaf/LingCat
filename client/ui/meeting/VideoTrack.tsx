@@ -1,12 +1,15 @@
 import React from 'react'
 import type { TrackPublication } from 'livekit-client'
 
-export function VideoPublication({ publication, muted, style }: {
+export function VideoPublication({ publication, muted, style, videoRef }: {
     publication?: TrackPublication
     muted?: boolean
     style?: React.CSSProperties
+    /** 可选: 外部访问 <video> 元素 (用于调试统计) */
+    videoRef?: React.RefObject<HTMLVideoElement | null>
 }) {
-    const ref = React.useRef<HTMLVideoElement>(null)
+    const innerRef = React.useRef<HTMLVideoElement>(null)
+    const ref = videoRef ?? innerRef
 
     React.useEffect(() => {
         const el = ref.current

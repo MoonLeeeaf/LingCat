@@ -2,6 +2,7 @@ import React from 'react'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import { AudioPublication, VideoPublication } from './VideoTrack.tsx'
 import { AudioLevelBar } from './AudioLevel.tsx'
+import { MediaStatsOverlay } from './MediaStats.tsx'
 import ClientManager from '../../ClientManager.ts'
 import AppState from '../AppState.ts'
 import default_avatar from '../../default_avatar.png'
@@ -43,6 +44,8 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const speaking = participant.isSpeaking && !micMuted
 
     const [hover, setHover] = React.useState(false)
+    const [showStats, setShowStats] = React.useState(false)
+    const videoRef = React.useRef<HTMLVideoElement>(null)
     const locallyMuted = !isLocal && MeetingManager.isLocallyMuted(participant.identity)
 
     const avatarHash = meta?.avatar_file_hash as string | null | undefined
@@ -71,7 +74,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     }}>
         {primary?.track
             // key: 源变化 (屏幕<->摄像头) 时强制重建 <video>, 避免复用节点残留黑帧
-            ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} />
+            ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} videoRef={videoRef} />
             : <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: compact ? '4px' : '8px', padding: '8px' }}>
                 <img
                     src={avatarUrl}
@@ -126,7 +129,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             </div>
         )}
 
-        {(!isLocal || actions) && (
+        {(!isLocal || actions || !!primary?.track) && (
             <div
                 onClick={(e) => e.stopPropagation()}
                 style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}>
@@ -139,8 +142,21 @@ export default function ParticipantTile({ participant, compact, onClick, actions
                         />
                     </mdui-tooltip>
                 )}
+                {/* 调试统计: 仅在有视频(屏幕共享/摄像头)的瓦片上, 悬停或已开启时显示 */}
+                {!!primary?.track && (hover || showStats) && (
+                    <mdui-tooltip content={showStats ? '隐藏统计信息' : '显示统计信息'}>
+                        <mdui-button-icon
+                            icon={showStats ? 'query_stats' : 'insights'}
+                            onClick={() => setShowStats((v) => !v)}
+                        />
+                    </mdui-tooltip>
+                )}
                 {actions}
             </div>
+        )}
+
+        {!!primary?.track && showStats && (
+            <MediaStatsOverlay publication={primary} videoRef={videoRef} compact={compact} />
         )}
 
         <div style={{
