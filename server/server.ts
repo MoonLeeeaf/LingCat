@@ -66,11 +66,6 @@ export default function createLingCatServer(base_data_path: string) {
             display_name: p.display_name || p.id,
             type: p.type || 'oidc',
         }))
-
-        pub.features = {
-            meeting: !!config.livekit_enabled,
-            oauth: enabledProviders().length > 0,
-        }
     
         res.setHeader('Cache-Control', 'no-cache')   // 配置改了要立刻生效
         res.json(pub)
