@@ -267,6 +267,8 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     showSnackbar({ message: '消息已不存在' })
                     return
                 }
+
+                setInitialScrollDone(false)
     
                 // 完全替换列表
                 useChatMessageStore.getState().initMessages(unique, seq)
@@ -502,7 +504,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
             msg={msg}
             avatarMenus={<>
                 <mdui-menu-item icon="info" onClick={() => msg.sender_user_id && UserProfileDialog.show(msg.sender_user_id)}>用户资料</mdui-menu-item>
-                <mdui-menu-item icon="alternate_email" onClick={async () => insertText(`![UserMention=@${((await ProfileCache.queryUserInfo(msg.sender_user_id!)).nickname)}](lingcat://user?id=${msg.sender_user_id}) `)}>提及用户</mdui-menu-item>
+                <mdui-menu-item icon="alternate_email" onClick={async () => insertText(`[@${((await ProfileCache.queryUserInfo(msg.sender_user_id!)).nickname)}](user:${msg.sender_user_id}) `)}>提及用户</mdui-menu-item>
             </>}
             messageMenus={<>
                 {msg.sender_user_id === AppState.myId && !msg.system && (
@@ -603,7 +605,7 @@ export default function ChatFragment({ chat: chatObj, drawerRef }: { chat: IChat
                     />
                 )}
 
-                <div style={{ flexGrow: 1 }}></div>
+                <div style={{ flexGrow: 1, paddingTop: '10px' }}></div>
 
                 {editingMessage && (
                     <div style={{ display: 'flex', alignItems: 'center', padding: '6px 12px', background: 'rgba(var(--mdui-color-primary), 0.08)', borderLeft: '3px solid rgb(var(--mdui-color-primary))', margin: '0 4px', borderRadius: '4px' }}>
