@@ -511,7 +511,7 @@ export default function ChatFragment({ chat: chatObj, drawerOpen, onToggleDrawer
                     <mdui-menu-item icon="edit" onClick={() => startEdit(msg)}>编辑</mdui-menu-item>
                 )}
                 <mdui-menu-item icon="reply" onClick={() => {
-                    insertText(`[reply:${msg.id}] `)
+                    insertText(`[reply:${msg.id}]`)
                     // 回复和编辑互斥
                     if (editingMessage) cancelEdit()
                 }}>回复</mdui-menu-item>
