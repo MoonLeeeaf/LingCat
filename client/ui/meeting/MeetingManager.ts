@@ -41,8 +41,8 @@ class MeetingManagerImpl {
     /** 本地静音的成员 (仅影响自己听到的声音) identity -> true */
     locallyMuted: { [identity: string]: boolean } = {}
 
-    /** 群消息气泡: identity -> 文本 (短暂显示在对应瓦片上) */
-    bubbles: { [identity: string]: string } = {}
+    /** 群消息气泡: identity -> { 文本, 时间戳 } (短暂显示在对应瓦片上) */
+    bubbles: { [identity: string]: { text: string, at: number } } = {}
     private chatMsgListener?: (p: Package) => void
     private bubbleTimers: { [identity: string]: ReturnType<typeof setTimeout> } = {}
 
@@ -345,8 +345,9 @@ class MeetingManagerImpl {
         this.bubbles = {}
     }
     private setBubble(identity: string, text: string) {
-        this.bubbles[identity] = text
+        this.bubbles[identity] = { text, at: Date.now() }
         if (this.bubbleTimers[identity]) clearTimeout(this.bubbleTimers[identity])
+        // 停留时长与 CSS 动画 lingcat-bubble 的 6s 保持一致 (末尾淡出)
         this.bubbleTimers[identity] = setTimeout(() => {
             delete this.bubbles[identity]
             delete this.bubbleTimers[identity]

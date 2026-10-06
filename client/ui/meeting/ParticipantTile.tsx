@@ -15,8 +15,8 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     style?: React.CSSProperties
     /** 显示哪一路: auto 屏幕优先, 或强制 screen / camera */
     prefer?: 'auto' | 'screen' | 'camera'
-    /** 群消息气泡文本 (短暂显示) */
-    bubble?: string
+    /** 群消息气泡 (文本 + 时间戳, 短暂显示) */
+    bubble?: { text: string, at: number }
 }) {
     const isLocal = participant instanceof LocalParticipant
     const screen = participant.getTrackPublication(Track.Source.ScreenShare)
@@ -95,9 +95,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         {/* 实时音量条 (本地与其他人): 长度随音量变化, 绿/橙/红 */}
         <AudioLevelBar participant={participant} muted={micMuted} />
 
-        {/* 群消息气泡 */}
+        {/* 群消息气泡: 6s 生命周期动画 (淡入 -> 保持 -> 淡出), key 用 at 以便新消息重播 */}
         {bubble && (
-            <div style={{
+            <div key={bubble.at} style={{
                 position: 'absolute',
                 left: '6px',
                 right: '6px',
@@ -116,9 +116,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
                 overflow: 'hidden',
                 zIndex: 2,
                 pointerEvents: 'none',
-                animation: 'lingcat-bubble-in 180ms ease-out',
+                animation: 'lingcat-bubble 6s ease-out both',
             }}>
-                {bubble}
+                {bubble.text}
             </div>
         )}
 

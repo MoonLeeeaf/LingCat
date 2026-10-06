@@ -53,10 +53,12 @@
         -webkit-app-region: no-drag;
         app-region: no-drag;
       }
-      /* 会议瓦片消息气泡进入动画 */
-      @keyframes lingcat-bubble-in {
-        from { opacity: 0; transform: translateY(6px); }
-        to { opacity: 1; transform: translateY(0); }
+      /* 会议瓦片消息气泡: 整段生命周期 (淡入 -> 保持 -> 淡出), 时长与 JS 的 6s 一致 */
+      @keyframes lingcat-bubble {
+        0%   { opacity: 0; transform: translateY(8px) scale(0.96); }
+        4%   { opacity: 1; transform: translateY(0) scale(1); }
+        90%  { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-6px) scale(0.98); }
       }
     </style>
   </head>
