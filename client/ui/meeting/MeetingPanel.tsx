@@ -324,12 +324,12 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                         onClick={() => MeetingManager.toggleMic().catch((e) => tipError(e, '切换麦克风失败'))}
                     />
                 </mdui-tooltip>
-                <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                {m.settings.showCameraButton && <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
                     <mdui-button-icon
                         icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
                         onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                     />
-                </mdui-tooltip>
+                </mdui-tooltip>}
                 <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
                         icon={m.isSharingScreen ? 'screen_share' : 'stop_screen_share'}
@@ -413,12 +413,12 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                         ))}
                     </mdui-menu>
                 </mdui-dropdown>
-                <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                {m.settings.showCameraButton && <mdui-tooltip content={m.isCameraOn ? '关闭摄像头' : '开启摄像头'}>
                     <mdui-button-icon
                         icon={m.isCameraOn ? 'videocam' : 'videocam_off'}
                         onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}
                     />
-                </mdui-tooltip>
+                </mdui-tooltip>}
                 <mdui-tooltip content={m.isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
                         icon={m.isSharingScreen ? 'screen_share' : 'stop_screen_share'}
@@ -453,10 +453,10 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                         <mdui-switch checked={m.settings.showLocalMute} checked-icon="" />
                     </div>
                 </mdui-list-item>
-                <mdui-list-item rounded onClick={() => MeetingManager.toggleCamera().catch((e) => tipError(e, '切换摄像头失败'))}>
+                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showCameraButton', !m.settings.showCameraButton)}>
                     <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>摄像头</span>
-                        <mdui-switch checked={m.isCameraOn} checked-icon="" />
+                        <span style={{ flex: 1 }}>摄像头按钮</span>
+                        <mdui-switch checked={m.settings.showCameraButton} checked-icon="" />
                     </div>
                 </mdui-list-item>
             </mdui-list>

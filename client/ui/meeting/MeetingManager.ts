@@ -484,9 +484,11 @@ export interface MeetingSettings {
     showBubble: boolean
     /** 是否显示瓦片上的"本地静音"按钮 */
     showLocalMute: boolean
+    /** 是否显示摄像头按钮 (关闭可防误触) */
+    showCameraButton: boolean
 }
 function loadMeetingSettings(): MeetingSettings {
-    const def: MeetingSettings = { showBubble: true, showLocalMute: true }
+    const def: MeetingSettings = { showBubble: true, showLocalMute: true, showCameraButton: true }
     try {
         const raw = localStorage.getItem('lingcat.meeting.settings')
         return raw ? { ...def, ...JSON.parse(raw) } : def
