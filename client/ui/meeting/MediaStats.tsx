@@ -78,7 +78,6 @@ export function MediaStatsOverlay({ publication, videoRef, compact }: {
     if (!entries.length) return null
 
     return <div
-        onClick={(e) => e.stopPropagation()}
         style={{
             position: 'absolute',
             left: '6px',

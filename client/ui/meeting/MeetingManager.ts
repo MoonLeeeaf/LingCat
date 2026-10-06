@@ -1,7 +1,7 @@
 import React from 'react'
 import { Room, RoomEvent, Track, type Participant } from 'livekit-client'
 import { MeetingApi } from 'lingcat-client-protocol'
-import { IChat, Methods, LingCatProto, type Package } from 'lingcat-protocol'
+import { IChat, Methods, LingCatProto, type Package, type IMessageEntity } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
 
 export type MeetingPhase = 'idle' | 'connecting' | 'connected' | 'error'
@@ -366,7 +366,7 @@ class MeetingManagerImpl {
             try { raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(p.data).msg } catch { return }
             if (!raw || raw.chatId !== chatId) return
             if (raw.system || !raw.senderUserId) return
-            const text = bubbleText(raw.text || '')
+            const text = bubbleTextFromEntities(raw.text || '', (raw.entities ?? []) as IMessageEntity[])
             if (!text) return
             this.setBubble(raw.senderUserId, text)
         }
@@ -534,24 +534,33 @@ function saveMeetingSettings(s: MeetingSettings) {
     try { localStorage.setItem('lingcat.meeting.settings', JSON.stringify(s)) } catch { }
 }
 
-/** 把消息富文本精简成气泡里显示的纯文本 */
-function bubbleText(text: string): string {
-    let out = text
-        // 图片/视频/文件/提及: ![alt](url) -> alt(去语义前缀)
-        .replace(/!\[([^\]]*)\]\([^)]*\)/g, (_m, alt: string) => {
-            const eq = alt.indexOf('=')
-            if (eq >= 0) return alt.slice(eq + 1)          // UserMention=@name -> @name
-            if (alt.startsWith('图片')) return '[图片]'
-            if (alt.startsWith('视频')) return '[视频]'
-            if (alt.startsWith('文件')) return '[文件]'
-            return alt
-        })
-        // 普通链接 [label](url) -> label
-        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-        .replace(/\s+/g, ' ')
-        .trim()
-    if (out.length > 100) out = out.slice(0, 100) + '…'
-    return out
+/**
+ * 把消息精简成气泡里显示的纯文本。
+ * 消息结构是 text + entities (附件在 text 里是 \uFFFC 占位符), 需按 entity 语义替换。
+ */
+function bubbleTextFromEntities(text: string, entities: IMessageEntity[]): string {
+    const collapse = (s: string): string => {
+        const t = s.replace(/\uFFFC/g, ' ').replace(/\s+/g, ' ').trim()
+        return t.length > 100 ? t.slice(0, 100) + '…' : t
+    }
+    if (!entities?.length) return collapse(text)
+
+    const sorted = [...entities].sort((a, b) => a.offset - b.offset)
+    let out = ''
+    let cursor = 0
+    for (const e of sorted) {
+        if (e.offset > cursor) out += text.slice(cursor, e.offset)
+        const seg = text.slice(e.offset, e.offset + e.length)
+        switch (e.type) {
+            case 'attachment': out += '[附件]'; break
+            case 'reply': out += '[回复] '; break
+            // link / user_mention / chat_mention / 样式类: 文本本身就是可读内容, 原样保留
+            default: out += seg
+        }
+        cursor = e.offset + e.length
+    }
+    if (cursor < text.length) out += text.slice(cursor)
+    return collapse(out)
 }
 
 export const MeetingManager = new MeetingManagerImpl()
