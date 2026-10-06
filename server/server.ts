@@ -85,8 +85,8 @@ export default function createLingCatServer(base_data_path: string) {
             if (file_hash != null && file.hash != file_hash)
                 return res.status(403).send({ message: "You have no access to this file" })
 
-            if (file.belong_to_chat_id && !await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
-                return res.status(403).send({ message: "This file belongs to a chat you have no access" })
+            /* if (file.belong_to_chat_id && !await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
+                return res.status(403).send({ message: "This file belongs to a chat you have no access" }) */
 
             res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
             res.setHeader('Content-Type', file.mime)
