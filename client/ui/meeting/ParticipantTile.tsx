@@ -7,12 +7,14 @@ import AppState from '../AppState.ts'
 import default_avatar from '../../default_avatar.png'
 import { MeetingManager } from './MeetingManager.ts'
 
-export default function ParticipantTile({ participant, compact, onClick, actions, style }: {
+export default function ParticipantTile({ participant, compact, onClick, actions, style, prefer = 'auto' }: {
     participant: Participant
     compact?: boolean
     onClick?: () => void
     actions?: React.ReactNode
     style?: React.CSSProperties
+    /** 显示哪一路: auto 屏幕优先, 或强制 screen / camera */
+    prefer?: 'auto' | 'screen' | 'camera'
 }) {
     const isLocal = participant instanceof LocalParticipant
     const screen = participant.getTrackPublication(Track.Source.ScreenShare)
@@ -24,7 +26,12 @@ export default function ParticipantTile({ participant, compact, onClick, actions
     const screenActive = !!screen?.track && !screen.isMuted
     // 摄像头静音时视为关闭, 否则会渲染一个纯黑的 <video>
     const cameraActive = !!camera?.track && !camera.isMuted
-    const primary = screenActive ? screen : (cameraActive ? camera : undefined)
+    const primary = prefer === 'camera'
+        ? (cameraActive ? camera : undefined)
+        : prefer === 'screen'
+            ? (screenActive ? screen : undefined)
+            : (screenActive ? screen : (cameraActive ? camera : undefined))
+    const showingScreen = !!primary && !!screen && primary === screen
     const name = participant.name || participant.identity
     const micMuted = !mic?.track || mic.isMuted
     const speaking = participant.isSpeaking && !micMuted
@@ -117,7 +124,7 @@ export default function ParticipantTile({ participant, compact, onClick, actions
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         }}>
-            {micMuted ? '(Muted) ' : ''}{name}{isLocal ? ' (我)' : ''}{screenActive ? ' · 共享屏幕' : ''}{screenAudioActive ? ' · 共享声音' : ''}
+            {micMuted ? '(Muted) ' : ''}{name}{isLocal ? ' (我)' : ''}{showingScreen ? ' · 共享屏幕' : ''}{screenAudioActive ? ' · 共享声音' : ''}
         </div>
     </div>
 }

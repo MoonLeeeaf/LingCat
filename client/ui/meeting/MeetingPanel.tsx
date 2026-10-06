@@ -24,6 +24,16 @@ function hasScreenShare(p: Participant) {
 function screenPub(p: Participant) {
     return p.getTrackPublication(Track.Source.ScreenShare)
 }
+function cameraActive(p: Participant) {
+    const c = p.getTrackPublication(Track.Source.Camera)
+    return !!c?.track && !c.isMuted
+}
+function cameraPub(p: Participant) {
+    return p.getTrackPublication(Track.Source.Camera)
+}
+
+type TileSource = 'screen' | 'camera' | 'auto'
+interface TileSpec { key: string, participant: Participant, source: TileSource }
 
 export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | 'window' }) {
     const m = useMeeting()
@@ -64,7 +74,7 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             pendingFullscreen.current = false
             focusRef.current.requestFullscreen?.().catch(() => { })
         }
-    }, [m.focusedIdentity])
+    }, [m.focusedIdentity, m.focusedSource])
 
     if (!active) return null
 
@@ -73,7 +83,26 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         : []
 
     const canEnd = !m.starterUserId || m.starterUserId == AppState.myId
-    const focused = participants.find((p) => p.identity === m.focusedIdentity && hasScreenShare(p))
+
+    const focusedParticipant = participants.find((p) => p.identity === m.focusedIdentity)
+    const focusedSource = m.focusedSource
+    const focusedPub = focusedParticipant
+        ? (focusedSource === 'camera'
+            ? (cameraActive(focusedParticipant) ? cameraPub(focusedParticipant) : undefined)
+            : (hasScreenShare(focusedParticipant) ? screenPub(focusedParticipant) : undefined))
+        : undefined
+    const focused = focusedPub ? focusedParticipant : undefined
+
+    // 每人按可用的源拆成瓦片: 屏幕共享与摄像头各一块 (可同时展示)
+    const tiles: TileSpec[] = []
+    for (const p of participants) {
+        const scr = hasScreenShare(p)
+        const cam = cameraActive(p)
+        if (scr) tiles.push({ key: p.identity + ':screen', participant: p, source: 'screen' })
+        if (cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'camera' })
+        if (!scr && !cam) tiles.push({ key: p.identity, participant: p, source: 'auto' })
+    }
+
     const dim = size === 'minimized'
         ? { w: 295, h: 0 }
         : (customSize ?? SIZES[size as Exclude<PanelSize, 'minimized'>])
@@ -157,10 +186,10 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             tipError(e, '屏幕共享失败')
         }
     }
-    const maximize = (id: string) => MeetingManager.setFocused(id)
-    const maximizeAndFullscreen = (id: string) => {
+    const maximize = (id: string, source: 'screen' | 'camera' = 'screen') => MeetingManager.setFocused(id, source)
+    const maximizeAndFullscreen = (id: string, source: 'screen' | 'camera' = 'screen') => {
         pendingFullscreen.current = true
-        MeetingManager.setFocused(id)
+        MeetingManager.setFocused(id, source)
     }
 
     const body = (
@@ -186,9 +215,9 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
             {!!m.room && (focused ? (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
-                        <VideoPublication publication={screenPub(focused)} muted={focused instanceof LocalParticipant} />
+                        <VideoPublication publication={focusedPub} muted={focused instanceof LocalParticipant} />
                         <div style={{ position: 'absolute', left: '8px', bottom: '8px', padding: '2px 8px', borderRadius: '8px', fontSize: '12px', background: 'rgba(0,0,0,0.5)', color: '#fff' }}>
-                            {focused.name || focused.identity} · 共享屏幕
+                            {focused.name || focused.identity} · {focusedSource === 'camera' ? '摄像头' : '共享屏幕'}
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px', zIndex: 2 }}>
                             <mdui-tooltip content={isFullscreen ? '退出全屏' : '全屏'}>
@@ -212,12 +241,17 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
-                        {participants.map((p) => (
-                            <div key={p.identity} style={{ flex: '0 0 130px' }}>
+                        {tiles.map((t) => (
+                            <div key={t.key} style={{ flex: '0 0 130px' }}>
                                 <ParticipantTile
                                     compact
-                                    participant={p}
-                                    onClick={() => hasScreenShare(p) && p.identity !== focused.identity && maximize(p.identity)}
+                                    participant={t.participant}
+                                    prefer={t.source}
+                                    onClick={() => {
+                                        if (t.source === 'auto') return
+                                        if (t.participant === focused && t.source === focusedSource) return
+                                        maximize(t.participant.identity, t.source)
+                                    }}
                                 />
                             </div>
                         ))}
@@ -225,19 +259,23 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
                 </div>
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${isWindow ? 280 : 130}px, 1fr))`, gap: '6px', alignContent: 'start' }}>
-                    {participants.map((p) => <ParticipantTile
-                        key={p.identity}
-                        participant={p}
-                        onClick={() => hasScreenShare(p) && maximize(p.identity)}
-                        actions={hasScreenShare(p) ? <>
-                            <mdui-tooltip content="最大化">
-                                <mdui-button-icon icon="zoom_out_map" onClick={() => maximize(p.identity)} />
-                            </mdui-tooltip>
-                            <mdui-tooltip content="全屏">
-                                <mdui-button-icon icon="fullscreen" onClick={() => maximizeAndFullscreen(p.identity)} />
-                            </mdui-tooltip>
-                        </> : undefined}
-                    />)}
+                    {tiles.map((t) => {
+                        const src = t.source
+                        return <ParticipantTile
+                            key={t.key}
+                            participant={t.participant}
+                            prefer={src}
+                            onClick={() => { if (src !== 'auto') maximize(t.participant.identity, src) }}
+                            actions={src !== 'auto' ? <>
+                                <mdui-tooltip content={src === 'camera' ? '最大化摄像头' : '最大化共享'}>
+                                    <mdui-button-icon icon="zoom_out_map" onClick={() => maximize(t.participant.identity, src)} />
+                                </mdui-tooltip>
+                                <mdui-tooltip content="全屏">
+                                    <mdui-button-icon icon="fullscreen" onClick={() => maximizeAndFullscreen(t.participant.identity, src)} />
+                                </mdui-tooltip>
+                            </> : undefined}
+                        />
+                    })}
                 </div>
             ))}
         </div>

@@ -47,6 +47,8 @@ class MeetingManagerImpl {
     dockWidthPercent = 50
     /** 正在最大化的成员 (通常是某人的屏幕共享) */
     focusedIdentity?: string
+    /** 最大化的是该成员的哪一路画面 */
+    focusedSource: 'screen' | 'camera' = 'screen'
 
     /** chat_id -> 进行中的会议 (由事件广播维护) */
     activeMeetings: { [chatId: string]: ActiveMeeting } = {}
@@ -133,8 +135,9 @@ class MeetingManagerImpl {
         this.emit()
     }
 
-    setFocused(identity?: string) {
+    setFocused(identity?: string, source: 'screen' | 'camera' = 'screen') {
         this.focusedIdentity = identity
+        this.focusedSource = source
         this.emit()
     }
 
