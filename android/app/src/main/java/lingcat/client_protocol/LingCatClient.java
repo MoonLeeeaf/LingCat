@@ -1,5 +1,7 @@
 package lingcat.client_protocol;
 
+import android.util.Log;
+
 import com.google.protobuf.ByteString;
 import com.goterl.lazysodium.utils.KeyPair;
 
@@ -29,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class LingCatClient {
+
+    private static final String TAG = "LingCatClient";
 
     private final String serverWs;
     private final String serverHttp;
@@ -60,6 +64,9 @@ public class LingCatClient {
     private volatile Runnable onAuthFailed;
     private volatile ExecutorCallback executorCallback = Runnable::run;
 
+    /** 保护"取 seq → encrypt → send"三步的原子性 */
+    private final Object sendLock = new Object();
+
     public interface OnReceiveListener {
         void onReceive(Package pkg);
     }
@@ -73,15 +80,9 @@ public class LingCatClient {
         void run(Runnable r);
     }
 
-    /**
-     * 会话状态。
-     * sendSeq / recvSeq 内部以 long 保存 uint32 语义，避免 Java int 有符号溢出
-     * 导致的 seq <= lastSeq 判断错乱。
-     */
     public static class Session {
         private byte[] keySend;
         private byte[] keyRecv;
-        // -1 表示未初始化，0 起为合法首包
         private long sendSeq = -1L;
         private long recvSeq = -1L;
 
@@ -95,11 +96,6 @@ public class LingCatClient {
         public synchronized long getRecvSeq() { return recvSeq; }
         public synchronized void setRecvSeq(long v) { recvSeq = v; }
 
-        /**
-         * 返回本次要用的 seq（uint32 语义），并将内部计数器 +1（无符号回绕）。
-         * - 首次调用返回 0
-         * - 到 0xFFFFFFFF 后回绕到 0
-         */
         public synchronized long nextSendSeq() {
             long current = sendSeq < 0 ? 0L : sendSeq;
             long next = (current + 1) & 0xFFFFFFFFL;
@@ -131,11 +127,7 @@ public class LingCatClient {
         this.serverWs = serverWs;
         this.serverHttp = serverHttp;
         this.serverPublicKey = serverPublicKey;
-        this.okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(0, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
+        this.okHttpClient = HttpClientProvider.get();
     }
 
     public String getServerHttp()   { return serverHttp; }
@@ -169,15 +161,18 @@ public class LingCatClient {
             return f;
         }
         try {
-            Package.Input in = new Package.Input();
-            in.method_id = methodId;
-            in.flags = flags;
-            in.data = data;
+            synchronized (sendLock) {
+                Package.Input in = new Package.Input();
+                in.method_id = methodId;
+                in.flags = flags;
+                in.data = data;
 
-            Package pkg = Package.encode(in)
-                    .encrypt(session.nextSendSeq(), keySend);
-            return invokeInternal(pkg, timeoutMs);
+                Package pkg = Package.encode(in)
+                        .encrypt(session.nextSendSeq(), keySend);
+                return invokeInternal(pkg, timeoutMs);
+            }
         } catch (Exception e) {
+            Log.e(TAG, "invoke: encrypt failed", e);
             CompletableFuture<Package> f = new CompletableFuture<>();
             f.completeExceptionally(e);
             return f;
@@ -202,6 +197,8 @@ public class LingCatClient {
         ScheduledFuture<?> timeoutTask = scheduler.schedule(() -> {
             PendingRequest removed = pendingRequests.remove(requestId);
             if (removed != null) {
+                Log.w(TAG, "request timeout: " + Methods.getMethodName(methodId)
+                        + " reqId=" + requestId);
                 removed.future.completeExceptionally(new TimeoutException(
                         "Request timeout " + timeoutMs + "ms (" + Methods.getMethodName(methodId) + ")"));
             }
@@ -225,6 +222,7 @@ public class LingCatClient {
             return future;
         }
 
+        Log.d(TAG, "invoke sent: " + Methods.getMethodName(methodId) + " reqId=" + requestId);
         return future;
     }
 
@@ -241,22 +239,25 @@ public class LingCatClient {
                         .setTime(System.currentTimeMillis())
                         .build().toByteArray();
 
-                Package.Input in = new Package.Input();
-                in.method_id = Methods.Ping_Request;
-                in.flags = 0;
-                in.data = pingData;
+                synchronized (sendLock) {
+                    Package.Input in = new Package.Input();
+                    in.method_id = Methods.Ping_Request;
+                    in.flags = 0;
+                    in.data = pingData;
 
-                Package pkt = Package.encode(in)
-                        .encrypt(session.nextSendSeq(), keySend);
-                ws.send(okio.ByteString.of(pkt.toBuffer()));
+                    Package pkt = Package.encode(in)
+                            .encrypt(session.nextSendSeq(), keySend);
+                    ws.send(okio.ByteString.of(pkt.toBuffer()));
+                }
             } catch (Exception e) {
-                // ignore
+                Log.w(TAG, "ping failed", e);
             }
         }, PING_INTERVAL_MS, PING_INTERVAL_MS, TimeUnit.MILLISECONDS);
 
         pingCheckTask = scheduler.scheduleAtFixedRate(() -> {
             long silent = System.currentTimeMillis() - lastPongTime;
             if (silent > PING_TIMEOUT_MS) {
+                Log.w(TAG, "ping timeout (" + silent + "ms silent), closing");
                 WebSocket ws = this.webSocket;
                 if (ws != null) {
                     try { ws.close(4000, "ping timeout"); } catch (Exception ignored) { }
@@ -290,7 +291,7 @@ public class LingCatClient {
         long jitter = Math.round(exp * (0.75 + Math.random() * 0.5));
 
         reconnectAttempt++;
-        System.out.println("[Client] reconnect in " + jitter + "ms (attempt " + reconnectAttempt + ")");
+        Log.i(TAG, "reconnect in " + jitter + "ms (attempt " + reconnectAttempt + ")");
 
         reconnectTask = scheduler.schedule(() -> {
             reconnectTask = null;
@@ -305,7 +306,11 @@ public class LingCatClient {
     }
 
     public void init() {
-        if (this.webSocket != null) return;
+        if (this.webSocket != null) {
+            Log.w(TAG, "init() called but webSocket already exists, skip");
+            return;
+        }
+        Log.i(TAG, "init() called, ws url = " + serverWs);
         this.manualDisconnect = false;
         cancelReconnect();
 
@@ -315,8 +320,11 @@ public class LingCatClient {
 
             @Override
             public void onOpen(WebSocket ws, Response response) {
+                Log.i(TAG, "onOpen! ws=" + serverWs + " code=" + response.code());
                 try {
                     KeyPair kp = SecureKey.All_generateExchangeKeyPair();
+                    Log.i(TAG, "onOpen: keypair generated, pub="
+                            + bytesToHex(kp.getPublicKey().getAsBytes()).substring(0, 16) + "...");
                     handshakeKeyPair = kp;
                     byte[] clientPublicKey = kp.getPublicKey().getAsBytes();
 
@@ -330,36 +338,52 @@ public class LingCatClient {
                     in.data = handshake.toByteArray();
 
                     Package pkg = Package.encode(in);
-                    ws.send(okio.ByteString.of(pkg.toBuffer()));
+                    byte[] buf = pkg.toBuffer();
+                    Log.i(TAG, "onOpen: sending HandShake_Request, " + buf.length + " bytes");
+
+                    boolean sent = ws.send(okio.ByteString.of(buf));
+                    Log.i(TAG, "onOpen: ws.send returned " + sent);
                 } catch (Exception e) {
+                    Log.e(TAG, "onOpen: handshake init failed", e);
                     ws.close(4002, "handshake init failed");
                 }
             }
 
             @Override
             public void onMessage(WebSocket ws, okio.ByteString bytes) {
+                Log.i(TAG, "onMessage: " + bytes.size() + " bytes");
                 byte[] raw = bytes.toByteArray();
                 executorCallback.run(() -> handleMessage(raw));
             }
 
             @Override
+            public void onMessage(WebSocket ws, String text) {
+                Log.w(TAG, "onMessage: got text frame (unexpected): " + text);
+            }
+
+            @Override
             public void onClosing(WebSocket ws, int code, String reason) {
+                Log.w(TAG, "onClosing: code=" + code + " reason=" + reason);
                 ws.close(1000, null);
             }
 
             @Override
             public void onClosed(WebSocket ws, int code, String reason) {
+                Log.w(TAG, "onClosed: code=" + code + " reason=" + reason);
                 handleDisconnected(code, reason);
             }
 
             @Override
             public void onFailure(WebSocket ws, Throwable t, Response response) {
+                Log.e(TAG, "onFailure: " + t + " (response="
+                        + (response != null ? response.code() : "null") + ")", t);
                 handleFailure(t);
             }
         });
     }
 
     public void disconnect() {
+        Log.i(TAG, "disconnect() called");
         manualDisconnect = true;
         cancelReconnect();
         stopPing();
@@ -375,15 +399,17 @@ public class LingCatClient {
     }
 
     private void handleMessage(byte[] raw) {
+        Log.d(TAG, "handleMessage: raw " + raw.length + " bytes");
         try {
             byte[] keyRecv = session.getKeyRecv();
-            boolean encrypted = false;
 
             // 先解出明文包头，判断是否为加密包
-            // 注意：Package.decode 内部若带 secret 会尝试解密；这里先不传 secret 解一次做判定
             Package header = Package.decode(raw, null, null);
-            encrypted = (header.flags & Package.FLAG_ENCRYPTED) != 0;
+            Log.d(TAG, "handleMessage: header method=" + header.method_id
+                    + " flags=" + header.flags + " seq=" + header.seq
+                    + " requestId=" + bytesToHex(header.request_id));
 
+            boolean encrypted = (header.flags & Package.FLAG_ENCRYPTED) != 0;
             if (encrypted && keyRecv == null) {
                 throw new IllegalStateException(
                         "Received encrypted package but no session key (method_id="
@@ -408,8 +434,10 @@ public class LingCatClient {
                 case Methods.Ping_Response:
                     try {
                         Ping_Response ping = Ping_Response.parseFrom(pkg.data);
-                        System.out.println("[Client] server recv time: " + ping.getUsage() + "ms");
-                    } catch (Exception ignored) { }
+                        Log.d(TAG, "Ping_Response: usage=" + ping.getUsage() + "ms");
+                    } catch (Exception e) {
+                        Log.w(TAG, "Ping_Response parse failed", e);
+                    }
                     break;
                 default:
                     break;
@@ -419,8 +447,12 @@ public class LingCatClient {
             String requestId = bytesToHex(pkg.request_id);
             PendingRequest pending = pendingRequests.remove(requestId);
             if (pending != null) {
+                Log.d(TAG, "handleMessage: matched pending request "
+                        + Methods.getMethodName(pending.methodId));
                 pending.timeoutTask.cancel(false);
                 pending.future.complete(pkg);
+            } else {
+                Log.d(TAG, "handleMessage: no pending request matches reqId=" + requestId);
             }
 
             // 全局事件分发
@@ -428,23 +460,28 @@ public class LingCatClient {
                 try {
                     l.onReceive(pkg);
                 } catch (Exception e) {
-                    System.err.println("[Client] on_receive_listener error: " + e);
+                    Log.e(TAG, "onReceiveListener error", e);
                 }
             }
         } catch (Exception e) {
-            System.err.println("[Client] handleMessage error: " + e);
+            Log.e(TAG, "handleMessage error", e);
         }
     }
 
     private void handleHandshakeResponse(Package pkg) {
+        Log.i(TAG, "handleHandshakeResponse: entered");
         KeyPair kp = handshakeKeyPair;
         if (kp == null) {
-            System.err.println("[Client] handshake response without pending keypair");
+            Log.e(TAG, "handshake response without pending keypair");
             return;
         }
 
         try {
             HandShake_Response res = HandShake_Response.parseFrom(pkg.data);
+            Log.d(TAG, "handleHandshakeResponse: parsed, serverPub="
+                    + bytesToHex(res.getServerPublicKey().toByteArray()).substring(0, 16)
+                    + "..., saltLen=" + res.getSalt().size()
+                    + ", msgToVerifyLen=" + res.getMessageToBeVerify().size());
 
             boolean verified = SecureKey.Client_checkSignedMessage(
                     res.getMessageToBeVerify().toByteArray(),
@@ -452,9 +489,10 @@ public class LingCatClient {
                     kp.getPublicKey().getAsBytes(),
                     serverPublicKey
             );
+            Log.i(TAG, "handleHandshakeResponse: signature verified=" + verified);
 
             if (!verified) {
-                System.err.println("[Client] server verification failed, closing connection");
+                Log.e(TAG, "server verification failed, closing connection");
                 WebSocket ws = this.webSocket;
                 if (ws != null) ws.close(4001, "handshake verify failed");
                 return;
@@ -469,27 +507,27 @@ public class LingCatClient {
 
             session.setKeyRecv(keys.keyRecv);
             session.setKeySend(keys.keySend);
-            session.setSendSeq(-1L);  // 下次 nextSendSeq() 从 0 起
+            session.setSendSeq(-1L);
             session.setRecvSeq(-1L);
 
             handshakeKeyPair = null;
             reconnectAttempt = 0;
 
-            System.out.println("[Client] server verified");
+            Log.i(TAG, "handshake complete, session keys established");
 
             startPing();
             OnInitListener l = onInitListener;
             if (l != null) l.onInit();
 
         } catch (Exception e) {
-            System.err.println("[Client] handshake handling error: " + e);
+            Log.e(TAG, "handshake handling error", e);
             WebSocket ws = this.webSocket;
             if (ws != null) ws.close(4002, "handshake parse failed");
         }
     }
 
     private void handleDisconnected(int code, String reason) {
-        System.out.println("[Client] closed: code=" + code + " reason=" + reason);
+        Log.i(TAG, "closed: code=" + code + " reason=" + reason);
 
         stopPing();
         rejectAllPending("Connection closed");
@@ -497,19 +535,30 @@ public class LingCatClient {
         handshakeKeyPair = null;
         webSocket = null;
 
-        if (manualDisconnect) return;
-        if (code == 1000) return;
-        if (code == 1008) return;
+        if (manualDisconnect) {
+            Log.d(TAG, "manual disconnect, no reconnect");
+            return;
+        }
+        if (code == 1000) {
+            Log.d(TAG, "normal close, no reconnect");
+            return;
+        }
+        if (code == 1008) {
+            Log.d(TAG, "policy violation close, no reconnect");
+            return;
+        }
         if (code == 4001) {
+            Log.w(TAG, "auth failed close, triggering onAuthFailed");
             Runnable cb = onAuthFailed;
             if (cb != null) cb.run();
             return;
         }
+        Log.i(TAG, "scheduling reconnect due to close code " + code);
         scheduleReconnect();
     }
 
     private void handleFailure(Throwable t) {
-        System.err.println("[Client] failure: " + t);
+        Log.e(TAG, "failure: " + t, t);
 
         stopPing();
         rejectAllPending("Connection failure");
@@ -517,7 +566,11 @@ public class LingCatClient {
         handshakeKeyPair = null;
         webSocket = null;
 
-        if (manualDisconnect) return;
+        if (manualDisconnect) {
+            Log.d(TAG, "manual disconnect, no reconnect");
+            return;
+        }
+        Log.i(TAG, "scheduling reconnect due to failure");
         scheduleReconnect();
     }
 
