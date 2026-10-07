@@ -25,6 +25,8 @@ import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 
 export default function createLingCatServer(base_data_path: string) {
+    const publicKeyHex = fs.readFileSync(`${base_data_path}/key/public`).toString('hex')
+
     const app = express()
     const httpServer = http.createServer(app)
     const wsServer = new WebSocketServer({
@@ -59,6 +61,8 @@ export default function createLingCatServer(base_data_path: string) {
                 pub[key] = (config as any)[key]
             }
         }
+
+        pub.public_key = publicKeyHex
 
         // 可用的 OAuth2/OIDC 登录方式 (不含任何密钥)
         pub.oauth2 = enabledProviders().map((p) => ({
@@ -187,7 +191,7 @@ export default function createLingCatServer(base_data_path: string) {
         fs.writeFileSync(`${base_data_path}/key/private`, keyPair.privateKey)
     }
 
-    console.log('[Server]', '服务端公钥 Hex:', fs.readFileSync(`${base_data_path}/key/public`).toString('hex'))
+    console.log('[Server]', '服务端公钥 Hex:', publicKeyHex)
 
     const clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } } = {}
 
