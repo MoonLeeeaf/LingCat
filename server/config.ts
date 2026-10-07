@@ -39,6 +39,16 @@ export interface LingCatServerConfig {
      * 或纯 OAuth2 (GitHub/Gitee...) 提供方。
      */
     oauth2?: OAuth2ProviderConfig[]
+
+    /**
+     * 允许客户端通过 `?redirect=` 指定的最终跳转地址白名单。
+     * 用于原生客户端（Android / iOS / 桌面端）接收 OAuth 回调，
+     * 例如 ['lingcat://oauth/callback']。
+     *
+     * 留空则使用内置默认值，仅允许 lingcat://oauth/callback。
+     * 只允许自定义 scheme，http(s) 一律拒绝（防开放重定向）。
+     */
+    oauth_redirect_allowlist?: string[]
 }
 
 export interface OAuth2ProviderConfig {
@@ -97,6 +107,7 @@ const default_config: LingCatServerConfig = {
     meeting_token_ttl_seconds: 7200,
 
     oauth2: [],
+    oauth_redirect_allowlist: ['lingcat://oauth/callback'],
 }
 
 if (!fileExists(base_data_path + '/config.json'))

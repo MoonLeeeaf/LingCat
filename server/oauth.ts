@@ -114,7 +114,7 @@ export function consumeOAuthTicket(ticket: string): string | undefined {
 function isAllowedClientRedirect(url: string): boolean {
     if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) return false
     if (/^https?:\/\//i.test(url)) return false
-    const allow = (config as any).oauth_redirect_allowlist
+    const allow = config.oauth_redirect_allowlist
     const list: string[] = (Array.isArray(allow) && allow.length)
         ? allow
         : DEFAULT_CLIENT_REDIRECTS
