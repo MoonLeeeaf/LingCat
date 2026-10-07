@@ -18,6 +18,11 @@ import TokenManager from './api/TokenManager.ts'
 const STATE_TTL_MS = 5 * 60 * 1000
 const TICKET_TTL_MS = 2 * 60 * 1000
 
+// 客户端自定义 scheme 的最终回调白名单。
+// 允许通过 config.oauth_redirect_allowlist 覆盖；不配置时使用下面的默认值，
+// 这样自部署服务器"开箱即用"Android 客户端，也能收紧密闭部署。
+const DEFAULT_CLIENT_REDIRECTS = ['lingcat://oauth/callback']
+
 // provider 列表在模块加载时计算一次 (配置改动需重启服务端, 与 OIDC 发现缓存一致)
 const PROVIDERS: OAuth2ProviderConfig[] = (config.oauth2 || []).filter((p) => p.enabled !== false && !!p.id)
 {
@@ -71,6 +76,8 @@ interface StateEntry {
     mode: 'login' | 'bind'
     userId?: string
     expiresAt: number
+    /** 客户端指定的最终跳转地址（自定义 scheme），未指定时回落到 Web 前端 */
+    clientRedirect?: string
 }
 interface TicketEntry { userId: string, expiresAt: number }
 
@@ -93,8 +100,43 @@ export function consumeOAuthTicket(ticket: string): string | undefined {
     return entry.userId
 }
 
-function redirectError(res: any, code: string) {
-    res.redirect(basePathPrefix() + '/#oauth_error=' + encodeURIComponent(code))
+// ============================================================
+//  最终跳转
+// ============================================================
+
+/**
+ * 判断客户端传入的 redirect 是否被允许。
+ * 规则：
+ *  1. 必须是带 scheme 的 URL（xxx://...）
+ *  2. 不允许 http / https，避免开放重定向
+ *  3. 必须命中白名单（配置优先，否则用 DEFAULT_CLIENT_REDIRECTS）
+ */
+function isAllowedClientRedirect(url: string): boolean {
+    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) return false
+    if (/^https?:\/\//i.test(url)) return false
+    const allow = (config as any).oauth_redirect_allowlist
+    const list: string[] = (Array.isArray(allow) && allow.length)
+        ? allow
+        : DEFAULT_CLIENT_REDIRECTS
+    return list.includes(url)
+}
+
+/**
+ * 最终跳转。
+ * - clientRedirect 存在时：拼成 xxx://path?params（query 形式，供 app 从 Intent 里读）
+ * - 否则：回落到 Web 前端的 /#params（fragment 形式，保持向后兼容）
+ */
+function finalRedirect(res: any, clientRedirect: string | undefined, params: string) {
+    if (clientRedirect) {
+        const sep = clientRedirect.includes('?') ? '&' : '?'
+        res.redirect(clientRedirect + sep + params)
+    } else {
+        res.redirect(basePathPrefix() + '/#' + params)
+    }
+}
+
+function redirectError(res: any, code: string, clientRedirect?: string) {
+    finalRedirect(res, clientRedirect, 'oauth_error=' + encodeURIComponent(code))
 }
 
 interface Profile { subject: string, name?: string }
@@ -172,6 +214,13 @@ export function registerOAuthRoutes(app: Express) {
             if (!p) return res.status(404).send('unknown oauth provider')
 
             const mode: 'login' | 'bind' = req.query.mode === 'bind' ? 'bind' : 'login'
+
+            const rawRedirect = String(req.query.redirect || '')
+            let clientRedirect: string | undefined
+            if (rawRedirect && isAllowedClientRedirect(rawRedirect)) {
+                clientRedirect = rawRedirect
+            }
+
             let userId: string | undefined
             if (mode === 'bind') {
                 const at = String(req.query.access_token || '')
@@ -181,7 +230,11 @@ export function registerOAuthRoutes(app: Express) {
 
             const redirect_uri = redirectUriFor(p, req)
             const state = randomState()
-            const entry: StateEntry = { providerId: p.id, mode, userId, expiresAt: Date.now() + STATE_TTL_MS }
+            const entry: StateEntry = {
+                providerId: p.id, mode, userId,
+                expiresAt: Date.now() + STATE_TTL_MS,
+                clientRedirect,
+            }
 
             let authorizeUrl: URL
             if ((p.type || 'oidc') === 'oidc') {
@@ -230,6 +283,8 @@ export function registerOAuthRoutes(app: Express) {
 
     // 回调
     app.get('/oauth/:id/callback', async (req, res) => {
+        // 提到 try 外面，catch 里也要用它来跳客户端
+        let clientRedirect: string | undefined
         try {
             const p = providerById(req.params.id)
             if (!p) return res.status(404).send('unknown oauth provider')
@@ -241,14 +296,17 @@ export function registerOAuthRoutes(app: Express) {
             if (!entry || entry.expiresAt < Date.now() || entry.providerId !== p.id)
                 return redirectError(res, 'state_invalid')
 
+            // 从这里开始，所有跳转都可以带上客户端的 redirect
+            clientRedirect = entry.clientRedirect
+
             const profile = await resolveProfile(p, req, redirectUriFor(p, req), String(req.query.code || ''), entry, state)
 
             // 绑定
             if (entry.mode === 'bind') {
-                if (!entry.userId) return redirectError(res, 'bind_no_user')
+                if (!entry.userId) return redirectError(res, 'bind_no_user', clientRedirect)
                 const r = await OAuthIdentity.link(p.id, profile.subject, entry.userId)
-                if (!r.ok) return redirectError(res, 'already_bound')
-                return res.redirect(basePathPrefix() + '/#oauth_bound=' + encodeURIComponent(p.id))
+                if (!r.ok) return redirectError(res, 'already_bound', clientRedirect)
+                return finalRedirect(res, clientRedirect, 'oauth_bound=' + encodeURIComponent(p.id))
             }
 
             // 登录
@@ -267,15 +325,15 @@ export function registerOAuthRoutes(app: Express) {
                     userId = newUserId
                 }
             }
-            if (!userId) return redirectError(res, 'not_bound')
+            if (!userId) return redirectError(res, 'not_bound', clientRedirect)
 
             const ticket = crypto.randomBytes(24).toString('hex')
             gc()
             tickets.set(ticket, { userId, expiresAt: Date.now() + TICKET_TTL_MS })
-            return res.redirect(basePathPrefix() + '/#oauth_ticket=' + ticket)
+            return finalRedirect(res, clientRedirect, 'oauth_ticket=' + ticket)
         } catch (e) {
             console.error('[OAuth] /oauth/:id/callback error', e)
-            redirectError(res, 'callback_failed')
+            redirectError(res, 'callback_failed', clientRedirect)
         }
     })
 }
