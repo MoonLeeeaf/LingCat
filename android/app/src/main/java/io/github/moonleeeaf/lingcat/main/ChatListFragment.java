@@ -117,7 +117,7 @@ public class ChatListFragment extends Fragment {
     private void showChatMenu(IChat chat) {
         List<ActionSheet.Action> actions = new ArrayList<>();
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_info_details,
+                R.drawable.ic_info,
                 "对话信息",
                 () -> ChatProfileSheet.show(requireContext(), chat.getId(), null)));
         ActionSheet.show(requireContext(),

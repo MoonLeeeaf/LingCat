@@ -307,7 +307,7 @@ public class ChatActivity extends Activity {
 
         // 复制
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_save,
+                R.drawable.ic_content_copy,
                 "复制",
                 () -> {
                     android.content.ClipboardManager cm =
@@ -319,7 +319,7 @@ public class ChatActivity extends Activity {
         // 回复
         // 回复
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_revert,
+                R.drawable.ic_reply,
                 "回复",
                 () -> enterReplyMode(msg)));
 
@@ -330,14 +330,14 @@ public class ChatActivity extends Activity {
                 && !msg.getSystem();
         if (isMine) {
             actions.add(new ActionSheet.Action(
-                    android.R.drawable.ic_menu_edit,
+                   R.drawable.ic_edit,
                     "编辑",
                     () -> enterEditMode(msg)));
         }
 
         // Info
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_info_details,
+                R.drawable.ic_info,
                 "Info",
                 () -> {
                     StringBuilder sb = new StringBuilder();
@@ -364,7 +364,7 @@ public class ChatActivity extends Activity {
         Classes.IUser u = ProfileCache.getCachedUser(userId);
 
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_info_details,
+                R.drawable.ic_info,
                 "用户资料",
                 () -> UserProfileSheet.show(ChatActivity.this, userId, chatId,
                         new UserProfileSheet.Listener() {
@@ -373,7 +373,7 @@ public class ChatActivity extends Activity {
                         })));
 
         actions.add(new ActionSheet.Action(
-                android.R.drawable.ic_menu_share,
+                R.drawable.ic_alternate_email,
                 "提及用户",
                 () -> {
                     String nickname = (u != null && u.getNickname() != null)
