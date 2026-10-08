@@ -55,6 +55,9 @@ public class MainActivity extends Activity {
                 case 2: tab.setText("全部"); break;
             }
         }).attach();
+
+        // 预热收藏列表缓存
+        LingCatClientManager.getInstance().refreshFavourites();
     }
 
     // ============================================================

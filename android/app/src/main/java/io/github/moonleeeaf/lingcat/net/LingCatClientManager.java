@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -115,15 +116,16 @@ public class LingCatClientManager {
 
         synchronized (this) {
             // 幂等：同一个 server 且已连好 → 复用
+            // 幂等：同一个 server 且已连好 → 复用
             if (current != null
                     && currentServer != null
                     && server.url.equals(currentServer.url)
-                    && pendingConnect == null) {
+                    && pendingConnect == null
+                    && current.isReady()) {              // ← 加这一句
                 CompletableFuture<LingCatClient> f = new CompletableFuture<>();
                 f.complete(current);
                 return f;
             }
-
             // 已有连接（不同 server）→ 先断
             if (current != null) {
                 disconnectInternal();
@@ -169,6 +171,7 @@ public class LingCatClientManager {
 
                 // 后台拉 file_access_token 并开始定时刷新
                 startFileTokenRefresh(server, client, sessionId);
+                autoAuthorize(client, server);
             });
 
             // 服务器拒绝（4001） → 未来视作失败
@@ -211,6 +214,21 @@ public class LingCatClientManager {
         }
     }
 
+    private void autoAuthorize(LingCatClient client, ServerConfig server) {
+        scheduler.execute(() -> {
+            try {
+                Account acc = AppDataStore.data().getActiveAccount(server.url);
+                if (acc == null || acc.accessToken == null) return;
+                String sessionId = currentSessionId;
+                lingcat.client_protocol.UserApi.authorize(
+                        client, acc.accessToken, sessionId, 15_000L);
+                Log.i(TAG, "auto authorize done after reconnect");
+            } catch (Exception e) {
+                Log.w(TAG, "auto authorize failed", e);
+            }
+        });
+    }
+
     /**
      * 主动断开当前连接。幂等。
      */
@@ -223,6 +241,7 @@ public class LingCatClientManager {
     private void disconnectInternal() {
         ProfileCache.clearAll();
         stopFileTokenRefresh();
+        favouritedChatIds.clear();
         LingCatClient c = current;
         if (c != null) {
             try { c.disconnect(); } catch (Exception ignored) {}
@@ -235,6 +254,77 @@ public class LingCatClientManager {
             pendingConnect.completeExceptionally(new IOException("Disconnected"));
         }
         pendingConnect = null;
+    }
+
+    // ============================================================
+//                      收藏缓存
+// ============================================================
+
+    private final java.util.Set<String> favouritedChatIds =
+            java.util.Collections.synchronizedSet(new java.util.HashSet<>());
+    private final CopyOnWriteArrayList<OnFavouritesChangedListener> favListeners =
+            new CopyOnWriteArrayList<>();
+
+    public interface OnFavouritesChangedListener {
+        void onFavouritesChanged();
+    }
+
+    public void addOnFavouritesChangedListener(OnFavouritesChangedListener l) {
+        favListeners.add(l);
+    }
+
+    public void removeOnFavouritesChangedListener(OnFavouritesChangedListener l) {
+        favListeners.remove(l);
+    }
+
+    public boolean isFavourited(String chatId) {
+        return chatId != null && favouritedChatIds.contains(chatId);
+    }
+
+    /** 手动更新一个 chat 的收藏状态（setChatFavourited 成功后调用） */
+    public void setFavourited(String chatId, boolean favourited) {
+        if (chatId == null) return;
+        if (favourited) favouritedChatIds.add(chatId);
+        else favouritedChatIds.remove(chatId);
+        notifyFavouritesChanged();
+    }
+
+    /**
+     * 从服务端拉一次收藏列表填充缓存。
+     * 在 MainActivity.onCreate / 切账号后 / 收到 Update_My_Chats_Event 时调用。
+     */
+    public void refreshFavourites() {
+        final LingCatClient c = current;
+        final ServerConfig s = currentServer;
+        if (c == null || s == null) return;
+
+        scheduler.execute(() -> {
+            try {
+                Account acc = AppDataStore.data().getActiveAccount(s.url);
+                if (acc == null || acc.accessToken == null) return;
+
+                java.util.List<lingcat.classes.Classes.IChat> fav =
+                        lingcat.client_protocol.ChatApi.getMyFavouriteChats(
+                                c, acc.accessToken, null, null, 15_000L);
+
+                synchronized (favouritedChatIds) {
+                    favouritedChatIds.clear();
+                    for (lingcat.classes.Classes.IChat f : fav) {
+                        favouritedChatIds.add(f.getId());
+                    }
+                }
+                notifyFavouritesChanged();
+                Log.i(TAG, "favourites refreshed: " + favouritedChatIds.size());
+            } catch (Exception e) {
+                Log.w(TAG, "refreshFavourites failed", e);
+            }
+        });
+    }
+
+    private void notifyFavouritesChanged() {
+        for (OnFavouritesChangedListener l : favListeners) {
+            try { l.onFavouritesChanged(); } catch (Exception ignored) {}
+        }
     }
 
     // ============================================================

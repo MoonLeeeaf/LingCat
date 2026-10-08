@@ -120,8 +120,21 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     //                      ViewHolder
     // ============================================================
 
-    abstract static class BaseVH extends RecyclerView.ViewHolder {
-        BaseVH(@NonNull View v) { super(v); }
+    abstract class BaseVH extends RecyclerView.ViewHolder {
+        BaseVH(@NonNull View v) {
+            super(v);
+            // itemView 长按 → 消息菜单。
+            // 气泡内容 (msg_content) 和头像有各自的长按监听，
+            // 事件先到达最深的子 View，会优先消费；只有落在
+            // 空白区 / 时间 / 头像之外的地方才会冒泡到这里。
+            v.setOnLongClickListener(view -> {
+                int pos = getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return false;
+                if (actionListener == null) return false;
+                actionListener.onMessageLongClick(data.get(pos), view);
+                return true;
+            });
+        }
         abstract void bind(IMessage m);
     }
 
@@ -210,6 +223,12 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
                 if (actionListener == null) return false;
                 actionListener.onMessageLongClick(m, content);
                 return true;
+            });
+
+            avatar.setOnClickListener(v -> {
+                String senderId = m.getSenderUserId();
+                if (actionListener == null || senderId == null || senderId.isEmpty()) return;
+                actionListener.onAvatarClick(senderId, avatar);
             });
 
             // 长按头像

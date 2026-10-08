@@ -130,6 +130,11 @@ public class LingCatClient {
         this.okHttpClient = HttpClientProvider.get();
     }
 
+    /** 是否已完成握手，可以发业务请求 */
+    public boolean isReady() {
+        return webSocket != null && session.getKeySend() != null;
+    }
+
     public String getServerHttp()   { return serverHttp; }
     public String getServerWs()     { return serverWs; }
     public OkHttpClient getOkHttpClient() { return okHttpClient; }

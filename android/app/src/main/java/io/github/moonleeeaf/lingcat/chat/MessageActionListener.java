@@ -14,6 +14,7 @@ public interface MessageActionListener extends MessageContentBuilder.Listener {
 
     /** 长按头像 */
     void onAvatarLongClick(String userId, View anchor);
+    void onAvatarClick(String userId, View anchor);
 
     // 下面 4 个从 MessageContentBuilder.Listener 继承：
     //   void onMentionUser(String userId);

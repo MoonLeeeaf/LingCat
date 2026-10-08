@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.moonleeeaf.lingcat.R;
+import io.github.moonleeeaf.lingcat.chat.ActionSheet;
+import io.github.moonleeeaf.lingcat.chat.ChatProfileSheet;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 import lingcat.classes.Classes.IChat;
 import lingcat.client_protocol.LingCatClient;
@@ -76,9 +81,14 @@ public class ChatListFragment extends Fragment {
         vm = new ViewModelProvider(this, new ChatListViewModel.Factory(tab))
                 .get(ChatListViewModel.class);
 
-        adapter = new ChatListAdapter(chat -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openChat(chat.getId(), chat.getTitle());
+        adapter = new ChatListAdapter(new ChatListAdapter.OnChatClickListener() {
+            @Override public void onChatClick(IChat chat) {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).openChat(chat.getId(), chat.getTitle());
+                }
+            }
+            @Override public void onChatLongClick(IChat chat) {
+                showChatMenu(chat);
             }
         });
 
@@ -102,6 +112,16 @@ public class ChatListFragment extends Fragment {
         });
 
         reload();
+    }
+
+    private void showChatMenu(IChat chat) {
+        List<ActionSheet.Action> actions = new ArrayList<>();
+        actions.add(new ActionSheet.Action(
+                android.R.drawable.ic_menu_info_details,
+                "对话信息",
+                () -> ChatProfileSheet.show(requireContext(), chat.getId(), null)));
+        ActionSheet.show(requireContext(),
+                chat.getTitle() != null ? chat.getTitle() : chat.getId(), actions);
     }
 
     @Override

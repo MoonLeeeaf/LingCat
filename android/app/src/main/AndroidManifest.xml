@@ -37,6 +37,15 @@
             android:name=".chat.ChatActivity"
             android:exported="false"
             android:parentActivityName=".main.MainActivity" />
+
+        <activity
+            android:name=".chat.ImageViewerActivity"
+            android:theme="@style/Theme.LingCat.Fullscreen"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="behind"
+            tools:ignore="DiscouragedApi" />
+
         <activity
             android:name=".auth.AuthActivity"
             android:exported="false"

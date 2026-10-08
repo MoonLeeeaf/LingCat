@@ -1,5 +1,6 @@
 package io.github.moonleeeaf.lingcat.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -92,24 +93,25 @@ public class ChatActivity extends Activity {
         ServerConfig server = LingCatClientManager.getInstance().getCurrentServer();
         if (client == null || server == null) {
             toast("连接已断开");
-            finish();
             return;
         }
         Account acc = AppDataStore.data().getActiveAccount(server.url);
         accessToken = acc != null ? acc.accessToken : null;
         if (accessToken == null) {
             toast("登录已失效");
-            finish();
             return;
         }
 
         // Toolbar（moon3.app.Activity 自带的那个）
         moon3.widget.Toolbar tb = getFirstToolbar();
         if (tb != null) {
-            tb.setTitle(chatTitle != null && !chatTitle.isEmpty() ? chatTitle : "对话");
             tb.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
             tb.setNavigationOnClickListener(v -> finish());
+            tb.setOnClickListener(v ->
+                    ChatProfileSheet.show(ChatActivity.this, chatId, chatId));
         }
+
+        setTitle(chatTitle != null && !chatTitle.isEmpty() ? chatTitle : "对话");
 
         // RecyclerView（反向布局）
         recycler = findViewById(R.id.chat_messages);
@@ -135,9 +137,15 @@ public class ChatActivity extends Activity {
             @Override public void onAvatarLongClick(String userId, View anchor) {
                 showAvatarMenu(userId);
             }
+            @Override public void onAvatarClick(String userId, View anchor) {
+                UserProfileSheet.show(ChatActivity.this, userId, chatId, new UserProfileSheet.Listener() {
+                    @Override public void onOpenChat(String targetUserId) { openPrivateChat(targetUserId); }
+                    @Override public void onMention(String targetUserId) { mentionUser(targetUserId); }
+                });
+            }
+
             @Override public void onMentionUser(String userId) {
-                // TODO: 打开用户资料页（下一轮做）
-                toast("用户 " + userId);
+                onAvatarClick(userId, null);
             }
             @Override public void onMentionChat(String chatId) {
                 toast("对话 " + chatId);
@@ -153,7 +161,7 @@ public class ChatActivity extends Activity {
             }
             @Override
             public void onAttachmentImageClick(String url, String name) {
-                ImageViewerDialog.show(ChatActivity.this, url);
+                ImageViewerActivity.show(ChatActivity.this, url);
             }
 
             @Override
@@ -200,6 +208,39 @@ public class ChatActivity extends Activity {
             }
         }
         toast("消息 #" + seq + " 未加载");
+    }
+
+    // ============================================================
+//                      私聊 / 提及 辅助
+// ============================================================
+
+    private void openPrivateChat(String targetUserId) {
+        IO.execute(() -> {
+            try {
+                String targetChatId = ChatApi.getOrCreatePrivateChat(
+                        client, accessToken, targetUserId, API_TIMEOUT_MS);
+                if (targetChatId == null) return;
+
+                final String finalChatId = targetChatId;
+                runOnUiThread(() -> {
+                    if (isFinishing()) return;
+                    if (finalChatId.equals(chatId)) return;   // 已是当前对话
+
+                    Intent i = new Intent(this, ChatActivity.class);
+                    i.putExtra(EXTRA_CHAT_ID, finalChatId);
+                    startActivity(i);
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> toast("打开对话失败: " + e.getMessage()));
+            }
+        });
+    }
+
+    private void mentionUser(String userId) {
+        Classes.IUser u = ProfileCache.getCachedUser(userId);
+        String nickname = (u != null && u.getNickname() != null && !u.getNickname().isEmpty())
+                ? u.getNickname() : userId;
+        insertText("[@" + nickname + "](user:" + userId + ") ");
     }
 
     // ============================================================
@@ -325,10 +366,11 @@ public class ChatActivity extends Activity {
         actions.add(new ActionSheet.Action(
                 android.R.drawable.ic_menu_info_details,
                 "用户资料",
-                () -> {
-                    // TODO: 下一轮做资料页
-                    toast("资料 " + userId);
-                }));
+                () -> UserProfileSheet.show(ChatActivity.this, userId, chatId,
+                        new UserProfileSheet.Listener() {
+                            @Override public void onOpenChat(String targetUserId) { openPrivateChat(targetUserId); }
+                            @Override public void onMention(String targetUserId) { mentionUser(targetUserId); }
+                        })));
 
         actions.add(new ActionSheet.Action(
                 android.R.drawable.ic_menu_share,

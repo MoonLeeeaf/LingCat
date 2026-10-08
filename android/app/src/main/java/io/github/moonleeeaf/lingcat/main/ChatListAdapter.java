@@ -26,6 +26,7 @@ public class ChatListAdapter extends ListAdapter<IChat, ChatListAdapter.VH> {
 
     public interface OnChatClickListener {
         void onChatClick(IChat chat);
+        void onChatLongClick(IChat chat);
     }
 
     private final OnChatClickListener listener;
@@ -85,6 +86,12 @@ public class ChatListAdapter extends ListAdapter<IChat, ChatListAdapter.VH> {
                 int pos = getAdapterPosition();
                 if (pos == RecyclerView.NO_POSITION) return;
                 listener.onChatClick(getItem(pos));
+            });
+            itemView.setOnLongClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return false;
+                listener.onChatLongClick(getItem(pos));
+                return true;
             });
         }
 

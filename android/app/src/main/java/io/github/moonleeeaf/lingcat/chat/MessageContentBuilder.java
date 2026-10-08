@@ -115,10 +115,10 @@ public final class MessageContentBuilder {
                 String type = s.entity.getType();
                 if ("reply".equals(type)) {
                     container.addView(makeReplyBlock(ctx, s.entity, listener,
-                            blockPadH, blockPadV, container));
+                            container));
                 } else if ("attachment".equals(type)) {
                     container.addView(makeAttachmentBlock(ctx, s.entity, listener,
-                            blockPadH, blockPadV, container));
+                            container));
                 } else {
                     container.addView(makeInlineText(ctx, s.text,
                             Collections.singletonList(s.entity), listener, container));
@@ -135,13 +135,13 @@ public final class MessageContentBuilder {
 
     private static View makeReplyBlock(Context ctx, IMessageEntity entity,
                                        @Nullable Listener listener,
-                                       int padH, int padV, View container) {
+                                       View container) {
         int seq = parseSeq(entity.hasData() ? entity.getData() : null);
         View card = makeReplyView(ctx, seq, listener);
 
         LinearLayout wrap = new LinearLayout(ctx);
         wrap.setOrientation(LinearLayout.VERTICAL);
-        wrap.setPadding(padH, padV, padH, padV);
+        // wrap.setPadding(padH, padV, padH, padV);
         wrap.addView(card);
 
         wrap.setOnLongClickListener(v -> { container.performLongClick(); return true; });
@@ -156,10 +156,10 @@ public final class MessageContentBuilder {
 
     private static View makeAttachmentBlock(Context ctx, IMessageEntity entity,
                                             @Nullable Listener listener,
-                                            int padH, int padV, View container) {
+                                            View container) {
         LinearLayout wrap = new LinearLayout(ctx);
         wrap.setOrientation(LinearLayout.VERTICAL);
-        wrap.setPadding(padH, padV, padH, padV);
+        // wrap.setPadding(padH, padV, padH, padV);
 
         String hash = null, name = null;
         String data = entity.hasData() ? entity.getData() : null;
@@ -300,7 +300,7 @@ public final class MessageContentBuilder {
     }
 
     private static String senderNameOf(IMessage m) {
-        if (m.getSystem()) return "系统消息";
+        if (m.getSystem()) return "系统";
         String sid = m.getSenderUserId();
         if (sid == null || sid.isEmpty()) return "…";
         IUser u = ProfileCache.getCachedUser(sid);
