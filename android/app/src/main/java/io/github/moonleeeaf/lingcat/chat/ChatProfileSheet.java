@@ -249,7 +249,7 @@ public class ChatProfileSheet {
 
                 actionsContainer.post(() -> {
                     dialog.dismiss();
-                    UserProfileSheet.show(ctx, otherUserId, currentChatId, null);
+                    UserProfileSheet.show(ctx, otherUserId, currentChatId);
                 });
             } catch (Exception e) {
                 actionsContainer.post(() -> Toast.makeText(ctx,

@@ -138,10 +138,7 @@ public class ChatActivity extends Activity {
                 showAvatarMenu(userId);
             }
             @Override public void onAvatarClick(String userId, View anchor) {
-                UserProfileSheet.show(ChatActivity.this, userId, chatId, new UserProfileSheet.Listener() {
-                    @Override public void onOpenChat(String targetUserId) { openPrivateChat(targetUserId); }
-                    @Override public void onMention(String targetUserId) { mentionUser(targetUserId); }
-                });
+                UserProfileSheet.show(ChatActivity.this, userId, chatId);
             }
 
             @Override public void onMentionUser(String userId) {
@@ -221,13 +218,27 @@ public class ChatActivity extends Activity {
                         client, accessToken, targetUserId, API_TIMEOUT_MS);
                 if (targetChatId == null) return;
 
+                // 拿对方昵称做初始标题（已有缓存则秒回，没有则网络拉）
+                String title = targetUserId;
+                try {
+                    Classes.IUser u = ProfileCache.queryUserInfo(targetUserId)
+                            .get(5, java.util.concurrent.TimeUnit.SECONDS);
+                    if (u != null && u.getNickname() != null && !u.getNickname().isEmpty()) {
+                        title = u.getNickname();
+                    }
+                } catch (Exception ignored) {
+                    // 拿不到就 userId 兜底
+                }
+
                 final String finalChatId = targetChatId;
+                final String finalTitle = title;
                 runOnUiThread(() -> {
                     if (isFinishing()) return;
                     if (finalChatId.equals(chatId)) return;   // 已是当前对话
 
                     Intent i = new Intent(this, ChatActivity.class);
                     i.putExtra(EXTRA_CHAT_ID, finalChatId);
+                    i.putExtra(EXTRA_CHAT_TITLE, finalTitle);
                     startActivity(i);
                 });
             } catch (Exception e) {
@@ -366,11 +377,7 @@ public class ChatActivity extends Activity {
         actions.add(new ActionSheet.Action(
                 R.drawable.ic_info,
                 "用户资料",
-                () -> UserProfileSheet.show(ChatActivity.this, userId, chatId,
-                        new UserProfileSheet.Listener() {
-                            @Override public void onOpenChat(String targetUserId) { openPrivateChat(targetUserId); }
-                            @Override public void onMention(String targetUserId) { mentionUser(targetUserId); }
-                        })));
+                () -> UserProfileSheet.show(ChatActivity.this, userId, chatId)));
 
         actions.add(new ActionSheet.Action(
                 R.drawable.ic_alternate_email,
