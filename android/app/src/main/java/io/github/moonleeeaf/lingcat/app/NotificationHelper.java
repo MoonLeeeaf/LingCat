@@ -43,6 +43,7 @@ public final class NotificationHelper {
     public static final String CHANNEL_PRIVATE = "msg_private";
     public static final String CHANNEL_MENTION = "msg_mention";
     public static final String CHANNEL_REPLY   = "msg_reply";
+    public static final String CHANNEL_KEEPALIVE = "keepalive";
 
     public static final String KEY_REPLY = "key_reply";
 
@@ -102,6 +103,18 @@ public final class NotificationHelper {
         createChannel(nm, CHANNEL_PRIVATE, "私聊消息", "来自私聊的新消息");
         createChannel(nm, CHANNEL_MENTION, "@我的消息", "群里 @我 的消息");
         createChannel(nm, CHANNEL_REPLY,   "被回复消息", "有人回复了我的消息");
+        createSilentChannel(nm, CHANNEL_KEEPALIVE, "后台连接", "保持与服务器的长连接");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createSilentChannel(NotificationManager nm, String id, String name, String desc) {
+        if (nm.getNotificationChannel(id) != null) return;
+        NotificationChannel ch = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW);
+        ch.setDescription(desc);
+        ch.setShowBadge(false);
+        ch.enableVibration(false);
+        ch.setSound(null, null);
+        nm.createNotificationChannel(ch);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

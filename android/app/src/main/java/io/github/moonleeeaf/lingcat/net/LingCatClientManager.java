@@ -258,6 +258,11 @@ public class LingCatClientManager {
         ProfileCache.clearAll();
         stopFileTokenRefresh();
         favouritedChatIds.clear();
+
+        try {
+            io.github.moonleeeaf.lingcat.app.ServiceController.stop(appContext);
+        } catch (Exception ignored) {}
+
         LingCatClient c = current;
         if (c != null) {
             NotificationRouter.detach(c);

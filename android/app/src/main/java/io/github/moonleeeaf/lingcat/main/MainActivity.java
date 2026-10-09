@@ -67,6 +67,8 @@ public class MainActivity extends Activity {
             }
         }).attach();
 
+        io.github.moonleeeaf.lingcat.app.ServiceController.ensureRunning(this);
+
         // 预热收藏列表缓存
         LingCatClientManager.getInstance().refreshFavourites();
     }

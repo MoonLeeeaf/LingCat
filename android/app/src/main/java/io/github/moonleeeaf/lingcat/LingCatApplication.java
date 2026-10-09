@@ -13,6 +13,7 @@ import coil.ImageLoader;
 import io.github.moonleeeaf.lingcat.app.AppState;
 import io.github.moonleeeaf.lingcat.app.NotificationHelper;
 import io.github.moonleeeaf.lingcat.app.NotificationRouter;
+import io.github.moonleeeaf.lingcat.app.ServiceController;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
@@ -91,6 +92,8 @@ public class LingCatApplication extends Application {
 
 
     private void onAppForeground() {
+        ServiceController.ensureRunning(this);
+
         LingCatClientManager mgr = LingCatClientManager.getInstance();
         LingCatClient cur = mgr.getCurrent();
         ServerConfig server = mgr.getCurrentServer();

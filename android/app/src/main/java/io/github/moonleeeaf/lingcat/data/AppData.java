@@ -13,6 +13,8 @@ import java.util.Map;
  * 顶层数据结构。持久化为一整块 JSON。
  */
 public class AppData {
+    /** 是否保持后台连接（默认开） */
+    public boolean keepAliveEnabled = true;
     /** 服务器列表，按 addedAt 排序 */
     public final List<ServerConfig> servers = new ArrayList<>();
     /** serverUrl -> 账号列表 */
@@ -46,6 +48,8 @@ public class AppData {
         root.put("activeAccountByServer", activeObj);
 
         if (currentServerUrl != null) root.put("currentServerUrl", currentServerUrl);
+
+        root.put("keepAliveEnabled", keepAliveEnabled);
 
         return root;
     }
@@ -83,6 +87,9 @@ public class AppData {
                 d.activeAccountByServer.put(url, activeObj.optString(url));
             }
         }
+
+        d.keepAliveEnabled = !root.has("keepAliveEnabled")
+                || root.optBoolean("keepAliveEnabled", true);
 
         d.currentServerUrl = root.has("currentServerUrl")
                 ? root.optString("currentServerUrl") : null;
