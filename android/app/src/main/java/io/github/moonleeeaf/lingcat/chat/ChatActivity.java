@@ -19,6 +19,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.github.moonleeeaf.lingcat.R;
+import io.github.moonleeeaf.lingcat.app.AppState;
+import io.github.moonleeeaf.lingcat.app.MyMessageSeqs;
 import io.github.moonleeeaf.lingcat.data.Account;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ProfileCache;
@@ -510,6 +512,20 @@ public class ChatActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        AppState.activeChatId = chatId;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (chatId.equals(AppState.activeChatId)) {
+            AppState.activeChatId = null;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         if (client != null) client.removeOnReceiveListener(onMessageEvent);
         super.onDestroy();
@@ -531,11 +547,17 @@ public class ChatActivity extends Activity {
                     if (isFinishing()) return;
                     messages.clear();
                     for (int i = list.size() - 1; i >= 0; i--) messages.add(list.get(i));
-                    adapter.notifyDataSetChanged();   // 全部重算，简单直接
+                    adapter.notifyDataSetChanged();
                     hasMoreOlder = list.size() >= PAGE_SIZE;
                     initialLoaded = true;
                     if (!messages.isEmpty()) {
                         recycler.scrollToPosition(0);
+                    }
+                    // 记录自己发的消息
+                    for (IMessage m : list) {
+                        if (myUserId != null && myUserId.equals(m.getSenderUserId())) {
+                            MyMessageSeqs.add(chatId, m.getId());
+                        }
                     }
                     prefetchUsers(list);
                 });
@@ -575,18 +597,24 @@ public class ChatActivity extends Activity {
                         loadingOlder = false;
                         return;
                     }
-                    // 倒序追加到末尾（视觉上向上扩展）
                     int oldSize = messages.size();
                     for (int i = older.size() - 1; i >= 0; i--) {
                         messages.add(older.get(i));
                     }
                     adapter.notifyItemRangeInserted(oldSize, older.size());
-                    // 原最旧那条（现在上方有邻居了）需要重判
                     if (oldSize > 0) {
                         adapter.notifyItemChanged(oldSize - 1);
                     }
                     if (older.size() < PAGE_SIZE) hasMoreOlder = false;
                     loadingOlder = false;
+
+                    // 记录自己发的消息
+                    for (IMessage m : older) {
+                        if (myUserId != null && myUserId.equals(m.getSenderUserId())) {
+                            MyMessageSeqs.add(chatId, m.getId());
+                        }
+                    }
+
                     prefetchUsers(older);
                 });
             } catch (Exception e) {
@@ -644,12 +672,15 @@ public class ChatActivity extends Activity {
                 }
 
                 // 3. 发送/编辑
+                // 3. 发送/编辑
                 if (editing != null) {
                     ChatApi.editChatMessage(client, accessToken, chatId,
                             editing.getId(), parsed.text, parsed.entities, API_TIMEOUT_MS);
                 } else {
-                    ChatApi.sendChatMessage(client, accessToken, chatId,
+                    int newMsgId = ChatApi.sendChatMessage(client, accessToken, chatId,
                             parsed.text, parsed.entities, API_TIMEOUT_MS);
+                    // 记录"我发过的 seq"，用于"被回复"通知判定
+                    MyMessageSeqs.add(chatId, newMsgId);
                 }
 
                 // 4. 清缓存
@@ -674,6 +705,8 @@ public class ChatActivity extends Activity {
             }
         });
     }
+
+
 
     // ============================================================
     //                      WS 事件分发
@@ -701,10 +734,15 @@ public class ChatActivity extends Activity {
 
             runOnUiThread(() -> {
                 if (isFinishing()) return;
+
+                // 自己发的消息 → 记录 seq
+                if (myUserId != null && myUserId.equals(raw.getSenderUserId())) {
+                    MyMessageSeqs.add(chatId, raw.getId());
+                }
+
                 boolean atLatest = layoutManager.findFirstVisibleItemPosition() <= 1;
                 messages.add(0, raw);
                 adapter.notifyItemInserted(0);
-                // 原 index 0 现在是 index 1，hideSender 状态可能变了
                 if (messages.size() > 1) {
                     adapter.notifyItemChanged(1);
                 }

@@ -2,6 +2,7 @@ package io.github.moonleeeaf.lingcat;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +10,9 @@ import android.util.Log;
 
 import coil.Coil;
 import coil.ImageLoader;
+import io.github.moonleeeaf.lingcat.app.AppState;
+import io.github.moonleeeaf.lingcat.app.NotificationHelper;
+import io.github.moonleeeaf.lingcat.app.NotificationRouter;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
@@ -34,37 +38,38 @@ public class LingCatApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        appContextStatic = this;
+
         AppDataStore.init(this);
+
+        NotificationHelper.get().ensureChannels(this);
+        NotificationRouter.get();
         LingCatClientManager.init(this);
         setupCoil();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
-            @Override
-            public void onActivityStarted(Activity a) {
+            @Override public void onActivityStarted(Activity a) {
                 startedCount++;
-
-                // 取消"进入后台"的待确认任务
                 if (backgroundConfirmRunnable != null) {
                     mainHandler.removeCallbacks(backgroundConfirmRunnable);
                     backgroundConfirmRunnable = null;
                 }
-
-                // 从后台回到前台
                 if (startedCount == 1 && isInBackground) {
                     isInBackground = false;
+                    AppState.foreground = true;   // ← 新增
                     Log.i(TAG, "app foregrounded");
                     onAppForeground();
                 }
             }
 
-            @Override
-            public void onActivityStopped(Activity a) {
+            @Override public void onActivityStopped(Activity a) {
                 startedCount--;
                 if (startedCount == 0) {
-                    // 延迟确认，避免 Activity 切换误判
                     backgroundConfirmRunnable = () -> {
                         isInBackground = true;
+                        AppState.foreground = false;   // ← 新增
                         backgroundConfirmRunnable = null;
                         Log.i(TAG, "app backgrounded");
                     };
@@ -79,6 +84,11 @@ public class LingCatApplication extends Application {
             @Override public void onActivityDestroyed(Activity a) {}
         });
     }
+
+    // LingCatClientManager
+    private static volatile Context appContextStatic;
+    public static Context getAppContext() { return appContextStatic; }
+
 
     private void onAppForeground() {
         LingCatClientManager mgr = LingCatClientManager.getInstance();

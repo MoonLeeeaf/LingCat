@@ -19,6 +19,14 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
 
+        <receiver
+            android:name=".app.ReplyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="io.github.moonleeeaf.lingcat.ACTION_REPLY" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">

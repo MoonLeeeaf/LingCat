@@ -1,6 +1,7 @@
 package io.github.moonleeeaf.lingcat.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +31,19 @@ public class MainActivity extends Activity {
     private TabLayout tabs;
     private ViewPager2 pager;
 
+    private void requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < 33) return;
+        if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) return;
+        requestPermissions(
+                new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1001);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestNotificationPermissionIfNeeded();
 
         if (LingCatClientManager.getInstance().getCurrent() == null) {
             goToAuth();

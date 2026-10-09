@@ -13,6 +13,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.github.moonleeeaf.lingcat.app.NotificationRouter;
 import io.github.moonleeeaf.lingcat.data.Account;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ProfileCache;
@@ -182,6 +183,8 @@ public class LingCatClientManager {
                 Log.i(TAG, "handshake done: " + wsUrl);
                 future.complete(client);
 
+                NotificationRouter.attach(client);
+
                 // 后台拉 file_access_token 并开始定时刷新
                 startFileTokenRefresh(server, client, sessionId);
                 autoAuthorize(client, server);
@@ -257,6 +260,7 @@ public class LingCatClientManager {
         favouritedChatIds.clear();
         LingCatClient c = current;
         if (c != null) {
+            NotificationRouter.detach(c);
             try { c.disconnect(); } catch (Exception ignored) {}
         }
         current = null;
