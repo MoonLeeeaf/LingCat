@@ -112,8 +112,7 @@ public final class AttachmentViewBuilder {
         ImageRequest req = new ImageRequest.Builder(ctx)
                 .data(url)
                 .crossfade(true)
-                .placeholder(R.drawable.ic_default_avatar)
-                .error(R.drawable.ic_default_avatar)
+                .error(R.drawable.ic_attach_file)
                 .target(iv)
                 .build();
         Coil.imageLoader(ctx).enqueue(req);
