@@ -180,6 +180,17 @@ public class ChatProfileSheet {
                     this::openUserInfo));
         }
 
+        // 群聊：查看成员
+        if (!isPrivate) {
+            actionsContainer.addView(makeItem(ctx, R.drawable.ic_group,
+                    "查看成员", null,
+                    () -> {
+                        dialog.dismiss();
+                        ChatMembersActivity.show(ctx, chatId, title.getText() != null
+                                ? title.getText().toString() : null);
+                    }));
+        }
+
         // 收藏/取消收藏
         favourited = LingCatClientManager.getInstance().isFavourited(chatId);
         favItem = makeItem(ctx,
