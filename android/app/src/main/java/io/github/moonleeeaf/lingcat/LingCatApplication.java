@@ -17,6 +17,7 @@ import lingcat.client_protocol.HttpClientProvider;
 import lingcat.client_protocol.LingCatClient;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class LingCatApplication extends Application {
 
@@ -89,29 +90,57 @@ public class LingCatApplication extends Application {
             return;
         }
 
-        // 完全没连接 / 连接对象在但没握手好
-        if (cur == null || !cur.isReady()) {
-            Log.i(TAG, "foreground: reconnecting to " + server.url);
-            // 强制重建：先断干净，避免和进行中的握手打架
+        // 情况 1：完全没连接对象 → 直接连
+        if (cur == null) {
+            Log.i(TAG, "foreground: no client, connecting...");
+            mgr.connectTo(server);
+            return;
+        }
+
+        // 情况 2：正在握手中 → 不打断
+        if (mgr.isConnecting()) {
+            Log.i(TAG, "foreground: connecting in progress, no action");
+            return;
+        }
+
+        // 情况 3：有 client 但未就绪（连接死了）→ 强制重连
+        if (!cur.isReady()) {
+            Log.i(TAG, "foreground: client dead, force reconnect");
             mgr.disconnect();
             mgr.connectTo(server);
-        } else {
-            Log.i(TAG, "foreground: connection ready, no action");
+            return;
         }
+
+        // 情况 4：一切正常
+        Log.i(TAG, "foreground: ready, no action");
     }
 
     /** 给所有 Coil 图片请求自动加 file_access_token header */
     private void setupCoil() {
         OkHttpClient client = HttpClientProvider.get().newBuilder()
+                // 全局 OkHttpClient 加 CookieJar
                 .addInterceptor(chain -> {
                     Request req = chain.request();
                     String token = LingCatClientManager.getInstance().getFileAccessToken();
                     if (token != null && !token.isEmpty()) {
                         req = req.newBuilder()
-                                .header("file_access_token", token)
+                                .header("Cookie", "file_access_token=" + token)
                                 .build();
                     }
-                    return chain.proceed(req);
+
+                    Response resp = chain.proceed(req);
+
+                    // 上传文件 URL 带 hash → 内容不变 → 永久缓存
+                    String path = req.url().encodedPath();
+                    if (path.startsWith("/uploaded_files/")) {
+                        resp = resp.newBuilder()
+                                .removeHeader("Cache-Control")
+                                .removeHeader("Pragma")
+                                .removeHeader("Expires")
+                                .header("Cache-Control", "max-age=31536000, immutable")
+                                .build();
+                    }
+                    return resp;
                 })
                 .build();
 

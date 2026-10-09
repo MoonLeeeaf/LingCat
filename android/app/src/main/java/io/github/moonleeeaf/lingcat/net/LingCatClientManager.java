@@ -97,6 +97,12 @@ public class LingCatClientManager {
         return current != null;
     }
 
+    /** 是否正在握手过程中（有 pending 且未完成） */
+    public boolean isConnecting() {
+        CompletableFuture<LingCatClient> p = pendingConnect;
+        return p != null && !p.isDone();
+    }
+
     /**
      * 连接到指定服务器并完成握手。
      *
@@ -117,6 +123,13 @@ public class LingCatClientManager {
         synchronized (this) {
             // 幂等：同一个 server 且已连好 → 复用
             // 幂等：同一个 server 且已连好 → 复用
+            // 已有同 server 的 pending → 复用它，不打断进行中的握手
+            if (pendingConnect != null && !pendingConnect.isDone()
+                    && currentServer != null
+                    && server.url.equals(currentServer.url)) {
+                Log.i(TAG, "connectTo: reuse pending future for " + server.url);
+                return pendingConnect;
+            }
             if (current != null
                     && currentServer != null
                     && server.url.equals(currentServer.url)
