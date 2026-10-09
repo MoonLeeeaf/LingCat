@@ -94,6 +94,7 @@ export default function createLingCatServer(base_data_path: string) {
 
             res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
             res.setHeader('Content-Type', file.mime)
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
             res.sendFile(node_path.resolve(FileManager.getFilePath(file.hash)))
 
             await FileManager.updateLastUsedTime(file.hash)
