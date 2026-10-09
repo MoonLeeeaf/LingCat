@@ -74,7 +74,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:src="@drawable/ic_close"
             android:contentDescription="取消" />
 
     </LinearLayout>
@@ -95,7 +95,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
+        <io.github.moonleeeaf.lingcat.widget.AttachEditText
             android:id="@+id/chat_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -107,12 +107,21 @@
             android:textSize="15sp" />
 
         <ImageButton
+            android:id="@+id/chat_attach"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_attach_file"
+            android:contentDescription="附件"
+            app:tint="?attr/colorOnSurfaceVariant" />
+
+        <ImageButton
             android:id="@+id/chat_send"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_send"
+            android:src="@drawable/ic_send"
             android:contentDescription="发送" />
 
     </LinearLayout>

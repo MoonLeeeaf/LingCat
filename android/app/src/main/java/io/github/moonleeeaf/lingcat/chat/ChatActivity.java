@@ -75,6 +75,146 @@ public class ChatActivity extends Activity {
 
     private final LingCatClient.OnReceiveListener onMessageEvent = this::onPackageReceived;
 
+    private ImageButton attachBtn;
+    private final java.util.Map<String, CachedFile> cachedFiles = new java.util.LinkedHashMap<>();
+    private androidx.activity.result.ActivityResultLauncher<String> filePickerLauncher;
+
+    // ============================================================
+//                      附件
+// ============================================================
+
+    /** 缓存的待上传文件 */
+    private static class CachedFile {
+        final String name;
+        final String mime;
+        final byte[] data;
+        CachedFile(String n, String m, byte[] d) { name = n; mime = m; data = d; }
+    }
+
+    private void openFilePicker() {
+        try {
+            filePickerLauncher.launch("*/*");
+        } catch (Exception e) {
+            toast("无法打开文件选择器: " + e.getMessage());
+        }
+    }
+
+    private boolean handlePasteUri(android.net.Uri uri) {
+        if (uri == null) return false;
+        handlePickedFile(uri);
+        return true;
+    }
+
+    private void handlePickedFile(android.net.Uri uri) {
+        IO.execute(() -> {
+            try {
+                String name = queryFileName(uri);
+                String mime = getContentResolver().getType(uri);
+                if (mime == null || mime.isEmpty()) mime = guessMime(name);
+                byte[] data = readAllBytes(uri);
+                final String fName = name;
+                final String fMime = mime;
+                final byte[] fData = data;
+                runOnUiThread(() -> {
+                    if (isFinishing()) return;
+                    addFileToInput(fName, fMime, fData);
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> toast("读取文件失败: " + e.getMessage()));
+            }
+        });
+    }
+
+    private void addFileToInput(String name, String mime, byte[] data) {
+        // 同名 → 加后缀去重
+        String finalName = name;
+        int i = 1;
+        while (cachedFiles.containsKey(finalName)) {
+            finalName = name + "_" + i;
+            i++;
+        }
+        cachedFiles.put(finalName, new CachedFile(finalName, mime, data));
+
+        String prefix;
+        String m = mime.toLowerCase();
+        if (m.startsWith("image/")) prefix = "图片";
+        else if (m.startsWith("video/")) prefix = "视频";
+        else if (m.startsWith("audio/")) prefix = "音频";
+        else prefix = "文件";
+
+        // 对齐 Web: ![图片-name](name)
+        insertText("![" + prefix + "-" + finalName + "](" + finalName + ") ");
+    }
+
+    /** 上传所有被输入框引用的附件，返回替换后的文本 */
+    private String uploadAndReplaceAttachments(String text) throws Exception {
+        java.util.List<String> toUpload = new java.util.ArrayList<>();
+        for (String name : cachedFiles.keySet()) {
+            if (text.contains("(" + name + ")")) toUpload.add(name);
+        }
+        if (toUpload.isEmpty()) return text;
+
+        String token = lingcat.client_protocol.FileApi.requestUploadFileToken(
+                client, accessToken, API_TIMEOUT_MS);
+
+        String result = text;
+        for (String name : toUpload) {
+            CachedFile cf = cachedFiles.get(name);
+            if (cf == null) continue;
+            String hash = lingcat.client_protocol.FileApi.uploadFile(
+                    client, token, chatId, cf.data, cf.mime, cf.name);
+            result = result.replace("(" + name + ")", "(file:" + hash + ")");
+        }
+        return result;
+    }
+
+    private String queryFileName(android.net.Uri uri) {
+        String name = null;
+        try (android.database.Cursor c = getContentResolver()
+                .query(uri, null, null, null, null)) {
+            if (c != null && c.moveToFirst()) {
+                int idx = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                if (idx >= 0) name = c.getString(idx);
+            }
+        } catch (Exception ignored) {}
+        if (name == null || name.isEmpty()) {
+            name = "file_" + System.currentTimeMillis();
+        }
+        return name;
+    }
+
+    private byte[] readAllBytes(android.net.Uri uri) throws Exception {
+        try (java.io.InputStream in = getContentResolver().openInputStream(uri);
+             java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream()) {
+            if (in == null) throw new java.io.IOException("无法打开输入流");
+            byte[] buf = new byte[8192];
+            int n;
+            long total = 0;
+            long max = 1000L * 1024 * 1024;   // 1GB
+            while ((n = in.read(buf)) > 0) {
+                total += n;
+                if (total > max) throw new java.io.IOException("文件过大");
+                out.write(buf, 0, n);
+            }
+            return out.toByteArray();
+        }
+    }
+
+    private String guessMime(String name) {
+        if (name == null) return "application/octet-stream";
+        String s = name.toLowerCase();
+        if (s.endsWith(".jpg") || s.endsWith(".jpeg")) return "image/jpeg";
+        if (s.endsWith(".png"))  return "image/png";
+        if (s.endsWith(".gif"))  return "image/gif";
+        if (s.endsWith(".webp")) return "image/webp";
+        if (s.endsWith(".mp4"))  return "video/mp4";
+        if (s.endsWith(".webm")) return "video/webm";
+        if (s.endsWith(".mp3"))  return "audio/mpeg";
+        if (s.endsWith(".ogg"))  return "audio/ogg";
+        if (s.endsWith(".pdf"))  return "application/pdf";
+        return "application/octet-stream";
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +325,24 @@ public class ChatActivity extends Activity {
         sendBtn = findViewById(R.id.chat_send);
         sendBtn.setOnClickListener(v -> onSendClicked());
 
+        // 附件按钮
+        attachBtn = findViewById(R.id.chat_attach);
+        attachBtn.setOnClickListener(v -> openFilePicker());
+
+// 文件选择器（多次选择）
+        filePickerLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.GetMultipleContents(),
+                uris -> {
+                    if (uris == null || uris.isEmpty()) return;
+                    for (android.net.Uri u : uris) handlePickedFile(u);
+                });
+
+// 剪贴板 URI 粘贴
+        if (input instanceof io.github.moonleeeaf.lingcat.widget.AttachEditText) {
+            ((io.github.moonleeeaf.lingcat.widget.AttachEditText) input)
+                    .setOnPasteUriListener(this::handlePasteUri);
+        }
+
         // 事件
         client.addOnReceiveListener(onMessageEvent);
 
@@ -205,53 +363,6 @@ public class ChatActivity extends Activity {
             }
         }
         toast("消息 #" + seq + " 未加载");
-    }
-
-    // ============================================================
-//                      私聊 / 提及 辅助
-// ============================================================
-
-    private void openPrivateChat(String targetUserId) {
-        IO.execute(() -> {
-            try {
-                String targetChatId = ChatApi.getOrCreatePrivateChat(
-                        client, accessToken, targetUserId, API_TIMEOUT_MS);
-                if (targetChatId == null) return;
-
-                // 拿对方昵称做初始标题（已有缓存则秒回，没有则网络拉）
-                String title = targetUserId;
-                try {
-                    Classes.IUser u = ProfileCache.queryUserInfo(targetUserId)
-                            .get(5, java.util.concurrent.TimeUnit.SECONDS);
-                    if (u != null && u.getNickname() != null && !u.getNickname().isEmpty()) {
-                        title = u.getNickname();
-                    }
-                } catch (Exception ignored) {
-                    // 拿不到就 userId 兜底
-                }
-
-                final String finalChatId = targetChatId;
-                final String finalTitle = title;
-                runOnUiThread(() -> {
-                    if (isFinishing()) return;
-                    if (finalChatId.equals(chatId)) return;   // 已是当前对话
-
-                    Intent i = new Intent(this, ChatActivity.class);
-                    i.putExtra(EXTRA_CHAT_ID, finalChatId);
-                    i.putExtra(EXTRA_CHAT_TITLE, finalTitle);
-                    startActivity(i);
-                });
-            } catch (Exception e) {
-                runOnUiThread(() -> toast("打开对话失败: " + e.getMessage()));
-            }
-        });
-    }
-
-    private void mentionUser(String userId) {
-        Classes.IUser u = ProfileCache.getCachedUser(userId);
-        String nickname = (u != null && u.getNickname() != null && !u.getNickname().isEmpty())
-                ? u.getNickname() : userId;
-        insertText("[@" + nickname + "](user:" + userId + ") ");
     }
 
     // ============================================================
@@ -495,27 +606,22 @@ public class ChatActivity extends Activity {
         String rawInput = input.getText().toString();
         if (TextUtils.isEmpty(rawInput.trim()) && editingMessage == null) return;
 
-        // 拼装：回复模式拼接 [reply:seq] 前缀
-        final String rawText;
+         String rawText_;
         final IMessage editing = editingMessage;
         final IMessage replying = replyingTo;
 
         if (editing != null) {
-            rawText = rawInput;
+            rawText_ = rawInput;
         } else if (replying != null) {
-            rawText = "[reply:" + replying.getId() + "] " + rawInput;
+            rawText_ = "[reply:" + replying.getId() + "] " + rawInput;
         } else {
-            rawText = rawInput;
+            rawText_ = rawInput;
         }
 
-        // 解析成 text + entities
-        final MessageParser.ParsedMessage parsed;
-        try {
-            parsed = MessageParser.parseMessage(rawText);
-        } catch (Exception e) {
-            toast("解析失败: " + e.getMessage());
-            return;
-        }
+        rawText_ = rawText_.trim();
+
+
+        final String rawText = rawText_;
 
         sending = true;
         sendBtn.setEnabled(false);
@@ -523,6 +629,21 @@ public class ChatActivity extends Activity {
 
         IO.execute(() -> {
             try {
+                // 1. 上传附件并替换
+                String processed = rawText;
+                if (!cachedFiles.isEmpty()) {
+                    processed = uploadAndReplaceAttachments(rawText);
+                }
+
+                // 2. 解析
+                MessageParser.ParsedMessage parsed;
+                try {
+                    parsed = MessageParser.parseMessage(processed);
+                } catch (Exception e) {
+                    throw new Exception("解析失败: " + e.getMessage());
+                }
+
+                // 3. 发送/编辑
                 if (editing != null) {
                     ChatApi.editChatMessage(client, accessToken, chatId,
                             editing.getId(), parsed.text, parsed.entities, API_TIMEOUT_MS);
@@ -531,6 +652,9 @@ public class ChatActivity extends Activity {
                             parsed.text, parsed.entities, API_TIMEOUT_MS);
                 }
 
+                // 4. 清缓存
+                cachedFiles.clear();
+
                 runOnUiThread(() -> {
                     if (isFinishing()) return;
                     input.setText("");
@@ -538,7 +662,6 @@ public class ChatActivity extends Activity {
                     sendBtn.setEnabled(true);
                     sending = false;
                     exitStateMode();
-                    // 新消息通过 WS 回来插入；编辑通过 Message_Edited_Event 更新
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
