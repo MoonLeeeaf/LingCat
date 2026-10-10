@@ -474,36 +474,27 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
     const settingsDialog = (
         <mdui-dialog ref={settingsRef} close-on-overlay-click close-on-esc headline="会议设置">
             <mdui-list>
-                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showBubble', !m.settings.showBubble)}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>消息气泡</span>
-                        <mdui-switch checked={m.settings.showBubble} checked-icon="" />
-                    </div>
-                </mdui-list-item>
-                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showLocalMute', !m.settings.showLocalMute)}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>本地静音按钮</span>
-                        <mdui-switch checked={m.settings.showLocalMute} checked-icon="" />
-                    </div>
-                </mdui-list-item>
-                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showCameraButton', !m.settings.showCameraButton)}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>摄像头按钮</span>
-                        <mdui-switch checked={m.settings.showCameraButton} checked-icon="" />
-                    </div>
-                </mdui-list-item>
-                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('autoMuteStreams', !m.settings.autoMuteStreams)}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>直播流加入时自动本地静音</span>
-                        <mdui-switch checked={m.settings.autoMuteStreams} checked-icon="" />
-                    </div>
-                </mdui-list-item>
-                <mdui-list-item rounded onClick={() => MeetingManager.setMeetingSetting('showMediaStats', !m.settings.showMediaStats)}>
-                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
-                        <span style={{ flex: 1 }}>显示视频统计信息 (调试)</span>
-                        <mdui-switch checked={m.settings.showMediaStats} checked-icon="" />
-                    </div>
-                </mdui-list-item>
+                {([
+                    { key: 'showBubble', label: '消息气泡' },
+                    { key: 'showLocalMute', label: '本地静音按钮' },
+                    { key: 'showCameraButton', label: '摄像头按钮' },
+                    { key: 'autoMuteStreams', label: '直播流加入时自动本地静音' },
+                    { key: 'showMediaStats', label: '显示视频统计信息 (调试)' },
+                ] as const).map(({ key, label }) => (
+                    <mdui-list-item
+                        key={key}
+                        rounded
+                        onClick={() => MeetingManager.setMeetingSetting(key, !m.settings[key])}>
+                        <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                            <span style={{ flex: 1 }}>{label}</span>
+                            <mdui-switch
+                                checked={m.settings[key]}
+                                checked-icon=""
+                                onClick={(e: any) => e.stopPropagation()}
+                                onChange={(v: any) => MeetingManager.setMeetingSetting(key, v.target.checked)} />
+                        </div>
+                    </mdui-list-item>
+                ))}
             </mdui-list>
             <mdui-button slot="action" variant="text" onClick={() => { if (settingsRef.current) settingsRef.current.open = false }}>关闭</mdui-button>
         </mdui-dialog>
