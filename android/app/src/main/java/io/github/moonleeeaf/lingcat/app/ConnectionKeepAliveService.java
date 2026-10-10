@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.concurrent.Executors;
@@ -170,14 +171,14 @@ public class ConnectionKeepAliveService extends Service {
 
         return new androidx.core.app.NotificationCompat.Builder(this,
                 NotificationHelper.CHANNEL_KEEPALIVE)
-                .setSmallIcon(R.drawable.ic_notifications)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("LingCat")
                 .setContentText("正在接收消息 · " + state)
                 .setContentIntent(pi)
                 .setOngoing(true)
                 .setSilent(true)
                 .setShowWhen(false)
-                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_LOW)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setCategory(androidx.core.app.NotificationCompat.CATEGORY_SERVICE)
                 .build();
     }

@@ -223,7 +223,7 @@ public final class NotificationHelper {
                 ctx, chatId, chatTitle, notifId, channelId);
 
         NotificationCompat.Builder b = new NotificationCompat.Builder(ctx, channelId)
-                .setSmallIcon(R.drawable.ic_notifications)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setStyle(style)
                 .setContentIntent(contentPi)
                 .setAutoCancel(true)
