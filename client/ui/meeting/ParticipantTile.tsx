@@ -61,7 +61,9 @@ export default function ParticipantTile({ participant, compact, onClick, actions
         overflow: 'hidden',
         borderRadius: '10px',
         background: '#202020',
-        border: speaking ? '2px solid rgb(var(--mdui-color-primary))' : '1px solid rgba(255,255,255,0.08)',
+        // 边框宽度固定, 用 inset box-shadow 表示"正在说话" (不改变尺寸, 避免布局/高度重算)
+        border: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: speaking ? 'inset 0 0 0 2px rgb(var(--mdui-color-primary))' : undefined,
         // 有视频时按 16:9 显示, 避免画面上下留黑边; 无视频(头像)时保留最小高度
         aspectRatio: primary?.track ? '16 / 9' : undefined,
         minHeight: primary?.track ? undefined : (compact ? '84px' : '160px'),
