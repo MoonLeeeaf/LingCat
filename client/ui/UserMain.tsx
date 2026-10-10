@@ -27,6 +27,54 @@ import { takePendingInAppMeeting } from "./meeting/MeetingWindow.ts"
 import { isAppForeground, isMentioned, notificationBody, notificationSupported, onNotificationClick, showMessageNotification } from "./notify.ts"
 import ClientConfigInstance from "../ClientConfig.ts"
 
+function protoMsgToIMessage(p: LingCatProto.classes.IMessage.$Properties): IMessage {
+    return {
+        id: p.id!,
+        chat_id: p.chatId!,
+        sender_user_id: p.senderUserId,
+        system: p.system,
+        text: p.text!,
+        time: p.time,
+        entities: (p.entities ?? []).map((e: any) => ({
+            type: e.type,
+            offset: e.offset ?? 0,
+            length: e.length ?? 0,
+            data: e.data,
+        })),
+        edited_at: p.editedAt,
+    }
+}
+
+/**
+ * 检查一条消息是否"回复了我"。
+ * 只通过网络查询——拉取被回复的那条消息，看 sender 是不是我。
+ */
+async function hasReplyToMe(chatId: string, raw: IMessage, myId: string): Promise<boolean> {
+    const entities = raw?.entities || []
+    for (const e of entities) {
+        if (e.type !== 'reply') continue
+        if (!e.data) continue
+        const seq = Number(e.data)
+        if (!Number.isFinite(seq)) continue
+        try {
+            const msgs = await ChatApi.getChatMessages(ClientManager.client, {
+                access_token: ClientManager.getActiveUserSession().token,
+                chat_id: chatId,
+                before: seq + 1,
+                limit: 1,
+            })
+            if (msgs && msgs.length > 0
+                && msgs[0].id === seq
+                && msgs[0].sender_user_id === myId) {
+                return true
+            }
+        } catch (err) {
+            console.warn('[Notify] fetch reply target failed', err)
+        }
+    }
+    return false
+}
+
 function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
     let timer: NodeJS.Timeout
     return (...args: Parameters<T>) => {
@@ -163,21 +211,29 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             try {
                 const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data).msg
                 if (!raw?.chatId) return
-
+        
                 const myId = AppState.myId || (await ClientManager.getMe()).id
                 if (raw.senderUserId == myId) return
                 if (activeChatIdRef.current == raw.chatId && isAppForeground()) return
-
+        
                 const chat = await ProfileCache.queryChatInfo(raw.chatId)
-                if (chat.type != 'private' && !isMentioned(raw.entities, myId)) return
-
+                const isPrivate = chat.type === 'private'
+                const mentioned = isMentioned(raw.entities, myId)
+                // 群聊时：未被 @ 才去查是否被回复（省网络请求）
+                const replied = (!isPrivate && !mentioned)
+                    ? await hasReplyToMe(raw.chatId, protoMsgToIMessage(raw), myId)
+                    : false
+                if (!isPrivate && !mentioned && !replied) return
+        
                 const sender = raw.senderUserId ? await ProfileCache.queryUserInfo(raw.senderUserId) : undefined
                 const avatar = chat.type == 'private' ? chat.avatar_file_hash : (sender?.avatar_file_hash || chat.avatar_file_hash)
-
+        
+                const prefix = replied ? '[回复] ' : (mentioned ? '[提及] ' : '')
+        
                 await showMessageNotification({
                     chatId: raw.chatId,
                     title: (chat.title || '灵猫') + ' | 灵猫',
-                    body: (raw.system ? '' : ((sender?.nickname || '新消息') + ': ')) + notificationBody(raw.text || ''),
+                    body: prefix + (raw.system ? '' : ((sender?.nickname || '新消息') + ': ')) + notificationBody(raw.text || ''),
                     icon: avatar ? ClientManager.client.getFileUrlByHashAndToken(avatar, AppState.fileAccessToken) : default_avatar,
                 })
             } catch (e) {
@@ -213,7 +269,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
     }, [activeChat?.id])
 
     React.useEffect(() => {
-            document.title = ClientConfigInstance.title + (activeChat?.title ? (' | ' + activeChat?.title) : '')
+        document.title = ClientConfigInstance.title + (activeChat?.title ? (' | ' + activeChat?.title) : '')
     }, [activeChat])
 
     // 记住当前打开的对话, 刷新后自动恢复
@@ -230,16 +286,16 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         let saved: string | null = null
         try { saved = localStorage.getItem(activeChatStorageKey) } catch { }
         if (!saved) return
-        ;(async () => {
-            try {
-                setActiveChat(await ChatApi.queryChatInfo(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                    chat_id: saved!,
-                }))
-            } catch (e) {
-                console.log('[UserMain] 恢复上次对话失败', e)
-            }
-        })()
+            ; (async () => {
+                try {
+                    setActiveChat(await ChatApi.queryChatInfo(ClientManager.client, {
+                        access_token: ClientManager.getActiveUserSession().token,
+                        chat_id: saved!,
+                    }))
+                } catch (e) {
+                    console.log('[UserMain] 恢复上次对话失败', e)
+                }
+            })()
     }, [activeChatStorageKey])
 
     const pendingMeetingTakenRef = React.useRef(false)
@@ -248,18 +304,18 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         const req = takePendingInAppMeeting()
         if (!req) return
         pendingMeetingTakenRef.current = true
-        ;(async () => {
-            try {
-                const chat = await ChatApi.queryChatInfo(ClientManager.client, {
-                    access_token: ClientManager.getActiveUserSession().token,
-                    chat_id: req.chatId,
-                })
-                setActiveChat(chat)
-                await MeetingManager.startMeeting(chat)
-            } catch (e) {
-                tipError(e, '加入会议失败')
-            }
-        })()
+            ; (async () => {
+                try {
+                    const chat = await ChatApi.queryChatInfo(ClientManager.client, {
+                        access_token: ClientManager.getActiveUserSession().token,
+                        chat_id: req.chatId,
+                    })
+                    setActiveChat(chat)
+                    await MeetingManager.startMeeting(chat)
+                } catch (e) {
+                    tipError(e, '加入会议失败')
+                }
+            })()
     }, [profile?.id])
 
     const navigationRef = React.useRef<NavigationRail | NavigationBar>(null)
@@ -572,48 +628,48 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
             minWidth: 0,
         }}>
             <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
-            {meeting.isActive() && meeting.dock && (<>
-                <div style={{ width: meeting.dockWidthPercent + '%', height: '100%', minWidth: 0, flexShrink: 0, display: 'flex' }}>
-                    <MeetingPanel mode="docked" />
-                </div>
-                {/* 可拖动分隔条: 调整会议面板与聊天的宽度 */}
-                <div
-                    onPointerDown={onDockDividerDown}
-                    title="拖动调整大小"
-                    style={{
-                        width: '6px', flexShrink: 0, cursor: 'col-resize',
-                        background: 'rgb(var(--mdui-color-outline-variant))',
-                        touchAction: 'none', userSelect: 'none',
-                    }}
-                />
-            </>)}
-            <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
-            {
-                activeChat
-                    ? <ChatFragment chat={activeChat} drawerOpen={drawerOpen} onToggleDrawer={toggleDrawer} />
-                    : <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                    }}>
-                        <mdui-top-app-bar style={{ position: 'relative' }}>
-                            <mdui-button-icon icon={drawerOpen ? 'menu_open' : 'menu'} onClick={toggleDrawer}></mdui-button-icon>
-                            <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
-                        </mdui-top-app-bar>
-                        <div style={{
-                            display: 'flex',
-                            flex: 1,
-                            justifyContent: 'center',
-                        }}>
-                            <div style={{
-                                alignSelf: 'center',
-                            }}>
-                                打开侧边栏, 选择一个对话以开始聊天喵~
-                            </div>
-                        </div>
+                {meeting.isActive() && meeting.dock && (<>
+                    <div style={{ width: meeting.dockWidthPercent + '%', height: '100%', minWidth: 0, flexShrink: 0, display: 'flex' }}>
+                        <MeetingPanel mode="docked" />
                     </div>
-            }
-            </div>
+                    {/* 可拖动分隔条: 调整会议面板与聊天的宽度 */}
+                    <div
+                        onPointerDown={onDockDividerDown}
+                        title="拖动调整大小"
+                        style={{
+                            width: '6px', flexShrink: 0, cursor: 'col-resize',
+                            background: 'rgb(var(--mdui-color-outline-variant))',
+                            touchAction: 'none', userSelect: 'none',
+                        }}
+                    />
+                </>)}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
+                    {
+                        activeChat
+                            ? <ChatFragment chat={activeChat} drawerOpen={drawerOpen} onToggleDrawer={toggleDrawer} />
+                            : <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '100%',
+                            }}>
+                                <mdui-top-app-bar style={{ position: 'relative' }}>
+                                    <mdui-button-icon icon={drawerOpen ? 'menu_open' : 'menu'} onClick={toggleDrawer}></mdui-button-icon>
+                                    <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>灵猫</mdui-top-app-bar-title>
+                                </mdui-top-app-bar>
+                                <div style={{
+                                    display: 'flex',
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                }}>
+                                    <div style={{
+                                        alignSelf: 'center',
+                                    }}>
+                                        打开侧边栏, 选择一个对话以开始聊天喵~
+                                    </div>
+                                </div>
+                            </div>
+                    }
+                </div>
             </div>
         </mdui-layout-main>
         {meeting.isActive() && !meeting.dock && <MeetingPanel mode="floating" />}
