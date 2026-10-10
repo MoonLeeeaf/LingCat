@@ -8,22 +8,12 @@ import android.util.Log;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 
-/**
- * 前台服务的启停控制。
- * 调用方只管调 ensureRunning / stop，内部判断该不该开。
- */
 public final class ServiceController {
 
     private static final String TAG = "ServiceController";
 
     private ServiceController() {}
 
-    /**
-     * 根据当前状态决定是否启动服务：
-     *   - 开关关闭 → 停
-     *   - 未登录 → 停
-     *   - 已登录 + 开关开 → 启动
-     */
     public static void ensureRunning(Context ctx) {
         if (ctx == null) return;
 
@@ -38,6 +28,13 @@ public final class ServiceController {
     }
 
     public static void start(Context ctx) {
+        // Android 12+：后台启动 FGS 会被拒——只有 App 在前台才启动
+        if (Build.VERSION.SDK_INT >= 31) {
+            if (!AppState.foreground) {
+                Log.i(TAG, "skip start: app not in foreground");
+                return;
+            }
+        }
         try {
             Intent i = new Intent(ctx, ConnectionKeepAliveService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

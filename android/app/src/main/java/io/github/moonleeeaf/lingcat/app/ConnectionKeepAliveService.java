@@ -12,7 +12,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.concurrent.Executors;
@@ -26,27 +25,15 @@ import io.github.moonleeeaf.lingcat.main.MainActivity;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 import lingcat.client_protocol.LingCatClient;
 
-/**
- * 前台服务：保证 WebSocket 长连接在后台尽可能存活。
- *
- * 只做三件事：
- *   1. 挂常驻通知（显示连接状态）
- *   2. 定期检查 LingCatClient 是否 ready；不 ready 就触发重连
- *   3. 被杀后 START_STICKY 自动重启
- *
- * 不管理连接本身——连接的生命周期仍由 LingCatClientManager 负责。
- */
 public class ConnectionKeepAliveService extends Service {
 
     private static final String TAG = "KeepAliveSvc";
-    private static final int NOTIF_ID = 0x4C43;   // "LC"
+    private static final int NOTIF_ID = 0x4C43;
     private static final long CHECK_INTERVAL_SEC = 60;
     private static final long INITIAL_DELAY_SEC = 10;
 
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> checkTask;
-
-    /** 上次通知里显示的 state，避免重复刷新 */
     private volatile String lastState = "";
 
     @Override
@@ -59,8 +46,7 @@ public class ConnectionKeepAliveService extends Service {
         try {
             startForeground(NOTIF_ID, buildNotification("初始化中..."));
         } catch (Exception e) {
-            // Android 12+ 后台启动 FGS 可能抛异常
-            Log.w(TAG, "startForeground failed", e);
+            Log.w(TAG, "startForeground failed in onCreate", e);
             stopSelf();
             return;
         }
@@ -70,7 +56,8 @@ public class ConnectionKeepAliveService extends Service {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        return START_STICKY;
+        // 前台服务被系统杀后不要在后台自动重启——后台 startForeground 会被拒
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -143,7 +130,6 @@ public class ConnectionKeepAliveService extends Service {
     private void updateNotification(String state) {
         if (state.equals(lastState)) return;
         lastState = state;
-
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -178,7 +164,7 @@ public class ConnectionKeepAliveService extends Service {
                 .setOngoing(true)
                 .setSilent(true)
                 .setShowWhen(false)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_LOW)
                 .setCategory(androidx.core.app.NotificationCompat.CATEGORY_SERVICE)
                 .build();
     }
