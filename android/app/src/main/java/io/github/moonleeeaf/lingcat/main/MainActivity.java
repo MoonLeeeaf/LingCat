@@ -94,6 +94,14 @@ public class MainActivity extends Activity {
             confirmLogout();
             return true;
         }
+        if (id == R.id.action_edit_profile) {
+            io.github.moonleeeaf.lingcat.main.EditMyProfileActivity.show(this);
+            return true;
+        }
+        if (id == R.id.action_change_password) {
+            ChangePasswordDialog.show(this);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -63,11 +63,15 @@
             android:launchMode="singleTop" />
 
         <activity
+            android:name=".main.EditMyProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".chat.ChatActivity"
             android:exported="false"
             android:parentActivityName=".main.MainActivity" />
 
-        <!-- AndroidManifest.xml -->
         <activity
             android:name=".chat.meeting.MeetingActivity"
             android:supportsPictureInPicture="true"

@@ -71,6 +71,16 @@ public class OAuthCallbackActivity extends AppCompatActivity {
             return;
         }
 
+        String bound = data.getQueryParameter("oauth_bound");
+        if (bound != null && !bound.isEmpty()) {
+            Log.i(TAG, "oauth bound: " + bound);
+            io.github.moonleeeaf.lingcat.main.OAuthBoundEvent.fire();
+            android.widget.Toast.makeText(this, "已绑定 " + bound,
+                    android.widget.Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         if (ticket == null || ticket.isEmpty()) {
             Log.w(TAG, "missing oauth_ticket");
             goBackWithError("missing_ticket");
