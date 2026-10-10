@@ -204,6 +204,7 @@ export default function UserMain({ profile, setProfile, drawerRef }: { profile: 
         })
     }, [])
 
+    // TODO: fix it
     React.useEffect(() => {
         async function callback(mPackage: Package) {
             if (mPackage.method_id != Methods.Receive_Chat_Message_Event) return
