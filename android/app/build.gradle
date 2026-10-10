@@ -68,5 +68,7 @@ dependencies {
     implementation 'io.coil-kt:coil-gif:2.6.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
+    implementation "io.livekit:livekit-android:2.13.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 }

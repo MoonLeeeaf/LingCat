@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.github.moonleeeaf.lingcat.chat.meeting.AspectRatioFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 视频渲染器（WebRTC） -->
+    <livekit.org.webrtc.SurfaceViewRenderer
+        android:id="@+id/participant_renderer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 无视频时的占位（头像 / 首字母） -->
+    <FrameLayout
+        android:id="@+id/participant_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/participant_placeholder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:text="?" />
+    </FrameLayout>
+
+    <!-- 底部名字 -->
+    <TextView
+        android:id="@+id/participant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- 麦克风状态 -->
+    <ImageView
+        android:id="@+id/participant_mic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_mic"
+        android:alpha="0.7"
+        android:contentDescription="" />
+
+</io.github.moonleeeaf.lingcat.chat.meeting.AspectRatioFrameLayout>

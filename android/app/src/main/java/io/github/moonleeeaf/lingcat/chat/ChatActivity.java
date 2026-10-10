@@ -81,6 +81,15 @@ public class ChatActivity extends Activity {
     private final java.util.Map<String, CachedFile> cachedFiles = new java.util.LinkedHashMap<>();
     private androidx.activity.result.ActivityResultLauncher<String> filePickerLauncher;
 
+    private static final int MENU_CALL = 0x4D43;
+
+    private android.view.View meetingBanner;
+    private android.widget.TextView meetingBannerText;
+    private com.google.android.material.button.MaterialButton meetingBannerAction;
+
+    private final io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.OnMeetingChangedListener meetingListener =
+            this::onMeetingChanged;
+
     // ============================================================
 //                      附件
 // ============================================================
@@ -255,6 +264,16 @@ public class ChatActivity extends Activity {
 
         setTitle(chatTitle != null && !chatTitle.isEmpty() ? chatTitle : "对话");
 
+// banner
+        meetingBanner = findViewById(R.id.meeting_banner);
+        meetingBannerText = findViewById(R.id.meeting_banner_text);
+        meetingBannerAction = findViewById(R.id.meeting_banner_action);
+        meetingBannerAction.setOnClickListener(v -> onCallClicked());
+
+// 注册会议状态监听
+        io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get().addListener(meetingListener);
+        updateMeetingBanner();
+
         // RecyclerView（反向布局）
         recycler = findViewById(R.id.chat_messages);
         layoutManager = new LinearLayoutManager(this);
@@ -350,6 +369,32 @@ public class ChatActivity extends Activity {
 
         // 首屏
         loadInitial();
+    }
+
+    // ============================================================
+//                      Toolbar 菜单
+// ============================================================
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        android.view.MenuItem item = menu.add(
+                android.view.Menu.NONE,
+                MENU_CALL,
+                android.view.Menu.NONE,
+                "会议");
+        item.setIcon(R.drawable.ic_videocam);
+        item.setShowAsAction(android.view.MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        if (item.getItemId() == MENU_CALL) {
+            onCallClicked();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -527,8 +572,62 @@ public class ChatActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get()
+                .removeListener(meetingListener);
         if (client != null) client.removeOnReceiveListener(onMessageEvent);
         super.onDestroy();
+    }
+
+    // ============================================================
+//                      会议
+// ============================================================
+
+    private void onCallClicked() {
+        io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager mgr =
+                io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get();
+
+        // 已在会议中 → 直接返回
+        if (mgr.isInMeeting(chatId)) {
+            android.content.Intent i = new android.content.Intent(
+                    this, io.github.moonleeeaf.lingcat.chat.meeting.MeetingActivity.class);
+            i.addFlags(android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            return;
+        }
+
+        io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.ActiveMeeting active =
+                mgr.getActiveMeeting(chatId);
+        boolean isStarter = (active == null);
+        mgr.openMeeting(this, chatId, chatTitle, isStarter);
+    }
+
+    private void onMeetingChanged(String changedChatId) {
+        if (!chatId.equals(changedChatId)) return;
+        runOnUiThread(this::updateMeetingBanner);
+    }
+
+    private void updateMeetingBanner() {
+        if (meetingBanner == null) return;
+
+        io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager mgr =
+                io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get();
+
+        boolean hasMeeting = mgr.hasAnyMeeting(chatId);
+        boolean inMeeting = mgr.isInMeeting(chatId);
+
+        if (!hasMeeting && !inMeeting) {
+            meetingBanner.setVisibility(android.view.View.GONE);
+            return;
+        }
+
+        meetingBanner.setVisibility(android.view.View.VISIBLE);
+        if (inMeeting) {
+            meetingBannerText.setText("您正在会议中");
+            meetingBannerAction.setText("返回");
+        } else {
+            meetingBannerText.setText("会议进行中");
+            meetingBannerAction.setText("加入");
+        }
     }
 
     // ============================================================
@@ -717,7 +816,29 @@ public class ChatActivity extends Activity {
             handleReceive(pkg);
         } else if (pkg.method_id == Methods.Message_Edited_Event) {
             handleEdited(pkg);
+        } else if (pkg.method_id == Methods.Meeting_Started_Event) {
+            handleMeetingStarted(pkg);
+        } else if (pkg.method_id == Methods.Meeting_Ended_Event) {
+            handleMeetingEnded(pkg);
         }
+    }
+
+    private void handleMeetingStarted(Package pkg) {
+        try {
+            lingcat.methods.Methods.Meeting_Started_Event ev =
+                    lingcat.methods.Methods.Meeting_Started_Event.parseFrom(pkg.data);
+            if (!chatId.equals(ev.getChatId())) return;
+            io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get().onMeetingStarted(ev);
+        } catch (Exception ignored) {}
+    }
+
+    private void handleMeetingEnded(Package pkg) {
+        try {
+            lingcat.methods.Methods.Meeting_Ended_Event ev =
+                    lingcat.methods.Methods.Meeting_Ended_Event.parseFrom(pkg.data);
+            if (!chatId.equals(ev.getChatId())) return;
+            io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get().onMeetingEnded(ev);
+        } catch (Exception ignored) {}
     }
 
     private void handleReceive(Package pkg) {
