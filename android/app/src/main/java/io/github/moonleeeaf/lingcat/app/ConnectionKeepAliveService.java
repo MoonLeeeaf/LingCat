@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.concurrent.Executors;
@@ -164,7 +165,7 @@ public class ConnectionKeepAliveService extends Service {
                 .setOngoing(true)
                 .setSilent(true)
                 .setShowWhen(false)
-                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_LOW)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setCategory(androidx.core.app.NotificationCompat.CATEGORY_SERVICE)
                 .build();
     }
