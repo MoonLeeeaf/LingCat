@@ -136,4 +136,55 @@ export default class MeetingApi {
             })).data
         )
     }
+
+    /**
+     * 查询会议在场成员 (供横幅显示人数/头像堆叠)
+     */
+    static async getMeetingParticipants(client: LingCatClient, {
+        access_token,
+        chat_id,
+        meeting_id,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        meeting_id?: string
+        timeout?: number
+    }): Promise<{
+        meeting_id: string
+        room: string
+        count: number
+        participants: Array<{
+            identity: string
+            user_id: string | null
+            nickname: string | null
+            remark: string | null
+            avatar_file_hash: string | null
+        }>
+    }> {
+        const res = decodeOrThrow<LingCatProto.methods.Get_Meeting_Participants_Response>(
+            LingCatProto.methods.Get_Meeting_Participants_Response,
+            (await client.invoke({
+                method_id: Methods.Get_Meeting_Participants_Request,
+                data: LingCatProto.methods.Get_Meeting_Participants_Request.encode({
+                    accessToken: access_token,
+                    chatId: chat_id,
+                    meetingId: meeting_id,
+                }).finish(),
+                timeout,
+            })).data
+        )
+        return {
+            meeting_id: res.meetingId,
+            room: res.room,
+            count: res.count,
+            participants: (res.participants ?? []).map((p) => ({
+                identity: p.identity ?? '',
+                user_id: p.userId ?? null,
+                nickname: p.nickname ?? null,
+                remark: p.remark ?? null,
+                avatar_file_hash: p.avatarFileHash ?? null,
+            })),
+        }
+    }
 }

@@ -25,6 +25,12 @@ type ClientsEmiter = { [k: string]: { [k: string]: (mPackage: Package) => void }
 
 const MEETING_IDLE_TIMEOUT_MS = 1000 * 60 * 60 * 6
 
+// 会议在场成员缓存: 同一 room 5 秒内共享一次 LiveKit 查询 (只存原始数据, 发送时再 encode)
+const participantsCache = new Map<string, {
+    at: number
+    data: Array<{ identity: string, userId?: string, nickname?: string, remark?: string, avatarFileHash?: string }>
+}>()
+
 // 会议持久化到数据库, 保证服务端重启/重新部署后仍可继续(加入/查询)同一场会议
 class MeetingStore {
     async create(chat_id: string, starter_user_id: string, title?: string): Promise<IMeeting> {
@@ -338,6 +344,89 @@ export default class MeetingApi {
                         room: meeting?.room ?? '',
                         starterUserId: meeting?.starter_user_id ?? '',
                         title: meeting?.title,
+                    }).finish(),
+                }))
+                break
+            }
+            /**
+             * ===============================
+             *        查询会议在场成员
+             * ===============================
+             */
+            case Methods.Get_Meeting_Participants_Request: {
+                const data = LingCatProto.methods.Get_Meeting_Participants_Request.decode(mPackage.data)
+
+                let user_id: string
+                try {
+                    user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+                } catch {
+                    return sendError(sendPackage, mPackage.method_id, 'Token is invalid', Code.UnAuthorized)
+                }
+
+                if (!data.chatId)
+                    return sendError(sendPackage, mPackage.method_id, 'chat_id required', Code.Bad_Request)
+                if (!(await UserChatLinker.isUserChatLinked(user_id, data.chatId)))
+                    return sendError(sendPackage, mPackage.method_id, 'You are not a member of this chat', Code.Forbidden)
+
+                const sendEmpty = (meetingId = '', room = '') => {
+                    sendPackage(Package.encode({
+                        method_id: Methods.Get_Meeting_Participants_Response,
+                        flags: 0,
+                        data: LingCatProto.methods.Get_Meeting_Participants_Response.encode({
+                            meetingId, room, count: 0, participants: [],
+                        }).finish(),
+                    }))
+                }
+
+                // 无 LiveKit → 空
+                if (!config.livekit_enabled) { sendEmpty(); break }
+
+                // meeting_id 与 chat_id 二次校验, 防跨会议查询
+                const meeting = data.meetingId
+                    ? await MeetingDataBase.get(data.meetingId)
+                    : await MeetingDataBase.findByChat(data.chatId)
+                if (!meeting || meeting.chat_id !== data.chatId) { sendEmpty(); break }
+
+                const now = Date.now()
+                let entry = participantsCache.get(meeting.room)
+                if (!entry || now - entry.at > 5000) {
+                    try {
+                        const svc = new RoomServiceClient(livekitHttpUrl(), config.livekit_api_key!, config.livekit_api_secret!)
+                        const ps = await svc.listParticipants(meeting.room)
+                        entry = {
+                            at: now,
+                            data: ps.map((p) => {
+                                let meta: any = {}
+                                try { meta = JSON.parse(p.metadata || '{}') } catch { }
+                                return {
+                                    identity: p.identity,
+                                    userId: meta.user_id ?? undefined,
+                                    nickname: meta.nickname ?? p.name ?? undefined,
+                                    remark: meta.remark ?? undefined,
+                                    avatarFileHash: meta.avatar_file_hash ?? undefined,
+                                }
+                            }),
+                        }
+                        participantsCache.set(meeting.room, entry)
+                    } catch (e: any) {
+                        const msg = String(e?.message || e)
+                        // 会议刚结束 / LiveKit 侧 room 已销毁 → 返回空而不是 500
+                        if (msg.includes('not found') || e?.code === 404) { sendEmpty(meeting.id, meeting.room); break }
+                        console.log('[Meeting] 查询在场成员失败:', e)
+                        return sendError(sendPackage, mPackage.method_id, 'Failed to query participants', Code.Internal_Server_Error)
+                    }
+                }
+
+                if (!entry) { sendEmpty(meeting.id, meeting.room); break }
+                const list = entry.data
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_Meeting_Participants_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_Meeting_Participants_Response.encode({
+                        meetingId: meeting.id,
+                        room: meeting.room,
+                        count: list.length,
+                        participants: list,
                     }).finish(),
                 }))
                 break

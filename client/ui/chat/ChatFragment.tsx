@@ -16,6 +16,9 @@ import ChatSettingsDialog from "./ChatSettingsDialog.tsx"
 import ChatMembersAndAdminsDialog from "./ChatMembersAndAdminsDialog.tsx"
 import ProfileCache from "../../ProfileCache.ts"
 import AppState from "../AppState.ts"
+import Avatar from "../Avatar.tsx"
+import default_avatar from '../../default_avatar.png'
+import { useMeetingParticipants } from "./useMeetingParticipants.ts"
 import { MeetingManager, useMeeting } from "../meeting/MeetingManager.ts"
 import { MeetingWindowManager, useMeetingWindow } from "../meeting/MeetingWindow.ts"
 import ClientConfigInstance from "../../ClientConfig.ts"
@@ -31,6 +34,10 @@ export default function ChatFragment({ chat: chatObj, drawerOpen, onToggleDrawer
 
     const meeting = useMeeting()
     const meetingWindow = useMeetingWindow()
+
+    // 会议在场成员 (供横幅显示人数/头像堆叠)
+    const activeMeetingId = meeting.getActiveMeeting(chat.id)?.meetingId
+    const meetingMembers = useMeetingParticipants(chat.id, activeMeetingId)
 
     React.useEffect(() => { MeetingManager.refreshActiveMeeting(chat.id) }, [chat.id])
     React.useEffect(() => {
@@ -543,6 +550,27 @@ export default function ChatFragment({ chat: chatObj, drawerOpen, onToggleDrawer
             <div style={{ position: 'absolute', top: '64px', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 6, pointerEvents: 'none' }}>
                 <div style={{ pointerEvents: 'auto', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 6px 4px 14px', borderRadius: '999px', background: 'rgb(var(--mdui-color-primary-container))', color: 'rgb(var(--mdui-color-on-primary-container))', boxShadow: 'var(--mdui-elevation-level3)', fontSize: '13px' }}>
                     <span>会议进行中</span>
+                    {meetingMembers.length > 0 && <>
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '2px' }}>
+                            {meetingMembers.slice(0, 5).map((p, i) => (
+                                <Avatar
+                                    key={p.identity}
+                                    src={p.avatar_file_hash ? ClientManager.client.getFileUrlByHashAndToken(p.avatar_file_hash, AppState.fileAccessToken) : default_avatar}
+                                    style={{
+                                        width: '24px', height: '24px',
+                                        marginLeft: i ? '-9px' : '0',
+                                        border: '2px solid rgb(var(--mdui-color-primary-container))',
+                                        borderRadius: '50%',
+                                        flexShrink: 0,
+                                    }}
+                                />
+                            ))}
+                            {meetingMembers.length > 5 && (
+                                <span style={{ marginLeft: '4px', fontSize: '12px', opacity: 0.75 }}>+{meetingMembers.length - 5}</span>
+                            )}
+                        </div>
+                        <span style={{ opacity: 0.75 }}>{meetingMembers.length} 人</span>
+                    </>}
                     {meetingWindow.isSupported()
                         ? <mdui-button variant="text" onClick={() => openMeetingWindow()}>
                             {meetingWindow.isOpen(chat.id) ? '回到会议' : '加入'}

@@ -30636,6 +30636,1140 @@ export const lingcat = $root.lingcat = (() => {
             return Unbind_OAuth_Response;
         })();
 
+        methods.Get_Meeting_Participants_Request = (function() {
+
+            /**
+             * Properties of a Get_Meeting_Participants_Request.
+             * @typedef {Object} lingcat.methods.Get_Meeting_Participants_Request.$Properties
+             * @property {string|null} [accessToken] Get_Meeting_Participants_Request accessToken
+             * @property {string|null} [chatId] Get_Meeting_Participants_Request chatId
+             * @property {string|null} [meetingId] Get_Meeting_Participants_Request meetingId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Meeting_Participants_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_Meeting_Participants_Request
+             * @augments lingcat.methods.Get_Meeting_Participants_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_Meeting_Participants_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Meeting_Participants_Request.
+             * @typedef {lingcat.methods.Get_Meeting_Participants_Request.$Properties} lingcat.methods.Get_Meeting_Participants_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Meeting_Participants_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Meeting_Participants_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_Meeting_Participants_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Meeting_Participants_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Meeting_Participants_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @instance
+             */
+            Get_Meeting_Participants_Request.prototype.accessToken = "";
+
+            /**
+             * Get_Meeting_Participants_Request chatId.
+             * @member {string} chatId
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @instance
+             */
+            Get_Meeting_Participants_Request.prototype.chatId = "";
+
+            /**
+             * Get_Meeting_Participants_Request meetingId.
+             * @member {string|null|undefined} meetingId
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @instance
+             */
+            Get_Meeting_Participants_Request.prototype.meetingId = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Get_Meeting_Participants_Request.prototype, "_meetingId", {
+                get: $util.oneOfGetter($oneOfFields = ["meetingId"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Get_Meeting_Participants_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Meeting_Participants_Request} Get_Meeting_Participants_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Meeting_Participants_Request.$Shape): lingcat.methods.Get_Meeting_Participants_Request & lingcat.methods.Get_Meeting_Participants_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_Meeting_Participants_Request.$Properties): lingcat.methods.Get_Meeting_Participants_Request;
+             * }}
+             */
+            Get_Meeting_Participants_Request.create = function(properties) {
+                return new Get_Meeting_Participants_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Meeting_Participants_Request message. Does not implicitly {@link lingcat.methods.Get_Meeting_Participants_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Request.$Properties} message Get_Meeting_Participants_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Meeting_Participants_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId") && message.chatId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.chatId);
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.meetingId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Meeting_Participants_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_Meeting_Participants_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Request.$Properties} message Get_Meeting_Participants_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Meeting_Participants_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Meeting_Participants_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Meeting_Participants_Request & lingcat.methods.Get_Meeting_Participants_Request.$Shape} Get_Meeting_Participants_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Meeting_Participants_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_Meeting_Participants_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.chatId = value;
+                            else
+                                delete message.chatId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            message.meetingId = reader.stringVerify();
+                            message._meetingId = "meetingId";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Meeting_Participants_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Meeting_Participants_Request & lingcat.methods.Get_Meeting_Participants_Request.$Shape} Get_Meeting_Participants_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Meeting_Participants_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Meeting_Participants_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Meeting_Participants_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    if (!$util.isString(message.chatId))
+                        return "chatId: string expected";
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId")) {
+                    properties._meetingId = 1;
+                    if (!$util.isString(message.meetingId))
+                        return "meetingId: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Meeting_Participants_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Meeting_Participants_Request} Get_Meeting_Participants_Request
+             */
+            Get_Meeting_Participants_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Meeting_Participants_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Meeting_Participants_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Meeting_Participants_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.chatId != null)
+                    if (typeof object.chatId !== "string" || object.chatId.length)
+                        message.chatId = $String(object.chatId);
+                if (object.meetingId != null)
+                    message.meetingId = $String(object.meetingId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Meeting_Participants_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Request} message Get_Meeting_Participants_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Meeting_Participants_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.chatId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.chatId != null && $Object.hasOwnProperty.call(message, "chatId"))
+                    object.chatId = message.chatId;
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId"))
+                    object.meetingId = message.meetingId;
+                return object;
+            };
+
+            /**
+             * Converts this Get_Meeting_Participants_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Meeting_Participants_Request.prototype.toJSON = function() {
+                return Get_Meeting_Participants_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Meeting_Participants_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Meeting_Participants_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Meeting_Participants_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Meeting_Participants_Request";
+            };
+
+            return Get_Meeting_Participants_Request;
+        })();
+
+        methods.Meeting_Participant = (function() {
+
+            /**
+             * Properties of a Meeting_Participant.
+             * @typedef {Object} lingcat.methods.Meeting_Participant.$Properties
+             * @property {string|null} [identity] Meeting_Participant identity
+             * @property {string|null} [userId] Meeting_Participant userId
+             * @property {string|null} [nickname] Meeting_Participant nickname
+             * @property {string|null} [remark] Meeting_Participant remark
+             * @property {string|null} [avatarFileHash] Meeting_Participant avatarFileHash
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Meeting_Participant.
+             * @memberof lingcat.methods
+             * @interface IMeeting_Participant
+             * @augments lingcat.methods.Meeting_Participant.$Properties
+             * @deprecated Use lingcat.methods.Meeting_Participant.$Properties instead.
+             */
+
+            /**
+             * Shape of a Meeting_Participant.
+             * @typedef {lingcat.methods.Meeting_Participant.$Properties} lingcat.methods.Meeting_Participant.$Shape
+             */
+
+            /**
+             * Constructs a new Meeting_Participant.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Meeting_Participant.
+             * @constructor
+             * @param {lingcat.methods.Meeting_Participant.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Meeting_Participant = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Meeting_Participant identity.
+             * @member {string} identity
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             */
+            Meeting_Participant.prototype.identity = "";
+
+            /**
+             * Meeting_Participant userId.
+             * @member {string|null|undefined} userId
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             */
+            Meeting_Participant.prototype.userId = null;
+
+            /**
+             * Meeting_Participant nickname.
+             * @member {string|null|undefined} nickname
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             */
+            Meeting_Participant.prototype.nickname = null;
+
+            /**
+             * Meeting_Participant remark.
+             * @member {string|null|undefined} remark
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             */
+            Meeting_Participant.prototype.remark = null;
+
+            /**
+             * Meeting_Participant avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             */
+            Meeting_Participant.prototype.avatarFileHash = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Meeting_Participant.prototype, "_userId", {
+                get: $util.oneOfGetter($oneOfFields = ["userId"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Meeting_Participant.prototype, "_nickname", {
+                get: $util.oneOfGetter($oneOfFields = ["nickname"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Meeting_Participant.prototype, "_remark", {
+                get: $util.oneOfGetter($oneOfFields = ["remark"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Meeting_Participant.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Meeting_Participant instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {lingcat.methods.Meeting_Participant.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Meeting_Participant} Meeting_Participant instance
+             * @type {{
+             *   (properties: lingcat.methods.Meeting_Participant.$Shape): lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape;
+             *   (properties?: lingcat.methods.Meeting_Participant.$Properties): lingcat.methods.Meeting_Participant;
+             * }}
+             */
+            Meeting_Participant.create = function(properties) {
+                return new Meeting_Participant(properties);
+            };
+
+            /**
+             * Encodes the specified Meeting_Participant message. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {lingcat.methods.Meeting_Participant.$Properties} message Meeting_Participant message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Meeting_Participant.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity") && message.identity !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.identity);
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.remark);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.avatarFileHash);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Meeting_Participant message, length delimited. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {lingcat.methods.Meeting_Participant.$Properties} message Meeting_Participant message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Meeting_Participant.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Meeting_Participant message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Meeting_Participant.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Meeting_Participant();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.identity = value;
+                            else
+                                delete message.identity;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.userId = reader.stringVerify();
+                            message._userId = "userId";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            message.nickname = reader.stringVerify();
+                            message._nickname = "nickname";
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.remark = reader.stringVerify();
+                            message._remark = "remark";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Meeting_Participant message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Meeting_Participant.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Meeting_Participant message.
+             * @function verify
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Meeting_Participant.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                    if (!$util.isString(message.identity))
+                        return "identity: string expected";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId")) {
+                    properties._userId = 1;
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                }
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname")) {
+                    properties._nickname = 1;
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
+                }
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark")) {
+                    properties._remark = 1;
+                    if (!$util.isString(message.remark))
+                        return "remark: string expected";
+                }
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Meeting_Participant message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Meeting_Participant} Meeting_Participant
+             */
+            Meeting_Participant.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Meeting_Participant)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Meeting_Participant: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Meeting_Participant();
+                if (object.identity != null)
+                    if (typeof object.identity !== "string" || object.identity.length)
+                        message.identity = $String(object.identity);
+                if (object.userId != null)
+                    message.userId = $String(object.userId);
+                if (object.nickname != null)
+                    message.nickname = $String(object.nickname);
+                if (object.remark != null)
+                    message.remark = $String(object.remark);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Meeting_Participant message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {lingcat.methods.Meeting_Participant} message Meeting_Participant
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Meeting_Participant.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.identity = "";
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                    object.identity = message.identity;
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    object.nickname = message.nickname;
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
+                    object.remark = message.remark;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                return object;
+            };
+
+            /**
+             * Converts this Meeting_Participant to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Meeting_Participant
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Meeting_Participant.prototype.toJSON = function() {
+                return Meeting_Participant.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Meeting_Participant
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Meeting_Participant
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Meeting_Participant.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Meeting_Participant";
+            };
+
+            return Meeting_Participant;
+        })();
+
+        methods.Get_Meeting_Participants_Response = (function() {
+
+            /**
+             * Properties of a Get_Meeting_Participants_Response.
+             * @typedef {Object} lingcat.methods.Get_Meeting_Participants_Response.$Properties
+             * @property {string|null} [meetingId] Get_Meeting_Participants_Response meetingId
+             * @property {string|null} [room] Get_Meeting_Participants_Response room
+             * @property {number|null} [count] Get_Meeting_Participants_Response count
+             * @property {Array.<lingcat.methods.Meeting_Participant.$Properties>|null} [participants] Get_Meeting_Participants_Response participants
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Meeting_Participants_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_Meeting_Participants_Response
+             * @augments lingcat.methods.Get_Meeting_Participants_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_Meeting_Participants_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Meeting_Participants_Response.
+             * @typedef {lingcat.methods.Get_Meeting_Participants_Response.$Properties} lingcat.methods.Get_Meeting_Participants_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Meeting_Participants_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Meeting_Participants_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_Meeting_Participants_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Meeting_Participants_Response = function (properties) {
+                this.participants = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Meeting_Participants_Response meetingId.
+             * @member {string} meetingId
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @instance
+             */
+            Get_Meeting_Participants_Response.prototype.meetingId = "";
+
+            /**
+             * Get_Meeting_Participants_Response room.
+             * @member {string} room
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @instance
+             */
+            Get_Meeting_Participants_Response.prototype.room = "";
+
+            /**
+             * Get_Meeting_Participants_Response count.
+             * @member {number} count
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @instance
+             */
+            Get_Meeting_Participants_Response.prototype.count = 0;
+
+            /**
+             * Get_Meeting_Participants_Response participants.
+             * @member {Array.<lingcat.methods.Meeting_Participant.$Properties>} participants
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @instance
+             */
+            Get_Meeting_Participants_Response.prototype.participants = $util.emptyArray;
+
+            /**
+             * Creates a new Get_Meeting_Participants_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Meeting_Participants_Response} Get_Meeting_Participants_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Meeting_Participants_Response.$Shape): lingcat.methods.Get_Meeting_Participants_Response & lingcat.methods.Get_Meeting_Participants_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_Meeting_Participants_Response.$Properties): lingcat.methods.Get_Meeting_Participants_Response;
+             * }}
+             */
+            Get_Meeting_Participants_Response.create = function(properties) {
+                return new Get_Meeting_Participants_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Meeting_Participants_Response message. Does not implicitly {@link lingcat.methods.Get_Meeting_Participants_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Response.$Properties} message Get_Meeting_Participants_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Meeting_Participants_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId") && message.meetingId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.meetingId);
+                if (message.room != null && $Object.hasOwnProperty.call(message, "room") && message.room !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.room);
+                if (message.count != null && $Object.hasOwnProperty.call(message, "count") && message.count !== 0)
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.count);
+                if (message.participants != null && message.participants.length)
+                    for (let i = 0; i < message.participants.length; ++i)
+                        $root.lingcat.methods.Meeting_Participant.encode(message.participants[i], writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Meeting_Participants_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_Meeting_Participants_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Response.$Properties} message Get_Meeting_Participants_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Meeting_Participants_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Meeting_Participants_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Meeting_Participants_Response & lingcat.methods.Get_Meeting_Participants_Response.$Shape} Get_Meeting_Participants_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Meeting_Participants_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_Meeting_Participants_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.meetingId = value;
+                            else
+                                delete message.meetingId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.room = value;
+                            else
+                                delete message.room;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.count = value;
+                            else
+                                delete message.count;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.participants && message.participants.length))
+                                message.participants = [];
+                            message.participants.push($root.lingcat.methods.Meeting_Participant.decode(reader, reader.uint32(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Meeting_Participants_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Meeting_Participants_Response & lingcat.methods.Get_Meeting_Participants_Response.$Shape} Get_Meeting_Participants_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Meeting_Participants_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a Get_Meeting_Participants_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Meeting_Participants_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId"))
+                    if (!$util.isString(message.meetingId))
+                        return "meetingId: string expected";
+                if (message.room != null && $Object.hasOwnProperty.call(message, "room"))
+                    if (!$util.isString(message.room))
+                        return "room: string expected";
+                if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                    if (!$util.isInteger(message.count))
+                        return "count: integer expected";
+                if (message.participants != null && $Object.hasOwnProperty.call(message, "participants")) {
+                    if (!$Array.isArray(message.participants))
+                        return "participants: array expected";
+                    for (let i = 0; i < message.participants.length; ++i) {
+                        let error = $root.lingcat.methods.Meeting_Participant.verify(message.participants[i], _depth + 1);
+                        if (error)
+                            return "participants." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Meeting_Participants_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Meeting_Participants_Response} Get_Meeting_Participants_Response
+             */
+            Get_Meeting_Participants_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Meeting_Participants_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Meeting_Participants_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Meeting_Participants_Response();
+                if (object.meetingId != null)
+                    if (typeof object.meetingId !== "string" || object.meetingId.length)
+                        message.meetingId = $String(object.meetingId);
+                if (object.room != null)
+                    if (typeof object.room !== "string" || object.room.length)
+                        message.room = $String(object.room);
+                if (object.count != null)
+                    if ($Number(object.count) !== 0)
+                        message.count = object.count >>> 0;
+                if (object.participants) {
+                    if (!$Array.isArray(object.participants))
+                        throw $TypeError(".lingcat.methods.Get_Meeting_Participants_Response.participants: array expected");
+                    message.participants = $Array(object.participants.length);
+                    for (let i = 0; i < object.participants.length; ++i) {
+                        if (!$util.isObject(object.participants[i]))
+                            throw $TypeError(".lingcat.methods.Get_Meeting_Participants_Response.participants: object expected");
+                        message.participants[i] = $root.lingcat.methods.Meeting_Participant.fromObject(object.participants[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Meeting_Participants_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {lingcat.methods.Get_Meeting_Participants_Response} message Get_Meeting_Participants_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Meeting_Participants_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.participants = [];
+                if (options.defaults) {
+                    object.meetingId = "";
+                    object.room = "";
+                    object.count = 0;
+                }
+                if (message.meetingId != null && $Object.hasOwnProperty.call(message, "meetingId"))
+                    object.meetingId = message.meetingId;
+                if (message.room != null && $Object.hasOwnProperty.call(message, "room"))
+                    object.room = message.room;
+                if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                    object.count = message.count;
+                if (message.participants && message.participants.length) {
+                    object.participants = $Array(message.participants.length);
+                    for (let j = 0; j < message.participants.length; ++j)
+                        object.participants[j] = $root.lingcat.methods.Meeting_Participant.toObject(message.participants[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_Meeting_Participants_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Meeting_Participants_Response.prototype.toJSON = function() {
+                return Get_Meeting_Participants_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Meeting_Participants_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Meeting_Participants_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Meeting_Participants_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Meeting_Participants_Response";
+            };
+
+            return Get_Meeting_Participants_Response;
+        })();
+
         return methods;
     })();
 

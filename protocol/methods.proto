@@ -455,3 +455,35 @@ message Unbind_OAuth_Request {
 }
 
 message Unbind_OAuth_Response {}
+
+/**
+ * =======================================================
+ *                 会议在场成员
+ * =======================================================
+ */
+
+// 查询会议在场成员 (供横幅显示人数/头像堆叠)
+message Get_Meeting_Participants_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    // 不传则用 chat 当前活跃的会议
+    optional string meeting_id = 3;
+}
+
+message Meeting_Participant {
+    // LiveKit identity
+    string identity = 1;
+    optional string user_id = 2;
+    optional string nickname = 3;
+    // 主播备注 (机器人)
+    optional string remark = 4;
+    optional string avatar_file_hash = 5;
+}
+
+// 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
+message Get_Meeting_Participants_Response {
+    string meeting_id = 1;
+    string room = 2;
+    uint32 count = 3;
+    repeated Meeting_Participant participants = 4;
+}
