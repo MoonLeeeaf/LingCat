@@ -36,9 +36,13 @@ public class MeetingForegroundService extends Service {
     private static final String ACTION_START = "io.github.moonleeeaf.lingcat.MEETING_START";
     private static final String ACTION_HANGUP = "io.github.moonleeeaf.lingcat.MEETING_HANGUP";
 
-    public static void start(Context ctx, String chatTitle) {
+    private static final String EXTRA_CHAT_ID = "chat_id";
+    private String chatId;   // ★ 新增字段
+
+    public static void start(Context ctx, String chatId, String chatTitle) {
         Intent i = new Intent(ctx, MeetingForegroundService.class);
         i.setAction(ACTION_START);
+        i.putExtra(EXTRA_CHAT_ID, chatId);
         i.putExtra(EXTRA_CHAT_TITLE, chatTitle);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ctx.startForegroundService(i);
@@ -71,8 +75,14 @@ public class MeetingForegroundService extends Service {
         }
 
         if (intent != null) {
+            String c = intent.getStringExtra(EXTRA_CHAT_ID);
+            if (c != null && !c.isEmpty()) chatId = c;
             String t = intent.getStringExtra(EXTRA_CHAT_TITLE);
             if (t != null) chatTitle = t;
+        }
+// ★ 兜底：如果 Service 是系统重建、extras 丢失，从 MeetingManager 拿
+        if (chatId == null) {
+            chatId = MeetingManager.get().getCurrentChatId();
         }
 
         Notification n = buildNotification();
@@ -109,8 +119,10 @@ public class MeetingForegroundService extends Service {
         // 点击 → 打开 MeetingActivity
         Intent click = new Intent(this, MeetingActivity.class);
         click.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        click.putExtra(MeetingActivity.EXTRA_CHAT_ID, chatId);              // ★
+        click.putExtra(MeetingActivity.EXTRA_CHAT_TITLE, chatTitle);        // ★
         PendingIntent clickPi = PendingIntent.getActivity(
-                this, 0, click,
+                this, chatId != null ? chatId.hashCode() : 0, click,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         // 挂断 → 回到 Service 自己处理
@@ -121,7 +133,7 @@ public class MeetingForegroundService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_videocam)
+                .setSmallIcon(R.drawable.ic_call)
                 .setContentTitle("正在会议中")
                 .setContentText(chatTitle != null ? chatTitle : "点击返回会议")
                 .setContentIntent(clickPi)

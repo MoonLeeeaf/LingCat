@@ -5,18 +5,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +24,12 @@ import io.github.moonleeeaf.lingcat.data.Account;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
-import io.livekit.android.renderer.TextureViewRenderer;
 import io.livekit.android.room.participant.Participant;
 import lingcat.client_protocol.LingCatClient;
 import lingcat.client_protocol.MeetingApi;
 import livekit.org.webrtc.EglBase;
 import livekit.org.webrtc.SurfaceViewRenderer;
 import moon3.app.Activity;
-import moon3.app.MaterialDialog;
 import moon3.utils.FastToast;
 
 /**
@@ -66,8 +60,17 @@ public class MeetingActivity extends Activity {
     // 从 GridLayout 改成 LinearLayout
     private android.widget.LinearLayout videoGrid;
     private final java.util.Map<String, ParticipantTile> tiles = new java.util.LinkedHashMap<>();
+    private static class ParticipantState {
+        String name;
+        boolean cameraOn;
+        boolean screenOn;
+    }
+
+    /** identity -> 状态 */
+    private final java.util.Map<String, ParticipantState> participantStates = new java.util.LinkedHashMap<>();
 
     private EglBase eglBase;
+    private boolean isReusingController = false;
 
     private class ParticipantTile {
         final String id;              // tile 唯一 key：{identity}:{source}
@@ -80,6 +83,7 @@ public class MeetingActivity extends Activity {
         final TextView nameTv;
         final ImageView micIcon;
         io.livekit.android.room.track.VideoTrack videoTrack;
+        private boolean rendererInited = false;
 
         ParticipantTile(String id, boolean isLocal, String source) {
             this.id = id;
@@ -117,6 +121,19 @@ public class MeetingActivity extends Activity {
             }
             videoTrack = track;
             if (track != null) {
+                if (!rendererInited) {
+                    rendererInited = true;   // ★ 先置位，无论 init 是否成功
+                    try {
+                        renderer.init(eglBase.getEglBaseContext(), null);
+                        renderer.setEnableHardwareScaler(true);
+                        renderer.setMirror(isLocal && "camera".equals(source));
+                    } catch (IllegalStateException e) {
+                        // 已初始化（可能上次 release 未清干净），忽略
+                        Log.w(TAG, "renderer already inited, ignoring", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "renderer init failed", e);
+                    }
+                }
                 track.addRenderer(renderer);
                 placeholder.setVisibility(View.GONE);
             } else {
@@ -126,8 +143,57 @@ public class MeetingActivity extends Activity {
 
         void release() {
             try { attachVideo(null); } catch (Exception ignored) {}
-            try { renderer.release(); } catch (Exception ignored) {}
+            if (rendererInited) {
+                rendererInited = false;   // ★ 先置位，无论 release 是否成功
+                try { renderer.release(); } catch (Exception ignored) {}
+            }
         }
+    }
+
+    /**
+     * 根据 participantState 决定该参与者应该有哪些 tile。
+     * - cameraOn 或 screenOn → 移除 auto，保证对应 tile 存在
+     * - 都 false → 移除 camera/screen，保证 auto tile 存在
+     */
+    private void ensureTiles(String identity) {
+        ParticipantState st = participantStates.get(identity);
+        if (st == null) return;
+
+        boolean hasVideo = st.cameraOn || st.screenOn;
+        String cameraKey = tileKey(identity, "camera");
+        String screenKey = tileKey(identity, "screen");
+        String autoKey   = tileKey(identity, "auto");
+        boolean isLocal  = "__local__".equals(identity);
+
+        if (hasVideo) {
+            // 移除 auto
+            ParticipantTile auto = tiles.remove(autoKey);
+            if (auto != null) auto.release();
+
+            if (st.cameraOn && !tiles.containsKey(cameraKey)) {
+                ParticipantTile t = new ParticipantTile(cameraKey, isLocal, "camera");
+                t.setName(st.name);
+                tiles.put(cameraKey, t);
+            }
+            if (st.screenOn && !tiles.containsKey(screenKey)) {
+                ParticipantTile t = new ParticipantTile(screenKey, isLocal, "screen");
+                t.setName(st.name);
+                tiles.put(screenKey, t);
+            }
+        } else {
+            ParticipantTile c = tiles.remove(cameraKey);
+            if (c != null) c.release();
+            ParticipantTile s = tiles.remove(screenKey);
+            if (s != null) s.release();
+
+            if (!tiles.containsKey(autoKey)) {
+                ParticipantTile t = new ParticipantTile(autoKey, isLocal, "auto");
+                t.setName(st.name);
+                tiles.put(autoKey, t);
+            }
+        }
+
+        rebuildGrid();
     }
 
     private static String tileKey(String identity, String source) {
@@ -144,32 +210,16 @@ public class MeetingActivity extends Activity {
             new MeetingRoomController.Listener() {
                 @Override public void onConnected() {
                     runOnUiThread(() -> {
-                        connected = true;
-                        statusTv.setVisibility(View.GONE);
+                        onConnectedImpl();
                         snack("已连接");
-
-                        // 启动前台服务保持后台通话
-                        try {
-                            io.github.moonleeeaf.lingcat.chat.meeting.MeetingForegroundService
-                                    .start(MeetingActivity.this, chatTitle);
-                        } catch (Exception e) {
-                            Log.w(TAG, "start meeting fg service failed", e);
-                        }
-
-                        if (controller != null) {
-                            controller.setMicrophoneEnabled(micEnabled);
-                            controller.setCameraEnabled(cameraEnabled);
-                        }
-
-                        addOrUpdateLocalTiles();
                     });
                 }
                 @Override public void onDisconnected() {
                     runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
                         connected = false;
                         try {
-                            io.github.moonleeeaf.lingcat.chat.meeting.MeetingForegroundService
-                                    .stop(MeetingActivity.this);
+                            MeetingForegroundService.stop(MeetingActivity.this);
                         } catch (Exception ignored) {}
                         statusTv.setText("已断开");
                         statusTv.setVisibility(View.VISIBLE);
@@ -187,8 +237,12 @@ public class MeetingActivity extends Activity {
                 }
                 @Override public void onParticipantJoined(io.livekit.android.room.participant.Participant p) {
                     runOnUiThread(() -> {
-                        Log.i(TAG, "participant joined: " + idOf(p));
-                        // 不创建 tile，等 TrackSubscribed
+                        String id = idOf(p);
+                        Log.i(TAG, "participant joined: " + id);
+                        ParticipantState st = new ParticipantState();
+                        st.name = displayNameOf(p);
+                        participantStates.put(id, st);
+                        ensureTiles(id);   // ★ 立即建 auto tile
                     });
                 }
 
@@ -196,6 +250,8 @@ public class MeetingActivity extends Activity {
                     runOnUiThread(() -> {
                         String id = idOf(p);
                         Log.i(TAG, "participant left: " + id);
+                        participantStates.remove(id);
+
                         java.util.List<String> toRemove = new java.util.ArrayList<>();
                         for (String k : tiles.keySet()) {
                             if (k.startsWith(id + ":")) toRemove.add(k);
@@ -215,16 +271,20 @@ public class MeetingActivity extends Activity {
                     runOnUiThread(() -> {
                         String id = idOf(p);
                         String src = sourceName(source);
-                        String key = tileKey(id, src);
 
-                        ParticipantTile tile = tiles.get(key);
-                        if (tile == null) {
-                            tile = new ParticipantTile(key, false, src);
-                            tile.setName(displayNameOf(p));
-                            tiles.put(key, tile);
-                            rebuildGrid();
+                        ParticipantState st = participantStates.get(id);
+                        if (st == null) {
+                            st = new ParticipantState();
+                            st.name = displayNameOf(p);
+                            participantStates.put(id, st);
                         }
-                        tile.attachVideo(t);
+                        if ("camera".equals(src)) st.cameraOn = true;
+                        else if ("screen".equals(src)) st.screenOn = true;
+
+                        ensureTiles(id);
+
+                        ParticipantTile tile = tiles.get(tileKey(id, src));
+                        if (tile != null) tile.attachVideo(t);
                     });
                 }
 
@@ -233,9 +293,15 @@ public class MeetingActivity extends Activity {
                         io.livekit.android.room.track.VideoTrack t,
                         io.livekit.android.room.track.Track.Source source) {
                     runOnUiThread(() -> {
-                        String key = tileKey(idOf(p), sourceName(source));
-                        ParticipantTile tile = tiles.get(key);
-                        if (tile != null) tile.attachVideo(null);
+                        String id = idOf(p);
+                        String src = sourceName(source);
+
+                        ParticipantState st = participantStates.get(id);
+                        if (st != null) {
+                            if ("camera".equals(src)) st.cameraOn = false;
+                            else if ("screen".equals(src)) st.screenOn = false;
+                        }
+                        ensureTiles(id);
                     });
                 }
 
@@ -243,14 +309,81 @@ public class MeetingActivity extends Activity {
                         io.livekit.android.room.track.VideoTrack t,
                         io.livekit.android.room.track.Track.Source source) {
                     runOnUiThread(() -> {
+                        String id = "__local__";
                         String src = sourceName(source);
-                        ensureLocalTile(src, t);
+
+                        ParticipantState st = participantStates.get(id);
+                        if (st == null) {
+                            st = new ParticipantState();
+                            st.name = "我";
+                            participantStates.put(id, st);
+                        }
+                        if ("camera".equals(src)) st.cameraOn = true;
+                        else if ("screen".equals(src)) st.screenOn = true;
+
+                        ensureTiles(id);
+
+                        ParticipantTile tile = tiles.get(tileKey(id, src));
+                        if (tile != null) tile.attachVideo(t);
                     });
                 }
                 @Override public void onError(Throwable t) {
                     runOnUiThread(() -> snack("错误: " + t.getMessage()));
                 }
+                @Override public void onInitialState(List<? extends Participant> participants) {
+                    runOnUiThread(() -> {
+                        if (isFinishing()) return;
+                        for (io.livekit.android.room.participant.Participant p : participants) {
+                            String id = idOf(p);
+                            Log.i(TAG, "init participant: " + id);
+
+                            // 1. 建 ParticipantState（没有就建）
+                            ParticipantState st = participantStates.get(id);
+                            if (st == null) {
+                                st = new ParticipantState();
+                                st.name = displayNameOf(p);
+                                participantStates.put(id, st);
+                            }
+
+                            // 2. 探测该参与者已发布的 track
+                            try {
+                                io.livekit.android.room.track.TrackPublication camPub =
+                                        p.getTrackPublication(io.livekit.android.room.track.Track.Source.CAMERA);
+                                if (camPub != null && camPub.getTrack() instanceof io.livekit.android.room.track.VideoTrack) {
+                                    st.cameraOn = true;
+                                    final io.livekit.android.room.track.VideoTrack vt =
+                                            (io.livekit.android.room.track.VideoTrack) camPub.getTrack();
+                                    // 建 tile + attach
+                                    ensureTiles(id);
+                                    ParticipantTile t = tiles.get(tileKey(id, "camera"));
+                                    if (t != null) t.attachVideo(vt);
+                                } else {
+                                    st.cameraOn = false;
+                                }
+
+                                io.livekit.android.room.track.TrackPublication scrPub =
+                                        p.getTrackPublication(io.livekit.android.room.track.Track.Source.SCREEN_SHARE);
+                                if (scrPub != null && scrPub.getTrack() instanceof io.livekit.android.room.track.VideoTrack) {
+                                    st.screenOn = true;
+                                    final io.livekit.android.room.track.VideoTrack vt =
+                                            (io.livekit.android.room.track.VideoTrack) scrPub.getTrack();
+                                    ensureTiles(id);
+                                    ParticipantTile t = tiles.get(tileKey(id, "screen"));
+                                    if (t != null) t.attachVideo(vt);
+                                } else {
+                                    st.screenOn = false;
+                                }
+                            } catch (Exception e) {
+                                Log.w(TAG, "probe existing tracks failed: " + e.getMessage());
+                            }
+
+                            // 3. 保证 tile 存在（无视频会建 auto）
+                            ensureTiles(id);
+                        }
+                    });
+                }
             };
+
 
     // ============================================================
 //                      参与者 tile 管理
@@ -277,10 +410,30 @@ public class MeetingActivity extends Activity {
 
     private void addOrUpdateLocalTiles() {
         if (controller == null) return;
+
+        ParticipantState st = participantStates.get("__local__");
+        if (st == null) {
+            st = new ParticipantState();
+            st.name = "我";
+            participantStates.put("__local__", st);
+        }
+
         io.livekit.android.room.track.VideoTrack cam = controller.getLocalCameraTrack();
         io.livekit.android.room.track.VideoTrack scr = controller.getLocalScreenShareTrack();
-        if (cam != null) ensureLocalTile("camera", cam);
-        if (scr != null) ensureLocalTile("screen", scr);
+
+        st.cameraOn = (cam != null);
+        st.screenOn = (scr != null);
+
+        ensureTiles("__local__");
+
+        if (cam != null) {
+            ParticipantTile t = tiles.get(tileKey("__local__", "camera"));
+            if (t != null) t.attachVideo(cam);
+        }
+        if (scr != null) {
+            ParticipantTile t = tiles.get(tileKey("__local__", "screen"));
+            if (t != null) t.attachVideo(scr);
+        }
     }
 
     private void ensureLocalTile(String src, io.livekit.android.room.track.VideoTrack track) {
@@ -392,15 +545,24 @@ public class MeetingActivity extends Activity {
 
         chatId = getIntent().getStringExtra(EXTRA_CHAT_ID);
         chatTitle = getIntent().getStringExtra(EXTRA_CHAT_TITLE);
-        isStarter = getIntent().getBooleanExtra(EXTRA_IS_STARTER, false);
 
-        setTitle(chatTitle == null ? "会议" : chatTitle);
+// ★ 兜底：通知栏/入口没带 extras 时，从 MeetingManager 恢复
+        if ((chatId == null || chatId.isEmpty())) {
+            String cur = MeetingManager.get().getCurrentChatId();
+            if (cur != null && !cur.isEmpty()) {
+                chatId = cur;
+                Log.w(TAG, "recovered chatId from MeetingManager: " + cur);
+            }
+        }
 
         if (chatId == null || chatId.isEmpty()) {
             snack("缺少 chatId");
             finish();
             return;
         }
+        isStarter = getIntent().getBooleanExtra(EXTRA_IS_STARTER, false);
+
+        setTitle(chatTitle == null ? "会议" : chatTitle);
 
         statusTv = findViewById(R.id.meeting_status);
         micBtn = findViewById(R.id.btn_toggle_mic);
@@ -419,26 +581,37 @@ public class MeetingActivity extends Activity {
             cameraEnabled = !cameraEnabled;
             controller.setCameraEnabled(cameraEnabled);
             cameraBtn.setAlpha(cameraEnabled ? 1.0f : 0.4f);
+
+            // ★ 同步本地状态（如果 Kotlin 有 LocalTrackUnpublished 事件，这个会被覆盖一次，无害）
+            ParticipantState st = participantStates.get("__local__");
+            if (st != null) {
+                st.cameraOn = cameraEnabled;
+                ensureTiles("__local__");
+                if (cameraEnabled && controller != null) {
+                    io.livekit.android.room.track.VideoTrack cam = controller.getLocalCameraTrack();
+                    if (cam != null) {
+                        ParticipantTile t = tiles.get(tileKey("__local__", "camera"));
+                        if (t != null) t.attachVideo(cam);
+                    }
+                }
+            }
         });
 
         hangupBtn.setOnClickListener(v -> hangup());
 
-        requestPermsIfNeeded();
-
         eglBase = EglBase.create();
-
-// 视频容器
         androidx.core.widget.NestedScrollView scroll =
                 findViewById(R.id.meeting_video_container);
-
         videoGrid = new android.widget.LinearLayout(this);
         videoGrid.setOrientation(android.widget.LinearLayout.VERTICAL);
         int p = dp(8);
         videoGrid.setPadding(p, p, p, p);
-
         scroll.addView(videoGrid, new androidx.core.widget.NestedScrollView.LayoutParams(
                 androidx.core.widget.NestedScrollView.LayoutParams.MATCH_PARENT,
                 androidx.core.widget.NestedScrollView.LayoutParams.WRAP_CONTENT));
+
+// ★ 然后才请求权限 / 连接
+        requestPermsIfNeeded();
     }
 
     private int dp(int v) {
@@ -505,7 +678,136 @@ public class MeetingActivity extends Activity {
     //                      连接
     // ============================================================
 
+    /** 连接完成后的统一处理：前台服务 + 应用开关 + 重建 UI */
+    /** 连接完成后的统一处理：前台服务 + 应用开关 + 重建 UI */
+    private void onConnectedImpl() {
+        if (isFinishing() || isDestroyed()) return;
+        connected = true;
+        statusTv.setVisibility(View.GONE);
+
+        try {
+            MeetingForegroundService.start(this, chatId, chatTitle);   // ★ 增加 chatId
+        } catch (Exception e) {
+            Log.w(TAG, "start meeting fg service failed", e);
+        }
+
+        if (controller != null) {
+            controller.setMicrophoneEnabled(micEnabled);
+            controller.setCameraEnabled(cameraEnabled);
+        }
+
+        // 清空旧 UI
+        for (ParticipantTile t : tiles.values()) {
+            try { t.release(); } catch (Exception ignored) {}
+        }
+        tiles.clear();
+        participantStates.clear();
+
+        // ★ 重建所有 tile
+        rebuildAllTiles();
+    }
+
+    @Override
+    protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        String newChatId = intent.getStringExtra(EXTRA_CHAT_ID);
+        String newChatTitle = intent.getStringExtra(EXTRA_CHAT_TITLE);
+        if (newChatId == null || newChatId.isEmpty()) {
+            newChatId = MeetingManager.get().getCurrentChatId();
+        }
+        if (newChatId == null || newChatId.isEmpty()) {
+            // 完全拿不到 → 保持现状，不切换
+            return;
+        }
+
+        // 不同会议：先结束当前，再启动新的
+        Log.i(TAG, "switch meeting: " + chatId + " -> " + newChatId);
+        MeetingManager.get().leave();
+
+        chatId = newChatId;
+        chatTitle = newChatTitle;
+        setTitle(chatTitle == null ? "会议" : chatTitle);
+
+        // 清空 UI 重新连接
+        for (ParticipantTile t : tiles.values()) {
+            try { t.release(); } catch (Exception ignored) {}
+        }
+        tiles.clear();
+        participantStates.clear();
+        rebuildGrid();
+
+        if (controller != null) {
+            controller.updateListener(null);
+            controller = null;
+        }
+
+        proceedConnect();
+    }
+
+    /** 遍历 controller 里所有参与者，重建 tile */
+    private void rebuildAllTiles() {
+        if (controller == null) return;
+
+        // 本地
+        addOrUpdateLocalTiles();
+
+        // 远端
+        for (io.livekit.android.room.participant.Participant p : controller.getRemoteParticipants()) {
+            String id = idOf(p);
+            ParticipantState st = participantStates.get(id);
+            if (st == null) {
+                st = new ParticipantState();
+                st.name = displayNameOf(p);
+                participantStates.put(id, st);
+            }
+
+            // 探测该 participant 已发布的 track
+            try {
+                io.livekit.android.room.track.TrackPublication camPub =
+                        p.getTrackPublication(io.livekit.android.room.track.Track.Source.CAMERA);
+                if (camPub != null
+                        && camPub.getTrack() instanceof io.livekit.android.room.track.VideoTrack) {
+                    st.cameraOn = true;
+                    final io.livekit.android.room.track.VideoTrack vt =
+                            (io.livekit.android.room.track.VideoTrack) camPub.getTrack();
+                    ensureTiles(id);
+                    ParticipantTile t = tiles.get(tileKey(id, "camera"));
+                    if (t != null) t.attachVideo(vt);
+                }
+
+                io.livekit.android.room.track.TrackPublication scrPub =
+                        p.getTrackPublication(io.livekit.android.room.track.Track.Source.SCREEN_SHARE);
+                if (scrPub != null
+                        && scrPub.getTrack() instanceof io.livekit.android.room.track.VideoTrack) {
+                    st.screenOn = true;
+                    final io.livekit.android.room.track.VideoTrack vt =
+                            (io.livekit.android.room.track.VideoTrack) scrPub.getTrack();
+                    ensureTiles(id);
+                    ParticipantTile t = tiles.get(tileKey(id, "screen"));
+                    if (t != null) t.attachVideo(vt);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "probe tracks failed: " + e.getMessage());
+            }
+
+            // 兜底：无视频时建 auto tile
+            ensureTiles(id);
+        }
+    }
+
     private void proceedConnect() {
+        MeetingManager mgr = MeetingManager.get();
+        MeetingRoomController existing = mgr.getCurrentController();
+        if (existing != null && mgr.isInMeeting(chatId)) {
+            Log.i(TAG, "reusing existing meeting controller");
+            isReusingController = true;
+            controller = existing;
+            controller.updateListener(roomListener);
+            onConnectedImpl();
+            return;
+        }
         statusTv.setText("正在获取会议令牌...");
         statusTv.setVisibility(View.VISIBLE);
 
@@ -624,22 +926,18 @@ public class MeetingActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        try {
-            io.github.moonleeeaf.lingcat.chat.meeting.MeetingForegroundService
-                    .stop(this);
-        } catch (Exception ignored) {}
-
+        // ★ 卸载 listener——Activity 即将销毁，不要再接收回调
         if (controller != null) {
-            try { controller.disconnect(); } catch (Exception ignored) {}
-            controller = null;
+            controller.updateListener(null);
         }
-        MeetingManager.get().detach();
+        controller = null;
 
         // 释放所有 tile
         for (ParticipantTile t : tiles.values()) {
             try { t.release(); } catch (Exception ignored) {}
         }
         tiles.clear();
+        participantStates.clear();
 
         // 释放 EglBase
         if (eglBase != null) {
@@ -647,14 +945,13 @@ public class MeetingActivity extends Activity {
             eglBase = null;
         }
 
+        // ★ 不调用 MeetingForegroundService.stop
+        // ★ 不调用 MeetingManager.get().detach()
+        // ★ 不调用 controller.disconnect()
+
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        hangup();
-    }
 
     // ============================================================
     //                      Snackbar

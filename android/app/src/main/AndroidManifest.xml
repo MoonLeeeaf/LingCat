@@ -74,6 +74,7 @@
 
         <activity
             android:name=".chat.meeting.MeetingActivity"
+            android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
 

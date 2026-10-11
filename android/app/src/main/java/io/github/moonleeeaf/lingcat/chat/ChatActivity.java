@@ -383,7 +383,7 @@ public class ChatActivity extends Activity {
                 MENU_CALL,
                 android.view.Menu.NONE,
                 "会议");
-        item.setIcon(R.drawable.ic_videocam);
+        item.setIcon(R.drawable.ic_call);
         item.setShowAsAction(android.view.MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
@@ -590,6 +590,8 @@ public class ChatActivity extends Activity {
         if (mgr.isInMeeting(chatId)) {
             android.content.Intent i = new android.content.Intent(
                     this, io.github.moonleeeaf.lingcat.chat.meeting.MeetingActivity.class);
+            i.putExtra(io.github.moonleeeaf.lingcat.chat.meeting.MeetingActivity.EXTRA_CHAT_ID, chatId);      // ★
+            i.putExtra(io.github.moonleeeaf.lingcat.chat.meeting.MeetingActivity.EXTRA_CHAT_TITLE, chatTitle); // ★
             i.addFlags(android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(i);
             return;

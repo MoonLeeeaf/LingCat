@@ -157,15 +157,35 @@ public final class MeetingManager {
      * @param isStarter true = 我是发起人（会先调 MeetingApi.startMeeting）
      */
     public void openMeeting(Context ctx, String chatId, String title, boolean isStarter) {
+        // ★ 若正在别的会议里，先静默断开旧会议
+        if (currentChatId != null && !currentChatId.equals(chatId)) {
+            final String oldChatId = currentChatId;
+            MeetingRoomController c = currentController;
+            if (c != null) {
+                c.updateListener(null);   // ★ 先卸载监听，避免 onDisconnected 把旧 Activity finish 掉
+                try { c.disconnect(); } catch (Exception ignored) {}
+            }
+            detach();
+            Log.i(TAG, "switched meeting: " + oldChatId + " -> " + chatId);
+        }
+
         Intent i = new Intent(ctx, MeetingActivity.class);
         i.putExtra(MeetingActivity.EXTRA_CHAT_ID, chatId);
         i.putExtra(MeetingActivity.EXTRA_CHAT_TITLE, title);
         i.putExtra(MeetingActivity.EXTRA_IS_STARTER, isStarter);
+        if (!(ctx instanceof android.app.Activity)) {
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         ctx.startActivity(i);
     }
 
     /** 由 MeetingActivity 在连接成功后调用 */
     public void attach(String chatId, MeetingRoomController controller) {
+        // ★ 防御：覆盖旧 controller 时报警，方便将来发现同类泄漏
+        if (this.currentController != null && this.currentController != controller) {
+            Log.w(TAG, "attach overriding existing controller, chatId=" + this.currentChatId
+                    + " -> " + chatId + " (old one may leak)");
+        }
         this.currentChatId = chatId;
         this.currentController = controller;
     }
