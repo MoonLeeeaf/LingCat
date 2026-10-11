@@ -208,18 +208,21 @@ export default function createLingCatServer(base_data_path: string) {
         let user_id_after_authorzied: string | undefined
         let session_id: string | undefined
 
-        // ws 层心跳: 30s 无 pong 即判定连接已死并 terminate
-        let isAlive = true
-        client.on('pong', () => { isAlive = true })
+        // ws 层心跳: 每 90s ping 一次, 连续 2 次收不到 pong 才 terminate (= 180s 容忍)
+        const HEARTBEAT_INTERVAL = 90_000
+        const MAX_MISSED = 2
+
+        let missed = 0
+        client.on('pong', () => { missed = 0 })
         const heartbeat = setInterval(() => {
-            if (!isAlive) {
+            if (missed >= MAX_MISSED) {
                 clearInterval(heartbeat)
                 try { client.terminate() } catch (e) { }
                 return
             }
-            isAlive = false
+            missed++
             try { client.ping() } catch (e) { }
-        }, 30000)
+        }, HEARTBEAT_INTERVAL)
 
         client.on('close', () => {
             clearInterval(heartbeat)
