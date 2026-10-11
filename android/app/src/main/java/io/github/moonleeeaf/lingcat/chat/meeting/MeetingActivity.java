@@ -20,6 +20,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.github.moonleeeaf.lingcat.R;
+import io.github.moonleeeaf.lingcat.chat.ChatActivity;
+import io.github.moonleeeaf.lingcat.chat.ChatProfileSheet;
 import io.github.moonleeeaf.lingcat.data.Account;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
@@ -563,6 +565,12 @@ public class MeetingActivity extends Activity {
         isStarter = getIntent().getBooleanExtra(EXTRA_IS_STARTER, false);
 
         setTitle(chatTitle == null ? "会议" : chatTitle);
+
+        moon3.widget.Toolbar tb = getFirstToolbar();
+        if (tb != null) {
+            tb.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            tb.setNavigationOnClickListener(v -> finish());
+        }
 
         statusTv = findViewById(R.id.meeting_status);
         micBtn = findViewById(R.id.btn_toggle_mic);
