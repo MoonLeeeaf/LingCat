@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        useDynamicColors();
         requestNotificationPermissionIfNeeded();
 
         if (LingCatClientManager.getInstance().getCurrent() == null) {
