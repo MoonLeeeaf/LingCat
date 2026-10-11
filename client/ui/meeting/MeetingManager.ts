@@ -1,6 +1,6 @@
 import React from 'react'
 import { Room, RoomEvent, Track, type Participant } from 'livekit-client'
-import { MeetingApi } from 'lingcat-client-protocol'
+import { ChatApi, MeetingApi } from 'lingcat-client-protocol'
 import { IChat, Methods, LingCatProto, type Package, type IMessageEntity } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
 
@@ -24,6 +24,12 @@ class MeetingManagerImpl {
     meetingId?: string
     roomName?: string
     starterUserId?: string
+
+    /** 当前用户在该对话的管理员身份/权限 (用于"结束会议"按钮可见性) */
+    iAmChatAdmin = false
+    myChatAdminRole: string | null = null
+    /** JSON 字符串, 与 IChatAdmin.permissions 一致 */
+    myChatAdminPermissions: string | null = null
 
     isMicOn = false
     /** 麦克风降噪 (WebRTC noiseSuppression) */
@@ -77,6 +83,33 @@ class MeetingManagerImpl {
     private accessToken() {
         return ClientManager.getActiveUserSession().token
     }
+
+        /**
+     * 拉取当前用户在该对话的管理员身份与权限点。
+     * 用于判断"结束会议"按钮是否可见: 发起人 / owner / admin 且 permissions.end_meeting === true
+     */
+        async loadChatAdminFlag(chatId: string) {
+            try {
+                const admins = await ChatApi.getChatAdmins(ClientManager.client, {
+                    access_token: this.accessToken(),
+                    chat_id: chatId,
+                })
+                const me = await ClientManager.getMe()
+                const mine = admins?.find(a => a.id === me.id)
+                // 期间切走了对话 -> 丢弃结果
+                if (this.chatId !== chatId) return
+                this.iAmChatAdmin = !!mine
+                this.myChatAdminRole = mine?.role ?? null
+                this.myChatAdminPermissions = mine?.permissions ?? null
+            } catch (e) {
+                if (this.chatId !== chatId) return
+                // 保守: 失败当无权限
+                this.iAmChatAdmin = false
+                this.myChatAdminRole = null
+                this.myChatAdminPermissions = null
+            }
+            this.emit()
+        }
 
     /** 由 UserMain 在收到 Meeting_Started_Event 时调用 */
     onMeetingStarted(ev: { chatId: string, meetingId: string, room: string, starterUserId: string, title?: string | null }) {
@@ -272,6 +305,8 @@ class MeetingManagerImpl {
             room.remoteParticipants.forEach((p) => this.maybeAutoLocalMute(p))
             this.phase = 'connected'
             this.emit()
+
+             this.loadChatAdminFlag(chatId)
         } catch (e: any) {
             this.phase = 'error'
             this.error = e?.message || String(e)
@@ -483,6 +518,9 @@ class MeetingManagerImpl {
         this.activeAudioInput = undefined
         this.locallyMuted = {}
         this.autoMuteDecided = {}
+        this.iAmChatAdmin = false
+        this.myChatAdminRole = null
+        this.myChatAdminPermissions = null
         this.stopChatBubbles()
         this.emit()
         try {
@@ -504,6 +542,9 @@ class MeetingManagerImpl {
         this.activeAudioInput = undefined
         this.locallyMuted = {}
         this.autoMuteDecided = {}
+        this.iAmChatAdmin = false
+        this.myChatAdminRole = null
+        this.myChatAdminPermissions = null
         this.stopChatBubbles()
         this.emit()
     }

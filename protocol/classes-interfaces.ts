@@ -29,6 +29,7 @@ export const AvailableChatAdminPermissions = [
     'delete_message',
     'mute',
     'pin',
+    'end_meeting',
 ]
 
 export type AvailableChatAdminPermission = typeof AvailableChatAdminPermissions[number]

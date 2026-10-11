@@ -83,7 +83,21 @@ export default function MeetingPanel({ mode }: { mode: 'floating' | 'docked' | '
         ? [m.room.localParticipant, ...Array.from(m.room.remoteParticipants.values())]
         : []
 
-    const canEnd = !m.starterUserId || m.starterUserId == AppState.myId
+    // 结束会议权限: 发起人 / owner / admin 且拥有 end_meeting 权限点
+    const canEnd = React.useMemo(() => {
+        // 1) 本地/服务端认定的发起人
+        if (!m.starterUserId || m.starterUserId == AppState.myId) return true
+        // 2) 管理员
+        if (!m.iAmChatAdmin) return false
+        if (m.myChatAdminRole === 'owner') return true
+        // 3) admin 看权限点
+        try {
+            const p = JSON.parse(m.myChatAdminPermissions || '{}')
+            return p.end_meeting === true
+        } catch {
+            return false
+        }
+    }, [m.starterUserId, m.iAmChatAdmin, m.myChatAdminRole, m.myChatAdminPermissions])
 
     const focusedParticipant = participants.find((p) => p.identity === m.focusedIdentity)
     const focusedSource = m.focusedSource
