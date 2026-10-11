@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +29,8 @@ import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 import io.livekit.android.room.participant.Participant;
+import lingcat.classes.Classes;
+import lingcat.client_protocol.ChatApi;
 import lingcat.client_protocol.LingCatClient;
 import lingcat.client_protocol.MeetingApi;
 import livekit.org.webrtc.EglBase;
@@ -73,6 +77,11 @@ public class MeetingActivity extends Activity {
 
     private EglBase eglBase;
     private boolean isReusingController = false;
+    private ImageButton endBtn;
+    private String meetingId;   // ★ 当前会议 ID
+    private volatile boolean iAmChatAdmin = false;
+    private volatile String myChatAdminRole;         // "owner" / "admin" / null
+    private volatile String myChatAdminPermissions;
 
     private class ParticipantTile {
         final String id;              // tile 唯一 key：{identity}:{source}
@@ -576,6 +585,10 @@ public class MeetingActivity extends Activity {
         micBtn = findViewById(R.id.btn_toggle_mic);
         cameraBtn = findViewById(R.id.btn_toggle_camera);
         hangupBtn = findViewById(R.id.btn_hangup);
+        endBtn = findViewById(R.id.btn_end_meeting);
+        endBtn.setOnClickListener(v -> onEndMeetingClicked());
+
+        loadChatAdminFlag();
 
         micBtn.setOnClickListener(v -> {
             if (!connected) return;
@@ -620,6 +633,51 @@ public class MeetingActivity extends Activity {
 
 // ★ 然后才请求权限 / 连接
         requestPermsIfNeeded();
+    }
+
+    private void loadChatAdminFlag() {
+        LingCatClient client = LingCatClientManager.getInstance().getCurrent();
+        ServerConfig server = LingCatClientManager.getInstance().getCurrentServer();
+        if (client == null || server == null) return;
+        Account acc = AppDataStore.data().getActiveAccount(server.url);
+        if (acc == null || acc.accessToken == null || acc.userId == null) return;
+
+        final String token = acc.accessToken;
+        final String myId = acc.userId;
+        final String cid = chatId;
+
+        IO.execute(() -> {
+            try {
+                List<Classes.IChatAdmin> admins =
+                        ChatApi.getChatAdmins(client, token, cid, API_TIMEOUT_MS);
+
+                boolean hit = false;
+                String role = null;
+                String perms = null;
+                if (admins != null) {
+                    for (Classes.IChatAdmin a : admins) {
+                        if (myId.equals(a.getId())) {
+                            hit = true;
+                            role = a.getRole();
+                            perms = a.getPermissions();
+                            break;
+                        }
+                    }
+                }
+                iAmChatAdmin = hit;
+                myChatAdminRole = role;
+                myChatAdminPermissions = perms;
+
+                Log.i(TAG, "chatAdmin me: isAdmin=" + hit
+                        + " role=" + role + " perms=" + perms);
+
+                runOnUiThread(() -> {
+                    if (connected) refreshEndButtonVisibility();
+                });
+            } catch (Exception e) {
+                Log.w(TAG, "loadChatAdmins failed", e);
+            }
+        });
     }
 
     private int dp(int v) {
@@ -713,6 +771,45 @@ public class MeetingActivity extends Activity {
 
         // ★ 重建所有 tile
         rebuildAllTiles();
+
+        // ★ 只有发起人 / 主持人能结束会议
+        endBtn.setVisibility(View.GONE);   // 先隐藏
+        refreshEndButtonVisibility();       // 再按判定显示
+    }
+
+    private boolean canEndMeeting() {
+        // 1) 本地发起人（从 Intent 来的）
+        if (isStarter) return true;
+
+        // 2) 服务端认定的发起人（从 MeetingManager 拿）
+        MeetingManager.ActiveMeeting am = MeetingManager.get().getActiveMeeting(chatId);
+        ServerConfig server = LingCatClientManager.getInstance().getCurrentServer();
+        Account acc = server != null ? AppDataStore.data().getActiveAccount(server.url) : null;
+        if (am != null && acc != null
+                && acc.userId != null
+                && acc.userId.equals(am.starterUserId)) {
+            return true;
+        }
+
+        // 3) 管理员：owner 全权，admin 看权限点
+        if (!iAmChatAdmin) return false;
+
+        if ("owner".equals(myChatAdminRole)) return true;
+
+        String perms = myChatAdminPermissions;
+        if (perms == null || perms.isEmpty()) return false;
+        try {
+            org.json.JSONObject o = new org.json.JSONObject(perms);
+            return o.optBoolean("end_meeting", false);
+        } catch (Exception e) {
+            Log.w(TAG, "parse permissions failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private void refreshEndButtonVisibility() {
+        if (endBtn == null) return;
+        endBtn.setVisibility(canEndMeeting() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -812,6 +909,8 @@ public class MeetingActivity extends Activity {
             Log.i(TAG, "reusing existing meeting controller");
             isReusingController = true;
             controller = existing;
+            MeetingManager.ActiveMeeting am = mgr.getActiveMeeting(chatId);   // ★
+            if (am != null) meetingId = am.meetingId;                          // ★
             controller.updateListener(roomListener);
             onConnectedImpl();
             return;
@@ -866,6 +965,7 @@ public class MeetingActivity extends Activity {
 
                 final String url = normalizeLiveKitUrl(cred.url);
                 final String lkToken = cred.token;
+                MeetingActivity.this.meetingId = meetingId;
 
                 if (url == null || url.isEmpty()) {
                     runOnUiThread(() -> {
@@ -930,6 +1030,53 @@ public class MeetingActivity extends Activity {
     private void hangup() {
         MeetingManager.get().leave();
         finish();
+    }
+
+    private void onEndMeetingClicked() {
+        if (meetingId == null || meetingId.isEmpty()) {
+            snack("会议 ID 未知，无法结束");
+            return;
+        }
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle("结束会议？")
+                .setMessage("所有参与者将被移出。")
+                .setPositiveButton("结束", (d, w) -> doEndMeeting())
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
+    private void doEndMeeting() {
+        endBtn.setEnabled(false);
+
+        LingCatClient client = LingCatClientManager.getInstance().getCurrent();
+        ServerConfig server = LingCatClientManager.getInstance().getCurrentServer();
+        if (client == null || server == null) {
+            snack("连接已断开");
+            endBtn.setEnabled(true);
+            return;
+        }
+        Account acc = AppDataStore.data().getActiveAccount(server.url);
+        if (acc == null || acc.accessToken == null) {
+            snack("登录已失效");
+            endBtn.setEnabled(true);
+            return;
+        }
+        final String token = acc.accessToken;
+        final String mid = meetingId;
+
+        IO.execute(() -> {
+            try {
+                MeetingApi.endMeeting(client, token, chatId, mid, API_TIMEOUT_MS);
+                Log.i(TAG, "endMeeting ok");
+                runOnUiThread(() -> MeetingManager.get().leave());  // 触发 onDisconnected → finish
+            } catch (Exception e) {
+                Log.e(TAG, "endMeeting failed", e);
+                runOnUiThread(() -> {
+                    snack("结束会议失败: " + e.getMessage());
+                    endBtn.setEnabled(true);
+                });
+            }
+        });
     }
 
     @Override

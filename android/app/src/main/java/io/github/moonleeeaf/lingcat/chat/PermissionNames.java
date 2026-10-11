@@ -18,6 +18,7 @@ public final class PermissionNames {
         ALL.put("delete_message", "删除消息");
         ALL.put("mute",           "禁言");
         ALL.put("pin",            "置顶消息");
+        ALL.put("end_meeting",            "结束会议");
     }
 
     public static String cn(String key) {

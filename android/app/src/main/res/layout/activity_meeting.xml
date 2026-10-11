@@ -59,6 +59,17 @@
                 app:tint="#FFFFFF"/>
 
             <ImageButton
+                android:id="@+id/btn_end_meeting"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_stop"
+                android:contentDescription="结束会议"
+                android:visibility="gone"
+                app:tint="#FF5252"/>
+
+            <ImageButton
                 android:id="@+id/btn_hangup"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
