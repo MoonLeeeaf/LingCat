@@ -55,7 +55,7 @@ public class LingCatClient {
     private volatile ScheduledFuture<?> pingCheckTask;
     private volatile long lastPongTime = 0;
 
-    private static final long PING_INTERVAL_MS = 30_000;
+    private static final long PING_INTERVAL_MS = 180_000;
     private static final long PING_TIMEOUT_MS = 90_000;
     private static final long RECONNECT_BASE_MS = 1_000;
     private static final long RECONNECT_CAP_MS = 30_000;
