@@ -26,6 +26,7 @@ import { MeetingManager, useMeeting } from "./meeting/MeetingManager.ts"
 import { takePendingInAppMeeting } from "./meeting/MeetingWindow.ts"
 import { isAppForeground, isMentioned, notificationBody, notificationSupported, onNotificationClick, showMessageNotification } from "./notify.ts"
 import ClientConfigInstance from "../ClientConfig.ts"
+import { toNumber, toNumberOrUndefined } from "lingcat-shared"
 
 function protoMsgToIMessage(p: LingCatProto.classes.IMessage.$Properties): IMessage {
     return {
@@ -34,14 +35,14 @@ function protoMsgToIMessage(p: LingCatProto.classes.IMessage.$Properties): IMess
         sender_user_id: p.senderUserId,
         system: p.system,
         text: p.text!,
-        time: p.time,
+        time: toNumber(p.time),
         entities: (p.entities ?? []).map((e: any) => ({
             type: e.type,
             offset: e.offset ?? 0,
             length: e.length ?? 0,
             data: e.data,
         })),
-        edited_at: p.editedAt,
+        edited_at: toNumberOrUndefined(p.editedAt),
     }
 }
 
