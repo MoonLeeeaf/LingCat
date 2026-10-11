@@ -38,6 +38,7 @@ public class AuthActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        useDynamicColors();
         setContentView(R.layout.activity_auth);
 
         loadingOverlay = findViewById(R.id.loading_overlay);

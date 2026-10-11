@@ -92,6 +92,7 @@ public class EditMyProfileActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        useDynamicColors();
         setContentView(R.layout.activity_edit_profile);
 
         // 依赖

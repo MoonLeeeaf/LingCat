@@ -551,7 +551,7 @@ public class MeetingActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        useDynamicColors();
         setContentView(R.layout.activity_meeting);
 
         chatId = getIntent().getStringExtra(EXTRA_CHAT_ID);
