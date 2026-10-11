@@ -110,27 +110,21 @@ public final class NotificationRouter implements LingCatClient.OnReceiveListener
         String myUserId = acc.userId;
         String myNickname = acc.nickname != null ? acc.nickname : "我";
 
-        // 自己发的 → 不通知
         if (myUserId.equals(senderId)) return;
-
-        // App 前台 + 当前活跃 chat → 不通知
-        if (AppState.foreground
-                && chatId.equals(AppState.activeChatId)) return;
+        if (AppState.foreground && chatId.equals(AppState.activeChatId)) return;
 
         Context ctx = LingCatApplication.getAppContext();
         if (ctx == null) return;
 
-        // 判断渠道优先级：被回复 > @我 > 私聊
-        String channelId = decideChannel(chatId, msg, myUserId, mgr.getCurrent(), acc.accessToken);
-        if (channelId == null) return;
-
-        // 拉 chat info（缓存优先）
-        // 拉 chat info 后
+        // ★ 先拉 chat info（缓存优先），再判定渠道
         IChat chat = ProfileCache.getCachedChat(chatId);
         if (chat == null) {
             chat = ProfileCache.queryChatInfo(chatId).get();
         }
         if (chat == null) return;
+
+        String channelId = decideChannel(chat.getId(), msg, myUserId, mgr.getCurrent(), acc.accessToken);
+        if (channelId == null) return;
 
         String chatTitle = chat.getTitle();
         if (chatTitle == null || chatTitle.isEmpty()) chatTitle = "对话";
