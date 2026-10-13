@@ -184,6 +184,22 @@ export default function createLingCatServer(base_data_path: string) {
         req.pipe(bb)
     })
 
+    app.get('/{*splat}', (req, res, next) => {
+        if (node_path.extname(req.path)) return next()
+    
+        res.sendFile(
+            node_path.resolve(node_path.join(base_data_path, 'page', 'index.html')),
+            (err) => {
+                if (err) {
+                    console.error('[Server] SPA fallback failed to send index.html:', err)
+                    if (!res.headersSent) {
+                        res.status(500).send('SPA entry (index.html) not found')
+                    }
+                }
+            }
+        )
+    })
+
     if (!fileExists(`${base_data_path}/key/`)) {
         console.log('[Server]', '生成服务端密钥...')
         mkdir(`${base_data_path}/key`)

@@ -1,58 +1,40 @@
-export interface OAuth2ProviderPublic {
+interface OAuth2Provider {
     id: string
     display_name?: string
     type?: string
 }
 
 export interface IClientConfig {
-    site_title?: string
-    livekit_enabled?: boolean
-    oauth2?: OAuth2ProviderPublic[]
+    public_key?: string
+    site_title: string
+    livekit_enabled: boolean
+    oauth2?: OAuth2Provider[]
 }
 
-class ClientConfig {
-    private config: IClientConfig = {}
-    private loadedFrom?: string
-
-    async load() {
-        return this.loadFrom('')
-    }
-
-    async loadFrom(serverUrl: string) {
-        if (this.loadedFrom === serverUrl) return this.config
-
-        const base = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl
-        const url = base + '/config.json'
-
-        try {
-            const res = await fetch(url, { cache: 'no-store' })
-            if (res.ok) {
-                this.config = await res.json()
-                this.loadedFrom = serverUrl
-            }
-        } catch (e) {
-            console.warn('[ClientConfig] 加载失败', url, e)
+class ClientConfigClass {
+    config: IClientConfig | undefined
+    async initConfig(configUrl: string) {
+        const re = await fetch(configUrl)
+        if (re.ok) this.config = await re.json()
+        if (re.status == 404) this.config = {
+            site_title: "灵猫",
+            livekit_enabled: false,
         }
-        return this.config
     }
-
-    get(): IClientConfig {
-        return this.config
+    get site_title() {
+        return this.config?.site_title || "灵猫"
     }
-
-    get title() {
-        return this.config.site_title || '灵猫'
+    get livekit_enabled() {
+        return this.config?.livekit_enabled || false
     }
-
-    get meetingEnabled() {
-        return this.config.livekit_enabled
+    get oauth2() {
+        return this.config?.oauth2 || []
     }
-
-    get oauthProviders(): OAuth2ProviderPublic[] {
-        return this.config.oauth2 || []
+    get public_key() {
+        return this.config?.public_key
     }
 }
 
-const ClientConfigInstance = new ClientConfig()
+const instance = new ClientConfigClass()
 
-export default ClientConfigInstance
+export default instance

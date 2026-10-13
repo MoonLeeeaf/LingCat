@@ -1,55 +1,32 @@
-import { dialog, Dialog, NavigationDrawer, TextField } from "mdui"
-import ClientManager from "../ClientManager.ts"
-import ClientSettingsDialog, { LoginDialog } from "./ClientSettingsDialog.tsx"
-import UserMain from "./UserMain.tsx"
-import React from 'react'
-import { IUser } from "lingcat-protocol"
-import PwaTitleBar from "./PwaTitleBar.tsx"
+import { useEffect, useState } from "react"
+import { useAsyncEffect } from "../useAsyncEffect.ts"
+import SessionEnv from "../SessionEnv.ts"
+import { RouterProvider } from "@tanstack/react-router"
+import { Router } from "./routes/Router.ts"
 
 export default function Main() {
-    const [profile, setProfile] = React.useState<IUser>()
+    const [loaded, setLoaded] = useState(false)
 
-    const drawerRef = React.useRef<NavigationDrawer>(undefined)
-
-    React.useEffect(() => {
-        if (ClientManager.listServerPublicKeys().length == 0)
-            dialog({
-                headline: "提示",
-                body: "为了与服务端进行安全通信, 请从安全渠道获取对应服务器的公钥, 并添加到客户端中, 随后请刷新此网页继续.",
-                actions: [{
-                    text: "打开设置",
-                    variant: 'tonal',
-                    onClick: () => ClientSettingsDialog.show()
-                }]
-            })
-        else
-            if (ClientManager.listUserSessions().length == 0) {
-                LoginDialog.show({ allowClose: false })
-            }
+    useAsyncEffect(async (signal) => {
+        try {
+            const url = `${import.meta.env.BASE_URL}config.json`
+            const re = await fetch(url, { method: 'HEAD', signal })
+            SessionEnv.isOutOfServer = !re.ok
+        } catch {
+            if (!signal.aborted) SessionEnv.isOutOfServer = true
+        }
+        if (!signal.aborted) setLoaded(true)
     }, [])
 
-    return (
-        <>
-            <PwaTitleBar />
-            <mdui-layout>
-                {
-                    (ClientManager.listUserSessions().length == 0 || ClientManager.listServerPublicKeys().length == 0 || ClientManager.getActiveUserSessionName() == null)
-                        ? <div style={{
-                            display: 'flex',
-                            flex: 1,
-                            justifyContent: 'center',
-                        }}>
-                            <div style={{
-                                alignSelf: 'center',
-                            }}>
-                                <mdui-button onClick={() => ClientSettingsDialog.show()}>打开设置</mdui-button>
-                                <div style={{ height: '10px' }}></div>
-                                <mdui-button onClick={() => document.location.reload()}>刷新页面</mdui-button>
-                            </div>
-                        </div>
-                        : <UserMain profile={profile} setProfile={setProfile} drawerRef={drawerRef} />
-                }
-            </mdui-layout>
-        </>
-    )
+    return loaded
+        ? <RouterProvider router={Router} />
+        : <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            width: '100%',
+        }}>
+            <mdui-circular-progress></mdui-circular-progress>
+        </div>
 }

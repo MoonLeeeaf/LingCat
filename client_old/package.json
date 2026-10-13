@@ -1,0 +1,30 @@
+{
+    "name": "lingcat-client",
+    "type": "module",
+    "version": "0.1.0",
+    "scripts": {
+        "build": "npx vite build",
+        "build-watch": "npx vite --watch build"
+    },
+    "devDependencies": {
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.2",
+        "lingcat-client-protocol": "*",
+        "vite": "^8.0.14",
+        "vite-plugin-node-polyfills": "^0.28.0"
+    },
+    "dependencies": {
+        "@zenfs/core": "^2.5.6",
+        "@zenfs/dom": "^1.2.9",
+        "livekit-client": "^2.22.3",
+        "marked-react": "^4.0.0",
+        "mdui": "^2.1.4",
+        "pinch-zoom-element": "^1.1.1",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-image": "^4.1.0",
+        "react-virtuoso": "^4.18.10",
+        "zustand": "^5.0.14"
+    }
+}
