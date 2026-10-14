@@ -33,6 +33,9 @@ class ClientConfigClass {
     get public_key() {
         return this.config?.public_key
     }
+    get oauthProviders() {
+        return this.oauth2
+    }
 }
 
 const instance = new ClientConfigClass()

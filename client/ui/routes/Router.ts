@@ -3,21 +3,14 @@ import { RootRoute } from './RootRoute.tsx'
 import { LoginRoute } from './LoginRoute.tsx'
 import { UserIndexRoute } from './UserIndexRoute.tsx'
 import { AuthRoute } from './AuthRoute.tsx'
-import { ChatProfileRoute } from './ChatProfileRoute.tsx'
 import { ChatRoute } from './ChatRoute.tsx'
-import { ImageViewerRoute } from './ImageViewerRoute.tsx'
-import { UserViewerRoute } from './UserViewerRoute.tsx'
 import { MainLayoutRoute } from './MainLayoutRoute.tsx'
 
 const routeTree = RootRoute.addChildren([
     AuthRoute.addChildren([
         MainLayoutRoute.addChildren([
             UserIndexRoute,
-            ChatRoute.addChildren([
-                ChatProfileRoute,
-            ]),
-            UserViewerRoute,
-            ImageViewerRoute,
+            ChatRoute,
         ]),
     ]),
     LoginRoute,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useAsyncEffect } from "../useAsyncEffect.ts"
+import { useAsyncEffect } from "../lib/useAsyncEffect.ts"
 import SessionEnv from "../SessionEnv.ts"
 import { RouterProvider } from "@tanstack/react-router"
 import { Router } from "./routes/Router.ts"

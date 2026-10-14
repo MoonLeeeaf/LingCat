@@ -11,6 +11,7 @@ interface DialogForRouterProps {
     closeOnOverlayClick?: boolean
     fullscreen?: boolean
     className?: string
+    fullBleed?: boolean
 }
 
 export function DialogForRouter({
@@ -22,6 +23,7 @@ export function DialogForRouter({
     closeOnOverlayClick = true,
     fullscreen,
     className,
+    fullBleed = false,
 }: DialogForRouterProps) {
     const ref = React.useRef<Dialog>(null)
     const selfClosingRef = React.useRef(false)
@@ -31,6 +33,36 @@ export function DialogForRouter({
     const onClosedRef = React.useRef(onClosed)
     React.useEffect(() => { onCloseRequestRef.current = onCloseRequest })
     React.useEffect(() => { onClosedRef.current = onClosed })
+
+    React.useEffect(() => {
+        if (!fullBleed) return
+        const el = ref.current
+        if (!el) return
+
+        let cancelled = false
+        el.updateComplete.then(() => {
+            if (cancelled) return
+            const shadow = el.shadowRoot
+            if (!shadow) return
+
+            const panel = shadow.querySelector('.panel') as HTMLElement | null
+            const body = shadow.querySelector('.body') as HTMLElement | null
+
+            if (panel) {
+                panel.style.padding = '0'
+                panel.style.color = 'inherit'
+                panel.style.backgroundColor = 'rgb(var(--mdui-color-background))'
+                panel.style.setProperty('--mdui-color-background', 'inherit')
+            }
+            if (body) {
+                body.style.height = '100%'
+                body.style.display = 'flex'
+                body.style.flexDirection = 'column'
+            }
+        })
+
+        return () => { cancelled = true }
+    }, [fullBleed])
 
     // ============================================================
     //  blocker：拦截浏览器返回/前进

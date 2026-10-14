@@ -36,7 +36,7 @@ export function MobileRootLayout({
     return (
         <>
             {topBar}
-            <div style={{ minHeight: '100%' }}>
+            <div style={{ minHeight: '100%', width: '100%' }}>
                 {content}
             </div>
             <mdui-navigation-bar ref={navRef as any} value={navValue}>

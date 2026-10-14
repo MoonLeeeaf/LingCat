@@ -3,7 +3,7 @@ import { useIsMobile } from "../../lib/useIsMobile.ts"
 import { DesktopRootLayout } from "./DesktopRootLayout.tsx"
 import { MobileRootLayout } from "./MobileRootLayout.tsx"
 import Avatar from "../Avatar.tsx"
-import { useAsyncEffect } from "../../useAsyncEffect.ts"
+import { useAsyncEffect } from "../../lib/useAsyncEffect.ts"
 import { IUser } from "lingcat-protocol"
 import { FileApi, UserApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
@@ -12,7 +12,11 @@ import default_avatar from '../../default_avatar.png'
 import getFileUrl from "../../lib/getFileUrl.ts"
 import SessionEnv from "../../SessionEnv.ts"
 import { NavigationDrawer } from "mdui"
-import { Outlet, useNavigate } from "@tanstack/react-router"
+import { Outlet, useMatchRoute, useNavigate, useParams } from "@tanstack/react-router"
+import ChangePasswordDialog from "../main/ChangePasswordDialog.tsx"
+import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
+import { ChatListFragment, ChatListShow } from "../main/ChatListFragment.tsx"
+import SwitchUserDialog from "../main/SwitchUserDialog.tsx"
 
 const navItems = [
     {
@@ -39,11 +43,13 @@ const navItems = [
         activeIcon: 'search',
         label: '搜索',
     },
-] as const
+]
 
 export function UserMainLayout({ children }: { children: React.ReactNode }) {
-    const navigate = useNavigate()
-
+    const matchRoute = useMatchRoute()
+    const chatMatch = matchRoute({ to: '/chat/$chatId' })
+    const activeChatId = chatMatch ? chatMatch.chatId : undefined
+    
     const [loaded, setLoaded] = React.useState(false)
     const [profile, setProfile] = React.useState<IUser>()
     useAsyncEffect(async (signal) => {
@@ -106,7 +112,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
     const isMobile = useIsMobile()
 
-    const [navValue, setNavValue] = React.useState('recents')
+    const [navValue, setNavValue] = React.useState<ChatListShow>('recents')
     const drawerRef = React.useRef<NavigationDrawer>(undefined)
 
     const avatarIconMenuItem = loaded ? (
@@ -118,12 +124,30 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     : default_avatar}
             />
             <mdui-menu>
-                <mdui-menu-item icon="info" onClick={() => navigate({ to: '/user/$userId', params: { userId: profile?.id! } })}>我的资料</mdui-menu-item>
+                <mdui-menu-item icon="info" onClick={() => UserProfileDialog.show(profile?.id!)}>我的资料</mdui-menu-item>
                 <mdui-menu-item icon="switch_account" onClick={() => SwitchUserDialog.show()}>切换账号</mdui-menu-item>
                 <mdui-menu-item icon="edit" onClick={() => ChangePasswordDialog.show()}>修改密码</mdui-menu-item>
             </mdui-menu>
         </mdui-dropdown>
     ) : null
+
+    const chatListFragment = <ChatListFragment
+        show={navValue}
+        activeChatId={activeChatId}
+    />
+    const mainContent = (
+        <>
+            {
+                isMobile && <div style={{
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+                }}>
+                    {chatListFragment}
+                </div>
+            }
+            <Outlet />
+        </>
+    )
 
     return loaded
         ? (isMobile
@@ -141,10 +165,8 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 }
                 navItems={navItems}
                 navValue={navValue}
-                onNavValueChange={setNavValue}
-                main={<>
-                    <Outlet />
-                </> /** Chat List */} />
+                onNavValueChange={(v) => setNavValue(v as any)}
+                main={mainContent} />
 
             : <DesktopRootLayout
                 drawerRef={drawerRef}
@@ -154,11 +176,9 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 }
                 navItems={navItems}
                 navValue={navValue}
-                onNavValueChange={setNavValue}
-                list={undefined /** List */}
-                main={<>
-                    <Outlet />
-                </> /** ChatFragment */} />)
+                onNavValueChange={(v) => setNavValue(v as any)}
+                list={chatListFragment}
+                main={mainContent} />)
         : <div style={{
             display: 'flex',
             alignItems: 'center',
