@@ -1,0 +1,56 @@
+import { NavigationBar } from 'mdui'
+import React from 'react'
+import { NavItem, AppLayoutSharedProps } from './DesktopRootLayout.tsx'
+
+export interface MobileLayoutProps extends AppLayoutSharedProps {
+    /** 顶部栏。桌面端用不到 */
+    topBar?: React.ReactNode
+    /** 会话列表内容 */
+    list?: React.ReactNode
+    /** 主区内容（会话详情 / 聊天） */
+    main?: React.ReactNode
+}
+
+export function MobileRootLayout({
+    navItems,
+    navValue,
+    onNavValueChange,
+    main,
+    topBar,
+}: MobileLayoutProps) {
+    const navRef = React.useRef<NavigationBar>(null)
+
+    React.useEffect(() => {
+        const el = navRef.current
+        if (!el) return
+        const handler = (e: Event) => {
+            const v = (e.target as NavigationBar).value
+            if (v) onNavValueChange?.(v)
+        }
+        el.addEventListener('change', handler)
+        return () => el.removeEventListener('change', handler)
+    }, [onNavValueChange])
+
+    const content = main
+
+    return (
+        <>
+            {topBar}
+            <div style={{ minHeight: '100%' }}>
+                {content}
+            </div>
+            <mdui-navigation-bar ref={navRef as any} value={navValue}>
+                {navItems?.map(item => (
+                    <mdui-navigation-bar-item
+                        key={item.value}
+                        icon={item.icon}
+                        active-icon={item.activeIcon}
+                        value={item.value}
+                    >
+                        {item.label ?? ''}
+                    </mdui-navigation-bar-item>
+                ))}
+            </mdui-navigation-bar>
+        </>
+    )
+}

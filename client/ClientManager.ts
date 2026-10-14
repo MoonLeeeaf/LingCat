@@ -1,4 +1,4 @@
-import LingCatClient from 'lingcat-client-protocol'
+import LingCatClient, { UserApi } from 'lingcat-client-protocol'
 import {
     normalizeServerAddress, toHttpUrl, toWsUrl,
 } from './lib/serverAddress.ts'
@@ -12,6 +12,7 @@ import {
 } from './lib/ClientStorage.ts'
 import { IClientConfig } from './ClientConfig.ts'
 import { bytesToHex, hexToBytes } from 'lingcat-shared'
+import { IUser } from '../protocol/classes-interfaces.ts'
 
 
 export type ServerTrustStatus = 'trusted' | 'new' | 'mismatch'
@@ -25,6 +26,35 @@ function randomHex(bytes: number): string {
 }
 
 class ClientManagerImpl {
+    private meCache: IUser | null = null
+    private mePromise: Promise<IUser> | null = null
+
+    async getMe(){
+        if (this.meCache) return this.meCache
+        if (this.mePromise) return this.mePromise
+
+        const client = this.getActiveClient()
+        const session = this.getActiveSession()
+        if (!client || !session) throw new Error('no active client/session')
+
+        this.mePromise = UserApi.queryMyUserInfo(client, { access_token: session.token })
+            .then((me) => {
+                this.meCache = me
+                this.mePromise = null
+                return me
+            })
+            .catch((e) => {
+                this.mePromise = null
+                throw e
+            })
+
+        return this.mePromise
+    }
+
+    clearMe(): void {
+        this.meCache = null
+        this.mePromise = null
+    }
     private data: StoreData = loadStore()
     private changeListeners = new Set<() => void>()
 
@@ -160,6 +190,7 @@ class ClientManagerImpl {
         } else {
             this.emitChange()
         }
+        this.clearMe()
     }
 
     removeUserSession(key: string): void {
@@ -242,6 +273,7 @@ class ClientManagerImpl {
 
     disconnect(): void {
         try { this.activeClient?.disconnect() } catch { /* ignore */ }
+        this.clearMe()
         this.activeClient = null
         this.connectionSessionId = null
         this.emitChange()

@@ -1,14 +1,26 @@
 import { createRouter } from '@tanstack/react-router'
 import { RootRoute } from './RootRoute.tsx'
-import { LoginOrRegisterRoute } from './LoginOrRegisterRoute'
+import { LoginRoute } from './LoginRoute.tsx'
 import { UserIndexRoute } from './UserIndexRoute.tsx'
-import { RootLayoutRoute } from './RootLayoutRoute.tsx'
+import { AuthRoute } from './AuthRoute.tsx'
+import { ChatProfileRoute } from './ChatProfileRoute.tsx'
+import { ChatRoute } from './ChatRoute.tsx'
+import { ImageViewerRoute } from './ImageViewerRoute.tsx'
+import { UserViewerRoute } from './UserViewerRoute.tsx'
+import { MainLayoutRoute } from './MainLayoutRoute.tsx'
 
 const routeTree = RootRoute.addChildren([
-    RootLayoutRoute.addChildren([
-        UserIndexRoute,
+    AuthRoute.addChildren([
+        MainLayoutRoute.addChildren([
+            UserIndexRoute,
+            ChatRoute.addChildren([
+                ChatProfileRoute,
+            ]),
+            UserViewerRoute,
+            ImageViewerRoute,
+        ]),
     ]),
-    LoginOrRegisterRoute,
+    LoginRoute,
 ])
 
 export const Router = createRouter({

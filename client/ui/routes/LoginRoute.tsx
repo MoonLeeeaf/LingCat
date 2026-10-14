@@ -1,7 +1,7 @@
 import { createRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { RootRoute } from './RootRoute.tsx'
 import { useState } from 'react'
-import { AuthMode, LoginOrRegisterForm, LoginValues, RegisterValues } from '../main/LoginOrRegisterForm.tsx'
+import { AuthMode, LoginOrRegisterForm, LoginValues, RegisterValues } from '../auth/LoginOrRegisterForm.tsx'
 import { DialogForRouter } from '../DialogForRouter.tsx'
 import SessionEnv from '../../SessionEnv.ts'
 import tipError from '../tipError.ts'
@@ -9,7 +9,7 @@ import showSnackbar from '../showSnackbar.ts'
 import { acceptServerPublicKey, checkServer } from '../../lib/trustServer.ts'
 import ClientManager from '../../ClientManager.ts'
 import { getCurrentServerAddr, toHttpUrl, toWsUrl } from '../../lib/serverAddress.ts'
-import { TrustServerDialog, TrustServerDialogProps } from '../main/TrustServerDialog.tsx'
+import { TrustServerDialog, TrustServerDialogProps } from '../auth/TrustServerDialog.tsx'
 import ReactDOM from 'react-dom/client'
 import LingCatClient, { UserApi } from 'lingcat-client-protocol'
 import { bytesToHex } from 'lingcat-shared'
@@ -116,7 +116,7 @@ async function withEphemeralClient<T>(
 
 function LoginPage() {
     const navigate = useNavigate()
-    const search = LoginOrRegisterRoute.useSearch()
+    const search = LoginRoute.useSearch()
     const [mode, setMode] = useState<AuthMode>('login')
     const [loading, setLoading] = useState(false)
 
@@ -233,7 +233,7 @@ function LoginPage() {
     )
 }
 
-export const LoginOrRegisterRoute = createRoute({
+export const LoginRoute = createRoute({
     getParentRoute: () => RootRoute,
     path: '/login',
     validateSearch: (s): { redirect?: string } => ({

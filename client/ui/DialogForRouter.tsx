@@ -10,6 +10,7 @@ interface DialogForRouterProps {
     closeOnEsc?: boolean
     closeOnOverlayClick?: boolean
     fullscreen?: boolean
+    className?: string
 }
 
 export function DialogForRouter({
@@ -20,6 +21,7 @@ export function DialogForRouter({
     closeOnEsc = true,
     closeOnOverlayClick = true,
     fullscreen,
+    className,
 }: DialogForRouterProps) {
     const ref = React.useRef<Dialog>(null)
     const selfClosingRef = React.useRef(false)
@@ -31,21 +33,16 @@ export function DialogForRouter({
     React.useEffect(() => { onClosedRef.current = onClosed })
 
     // ============================================================
-    //  ★ 拦截浏览器历史导航（返回/前进/跳跃），
-    //    让关闭动画播完再真正导航
+    //  blocker：拦截浏览器返回/前进
     // ============================================================
     const blocker = useBlocker({
-        shouldBlockFn: ({ action }) => {
-            // PUSH / REPLACE = 程序内部 navigate，不拦
-            // BACK / FORWARD / GO = 浏览器历史导航，拦下来播动画
-            return action === 'BACK' || action === 'FORWARD' || action === 'GO'
-        },
-        // ★ 必须加这个才能拿到 blocker 对象（否则返回 void）
+        shouldBlockFn: ({ action }) =>
+            action === 'BACK' || action === 'FORWARD' || action === 'GO',
         withResolver: true,
         enableBeforeUnload: false,
     })
 
-    // 首次挂载：等 Lit 完成首次更新再设 open，走"非首次渲染"路径 → 有动画
+    // 首次挂载：等 Lit 首次更新完成，走"非首次渲染"路径 → 有打开动画
     React.useEffect(() => {
         const el = ref.current
         if (!el) return
@@ -72,31 +69,31 @@ export function DialogForRouter({
         el.open = open
     }, [open])
 
-    // 拦截用户触发的关闭（ESC / 遮罩 / X 按钮）
+    // ============================================================
+    //  closed 事件：用户触发 vs 我们主动关
+    //  ★ 必须过滤 e.target，否则 mdui-dropdown 的 closed 冒泡会误触发
+    // ============================================================
     React.useEffect(() => {
         const el = ref.current
         if (!el) return
 
-        const handleClose = (e: Event) => {
-            if (selfClosingRef.current) return
-            // 阻止 mdui 直接关闭，改由外部 navigate 触发 → blocker 统一处理
-            e.preventDefault()
-            onCloseRequestRef.current()
-        }
-        const handleClosed = () => {
-            selfClosingRef.current = false
-            onClosedRef.current?.()
+        const handleClosed = (e: Event) => {
+            if (e.target !== el) return    // ★ 忽略子元素的 closed 冒泡
+            if (selfClosingRef.current) {
+                selfClosingRef.current = false
+                onClosedRef.current?.()
+            } else {
+                onCloseRequestRef.current()
+            }
         }
 
-        el.addEventListener('close', handleClose)
         el.addEventListener('closed', handleClosed)
-        return () => {
-            el.removeEventListener('close', handleClose)
-            el.removeEventListener('closed', handleClosed)
-        }
+        return () => el.removeEventListener('closed', handleClosed)
     }, [])
 
-    // ★ blocker 拦截生效时：播放关闭动画，动画结束再放行导航
+    // ============================================================
+    //  blocker 拦截：浏览器返回键
+    // ============================================================
     React.useEffect(() => {
         if (blocker?.status !== 'blocked') return
         const el = ref.current
@@ -104,19 +101,31 @@ export function DialogForRouter({
             blocker.proceed?.()
             return
         }
+
+        // 用户操作已经关过了 → 直接放行
+        if (!el.open) {
+            blocker.proceed?.()
+            return
+        }
+
         selfClosingRef.current = true
         el.open = false
 
-        const handleClosed = () => {
+        // ★ 同样过滤 e.target
+        const handleClosed = (e: Event) => {
+            if (e.target !== el) return
+            el.removeEventListener('closed', handleClosed)
             blocker.proceed?.()
         }
-        el.addEventListener('closed', handleClosed, { once: true })
+        el.addEventListener('closed', handleClosed)
+
         return () => el.removeEventListener('closed', handleClosed)
     }, [blocker?.status])
 
     return (
         <mdui-dialog
             ref={ref as any}
+            className={className}
             close-on-esc={closeOnEsc}
             close-on-overlay-click={closeOnOverlayClick}
             fullscreen={fullscreen}
