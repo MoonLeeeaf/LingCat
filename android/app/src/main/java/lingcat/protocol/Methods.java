@@ -92,6 +92,7 @@ public class Methods {
     public static final int Message_Edited_Event = 0x73;
     public static final int Meeting_Started_Event = 0x80;
     public static final int Meeting_Ended_Event = 0x81;
+    public static final int Meeting_Participants_Changed_Event = 0x90;
 
     private Methods() { }
 
@@ -187,6 +188,7 @@ public class Methods {
             case Message_Edited_Event: return "Message_Edited_Event";
             case Meeting_Started_Event: return "Meeting_Started_Event";
             case Meeting_Ended_Event: return "Meeting_Ended_Event";
+            case Meeting_Participants_Changed_Event: return "Meeting_Participants_Changed_Event";
             default: return "Unknown(" + id + ")";
         }
     }
