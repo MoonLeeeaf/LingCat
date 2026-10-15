@@ -1,5 +1,3 @@
-import React from 'react'
-
 export interface ChatHeaderProps {
     /** 聊天标题 */
     title: string
@@ -23,7 +21,6 @@ export interface ChatHeaderProps {
 export function ChatHeader({
     title,
     isMobile,
-    drawerOpen = true,
     onToggleDrawer,
     onOpenMembers,
     onOpenSettings,
