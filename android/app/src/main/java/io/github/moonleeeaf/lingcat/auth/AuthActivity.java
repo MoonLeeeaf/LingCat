@@ -197,6 +197,15 @@ public class AuthActivity extends Activity {
                 String sessionId = LingCatClientManager.getInstance().getSessionId();
                 UserApi.authorize(client, account.accessToken, sessionId);
 
+                LingCatClientManager.getInstance().refreshFileTokenNow();
+
+                // 等它就绪（最多 15s）
+                try {
+                    LingCatClientManager.getInstance().awaitFileAccessToken(15_000L);
+                } catch (Exception e) {
+                    Log.w(TAG, "await file token failed, will retry in UI", e);
+                }
+
                 runOnUiThread(() -> {
                     hideLoading();
                     goMain();

@@ -382,6 +382,52 @@ public class LingCatClientManager {
         fileTokenListeners.remove(l);
     }
 
+    /**
+     * 立即（异步）刷新一次 file_access_token。
+     * 用于登录成功后主动触发——此时 DataStore 里刚写入账号, 定时器的首次调用可能已错过。
+     */
+    public void refreshFileTokenNow() {
+        LingCatClient c = current;
+        ServerConfig s = currentServer;
+        String sid = currentSessionId;
+        if (c == null || s == null || sid == null) return;
+        refreshFileTokenOnce(s, c, sid);
+    }
+
+    /**
+     * 阻塞等待 file_access_token 就绪（已有值则立即返回）。
+     * 用于"登录成功后跳主界面前，保证 token 已拿到"的场景。
+     *
+     * @param timeoutMs 最长等待时间
+     * @return token
+     * @throws InterruptedException 线程中断
+     * @throws TimeoutException 超时未拿到
+     */
+    public String awaitFileAccessToken(long timeoutMs)
+            throws InterruptedException, TimeoutException {
+        // 快路径：已经有值
+        String t = fileAccessToken;
+        if (t != null) return t;
+
+        final CompletableFuture<String> future = new CompletableFuture<>();
+        OnFileTokenChangedListener listener = future::complete;
+
+        addOnFileTokenChangedListener(listener);
+        try {
+            // 双检：注册监听和第一次检查之间可能已经刷出来了
+            t = fileAccessToken;
+            if (t != null) return t;
+
+            return future.get(timeoutMs, TimeUnit.MILLISECONDS);
+        } catch (java.util.concurrent.ExecutionException e) {
+            // listener 只会 complete 成功值，不会 completeExceptionally；
+            // 走到这里说明是 future 内部异常，包一层 RuntimeException 让调用方感知
+            throw new RuntimeException(e);
+        } finally {
+            removeOnFileTokenChangedListener(listener);
+        }
+    }
+
     private void refreshFileTokenOnce(ServerConfig server, LingCatClient client, String sessionId) {
         scheduler.execute(() -> {
             try {

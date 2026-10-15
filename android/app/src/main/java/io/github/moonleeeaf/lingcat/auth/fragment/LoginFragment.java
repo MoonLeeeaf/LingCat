@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 import io.github.moonleeeaf.lingcat.R;
 import io.github.moonleeeaf.lingcat.auth.AuthActivity;
@@ -294,6 +295,12 @@ public class LoginFragment extends Fragment {
                 UserApi.authorize(c, accessToken, sessionId, API_TIMEOUT_MS);
             } catch (Exception e) {
                 android.util.Log.w("LoginFragment", "authorize failed", e);
+            }
+            try {
+                LingCatClientManager.getInstance().refreshFileTokenNow();   // 主动触发
+                LingCatClientManager.getInstance().awaitFileAccessToken(15_000L);  // 等结果
+            } catch (Exception e) {
+                android.util.Log.w("LoginFragment", "get file_access_token failed", e);
             }
             if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {
