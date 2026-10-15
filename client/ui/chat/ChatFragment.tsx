@@ -15,6 +15,10 @@ import { MessageList } from './MessageList.tsx'
 import { MessageInput, type MessageInputHandle } from './MessageInput.tsx'
 import ChatMembersAndAdminsDialog from './ChatMembersAndAdminsDialog.tsx'
 import ChatSettingsDialog from './ChatSettingsDialog.tsx'
+import { useMeetingStore } from '../meeting/MeetingManager.ts'
+import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
+import showSnackbar from '../showSnackbar.ts'
+import { MeetingBanner } from './MeetingBanner.tsx'
 
 export function ChatFragment() {
     const { chatId } = ChatRoute.useParams()
@@ -53,6 +57,47 @@ export function ChatFragment() {
         messageInputRef.current?.focus()
     }
 
+    // 我是否在该 chat 会议中（用于通话按钮的图标/状态）
+    const room = useMeetingStore(s => s.room)
+    const currentMeetingChatId = useMeetingStore(s => s.chatId)
+    const isInThisMeeting = !!room && currentMeetingChatId === chatId
+
+    // 该 chat 是否有活跃会议（用于决定按钮行为：加入 vs 发起）
+    const hasActiveMeeting = useMeetingStore(s => !!s.activeMeetings[chatId])
+
+    const onCall = async () => {
+        if (!chat) return
+
+        // 我已在会议中
+        if (isInThisMeeting) {
+            const uiState = useMeetingUIStore.getState()
+            if (!uiState.isOpen) {
+                uiState.open()
+            } else {
+                showSnackbar({ message: '你已在此会议中' })
+            }
+            return
+        }
+
+        // 我在别的会议里 → 提示
+        if (room) {
+            showSnackbar({ message: '请先挂断当前会议' })
+            return
+        }
+
+        try {
+            if (hasActiveMeeting) {
+                const active = useMeetingStore.getState().activeMeetings[chatId]
+                await useMeetingStore.getState().joinMeeting(chatId, active.meetingId, chat.title ?? undefined)
+            } else {
+                await useMeetingStore.getState().startMeeting(chat)
+            }
+            useMeetingUIStore.getState().open()
+        } catch (e) {
+            tipError(e, '发起会议失败')
+        }
+    }
+
     const content = (
         <>
             <ChatHeader
@@ -63,6 +108,7 @@ export function ChatFragment() {
                 onOpenMembers={() => ChatMembersAndAdminsDialog.show(chatId)}
                 onOpenSettings={() => ChatSettingsDialog.show(chatId)}
                 onOpenInfo={() => ChatProfileDialog.show(chatId)}
+                onCall={chat?.is_member ? onCall : undefined}
             />
 
             {chat ? (
@@ -73,6 +119,7 @@ export function ChatFragment() {
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
+                        <MeetingBanner chatId={chatId} />
                         <MessageList
                             chatId={chatId}
                             isMember={true}

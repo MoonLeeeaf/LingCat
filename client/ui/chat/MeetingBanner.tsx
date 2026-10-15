@@ -1,0 +1,106 @@
+import React from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { useMeetingStore } from '../meeting/MeetingManager.ts'
+import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
+import { useMeetingParticipants } from '../meeting/useMeetingParticipants.ts'
+import SessionEnv from '../../SessionEnv.ts'
+import default_avatar from '../../default_avatar.png'
+import getFileUrl from '../../lib/getFileUrl.ts'
+import Avatar from '../Avatar.tsx'
+import tipError from '../tipError.ts'
+
+export function MeetingBanner({ chatId }: { chatId: string }) {
+    // 本对话是否有会议
+    const activeMeeting = useMeetingStore(s => s.activeMeetings[chatId])
+    // 我是否在这个对话的会议里
+    const room = useMeetingStore(s => s.room)
+    const currentChatId = useMeetingStore(s => s.chatId)
+    const isInThisMeeting = !!room && currentChatId === chatId
+    // 会议 UI 是否已打开
+    const uiOpen = useMeetingUIStore(s => s.isOpen)
+
+    const meetingMembers = useMeetingParticipants(chatId, activeMeeting?.meetingId)
+
+    const joinOrOpen = async () => {
+        if (isInThisMeeting) {
+            if (!uiOpen) useMeetingUIStore.getState().open()
+            return
+        }
+        if (!activeMeeting) return
+        try {
+            await useMeetingStore.getState().joinMeeting(
+                chatId,
+                activeMeeting.meetingId,
+                activeMeeting.title,
+            )
+            useMeetingUIStore.getState().open()
+        } catch (e) {
+            tipError(e, '加入会议失败')
+        }
+    }
+
+    if (!activeMeeting) return null
+
+    const actionLabel = isInThisMeeting
+        ? (uiOpen ? '会议中' : '回到会议')
+        : '加入'
+
+    return (
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            margin: '6px 8px',
+            padding: '6px 6px 6px 14px',
+            borderRadius: '999px',
+            background: 'rgb(var(--mdui-color-primary-container))',
+            color: 'rgb(var(--mdui-color-on-primary-container))',
+            boxShadow: 'var(--mdui-shadow-2)',
+            fontSize: '13px',
+            flexShrink: 0,
+        }}>
+            <span style={{ opacity: 0.9 }}>会议进行中</span>
+
+            {meetingMembers.length > 0 && (
+                <>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {meetingMembers.slice(0, 5).map((p, i) => (
+                            <div
+                                key={p.identity}
+                                style={{
+                                    marginLeft: i ? '-9px' : 0,
+                                    borderRadius: '50%',
+                                    border: '2px solid rgb(var(--mdui-color-primary-container))',
+                                    flexShrink: 0,
+                                }}
+                            >
+                                <Avatar
+                                    src={p.avatar_file_hash
+                                        ? getFileUrl(p.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                        : default_avatar}
+                                    style={{ width: '24px', height: '24px' }}
+                                />
+                            </div>
+                        ))}
+                        {meetingMembers.length > 5 && (
+                            <span style={{ marginLeft: '4px', fontSize: '12px', opacity: 0.75 }}>
+                                +{meetingMembers.length - 5}
+                            </span>
+                        )}
+                    </div>
+                    <span style={{ opacity: 0.75 }}>{meetingMembers.length} 人</span>
+                </>
+            )}
+
+            <div style={{ flex: 1 }} />
+
+            <mdui-button
+                variant="text"
+                onClick={joinOrOpen}
+                disabled={isInThisMeeting && uiOpen || undefined}
+            >
+                {actionLabel}
+            </mdui-button>
+        </div>
+    )
+}

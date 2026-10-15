@@ -4,7 +4,7 @@ import { DesktopRootLayout } from "./DesktopRootLayout.tsx"
 import { MobileRootLayout } from "./MobileRootLayout.tsx"
 import Avatar from "../Avatar.tsx"
 import { useAsyncEffect } from "../../lib/useAsyncEffect.ts"
-import { IUser } from "lingcat-protocol"
+import { IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
 import { FileApi, UserApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
@@ -18,6 +18,9 @@ import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import { ChatListFragment, ChatListShow } from "../main/ChatListFragment.tsx"
 import SwitchUserDialog from "../main/SwitchUserDialog.tsx"
 import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
+import { MobileMeetingDialog } from "../meeting/MobileMeetingDialog.tsx"
+import { DesktopMeetingWindow } from "../meeting/DesktopMeetingWindow.tsx"
+import { useMeetingStore } from "../meeting/MeetingManager.ts"
 
 const navItems = [
     {
@@ -50,7 +53,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     const matchRoute = useMatchRoute()
     const chatMatch = matchRoute({ to: '/chat/$chatId' })
     const activeChatId = chatMatch ? chatMatch.chatId : undefined
-    
+
     const [loaded, setLoaded] = React.useState(false)
     const [profile, setProfile] = React.useState<IUser>()
     useAsyncEffect(async (signal) => {
@@ -109,6 +112,34 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         } catch (e) {
             if (!signal.aborted) tipError(e, '加载资料失败')
         }
+
+        const onMeetingEvent = (pkg: Package) => {
+            try {
+                if (pkg.method_id === Methods.Meeting_Started_Event) {
+                    const ev = LingCatProto.methods.Meeting_Started_Event.decode(pkg.data)
+                    useMeetingStore.getState().onMeetingStarted({
+                        chatId: ev.chatId,
+                        meetingId: ev.meetingId,
+                        room: ev.room,
+                        starterUserId: ev.starterUserId,
+                        title: ev.title ?? undefined,
+                    })
+                } else if (pkg.method_id === Methods.Meeting_Ended_Event) {
+                    const ev = LingCatProto.methods.Meeting_Ended_Event.decode(pkg.data)
+                    useMeetingStore.getState().onMeetingEnded({
+                        chatId: ev.chatId,
+                        meetingId: ev.meetingId,
+                    })
+                }
+            } catch (e) {
+                console.warn('[Meeting] 处理会议事件失败', e)
+            }
+        }
+
+        ClientManager.getActiveClient()?.addOnReceiveListener(onMeetingEvent)
+        signal.addEventListener('abort', () => {
+            ClientManager.getActiveClient()?.removeOnReceiveListener(onMeetingEvent)
+        }, { once: true })
     }, [])
 
     const isMobile = useIsMobile()
@@ -151,32 +182,39 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
     return loaded
         ? (isMobile
-            ? <MobileRootLayout
-                topBar={
-                    <mdui-top-app-bar>
-                        <div style={{ width: '3px' }}></div>
-                        <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
-                        <div style={{ flexGrow: 1 }}></div>
-                        <mdui-button-icon icon="settings" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
-                        {avatarIconMenuItem}
-                        <div style={{ width: '3px' }}></div>
-                    </mdui-top-app-bar>
-                }
-                navItems={navItems}
-                navValue={navValue}
-                onNavValueChange={(v) => setNavValue(v as any)}
-                main={mainContent} />
+            ? <>
+                <MobileRootLayout
+                    topBar={
+                        <mdui-top-app-bar>
+                            <div style={{ width: '3px' }}></div>
+                            <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
+                            <div style={{ flexGrow: 1 }}></div>
+                            <mdui-button-icon icon="settings" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
+                            {avatarIconMenuItem}
+                            <div style={{ width: '3px' }}></div>
+                        </mdui-top-app-bar>
+                    }
+                    navItems={navItems}
+                    navValue={navValue}
+                    onNavValueChange={(v) => setNavValue(v as any)}
+                    main={mainContent} />
+                <MobileMeetingDialog />
+            </>
 
-            : <DesktopRootLayout
-                navTop={avatarIconMenuItem}
-                navBottom={
-                    <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
-                }
-                navItems={navItems}
-                navValue={navValue}
-                onNavValueChange={(v) => setNavValue(v as any)}
-                list={chatListFragment}
-                main={mainContent} />)
+            : <>
+                <DesktopRootLayout
+                    navTop={avatarIconMenuItem}
+                    navBottom={
+                        <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
+                    }
+                    navItems={navItems}
+                    navValue={navValue}
+                    onNavValueChange={(v) => setNavValue(v as any)}
+                    list={chatListFragment}
+                    main={mainContent} />
+                <DesktopMeetingWindow />
+            </>
+        )
         : <div style={{
             display: 'flex',
             alignItems: 'center',
