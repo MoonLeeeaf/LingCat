@@ -1,6 +1,7 @@
 import React from 'react'
 import { useBlocker } from '@tanstack/react-router'
 import { Dialog } from 'mdui'
+import { applyFullBleed } from '../lib/dialogFullBleed.ts'
 
 interface DialogForRouterProps {
     open: boolean
@@ -38,29 +39,10 @@ export function DialogForRouter({
         if (!fullBleed) return
         const el = ref.current
         if (!el) return
-
+    
         let cancelled = false
-        el.updateComplete.then(() => {
-            if (cancelled) return
-            const shadow = el.shadowRoot
-            if (!shadow) return
-
-            const panel = shadow.querySelector('.panel') as HTMLElement | null
-            const body = shadow.querySelector('.body') as HTMLElement | null
-
-            if (panel) {
-                panel.style.padding = '0'
-                panel.style.color = 'inherit'
-                panel.style.backgroundColor = 'rgb(var(--mdui-color-background))'
-                panel.style.setProperty('--mdui-color-background', 'inherit')
-            }
-            if (body) {
-                body.style.height = '100%'
-                body.style.display = 'flex'
-                body.style.flexDirection = 'column'
-            }
-        })
-
+        applyFullBleed(el, () => cancelled)
+    
         return () => { cancelled = true }
     }, [fullBleed])
 
@@ -163,6 +145,10 @@ export function DialogForRouter({
             fullscreen={fullscreen}
         >
             {children}
+
+            if (fullBleed) {
+    
+}
         </mdui-dialog>
     )
 }
