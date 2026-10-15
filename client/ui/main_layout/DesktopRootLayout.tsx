@@ -1,5 +1,6 @@
 import { NavigationDrawer, NavigationRail } from 'mdui'
 import React from 'react'
+import { DrawerContext, DrawerContextValue } from './DrawerContext.ts'
 
 export interface NavItem {
     value: string
@@ -22,7 +23,6 @@ export interface DesktopLayoutProps extends AppLayoutSharedProps {
     list: React.ReactNode
     /** 主区内容（会话详情 / 聊天） */
     main: React.ReactNode
-    drawerRef: React.RefObject<NavigationDrawer | undefined>
     navTop?: React.ReactNode
     navBottom?: React.ReactNode
     dockedPanel?: React.ReactNode
@@ -31,7 +31,6 @@ export interface DesktopLayoutProps extends AppLayoutSharedProps {
 }
 
 export function DesktopRootLayout({
-    drawerRef,
     navItems,
     navValue,
     onNavValueChange,
@@ -44,6 +43,7 @@ export function DesktopRootLayout({
     onDockPercentChange,
 }: DesktopLayoutProps) {
     const railRef = React.useRef<NavigationRail>(null)
+    const drawerRef = React.useRef<NavigationDrawer>(null) 
     const dockRowRef = React.useRef<HTMLDivElement>(null)
 
     // rail 选中项变化
@@ -58,8 +58,35 @@ export function DesktopRootLayout({
         return () => el.removeEventListener('change', handler)
     }, [onNavValueChange])
 
+    const [drawerOpen, setDrawerOpen] = React.useState(true)
+    React.useEffect(() => {
+        const d = drawerRef.current
+        if (!d) return
+        setDrawerOpen(d.open)
+
+        const onOpened = () => setDrawerOpen(true)
+        const onClosed = () => setDrawerOpen(false)
+        d.addEventListener('opened', onOpened as EventListener)
+        d.addEventListener('closed', onClosed as EventListener)
+        return () => {
+            d.removeEventListener('opened', onOpened as EventListener)
+            d.removeEventListener('closed', onClosed as EventListener)
+        }
+    }, []) 
+    const drawerCtx = React.useMemo<DrawerContextValue>(() => ({
+        open: drawerOpen,
+        toggle: () => {
+            const d = drawerRef.current
+            if (d) d.open = !d.open
+        },
+        setOpen: (v) => {
+            const d = drawerRef.current
+            if (d) d.open = v
+        },
+    }), [drawerOpen])
+
     return (
-        <>
+        <DrawerContext.Provider value={drawerCtx}>
             <mdui-navigation-drawer open ref={drawerRef as any}>
                 <mdui-navigation-rail
                     ref={railRef as any}
@@ -92,6 +119,6 @@ export function DesktopRootLayout({
                     </div>
                 </div>
             </mdui-layout-main>
-        </>
+        </DrawerContext.Provider>
     )
 }

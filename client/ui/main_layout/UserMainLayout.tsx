@@ -114,7 +114,6 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     const isMobile = useIsMobile()
 
     const [navValue, setNavValue] = React.useState<ChatListShow>('recents')
-    const drawerRef = React.useRef<NavigationDrawer>(undefined)
 
     const avatarIconMenuItem = loaded ? (
         <mdui-dropdown trigger="click" slot={isMobile ? undefined : 'top'}>
@@ -169,7 +168,6 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 main={mainContent} />
 
             : <DesktopRootLayout
-                drawerRef={drawerRef}
                 navTop={avatarIconMenuItem}
                 navBottom={
                     <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
