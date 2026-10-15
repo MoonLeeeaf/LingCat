@@ -438,3 +438,143 @@ export default class MeetingApi {
         return true
     }
 }
+
+// ============================================================
+//              会议成员轮询器
+//   定时 diff LiveKit 房间成员, 变化时广播事件
+//   —— 避免每个客户端各自轮询
+// ============================================================
+
+const POLL_INTERVAL_MS = 5000
+const SNAPSHOT_TTL_MS = 30_000   // 30 秒没更新的快照丢弃
+
+class MeetingParticipantPoller {
+    private snapshots = new Map<string, {
+        meetingId: string
+        chatId: string
+        identities: Set<string>
+        at: number
+    }>()
+
+    private timer?: ReturnType<typeof setInterval>
+
+    start(clients_emiter: ClientsEmiter) {
+        if (this.timer) return
+        this.timer = setInterval(() => {
+            this.tick(clients_emiter).catch(e => console.warn('[Poller] tick failed', e))
+        }, POLL_INTERVAL_MS)
+    }
+
+    stop() {
+        if (this.timer) {
+            clearInterval(this.timer)
+            this.timer = undefined
+        }
+    }
+
+    private async tick(clients_emiter: ClientsEmiter) {
+        if (!config.livekit_enabled) return
+        const cutoff = Date.now() - MEETING_IDLE_TIMEOUT_MS
+        const meetings = await MeetingDataBase.getAllActive(cutoff)
+        if (meetings.length === 0) {
+            // 没有会议, 清空快照
+            this.snapshots.clear()
+            return
+        }
+
+        const now = Date.now()
+        const activeRooms = new Set<string>()
+
+        for (const meeting of meetings) {
+            activeRooms.add(meeting.room)
+            try {
+                const svc = new RoomServiceClient(
+                    livekitHttpUrl(),
+                    config.livekit_api_key!,
+                    config.livekit_api_secret!,
+                )
+                const ps = await svc.listParticipants(meeting.room)
+                const data = ps.map(p => {
+                    let meta: any = {}
+                    try { meta = JSON.parse(p.metadata || '{}') } catch { }
+                    return {
+                        identity: p.identity,
+                        userId: meta.user_id ?? undefined,
+                        nickname: meta.nickname ?? p.name ?? undefined,
+                        remark: meta.remark ?? undefined,
+                        avatarFileHash: meta.avatar_file_hash ?? undefined,
+                    }
+                })
+                const identities = new Set(data.map(d => d.identity))
+
+                const prev = this.snapshots.get(meeting.room)
+
+                // 首次快照: 不广播 (客户端会主动 query 一次)
+                if (!prev) {
+                    this.snapshots.set(meeting.room, {
+                        meetingId: meeting.id,
+                        chatId: meeting.chat_id,
+                        identities,
+                        at: now,
+                    })
+                    continue
+                }
+
+                // diff
+                let changed = prev.identities.size !== identities.size
+                if (!changed) {
+                    for (const id of identities) {
+                        if (!prev.identities.has(id)) { changed = true; break }
+                    }
+                }
+
+                if (changed) {
+                    this.snapshots.set(meeting.room, {
+                        meetingId: meeting.id,
+                        chatId: meeting.chat_id,
+                        identities,
+                        at: now,
+                    })
+                    await this.broadcast(clients_emiter, meeting, data)
+                } else {
+                    prev.at = now  // 刷新时间戳
+                }
+            } catch (e: any) {
+                const msg = String(e?.message || e)
+                if (msg.includes('not found') || e?.code === 404) {
+                    // 房间已不存在 (可能刚结束)
+                    this.snapshots.delete(meeting.room)
+                } else {
+                    console.warn('[Poller] listParticipants failed', e)
+                }
+            }
+        }
+
+        // 清理过期快照
+        for (const [room, snap] of this.snapshots) {
+            if (!activeRooms.has(room) || now - snap.at > SNAPSHOT_TTL_MS) {
+                this.snapshots.delete(room)
+            }
+        }
+    }
+
+    private async broadcast(
+        clients_emiter: ClientsEmiter,
+        meeting: { id: string, chat_id: string, room: string },
+        participants: Array<{ identity: string, userId?: string, nickname?: string, remark?: string, avatarFileHash?: string }>,
+    ) {
+        await broadcastToChatMembers(clients_emiter, meeting.chat_id, () => Package.encode({
+            method_id: Methods.Meeting_Participants_Changed_Event,
+            flags: 0,
+            data: LingCatProto.methods.Meeting_Participants_Changed_Event.encode({
+                chatId: meeting.chat_id,
+                meetingId: meeting.id,
+                room: meeting.room,
+                count: participants.length,
+                participants,
+            }).finish(),
+        }))
+    }
+}
+
+export const meetingParticipantPoller = new MeetingParticipantPoller()

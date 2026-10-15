@@ -93,6 +93,7 @@ export default class Methods {
     static Message_Edited_Event = 0x73
     static Meeting_Started_Event = 0x80
     static Meeting_Ended_Event = 0x81
+    static Meeting_Participants_Changed_Event = 0x90
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

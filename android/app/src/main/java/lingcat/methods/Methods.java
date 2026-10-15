@@ -34683,6 +34683,3009 @@ public final class Methods {
     }
   }
 
+  public interface Get_Meeting_Participants_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_Meeting_Participants_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string chat_id = 2;</code>
+     * @return The chatId.
+     */
+    java.lang.String getChatId();
+    /**
+     * <code>string chat_id = 2;</code>
+     * @return The bytes for chatId.
+     */
+    com.google.protobuf.ByteString
+        getChatIdBytes();
+
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return Whether the meetingId field is set.
+     */
+    boolean hasMeetingId();
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return The meetingId.
+     */
+    java.lang.String getMeetingId();
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return The bytes for meetingId.
+     */
+    com.google.protobuf.ByteString
+        getMeetingIdBytes();
+  }
+  /**
+   * <pre>
+   * 查询会议在场成员 (供横幅显示人数/头像堆叠)
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Get_Meeting_Participants_Request}
+   */
+  public  static final class Get_Meeting_Participants_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_Meeting_Participants_Request, Get_Meeting_Participants_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_Meeting_Participants_Request)
+      Get_Meeting_Participants_RequestOrBuilder {
+    private Get_Meeting_Participants_Request() {
+      accessToken_ = "";
+      chatId_ = "";
+      meetingId_ = "";
+    }
+    private int bitField0_;
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int CHAT_ID_FIELD_NUMBER = 2;
+    private java.lang.String chatId_;
+    /**
+     * <code>string chat_id = 2;</code>
+     * @return The chatId.
+     */
+    @java.lang.Override
+    public java.lang.String getChatId() {
+      return chatId_;
+    }
+    /**
+     * <code>string chat_id = 2;</code>
+     * @return The bytes for chatId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getChatIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(chatId_);
+    }
+    /**
+     * <code>string chat_id = 2;</code>
+     * @param value The chatId to set.
+     */
+    private void setChatId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      chatId_ = value;
+    }
+    /**
+     * <code>string chat_id = 2;</code>
+     */
+    private void clearChatId() {
+      
+      chatId_ = getDefaultInstance().getChatId();
+    }
+    /**
+     * <code>string chat_id = 2;</code>
+     * @param value The bytes for chatId to set.
+     */
+    private void setChatIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      chatId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int MEETING_ID_FIELD_NUMBER = 3;
+    private java.lang.String meetingId_;
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return Whether the meetingId field is set.
+     */
+    @java.lang.Override
+    public boolean hasMeetingId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return The meetingId.
+     */
+    @java.lang.Override
+    public java.lang.String getMeetingId() {
+      return meetingId_;
+    }
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @return The bytes for meetingId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMeetingIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(meetingId_);
+    }
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @param value The meetingId to set.
+     */
+    private void setMeetingId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      meetingId_ = value;
+    }
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     */
+    private void clearMeetingId() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      meetingId_ = getDefaultInstance().getMeetingId();
+    }
+    /**
+     * <pre>
+     * 不传则用 chat 当前活跃的会议
+     * </pre>
+     *
+     * <code>optional string meeting_id = 3;</code>
+     * @param value The bytes for meetingId to set.
+     */
+    private void setMeetingIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      meetingId_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_Meeting_Participants_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 查询会议在场成员 (供横幅显示人数/头像堆叠)
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Get_Meeting_Participants_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_Meeting_Participants_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_Meeting_Participants_Request)
+        lingcat.methods.Methods.Get_Meeting_Participants_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_Meeting_Participants_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string chat_id = 2;</code>
+       * @return The chatId.
+       */
+      @java.lang.Override
+      public java.lang.String getChatId() {
+        return instance.getChatId();
+      }
+      /**
+       * <code>string chat_id = 2;</code>
+       * @return The bytes for chatId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getChatIdBytes() {
+        return instance.getChatIdBytes();
+      }
+      /**
+       * <code>string chat_id = 2;</code>
+       * @param value The chatId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChatId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setChatId(value);
+        return this;
+      }
+      /**
+       * <code>string chat_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChatId() {
+        copyOnWrite();
+        instance.clearChatId();
+        return this;
+      }
+      /**
+       * <code>string chat_id = 2;</code>
+       * @param value The bytes for chatId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChatIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setChatIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @return Whether the meetingId field is set.
+       */
+      @java.lang.Override
+      public boolean hasMeetingId() {
+        return instance.hasMeetingId();
+      }
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @return The meetingId.
+       */
+      @java.lang.Override
+      public java.lang.String getMeetingId() {
+        return instance.getMeetingId();
+      }
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @return The bytes for meetingId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMeetingIdBytes() {
+        return instance.getMeetingIdBytes();
+      }
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @param value The meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMeetingId(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMeetingId() {
+        copyOnWrite();
+        instance.clearMeetingId();
+        return this;
+      }
+      /**
+       * <pre>
+       * 不传则用 chat 当前活跃的会议
+       * </pre>
+       *
+       * <code>optional string meeting_id = 3;</code>
+       * @param value The bytes for meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMeetingIdBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_Meeting_Participants_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_Meeting_Participants_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "accessToken_",
+              "chatId_",
+              "meetingId_",
+            };
+            java.lang.String info =
+                "\u0000\u0003\u0000\u0001\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u1208\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_Meeting_Participants_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_Meeting_Participants_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_Meeting_Participants_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_Meeting_Participants_Request)
+    private static final lingcat.methods.Methods.Get_Meeting_Participants_Request DEFAULT_INSTANCE;
+    static {
+      Get_Meeting_Participants_Request defaultInstance = new Get_Meeting_Participants_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_Meeting_Participants_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_Meeting_Participants_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_Meeting_Participants_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Meeting_ParticipantOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Meeting_Participant)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The identity.
+     */
+    java.lang.String getIdentity();
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The bytes for identity.
+     */
+    com.google.protobuf.ByteString
+        getIdentityBytes();
+
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return Whether the userId field is set.
+     */
+    boolean hasUserId();
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The userId.
+     */
+    java.lang.String getUserId();
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The bytes for userId.
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return Whether the nickname field is set.
+     */
+    boolean hasNickname();
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The nickname.
+     */
+    java.lang.String getNickname();
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The bytes for nickname.
+     */
+    com.google.protobuf.ByteString
+        getNicknameBytes();
+
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return Whether the remark field is set.
+     */
+    boolean hasRemark();
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The remark.
+     */
+    java.lang.String getRemark();
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The bytes for remark.
+     */
+    com.google.protobuf.ByteString
+        getRemarkBytes();
+
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return Whether the avatarFileHash field is set.
+     */
+    boolean hasAvatarFileHash();
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The avatarFileHash.
+     */
+    java.lang.String getAvatarFileHash();
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The bytes for avatarFileHash.
+     */
+    com.google.protobuf.ByteString
+        getAvatarFileHashBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Meeting_Participant}
+   */
+  public  static final class Meeting_Participant extends
+      com.google.protobuf.GeneratedMessageLite<
+          Meeting_Participant, Meeting_Participant.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Meeting_Participant)
+      Meeting_ParticipantOrBuilder {
+    private Meeting_Participant() {
+      identity_ = "";
+      userId_ = "";
+      nickname_ = "";
+      remark_ = "";
+      avatarFileHash_ = "";
+    }
+    private int bitField0_;
+    public static final int IDENTITY_FIELD_NUMBER = 1;
+    private java.lang.String identity_;
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The identity.
+     */
+    @java.lang.Override
+    public java.lang.String getIdentity() {
+      return identity_;
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The bytes for identity.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIdentityBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(identity_);
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @param value The identity to set.
+     */
+    private void setIdentity(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      identity_ = value;
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     */
+    private void clearIdentity() {
+      
+      identity_ = getDefaultInstance().getIdentity();
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @param value The bytes for identity to set.
+     */
+    private void setIdentityBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      identity_ = value.toStringUtf8();
+      
+    }
+
+    public static final int USER_ID_FIELD_NUMBER = 2;
+    private java.lang.String userId_;
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return Whether the userId field is set.
+     */
+    @java.lang.Override
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public java.lang.String getUserId() {
+      return userId_;
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The bytes for userId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(userId_);
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @param value The userId to set.
+     */
+    private void setUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      userId_ = value;
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     */
+    private void clearUserId() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      userId_ = getDefaultInstance().getUserId();
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @param value The bytes for userId to set.
+     */
+    private void setUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      userId_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static final int NICKNAME_FIELD_NUMBER = 3;
+    private java.lang.String nickname_;
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return Whether the nickname field is set.
+     */
+    @java.lang.Override
+    public boolean hasNickname() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The nickname.
+     */
+    @java.lang.Override
+    public java.lang.String getNickname() {
+      return nickname_;
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The bytes for nickname.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getNicknameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(nickname_);
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @param value The nickname to set.
+     */
+    private void setNickname(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000002;
+      nickname_ = value;
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     */
+    private void clearNickname() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      nickname_ = getDefaultInstance().getNickname();
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @param value The bytes for nickname to set.
+     */
+    private void setNicknameBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      nickname_ = value.toStringUtf8();
+      bitField0_ |= 0x00000002;
+    }
+
+    public static final int REMARK_FIELD_NUMBER = 4;
+    private java.lang.String remark_;
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return Whether the remark field is set.
+     */
+    @java.lang.Override
+    public boolean hasRemark() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The remark.
+     */
+    @java.lang.Override
+    public java.lang.String getRemark() {
+      return remark_;
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The bytes for remark.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRemarkBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(remark_);
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @param value The remark to set.
+     */
+    private void setRemark(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000004;
+      remark_ = value;
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     */
+    private void clearRemark() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      remark_ = getDefaultInstance().getRemark();
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @param value The bytes for remark to set.
+     */
+    private void setRemarkBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      remark_ = value.toStringUtf8();
+      bitField0_ |= 0x00000004;
+    }
+
+    public static final int AVATAR_FILE_HASH_FIELD_NUMBER = 5;
+    private java.lang.String avatarFileHash_;
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return Whether the avatarFileHash field is set.
+     */
+    @java.lang.Override
+    public boolean hasAvatarFileHash() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The avatarFileHash.
+     */
+    @java.lang.Override
+    public java.lang.String getAvatarFileHash() {
+      return avatarFileHash_;
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The bytes for avatarFileHash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAvatarFileHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(avatarFileHash_);
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @param value The avatarFileHash to set.
+     */
+    private void setAvatarFileHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000008;
+      avatarFileHash_ = value;
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     */
+    private void clearAvatarFileHash() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      avatarFileHash_ = getDefaultInstance().getAvatarFileHash();
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @param value The bytes for avatarFileHash to set.
+     */
+    private void setAvatarFileHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      avatarFileHash_ = value.toStringUtf8();
+      bitField0_ |= 0x00000008;
+    }
+
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participant parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Meeting_Participant prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Meeting_Participant}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Meeting_Participant, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Meeting_Participant)
+        lingcat.methods.Methods.Meeting_ParticipantOrBuilder {
+      // Construct using lingcat.methods.Methods.Meeting_Participant.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return The identity.
+       */
+      @java.lang.Override
+      public java.lang.String getIdentity() {
+        return instance.getIdentity();
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return The bytes for identity.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getIdentityBytes() {
+        return instance.getIdentityBytes();
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @param value The identity to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdentity(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setIdentity(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIdentity() {
+        copyOnWrite();
+        instance.clearIdentity();
+        return this;
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @param value The bytes for identity to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdentityBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setIdentityBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return Whether the userId field is set.
+       */
+      @java.lang.Override
+      public boolean hasUserId() {
+        return instance.hasUserId();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public java.lang.String getUserId() {
+        return instance.getUserId();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return The bytes for userId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        return instance.getUserIdBytes();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setUserId(value);
+        return this;
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        copyOnWrite();
+        instance.clearUserId();
+        return this;
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @param value The bytes for userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return Whether the nickname field is set.
+       */
+      @java.lang.Override
+      public boolean hasNickname() {
+        return instance.hasNickname();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return The nickname.
+       */
+      @java.lang.Override
+      public java.lang.String getNickname() {
+        return instance.getNickname();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return The bytes for nickname.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getNicknameBytes() {
+        return instance.getNicknameBytes();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @param value The nickname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNickname(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setNickname(value);
+        return this;
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNickname() {
+        copyOnWrite();
+        instance.clearNickname();
+        return this;
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @param value The bytes for nickname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNicknameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setNicknameBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return Whether the remark field is set.
+       */
+      @java.lang.Override
+      public boolean hasRemark() {
+        return instance.hasRemark();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return The remark.
+       */
+      @java.lang.Override
+      public java.lang.String getRemark() {
+        return instance.getRemark();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return The bytes for remark.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRemarkBytes() {
+        return instance.getRemarkBytes();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @param value The remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemark(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRemark(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRemark() {
+        copyOnWrite();
+        instance.clearRemark();
+        return this;
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @param value The bytes for remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemarkBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRemarkBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return Whether the avatarFileHash field is set.
+       */
+      @java.lang.Override
+      public boolean hasAvatarFileHash() {
+        return instance.hasAvatarFileHash();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return The avatarFileHash.
+       */
+      @java.lang.Override
+      public java.lang.String getAvatarFileHash() {
+        return instance.getAvatarFileHash();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return The bytes for avatarFileHash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAvatarFileHashBytes() {
+        return instance.getAvatarFileHashBytes();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @param value The avatarFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAvatarFileHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAvatarFileHash(value);
+        return this;
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAvatarFileHash() {
+        copyOnWrite();
+        instance.clearAvatarFileHash();
+        return this;
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @param value The bytes for avatarFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAvatarFileHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAvatarFileHashBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Meeting_Participant)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Meeting_Participant();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "identity_",
+              "userId_",
+              "nickname_",
+              "remark_",
+              "avatarFileHash_",
+            };
+            java.lang.String info =
+                "\u0000\u0005\u0000\u0001\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u0208\u0002\u1208" +
+                "\u0000\u0003\u1208\u0001\u0004\u1208\u0002\u0005\u1208\u0003";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Meeting_Participant> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Meeting_Participant.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Meeting_Participant>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Meeting_Participant)
+    private static final lingcat.methods.Methods.Meeting_Participant DEFAULT_INSTANCE;
+    static {
+      Meeting_Participant defaultInstance = new Meeting_Participant();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Meeting_Participant.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Meeting_Participant getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Meeting_Participant> PARSER;
+
+    public static com.google.protobuf.Parser<Meeting_Participant> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_Meeting_Participants_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_Meeting_Participants_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @return The meetingId.
+     */
+    java.lang.String getMeetingId();
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @return The bytes for meetingId.
+     */
+    com.google.protobuf.ByteString
+        getMeetingIdBytes();
+
+    /**
+     * <code>string room = 2;</code>
+     * @return The room.
+     */
+    java.lang.String getRoom();
+    /**
+     * <code>string room = 2;</code>
+     * @return The bytes for room.
+     */
+    com.google.protobuf.ByteString
+        getRoomBytes();
+
+    /**
+     * <code>uint32 count = 3;</code>
+     * @return The count.
+     */
+    int getCount();
+
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    java.util.List<lingcat.methods.Methods.Meeting_Participant> 
+        getParticipantsList();
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    lingcat.methods.Methods.Meeting_Participant getParticipants(int index);
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    int getParticipantsCount();
+  }
+  /**
+   * <pre>
+   * 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Get_Meeting_Participants_Response}
+   */
+  public  static final class Get_Meeting_Participants_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_Meeting_Participants_Response, Get_Meeting_Participants_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_Meeting_Participants_Response)
+      Get_Meeting_Participants_ResponseOrBuilder {
+    private Get_Meeting_Participants_Response() {
+      meetingId_ = "";
+      room_ = "";
+      participants_ = emptyProtobufList();
+    }
+    public static final int MEETING_ID_FIELD_NUMBER = 1;
+    private java.lang.String meetingId_;
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @return The meetingId.
+     */
+    @java.lang.Override
+    public java.lang.String getMeetingId() {
+      return meetingId_;
+    }
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @return The bytes for meetingId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMeetingIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(meetingId_);
+    }
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @param value The meetingId to set.
+     */
+    private void setMeetingId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      meetingId_ = value;
+    }
+    /**
+     * <code>string meeting_id = 1;</code>
+     */
+    private void clearMeetingId() {
+      
+      meetingId_ = getDefaultInstance().getMeetingId();
+    }
+    /**
+     * <code>string meeting_id = 1;</code>
+     * @param value The bytes for meetingId to set.
+     */
+    private void setMeetingIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      meetingId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int ROOM_FIELD_NUMBER = 2;
+    private java.lang.String room_;
+    /**
+     * <code>string room = 2;</code>
+     * @return The room.
+     */
+    @java.lang.Override
+    public java.lang.String getRoom() {
+      return room_;
+    }
+    /**
+     * <code>string room = 2;</code>
+     * @return The bytes for room.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRoomBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(room_);
+    }
+    /**
+     * <code>string room = 2;</code>
+     * @param value The room to set.
+     */
+    private void setRoom(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      room_ = value;
+    }
+    /**
+     * <code>string room = 2;</code>
+     */
+    private void clearRoom() {
+      
+      room_ = getDefaultInstance().getRoom();
+    }
+    /**
+     * <code>string room = 2;</code>
+     * @param value The bytes for room to set.
+     */
+    private void setRoomBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      room_ = value.toStringUtf8();
+      
+    }
+
+    public static final int COUNT_FIELD_NUMBER = 3;
+    private int count_;
+    /**
+     * <code>uint32 count = 3;</code>
+     * @return The count.
+     */
+    @java.lang.Override
+    public int getCount() {
+      return count_;
+    }
+    /**
+     * <code>uint32 count = 3;</code>
+     * @param value The count to set.
+     */
+    private void setCount(int value) {
+      
+      count_ = value;
+    }
+    /**
+     * <code>uint32 count = 3;</code>
+     */
+    private void clearCount() {
+      
+      count_ = 0;
+    }
+
+    public static final int PARTICIPANTS_FIELD_NUMBER = 4;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.Meeting_Participant> participants_;
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.methods.Methods.Meeting_Participant> getParticipantsList() {
+      return participants_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    public java.util.List<? extends lingcat.methods.Methods.Meeting_ParticipantOrBuilder> 
+        getParticipantsOrBuilderList() {
+      return participants_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    @java.lang.Override
+    public int getParticipantsCount() {
+      return participants_.size();
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    @java.lang.Override
+    public lingcat.methods.Methods.Meeting_Participant getParticipants(int index) {
+      return participants_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    public lingcat.methods.Methods.Meeting_ParticipantOrBuilder getParticipantsOrBuilder(
+        int index) {
+      return participants_.get(index);
+    }
+    private void ensureParticipantsIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.Meeting_Participant> tmp = participants_;
+      if (!tmp.isModifiable()) {
+        participants_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void setParticipants(
+        int index, lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void addParticipants(lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void addParticipants(
+        int index, lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void addAllParticipants(
+        java.lang.Iterable<? extends lingcat.methods.Methods.Meeting_Participant> values) {
+      ensureParticipantsIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, participants_);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void clearParticipants() {
+      participants_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+     */
+    private void removeParticipants(int index) {
+      ensureParticipantsIsMutable();
+      participants_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_Meeting_Participants_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Get_Meeting_Participants_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_Meeting_Participants_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_Meeting_Participants_Response)
+        lingcat.methods.Methods.Get_Meeting_Participants_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_Meeting_Participants_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string meeting_id = 1;</code>
+       * @return The meetingId.
+       */
+      @java.lang.Override
+      public java.lang.String getMeetingId() {
+        return instance.getMeetingId();
+      }
+      /**
+       * <code>string meeting_id = 1;</code>
+       * @return The bytes for meetingId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMeetingIdBytes() {
+        return instance.getMeetingIdBytes();
+      }
+      /**
+       * <code>string meeting_id = 1;</code>
+       * @param value The meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMeetingId(value);
+        return this;
+      }
+      /**
+       * <code>string meeting_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMeetingId() {
+        copyOnWrite();
+        instance.clearMeetingId();
+        return this;
+      }
+      /**
+       * <code>string meeting_id = 1;</code>
+       * @param value The bytes for meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMeetingIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string room = 2;</code>
+       * @return The room.
+       */
+      @java.lang.Override
+      public java.lang.String getRoom() {
+        return instance.getRoom();
+      }
+      /**
+       * <code>string room = 2;</code>
+       * @return The bytes for room.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRoomBytes() {
+        return instance.getRoomBytes();
+      }
+      /**
+       * <code>string room = 2;</code>
+       * @param value The room to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoom(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRoom(value);
+        return this;
+      }
+      /**
+       * <code>string room = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRoom() {
+        copyOnWrite();
+        instance.clearRoom();
+        return this;
+      }
+      /**
+       * <code>string room = 2;</code>
+       * @param value The bytes for room to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoomBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRoomBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>uint32 count = 3;</code>
+       * @return The count.
+       */
+      @java.lang.Override
+      public int getCount() {
+        return instance.getCount();
+      }
+      /**
+       * <code>uint32 count = 3;</code>
+       * @param value The count to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCount(int value) {
+        copyOnWrite();
+        instance.setCount(value);
+        return this;
+      }
+      /**
+       * <code>uint32 count = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCount() {
+        copyOnWrite();
+        instance.clearCount();
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.methods.Methods.Meeting_Participant> getParticipantsList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getParticipantsList());
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      @java.lang.Override
+      public int getParticipantsCount() {
+        return instance.getParticipantsCount();
+      }/**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      @java.lang.Override
+      public lingcat.methods.Methods.Meeting_Participant getParticipants(int index) {
+        return instance.getParticipants(index);
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder setParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.setParticipants(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder setParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.setParticipants(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder addParticipants(lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.addParticipants(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder addParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.addParticipants(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder addParticipants(
+          lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.addParticipants(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder addParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.addParticipants(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder addAllParticipants(
+          java.lang.Iterable<? extends lingcat.methods.Methods.Meeting_Participant> values) {
+        copyOnWrite();
+        instance.addAllParticipants(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder clearParticipants() {
+        copyOnWrite();
+        instance.clearParticipants();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 4;</code>
+       */
+      public Builder removeParticipants(int index) {
+        copyOnWrite();
+        instance.removeParticipants(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_Meeting_Participants_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_Meeting_Participants_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "meetingId_",
+              "room_",
+              "count_",
+              "participants_",
+              lingcat.methods.Methods.Meeting_Participant.class,
+            };
+            java.lang.String info =
+                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0001\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u000b\u0004\u001b";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_Meeting_Participants_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_Meeting_Participants_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_Meeting_Participants_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_Meeting_Participants_Response)
+    private static final lingcat.methods.Methods.Get_Meeting_Participants_Response DEFAULT_INSTANCE;
+    static {
+      Get_Meeting_Participants_Response defaultInstance = new Get_Meeting_Participants_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_Meeting_Participants_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_Meeting_Participants_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_Meeting_Participants_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_Meeting_Participants_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Meeting_Participants_Changed_EventOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Meeting_Participants_Changed_Event)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string chat_id = 1;</code>
+     * @return The chatId.
+     */
+    java.lang.String getChatId();
+    /**
+     * <code>string chat_id = 1;</code>
+     * @return The bytes for chatId.
+     */
+    com.google.protobuf.ByteString
+        getChatIdBytes();
+
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @return The meetingId.
+     */
+    java.lang.String getMeetingId();
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @return The bytes for meetingId.
+     */
+    com.google.protobuf.ByteString
+        getMeetingIdBytes();
+
+    /**
+     * <code>string room = 3;</code>
+     * @return The room.
+     */
+    java.lang.String getRoom();
+    /**
+     * <code>string room = 3;</code>
+     * @return The bytes for room.
+     */
+    com.google.protobuf.ByteString
+        getRoomBytes();
+
+    /**
+     * <code>uint32 count = 4;</code>
+     * @return The count.
+     */
+    int getCount();
+
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    java.util.List<lingcat.methods.Methods.Meeting_Participant> 
+        getParticipantsList();
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    lingcat.methods.Methods.Meeting_Participant getParticipants(int index);
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    int getParticipantsCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Meeting_Participants_Changed_Event}
+   */
+  public  static final class Meeting_Participants_Changed_Event extends
+      com.google.protobuf.GeneratedMessageLite<
+          Meeting_Participants_Changed_Event, Meeting_Participants_Changed_Event.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Meeting_Participants_Changed_Event)
+      Meeting_Participants_Changed_EventOrBuilder {
+    private Meeting_Participants_Changed_Event() {
+      chatId_ = "";
+      meetingId_ = "";
+      room_ = "";
+      participants_ = emptyProtobufList();
+    }
+    public static final int CHAT_ID_FIELD_NUMBER = 1;
+    private java.lang.String chatId_;
+    /**
+     * <code>string chat_id = 1;</code>
+     * @return The chatId.
+     */
+    @java.lang.Override
+    public java.lang.String getChatId() {
+      return chatId_;
+    }
+    /**
+     * <code>string chat_id = 1;</code>
+     * @return The bytes for chatId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getChatIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(chatId_);
+    }
+    /**
+     * <code>string chat_id = 1;</code>
+     * @param value The chatId to set.
+     */
+    private void setChatId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      chatId_ = value;
+    }
+    /**
+     * <code>string chat_id = 1;</code>
+     */
+    private void clearChatId() {
+      
+      chatId_ = getDefaultInstance().getChatId();
+    }
+    /**
+     * <code>string chat_id = 1;</code>
+     * @param value The bytes for chatId to set.
+     */
+    private void setChatIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      chatId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int MEETING_ID_FIELD_NUMBER = 2;
+    private java.lang.String meetingId_;
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @return The meetingId.
+     */
+    @java.lang.Override
+    public java.lang.String getMeetingId() {
+      return meetingId_;
+    }
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @return The bytes for meetingId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMeetingIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(meetingId_);
+    }
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @param value The meetingId to set.
+     */
+    private void setMeetingId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      meetingId_ = value;
+    }
+    /**
+     * <code>string meeting_id = 2;</code>
+     */
+    private void clearMeetingId() {
+      
+      meetingId_ = getDefaultInstance().getMeetingId();
+    }
+    /**
+     * <code>string meeting_id = 2;</code>
+     * @param value The bytes for meetingId to set.
+     */
+    private void setMeetingIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      meetingId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int ROOM_FIELD_NUMBER = 3;
+    private java.lang.String room_;
+    /**
+     * <code>string room = 3;</code>
+     * @return The room.
+     */
+    @java.lang.Override
+    public java.lang.String getRoom() {
+      return room_;
+    }
+    /**
+     * <code>string room = 3;</code>
+     * @return The bytes for room.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRoomBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(room_);
+    }
+    /**
+     * <code>string room = 3;</code>
+     * @param value The room to set.
+     */
+    private void setRoom(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      room_ = value;
+    }
+    /**
+     * <code>string room = 3;</code>
+     */
+    private void clearRoom() {
+      
+      room_ = getDefaultInstance().getRoom();
+    }
+    /**
+     * <code>string room = 3;</code>
+     * @param value The bytes for room to set.
+     */
+    private void setRoomBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      room_ = value.toStringUtf8();
+      
+    }
+
+    public static final int COUNT_FIELD_NUMBER = 4;
+    private int count_;
+    /**
+     * <code>uint32 count = 4;</code>
+     * @return The count.
+     */
+    @java.lang.Override
+    public int getCount() {
+      return count_;
+    }
+    /**
+     * <code>uint32 count = 4;</code>
+     * @param value The count to set.
+     */
+    private void setCount(int value) {
+      
+      count_ = value;
+    }
+    /**
+     * <code>uint32 count = 4;</code>
+     */
+    private void clearCount() {
+      
+      count_ = 0;
+    }
+
+    public static final int PARTICIPANTS_FIELD_NUMBER = 5;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.Meeting_Participant> participants_;
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.methods.Methods.Meeting_Participant> getParticipantsList() {
+      return participants_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    public java.util.List<? extends lingcat.methods.Methods.Meeting_ParticipantOrBuilder> 
+        getParticipantsOrBuilderList() {
+      return participants_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    @java.lang.Override
+    public int getParticipantsCount() {
+      return participants_.size();
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    @java.lang.Override
+    public lingcat.methods.Methods.Meeting_Participant getParticipants(int index) {
+      return participants_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    public lingcat.methods.Methods.Meeting_ParticipantOrBuilder getParticipantsOrBuilder(
+        int index) {
+      return participants_.get(index);
+    }
+    private void ensureParticipantsIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.Meeting_Participant> tmp = participants_;
+      if (!tmp.isModifiable()) {
+        participants_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void setParticipants(
+        int index, lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void addParticipants(lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void addParticipants(
+        int index, lingcat.methods.Methods.Meeting_Participant value) {
+      value.getClass();
+  ensureParticipantsIsMutable();
+      participants_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void addAllParticipants(
+        java.lang.Iterable<? extends lingcat.methods.Methods.Meeting_Participant> values) {
+      ensureParticipantsIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, participants_);
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void clearParticipants() {
+      participants_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+     */
+    private void removeParticipants(int index) {
+      ensureParticipantsIsMutable();
+      participants_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Meeting_Participants_Changed_Event prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Meeting_Participants_Changed_Event}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Meeting_Participants_Changed_Event, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Meeting_Participants_Changed_Event)
+        lingcat.methods.Methods.Meeting_Participants_Changed_EventOrBuilder {
+      // Construct using lingcat.methods.Methods.Meeting_Participants_Changed_Event.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string chat_id = 1;</code>
+       * @return The chatId.
+       */
+      @java.lang.Override
+      public java.lang.String getChatId() {
+        return instance.getChatId();
+      }
+      /**
+       * <code>string chat_id = 1;</code>
+       * @return The bytes for chatId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getChatIdBytes() {
+        return instance.getChatIdBytes();
+      }
+      /**
+       * <code>string chat_id = 1;</code>
+       * @param value The chatId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChatId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setChatId(value);
+        return this;
+      }
+      /**
+       * <code>string chat_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChatId() {
+        copyOnWrite();
+        instance.clearChatId();
+        return this;
+      }
+      /**
+       * <code>string chat_id = 1;</code>
+       * @param value The bytes for chatId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChatIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setChatIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string meeting_id = 2;</code>
+       * @return The meetingId.
+       */
+      @java.lang.Override
+      public java.lang.String getMeetingId() {
+        return instance.getMeetingId();
+      }
+      /**
+       * <code>string meeting_id = 2;</code>
+       * @return The bytes for meetingId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMeetingIdBytes() {
+        return instance.getMeetingIdBytes();
+      }
+      /**
+       * <code>string meeting_id = 2;</code>
+       * @param value The meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMeetingId(value);
+        return this;
+      }
+      /**
+       * <code>string meeting_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMeetingId() {
+        copyOnWrite();
+        instance.clearMeetingId();
+        return this;
+      }
+      /**
+       * <code>string meeting_id = 2;</code>
+       * @param value The bytes for meetingId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMeetingIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMeetingIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string room = 3;</code>
+       * @return The room.
+       */
+      @java.lang.Override
+      public java.lang.String getRoom() {
+        return instance.getRoom();
+      }
+      /**
+       * <code>string room = 3;</code>
+       * @return The bytes for room.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRoomBytes() {
+        return instance.getRoomBytes();
+      }
+      /**
+       * <code>string room = 3;</code>
+       * @param value The room to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoom(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRoom(value);
+        return this;
+      }
+      /**
+       * <code>string room = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRoom() {
+        copyOnWrite();
+        instance.clearRoom();
+        return this;
+      }
+      /**
+       * <code>string room = 3;</code>
+       * @param value The bytes for room to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRoomBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRoomBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>uint32 count = 4;</code>
+       * @return The count.
+       */
+      @java.lang.Override
+      public int getCount() {
+        return instance.getCount();
+      }
+      /**
+       * <code>uint32 count = 4;</code>
+       * @param value The count to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCount(int value) {
+        copyOnWrite();
+        instance.setCount(value);
+        return this;
+      }
+      /**
+       * <code>uint32 count = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCount() {
+        copyOnWrite();
+        instance.clearCount();
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.methods.Methods.Meeting_Participant> getParticipantsList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getParticipantsList());
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      @java.lang.Override
+      public int getParticipantsCount() {
+        return instance.getParticipantsCount();
+      }/**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      @java.lang.Override
+      public lingcat.methods.Methods.Meeting_Participant getParticipants(int index) {
+        return instance.getParticipants(index);
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder setParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.setParticipants(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder setParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.setParticipants(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder addParticipants(lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.addParticipants(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder addParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant value) {
+        copyOnWrite();
+        instance.addParticipants(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder addParticipants(
+          lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.addParticipants(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder addParticipants(
+          int index, lingcat.methods.Methods.Meeting_Participant.Builder builderForValue) {
+        copyOnWrite();
+        instance.addParticipants(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder addAllParticipants(
+          java.lang.Iterable<? extends lingcat.methods.Methods.Meeting_Participant> values) {
+        copyOnWrite();
+        instance.addAllParticipants(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder clearParticipants() {
+        copyOnWrite();
+        instance.clearParticipants();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.Meeting_Participant participants = 5;</code>
+       */
+      public Builder removeParticipants(int index) {
+        copyOnWrite();
+        instance.removeParticipants(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Meeting_Participants_Changed_Event)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Meeting_Participants_Changed_Event();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "chatId_",
+              "meetingId_",
+              "room_",
+              "count_",
+              "participants_",
+              lingcat.methods.Methods.Meeting_Participant.class,
+            };
+            java.lang.String info =
+                "\u0000\u0005\u0000\u0000\u0001\u0005\u0005\u0000\u0001\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208\u0004\u000b\u0005\u001b";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Meeting_Participants_Changed_Event> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Meeting_Participants_Changed_Event.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Meeting_Participants_Changed_Event>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Meeting_Participants_Changed_Event)
+    private static final lingcat.methods.Methods.Meeting_Participants_Changed_Event DEFAULT_INSTANCE;
+    static {
+      Meeting_Participants_Changed_Event defaultInstance = new Meeting_Participants_Changed_Event();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Meeting_Participants_Changed_Event.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Meeting_Participants_Changed_Event getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Meeting_Participants_Changed_Event> PARSER;
+
+    public static com.google.protobuf.Parser<Meeting_Participants_Changed_Event> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
 
   static {
   }

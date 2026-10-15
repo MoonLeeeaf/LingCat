@@ -12397,5 +12397,146 @@ export namespace lingcat {
             /** Shape of a Get_Meeting_Participants_Response. */
             type $Shape = lingcat.methods.Get_Meeting_Participants_Response.$Properties;
         }
+
+        /**
+         * Properties of a Meeting_Participants_Changed_Event.
+         * @deprecated Use lingcat.methods.Meeting_Participants_Changed_Event.$Properties instead.
+         */
+        interface IMeeting_Participants_Changed_Event extends lingcat.methods.Meeting_Participants_Changed_Event.$Properties {
+        }
+
+        /** Represents a Meeting_Participants_Changed_Event. */
+        class Meeting_Participants_Changed_Event {
+
+            /**
+             * Constructs a new Meeting_Participants_Changed_Event.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Meeting_Participants_Changed_Event.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Meeting_Participants_Changed_Event chatId. */
+            chatId: string;
+
+            /** Meeting_Participants_Changed_Event meetingId. */
+            meetingId: string;
+
+            /** Meeting_Participants_Changed_Event room. */
+            room: string;
+
+            /** Meeting_Participants_Changed_Event count. */
+            count: number;
+
+            /** Meeting_Participants_Changed_Event participants. */
+            participants: lingcat.methods.Meeting_Participant.$Properties[];
+
+            /**
+             * Creates a new Meeting_Participants_Changed_Event instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Meeting_Participants_Changed_Event instance
+             */
+            static create(properties: lingcat.methods.Meeting_Participants_Changed_Event.$Shape): lingcat.methods.Meeting_Participants_Changed_Event & lingcat.methods.Meeting_Participants_Changed_Event.$Shape;
+            static create(properties?: lingcat.methods.Meeting_Participants_Changed_Event.$Properties): lingcat.methods.Meeting_Participants_Changed_Event;
+
+            /**
+             * Encodes the specified Meeting_Participants_Changed_Event message. Does not implicitly {@link lingcat.methods.Meeting_Participants_Changed_Event.verify|verify} messages.
+             * @param message Meeting_Participants_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Meeting_Participants_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Meeting_Participants_Changed_Event message, length delimited. Does not implicitly {@link lingcat.methods.Meeting_Participants_Changed_Event.verify|verify} messages.
+             * @param message Meeting_Participants_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Meeting_Participants_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Meeting_Participants_Changed_Event message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Meeting_Participants_Changed_Event & lingcat.methods.Meeting_Participants_Changed_Event.$Shape} Meeting_Participants_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Meeting_Participants_Changed_Event & lingcat.methods.Meeting_Participants_Changed_Event.$Shape;
+
+            /**
+             * Decodes a Meeting_Participants_Changed_Event message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Meeting_Participants_Changed_Event & lingcat.methods.Meeting_Participants_Changed_Event.$Shape} Meeting_Participants_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Meeting_Participants_Changed_Event & lingcat.methods.Meeting_Participants_Changed_Event.$Shape;
+
+            /**
+             * Verifies a Meeting_Participants_Changed_Event message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Meeting_Participants_Changed_Event message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Meeting_Participants_Changed_Event
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Meeting_Participants_Changed_Event;
+
+            /**
+             * Creates a plain object from a Meeting_Participants_Changed_Event message. Also converts values to other types if specified.
+             * @param message Meeting_Participants_Changed_Event
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Meeting_Participants_Changed_Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Meeting_Participants_Changed_Event to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Meeting_Participants_Changed_Event
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Meeting_Participants_Changed_Event {
+
+            /** Properties of a Meeting_Participants_Changed_Event. */
+            interface $Properties {
+
+                /** Meeting_Participants_Changed_Event chatId */
+                chatId?: (string|null);
+
+                /** Meeting_Participants_Changed_Event meetingId */
+                meetingId?: (string|null);
+
+                /** Meeting_Participants_Changed_Event room */
+                room?: (string|null);
+
+                /** Meeting_Participants_Changed_Event count */
+                count?: (number|null);
+
+                /** Meeting_Participants_Changed_Event participants */
+                participants?: (lingcat.methods.Meeting_Participant.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Meeting_Participants_Changed_Event. */
+            type $Shape = lingcat.methods.Meeting_Participants_Changed_Event.$Properties;
+        }
     }
 }

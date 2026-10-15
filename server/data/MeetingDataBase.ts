@@ -28,6 +28,13 @@ export default class MeetingDataBase {
         return await db<IMeetingRecord>(tableName).where({ id }).first()
     }
 
+    static async getAllActive(minCreatedAt: number): Promise<IMeetingRecord[]> {
+        return await db<IMeetingRecord>(tableName)
+            .where('created_at', '>=', minCreatedAt)
+            .orderBy('created_at', 'asc')
+            .select('*')
+    }
+
     static async findByChat(chat_id: string) {
         return await db<IMeetingRecord>(tableName).where({ chat_id }).orderBy('created_at', 'desc').first()
     }

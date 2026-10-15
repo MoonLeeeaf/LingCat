@@ -20,7 +20,7 @@ import FileApi from './api/FileApi.ts'
 import cookieParser from 'cookie-parser'
 import { fileTypeFromFile } from 'file-type'
 import ChatApi from './api/ChatApi.ts'
-import MeetingApi from './api/MeetingApi.ts'
+import MeetingApi, { meetingParticipantPoller } from './api/MeetingApi.ts'
 import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 
@@ -358,7 +358,10 @@ export default function createLingCatServer(base_data_path: string) {
         })
     })
 
+    meetingParticipantPoller.start(clients_emiter)
+
     async function close() {
+        meetingParticipantPoller.stop()
         // 先断开所有 ws 连接, 否则 wsServer.close() 会一直等待
         wsServer.clients.forEach((c) => {
             try { c.terminate() } catch (e) { }

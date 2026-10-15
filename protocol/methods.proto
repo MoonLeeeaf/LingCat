@@ -487,3 +487,11 @@ message Get_Meeting_Participants_Response {
     uint32 count = 3;
     repeated Meeting_Participant participants = 4;
 }
+
+message Meeting_Participants_Changed_Event {
+    string chat_id = 1;
+    string meeting_id = 2;
+    string room = 3;
+    uint32 count = 4;
+    repeated Meeting_Participant participants = 5;
+}
