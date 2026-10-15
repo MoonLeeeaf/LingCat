@@ -145,10 +145,6 @@ export function DialogForRouter({
             fullscreen={fullscreen}
         >
             {children}
-
-            if (fullBleed) {
-    
-}
         </mdui-dialog>
     )
 }
