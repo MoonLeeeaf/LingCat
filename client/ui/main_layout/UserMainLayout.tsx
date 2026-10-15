@@ -17,6 +17,7 @@ import ChangePasswordDialog from "../main/ChangePasswordDialog.tsx"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import { ChatListFragment, ChatListShow } from "../main/ChatListFragment.tsx"
 import SwitchUserDialog from "../main/SwitchUserDialog.tsx"
+import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
 
 const navItems = [
     {
@@ -157,8 +158,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                         <div style={{ width: '3px' }}></div>
                         <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
                         <div style={{ flexGrow: 1 }}></div>
-                        <mdui-button-icon icon="settings"></mdui-button-icon>
-
+                        <mdui-button-icon icon="settings" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
                         {avatarIconMenuItem}
                         <div style={{ width: '3px' }}></div>
                     </mdui-top-app-bar>
@@ -172,7 +172,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 drawerRef={drawerRef}
                 navTop={avatarIconMenuItem}
                 navBottom={
-                    <mdui-button-icon icon="settings" slot="bottom"></mdui-button-icon>
+                    <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
                 }
                 navItems={navItems}
                 navValue={navValue}

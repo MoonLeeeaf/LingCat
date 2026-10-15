@@ -1,6 +1,6 @@
 import { createRoute } from '@tanstack/react-router'
 import { AuthRoute } from './AuthRoute.tsx'
-import { UserMainLayout } from '../layout/UserMainLayout.tsx'
+import { UserMainLayout } from '../main_layout/UserMainLayout.tsx'
 import { MainLayoutRoute } from './MainLayoutRoute.tsx'
 import { useIsMobile } from '../../lib/useIsMobile.ts'
 
