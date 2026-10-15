@@ -157,9 +157,11 @@ export function LoginOrRegisterForm({
                     gap: '0.5rem',
                 }}
             >
-                <mdui-button variant="text" onClick={() => onOpenSettings?.()}>
-                    设置
-                </mdui-button>
+                {
+                    onOpenSettings && <mdui-button variant="text" onClick={() => onOpenSettings()}>
+                        设置
+                    </mdui-button>
+                }
 
                 <div style={{ flexGrow: 1 }} />
 

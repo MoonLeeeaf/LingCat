@@ -112,7 +112,6 @@ export default function SwitchUserDialog({ ref, onClose }: SwitchUserDialogProps
                         rounded
                         icon="add"
                         onClick={() => {
-                            ref.current!.open = false
                             LoginOrRegisterDialog.show({
                                 allowClose: true,
                                 onSuccess: () => {

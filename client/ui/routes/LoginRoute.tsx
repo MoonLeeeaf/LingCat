@@ -8,6 +8,7 @@ import showSnackbar from '../showSnackbar.ts'
 import ClientManager from '../../ClientManager.ts'
 import ClientConfigInstance from '../../ClientConfig.ts'
 import { useAuthFlow } from '../auth/useAuthFlow.tsx'
+import ClientSettingsDialog from '../main/ClientSettingsDialog.tsx'
 
 function LoginPage() {
     const navigate = useNavigate()
@@ -24,6 +25,7 @@ function LoginPage() {
                 onModeChange={setMode}
                 oauthProviders={ClientConfigInstance.oauthProviders}
                 loading={loading}
+                onOpenSettings={() => ClientSettingsDialog.show()}
                 onLogin={async (v) => {
                     const r = await doLogin(v)
                     if (r.ok) {
