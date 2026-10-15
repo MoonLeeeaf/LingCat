@@ -7,13 +7,11 @@
 
 ## 简介
 
-本项目是由 **月有阴晴圆缺 (白日梦 / 满月叶)** 使用 Node.js + React 编写的轻量级自部署即时通讯应用. 
+本项目是由 **月有阴晴圆缺** 使用 Node.js + React 编写的轻量级自部署的即时通讯应用
 
-- **前端**: MDUI v2（Material Design 3 风格 UI 库, 已根据自己的需求魔改）
+- **前端**: MDUI v2（Material Design 3 风格 UI 库, 已魔改）
 - **后端**: Express + WebSocket + Knex (SQLite)
 - **加密**: X25519 密钥交换 + XChaCha20-Poly1305 会话加密
-
-Android 客户端仍在开发中, 敬请期待. 
 
 > 在本项目之前, 本人也有多次即时通讯类应用程序的开发尝试, 但多以失败告终. 
 >
@@ -131,20 +129,6 @@ location /rtc {
 
 `/rtc` 反代只解决信令, **媒体流仍然直连 LiveKit 的 UDP 7882 端口**, 这部分无法通过 Nginx 代理, 必须在防火墙放行. 
 
----
-
-## PWA 与会议独立窗口
-
-前端自带 `manifest.webmanifest` 与一个最小化的 Service Worker（`client/public/sw.js`，**不缓存任何内容**），用浏览器地址栏的"安装"即可把灵猫装成 PWA。
-
-- 会议在 **已安装的 PWA**（独立窗口运行）中会 **单开一个窗口** 进行：点击通话按钮会打开 `/?meeting=1&chat=<对话ID>`，窗口内是纯会议界面（全屏 / 离开），会议结束后窗口自动关闭，主窗口只保留"会议进行中"的横幅。
-- **Android / iOS 除外**：这两个平台上 `window.open` 会被丢给系统浏览器，因此明确不支持，依旧使用应用内的会议浮窗。
-- **不是 PWA**（普通浏览器标签页 / Android WebView 客户端）时不会单开窗口，会议继续在应用内的浮窗中进行；此时即使手动打开了会议窗口链接，也会自动回退到应用内。
-- 检测逻辑见 `client/pwa.ts`（`display-mode: standalone` 等 + 平台 UA 判定），控制台会打印 `[PWA] 运行环境检测` 便于排查。
-- 已安装的桌面 PWA 通过 **Window Controls Overlay** 自绘标题栏（`display_override: ["window-controls-overlay", "standalone"]` + `client/ui/PwaTitleBar.tsx`），即禁用 Chrome / Edge 自带的标题栏，标题栏颜色会跟随应用主题（同时更新 `theme-color`）。不支持 WCO 的浏览器（含移动端）自动退回系统标题栏，不需要额外适配。
-
----
-
 ## Nginx 反代
 
 ```nginx
@@ -190,13 +174,13 @@ server {
 
 ```
 LingCat/
-├── android_client/    Android 客户端 (开发中)
-├── client/            Web 前端 (React + Vite)
-├── client_protocol/   客户端协议实现
-├── protocol/          协议定义 (Protobuf + TypeScript)
-├── server/            服务端 (Express + WS)
-├── shared/            共享工具
-└── lingcat_data/      运行时数据 (数据库 / 密钥 / 上传文件)
+├── android/         Android 客户端
+├── client/          Web 端 (React + Vite)
+├── client_protocol/ 客户端协议实现
+├── protocol/        协议定义 (Protobuf + TypeScript)
+├── server/          服务端 (Express + WS)
+├── shared/          共享工具
+└── lingcat_data/    数据 (数据库 / 密钥 / 上传文件)
 ```
 
 
