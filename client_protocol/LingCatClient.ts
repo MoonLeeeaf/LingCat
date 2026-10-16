@@ -16,7 +16,10 @@ export default class LingCatClient {
 
     /** 主动断开标志: 为 true 时 close 事件不触发重连 */
     private manualDisconnect = false
-
+    
+    onHandshakeFailed(reason: string) {
+    }
+    
     session: {
         keySend?: Uint8Array,
         keyRecv?: Uint8Array,
@@ -219,6 +222,10 @@ export default class LingCatClient {
                             )
                             if (!verified) {
                                 console.error('[Client] Server verification failed, closing connection')
+                                // ★ 阻止自动重连（否则 close → init() → 死循环）
+                                this.manualDisconnect = true
+                                // ★ 通知调用方
+                                this.onHandshakeFailed('server_public_key_mismatch')
                                 client.close()
                                 return
                             }

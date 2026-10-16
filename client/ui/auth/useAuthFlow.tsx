@@ -9,26 +9,11 @@ import type { TrustServerDialogProps } from './TrustServerDialog.tsx'
 import { TrustServerDialog } from './TrustServerDialog.tsx'
 import ReactDOM from 'react-dom/client'
 import type { LoginValues, RegisterValues } from './LoginOrRegisterForm.tsx'
+import { confirmTrust } from '../../lib/confirmTrust.tsx'
 
 // ============================================================
 //                      工具函数
 // ============================================================
-
-function confirmTrust(
-    opts: Omit<TrustServerDialogProps, 'onAccept' | 'onReject'>,
-): Promise<boolean> {
-    return new Promise((resolve) => {
-        const container = document.createElement('div')
-        document.body.appendChild(container)
-        const root = ReactDOM.createRoot(container)
-        const cleanup = () => { root.unmount(); container.remove() }
-        root.render(<TrustServerDialog
-            {...opts}
-            onAccept={() => { cleanup(); resolve(true) }}
-            onReject={() => { cleanup(); resolve(false) }}
-        />)
-    })
-}
 
 function hexToBytes(hex: string): Uint8Array {
     const clean = hex.startsWith('0x') ? hex.slice(2) : hex

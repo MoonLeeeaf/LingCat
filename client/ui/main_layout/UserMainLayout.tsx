@@ -11,8 +11,7 @@ import tipError from "../tipError.ts"
 import default_avatar from '../../default_avatar.png'
 import getFileUrl from "../../lib/getFileUrl.ts"
 import SessionEnv from "../../SessionEnv.ts"
-import { NavigationDrawer } from "mdui"
-import { Outlet, useMatchRoute, useNavigate, useParams } from "@tanstack/react-router"
+import { Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router"
 import ChangePasswordDialog from "../main/ChangePasswordDialog.tsx"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import { ChatListFragment, ChatListShow } from "../main/ChatListFragment.tsx"
@@ -21,6 +20,10 @@ import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
 import { MobileMeetingDialog } from "../meeting/MobileMeetingDialog.tsx"
 import { DesktopMeetingWindow } from "../meeting/DesktopMeetingWindow.tsx"
 import { useMeetingStore } from "../meeting/MeetingManager.ts"
+import { checkServer, acceptServerPublicKey } from '../../lib/trustServer.ts'
+import { confirmTrust } from '../../lib/confirmTrust.tsx'
+import { bytesToHex } from 'lingcat-shared'
+import LingCatClient from 'lingcat-client-protocol'
 
 const navItems = [
     {
@@ -49,42 +52,76 @@ const navItems = [
     },
 ]
 
+/**
+ * 判断错误是否是"token 失效"。
+ * 服务端返回的形式可能是:
+ *   - 字符串 "[401] 令牌错误! (JsonWebTokenError: invalid signature)"
+ *   - Error 对象带 message
+ *   - 带 code 字段
+ */
+function isTokenError(e: any): boolean {
+    if (!e) return false
+    // const msg = String(e?.message ?? e)
+    return (
+        /*msg.includes('401') ||
+        msg.includes('令牌错误') ||
+        msg.includes('JsonWebTokenError') ||
+        msg.includes('invalid signature') ||
+        msg.includes('Token is invalid') ||
+        msg.includes('Unauthorized') ||*/
+        e?.code === 401
+    )
+}
+
 export function UserMainLayout({ children }: { children: React.ReactNode }) {
     const matchRoute = useMatchRoute()
     const chatMatch = matchRoute({ to: '/chat/$chatId' })
     const activeChatId = chatMatch ? chatMatch.chatId : undefined
 
+    const navigate = useNavigate()
+
     const [loaded, setLoaded] = React.useState(false)
     const [profile, setProfile] = React.useState<IUser>()
+    const [client, setClient] = React.useState<LingCatClient | null>(null)
+    const [reloadKey, setReloadKey] = React.useState(0)
+
+    // ============================================================
+    //  初始化（可重跑：reloadKey 变化时）
+    // ============================================================
     useAsyncEffect(async (signal) => {
+        setLoaded(false)
+        setClient(null)
+
+        let session: ReturnType<typeof ClientManager.getOrInitActiveSession>
         try {
-            const session = ClientManager.getOrInitActiveSession()
+            session = ClientManager.getOrInitActiveSession()
             if (!session) throw new Error('no active session')
 
-            const client = ClientManager.createClient(session.server)
+            const c = ClientManager.createClient(session.server)
             if (signal.aborted) return
 
             await new Promise<void>((resolve, reject) => {
-                client.onInit = async () => {
+                c.onInit = async () => {
                     try {
-                        await UserApi.authorize(client, {
-                            access_token: session.token,
+                        await UserApi.authorize(c, {
+                            access_token: session!.token,
                             session_id: ClientManager.getConnectionSessionId()!,
                         })
                         resolve()
                     } catch (e) { reject(e) }
                 }
-                client.init()
+                // 监听握手失败（字段赋值，需与 LingCatClient 内的字段定义一致）
+                c.onHandshakeFailed = (reason: string) => reject(new Error(reason))
+                c.init()
             })
 
             if (signal.aborted) return
 
             const REFRESH_INTERVAL = 30 * 60 * 1000
-
             const refreshFileToken = async () => {
                 try {
-                    const token = await FileApi.requestAccessUploadFileToken(client, {
-                        access_token: session.token,
+                    const token = await FileApi.requestAccessUploadFileToken(c, {
+                        access_token: session!.token,
                     })
                     if (signal.aborted) return
                     SessionEnv.myFileAccessToken = token
@@ -99,19 +136,74 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
             const timer = setInterval(refreshFileToken, REFRESH_INTERVAL)
             signal.addEventListener('abort', () => clearInterval(timer), { once: true })
 
-            const me = await UserApi.queryMyUserInfo(client, {
+            const me = await UserApi.queryMyUserInfo(c, {
                 access_token: session.token,
             })
             if (signal.aborted) return
 
             setProfile(me)
-
             SessionEnv.myUserId = me.id
-
+            setClient(c)
             setLoaded(true)
-        } catch (e) {
-            if (!signal.aborted) tipError(e, '加载资料失败')
+        } catch (e: any) {
+            if (signal.aborted) return
+
+            // ★ 公钥不匹配 → 弹 TOFU 对话框 → 用户接受后重试
+            if (e?.message === 'server_public_key_mismatch' && session) {
+                await handleTofuMismatch(session.server)
+                return
+            }
+
+            // ★ token 失效 → 清掉失效账号 + 跳登录
+            if (isTokenError(e) && session) {
+                ClientManager.removeUserSession(session.key)
+                tipError(e, '登录已失效，请重新登录')
+                navigate({
+                    to: '/login',
+                    search: {
+                        redirect: location.pathname + location.search,
+                    },
+                })
+                return
+            }
+
+            tipError(e, '加载资料失败')
         }
+    }, [reloadKey])
+
+    // ============================================================
+    //  TOFU mismatch 处理
+    // ============================================================
+    const handleTofuMismatch = React.useCallback(async (rawServer: string) => {
+        try {
+            const check = await checkServer(rawServer)
+            const oldKey = ClientManager.getServerPublicKey(check.addr)
+
+            const ok = await confirmTrust({
+                mode: 'mismatch',
+                rawAddr: rawServer,
+                publicKeyHex: check.publicKeyHex,
+                oldPublicKeyHex: oldKey ? bytesToHex(oldKey) : undefined,
+            })
+
+            if (!ok) {
+                tipError(new Error('已拒绝新公钥，无法连接'), '连接失败')
+                return
+            }
+
+            acceptServerPublicKey(check.addr, check.publicKeyHex)
+            // 触发重试
+            setReloadKey(k => k + 1)
+        } catch (e) {
+            tipError(e, '检查服务端公钥失败')
+        }
+    }, [])
+
+    // ============================================================
+    //  会议事件监听（client 就绪后注册）
+    // ============================================================
+    React.useEffect(() => {
+        if (!client) return
 
         const onMeetingEvent = (pkg: Package) => {
             try {
@@ -136,11 +228,9 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
             }
         }
 
-        ClientManager.getActiveClient()?.addOnReceiveListener(onMeetingEvent)
-        signal.addEventListener('abort', () => {
-            ClientManager.getActiveClient()?.removeOnReceiveListener(onMeetingEvent)
-        }, { once: true })
-    }, [])
+        client.addOnReceiveListener(onMeetingEvent)
+        return () => client.removeOnReceiveListener(onMeetingEvent)
+    }, [client])
 
     const isMobile = useIsMobile()
 
