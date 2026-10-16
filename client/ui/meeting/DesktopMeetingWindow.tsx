@@ -50,6 +50,7 @@ export function DesktopMeetingWindow() {
 
     const onResizeDown = (e: React.PointerEvent) => {
         e.stopPropagation()
+        e.preventDefault()
         resizeRef.current = {
             startX: e.clientX,
             startY: e.clientY,

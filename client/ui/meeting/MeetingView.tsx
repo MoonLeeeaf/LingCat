@@ -491,7 +491,9 @@ export function MeetingView({
                     gap: '6px',
                     padding: '6px 8px 6px 12px',
                     borderBottom: '1px solid rgb(var(--mdui-color-outline-variant))',
-                    cursor: 'move'
+                    cursor: headerPointer ? 'move' : 'default',
+                    userSelect: headerPointer ? 'none' : undefined,
+                    touchAction: headerPointer ? 'none' : undefined,
                 }}
                 onPointerDown={headerPointer?.onPointerDown}
                 onPointerMove={headerPointer?.onPointerMove}
