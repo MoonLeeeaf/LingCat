@@ -149,13 +149,13 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
             if (signal.aborted) return
 
             // ★ 公钥不匹配 → 弹 TOFU 对话框 → 用户接受后重试
-            if (e?.message === 'server_public_key_mismatch' && session) {
+            if (e?.message === 'server_public_key_mismatch' && session!) {
                 await handleTofuMismatch(session.server)
                 return
             }
 
             // ★ token 失效 → 清掉失效账号 + 跳登录
-            if (isTokenError(e) && session) {
+            if (isTokenError(e) && session!) {
                 ClientManager.removeUserSession(session.key)
                 tipError(e, '登录已失效，请重新登录')
                 navigate({
