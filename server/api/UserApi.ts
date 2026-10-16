@@ -113,14 +113,14 @@ export default class UserApi {
                 break
             }
             case Methods.Query_My_User_Info_Request: {
-                const data = LingCatProto.methods.Query_User_Info_Request.decode(mPackage.data)
+                const data = LingCatProto.methods.Query_My_User_Info_Request.decode(mPackage.data)
 
                 const user = (await UserDataBase.queryUserById((await TokenManager.verifyAccessToken(data.accessToken)).user_id))!
 
                 sendPackage(Package.encode({
-                    method_id: Methods.Query_User_Info_Response,
+                    method_id: Methods.Query_My_User_Info_Response,
                     flags: 0,
-                    data: LingCatProto.methods.Query_User_Info_Response.encode({
+                    data: LingCatProto.methods.Query_My_User_Info_Response.encode({
                         info: LingCatProto.classes.IUser.create({
                             username: user.username,
                             avatarFileHash: user.avatar_file_hash,
