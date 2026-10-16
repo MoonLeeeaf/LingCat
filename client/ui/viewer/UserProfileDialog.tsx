@@ -82,7 +82,6 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
 
     const [, forceUpdate] = React.useReducer((x) => x + 1, 0)
     const userRemark = RemarksCache.get(userId)
-    const nickname = userRemark ? (userRemark + '(' + profile?.nickname + ')') : profile?.nickname
 
     const setRemark = React.useCallback(async () => {
         const client = ClientManager.getActiveClient()
@@ -93,11 +92,11 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
         const current = RemarksCache.get(userId) ?? ''
 
         const dlg = dialog({
-            headline: '设置备注名',
+            headline: '设置备注',
             body: `
                 <mdui-text-field
                     id="remark-input"
-                    label="备注名"
+                    label="备注"
                     variant="outlined"
                     style="width: 100%"
                     clearable
@@ -158,7 +157,18 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                     flexDirection: 'column',
                     wordBreak: 'break-word',
                 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{nickname}</span>
+                    <span style={{ fontSize: '1.25rem' }}>
+                        {userRemark || profile?.nickname}
+                    </span>
+                    {userRemark && profile?.nickname && (
+                        <span style={{
+                            fontSize: '0.8rem',
+                            opacity: 0.55,
+                            marginTop: '2px',
+                        }}>
+                            {profile.nickname}
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -179,7 +189,7 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                         rounded
                         onClick={setRemark}
                     >
-                        设置备注名
+                        设置备注
                     </mdui-list-item>
                 )}
 

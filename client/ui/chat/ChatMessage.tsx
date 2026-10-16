@@ -8,6 +8,7 @@ import getFileUrl from '../../lib/getFileUrl.ts'
 import tipError from '../tipError.ts'
 import Message from './Message.tsx'
 import RichText from './RichText.tsx'
+import RemarksCache from '../../RemarksCache.ts'
 
 export interface ChatMessageProps {
     msg: IMessage
@@ -53,7 +54,7 @@ export default function ChatMessage({
             onAvatarClick={onAvatarClick}
             messageMenus={messageMenus}
             isSystem={msg.system || false}
-            senderName={profile?.nickname || ''}
+            senderName={RemarksCache.get(msg.sender_user_id!) || profile?.nickname || ''}
             avatar={profile?.avatar_file_hash
                 ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)!
                 : default_avatar}

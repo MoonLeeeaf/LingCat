@@ -256,7 +256,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     useAsyncEffect(async (signal) => {
         if (!activeChatId) return void(document.title = ClientConfig.site_title)
         const chat = await ProfileCache.queryChatInfo(activeChatId)
-        document.title = ClientConfig.site_title + ' | ' + chat?.title
+        document.title = ClientConfig.site_title + ' | ' + (chat.peer_user_id ? (RemarksCache.get(chat.peer_user_id) || chat.title) : chat?.title)
     }, [activeChatId])
 
     const isMobile = useIsMobile()

@@ -81,9 +81,10 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)
         : default_avatar
 
-    const userRemark = profile?.peer_user_id && RemarksCache.get(profile.peer_user_id)
-    const title = userRemark ? (userRemark + '(' + profile.title + ')') : profile?.title
-    
+    const userRemark = profile?.peer_user_id
+        ? RemarksCache.get(profile.peer_user_id)
+        : undefined
+
     if (loading) {
         return (
             <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
@@ -101,7 +102,18 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
                     flexDirection: 'column',
                     wordBreak: 'break-word',
                 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{title}</span>
+                    <span style={{ fontSize: '1.25rem' }}>
+                        {userRemark || profile?.title}
+                    </span>
+                    {userRemark && profile?.title && (
+                        <span style={{
+                            fontSize: '0.8rem',
+                            opacity: 0.55,
+                            marginTop: '2px',
+                        }}>
+                            {profile.title}
+                        </span>
+                    )}
                 </div>
             </div>
 
