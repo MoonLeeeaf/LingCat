@@ -12,7 +12,7 @@ const tableName = 'UserRemarks'
     table.string('target_user_id').notNullable()
     table.string('remark').notNullable()
     table.primary(['user_id', 'target_user_id'])
-    table.index('idx_user_remarks_user_id', 'user_id')
+    table.index('user_id', 'idx_user_remarks_user_id')
 })
 
 export default class UserRemarkDataBase {
