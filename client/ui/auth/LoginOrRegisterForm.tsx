@@ -43,6 +43,8 @@ export interface LoginOrRegisterFormProps {
     onOAuthLogin?: (providerId: string) => void
     /** 点击"设置" */
     onOpenSettings?: () => void
+    /** 点"登录到其他服务器"的回调。不传则不显示该入口 */
+    onSwitchServer?: () => void
 }
 
 export function LoginOrRegisterForm({
@@ -55,6 +57,7 @@ export function LoginOrRegisterForm({
     onRegister,
     onOAuthLogin,
     onOpenSettings,
+    onSwitchServer,
 }: LoginOrRegisterFormProps) {
     // 登录字段
     const serverRef = React.useRef<TextField>(null)
@@ -147,6 +150,16 @@ export function LoginOrRegisterForm({
                     用 {p.display_name || p.id} 登录
                 </mdui-button>
             ))}
+            
+            {serverLabel === undefined && onSwitchServer && (
+                <mdui-button
+                    variant="text"
+                    onClick={onSwitchServer}
+                    style={{ marginTop: '10px', width: '100%' }}
+                >
+                    登录到其他服务器
+                </mdui-button>
+            )}
 
             {/* 操作栏：模拟 mdui-dialog action 区域的视觉 */}
             <div

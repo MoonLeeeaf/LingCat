@@ -29,6 +29,13 @@ export function LoginOrRegisterDialog({
 
     const [mode, setMode] = React.useState<AuthMode>(initialMode)
     const { loading, doLogin, doRegister } = useAuthFlow()
+    
+    const [showServerInput, setShowServerInput] = React.useState(SessionEnv.isOutOfServer)
+
+    // 服务端 label
+    const serverLabel = showServerInput
+        ? '服务端地址'
+        : undefined
 
     // 标记"是否要调 onSuccess"（区分用户主动关闭 vs 成功后关闭）
     const successRef = React.useRef(false)
@@ -75,7 +82,7 @@ export function LoginOrRegisterDialog({
         >
             <span slot="headline">{mode === 'login' ? '登录' : '注册'}</span>
             <LoginOrRegisterForm
-                serverLabel={SessionEnv.isOutOfServer ? '服务端 HTTP 地址' : undefined}
+                serverLabel={serverLabel}
                 mode={mode}
                 onModeChange={setMode}
                 oauthProviders={ClientConfigInstance.oauthProviders}
@@ -97,6 +104,7 @@ export function LoginOrRegisterDialog({
                 onOAuthLogin={(id) => {
                     location.href = '/oauth/' + encodeURIComponent(id) + '/login'
                 }}
+                onSwitchServer={() => setShowServerInput(true)}
             />
         </mdui-dialog>
     )

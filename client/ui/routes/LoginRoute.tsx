@@ -16,11 +16,19 @@ function LoginPage() {
     const [mode, setMode] = useState<AuthMode>('login')
     const { loading, doLogin, doRegister } = useAuthFlow()
 
+    // ★ 输入框是否显示
+    const [showServerInput, setShowServerInput] = useState(SessionEnv.isOutOfServer)
+
+    // 服务端 label
+    const serverLabel = showServerInput
+        ? '服务端地址'
+        : undefined
+
     return (
         <DialogForRouter open onCloseRequest={() => navigate({ to: '..' })}>
             <span slot="headline">{mode === 'login' ? '登录' : '注册'}</span>
             <LoginOrRegisterForm
-                serverLabel={SessionEnv.isOutOfServer ? '服务端 HTTP 地址' : undefined}
+                serverLabel={serverLabel}
                 mode={mode}
                 onModeChange={setMode}
                 oauthProviders={ClientConfigInstance.oauthProviders}
@@ -41,6 +49,8 @@ function LoginPage() {
                     }
                 }}
                 onOAuthLogin={(id) => { location.href = '/oauth/' + encodeURIComponent(id) + '/login' }}
+                // ★ 提供外部入口
+                onSwitchServer={() => setShowServerInput(true)}
             />
         </DialogForRouter>
     )
