@@ -27,6 +27,7 @@ import LingCatClient from 'lingcat-client-protocol'
 import ProfileCache from "../../ProfileCache.ts"
 import ClientConfig from "../../ClientConfig.ts"
 import RemarksCache from "../../RemarksCache.ts"
+import OpenChatDialog from "../main/OpenChatDialog.tsx"
 
 const navItems = [
     {
@@ -278,6 +279,21 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         </mdui-dropdown>
     ) : null
 
+    const addMenu = loaded ? (
+        <mdui-dropdown trigger="click" slot={isMobile ? undefined : 'top'}>
+            <mdui-button-icon icon="add" slot="trigger" />
+            <mdui-menu>
+                <mdui-menu-item
+                    icon="open_in_new"
+                    onClick={() => OpenChatDialog.show()}
+                >
+                    打开对话
+                </mdui-menu-item>
+                {/* TODO: 创建群组 */}
+            </mdui-menu>
+        </mdui-dropdown>
+    ) : null
+
     const chatListFragment = <ChatListFragment
         show={navValue}
         activeChatId={activeChatId}
@@ -305,6 +321,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                             <div style={{ width: '3px' }}></div>
                             <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
                             <div style={{ flexGrow: 1 }}></div>
+                            {addMenu}
                             <mdui-button-icon icon="settings" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
                             {avatarIconMenuItem}
                             <div style={{ width: '3px' }}></div>
@@ -319,7 +336,10 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
             : <>
                 <DesktopRootLayout
-                    navTop={avatarIconMenuItem}
+                    navTop={[
+                        avatarIconMenuItem,
+                        addMenu,
+                    ]}
                     navBottom={
                         <mdui-button-icon icon="settings" slot="bottom" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
                     }
