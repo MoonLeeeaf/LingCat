@@ -495,3 +495,33 @@ message Meeting_Participants_Changed_Event {
     uint32 count = 4;
     repeated Meeting_Participant participants = 5;
 }
+
+/**
+ * =======================================================
+ *                  用户备注 (私密, 仅自己可见)
+ * =======================================================
+ */
+
+// 设置某个用户的备注名 (对自己生效)
+message Set_User_Remark_Request {
+    string access_token = 1;
+    string target_user_id = 2;
+    // 空字符串 = 删除备注
+    string remark = 3;
+}
+
+message Set_User_Remark_Response {}
+
+// 拉取自己设置的所有备注
+message Get_My_User_Remarks_Request {
+    string access_token = 1;
+}
+
+message Get_My_User_Remarks_Response {
+    // 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+    string my_user_id = 1;
+    repeated IUserRemark remarks = 2;
+}
+
+// 备注变更事件 (广播给自己的所有在线设备, 用于多设备同步)
+message User_Remarks_Changed_Event {}

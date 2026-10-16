@@ -1,4 +1,4 @@
-import { IUser, LingCatProto, Methods } from "lingcat-protocol"
+import { IUser, IUserRemark, LingCatProto, Methods } from "lingcat-protocol"
 import LingCatClient from "./LingCatClient.ts"
 import decodeOrThrow from "./decodeOrThrow.ts"
 
@@ -238,5 +238,52 @@ export default class UserApi {
                 timeout,
             })).data
         )
+    }
+    static async setUserRemark(client: LingCatClient, {
+        access_token,
+        target_user_id,
+        remark,
+        timeout,
+    }: {
+        access_token: string
+        target_user_id: string
+        remark: string
+        timeout?: number
+    }) {
+        decodeOrThrow<LingCatProto.methods.Set_User_Remark_Response>(
+            LingCatProto.methods.Set_User_Remark_Response,
+            (await client.invoke({
+                method_id: Methods.Set_User_Remark_Request,
+                data: LingCatProto.methods.Set_User_Remark_Request.encode({
+                    accessToken: access_token,
+                    targetUserId: target_user_id,
+                    remark,
+                }).finish(),
+                timeout,
+            })).data,
+        )
+    }
+    static async getMyUserRemarks(client: LingCatClient, {
+        access_token,
+        timeout,
+    }: {
+        access_token: string
+        timeout?: number
+    }) {
+        const decoded = decodeOrThrow<LingCatProto.methods.Get_My_User_Remarks_Response>(
+            LingCatProto.methods.Get_My_User_Remarks_Response,
+            (await client.invoke({
+                method_id: Methods.Get_My_User_Remarks_Request,
+                data: LingCatProto.methods.Get_My_User_Remarks_Request.encode({
+                    accessToken: access_token,
+                }).finish(),
+                timeout,
+            })).data,
+        )
+        // proto camelCase → 业务 snake_case
+        return (decoded.remarks || []).map(r => ({
+            user_id: r.userId!,
+            remark: r.remark!,
+        })) as IUserRemark[]
     }
 }

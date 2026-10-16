@@ -15,6 +15,7 @@ function protoChatToIChat(chat: LingCatProto.classes.IChat.$Properties) {
         last_message_text: chat.lastMessageText,
         description: chat.description,
         is_member: chat.isMember,
+        peer_user_id: chat.peerUserId,
     } as IChat
 }
 

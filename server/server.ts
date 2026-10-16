@@ -151,7 +151,7 @@ export default function createLingCatServer(base_data_path: string) {
             const hasher = crypto.createHash('sha256')
             const writeStream = fs.createWriteStream(path)
 
-            fileName = info.filename
+            fileName = info.filename!
 
             file.on('data', (data) => {
                 hasher.update(data)
@@ -337,7 +337,7 @@ export default function createLingCatServer(base_data_path: string) {
                     // 若没有一个命中, 则报 Not_Found 错误
                     if (!(
                         await ServerApi.onCall(sendPackage, mPackage) ||
-                        await UserApi.onCall(sendPackage, mPackage) ||
+                        await UserApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await ChatApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await MeetingApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await OAuthApi.onCall(sendPackage, mPackage) ||

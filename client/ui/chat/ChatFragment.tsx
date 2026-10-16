@@ -19,6 +19,7 @@ import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { MeetingBanner } from './MeetingBanner.tsx'
+import RemarksCache from '../../RemarksCache.ts'
 
 export function ChatFragment() {
     const { chatId } = ChatRoute.useParams()
@@ -98,10 +99,14 @@ export function ChatFragment() {
         }
     }
 
+    const userRemark = chat?.peer_user_id && RemarksCache.get(chat.peer_user_id)
+
+    const title = userRemark || chat?.title || '加载中...'
+
     const content = (
         <>
             <ChatHeader
-                title={chat?.title ?? '加载中...'}
+                title={title}
                 isMobile={isMobile}
                 drawerOpen={drawerOpen}
                 onToggleDrawer={toggleDrawer}

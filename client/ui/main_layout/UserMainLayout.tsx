@@ -26,6 +26,7 @@ import { bytesToHex } from 'lingcat-shared'
 import LingCatClient from 'lingcat-client-protocol'
 import ProfileCache from "../../ProfileCache.ts"
 import ClientConfig from "../../ClientConfig.ts"
+import RemarksCache from "../../RemarksCache.ts"
 
 const navItems = [
     {
@@ -201,12 +202,12 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         }
     }, [])
 
-    // ============================================================
-    //  会议事件监听（client 就绪后注册）
-    // ============================================================
     React.useEffect(() => {
         if (!client) return
-
+    
+        // ============================================================
+        //  会议事件
+        // ============================================================
         const onMeetingEvent = (pkg: Package) => {
             try {
                 if (pkg.method_id === Methods.Meeting_Started_Event) {
@@ -229,9 +230,26 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 console.warn('[Meeting] 处理会议事件失败', e)
             }
         }
-
+    
+        // ============================================================
+        //  备注变更事件（多设备同步）
+        // ============================================================
+        const onRemarksEvent = (pkg: Package) => {
+            if (pkg.method_id === Methods.User_Remarks_Changed_Event) {
+                RemarksCache.refresh().catch(() => { })
+            }
+        }
+    
         client.addOnReceiveListener(onMeetingEvent)
-        return () => client.removeOnReceiveListener(onMeetingEvent)
+        client.addOnReceiveListener(onRemarksEvent)
+    
+        // 首屏加载备注
+        RemarksCache.loadAll().catch(() => { })
+    
+        return () => {
+            client.removeOnReceiveListener(onMeetingEvent)
+            client.removeOnReceiveListener(onRemarksEvent)
+        }
     }, [client])
 
     useAsyncEffect(async (signal) => {

@@ -16,6 +16,7 @@ import tipError from '../tipError.ts'
 import UserProfileDialog from './UserProfileDialog.tsx'
 import ImageViewerDialog from './ImageViewerDialog.tsx'
 import { Router } from '../routes/Router.ts'   // ★ 用于在 RouterProvider 外导航
+import RemarksCache from '../../RemarksCache.ts'
 
 function findFavourited(chatId: string) {
     return SessionEnv.favouritedChats?.findIndex(chat => chat.id === chatId)
@@ -36,17 +37,17 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
 
     React.useEffect(() => {
         let cancelled = false
-        ;(async () => {
-            try {
-                const chat = await ProfileCache.queryChatInfo(chatId)
-                if (cancelled) return
-                setProfile(chat ?? undefined)
-                setFavourited(findFavourited(chatId) !== -1)
-            } catch (e) {
-                if (!cancelled) tipError(e, '加载失败')
-            }
-            if (!cancelled) setLoading(false)
-        })()
+            ; (async () => {
+                try {
+                    const chat = await ProfileCache.queryChatInfo(chatId)
+                    if (cancelled) return
+                    setProfile(chat ?? undefined)
+                    setFavourited(findFavourited(chatId) !== -1)
+                } catch (e) {
+                    if (!cancelled) tipError(e, '加载失败')
+                }
+                if (!cancelled) setLoading(false)
+            })()
         return () => { cancelled = true }
     }, [chatId])
 
@@ -86,6 +87,9 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         )
     }
 
+    const userRemark = profile?.peer_user_id && RemarksCache.get(profile.peer_user_id)
+    const title = userRemark ? (userRemark + '(' + profile.title + ')') : profile?.title
+
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -97,7 +101,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
                     flexDirection: 'column',
                     wordBreak: 'break-word',
                 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{profile?.title}</span>
+                    <span style={{ fontSize: '1.25rem' }}>{title}</span>
                 </div>
             </div>
 

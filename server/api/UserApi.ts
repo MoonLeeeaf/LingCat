@@ -6,9 +6,11 @@ import FileManager from '../data/FileManager.ts'
 import sendError from './sendError.ts'
 import ChatDataBase from '../data/ChatDataBase.ts'
 import UserChatLinker from '../data/UserChatLinker.ts'
+import UserRemarkDataBase from '../data/UserRemarkDataBase.ts'
+import { broadcastToUserClients } from './broadcaster.ts'
 
 export default class UserApi {
-    static async onCall(sendPackage: ISendPackageFunction, mPackage: Package) {
+    static async onCall(sendPackage: ISendPackageFunction, mPackage: Package, clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } } = {}) {
         switch (mPackage.method_id) {
             /**
              * ===============================
@@ -197,27 +199,83 @@ export default class UserApi {
             case Methods.Change_Password_Request: {
                 const data = LingCatProto.methods.Change_Password_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
-            
+
                 // 1. 验证 change_token
                 const tokenPayload = await TokenManager.verifyChangePasswordToken(data.changeToken, user_id)
                 if (!tokenPayload) {
                     return sendError(sendPackage, mPackage.method_id, 'Invalid or expired change token', Code.Forbidden)
                 }
-            
+
                 // 2. 更新密码
                 const hashedNew = UserDataBase.hashifyPassword(data.newPassword)
                 await UserDataBase.updateRawPassWord(user_id, hashedNew)
-            
+
                 // 3. （可选）使所有现有 access_token 失效，或让用户重新登录
                 // 这里可以调用 TokenManager 的黑名单或直接让用户重新登录
-                
+
                 // 不过这个还没有进行设计......
                 // 不好办呐, 不好办呐
-            
+
                 sendPackage(Package.encode({
                     method_id: Methods.Change_Password_Response,
                     flags: 0,
                     data: LingCatProto.methods.Change_Password_Response.encode({}).finish()
+                }))
+                break
+            }
+            /**
+ * ===============================
+ *        设置用户备注
+ * ===============================
+ */
+            case Methods.Set_User_Remark_Request: {
+                const data = LingCatProto.methods.Set_User_Remark_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+
+                if (data.targetUserId === user_id)
+                    return sendError(sendPackage, mPackage.method_id, '不能给自己设置备注', Code.Bad_Request)
+
+                if (!await UserDataBase.queryUserById(data.targetUserId))
+                    return sendError(sendPackage, mPackage.method_id, '目标用户不存在', Code.Not_Found)
+
+                await UserRemarkDataBase.set(user_id, data.targetUserId, data.remark)
+
+                // 广播给自己的所有设备 (多设备同步)
+                broadcastToUserClients(clients_emiter, user_id, (emit) => emit(Package.encode({
+                    method_id: Methods.User_Remarks_Changed_Event,
+                    flags: 0,
+                    data: LingCatProto.methods.User_Remarks_Changed_Event.encode({}).finish(),
+                })))
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Set_User_Remark_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Set_User_Remark_Response.encode({}).finish(),
+                }))
+                break
+            }
+
+            /**
+             * ===============================
+             *        拉取我的所有备注
+             * ===============================
+             */
+            case Methods.Get_My_User_Remarks_Request: {
+                const data = LingCatProto.methods.Get_My_User_Remarks_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+
+                const remarks = await UserRemarkDataBase.getAllByUser(user_id)
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_My_User_Remarks_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_My_User_Remarks_Response.encode({
+                        myUserId: user_id,
+                        remarks: remarks.map(r => ({
+                            userId: r.target_user_id,
+                            remark: r.remark,
+                        })),
+                    }).finish(),
                 }))
                 break
             }

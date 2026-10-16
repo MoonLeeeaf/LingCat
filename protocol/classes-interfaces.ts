@@ -59,6 +59,12 @@ export interface IChat {
      * 只有在 ChatApi 返回客户端时 才有明确的值 或未被设置 == false
      */
     is_member?: boolean
+    /**
+     * 仅私聊返回对方的 User ID
+     * 
+     * 该字段在服务端不应该存在, 因为是返回给客户端时映射出来的
+     */
+    peer_user_id?: string
 }
 
 export interface IFile {
@@ -93,4 +99,10 @@ export interface IChatAdmin extends IUser {
     role: AdminRole
     permissions: string
     belong_to_chat_id: string
+}
+
+export interface IUserRemark {
+    /** 被设置备注的用户的 ID */
+    user_id: string
+    remark: string
 }

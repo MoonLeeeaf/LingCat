@@ -80,6 +80,7 @@ message IChat {
     optional string description = 9;
     optional string last_message_text = 10; 
     bool is_member = 11;
+    optional string peer_user_id = 12;   // 私聊时是对方 userId, 群聊为 null
 }
 
 message IFile {
@@ -111,4 +112,9 @@ message IMessage {
     uint64 time = 6;
     repeated IMessageEntity entities = 7;
     optional uint64 edited_at = 8;
+}
+
+message IUserRemark {
+    string user_id = 1;
+    string remark = 2;
 }

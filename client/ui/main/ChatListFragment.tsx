@@ -14,6 +14,7 @@ import useEventListener from '../../lib/useEventListener.ts'
 import { ChatApi } from 'lingcat-client-protocol'
 import { useIsMobile } from '../../lib/useIsMobile.ts'
 import { Methods, Package } from 'lingcat-protocol'
+import RemarksCache from '../../RemarksCache.ts'
 
 export type ChatListShow = 'recents' | 'search' | 'favourites' | 'all'
 
@@ -44,6 +45,9 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
     const navigate = useNavigate()
     const isMobile = useIsMobile()
 
+    const userRemark = chat.peer_user_id && RemarksCache.get(chat.peer_user_id)
+    const title = userRemark || chat.title || ''
+
     return (
         <mdui-dropdown trigger="hover">
             <mdui-list-item
@@ -57,7 +61,7 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
                         replace: !isMobile,   // 桌面端 replace，移动端 push
                     })
                 }}
-                headline={chat.title || ''}
+                headline={title}
                 description-line={2}
             >
                 <Avatar

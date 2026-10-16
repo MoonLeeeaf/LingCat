@@ -84,6 +84,10 @@ export default class Methods {
     static Get_OAuth_Bindings_Response = 0x87
     static Unbind_OAuth_Request = 0x88
     static Unbind_OAuth_Response = 0x89
+    static Set_User_Remark_Request = 0x91
+    static Set_User_Remark_Response = 0x92
+    static Get_My_User_Remarks_Request = 0x93
+    static Get_My_User_Remarks_Response = 0x94
 
     static Get_Meeting_Participants_Request = 0x8a
     static Get_Meeting_Participants_Response = 0x8b
@@ -94,6 +98,7 @@ export default class Methods {
     static Meeting_Started_Event = 0x80
     static Meeting_Ended_Event = 0x81
     static Meeting_Participants_Changed_Event = 0x90
+    static User_Remarks_Changed_Event = 0x95
 
     static CACHED_KEYS?: Array<string>
     static CACHED_VALUES?: Array<any>

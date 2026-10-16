@@ -1,12 +1,12 @@
 import ReactClient from 'react-dom/client'
 import React from 'react'
-import { Dialog } from 'mdui'
+import { dialog, Dialog } from 'mdui'
 import type { IUser } from 'lingcat-protocol'
 import EffectOnly from '../EffectOnly.tsx'
 import CircleProgressDialog from '../CircleProgressDialog.tsx'
 import ClientManager from '../../ClientManager.ts'
 import default_avatar from '../../default_avatar.png'
-import { ChatApi } from 'lingcat-client-protocol'
+import { ChatApi, UserApi } from 'lingcat-client-protocol'
 import Avatar from '../Avatar.tsx'
 import tipError from '../tipError.ts'
 import EditMyProfileDialog from '../main/EditMyProfileDialog.tsx'
@@ -16,6 +16,8 @@ import ImageViewerDialog from './ImageViewerDialog.tsx'
 import CopyableListItem from '../CopyableListItem.tsx'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import { Router } from '../routes/Router.ts'
+import RemarksCache from '../../RemarksCache.ts'
+import showSnackbar from '../showSnackbar.ts'
 
 interface UserProfileDialogProps {
     ref?: React.RefObject<Dialog | undefined>
@@ -32,19 +34,19 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
 
     React.useEffect(() => {
         let cancelled = false
-        ;(async () => {
-            try {
-                const p = await ProfileCache.queryUserInfo(userId)
-                if (cancelled) return
-                setProfile(p)
-                const me = await ClientManager.getMe()
-                if (cancelled) return
-                setIsMe(me.id === p.id)
-            } catch (e) {
-                if (!cancelled) tipError(e, '加载失败')
-            }
-            if (!cancelled) setLoading(false)
-        })()
+            ; (async () => {
+                try {
+                    const p = await ProfileCache.queryUserInfo(userId)
+                    if (cancelled) return
+                    setProfile(p)
+                    const me = await ClientManager.getMe()
+                    if (cancelled) return
+                    setIsMe(me.id === p.id)
+                } catch (e) {
+                    if (!cancelled) tipError(e, '加载失败')
+                }
+                if (!cancelled) setLoading(false)
+            })()
         return () => { cancelled = true }
     }, [userId])
 
@@ -84,6 +86,67 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
         )
     }
 
+    const [, forceUpdate] = React.useReducer((x) => x + 1, 0)
+    const userRemark = RemarksCache.get(userId)
+    const nickname = userRemark ? (userRemark + '(' + profile?.nickname + ')') : profile?.nickname
+
+    const setRemark = React.useCallback(async () => {
+        const client = ClientManager.getActiveClient()
+        const session = ClientManager.getActiveSession()
+        if (!client || !session) return
+
+        // 当前备注（用作默认值）
+        const current = RemarksCache.get(userId) ?? ''
+
+        const dlg = dialog({
+            headline: '设置备注名',
+            body: `
+                <mdui-text-field
+                    id="remark-input"
+                    label="备注名"
+                    variant="outlined"
+                    style="width: 100%"
+                    clearable
+                ></mdui-text-field>
+                <div style="margin-top: 10px; font-size: 12px; opacity: 0.6">
+                    仅自己可见，留空则清除备注
+                </div>
+            `,
+            closeOnEsc: true,
+            closeOnOverlayClick: true,
+            actions: [
+                { text: '取消', onClick: () => true },
+                {
+                    text: '保存',
+                    onClick: async () => {
+                        const input = dlg.querySelector('#remark-input') as HTMLInputElement & { value: string }
+                        const newRemark = (input?.value ?? '').trim()
+
+                        try {
+                            await UserApi.setUserRemark(client, {
+                                access_token: session.token,
+                                target_user_id: userId,
+                                remark: newRemark,
+                            })
+                            // 本地更新 + 触发重渲染
+                            RemarksCache.set(userId, newRemark)
+                            forceUpdate()
+                            showSnackbar({ message: newRemark ? '备注已保存' : '备注已清除' })
+                        } catch (e) {
+                            tipError(e, '保存备注失败')
+                        }
+                    },
+                },
+            ],
+        })
+
+        // 对话框打开后回填当前值
+        setTimeout(() => {
+            const input = dlg.querySelector('#remark-input') as HTMLInputElement | null
+            if (input) input.value = current
+        }, 10)
+    }, [userId])
+
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -95,7 +158,7 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                     flexDirection: 'column',
                     wordBreak: 'break-word',
                 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{profile?.nickname}</span>
+                    <span style={{ fontSize: '1.25rem' }}>{nickname}</span>
                 </div>
             </div>
 
@@ -108,6 +171,16 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                 )}
                 {profile?.description && (
                     <CopyableListItem icon="description" value={profile.description} description="简介" />
+                )}
+
+                {!isMe && (
+                    <mdui-list-item
+                        icon="edit"
+                        rounded
+                        onClick={setRemark}
+                    >
+                        设置备注名
+                    </mdui-list-item>
                 )}
 
                 {isMe && (

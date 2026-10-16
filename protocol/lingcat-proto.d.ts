@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from "protobufjs/minimal.js";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -677,6 +677,9 @@ export namespace lingcat {
             /** IChat isMember. */
             isMember: boolean;
 
+            /** IChat peerUserId. */
+            peerUserId?: (string|null);
+
             /**
              * Creates a new IChat instance using the specified properties.
              * @param [properties] Properties to set
@@ -793,6 +796,9 @@ export namespace lingcat {
 
                 /** IChat isMember */
                 isMember?: (boolean|null);
+
+                /** IChat peerUserId */
+                peerUserId?: (string|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -1235,6 +1241,129 @@ export namespace lingcat {
 
             /** Shape of a IMessage. */
             type $Shape = lingcat.classes.IMessage.$Properties;
+        }
+
+        /**
+         * Properties of a IUserRemark.
+         * @deprecated Use lingcat.classes.IUserRemark.$Properties instead.
+         */
+        interface IIUserRemark extends lingcat.classes.IUserRemark.$Properties {
+        }
+
+        /** Represents a IUserRemark. */
+        class IUserRemark {
+
+            /**
+             * Constructs a new IUserRemark.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IUserRemark.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IUserRemark userId. */
+            userId: string;
+
+            /** IUserRemark remark. */
+            remark: string;
+
+            /**
+             * Creates a new IUserRemark instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IUserRemark instance
+             */
+            static create(properties: lingcat.classes.IUserRemark.$Shape): lingcat.classes.IUserRemark & lingcat.classes.IUserRemark.$Shape;
+            static create(properties?: lingcat.classes.IUserRemark.$Properties): lingcat.classes.IUserRemark;
+
+            /**
+             * Encodes the specified IUserRemark message. Does not implicitly {@link lingcat.classes.IUserRemark.verify|verify} messages.
+             * @param message IUserRemark message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IUserRemark.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IUserRemark message, length delimited. Does not implicitly {@link lingcat.classes.IUserRemark.verify|verify} messages.
+             * @param message IUserRemark message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IUserRemark.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IUserRemark message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IUserRemark & lingcat.classes.IUserRemark.$Shape} IUserRemark
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IUserRemark & lingcat.classes.IUserRemark.$Shape;
+
+            /**
+             * Decodes a IUserRemark message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IUserRemark & lingcat.classes.IUserRemark.$Shape} IUserRemark
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IUserRemark & lingcat.classes.IUserRemark.$Shape;
+
+            /**
+             * Verifies a IUserRemark message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IUserRemark message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IUserRemark
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IUserRemark;
+
+            /**
+             * Creates a plain object from a IUserRemark message. Also converts values to other types if specified.
+             * @param message IUserRemark
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IUserRemark, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IUserRemark to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IUserRemark
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IUserRemark {
+
+            /** Properties of a IUserRemark. */
+            interface $Properties {
+
+                /** IUserRemark userId */
+                userId?: (string|null);
+
+                /** IUserRemark remark */
+                remark?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IUserRemark. */
+            type $Shape = lingcat.classes.IUserRemark.$Properties;
         }
     }
 
@@ -12537,6 +12666,597 @@ export namespace lingcat {
 
             /** Shape of a Meeting_Participants_Changed_Event. */
             type $Shape = lingcat.methods.Meeting_Participants_Changed_Event.$Properties;
+        }
+
+        /**
+         * Properties of a Set_User_Remark_Request.
+         * @deprecated Use lingcat.methods.Set_User_Remark_Request.$Properties instead.
+         */
+        interface ISet_User_Remark_Request extends lingcat.methods.Set_User_Remark_Request.$Properties {
+        }
+
+        /** Represents a Set_User_Remark_Request. */
+        class Set_User_Remark_Request {
+
+            /**
+             * Constructs a new Set_User_Remark_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_User_Remark_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Set_User_Remark_Request accessToken. */
+            accessToken: string;
+
+            /** Set_User_Remark_Request targetUserId. */
+            targetUserId: string;
+
+            /** Set_User_Remark_Request remark. */
+            remark: string;
+
+            /**
+             * Creates a new Set_User_Remark_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_User_Remark_Request instance
+             */
+            static create(properties: lingcat.methods.Set_User_Remark_Request.$Shape): lingcat.methods.Set_User_Remark_Request & lingcat.methods.Set_User_Remark_Request.$Shape;
+            static create(properties?: lingcat.methods.Set_User_Remark_Request.$Properties): lingcat.methods.Set_User_Remark_Request;
+
+            /**
+             * Encodes the specified Set_User_Remark_Request message. Does not implicitly {@link lingcat.methods.Set_User_Remark_Request.verify|verify} messages.
+             * @param message Set_User_Remark_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_User_Remark_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_User_Remark_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_User_Remark_Request.verify|verify} messages.
+             * @param message Set_User_Remark_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_User_Remark_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_User_Remark_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_User_Remark_Request & lingcat.methods.Set_User_Remark_Request.$Shape} Set_User_Remark_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_User_Remark_Request & lingcat.methods.Set_User_Remark_Request.$Shape;
+
+            /**
+             * Decodes a Set_User_Remark_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_User_Remark_Request & lingcat.methods.Set_User_Remark_Request.$Shape} Set_User_Remark_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_User_Remark_Request & lingcat.methods.Set_User_Remark_Request.$Shape;
+
+            /**
+             * Verifies a Set_User_Remark_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_User_Remark_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_User_Remark_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_User_Remark_Request;
+
+            /**
+             * Creates a plain object from a Set_User_Remark_Request message. Also converts values to other types if specified.
+             * @param message Set_User_Remark_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_User_Remark_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_User_Remark_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_User_Remark_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_User_Remark_Request {
+
+            /** Properties of a Set_User_Remark_Request. */
+            interface $Properties {
+
+                /** Set_User_Remark_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Set_User_Remark_Request targetUserId */
+                targetUserId?: (string|null);
+
+                /** Set_User_Remark_Request remark */
+                remark?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_User_Remark_Request. */
+            type $Shape = lingcat.methods.Set_User_Remark_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Set_User_Remark_Response.
+         * @deprecated Use lingcat.methods.Set_User_Remark_Response.$Properties instead.
+         */
+        interface ISet_User_Remark_Response extends lingcat.methods.Set_User_Remark_Response.$Properties {
+        }
+
+        /** Represents a Set_User_Remark_Response. */
+        class Set_User_Remark_Response {
+
+            /**
+             * Constructs a new Set_User_Remark_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_User_Remark_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Set_User_Remark_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_User_Remark_Response instance
+             */
+            static create(properties: lingcat.methods.Set_User_Remark_Response.$Shape): lingcat.methods.Set_User_Remark_Response & lingcat.methods.Set_User_Remark_Response.$Shape;
+            static create(properties?: lingcat.methods.Set_User_Remark_Response.$Properties): lingcat.methods.Set_User_Remark_Response;
+
+            /**
+             * Encodes the specified Set_User_Remark_Response message. Does not implicitly {@link lingcat.methods.Set_User_Remark_Response.verify|verify} messages.
+             * @param message Set_User_Remark_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_User_Remark_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_User_Remark_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_User_Remark_Response.verify|verify} messages.
+             * @param message Set_User_Remark_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_User_Remark_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_User_Remark_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_User_Remark_Response & lingcat.methods.Set_User_Remark_Response.$Shape} Set_User_Remark_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_User_Remark_Response & lingcat.methods.Set_User_Remark_Response.$Shape;
+
+            /**
+             * Decodes a Set_User_Remark_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_User_Remark_Response & lingcat.methods.Set_User_Remark_Response.$Shape} Set_User_Remark_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_User_Remark_Response & lingcat.methods.Set_User_Remark_Response.$Shape;
+
+            /**
+             * Verifies a Set_User_Remark_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_User_Remark_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_User_Remark_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_User_Remark_Response;
+
+            /**
+             * Creates a plain object from a Set_User_Remark_Response message. Also converts values to other types if specified.
+             * @param message Set_User_Remark_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_User_Remark_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_User_Remark_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_User_Remark_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_User_Remark_Response {
+
+            /** Properties of a Set_User_Remark_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_User_Remark_Response. */
+            type $Shape = lingcat.methods.Set_User_Remark_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_User_Remarks_Request.
+         * @deprecated Use lingcat.methods.Get_My_User_Remarks_Request.$Properties instead.
+         */
+        interface IGet_My_User_Remarks_Request extends lingcat.methods.Get_My_User_Remarks_Request.$Properties {
+        }
+
+        /** Represents a Get_My_User_Remarks_Request. */
+        class Get_My_User_Remarks_Request {
+
+            /**
+             * Constructs a new Get_My_User_Remarks_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_User_Remarks_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_User_Remarks_Request accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Get_My_User_Remarks_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_User_Remarks_Request instance
+             */
+            static create(properties: lingcat.methods.Get_My_User_Remarks_Request.$Shape): lingcat.methods.Get_My_User_Remarks_Request & lingcat.methods.Get_My_User_Remarks_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_My_User_Remarks_Request.$Properties): lingcat.methods.Get_My_User_Remarks_Request;
+
+            /**
+             * Encodes the specified Get_My_User_Remarks_Request message. Does not implicitly {@link lingcat.methods.Get_My_User_Remarks_Request.verify|verify} messages.
+             * @param message Get_My_User_Remarks_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_User_Remarks_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_User_Remarks_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_User_Remarks_Request.verify|verify} messages.
+             * @param message Get_My_User_Remarks_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_User_Remarks_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_User_Remarks_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_User_Remarks_Request & lingcat.methods.Get_My_User_Remarks_Request.$Shape} Get_My_User_Remarks_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_User_Remarks_Request & lingcat.methods.Get_My_User_Remarks_Request.$Shape;
+
+            /**
+             * Decodes a Get_My_User_Remarks_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_User_Remarks_Request & lingcat.methods.Get_My_User_Remarks_Request.$Shape} Get_My_User_Remarks_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_User_Remarks_Request & lingcat.methods.Get_My_User_Remarks_Request.$Shape;
+
+            /**
+             * Verifies a Get_My_User_Remarks_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_User_Remarks_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_User_Remarks_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_User_Remarks_Request;
+
+            /**
+             * Creates a plain object from a Get_My_User_Remarks_Request message. Also converts values to other types if specified.
+             * @param message Get_My_User_Remarks_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_User_Remarks_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_User_Remarks_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_User_Remarks_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_User_Remarks_Request {
+
+            /** Properties of a Get_My_User_Remarks_Request. */
+            interface $Properties {
+
+                /** Get_My_User_Remarks_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_User_Remarks_Request. */
+            type $Shape = lingcat.methods.Get_My_User_Remarks_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_User_Remarks_Response.
+         * @deprecated Use lingcat.methods.Get_My_User_Remarks_Response.$Properties instead.
+         */
+        interface IGet_My_User_Remarks_Response extends lingcat.methods.Get_My_User_Remarks_Response.$Properties {
+        }
+
+        /** Represents a Get_My_User_Remarks_Response. */
+        class Get_My_User_Remarks_Response {
+
+            /**
+             * Constructs a new Get_My_User_Remarks_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_User_Remarks_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_User_Remarks_Response myUserId. */
+            myUserId: string;
+
+            /** Get_My_User_Remarks_Response remarks. */
+            remarks: lingcat.classes.IUserRemark.$Properties[];
+
+            /**
+             * Creates a new Get_My_User_Remarks_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_User_Remarks_Response instance
+             */
+            static create(properties: lingcat.methods.Get_My_User_Remarks_Response.$Shape): lingcat.methods.Get_My_User_Remarks_Response & lingcat.methods.Get_My_User_Remarks_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_My_User_Remarks_Response.$Properties): lingcat.methods.Get_My_User_Remarks_Response;
+
+            /**
+             * Encodes the specified Get_My_User_Remarks_Response message. Does not implicitly {@link lingcat.methods.Get_My_User_Remarks_Response.verify|verify} messages.
+             * @param message Get_My_User_Remarks_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_User_Remarks_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_User_Remarks_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_User_Remarks_Response.verify|verify} messages.
+             * @param message Get_My_User_Remarks_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_User_Remarks_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_User_Remarks_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_User_Remarks_Response & lingcat.methods.Get_My_User_Remarks_Response.$Shape} Get_My_User_Remarks_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_User_Remarks_Response & lingcat.methods.Get_My_User_Remarks_Response.$Shape;
+
+            /**
+             * Decodes a Get_My_User_Remarks_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_User_Remarks_Response & lingcat.methods.Get_My_User_Remarks_Response.$Shape} Get_My_User_Remarks_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_User_Remarks_Response & lingcat.methods.Get_My_User_Remarks_Response.$Shape;
+
+            /**
+             * Verifies a Get_My_User_Remarks_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_User_Remarks_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_User_Remarks_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_User_Remarks_Response;
+
+            /**
+             * Creates a plain object from a Get_My_User_Remarks_Response message. Also converts values to other types if specified.
+             * @param message Get_My_User_Remarks_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_User_Remarks_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_User_Remarks_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_User_Remarks_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_User_Remarks_Response {
+
+            /** Properties of a Get_My_User_Remarks_Response. */
+            interface $Properties {
+
+                /** Get_My_User_Remarks_Response myUserId */
+                myUserId?: (string|null);
+
+                /** Get_My_User_Remarks_Response remarks */
+                remarks?: (lingcat.classes.IUserRemark.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_User_Remarks_Response. */
+            type $Shape = lingcat.methods.Get_My_User_Remarks_Response.$Properties;
+        }
+
+        /**
+         * Properties of a User_Remarks_Changed_Event.
+         * @deprecated Use lingcat.methods.User_Remarks_Changed_Event.$Properties instead.
+         */
+        interface IUser_Remarks_Changed_Event extends lingcat.methods.User_Remarks_Changed_Event.$Properties {
+        }
+
+        /** Represents a User_Remarks_Changed_Event. */
+        class User_Remarks_Changed_Event {
+
+            /**
+             * Constructs a new User_Remarks_Changed_Event.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.User_Remarks_Changed_Event.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new User_Remarks_Changed_Event instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns User_Remarks_Changed_Event instance
+             */
+            static create(properties: lingcat.methods.User_Remarks_Changed_Event.$Shape): lingcat.methods.User_Remarks_Changed_Event & lingcat.methods.User_Remarks_Changed_Event.$Shape;
+            static create(properties?: lingcat.methods.User_Remarks_Changed_Event.$Properties): lingcat.methods.User_Remarks_Changed_Event;
+
+            /**
+             * Encodes the specified User_Remarks_Changed_Event message. Does not implicitly {@link lingcat.methods.User_Remarks_Changed_Event.verify|verify} messages.
+             * @param message User_Remarks_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.User_Remarks_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified User_Remarks_Changed_Event message, length delimited. Does not implicitly {@link lingcat.methods.User_Remarks_Changed_Event.verify|verify} messages.
+             * @param message User_Remarks_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.User_Remarks_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a User_Remarks_Changed_Event message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.User_Remarks_Changed_Event & lingcat.methods.User_Remarks_Changed_Event.$Shape} User_Remarks_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.User_Remarks_Changed_Event & lingcat.methods.User_Remarks_Changed_Event.$Shape;
+
+            /**
+             * Decodes a User_Remarks_Changed_Event message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.User_Remarks_Changed_Event & lingcat.methods.User_Remarks_Changed_Event.$Shape} User_Remarks_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.User_Remarks_Changed_Event & lingcat.methods.User_Remarks_Changed_Event.$Shape;
+
+            /**
+             * Verifies a User_Remarks_Changed_Event message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a User_Remarks_Changed_Event message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns User_Remarks_Changed_Event
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.User_Remarks_Changed_Event;
+
+            /**
+             * Creates a plain object from a User_Remarks_Changed_Event message. Also converts values to other types if specified.
+             * @param message User_Remarks_Changed_Event
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.User_Remarks_Changed_Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this User_Remarks_Changed_Event to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for User_Remarks_Changed_Event
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace User_Remarks_Changed_Event {
+
+            /** Properties of a User_Remarks_Changed_Event. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a User_Remarks_Changed_Event. */
+            type $Shape = lingcat.methods.User_Remarks_Changed_Event.$Properties;
         }
     }
 }

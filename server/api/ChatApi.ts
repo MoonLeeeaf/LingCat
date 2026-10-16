@@ -10,6 +10,7 @@ import UserDataBase from "../data/UserDataBase.ts"
 import ChatAdminLinker from "../data/ChatAdminLinker.ts"
 import { db } from "../data/db.ts"
 import FileManager from "../data/FileManager.ts"
+import { broadcastToUserClients } from "./broadcaster.ts"
 
 async function IChatToProtoChat(c: IChat, user_id?: string, isMember?: boolean) {
     let a: LingCatProto.classes.IChat.$Properties = {
@@ -32,6 +33,7 @@ async function IChatToProtoChat(c: IChat, user_id?: string, isMember?: boolean) 
             if (anotherUser) {
                 a.avatarFileHash = anotherUser.avatar_file_hash
                 a.title = anotherUser.nickname
+                a.peerUserId = anotherUserId
             }
         }
     }
@@ -68,9 +70,7 @@ function protoEntityToIMessageEntity(
     }
 }
 
-function broadcastToUserClients(clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } }, user_id: string, func: (func: (mPackage: Package) => void) => void) {
-    Object.values(clients_emiter[user_id] || []).forEach(func)
-}
+
 
 export default class ChatApi {
     static async onCall(sendPackage: ISendPackageFunction, mPackage: Package, clients_emiter: { [k: string]: { [k: string]: (mPackage: Package) => void } } = {}) {
