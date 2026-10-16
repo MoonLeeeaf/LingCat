@@ -24,6 +24,8 @@ import { checkServer, acceptServerPublicKey } from '../../lib/trustServer.ts'
 import { confirmTrust } from '../../lib/confirmTrust.tsx'
 import { bytesToHex } from 'lingcat-shared'
 import LingCatClient from 'lingcat-client-protocol'
+import ProfileCache from "../../ProfileCache.ts"
+import ClientConfig from "../../ClientConfig.ts"
 
 const navItems = [
     {
@@ -231,6 +233,12 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         client.addOnReceiveListener(onMeetingEvent)
         return () => client.removeOnReceiveListener(onMeetingEvent)
     }, [client])
+
+    useAsyncEffect(async (signal) => {
+        if (!activeChatId) return void(document.title = ClientConfig.site_title)
+        const chat = await ProfileCache.queryChatInfo(activeChatId)
+        document.title = ClientConfig.site_title + ' | ' + chat?.title
+    }, [activeChatId])
 
     const isMobile = useIsMobile()
 
