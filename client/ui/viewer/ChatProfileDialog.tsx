@@ -81,14 +81,14 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)
         : default_avatar
 
+    const userRemark = profile?.peer_user_id && RemarksCache.get(profile.peer_user_id)
+    const title = userRemark ? (userRemark + '(' + profile.title + ')') : profile?.title
+    
     if (loading) {
         return (
             <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
         )
     }
-
-    const userRemark = profile?.peer_user_id && RemarksCache.get(profile.peer_user_id)
-    const title = userRemark ? (userRemark + '(' + profile.title + ')') : profile?.title
 
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>

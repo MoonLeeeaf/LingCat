@@ -80,12 +80,6 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
         ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)
         : default_avatar
 
-    if (loading) {
-        return (
-            <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
-        )
-    }
-
     const [, forceUpdate] = React.useReducer((x) => x + 1, 0)
     const userRemark = RemarksCache.get(userId)
     const nickname = userRemark ? (userRemark + '(' + profile?.nickname + ')') : profile?.nickname
@@ -146,6 +140,12 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
             if (input) input.value = current
         }, 10)
     }, [userId])
+
+    if (loading) {
+        return (
+            <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
+        )
+    }
 
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
