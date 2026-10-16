@@ -79,7 +79,8 @@ export default function createLingCatServer(base_data_path: string) {
             type: p.type || 'oidc',
         }))
 
-        res.setHeader('Cache-Control', 'no-cache')   // 配置改了要立刻生效
+        res.setHeader('Cache-Control', 'no-cache')
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.json(pub)
     })
     app.get('/uploaded_files/:hash', async (req, res) => {
