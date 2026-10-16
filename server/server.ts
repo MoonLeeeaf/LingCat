@@ -25,6 +25,14 @@ import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 
 export default function createLingCatServer(base_data_path: string) {
+    if (!fileExists(`${base_data_path}/key/`)) {
+        console.log('[Server]', '生成服务端密钥...')
+        mkdir(`${base_data_path}/key`)
+        const keyPair = SecureKey.Server_generateLongTermKeyPair()
+        fs.writeFileSync(`${base_data_path}/key/public`, keyPair.publicKey)
+        fs.writeFileSync(`${base_data_path}/key/private`, keyPair.privateKey)
+    }
+
     const publicKeyHex = fs.readFileSync(`${base_data_path}/key/public`).toString('hex')
 
     const app = express()
@@ -199,14 +207,6 @@ export default function createLingCatServer(base_data_path: string) {
             }
         )
     })
-
-    if (!fileExists(`${base_data_path}/key/`)) {
-        console.log('[Server]', '生成服务端密钥...')
-        mkdir(`${base_data_path}/key`)
-        const keyPair = SecureKey.Server_generateLongTermKeyPair()
-        fs.writeFileSync(`${base_data_path}/key/public`, keyPair.publicKey)
-        fs.writeFileSync(`${base_data_path}/key/private`, keyPair.privateKey)
-    }
 
     console.log('[Server]', '服务端公钥 Hex:', publicKeyHex)
 
