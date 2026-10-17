@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
 import { useMeetingParticipants } from '../meeting/useMeetingParticipants.ts'
+import { MicLevelBar } from '../meeting/AudioLevel.tsx'
 import SessionEnv from '../../SessionEnv.ts'
 import default_avatar from '../../default_avatar.png'
 import getFileUrl from '../../lib/getFileUrl.ts'
@@ -16,8 +17,11 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
     const room = useMeetingStore(s => s.room)
     const currentChatId = useMeetingStore(s => s.chatId)
     const isInThisMeeting = !!room && currentChatId === chatId
-    // 会议 UI 是否已打开
+    // 会议 UI 是否已打开 / 是否最小化
     const uiOpen = useMeetingUIStore(s => s.isOpen)
+    const isMinimized = useMeetingUIStore(s => s.isMinimized)
+    // 本机麦克风状态 (用于音量条)
+    const isMicOn = useMeetingStore(s => s.isMicOn)
 
     const meetingMembers = useMeetingParticipants(chatId, activeMeeting?.meetingId)
 
@@ -37,7 +41,9 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
 
     const joinOrOpen = async () => {
         if (isInThisMeeting) {
-            if (!uiOpen) useMeetingUIStore.getState().open()
+            // 已在该会议: 恢复被最小化/关闭的窗口
+            useMeetingUIStore.getState().setMinimized(false)
+            useMeetingUIStore.getState().open()
             return
         }
         if (!activeMeeting) return
@@ -55,9 +61,7 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
 
     if (!activeMeeting) return null
 
-    const actionLabel = isInThisMeeting
-        ? (uiOpen ? '会议中' : '回到会议')
-        : '加入'
+    const actionLabel = isInThisMeeting ? '会议中' : '加入'
 
     return (
         <div style={{
@@ -106,12 +110,17 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
                 </>
             )}
 
+            {/* 本机麦克风音量条 (仅在自己处于该会议时) */}
+            {isInThisMeeting && room?.localParticipant && (
+                <MicLevelBar participant={room.localParticipant} muted={!isMicOn} />
+            )}
+
             <div style={{ flex: 1 }} />
 
             <mdui-button
                 variant="text"
                 onClick={joinOrOpen}
-                disabled={isInThisMeeting && uiOpen || undefined}
+                disabled={isInThisMeeting && uiOpen && !isMinimized || undefined}
             >
                 {actionLabel}
             </mdui-button>

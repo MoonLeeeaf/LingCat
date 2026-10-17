@@ -34,6 +34,73 @@ function rmsLevel(analyser: AnalyserNode, buf: Float32Array) {
 // 低于此音量视为"没在说话", 隐藏音量条
 const SHOW_THRESHOLD = 0.08
 
+/**
+ * 内联麦克风音量条 (用于会议横幅): 始终可见, 长度随本机麦克风音量变化。
+ */
+export function MicLevelBar({ participant, muted, width = 44 }: { participant: Participant, muted: boolean, width?: number }) {
+    const fillRef = React.useRef<HTMLDivElement>(null)
+    const mic = participant.getTrackPublication(Track.Source.Microphone)
+    const track = mic?.track
+    const sid = track?.sid
+
+    React.useEffect(() => {
+        const fill = fillRef.current
+        if (!fill) return
+
+        const set = (level: number) => {
+            const v = Math.max(0, Math.min(1, level))
+            fill.style.width = (v * 100).toFixed(0) + '%'
+            fill.style.background = levelColor(v)
+        }
+
+        if (muted || !track?.mediaStreamTrack) { set(0); return }
+
+        const ctx = getAudioContext()
+        if (!ctx) { set(0); return }
+
+        let src: MediaStreamAudioSourceNode | undefined
+        let analyser: AnalyserNode | undefined
+        try {
+            src = ctx.createMediaStreamSource(new MediaStream([track.mediaStreamTrack]))
+            analyser = ctx.createAnalyser()
+            analyser.fftSize = 512
+            analyser.smoothingTimeConstant = 0.6
+            src.connect(analyser)
+        } catch {
+            set(0)
+            return
+        }
+
+        const buf = new Float32Array(analyser.fftSize)
+        let raf = 0
+        const tick = () => {
+            set(rmsLevel(analyser!, buf))
+            raf = requestAnimationFrame(tick)
+        }
+        raf = requestAnimationFrame(tick)
+
+        return () => {
+            cancelAnimationFrame(raf)
+            try { src?.disconnect() } catch { }
+            try { analyser?.disconnect() } catch { }
+        }
+    }, [sid, muted, track])
+
+    return <div
+        title={muted ? '麦克风已静音' : '麦克风音量'}
+        style={{
+            width, height: '6px', borderRadius: '3px',
+            background: 'rgba(0,0,0,0.18)', overflow: 'hidden',
+            flexShrink: 0, opacity: muted ? 0.4 : 1,
+        }}>
+        <div ref={fillRef} style={{
+            height: '100%', width: '0%',
+            background: '#4ade80', borderRadius: '3px',
+            transition: 'width 60ms linear, background-color 120ms linear',
+        }} />
+    </div>
+}
+
 export function AudioLevelBar({ participant, muted }: { participant: Participant, muted: boolean }) {
     const boxRef = React.useRef<HTMLDivElement>(null)
     const fillRef = React.useRef<HTMLDivElement>(null)

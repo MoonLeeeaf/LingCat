@@ -86,7 +86,7 @@ export function DesktopMeetingWindow() {
             left: position.x,
             top: position.y,
             width: size.w,
-            height: isMinimized ? 'auto' : size.h,
+            height: size.h,
         }
 
     const headerExtra = (
@@ -116,7 +116,8 @@ export function DesktopMeetingWindow() {
                 borderRadius: isMaximized ? 0 : '12px',
                 boxShadow: isMaximized ? 'none' : 'var(--mdui-elevation-level3)',
                 border: isMaximized ? 'none' : '1px solid rgb(var(--mdui-color-outline-variant))',
-                display: 'flex',
+                // 最小化 = 整个窗口隐藏, 但仍挂载 (会议保持连接、音频继续播放)
+                display: isMinimized ? 'none' : 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
                 ...style,
