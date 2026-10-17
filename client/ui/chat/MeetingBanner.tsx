@@ -110,8 +110,8 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
                 </>
             )}
 
-            {/* 本机麦克风音量条 (仅在自己处于该会议时) */}
-            {isInThisMeeting && room?.localParticipant && (
+            {/* 本机麦克风音量条: 仅在自己处于该会议且窗口未打开/已最小化时展示 */}
+            {isInThisMeeting && (!uiOpen || isMinimized) && room?.localParticipant && (
                 <MicLevelBar participant={room.localParticipant} muted={!isMicOn} />
             )}
 
