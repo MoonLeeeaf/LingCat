@@ -135,7 +135,7 @@ export function MeetingBall() {
                 const hash = meta.avatar_file_hash as string | undefined
                 meters.push({
                     identity: p.identity,
-                    avatar: hash ? getFileUrl(hash, SessionEnv.myFileAccessToken) : default_avatar,
+                    avatar: (hash ? getFileUrl(hash, SessionEnv.myFileAccessToken) : undefined) || default_avatar,
                     analyser, src, buf: new Float32Array(analyser.fftSize),
                 })
             } catch { /* 忽略单个分析器失败 */ }
