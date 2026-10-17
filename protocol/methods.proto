@@ -525,3 +525,49 @@ message Get_My_User_Remarks_Response {
 
 // 备注变更事件 (广播给自己的所有在线设备, 用于多设备同步)
 message User_Remarks_Changed_Event {}
+
+/**
+ * =======================================================
+ *                  端到端加密 (E2E) 密钥管理
+ * =======================================================
+ */
+
+message Upload_E2E_Key_Request {
+    string access_token = 1;
+    string public_key = 2;
+    string encrypted_private_key = 3;
+    string kdf_salt = 4;
+    string kdf_params = 5;
+    string priv_nonce = 6;
+    int32 key_version = 7;
+}
+
+message Upload_E2E_Key_Response {}
+
+message Get_My_E2E_Key_Request {
+    string access_token = 1;
+    optional int32 key_version = 2; // 不传 = 拉最新；传了 = 拉特定版本
+}
+
+message Get_My_E2E_Key_Response {
+    optional IUserE2EKey key = 1;
+}
+
+message Get_E2E_Public_Keys_Request {
+    string access_token = 1;
+    repeated string user_ids = 2;
+}
+
+message Get_E2E_Public_Keys_Response {
+    string my_user_id = 1;
+    repeated E2E_PublicKeyItem keys = 2;
+}
+
+message Get_All_My_E2E_Keys_Request {
+    string access_token = 1;
+}
+
+message Get_All_My_E2E_Keys_Response {
+    string my_user_id = 1;
+    repeated IUserE2EKey keys = 2;
+}

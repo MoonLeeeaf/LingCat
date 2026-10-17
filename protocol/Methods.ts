@@ -88,6 +88,14 @@ export default class Methods {
     static Set_User_Remark_Response = 0x92
     static Get_My_User_Remarks_Request = 0x93
     static Get_My_User_Remarks_Response = 0x94
+    static Upload_E2E_Key_Request = 0x96
+    static Upload_E2E_Key_Response = 0x97
+    static Get_My_E2E_Key_Request = 0x98
+    static Get_My_E2E_Key_Response = 0x99
+    static Get_E2E_Public_Keys_Request = 0x9a
+    static Get_E2E_Public_Keys_Response = 0x9b
+    static Get_All_My_E2E_Keys_Request = 0x9c
+    static Get_All_My_E2E_Keys_Response = 0x9d
 
     static Get_Meeting_Participants_Request = 0x8a
     static Get_Meeting_Participants_Response = 0x8b

@@ -20,6 +20,7 @@ import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { MeetingBanner } from './MeetingBanner.tsx'
 import RemarksCache from '../../RemarksCache.ts'
+import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
 
 export function ChatFragment() {
     const { chatId } = ChatRoute.useParams()
@@ -43,6 +44,31 @@ export function ChatFragment() {
             tipError(e, '查询对话失败')
         }
     }, [chatId])
+
+    const loadE2E = useE2EStore(s => s.loadKeyState)
+    const fetchPeerKeys = useE2EStore(s => s.fetchPeerKeys)
+
+    React.useEffect(() => {
+        // 1. 拉取自己的加密状态
+        loadE2E()
+    }, [])
+
+    const e2eStatus = useE2EStore(s => s.status)
+    const peerKeys = useE2EStore(s => s.peerKeys)
+    const peerVerifyStatus = useE2EStore(s => s.peerVerifyStatus)
+
+    // 判断是否开启了 E2E (私聊 + 双方都有公钥 + 本地未禁用)
+    const peerUserId = chat?.type === 'private' ? chat.peer_user_id : undefined
+    const peerPub = peerUserId ? peerKeys[peerUserId] : null
+    const isE2EActive = !!peerUserId && !!peerPub && e2eStatus !== 'disabled'
+    const verifyStatus = peerUserId ? peerVerifyStatus[peerUserId] : 'unverified'
+
+    // 确保拉取了对方公钥 (如果没有这段，加上)
+    React.useEffect(() => {
+        if (peerUserId && !peerPub) {
+            fetchPeerKeys([peerUserId])
+        }
+    }, [peerUserId, peerPub, fetchPeerKeys])
 
     useAsyncEffect(async () => {
         await reloadChat()
@@ -106,10 +132,12 @@ export function ChatFragment() {
     const content = (
         <>
             <ChatHeader
-                title={title}
+                title={chat?.title ?? '加载中...'}
                 isMobile={isMobile}
                 drawerOpen={drawerOpen}
                 onToggleDrawer={toggleDrawer}
+                isE2E={isE2EActive}
+                e2eStatus={verifyStatus}
                 onOpenMembers={() => ChatMembersAndAdminsDialog.show(chatId)}
                 onOpenSettings={() => ChatSettingsDialog.show(chatId)}
                 onOpenInfo={() => ChatProfileDialog.show(chatId)}
@@ -135,6 +163,7 @@ export function ChatFragment() {
                             ref={messageInputRef}
                             chatId={chatId}
                             chatTitle={chat.title ?? ''}
+                            peerUserId={chat.type === 'private' ? chat.peer_user_id : undefined}
                             editingMessage={editingMessage}
                             onEditCancel={() => setEditingMessage(null)}
                             onEditDone={() => setEditingMessage(null)}

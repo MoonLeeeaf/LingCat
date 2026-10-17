@@ -76,7 +76,7 @@ export interface IFile {
 }
 
 export interface IMessageEntity {
-    type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention' | 'reply'
+    type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention' | 'reply' | 'e2e'
     offset: number
     length: number
     data?: string
@@ -105,4 +105,13 @@ export interface IUserRemark {
     /** 被设置备注的用户的 ID */
     user_id: string
     remark: string
+}
+
+export interface IUserE2EKey {
+    public_key: string
+    encrypted_private_key: string
+    kdf_salt: string
+    kdf_params: string
+    priv_nonce: string
+    key_version: number
 }

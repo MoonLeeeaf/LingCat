@@ -1,3 +1,5 @@
+import React from 'react'
+
 export interface ChatHeaderProps {
     /** 聊天标题 */
     title: string
@@ -7,6 +9,11 @@ export interface ChatHeaderProps {
     drawerOpen?: boolean
     /** 桌面端：点击抽屉开关 */
     onToggleDrawer?: () => void
+
+    /** 是否开启了端到端加密 */
+    isE2E?: boolean
+    /** E2E 验证状态 (可选，用于改变锁的颜色) */
+    e2eStatus?: 'unverified' | 'verified' | 'mismatch'
 
     /** 点击"成员列表" */
     onOpenMembers?: () => void
@@ -22,11 +29,20 @@ export function ChatHeader({
     title,
     isMobile,
     onToggleDrawer,
+    isE2E,
+    e2eStatus = 'unverified',
     onOpenMembers,
     onOpenSettings,
     onOpenInfo,
     onCall,
 }: ChatHeaderProps) {
+    // 根据状态决定锁的颜色
+    const lockColor = e2eStatus === 'verified' 
+        ? 'var(--mdui-color-primary)' 
+        : e2eStatus === 'mismatch' 
+            ? 'var(--mdui-color-error)' 
+            : 'var(--mdui-color-outline)'
+
     return (
         <mdui-top-app-bar scroll-target='#thishumandoesnotexists' style={{ position: 'relative' }}>
             {isMobile ? (
@@ -41,8 +57,26 @@ export function ChatHeader({
                 />
             )}
 
-            <mdui-top-app-bar-title style={{ marginLeft: '8px' }}>
-                {title}
+            <mdui-top-app-bar-title style={{ marginLeft: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {title}
+                </span>
+                {isE2E && (
+                    <mdui-tooltip content={
+                        e2eStatus === 'verified' ? '端到端加密 (已验证)' :
+                        e2eStatus === 'mismatch' ? '端到端加密 (安全码已变更)' :
+                        '端到端加密'
+                    }>
+                        <mdui-icon 
+                            name="lock" 
+                            style={{ 
+                                fontSize: '16px', 
+                                color: lockColor,
+                                flexShrink: 0 
+                            }}
+                        />
+                    </mdui-tooltip>
+                )}
             </mdui-top-app-bar-title>
 
             <div style={{ flexGrow: 1 }} />

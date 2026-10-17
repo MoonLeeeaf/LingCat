@@ -4261,6 +4261,732 @@ export const lingcat = $root.lingcat = (() => {
             return IUserRemark;
         })();
 
+        classes.E2E_PublicKeyItem = (function() {
+
+            /**
+             * Properties of a E2E_PublicKeyItem.
+             * @typedef {Object} lingcat.classes.E2E_PublicKeyItem.$Properties
+             * @property {string|null} [userId] E2E_PublicKeyItem userId
+             * @property {string|null} [publicKey] E2E_PublicKeyItem publicKey
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a E2E_PublicKeyItem.
+             * @memberof lingcat.classes
+             * @interface IE2E_PublicKeyItem
+             * @augments lingcat.classes.E2E_PublicKeyItem.$Properties
+             * @deprecated Use lingcat.classes.E2E_PublicKeyItem.$Properties instead.
+             */
+
+            /**
+             * Shape of a E2E_PublicKeyItem.
+             * @typedef {lingcat.classes.E2E_PublicKeyItem.$Properties} lingcat.classes.E2E_PublicKeyItem.$Shape
+             */
+
+            /**
+             * Constructs a new E2E_PublicKeyItem.
+             * @memberof lingcat.classes
+             * @classdesc Represents a E2E_PublicKeyItem.
+             * @constructor
+             * @param {lingcat.classes.E2E_PublicKeyItem.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const E2E_PublicKeyItem = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * E2E_PublicKeyItem userId.
+             * @member {string} userId
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @instance
+             */
+            E2E_PublicKeyItem.prototype.userId = "";
+
+            /**
+             * E2E_PublicKeyItem publicKey.
+             * @member {string} publicKey
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @instance
+             */
+            E2E_PublicKeyItem.prototype.publicKey = "";
+
+            /**
+             * Creates a new E2E_PublicKeyItem instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {lingcat.classes.E2E_PublicKeyItem.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.E2E_PublicKeyItem} E2E_PublicKeyItem instance
+             * @type {{
+             *   (properties: lingcat.classes.E2E_PublicKeyItem.$Shape): lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape;
+             *   (properties?: lingcat.classes.E2E_PublicKeyItem.$Properties): lingcat.classes.E2E_PublicKeyItem;
+             * }}
+             */
+            E2E_PublicKeyItem.create = function(properties) {
+                return new E2E_PublicKeyItem(properties);
+            };
+
+            /**
+             * Encodes the specified E2E_PublicKeyItem message. Does not implicitly {@link lingcat.classes.E2E_PublicKeyItem.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {lingcat.classes.E2E_PublicKeyItem.$Properties} message E2E_PublicKeyItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            E2E_PublicKeyItem.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId") && message.userId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey") && message.publicKey !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.publicKey);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified E2E_PublicKeyItem message, length delimited. Does not implicitly {@link lingcat.classes.E2E_PublicKeyItem.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {lingcat.classes.E2E_PublicKeyItem.$Properties} message E2E_PublicKeyItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            E2E_PublicKeyItem.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a E2E_PublicKeyItem message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape} E2E_PublicKeyItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            E2E_PublicKeyItem.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.classes.E2E_PublicKeyItem();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.userId = value;
+                            else
+                                delete message.userId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.publicKey = value;
+                            else
+                                delete message.publicKey;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a E2E_PublicKeyItem message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape} E2E_PublicKeyItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            E2E_PublicKeyItem.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a E2E_PublicKeyItem message.
+             * @function verify
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            E2E_PublicKeyItem.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    if (!$util.isString(message.publicKey))
+                        return "publicKey: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a E2E_PublicKeyItem message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.E2E_PublicKeyItem} E2E_PublicKeyItem
+             */
+            E2E_PublicKeyItem.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.E2E_PublicKeyItem)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.E2E_PublicKeyItem: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.E2E_PublicKeyItem();
+                if (object.userId != null)
+                    if (typeof object.userId !== "string" || object.userId.length)
+                        message.userId = $String(object.userId);
+                if (object.publicKey != null)
+                    if (typeof object.publicKey !== "string" || object.publicKey.length)
+                        message.publicKey = $String(object.publicKey);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a E2E_PublicKeyItem message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {lingcat.classes.E2E_PublicKeyItem} message E2E_PublicKeyItem
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            E2E_PublicKeyItem.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.userId = "";
+                    object.publicKey = "";
+                }
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    object.publicKey = message.publicKey;
+                return object;
+            };
+
+            /**
+             * Converts this E2E_PublicKeyItem to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            E2E_PublicKeyItem.prototype.toJSON = function() {
+                return E2E_PublicKeyItem.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for E2E_PublicKeyItem
+             * @function getTypeUrl
+             * @memberof lingcat.classes.E2E_PublicKeyItem
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            E2E_PublicKeyItem.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.E2E_PublicKeyItem";
+            };
+
+            return E2E_PublicKeyItem;
+        })();
+
+        classes.IUserE2EKey = (function() {
+
+            /**
+             * Properties of a IUserE2EKey.
+             * @typedef {Object} lingcat.classes.IUserE2EKey.$Properties
+             * @property {string|null} [publicKey] IUserE2EKey publicKey
+             * @property {string|null} [encryptedPrivateKey] IUserE2EKey encryptedPrivateKey
+             * @property {string|null} [kdfSalt] IUserE2EKey kdfSalt
+             * @property {string|null} [kdfParams] IUserE2EKey kdfParams
+             * @property {string|null} [privNonce] IUserE2EKey privNonce
+             * @property {number|null} [keyVersion] IUserE2EKey keyVersion
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IUserE2EKey.
+             * @memberof lingcat.classes
+             * @interface IIUserE2EKey
+             * @augments lingcat.classes.IUserE2EKey.$Properties
+             * @deprecated Use lingcat.classes.IUserE2EKey.$Properties instead.
+             */
+
+            /**
+             * Shape of a IUserE2EKey.
+             * @typedef {lingcat.classes.IUserE2EKey.$Properties} lingcat.classes.IUserE2EKey.$Shape
+             */
+
+            /**
+             * Constructs a new IUserE2EKey.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IUserE2EKey.
+             * @constructor
+             * @param {lingcat.classes.IUserE2EKey.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IUserE2EKey = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IUserE2EKey publicKey.
+             * @member {string} publicKey
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.publicKey = "";
+
+            /**
+             * IUserE2EKey encryptedPrivateKey.
+             * @member {string} encryptedPrivateKey
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.encryptedPrivateKey = "";
+
+            /**
+             * IUserE2EKey kdfSalt.
+             * @member {string} kdfSalt
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.kdfSalt = "";
+
+            /**
+             * IUserE2EKey kdfParams.
+             * @member {string} kdfParams
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.kdfParams = "";
+
+            /**
+             * IUserE2EKey privNonce.
+             * @member {string} privNonce
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.privNonce = "";
+
+            /**
+             * IUserE2EKey keyVersion.
+             * @member {number} keyVersion
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             */
+            IUserE2EKey.prototype.keyVersion = 0;
+
+            /**
+             * Creates a new IUserE2EKey instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {lingcat.classes.IUserE2EKey.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IUserE2EKey} IUserE2EKey instance
+             * @type {{
+             *   (properties: lingcat.classes.IUserE2EKey.$Shape): lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape;
+             *   (properties?: lingcat.classes.IUserE2EKey.$Properties): lingcat.classes.IUserE2EKey;
+             * }}
+             */
+            IUserE2EKey.create = function(properties) {
+                return new IUserE2EKey(properties);
+            };
+
+            /**
+             * Encodes the specified IUserE2EKey message. Does not implicitly {@link lingcat.classes.IUserE2EKey.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {lingcat.classes.IUserE2EKey.$Properties} message IUserE2EKey message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IUserE2EKey.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey") && message.publicKey !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.publicKey);
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey") && message.encryptedPrivateKey !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.encryptedPrivateKey);
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt") && message.kdfSalt !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.kdfSalt);
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams") && message.kdfParams !== "")
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.kdfParams);
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce") && message.privNonce !== "")
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.privNonce);
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion") && message.keyVersion !== 0)
+                    writer.uint32(/* id 6, wireType 0 =*/48).int32(message.keyVersion);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IUserE2EKey message, length delimited. Does not implicitly {@link lingcat.classes.IUserE2EKey.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {lingcat.classes.IUserE2EKey.$Properties} message IUserE2EKey message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IUserE2EKey.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a IUserE2EKey message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape} IUserE2EKey
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IUserE2EKey.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.classes.IUserE2EKey();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.publicKey = value;
+                            else
+                                delete message.publicKey;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.encryptedPrivateKey = value;
+                            else
+                                delete message.encryptedPrivateKey;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.kdfSalt = value;
+                            else
+                                delete message.kdfSalt;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.kdfParams = value;
+                            else
+                                delete message.kdfParams;
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.privNonce = value;
+                            else
+                                delete message.privNonce;
+                            continue;
+                        }
+                    case 6: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.int32())
+                                message.keyVersion = value;
+                            else
+                                delete message.keyVersion;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IUserE2EKey message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape} IUserE2EKey
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IUserE2EKey.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a IUserE2EKey message.
+             * @function verify
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IUserE2EKey.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    if (!$util.isString(message.publicKey))
+                        return "publicKey: string expected";
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey"))
+                    if (!$util.isString(message.encryptedPrivateKey))
+                        return "encryptedPrivateKey: string expected";
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt"))
+                    if (!$util.isString(message.kdfSalt))
+                        return "kdfSalt: string expected";
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams"))
+                    if (!$util.isString(message.kdfParams))
+                        return "kdfParams: string expected";
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce"))
+                    if (!$util.isString(message.privNonce))
+                        return "privNonce: string expected";
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    if (!$util.isInteger(message.keyVersion))
+                        return "keyVersion: integer expected";
+                return null;
+            };
+
+            /**
+             * Creates a IUserE2EKey message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IUserE2EKey} IUserE2EKey
+             */
+            IUserE2EKey.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IUserE2EKey)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IUserE2EKey: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IUserE2EKey();
+                if (object.publicKey != null)
+                    if (typeof object.publicKey !== "string" || object.publicKey.length)
+                        message.publicKey = $String(object.publicKey);
+                if (object.encryptedPrivateKey != null)
+                    if (typeof object.encryptedPrivateKey !== "string" || object.encryptedPrivateKey.length)
+                        message.encryptedPrivateKey = $String(object.encryptedPrivateKey);
+                if (object.kdfSalt != null)
+                    if (typeof object.kdfSalt !== "string" || object.kdfSalt.length)
+                        message.kdfSalt = $String(object.kdfSalt);
+                if (object.kdfParams != null)
+                    if (typeof object.kdfParams !== "string" || object.kdfParams.length)
+                        message.kdfParams = $String(object.kdfParams);
+                if (object.privNonce != null)
+                    if (typeof object.privNonce !== "string" || object.privNonce.length)
+                        message.privNonce = $String(object.privNonce);
+                if (object.keyVersion != null)
+                    if ($Number(object.keyVersion) !== 0)
+                        message.keyVersion = object.keyVersion | 0;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IUserE2EKey message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {lingcat.classes.IUserE2EKey} message IUserE2EKey
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IUserE2EKey.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.publicKey = "";
+                    object.encryptedPrivateKey = "";
+                    object.kdfSalt = "";
+                    object.kdfParams = "";
+                    object.privNonce = "";
+                    object.keyVersion = 0;
+                }
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    object.publicKey = message.publicKey;
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey"))
+                    object.encryptedPrivateKey = message.encryptedPrivateKey;
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt"))
+                    object.kdfSalt = message.kdfSalt;
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams"))
+                    object.kdfParams = message.kdfParams;
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce"))
+                    object.privNonce = message.privNonce;
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    object.keyVersion = message.keyVersion;
+                return object;
+            };
+
+            /**
+             * Converts this IUserE2EKey to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IUserE2EKey
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IUserE2EKey.prototype.toJSON = function() {
+                return IUserE2EKey.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IUserE2EKey
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IUserE2EKey
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IUserE2EKey.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IUserE2EKey";
+            };
+
+            return IUserE2EKey;
+        })();
+
         return classes;
     })();
 
@@ -33915,6 +34641,2526 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return User_Remarks_Changed_Event;
+        })();
+
+        methods.Upload_E2E_Key_Request = (function() {
+
+            /**
+             * Properties of an Upload_E2E_Key_Request.
+             * @typedef {Object} lingcat.methods.Upload_E2E_Key_Request.$Properties
+             * @property {string|null} [accessToken] Upload_E2E_Key_Request accessToken
+             * @property {string|null} [publicKey] Upload_E2E_Key_Request publicKey
+             * @property {string|null} [encryptedPrivateKey] Upload_E2E_Key_Request encryptedPrivateKey
+             * @property {string|null} [kdfSalt] Upload_E2E_Key_Request kdfSalt
+             * @property {string|null} [kdfParams] Upload_E2E_Key_Request kdfParams
+             * @property {string|null} [privNonce] Upload_E2E_Key_Request privNonce
+             * @property {number|null} [keyVersion] Upload_E2E_Key_Request keyVersion
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Upload_E2E_Key_Request.
+             * @memberof lingcat.methods
+             * @interface IUpload_E2E_Key_Request
+             * @augments lingcat.methods.Upload_E2E_Key_Request.$Properties
+             * @deprecated Use lingcat.methods.Upload_E2E_Key_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of an Upload_E2E_Key_Request.
+             * @typedef {lingcat.methods.Upload_E2E_Key_Request.$Properties} lingcat.methods.Upload_E2E_Key_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Upload_E2E_Key_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Upload_E2E_Key_Request.
+             * @constructor
+             * @param {lingcat.methods.Upload_E2E_Key_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Upload_E2E_Key_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Upload_E2E_Key_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.accessToken = "";
+
+            /**
+             * Upload_E2E_Key_Request publicKey.
+             * @member {string} publicKey
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.publicKey = "";
+
+            /**
+             * Upload_E2E_Key_Request encryptedPrivateKey.
+             * @member {string} encryptedPrivateKey
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.encryptedPrivateKey = "";
+
+            /**
+             * Upload_E2E_Key_Request kdfSalt.
+             * @member {string} kdfSalt
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.kdfSalt = "";
+
+            /**
+             * Upload_E2E_Key_Request kdfParams.
+             * @member {string} kdfParams
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.kdfParams = "";
+
+            /**
+             * Upload_E2E_Key_Request privNonce.
+             * @member {string} privNonce
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.privNonce = "";
+
+            /**
+             * Upload_E2E_Key_Request keyVersion.
+             * @member {number} keyVersion
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             */
+            Upload_E2E_Key_Request.prototype.keyVersion = 0;
+
+            /**
+             * Creates a new Upload_E2E_Key_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Upload_E2E_Key_Request} Upload_E2E_Key_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Upload_E2E_Key_Request.$Shape): lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape;
+             *   (properties?: lingcat.methods.Upload_E2E_Key_Request.$Properties): lingcat.methods.Upload_E2E_Key_Request;
+             * }}
+             */
+            Upload_E2E_Key_Request.create = function(properties) {
+                return new Upload_E2E_Key_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Request message. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Request.$Properties} message Upload_E2E_Key_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Upload_E2E_Key_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey") && message.publicKey !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.publicKey);
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey") && message.encryptedPrivateKey !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.encryptedPrivateKey);
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt") && message.kdfSalt !== "")
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.kdfSalt);
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams") && message.kdfParams !== "")
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.kdfParams);
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce") && message.privNonce !== "")
+                    writer.uint32(/* id 6, wireType 2 =*/50).string(message.privNonce);
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion") && message.keyVersion !== 0)
+                    writer.uint32(/* id 7, wireType 0 =*/56).int32(message.keyVersion);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Request message, length delimited. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Request.$Properties} message Upload_E2E_Key_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Upload_E2E_Key_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes an Upload_E2E_Key_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape} Upload_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Upload_E2E_Key_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Upload_E2E_Key_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.publicKey = value;
+                            else
+                                delete message.publicKey;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.encryptedPrivateKey = value;
+                            else
+                                delete message.encryptedPrivateKey;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.kdfSalt = value;
+                            else
+                                delete message.kdfSalt;
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.kdfParams = value;
+                            else
+                                delete message.kdfParams;
+                            continue;
+                        }
+                    case 6: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.privNonce = value;
+                            else
+                                delete message.privNonce;
+                            continue;
+                        }
+                    case 7: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.int32())
+                                message.keyVersion = value;
+                            else
+                                delete message.keyVersion;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Upload_E2E_Key_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape} Upload_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Upload_E2E_Key_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies an Upload_E2E_Key_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Upload_E2E_Key_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    if (!$util.isString(message.publicKey))
+                        return "publicKey: string expected";
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey"))
+                    if (!$util.isString(message.encryptedPrivateKey))
+                        return "encryptedPrivateKey: string expected";
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt"))
+                    if (!$util.isString(message.kdfSalt))
+                        return "kdfSalt: string expected";
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams"))
+                    if (!$util.isString(message.kdfParams))
+                        return "kdfParams: string expected";
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce"))
+                    if (!$util.isString(message.privNonce))
+                        return "privNonce: string expected";
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    if (!$util.isInteger(message.keyVersion))
+                        return "keyVersion: integer expected";
+                return null;
+            };
+
+            /**
+             * Creates an Upload_E2E_Key_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Upload_E2E_Key_Request} Upload_E2E_Key_Request
+             */
+            Upload_E2E_Key_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Upload_E2E_Key_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Upload_E2E_Key_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Upload_E2E_Key_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.publicKey != null)
+                    if (typeof object.publicKey !== "string" || object.publicKey.length)
+                        message.publicKey = $String(object.publicKey);
+                if (object.encryptedPrivateKey != null)
+                    if (typeof object.encryptedPrivateKey !== "string" || object.encryptedPrivateKey.length)
+                        message.encryptedPrivateKey = $String(object.encryptedPrivateKey);
+                if (object.kdfSalt != null)
+                    if (typeof object.kdfSalt !== "string" || object.kdfSalt.length)
+                        message.kdfSalt = $String(object.kdfSalt);
+                if (object.kdfParams != null)
+                    if (typeof object.kdfParams !== "string" || object.kdfParams.length)
+                        message.kdfParams = $String(object.kdfParams);
+                if (object.privNonce != null)
+                    if (typeof object.privNonce !== "string" || object.privNonce.length)
+                        message.privNonce = $String(object.privNonce);
+                if (object.keyVersion != null)
+                    if ($Number(object.keyVersion) !== 0)
+                        message.keyVersion = object.keyVersion | 0;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Upload_E2E_Key_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Request} message Upload_E2E_Key_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Upload_E2E_Key_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.publicKey = "";
+                    object.encryptedPrivateKey = "";
+                    object.kdfSalt = "";
+                    object.kdfParams = "";
+                    object.privNonce = "";
+                    object.keyVersion = 0;
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.publicKey != null && $Object.hasOwnProperty.call(message, "publicKey"))
+                    object.publicKey = message.publicKey;
+                if (message.encryptedPrivateKey != null && $Object.hasOwnProperty.call(message, "encryptedPrivateKey"))
+                    object.encryptedPrivateKey = message.encryptedPrivateKey;
+                if (message.kdfSalt != null && $Object.hasOwnProperty.call(message, "kdfSalt"))
+                    object.kdfSalt = message.kdfSalt;
+                if (message.kdfParams != null && $Object.hasOwnProperty.call(message, "kdfParams"))
+                    object.kdfParams = message.kdfParams;
+                if (message.privNonce != null && $Object.hasOwnProperty.call(message, "privNonce"))
+                    object.privNonce = message.privNonce;
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    object.keyVersion = message.keyVersion;
+                return object;
+            };
+
+            /**
+             * Converts this Upload_E2E_Key_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Upload_E2E_Key_Request.prototype.toJSON = function() {
+                return Upload_E2E_Key_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Upload_E2E_Key_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Upload_E2E_Key_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Upload_E2E_Key_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Upload_E2E_Key_Request";
+            };
+
+            return Upload_E2E_Key_Request;
+        })();
+
+        methods.Upload_E2E_Key_Response = (function() {
+
+            /**
+             * Properties of an Upload_E2E_Key_Response.
+             * @typedef {Object} lingcat.methods.Upload_E2E_Key_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Upload_E2E_Key_Response.
+             * @memberof lingcat.methods
+             * @interface IUpload_E2E_Key_Response
+             * @augments lingcat.methods.Upload_E2E_Key_Response.$Properties
+             * @deprecated Use lingcat.methods.Upload_E2E_Key_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of an Upload_E2E_Key_Response.
+             * @typedef {lingcat.methods.Upload_E2E_Key_Response.$Properties} lingcat.methods.Upload_E2E_Key_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Upload_E2E_Key_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Upload_E2E_Key_Response.
+             * @constructor
+             * @param {lingcat.methods.Upload_E2E_Key_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Upload_E2E_Key_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Upload_E2E_Key_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Upload_E2E_Key_Response} Upload_E2E_Key_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Upload_E2E_Key_Response.$Shape): lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape;
+             *   (properties?: lingcat.methods.Upload_E2E_Key_Response.$Properties): lingcat.methods.Upload_E2E_Key_Response;
+             * }}
+             */
+            Upload_E2E_Key_Response.create = function(properties) {
+                return new Upload_E2E_Key_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Response message. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Response.$Properties} message Upload_E2E_Key_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Upload_E2E_Key_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Response message, length delimited. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Response.$Properties} message Upload_E2E_Key_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Upload_E2E_Key_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes an Upload_E2E_Key_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape} Upload_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Upload_E2E_Key_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Upload_E2E_Key_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Upload_E2E_Key_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape} Upload_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Upload_E2E_Key_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies an Upload_E2E_Key_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Upload_E2E_Key_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates an Upload_E2E_Key_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Upload_E2E_Key_Response} Upload_E2E_Key_Response
+             */
+            Upload_E2E_Key_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Upload_E2E_Key_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Upload_E2E_Key_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Upload_E2E_Key_Response();
+            };
+
+            /**
+             * Creates a plain object from an Upload_E2E_Key_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Upload_E2E_Key_Response} message Upload_E2E_Key_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Upload_E2E_Key_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Upload_E2E_Key_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Upload_E2E_Key_Response.prototype.toJSON = function() {
+                return Upload_E2E_Key_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Upload_E2E_Key_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Upload_E2E_Key_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Upload_E2E_Key_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Upload_E2E_Key_Response";
+            };
+
+            return Upload_E2E_Key_Response;
+        })();
+
+        methods.Get_My_E2E_Key_Request = (function() {
+
+            /**
+             * Properties of a Get_My_E2E_Key_Request.
+             * @typedef {Object} lingcat.methods.Get_My_E2E_Key_Request.$Properties
+             * @property {string|null} [accessToken] Get_My_E2E_Key_Request accessToken
+             * @property {number|null} [keyVersion] Get_My_E2E_Key_Request keyVersion
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_My_E2E_Key_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_My_E2E_Key_Request
+             * @augments lingcat.methods.Get_My_E2E_Key_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_My_E2E_Key_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_My_E2E_Key_Request.
+             * @typedef {lingcat.methods.Get_My_E2E_Key_Request.$Properties} lingcat.methods.Get_My_E2E_Key_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_My_E2E_Key_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_My_E2E_Key_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_My_E2E_Key_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_My_E2E_Key_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_My_E2E_Key_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @instance
+             */
+            Get_My_E2E_Key_Request.prototype.accessToken = "";
+
+            /**
+             * Get_My_E2E_Key_Request keyVersion.
+             * @member {number|null|undefined} keyVersion
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @instance
+             */
+            Get_My_E2E_Key_Request.prototype.keyVersion = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Get_My_E2E_Key_Request.prototype, "_keyVersion", {
+                get: $util.oneOfGetter($oneOfFields = ["keyVersion"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Get_My_E2E_Key_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request} Get_My_E2E_Key_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_My_E2E_Key_Request.$Shape): lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_My_E2E_Key_Request.$Properties): lingcat.methods.Get_My_E2E_Key_Request;
+             * }}
+             */
+            Get_My_E2E_Key_Request.create = function(properties) {
+                return new Get_My_E2E_Key_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Request message. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Request.$Properties} message Get_My_E2E_Key_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_E2E_Key_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.keyVersion);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Request.$Properties} message Get_My_E2E_Key_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_E2E_Key_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_My_E2E_Key_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape} Get_My_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_E2E_Key_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_My_E2E_Key_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 0)
+                                break;
+                            message.keyVersion = reader.int32();
+                            message._keyVersion = "keyVersion";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_My_E2E_Key_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape} Get_My_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_E2E_Key_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_My_E2E_Key_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_My_E2E_Key_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion")) {
+                    properties._keyVersion = 1;
+                    if (!$util.isInteger(message.keyVersion))
+                        return "keyVersion: integer expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_My_E2E_Key_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request} Get_My_E2E_Key_Request
+             */
+            Get_My_E2E_Key_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_My_E2E_Key_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_My_E2E_Key_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_My_E2E_Key_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.keyVersion != null)
+                    message.keyVersion = object.keyVersion | 0;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_My_E2E_Key_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Request} message Get_My_E2E_Key_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_My_E2E_Key_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.keyVersion != null && $Object.hasOwnProperty.call(message, "keyVersion"))
+                    object.keyVersion = message.keyVersion;
+                return object;
+            };
+
+            /**
+             * Converts this Get_My_E2E_Key_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_My_E2E_Key_Request.prototype.toJSON = function() {
+                return Get_My_E2E_Key_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_My_E2E_Key_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_My_E2E_Key_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_My_E2E_Key_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_My_E2E_Key_Request";
+            };
+
+            return Get_My_E2E_Key_Request;
+        })();
+
+        methods.Get_My_E2E_Key_Response = (function() {
+
+            /**
+             * Properties of a Get_My_E2E_Key_Response.
+             * @typedef {Object} lingcat.methods.Get_My_E2E_Key_Response.$Properties
+             * @property {lingcat.classes.IUserE2EKey.$Properties|null} [key] Get_My_E2E_Key_Response key
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_My_E2E_Key_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_My_E2E_Key_Response
+             * @augments lingcat.methods.Get_My_E2E_Key_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_My_E2E_Key_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_My_E2E_Key_Response.
+             * @typedef {lingcat.methods.Get_My_E2E_Key_Response.$Properties} lingcat.methods.Get_My_E2E_Key_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_My_E2E_Key_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_My_E2E_Key_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_My_E2E_Key_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_My_E2E_Key_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_My_E2E_Key_Response key.
+             * @member {lingcat.classes.IUserE2EKey.$Properties|null|undefined} key
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @instance
+             */
+            Get_My_E2E_Key_Response.prototype.key = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Get_My_E2E_Key_Response.prototype, "_key", {
+                get: $util.oneOfGetter($oneOfFields = ["key"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Get_My_E2E_Key_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response} Get_My_E2E_Key_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_My_E2E_Key_Response.$Shape): lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_My_E2E_Key_Response.$Properties): lingcat.methods.Get_My_E2E_Key_Response;
+             * }}
+             */
+            Get_My_E2E_Key_Response.create = function(properties) {
+                return new Get_My_E2E_Key_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Response message. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Response.$Properties} message Get_My_E2E_Key_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_E2E_Key_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.key != null && $Object.hasOwnProperty.call(message, "key"))
+                    $root.lingcat.classes.IUserE2EKey.encode(message.key, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Response.$Properties} message Get_My_E2E_Key_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_E2E_Key_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_My_E2E_Key_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape} Get_My_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_E2E_Key_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_My_E2E_Key_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            message.key = $root.lingcat.classes.IUserE2EKey.decode(reader, reader.size(), $undefined, _depth + 1, message.key);
+                            message._key = "key";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_My_E2E_Key_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape} Get_My_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_E2E_Key_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_My_E2E_Key_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_My_E2E_Key_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.key != null && $Object.hasOwnProperty.call(message, "key")) {
+                    properties._key = 1;
+                    {
+                        let error = $root.lingcat.classes.IUserE2EKey.verify(message.key, _depth + 1);
+                        if (error)
+                            return "key." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_My_E2E_Key_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response} Get_My_E2E_Key_Response
+             */
+            Get_My_E2E_Key_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_My_E2E_Key_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_My_E2E_Key_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_My_E2E_Key_Response();
+                if (object.key != null) {
+                    if (!$util.isObject(object.key))
+                        throw $TypeError(".lingcat.methods.Get_My_E2E_Key_Response.key: object expected");
+                    message.key = $root.lingcat.classes.IUserE2EKey.fromObject(object.key, _depth + 1);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_My_E2E_Key_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {lingcat.methods.Get_My_E2E_Key_Response} message Get_My_E2E_Key_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_My_E2E_Key_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (message.key != null && $Object.hasOwnProperty.call(message, "key"))
+                    object.key = $root.lingcat.classes.IUserE2EKey.toObject(message.key, options, _depth + 1);
+                return object;
+            };
+
+            /**
+             * Converts this Get_My_E2E_Key_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_My_E2E_Key_Response.prototype.toJSON = function() {
+                return Get_My_E2E_Key_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_My_E2E_Key_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_My_E2E_Key_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_My_E2E_Key_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_My_E2E_Key_Response";
+            };
+
+            return Get_My_E2E_Key_Response;
+        })();
+
+        methods.Get_E2E_Public_Keys_Request = (function() {
+
+            /**
+             * Properties of a Get_E2E_Public_Keys_Request.
+             * @typedef {Object} lingcat.methods.Get_E2E_Public_Keys_Request.$Properties
+             * @property {string|null} [accessToken] Get_E2E_Public_Keys_Request accessToken
+             * @property {Array.<string>|null} [userIds] Get_E2E_Public_Keys_Request userIds
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_E2E_Public_Keys_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_E2E_Public_Keys_Request
+             * @augments lingcat.methods.Get_E2E_Public_Keys_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_E2E_Public_Keys_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_E2E_Public_Keys_Request.
+             * @typedef {lingcat.methods.Get_E2E_Public_Keys_Request.$Properties} lingcat.methods.Get_E2E_Public_Keys_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_E2E_Public_Keys_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_E2E_Public_Keys_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_E2E_Public_Keys_Request = function (properties) {
+                this.userIds = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_E2E_Public_Keys_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @instance
+             */
+            Get_E2E_Public_Keys_Request.prototype.accessToken = "";
+
+            /**
+             * Get_E2E_Public_Keys_Request userIds.
+             * @member {Array.<string>} userIds
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @instance
+             */
+            Get_E2E_Public_Keys_Request.prototype.userIds = $util.emptyArray;
+
+            /**
+             * Creates a new Get_E2E_Public_Keys_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request} Get_E2E_Public_Keys_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_E2E_Public_Keys_Request.$Shape): lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_E2E_Public_Keys_Request.$Properties): lingcat.methods.Get_E2E_Public_Keys_Request;
+             * }}
+             */
+            Get_E2E_Public_Keys_Request.create = function(properties) {
+                return new Get_E2E_Public_Keys_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Request message. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Request.$Properties} message Get_E2E_Public_Keys_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_E2E_Public_Keys_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.userIds != null && message.userIds.length)
+                    for (let i = 0; i < message.userIds.length; ++i)
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.userIds[i]);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Request.$Properties} message Get_E2E_Public_Keys_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_E2E_Public_Keys_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape} Get_E2E_Public_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_E2E_Public_Keys_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_E2E_Public_Keys_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.userIds && message.userIds.length))
+                                message.userIds = [];
+                            message.userIds.push(reader.stringVerify());
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape} Get_E2E_Public_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_E2E_Public_Keys_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_E2E_Public_Keys_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_E2E_Public_Keys_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.userIds != null && $Object.hasOwnProperty.call(message, "userIds")) {
+                    if (!$Array.isArray(message.userIds))
+                        return "userIds: array expected";
+                    for (let i = 0; i < message.userIds.length; ++i)
+                        if (!$util.isString(message.userIds[i]))
+                            return "userIds: string[] expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_E2E_Public_Keys_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request} Get_E2E_Public_Keys_Request
+             */
+            Get_E2E_Public_Keys_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_E2E_Public_Keys_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_E2E_Public_Keys_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_E2E_Public_Keys_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.userIds) {
+                    if (!$Array.isArray(object.userIds))
+                        throw $TypeError(".lingcat.methods.Get_E2E_Public_Keys_Request.userIds: array expected");
+                    message.userIds = $Array(object.userIds.length);
+                    for (let i = 0; i < object.userIds.length; ++i)
+                        message.userIds[i] = $String(object.userIds[i]);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_E2E_Public_Keys_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Request} message Get_E2E_Public_Keys_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_E2E_Public_Keys_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.userIds = [];
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.userIds && message.userIds.length) {
+                    object.userIds = $Array(message.userIds.length);
+                    for (let j = 0; j < message.userIds.length; ++j)
+                        object.userIds[j] = message.userIds[j];
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_E2E_Public_Keys_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_E2E_Public_Keys_Request.prototype.toJSON = function() {
+                return Get_E2E_Public_Keys_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_E2E_Public_Keys_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_E2E_Public_Keys_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_E2E_Public_Keys_Request";
+            };
+
+            return Get_E2E_Public_Keys_Request;
+        })();
+
+        methods.Get_E2E_Public_Keys_Response = (function() {
+
+            /**
+             * Properties of a Get_E2E_Public_Keys_Response.
+             * @typedef {Object} lingcat.methods.Get_E2E_Public_Keys_Response.$Properties
+             * @property {string|null} [myUserId] Get_E2E_Public_Keys_Response myUserId
+             * @property {Array.<lingcat.classes.E2E_PublicKeyItem.$Properties>|null} [keys] Get_E2E_Public_Keys_Response keys
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_E2E_Public_Keys_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_E2E_Public_Keys_Response
+             * @augments lingcat.methods.Get_E2E_Public_Keys_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_E2E_Public_Keys_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_E2E_Public_Keys_Response.
+             * @typedef {lingcat.methods.Get_E2E_Public_Keys_Response.$Properties} lingcat.methods.Get_E2E_Public_Keys_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_E2E_Public_Keys_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_E2E_Public_Keys_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_E2E_Public_Keys_Response = function (properties) {
+                this.keys = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_E2E_Public_Keys_Response myUserId.
+             * @member {string} myUserId
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @instance
+             */
+            Get_E2E_Public_Keys_Response.prototype.myUserId = "";
+
+            /**
+             * Get_E2E_Public_Keys_Response keys.
+             * @member {Array.<lingcat.classes.E2E_PublicKeyItem.$Properties>} keys
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @instance
+             */
+            Get_E2E_Public_Keys_Response.prototype.keys = $util.emptyArray;
+
+            /**
+             * Creates a new Get_E2E_Public_Keys_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response} Get_E2E_Public_Keys_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_E2E_Public_Keys_Response.$Shape): lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_E2E_Public_Keys_Response.$Properties): lingcat.methods.Get_E2E_Public_Keys_Response;
+             * }}
+             */
+            Get_E2E_Public_Keys_Response.create = function(properties) {
+                return new Get_E2E_Public_Keys_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Response message. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Response.$Properties} message Get_E2E_Public_Keys_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_E2E_Public_Keys_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId") && message.myUserId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.myUserId);
+                if (message.keys != null && message.keys.length)
+                    for (let i = 0; i < message.keys.length; ++i)
+                        $root.lingcat.classes.E2E_PublicKeyItem.encode(message.keys[i], writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Response.$Properties} message Get_E2E_Public_Keys_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_E2E_Public_Keys_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape} Get_E2E_Public_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_E2E_Public_Keys_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_E2E_Public_Keys_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.myUserId = value;
+                            else
+                                delete message.myUserId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.keys && message.keys.length))
+                                message.keys = [];
+                            message.keys.push($root.lingcat.classes.E2E_PublicKeyItem.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape} Get_E2E_Public_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_E2E_Public_Keys_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_E2E_Public_Keys_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_E2E_Public_Keys_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId"))
+                    if (!$util.isString(message.myUserId))
+                        return "myUserId: string expected";
+                if (message.keys != null && $Object.hasOwnProperty.call(message, "keys")) {
+                    if (!$Array.isArray(message.keys))
+                        return "keys: array expected";
+                    for (let i = 0; i < message.keys.length; ++i) {
+                        let error = $root.lingcat.classes.E2E_PublicKeyItem.verify(message.keys[i], _depth + 1);
+                        if (error)
+                            return "keys." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_E2E_Public_Keys_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response} Get_E2E_Public_Keys_Response
+             */
+            Get_E2E_Public_Keys_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_E2E_Public_Keys_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_E2E_Public_Keys_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_E2E_Public_Keys_Response();
+                if (object.myUserId != null)
+                    if (typeof object.myUserId !== "string" || object.myUserId.length)
+                        message.myUserId = $String(object.myUserId);
+                if (object.keys) {
+                    if (!$Array.isArray(object.keys))
+                        throw $TypeError(".lingcat.methods.Get_E2E_Public_Keys_Response.keys: array expected");
+                    message.keys = $Array(object.keys.length);
+                    for (let i = 0; i < object.keys.length; ++i) {
+                        if (!$util.isObject(object.keys[i]))
+                            throw $TypeError(".lingcat.methods.Get_E2E_Public_Keys_Response.keys: object expected");
+                        message.keys[i] = $root.lingcat.classes.E2E_PublicKeyItem.fromObject(object.keys[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_E2E_Public_Keys_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_E2E_Public_Keys_Response} message Get_E2E_Public_Keys_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_E2E_Public_Keys_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.keys = [];
+                if (options.defaults)
+                    object.myUserId = "";
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId"))
+                    object.myUserId = message.myUserId;
+                if (message.keys && message.keys.length) {
+                    object.keys = $Array(message.keys.length);
+                    for (let j = 0; j < message.keys.length; ++j)
+                        object.keys[j] = $root.lingcat.classes.E2E_PublicKeyItem.toObject(message.keys[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_E2E_Public_Keys_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_E2E_Public_Keys_Response.prototype.toJSON = function() {
+                return Get_E2E_Public_Keys_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_E2E_Public_Keys_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_E2E_Public_Keys_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_E2E_Public_Keys_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_E2E_Public_Keys_Response";
+            };
+
+            return Get_E2E_Public_Keys_Response;
+        })();
+
+        methods.Get_All_My_E2E_Keys_Request = (function() {
+
+            /**
+             * Properties of a Get_All_My_E2E_Keys_Request.
+             * @typedef {Object} lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties
+             * @property {string|null} [accessToken] Get_All_My_E2E_Keys_Request accessToken
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_All_My_E2E_Keys_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_All_My_E2E_Keys_Request
+             * @augments lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_All_My_E2E_Keys_Request.
+             * @typedef {lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties} lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_All_My_E2E_Keys_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_All_My_E2E_Keys_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_All_My_E2E_Keys_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_All_My_E2E_Keys_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @instance
+             */
+            Get_All_My_E2E_Keys_Request.prototype.accessToken = "";
+
+            /**
+             * Creates a new Get_All_My_E2E_Keys_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request} Get_All_My_E2E_Keys_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape): lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties): lingcat.methods.Get_All_My_E2E_Keys_Request;
+             * }}
+             */
+            Get_All_My_E2E_Keys_Request.create = function(properties) {
+                return new Get_All_My_E2E_Keys_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Request message. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties} message Get_All_My_E2E_Keys_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_All_My_E2E_Keys_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties} message Get_All_My_E2E_Keys_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_All_My_E2E_Keys_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape} Get_All_My_E2E_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_All_My_E2E_Keys_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_All_My_E2E_Keys_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape} Get_All_My_E2E_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_All_My_E2E_Keys_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_All_My_E2E_Keys_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_All_My_E2E_Keys_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_All_My_E2E_Keys_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request} Get_All_My_E2E_Keys_Request
+             */
+            Get_All_My_E2E_Keys_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_All_My_E2E_Keys_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_All_My_E2E_Keys_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_All_My_E2E_Keys_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_All_My_E2E_Keys_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Request} message Get_All_My_E2E_Keys_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_All_My_E2E_Keys_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                return object;
+            };
+
+            /**
+             * Converts this Get_All_My_E2E_Keys_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_All_My_E2E_Keys_Request.prototype.toJSON = function() {
+                return Get_All_My_E2E_Keys_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_All_My_E2E_Keys_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_All_My_E2E_Keys_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_All_My_E2E_Keys_Request";
+            };
+
+            return Get_All_My_E2E_Keys_Request;
+        })();
+
+        methods.Get_All_My_E2E_Keys_Response = (function() {
+
+            /**
+             * Properties of a Get_All_My_E2E_Keys_Response.
+             * @typedef {Object} lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties
+             * @property {string|null} [myUserId] Get_All_My_E2E_Keys_Response myUserId
+             * @property {Array.<lingcat.classes.IUserE2EKey.$Properties>|null} [keys] Get_All_My_E2E_Keys_Response keys
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_All_My_E2E_Keys_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_All_My_E2E_Keys_Response
+             * @augments lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_All_My_E2E_Keys_Response.
+             * @typedef {lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties} lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_All_My_E2E_Keys_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_All_My_E2E_Keys_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_All_My_E2E_Keys_Response = function (properties) {
+                this.keys = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_All_My_E2E_Keys_Response myUserId.
+             * @member {string} myUserId
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @instance
+             */
+            Get_All_My_E2E_Keys_Response.prototype.myUserId = "";
+
+            /**
+             * Get_All_My_E2E_Keys_Response keys.
+             * @member {Array.<lingcat.classes.IUserE2EKey.$Properties>} keys
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @instance
+             */
+            Get_All_My_E2E_Keys_Response.prototype.keys = $util.emptyArray;
+
+            /**
+             * Creates a new Get_All_My_E2E_Keys_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response} Get_All_My_E2E_Keys_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape): lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties): lingcat.methods.Get_All_My_E2E_Keys_Response;
+             * }}
+             */
+            Get_All_My_E2E_Keys_Response.create = function(properties) {
+                return new Get_All_My_E2E_Keys_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Response message. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties} message Get_All_My_E2E_Keys_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_All_My_E2E_Keys_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId") && message.myUserId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.myUserId);
+                if (message.keys != null && message.keys.length)
+                    for (let i = 0; i < message.keys.length; ++i)
+                        $root.lingcat.classes.IUserE2EKey.encode(message.keys[i], writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties} message Get_All_My_E2E_Keys_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_All_My_E2E_Keys_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape} Get_All_My_E2E_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_All_My_E2E_Keys_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_All_My_E2E_Keys_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.myUserId = value;
+                            else
+                                delete message.myUserId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.keys && message.keys.length))
+                                message.keys = [];
+                            message.keys.push($root.lingcat.classes.IUserE2EKey.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape} Get_All_My_E2E_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_All_My_E2E_Keys_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_All_My_E2E_Keys_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_All_My_E2E_Keys_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId"))
+                    if (!$util.isString(message.myUserId))
+                        return "myUserId: string expected";
+                if (message.keys != null && $Object.hasOwnProperty.call(message, "keys")) {
+                    if (!$Array.isArray(message.keys))
+                        return "keys: array expected";
+                    for (let i = 0; i < message.keys.length; ++i) {
+                        let error = $root.lingcat.classes.IUserE2EKey.verify(message.keys[i], _depth + 1);
+                        if (error)
+                            return "keys." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_All_My_E2E_Keys_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response} Get_All_My_E2E_Keys_Response
+             */
+            Get_All_My_E2E_Keys_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_All_My_E2E_Keys_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_All_My_E2E_Keys_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_All_My_E2E_Keys_Response();
+                if (object.myUserId != null)
+                    if (typeof object.myUserId !== "string" || object.myUserId.length)
+                        message.myUserId = $String(object.myUserId);
+                if (object.keys) {
+                    if (!$Array.isArray(object.keys))
+                        throw $TypeError(".lingcat.methods.Get_All_My_E2E_Keys_Response.keys: array expected");
+                    message.keys = $Array(object.keys.length);
+                    for (let i = 0; i < object.keys.length; ++i) {
+                        if (!$util.isObject(object.keys[i]))
+                            throw $TypeError(".lingcat.methods.Get_All_My_E2E_Keys_Response.keys: object expected");
+                        message.keys[i] = $root.lingcat.classes.IUserE2EKey.fromObject(object.keys[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_All_My_E2E_Keys_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {lingcat.methods.Get_All_My_E2E_Keys_Response} message Get_All_My_E2E_Keys_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_All_My_E2E_Keys_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.keys = [];
+                if (options.defaults)
+                    object.myUserId = "";
+                if (message.myUserId != null && $Object.hasOwnProperty.call(message, "myUserId"))
+                    object.myUserId = message.myUserId;
+                if (message.keys && message.keys.length) {
+                    object.keys = $Array(message.keys.length);
+                    for (let j = 0; j < message.keys.length; ++j)
+                        object.keys[j] = $root.lingcat.classes.IUserE2EKey.toObject(message.keys[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_All_My_E2E_Keys_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_All_My_E2E_Keys_Response.prototype.toJSON = function() {
+                return Get_All_My_E2E_Keys_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_All_My_E2E_Keys_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_All_My_E2E_Keys_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_All_My_E2E_Keys_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_All_My_E2E_Keys_Response";
+            };
+
+            return Get_All_My_E2E_Keys_Response;
         })();
 
         return methods;

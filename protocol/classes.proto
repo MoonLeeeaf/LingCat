@@ -118,3 +118,17 @@ message IUserRemark {
     string user_id = 1;
     string remark = 2;
 }
+
+message E2E_PublicKeyItem {
+    string user_id = 1;
+    string public_key = 2;
+}
+
+message IUserE2EKey {
+    string public_key = 1;
+    string encrypted_private_key = 2;
+    string kdf_salt = 3;
+    string kdf_params = 4;
+    string priv_nonce = 5;
+    int32 key_version = 6;
+}

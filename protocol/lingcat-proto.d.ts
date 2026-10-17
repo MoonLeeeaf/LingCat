@@ -1365,6 +1365,276 @@ export namespace lingcat {
             /** Shape of a IUserRemark. */
             type $Shape = lingcat.classes.IUserRemark.$Properties;
         }
+
+        /**
+         * Properties of a E2E_PublicKeyItem.
+         * @deprecated Use lingcat.classes.E2E_PublicKeyItem.$Properties instead.
+         */
+        interface IE2E_PublicKeyItem extends lingcat.classes.E2E_PublicKeyItem.$Properties {
+        }
+
+        /** Represents a E2E_PublicKeyItem. */
+        class E2E_PublicKeyItem {
+
+            /**
+             * Constructs a new E2E_PublicKeyItem.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.E2E_PublicKeyItem.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** E2E_PublicKeyItem userId. */
+            userId: string;
+
+            /** E2E_PublicKeyItem publicKey. */
+            publicKey: string;
+
+            /**
+             * Creates a new E2E_PublicKeyItem instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns E2E_PublicKeyItem instance
+             */
+            static create(properties: lingcat.classes.E2E_PublicKeyItem.$Shape): lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape;
+            static create(properties?: lingcat.classes.E2E_PublicKeyItem.$Properties): lingcat.classes.E2E_PublicKeyItem;
+
+            /**
+             * Encodes the specified E2E_PublicKeyItem message. Does not implicitly {@link lingcat.classes.E2E_PublicKeyItem.verify|verify} messages.
+             * @param message E2E_PublicKeyItem message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.E2E_PublicKeyItem.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified E2E_PublicKeyItem message, length delimited. Does not implicitly {@link lingcat.classes.E2E_PublicKeyItem.verify|verify} messages.
+             * @param message E2E_PublicKeyItem message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.E2E_PublicKeyItem.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a E2E_PublicKeyItem message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape} E2E_PublicKeyItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape;
+
+            /**
+             * Decodes a E2E_PublicKeyItem message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape} E2E_PublicKeyItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.E2E_PublicKeyItem & lingcat.classes.E2E_PublicKeyItem.$Shape;
+
+            /**
+             * Verifies a E2E_PublicKeyItem message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a E2E_PublicKeyItem message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns E2E_PublicKeyItem
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.E2E_PublicKeyItem;
+
+            /**
+             * Creates a plain object from a E2E_PublicKeyItem message. Also converts values to other types if specified.
+             * @param message E2E_PublicKeyItem
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.E2E_PublicKeyItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this E2E_PublicKeyItem to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for E2E_PublicKeyItem
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace E2E_PublicKeyItem {
+
+            /** Properties of a E2E_PublicKeyItem. */
+            interface $Properties {
+
+                /** E2E_PublicKeyItem userId */
+                userId?: (string|null);
+
+                /** E2E_PublicKeyItem publicKey */
+                publicKey?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a E2E_PublicKeyItem. */
+            type $Shape = lingcat.classes.E2E_PublicKeyItem.$Properties;
+        }
+
+        /**
+         * Properties of a IUserE2EKey.
+         * @deprecated Use lingcat.classes.IUserE2EKey.$Properties instead.
+         */
+        interface IIUserE2EKey extends lingcat.classes.IUserE2EKey.$Properties {
+        }
+
+        /** Represents a IUserE2EKey. */
+        class IUserE2EKey {
+
+            /**
+             * Constructs a new IUserE2EKey.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IUserE2EKey.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IUserE2EKey publicKey. */
+            publicKey: string;
+
+            /** IUserE2EKey encryptedPrivateKey. */
+            encryptedPrivateKey: string;
+
+            /** IUserE2EKey kdfSalt. */
+            kdfSalt: string;
+
+            /** IUserE2EKey kdfParams. */
+            kdfParams: string;
+
+            /** IUserE2EKey privNonce. */
+            privNonce: string;
+
+            /** IUserE2EKey keyVersion. */
+            keyVersion: number;
+
+            /**
+             * Creates a new IUserE2EKey instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IUserE2EKey instance
+             */
+            static create(properties: lingcat.classes.IUserE2EKey.$Shape): lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape;
+            static create(properties?: lingcat.classes.IUserE2EKey.$Properties): lingcat.classes.IUserE2EKey;
+
+            /**
+             * Encodes the specified IUserE2EKey message. Does not implicitly {@link lingcat.classes.IUserE2EKey.verify|verify} messages.
+             * @param message IUserE2EKey message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IUserE2EKey.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IUserE2EKey message, length delimited. Does not implicitly {@link lingcat.classes.IUserE2EKey.verify|verify} messages.
+             * @param message IUserE2EKey message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IUserE2EKey.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IUserE2EKey message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape} IUserE2EKey
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape;
+
+            /**
+             * Decodes a IUserE2EKey message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape} IUserE2EKey
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IUserE2EKey & lingcat.classes.IUserE2EKey.$Shape;
+
+            /**
+             * Verifies a IUserE2EKey message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IUserE2EKey message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IUserE2EKey
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IUserE2EKey;
+
+            /**
+             * Creates a plain object from a IUserE2EKey message. Also converts values to other types if specified.
+             * @param message IUserE2EKey
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IUserE2EKey, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IUserE2EKey to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IUserE2EKey
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IUserE2EKey {
+
+            /** Properties of a IUserE2EKey. */
+            interface $Properties {
+
+                /** IUserE2EKey publicKey */
+                publicKey?: (string|null);
+
+                /** IUserE2EKey encryptedPrivateKey */
+                encryptedPrivateKey?: (string|null);
+
+                /** IUserE2EKey kdfSalt */
+                kdfSalt?: (string|null);
+
+                /** IUserE2EKey kdfParams */
+                kdfParams?: (string|null);
+
+                /** IUserE2EKey privNonce */
+                privNonce?: (string|null);
+
+                /** IUserE2EKey keyVersion */
+                keyVersion?: (number|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IUserE2EKey. */
+            type $Shape = lingcat.classes.IUserE2EKey.$Properties;
+        }
     }
 
     /** Namespace methods. */
@@ -13257,6 +13527,996 @@ export namespace lingcat {
 
             /** Shape of a User_Remarks_Changed_Event. */
             type $Shape = lingcat.methods.User_Remarks_Changed_Event.$Properties;
+        }
+
+        /**
+         * Properties of an Upload_E2E_Key_Request.
+         * @deprecated Use lingcat.methods.Upload_E2E_Key_Request.$Properties instead.
+         */
+        interface IUpload_E2E_Key_Request extends lingcat.methods.Upload_E2E_Key_Request.$Properties {
+        }
+
+        /** Represents an Upload_E2E_Key_Request. */
+        class Upload_E2E_Key_Request {
+
+            /**
+             * Constructs a new Upload_E2E_Key_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Upload_E2E_Key_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Upload_E2E_Key_Request accessToken. */
+            accessToken: string;
+
+            /** Upload_E2E_Key_Request publicKey. */
+            publicKey: string;
+
+            /** Upload_E2E_Key_Request encryptedPrivateKey. */
+            encryptedPrivateKey: string;
+
+            /** Upload_E2E_Key_Request kdfSalt. */
+            kdfSalt: string;
+
+            /** Upload_E2E_Key_Request kdfParams. */
+            kdfParams: string;
+
+            /** Upload_E2E_Key_Request privNonce. */
+            privNonce: string;
+
+            /** Upload_E2E_Key_Request keyVersion. */
+            keyVersion: number;
+
+            /**
+             * Creates a new Upload_E2E_Key_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Upload_E2E_Key_Request instance
+             */
+            static create(properties: lingcat.methods.Upload_E2E_Key_Request.$Shape): lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape;
+            static create(properties?: lingcat.methods.Upload_E2E_Key_Request.$Properties): lingcat.methods.Upload_E2E_Key_Request;
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Request message. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Request.verify|verify} messages.
+             * @param message Upload_E2E_Key_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Upload_E2E_Key_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Request message, length delimited. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Request.verify|verify} messages.
+             * @param message Upload_E2E_Key_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Upload_E2E_Key_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Upload_E2E_Key_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape} Upload_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape;
+
+            /**
+             * Decodes an Upload_E2E_Key_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape} Upload_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Upload_E2E_Key_Request & lingcat.methods.Upload_E2E_Key_Request.$Shape;
+
+            /**
+             * Verifies an Upload_E2E_Key_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Upload_E2E_Key_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Upload_E2E_Key_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Upload_E2E_Key_Request;
+
+            /**
+             * Creates a plain object from an Upload_E2E_Key_Request message. Also converts values to other types if specified.
+             * @param message Upload_E2E_Key_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Upload_E2E_Key_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Upload_E2E_Key_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Upload_E2E_Key_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Upload_E2E_Key_Request {
+
+            /** Properties of an Upload_E2E_Key_Request. */
+            interface $Properties {
+
+                /** Upload_E2E_Key_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Upload_E2E_Key_Request publicKey */
+                publicKey?: (string|null);
+
+                /** Upload_E2E_Key_Request encryptedPrivateKey */
+                encryptedPrivateKey?: (string|null);
+
+                /** Upload_E2E_Key_Request kdfSalt */
+                kdfSalt?: (string|null);
+
+                /** Upload_E2E_Key_Request kdfParams */
+                kdfParams?: (string|null);
+
+                /** Upload_E2E_Key_Request privNonce */
+                privNonce?: (string|null);
+
+                /** Upload_E2E_Key_Request keyVersion */
+                keyVersion?: (number|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Upload_E2E_Key_Request. */
+            type $Shape = lingcat.methods.Upload_E2E_Key_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Upload_E2E_Key_Response.
+         * @deprecated Use lingcat.methods.Upload_E2E_Key_Response.$Properties instead.
+         */
+        interface IUpload_E2E_Key_Response extends lingcat.methods.Upload_E2E_Key_Response.$Properties {
+        }
+
+        /** Represents an Upload_E2E_Key_Response. */
+        class Upload_E2E_Key_Response {
+
+            /**
+             * Constructs a new Upload_E2E_Key_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Upload_E2E_Key_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Upload_E2E_Key_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Upload_E2E_Key_Response instance
+             */
+            static create(properties: lingcat.methods.Upload_E2E_Key_Response.$Shape): lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape;
+            static create(properties?: lingcat.methods.Upload_E2E_Key_Response.$Properties): lingcat.methods.Upload_E2E_Key_Response;
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Response message. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Response.verify|verify} messages.
+             * @param message Upload_E2E_Key_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Upload_E2E_Key_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Upload_E2E_Key_Response message, length delimited. Does not implicitly {@link lingcat.methods.Upload_E2E_Key_Response.verify|verify} messages.
+             * @param message Upload_E2E_Key_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Upload_E2E_Key_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Upload_E2E_Key_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape} Upload_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape;
+
+            /**
+             * Decodes an Upload_E2E_Key_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape} Upload_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Upload_E2E_Key_Response & lingcat.methods.Upload_E2E_Key_Response.$Shape;
+
+            /**
+             * Verifies an Upload_E2E_Key_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Upload_E2E_Key_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Upload_E2E_Key_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Upload_E2E_Key_Response;
+
+            /**
+             * Creates a plain object from an Upload_E2E_Key_Response message. Also converts values to other types if specified.
+             * @param message Upload_E2E_Key_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Upload_E2E_Key_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Upload_E2E_Key_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Upload_E2E_Key_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Upload_E2E_Key_Response {
+
+            /** Properties of an Upload_E2E_Key_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Upload_E2E_Key_Response. */
+            type $Shape = lingcat.methods.Upload_E2E_Key_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_E2E_Key_Request.
+         * @deprecated Use lingcat.methods.Get_My_E2E_Key_Request.$Properties instead.
+         */
+        interface IGet_My_E2E_Key_Request extends lingcat.methods.Get_My_E2E_Key_Request.$Properties {
+        }
+
+        /** Represents a Get_My_E2E_Key_Request. */
+        class Get_My_E2E_Key_Request {
+
+            /**
+             * Constructs a new Get_My_E2E_Key_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_E2E_Key_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_E2E_Key_Request accessToken. */
+            accessToken: string;
+
+            /** Get_My_E2E_Key_Request keyVersion. */
+            keyVersion?: (number|null);
+
+            /**
+             * Creates a new Get_My_E2E_Key_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_E2E_Key_Request instance
+             */
+            static create(properties: lingcat.methods.Get_My_E2E_Key_Request.$Shape): lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_My_E2E_Key_Request.$Properties): lingcat.methods.Get_My_E2E_Key_Request;
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Request message. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Request.verify|verify} messages.
+             * @param message Get_My_E2E_Key_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_E2E_Key_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Request.verify|verify} messages.
+             * @param message Get_My_E2E_Key_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_E2E_Key_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_E2E_Key_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape} Get_My_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape;
+
+            /**
+             * Decodes a Get_My_E2E_Key_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape} Get_My_E2E_Key_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_E2E_Key_Request & lingcat.methods.Get_My_E2E_Key_Request.$Shape;
+
+            /**
+             * Verifies a Get_My_E2E_Key_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_E2E_Key_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_E2E_Key_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_E2E_Key_Request;
+
+            /**
+             * Creates a plain object from a Get_My_E2E_Key_Request message. Also converts values to other types if specified.
+             * @param message Get_My_E2E_Key_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_E2E_Key_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_E2E_Key_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_E2E_Key_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_E2E_Key_Request {
+
+            /** Properties of a Get_My_E2E_Key_Request. */
+            interface $Properties {
+
+                /** Get_My_E2E_Key_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Get_My_E2E_Key_Request keyVersion */
+                keyVersion?: (number|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_E2E_Key_Request. */
+            type $Shape = lingcat.methods.Get_My_E2E_Key_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_E2E_Key_Response.
+         * @deprecated Use lingcat.methods.Get_My_E2E_Key_Response.$Properties instead.
+         */
+        interface IGet_My_E2E_Key_Response extends lingcat.methods.Get_My_E2E_Key_Response.$Properties {
+        }
+
+        /** Represents a Get_My_E2E_Key_Response. */
+        class Get_My_E2E_Key_Response {
+
+            /**
+             * Constructs a new Get_My_E2E_Key_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_E2E_Key_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_E2E_Key_Response key. */
+            key?: (lingcat.classes.IUserE2EKey.$Properties|null);
+
+            /**
+             * Creates a new Get_My_E2E_Key_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_E2E_Key_Response instance
+             */
+            static create(properties: lingcat.methods.Get_My_E2E_Key_Response.$Shape): lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_My_E2E_Key_Response.$Properties): lingcat.methods.Get_My_E2E_Key_Response;
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Response message. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Response.verify|verify} messages.
+             * @param message Get_My_E2E_Key_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_E2E_Key_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_E2E_Key_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_E2E_Key_Response.verify|verify} messages.
+             * @param message Get_My_E2E_Key_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_E2E_Key_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_E2E_Key_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape} Get_My_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape;
+
+            /**
+             * Decodes a Get_My_E2E_Key_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape} Get_My_E2E_Key_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_E2E_Key_Response & lingcat.methods.Get_My_E2E_Key_Response.$Shape;
+
+            /**
+             * Verifies a Get_My_E2E_Key_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_E2E_Key_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_E2E_Key_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_E2E_Key_Response;
+
+            /**
+             * Creates a plain object from a Get_My_E2E_Key_Response message. Also converts values to other types if specified.
+             * @param message Get_My_E2E_Key_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_E2E_Key_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_E2E_Key_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_E2E_Key_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_E2E_Key_Response {
+
+            /** Properties of a Get_My_E2E_Key_Response. */
+            interface $Properties {
+
+                /** Get_My_E2E_Key_Response key */
+                key?: (lingcat.classes.IUserE2EKey.$Properties|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_E2E_Key_Response. */
+            type $Shape = lingcat.methods.Get_My_E2E_Key_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_E2E_Public_Keys_Request.
+         * @deprecated Use lingcat.methods.Get_E2E_Public_Keys_Request.$Properties instead.
+         */
+        interface IGet_E2E_Public_Keys_Request extends lingcat.methods.Get_E2E_Public_Keys_Request.$Properties {
+        }
+
+        /** Represents a Get_E2E_Public_Keys_Request. */
+        class Get_E2E_Public_Keys_Request {
+
+            /**
+             * Constructs a new Get_E2E_Public_Keys_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_E2E_Public_Keys_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_E2E_Public_Keys_Request accessToken. */
+            accessToken: string;
+
+            /** Get_E2E_Public_Keys_Request userIds. */
+            userIds: string[];
+
+            /**
+             * Creates a new Get_E2E_Public_Keys_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_E2E_Public_Keys_Request instance
+             */
+            static create(properties: lingcat.methods.Get_E2E_Public_Keys_Request.$Shape): lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_E2E_Public_Keys_Request.$Properties): lingcat.methods.Get_E2E_Public_Keys_Request;
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Request message. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Request.verify|verify} messages.
+             * @param message Get_E2E_Public_Keys_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_E2E_Public_Keys_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Request.verify|verify} messages.
+             * @param message Get_E2E_Public_Keys_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_E2E_Public_Keys_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape} Get_E2E_Public_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape;
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape} Get_E2E_Public_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_E2E_Public_Keys_Request & lingcat.methods.Get_E2E_Public_Keys_Request.$Shape;
+
+            /**
+             * Verifies a Get_E2E_Public_Keys_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_E2E_Public_Keys_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_E2E_Public_Keys_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_E2E_Public_Keys_Request;
+
+            /**
+             * Creates a plain object from a Get_E2E_Public_Keys_Request message. Also converts values to other types if specified.
+             * @param message Get_E2E_Public_Keys_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_E2E_Public_Keys_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_E2E_Public_Keys_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_E2E_Public_Keys_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_E2E_Public_Keys_Request {
+
+            /** Properties of a Get_E2E_Public_Keys_Request. */
+            interface $Properties {
+
+                /** Get_E2E_Public_Keys_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Get_E2E_Public_Keys_Request userIds */
+                userIds?: (string[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_E2E_Public_Keys_Request. */
+            type $Shape = lingcat.methods.Get_E2E_Public_Keys_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_E2E_Public_Keys_Response.
+         * @deprecated Use lingcat.methods.Get_E2E_Public_Keys_Response.$Properties instead.
+         */
+        interface IGet_E2E_Public_Keys_Response extends lingcat.methods.Get_E2E_Public_Keys_Response.$Properties {
+        }
+
+        /** Represents a Get_E2E_Public_Keys_Response. */
+        class Get_E2E_Public_Keys_Response {
+
+            /**
+             * Constructs a new Get_E2E_Public_Keys_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_E2E_Public_Keys_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_E2E_Public_Keys_Response myUserId. */
+            myUserId: string;
+
+            /** Get_E2E_Public_Keys_Response keys. */
+            keys: lingcat.classes.E2E_PublicKeyItem.$Properties[];
+
+            /**
+             * Creates a new Get_E2E_Public_Keys_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_E2E_Public_Keys_Response instance
+             */
+            static create(properties: lingcat.methods.Get_E2E_Public_Keys_Response.$Shape): lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_E2E_Public_Keys_Response.$Properties): lingcat.methods.Get_E2E_Public_Keys_Response;
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Response message. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Response.verify|verify} messages.
+             * @param message Get_E2E_Public_Keys_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_E2E_Public_Keys_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_E2E_Public_Keys_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_E2E_Public_Keys_Response.verify|verify} messages.
+             * @param message Get_E2E_Public_Keys_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_E2E_Public_Keys_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape} Get_E2E_Public_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape;
+
+            /**
+             * Decodes a Get_E2E_Public_Keys_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape} Get_E2E_Public_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_E2E_Public_Keys_Response & lingcat.methods.Get_E2E_Public_Keys_Response.$Shape;
+
+            /**
+             * Verifies a Get_E2E_Public_Keys_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_E2E_Public_Keys_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_E2E_Public_Keys_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_E2E_Public_Keys_Response;
+
+            /**
+             * Creates a plain object from a Get_E2E_Public_Keys_Response message. Also converts values to other types if specified.
+             * @param message Get_E2E_Public_Keys_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_E2E_Public_Keys_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_E2E_Public_Keys_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_E2E_Public_Keys_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_E2E_Public_Keys_Response {
+
+            /** Properties of a Get_E2E_Public_Keys_Response. */
+            interface $Properties {
+
+                /** Get_E2E_Public_Keys_Response myUserId */
+                myUserId?: (string|null);
+
+                /** Get_E2E_Public_Keys_Response keys */
+                keys?: (lingcat.classes.E2E_PublicKeyItem.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_E2E_Public_Keys_Response. */
+            type $Shape = lingcat.methods.Get_E2E_Public_Keys_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_All_My_E2E_Keys_Request.
+         * @deprecated Use lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties instead.
+         */
+        interface IGet_All_My_E2E_Keys_Request extends lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties {
+        }
+
+        /** Represents a Get_All_My_E2E_Keys_Request. */
+        class Get_All_My_E2E_Keys_Request {
+
+            /**
+             * Constructs a new Get_All_My_E2E_Keys_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_All_My_E2E_Keys_Request accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Get_All_My_E2E_Keys_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_All_My_E2E_Keys_Request instance
+             */
+            static create(properties: lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape): lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties): lingcat.methods.Get_All_My_E2E_Keys_Request;
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Request message. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Request.verify|verify} messages.
+             * @param message Get_All_My_E2E_Keys_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Request.verify|verify} messages.
+             * @param message Get_All_My_E2E_Keys_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape} Get_All_My_E2E_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape;
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape} Get_All_My_E2E_Keys_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_All_My_E2E_Keys_Request & lingcat.methods.Get_All_My_E2E_Keys_Request.$Shape;
+
+            /**
+             * Verifies a Get_All_My_E2E_Keys_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_All_My_E2E_Keys_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_All_My_E2E_Keys_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_All_My_E2E_Keys_Request;
+
+            /**
+             * Creates a plain object from a Get_All_My_E2E_Keys_Request message. Also converts values to other types if specified.
+             * @param message Get_All_My_E2E_Keys_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_All_My_E2E_Keys_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_All_My_E2E_Keys_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_All_My_E2E_Keys_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_All_My_E2E_Keys_Request {
+
+            /** Properties of a Get_All_My_E2E_Keys_Request. */
+            interface $Properties {
+
+                /** Get_All_My_E2E_Keys_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_All_My_E2E_Keys_Request. */
+            type $Shape = lingcat.methods.Get_All_My_E2E_Keys_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_All_My_E2E_Keys_Response.
+         * @deprecated Use lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties instead.
+         */
+        interface IGet_All_My_E2E_Keys_Response extends lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties {
+        }
+
+        /** Represents a Get_All_My_E2E_Keys_Response. */
+        class Get_All_My_E2E_Keys_Response {
+
+            /**
+             * Constructs a new Get_All_My_E2E_Keys_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_All_My_E2E_Keys_Response myUserId. */
+            myUserId: string;
+
+            /** Get_All_My_E2E_Keys_Response keys. */
+            keys: lingcat.classes.IUserE2EKey.$Properties[];
+
+            /**
+             * Creates a new Get_All_My_E2E_Keys_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_All_My_E2E_Keys_Response instance
+             */
+            static create(properties: lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape): lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties): lingcat.methods.Get_All_My_E2E_Keys_Response;
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Response message. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Response.verify|verify} messages.
+             * @param message Get_All_My_E2E_Keys_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_All_My_E2E_Keys_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_All_My_E2E_Keys_Response.verify|verify} messages.
+             * @param message Get_All_My_E2E_Keys_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape} Get_All_My_E2E_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape;
+
+            /**
+             * Decodes a Get_All_My_E2E_Keys_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape} Get_All_My_E2E_Keys_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_All_My_E2E_Keys_Response & lingcat.methods.Get_All_My_E2E_Keys_Response.$Shape;
+
+            /**
+             * Verifies a Get_All_My_E2E_Keys_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_All_My_E2E_Keys_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_All_My_E2E_Keys_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_All_My_E2E_Keys_Response;
+
+            /**
+             * Creates a plain object from a Get_All_My_E2E_Keys_Response message. Also converts values to other types if specified.
+             * @param message Get_All_My_E2E_Keys_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_All_My_E2E_Keys_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_All_My_E2E_Keys_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_All_My_E2E_Keys_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_All_My_E2E_Keys_Response {
+
+            /** Properties of a Get_All_My_E2E_Keys_Response. */
+            interface $Properties {
+
+                /** Get_All_My_E2E_Keys_Response myUserId */
+                myUserId?: (string|null);
+
+                /** Get_All_My_E2E_Keys_Response keys */
+                keys?: (lingcat.classes.IUserE2EKey.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_All_My_E2E_Keys_Response. */
+            type $Shape = lingcat.methods.Get_All_My_E2E_Keys_Response.$Properties;
         }
     }
 }

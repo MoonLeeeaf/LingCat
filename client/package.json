@@ -23,6 +23,8 @@
         "react-dom": "^19.2.7",
         "react-image": "^4.1.0",
         "react-virtuoso": "^4.18.19",
-        "zustand": "^5.0.14"
+        "zustand": "^5.0.14",
+        "libsodium-wrappers": "^0.8.4",
+        "libsodium-wrappers-sumo": "^0.8.4"
     }
 }

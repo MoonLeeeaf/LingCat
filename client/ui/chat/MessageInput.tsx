@@ -1,26 +1,25 @@
 import React from 'react'
 import { TextField } from 'mdui'
-import { MessageParser } from 'lingcat-client-protocol'
-import { ChatApi } from 'lingcat-client-protocol'
-import type { IMessage } from 'lingcat-protocol'
+import { MessageParser, ChatApi } from 'lingcat-client-protocol'
+import type { IMessage, IMessageEntity } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
 import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts'
 import escapeHtml from '../../lib/escapeHtml.ts'
 import { useChatFileUpload } from './useChatFileUpload.ts'
 import { useAudioRecorder } from './useAudioRecorder.ts'
+import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
+import { UnlockPasswordDialog } from '../e2e/UnlockPasswordDialog.tsx'
 
 export interface MessageInputHandle {
-    /** 把纯文本插入当前光标位置（供回复/提及使用） */
     insertText: (text: string) => void
-    /** 让输入框获得焦点 */
     focus: () => void
 }
 
 export interface MessageInputProps {
     chatId: string
     chatTitle: string
-    /** 正在编辑的消息；null = 正常发送 */
+    peerUserId?: string
     editingMessage: IMessage | null
     onEditCancel: () => void
     onEditDone: () => void
@@ -31,13 +30,26 @@ function formatDuration(sec: number) {
 }
 
 export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputProps>(
-    function MessageInput({ chatId, chatTitle, editingMessage, onEditCancel, onEditDone }, ref) {
+    function MessageInput({ chatId, chatTitle, peerUserId, editingMessage, onEditCancel, onEditDone }, ref) {
         const inputRef = React.useRef<TextField>(null)
         const attachFileInputRef = React.useRef<HTMLInputElement>(null)
         const [isSending, setIsSending] = React.useState(false)
-
-        // 保存编辑前的原始输入
         const preEditValueRef = React.useRef('')
+
+        // E2E 状态
+        const e2eStatus = useE2EStore(s => s.status)
+        const peerKeys = useE2EStore(s => s.peerKeys)
+        const encryptForPeer = useE2EStore(s => s.encryptForPeer)
+        const fetchPeerKeys = useE2EStore(s => s.fetchPeerKeys)
+        const decryptFromPeer = useE2EStore(s => s.decryptFromPeer)
+
+        // ★ 加密开关：默认为 true（只要有 peerUserId 且对方有公钥）
+        const [isEncryptMode, setIsEncryptMode] = React.useState(true)
+
+        // ★ 核心修复：判断是否具备 E2E 的条件
+        // 必须满足：是私聊 + 对方有公钥 + 我的状态是已解锁或已获取密钥包
+        const hasPeerKey = peerUserId ? !!peerKeys[peerUserId] : false
+        const canE2E = hasPeerKey && (e2eStatus === 'locked' || e2eStatus === 'unlocked')
 
         // ============================================================
         //  insertText（供外部通过 ref 调用）
@@ -48,7 +60,6 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
             if (typeof input.insertHtml === 'function') {
                 input.insertHtml(escapeHtml(text))
             } else {
-                // 降级：直接拼在末尾
                 inputRef.current!.value = (inputRef.current!.value ?? '') + text
             }
         }, [])
@@ -59,15 +70,10 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         }), [insertText])
 
         // ============================================================
-        //  附件上传
+        //  附件上传 & 录音
         // ============================================================
-        const { addFile, uploadAll, countInText, clear: clearFiles } = useChatFileUpload({
-            onInsertText: insertText,
-        })
+        const { addFile, uploadAll, countInText, clear: clearFiles } = useChatFileUpload({ onInsertText: insertText })
 
-        // ============================================================
-        //  录音
-        // ============================================================
         const { isRecording, seconds, toggle: toggleRecording, stop: stopRecording } = useAudioRecorder({
             onRecorded: async (blob, mime, name) => {
                 try {
@@ -79,18 +85,59 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         })
 
         // ============================================================
-        //  编辑模式：切换时同步输入框
+        //  初始化：拉取对方公钥，决定默认开关状态
+        // ============================================================
+        React.useEffect(() => {
+            if (peerUserId) {
+                fetchPeerKeys([peerUserId])
+            }
+        }, [peerUserId, fetchPeerKeys])
+
+        // 当 canE2E 变为可用时，默认打开加密（如果用户没手动关过）
+        React.useEffect(() => {
+            if (canE2E) {
+                setIsEncryptMode(true)
+            } else {
+                setIsEncryptMode(false)
+            }
+        }, [canE2E])
+
+        // ============================================================
+        //  编辑模式：解密并同步到输入框
         // ============================================================
         React.useEffect(() => {
             if (editingMessage) {
                 preEditValueRef.current = inputRef.current?.value ?? ''
-                inputRef.current!.value = MessageParser.entitiesToRawRichText(
-                    editingMessage.text,
-                    editingMessage.entities ?? [],
-                )
+
+                const isE2E = editingMessage.entities?.some(e => e.type === 'e2e')
+                const e2eEntity = editingMessage.entities?.find(e => e.type === 'e2e')
+
+                if (isE2E && e2eEntity?.data) {
+                    setIsEncryptMode(true)
+                    // 异步解密
+                    decryptFromPeer(e2eEntity.data, editingMessage.sender_user_id!).then(plainJson => {
+                        if (plainJson) {
+                            try {
+                                const parsed = JSON.parse(plainJson)
+                                inputRef.current!.value = MessageParser.entitiesToRawRichText(
+                                    parsed.text,
+                                    parsed.entities ?? [],
+                                )
+                            } catch {
+                                inputRef.current!.value = plainJson
+                            }
+                        }
+                    })
+                } else {
+                    setIsEncryptMode(false) // 原文是明文，默认切到明文
+                    inputRef.current!.value = MessageParser.entitiesToRawRichText(
+                        editingMessage.text,
+                        editingMessage.entities ?? [],
+                    )
+                }
                 inputRef.current?.focus()
             }
-        }, [editingMessage?.id])
+        }, [editingMessage?.id, decryptFromPeer])
 
         const cancelEdit = () => {
             inputRef.current!.value = preEditValueRef.current
@@ -98,30 +145,20 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         }
 
         // ============================================================
-        //  发送 / 保存编辑
+        //  核心发送逻辑：实际执行发送
         // ============================================================
-        const send = async () => {
-            let text = inputRef.current?.value ?? ''
-            if (!text.trim()) return
-            if (isRecording) stopRecording()
-
+        const executeSend = async (textToSend: string) => {
             const client = ClientManager.getActiveClient()
             const session = ClientManager.getActiveSession()
             if (!client || !session) return
 
-            const fileCount = countInText(text)
-            const snack = showSnackbar({
-                message: `发送到 [${chatTitle}]...`,
-                autoCloseDelay: 0,
-            })
+            const fileCount = countInText(textToSend)
+            const snack = showSnackbar({ message: `发送到 [${chatTitle}]...`, autoCloseDelay: 0 })
             let tick = 1
             let uploaded = 0
             const timer = setInterval(() => {
-                if (uploaded < fileCount) {
-                    snack.textContent = `上传第 ${uploaded}/${fileCount} 个文件... (${tick}s)`
-                } else {
-                    snack.textContent = `发送到 [${chatTitle}]... (${tick}s)`
-                }
+                if (uploaded < fileCount) snack.textContent = `上传第 ${uploaded}/${fileCount} 个文件... (${tick}s)`
+                else snack.textContent = `发送到 [${chatTitle}]... (${tick}s)`
                 tick++
             }, 1000)
 
@@ -131,28 +168,45 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
             try {
                 setIsSending(true)
 
+                let finalText = textToSend
                 if (fileCount > 0) {
-                    text = await uploadAll(text)
+                    finalText = await uploadAll(finalText)
                     uploaded = fileCount
                 }
 
-                const parsed = MessageParser.parseMessage(text)
+                const parsed = MessageParser.parseMessage(finalText)
+                let sendText = parsed.text
+                let sendEntities: IMessageEntity[] | undefined = parsed.entities
 
+                // E2E 加密
+                if (isEncryptMode && peerUserId) {
+                    const rawPayload = JSON.stringify({
+                        text: parsed.text,
+                        entities: parsed.entities
+                    })
+                    const entityJson = await encryptForPeer(rawPayload, peerUserId)
+                    if (!entityJson) throw new Error('加密失败')
+
+                    sendText = '🔒'
+                    sendEntities = [{ type: 'e2e', offset: 0, length: 1, data: entityJson }]
+                }
+
+                // 发送或编辑
                 if (editingMessage) {
                     await ChatApi.editChatMessage(client, {
                         access_token: session.token,
                         chat_id: chatId,
                         message_id: editingMessage.id,
-                        text: parsed.text,
-                        entities: parsed.entities,
+                        text: sendText,
+                        entities: sendEntities,
                     })
                     onEditDone()
                 } else {
                     await ChatApi.sendChatMessage(client, {
                         access_token: session.token,
                         chat_id: chatId,
-                        text: parsed.text,
-                        entities: parsed.entities,
+                        text: sendText,
+                        entities: sendEntities,
                     })
                 }
 
@@ -168,7 +222,43 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         }
 
         // ============================================================
-        //  拖拽 / 粘贴 / 选择文件
+        //  发送入口：检查状态并处理未解锁的情况
+        // ============================================================
+        const send = async () => {
+            let text = inputRef.current?.value ?? ''
+            if (!text.trim()) return
+            if (isRecording) stopRecording()
+
+            // 如果是加密模式，且是私聊
+            if (isEncryptMode && peerUserId) {
+                // 发送前，强制拉取一次对方的最新公钥
+                await fetchPeerKeys([peerUserId])
+                const currentPeerKey = useE2EStore.getState().peerKeys[peerUserId]
+
+                // 如果拉完发现对方没公钥（可能刚重置/删除了），降级为明文
+                if (!currentPeerKey) {
+                    setIsEncryptMode(false)
+                    showSnackbar({ message: '对方未开启端到端加密，将以明文发送' })
+                    executeSend(text)
+                    return
+                }
+
+                // 如果处于锁定状态，拦截并弹窗，★ 成功后自动重试发送
+                if (e2eStatus !== 'unlocked') {
+                    UnlockPasswordDialog.show('unlock', () => {
+                        // 解锁成功，直接触发真实发送
+                        executeSend(text)
+                    })
+                    return
+                }
+            }
+
+            // 如果没开加密，或者已经解锁，直接发
+            executeSend(text)
+        }
+
+        // ============================================================
+        //  文件选择 / 粘贴 / 拖拽
         // ============================================================
         const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
             const files = e.target.files
@@ -272,7 +362,24 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         icon="attachment"
                         onClick={() => attachFileInputRef.current?.click()}
                     />
-                    <div slot="end-icon" style={{ paddingRight: '20px' }} />
+
+                    {/* ★ 发送按钮旁边的锁图标 */}
+                    {canE2E && (
+                        <>
+                            <div slot="end-icon" style={{ paddingRight: '12px' }} />
+                            <mdui-tooltip  slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
+                                <mdui-button-icon
+                                    icon={isEncryptMode ? 'lock' : 'lock_open'}
+                                    onClick={() => setIsEncryptMode(!isEncryptMode)}
+                                    style={{
+                                        color: isEncryptMode ? 'var(--mdui-color-primary)' : 'var(--mdui-color-outline)'
+                                    }}
+                                />
+                            </mdui-tooltip>
+                        </>
+                    )}
+
+                    <div slot="end-icon" style={{ paddingRight: '12px' }} />
                     <mdui-button-icon
                         slot="end-icon"
                         icon="send"

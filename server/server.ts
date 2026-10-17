@@ -23,6 +23,7 @@ import ChatApi from './api/ChatApi.ts'
 import MeetingApi, { meetingParticipantPoller } from './api/MeetingApi.ts'
 import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
+import E2EApi from './api/E2EApi.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     if (!fileExists(`${base_data_path}/key/`)) {
@@ -341,7 +342,8 @@ export default function createLingCatServer(base_data_path: string) {
                         await ChatApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await MeetingApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await OAuthApi.onCall(sendPackage, mPackage) ||
-                        await FileApi.onCall(sendPackage, mPackage)
+                        await FileApi.onCall(sendPackage, mPackage) || 
+                        await E2EApi.onCall(sendPackage, mPackage)
                     )) {
                         console.log('[Server] Method not found:', mPackage.method_id)
                         sendError(sendPackage, mPackage.method_id, 'Method not found', Code.Not_Found)

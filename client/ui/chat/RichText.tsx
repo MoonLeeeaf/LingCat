@@ -181,6 +181,10 @@ function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number
             return <Attachment key={i} data={parsed} />
         }
 
+        case 'e2e': {
+            return <em key={i} style={{ color: 'var(--mdui-color-error)' }}>[加密数据未处理]</em>
+        }
+
         default:
             return <React.Fragment key={i}>{seg.text}</React.Fragment>
     }
