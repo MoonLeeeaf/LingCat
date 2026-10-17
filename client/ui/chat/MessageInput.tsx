@@ -366,7 +366,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                     {/* ★ 发送按钮旁边的锁图标 */}
                     {canE2E && (
                         <>
-                            <div slot="end-icon" style={{ paddingRight: '12px' }} />
+                            <div slot="end-icon" style={{ paddingRight: '20px' }} />
                             <mdui-tooltip  slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
                                 <mdui-button-icon
                                     icon={isEncryptMode ? 'lock' : 'lock_open'}
@@ -379,7 +379,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         </>
                     )}
 
-                    <div slot="end-icon" style={{ paddingRight: '12px' }} />
+                    <div slot="end-icon" style={{ paddingRight: '20px' }} />
                     <mdui-button-icon
                         slot="end-icon"
                         icon="send"
