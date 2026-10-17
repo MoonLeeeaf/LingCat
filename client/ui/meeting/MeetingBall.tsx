@@ -18,9 +18,8 @@ const GLOW_ALPHA = 0.44            // 原 0.35 -> +25%
 const INNER_LIFT = 0.88            // 内环透明度增益 (上限 1)
 const GATE = 0.06                  // 噪声门限
 const VOICE_LEVEL = 0.04           // 判定"有人在说话"的平滑音量
-const IDLE_DELAY_MS = 1000         // 静音约 1s 后进入待机呼吸
-const IDLE_FADE_MS = 300           // 待机呼吸环淡入/淡出
-const BREATH_DURATION = '4.4s'     // 无声呼吸周期 (4-5s)
+const IDLE_DELAY_MS = 2000         // 静音约 2s 后进入待机
+const IDLE_FADE_MS = 320           // 待机拼贴/流光 淡入淡出
 const ATTACK_TAU = 0.10            // 上升时间常数 ~100ms
 const RELEASE_TAU = 0.36           // 回落 ~360ms
 const FRAME_MS = 33                // 约 30fps
@@ -123,6 +122,20 @@ export function MeetingBall() {
             return p.identity + ':' + (mic?.track?.sid || '') + ':' + (mic?.isMuted ? 1 : 0) + ':' + (p.metadata || '')
         }).join('|')
         : ''
+
+    // 待机拼贴: 最多 4 位成员头像
+    const memberAvatars = React.useMemo(() => {
+        if (!room) return [default_avatar]
+        const out: string[] = []
+        for (const p of [room.localParticipant, ...Array.from(room.remoteParticipants.values())]) {
+            let meta: any = {}
+            try { meta = JSON.parse(p.metadata || '{}') } catch { }
+            const hash = meta.avatar_file_hash as string | undefined
+            out.push((hash ? getFileUrl(hash, SessionEnv.myFileAccessToken) : undefined) || default_avatar)
+            if (out.length >= 4) break
+        }
+        return out.length ? out : [default_avatar]
+    }, [room, sig])
 
     // 音量分析 + 说话者识别 + 光环动画
     React.useEffect(() => {
@@ -319,10 +332,8 @@ export function MeetingBall() {
         >
             <style>{`
 @keyframes lcBallFadeIn{from{opacity:0}to{opacity:1}}
-@keyframes lcBallBreath{
-    0%,100%{transform:scale(1);opacity:.18;box-shadow:0 0 8px rgba(74,222,128,.18)}
-    50%{transform:scale(1.06);opacity:.34;box-shadow:0 0 16px rgba(74,222,128,.34)}
-}
+@keyframes lcBallFlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes lcBallFlow2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(55%,45%) scale(1.25)}}
 `}</style>
 
             {/* 外层柔光环 */}
@@ -336,27 +347,6 @@ export function MeetingBall() {
                 transition: 'opacity 90ms linear',
                 willChange: 'transform, opacity, box-shadow',
             }} />
-
-            {/* 待机呼吸环 (无人说话时, 纯 CSS 动画, 与说话环交叉淡入淡出) */}
-            <div style={{
-                position: 'absolute',
-                inset: -RING_INSET,
-                borderRadius: '50%',
-                pointerEvents: 'none',
-                opacity: idle && !REDUCED_MOTION ? 1 : 0,
-                transition: `opacity ${IDLE_FADE_MS}ms ease`,
-                willChange: 'opacity',
-            }}>
-                <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '50%',
-                    border: '1.5px solid rgba(74,222,128,0.55)',
-                    opacity: 0.18,
-                    animation: (idle && !REDUCED_MOTION) ? `lcBallBreath ${BREATH_DURATION} ease-in-out infinite` : undefined,
-                    willChange: 'transform, opacity, box-shadow',
-                }} />
-            </div>
 
             {/* 内层光环 (紧贴头像) */}
             <div ref={innerRingRef} style={{
@@ -379,34 +369,103 @@ export function MeetingBall() {
                 background: '#202020',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
             }}>
-                {prev && (
+                {/* 待机: 多人拼贴头像 */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${memberAvatars.length === 1 ? 1 : 2}, 1fr)`,
+                    gridAutoRows: '1fr',
+                    opacity: idle ? 1 : 0,
+                    transition: `opacity ${IDLE_FADE_MS}ms ease`,
+                    pointerEvents: 'none',
+                }}>
+                    {memberAvatars.map((src, i) => (
+                        <img
+                            key={i}
+                            src={src}
+                            alt=""
+                            draggable={false}
+                            onError={(e) => {
+                                const el = e.currentTarget
+                                if (el.dataset.fallback) return
+                                el.dataset.fallback = '1'
+                                el.src = default_avatar
+                            }}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: 0 }}
+                        />
+                    ))}
+                </div>
+
+                {/* 说话: 当前/上一位说话者头像 (待机时淡出) */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: idle ? 0 : 1,
+                    transition: `opacity ${IDLE_FADE_MS}ms ease`,
+                    pointerEvents: 'none',
+                }}>
+                    {prev && (
+                        <img
+                            src={prev.avatar}
+                            alt=""
+                            draggable={false}
+                            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                    )}
                     <img
-                        src={prev.avatar}
+                        key={cur?.identity || 'default'}
+                        src={cur?.avatar || default_avatar}
                         alt=""
                         draggable={false}
-                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => {
+                            const el = e.currentTarget
+                            if (el.dataset.fallback) return
+                            el.dataset.fallback = '1'
+                            el.src = default_avatar
+                        }}
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            animation: REDUCED_MOTION ? undefined : 'lcBallFadeIn 180ms ease',
+                        }}
                     />
-                )}
-                <img
-                    key={cur?.identity || 'default'}
-                    src={cur?.avatar || default_avatar}
-                    alt=""
-                    draggable={false}
-                    onError={(e) => {
-                        const el = e.currentTarget
-                        if (el.dataset.fallback) return
-                        el.dataset.fallback = '1'
-                        el.src = default_avatar
-                    }}
-                    style={{
+                </div>
+
+                {/* 待机: 圆形内部流光 (裁切在 56px 圆内, 半透明, 不遮挡面部) */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    pointerEvents: 'none',
+                    opacity: idle ? 1 : 0,
+                    transition: `opacity ${IDLE_FADE_MS}ms ease`,
+                }}>
+                    <div style={{
                         position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        animation: REDUCED_MOTION ? undefined : 'lcBallFadeIn 180ms ease',
-                    }}
-                />
+                        inset: '-45%',
+                        background: 'conic-gradient(from 0deg, rgba(74,222,128,0), rgba(74,222,128,0.45), rgba(96,165,250,0.35), rgba(74,222,128,0))',
+                        mixBlendMode: 'screen',
+                        animation: (idle && !REDUCED_MOTION) ? 'lcBallFlow 6.5s linear infinite' : undefined,
+                        willChange: 'transform',
+                    }} />
+                    <div style={{
+                        position: 'absolute',
+                        width: '70%',
+                        height: '70%',
+                        left: '-15%',
+                        top: '-15%',
+                        borderRadius: '50%',
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.35), rgba(255,255,255,0) 70%)',
+                        mixBlendMode: 'screen',
+                        animation: (idle && !REDUCED_MOTION) ? 'lcBallFlow2 8s ease-in-out infinite' : undefined,
+                        willChange: 'transform',
+                    }} />
+                </div>
             </div>
 
             {/* 右下角: 当前对话/群组头像或 forum 图标 */}
