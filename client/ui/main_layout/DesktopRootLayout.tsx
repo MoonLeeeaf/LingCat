@@ -87,7 +87,7 @@ export function DesktopRootLayout({
 
     return (
         <DrawerContext.Provider value={drawerCtx}>
-            <mdui-navigation-drawer open ref={drawerRef as any}>
+            <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
                 <mdui-navigation-rail
                     ref={railRef as any}
                     contained
