@@ -21,6 +21,7 @@ import RemarksCache from '../../RemarksCache.ts'
 import E2EManager from '../../lib/e2e/E2EManager.ts'
 import { UnlockPasswordDialog } from '../e2e/UnlockPasswordDialog.tsx'
 import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
+import copyToClipboard from '../../lib/copyToClipboard.ts'
 
 function findFavourited(chatId: string) {
     return SessionEnv.favouritedChats?.findIndex(chat => chat.id === chatId)
@@ -208,34 +209,47 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         return (
             <>
                 {/* 1. 安全码展示（纯展示） */}
-                <mdui-list-item
-                    rounded
-                    icon={verifyStatus === 'mismatch' ? 'gpp_bad' : 'lock'}
-                    style={{ height: 'auto', paddingTop: '12px', paddingBottom: '12px' }}
-                >
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                            <span style={{ fontSize: '1rem', color: verifyStatus === 'mismatch' ? 'var(--mdui-color-error)' : 'rgb(var(--mdui-color-on-surface))' }}>
-                                端到端加密安全码
-                            </span>
+                <mdui-dropdown trigger="click">
+                    <mdui-list-item
+                        slot="trigger"
+                        rounded
+                        icon={verifyStatus === 'mismatch' ? 'gpp_bad' : 'lock'}
+                        style={{ height: 'auto', paddingTop: '12px', paddingBottom: '12px' }}
+                    >
+                        <div slot="description" style={{ color: verifyStatus === 'mismatch' ? 'var(--mdui-color-error)' : 'rgb(var(--mdui-color-on-surface))' }}>
+                            端到端加密安全码
                         </div>
-                        <div style={{
-                            fontFamily: 'monospace',
-                            fontSize: '15px',
-                            letterSpacing: '1.5px',
-                            lineHeight: '1.6',
-                            wordSpacing: '4px',
-                            color: verifyStatus === 'mismatch' ? 'var(--mdui-color-error)' : 'rgb(var(--mdui-color-on-surface-variant))'
-                        }}>
-                            {safetyNumber}
-                        </div>
-                        {verifyStatus === 'mismatch' && (
-                            <div style={{ color: 'var(--mdui-color-error)', fontSize: '12px', marginTop: '4px' }}>
-                                对方安全码已变更，请通过其他方式确认对方身份。
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{
+                                fontFamily: 'monospace',
+                                fontSize: '15px',
+                                letterSpacing: '1.5px',
+                                lineHeight: '1.6',
+                                wordSpacing: '4px',
+                                color: verifyStatus === 'mismatch' ? 'var(--mdui-color-error)' : 'rgb(var(--mdui-color-on-surface-variant))'
+                            }}>
+                                {safetyNumber}
                             </div>
-                        )}
-                    </div>
-                </mdui-list-item>
+                            {verifyStatus === 'mismatch' && (
+                                <div style={{ color: 'var(--mdui-color-error)', fontSize: '12px', marginTop: '4px' }}>
+                                    对方安全码已变更，请通过其他方式确认对方身份。
+                                </div>
+                            )}
+                        </div>
+                    </mdui-list-item>
+
+                    <mdui-menu>
+                        <mdui-menu-item
+                            icon="content_copy"
+                            onClick={async () => {
+                                const ok = await copyToClipboard(safetyNumber)
+                                showSnackbar({ message: ok ? '安全码已复制' : '复制失败' })
+                            }}
+                        >
+                            复制安全码
+                        </mdui-menu-item>
+                    </mdui-menu>
+                </mdui-dropdown>
 
                 {/* 2. 验证状态操作（独立项） */}
                 <mdui-list-item
