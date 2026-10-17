@@ -320,17 +320,8 @@ export function MeetingBall() {
         >
             <style>{`
 @keyframes lcBallFadeIn{from{opacity:0}to{opacity:1}}
-@keyframes lcOrbA{
-    0%{transform:translate(-18%,-8%) scale(1);border-radius:42% 58% 60% 40%/55% 45% 55% 45%}
-    50%{transform:translate(12%,8%) scale(1.18);border-radius:60% 40% 45% 55%/45% 55% 45% 55%}
-    100%{transform:translate(-6%,18%) scale(1.06);border-radius:50% 50% 55% 45%/50% 50% 50% 50%}
-}
-@keyframes lcOrbB{
-    0%{transform:translate(15%,10%) scale(1.1);border-radius:55% 45% 40% 60%/50% 50% 50% 50%}
-    50%{transform:translate(-12%,-6%) scale(1);border-radius:45% 55% 58% 42%/55% 45% 55% 45%}
-    100%{transform:translate(8%,-14%) scale(1.15);border-radius:50% 50% 45% 55%/50% 50% 50% 50%}
-}
-@keyframes lcOrbC{from{transform:rotate(0deg) translateX(6%)}to{transform:rotate(360deg) translateX(6%)}}
+/* 极简声纹: 固定低强度节奏, 不模拟真实音量 */
+@keyframes lcWave{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 `}</style>
 
             {/* 外层柔光环 */}
@@ -404,49 +395,39 @@ export function MeetingBall() {
                     />
                 </div>
 
-                {/* 待机: Liquid Orb 液态玻璃球 (严格裁切在 56px 圆内) */}
+                {/* 待机: 极简扁平动态声纹 (严格限制在 56px 圆内) */}
                 <div style={{
                     position: 'absolute',
                     inset: 0,
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    pointerEvents: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '3px',
                     opacity: idle ? 1 : 0,
                     transition: `opacity ${IDLE_FADE_MS}ms ease`,
-                    background: 'radial-gradient(circle at 35% 28%, #16323a 0%, #0a171c 62%, #04090c 100%)',
+                    background: 'linear-gradient(180deg, #1b242a 0%, #151c21 100%)',
+                    pointerEvents: 'none',
                 }}>
-                    <div style={{
-                        position: 'absolute', width: '85%', height: '85%', left: '-12%', top: '-12%',
-                        background: 'radial-gradient(circle at 42% 42%, rgba(45,212,191,0.80), rgba(45,212,191,0) 70%)',
-                        filter: 'blur(6px)',
-                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbA 9s ease-in-out infinite alternate' : undefined,
-                        willChange: 'transform, border-radius',
-                    }} />
-                    <div style={{
-                        position: 'absolute', width: '90%', height: '90%', right: '-18%', bottom: '-18%',
-                        background: 'radial-gradient(circle at 50% 50%, rgba(34,211,238,0.62), rgba(34,211,238,0) 70%)',
-                        filter: 'blur(7px)',
-                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbB 12s ease-in-out infinite alternate' : undefined,
-                        willChange: 'transform, border-radius',
-                    }} />
-                    <div style={{
-                        position: 'absolute', width: '72%', height: '72%', left: '12%', bottom: '-22%',
-                        background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.45), rgba(59,130,246,0) 70%)',
-                        filter: 'blur(8px)',
-                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbC 15s linear infinite' : undefined,
-                        willChange: 'transform',
-                    }} />
-                    {/* 玻璃高光 */}
-                    <div style={{
-                        position: 'absolute', inset: 0,
-                        background: 'radial-gradient(circle at 32% 26%, rgba(255,255,255,0.30), rgba(255,255,255,0.06) 36%, rgba(255,255,255,0) 60%)',
-                        mixBlendMode: 'screen',
-                    }} />
-                    {/* 内缘玻璃反光 */}
-                    <div style={{
-                        position: 'absolute', inset: 0, borderRadius: '50%',
-                        boxShadow: 'inset 0 0 12px rgba(120,220,220,0.20), inset 0 1px 2px rgba(255,255,255,0.20)',
-                    }} />
+                    {[
+                        { d: '2.2s', delay: '-0.2s' },
+                        { d: '2.7s', delay: '-1.1s' },
+                        { d: '2.0s', delay: '-0.6s' },
+                        { d: '2.5s', delay: '-1.6s' },
+                        { d: '2.3s', delay: '-0.9s' },
+                    ].map((b, i) => (
+                        <span key={i} style={{
+                            display: 'block',
+                            width: '3px',
+                            height: '24px',
+                            borderRadius: '2px',
+                            background: '#2dd4bf',
+                            opacity: 0.9,
+                            transformOrigin: 'center',
+                            transform: 'scaleY(0.35)',
+                            animation: (idle && !REDUCED_MOTION) ? `lcWave ${b.d} ease-in-out ${b.delay} infinite` : undefined,
+                            willChange: 'transform',
+                        }} />
+                    ))}
                 </div>
             </div>
 
