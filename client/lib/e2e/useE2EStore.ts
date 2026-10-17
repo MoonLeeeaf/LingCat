@@ -6,7 +6,7 @@ import E2EManager from './E2EManager.ts'
 import { E2EPayload } from './types.ts'
 
 // ★ 细分 E2E 状态
-export type E2EStatus = 
+export type E2EStatus =
     | 'loading'        // 正在拉取状态
     | 'disabled'       // 确认未开启 E2E
     | 'locked'         // 已获取密钥包，但未解锁
@@ -36,6 +36,8 @@ interface E2EState {
     decryptFromPeer: (entityJson: string, senderUserId: string) => Promise<string | null>
     getPrivateKeyByVersion: (version: number, password: string) => Promise<string | null>
     unlockSpecificVersion: (version: number, password: string) => Promise<boolean>
+    changePassword: (oldPassword: string, newPassword: string) => Promise<boolean>
+    changeVersionPassword: (version: number, oldPassword: string, newPassword: string) => Promise<boolean>
 }
 
 export const useE2EStore = create<E2EState>((set, get) => ({
@@ -332,8 +334,8 @@ export const useE2EStore = create<E2EState>((set, get) => ({
             return null
         }
     },
-    
-    unlockSpecificVersion: async (version: number, password: string) => {
+
+    unlockSpecificVersion: async (version, password) => {
         const client = ClientManager.getActiveClient()
         const session = ClientManager.getActiveSession()
         if (!client || !session) return false
@@ -358,8 +360,117 @@ export const useE2EStore = create<E2EState>((set, get) => ({
                 myPrivateKeys: { ...s.myPrivateKeys, [version]: priv }
             }))
             return true
-        } catch(e) {
-            console.error(`[E2E] 历史密钥 v${version} 解密失败:`, e) 
+        } catch (e) {
+            console.error(`[E2E] 历史密钥 v${version} 解密失败:`, e)
+            return false
+        }
+    },
+    changePassword: async (oldPassword, newPassword) => {
+        const client = ClientManager.getActiveClient()
+        const session = ClientManager.getActiveSession()
+        if (!client || !session) return false
+
+        try {
+            // 1. 拉取所有历史密钥包
+            const allBundles = await E2EApi.getAllMyKeys(client, { access_token: session.token })
+            if (!allBundles || allBundles.length === 0) return false
+
+            // 2. 先在内存中把所有能解开的都解开，重新加密（如果中途报错，就中断，防止一半改了另一半没改）
+            const newEncryptedBundles = []
+
+            for (const bundle of allBundles) {
+                try {
+                    // 用旧密码解密
+                    const privBase64 = E2EManager.decryptPrivateKey({
+                        publicKey: bundle.public_key,
+                        encryptedPrivateKey: bundle.encrypted_private_key,
+                        salt: bundle.kdf_salt,
+                        nonce: bundle.priv_nonce,
+                        kdfParams: JSON.parse(bundle.kdf_params),
+                        keyVersion: bundle.key_version
+                    }, oldPassword)
+
+                    // 用新密码重新加密
+                    const enc = E2EManager.encryptPrivateKey(privBase64, newPassword)
+
+                    newEncryptedBundles.push({
+                        key_version: bundle.key_version,
+                        public_key: bundle.public_key,
+                        encrypted_private_key: enc.encrypted,
+                        kdf_salt: enc.salt,
+                        kdf_params: JSON.stringify(enc.kdfParams),
+                        priv_nonce: enc.nonce
+                    })
+                } catch (e) {
+                    console.warn(`[E2E] 无法用旧密码解密 v${bundle.key_version}，跳过该版本`)
+                    // 如果连最新版本都解不开，说明旧密码错了，直接抛错终止
+                    if (bundle.key_version === get().myKeyVersion) {
+                        throw new Error('旧密码错误')
+                    }
+                }
+            }
+
+            // 3. 批量覆盖上传到服务端
+            for (const bundle of newEncryptedBundles) {
+                await E2EApi.uploadKey(client, {
+                    access_token: session.token,
+                    ...bundle
+                })
+            }
+
+            // 4. 更新本地缓存（可选：为了安全，改完后直接锁定，让用户用新密码重新解锁）
+            set({ status: 'locked', myPrivateKeys: {} })
+            return true
+        } catch (e) {
+            console.error('[E2E] 修改密码失败', e)
+            return false
+        }
+    },
+    changeVersionPassword: async (version, oldPassword, newPassword) => {
+        const client = ClientManager.getActiveClient()
+        const session = ClientManager.getActiveSession()
+        if (!client || !session) return false
+
+        try {
+            // 1. 拉取该特定版本
+            const bundle = await E2EApi.getMyKey(client, {
+                access_token: session.token,
+                key_version: version
+            })
+            if (!bundle) return false
+
+            // 2. 用旧密码解密
+            const privBase64 = E2EManager.decryptPrivateKey({
+                publicKey: bundle.public_key,
+                encryptedPrivateKey: bundle.encrypted_private_key,
+                salt: bundle.kdf_salt,
+                nonce: bundle.priv_nonce,
+                kdfParams: JSON.parse(bundle.kdf_params),
+                keyVersion: bundle.key_version
+            }, oldPassword)
+
+            // 3. 用新密码重新加密
+            const enc = E2EManager.encryptPrivateKey(privBase64, newPassword)
+
+            // 4. 覆盖上传到服务端
+            await E2EApi.uploadKey(client, {
+                access_token: session.token,
+                key_version: version,
+                public_key: bundle.public_key,
+                encrypted_private_key: enc.encrypted,
+                kdf_salt: enc.salt,
+                kdf_params: JSON.stringify(enc.kdfParams),
+                priv_nonce: enc.nonce
+            })
+
+            // 5. ★ 顺便把明文私钥塞进缓存，这样组件收到通知后能直接解密成功
+            set(s => ({
+                myPrivateKeys: { ...s.myPrivateKeys, [version]: privBase64 }
+            }))
+
+            return true
+        } catch (e) {
+            console.error(`[E2E] 修改 v${version} 密码失败`, e)
             return false
         }
     },

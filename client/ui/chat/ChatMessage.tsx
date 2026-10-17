@@ -108,6 +108,7 @@ export default function ChatMessage({
     }, [msg.id, msg.text, msg.entities, e2eStatus, decryptFromPeer, myPrivateKeys])
 
     const unlockSpecificVersion = useE2EStore(s => s.unlockSpecificVersion)
+    const changeVersionPassword = useE2EStore(s => s.changeVersionPassword)
 
     const handleUnlockClick = () => {
         if (needOldVersion) {
@@ -115,9 +116,10 @@ export default function ChatMessage({
                 headline: `解锁历史消息 (v${needOldVersion})`,
                 body: `
                     <div style="margin-bottom: 12px; font-size: 14px; opacity: 0.8;">
-                        该消息使用了旧版本的安全密码加密，请输入当时的密码。
+                        该消息使用了旧版本的密码加密。
                     </div>
-                    <mdui-text-field id="old-pwd" label="旧密码" type="password" variant="outlined" style="width: 100%"></mdui-text-field>
+                    <mdui-text-field id="old-pwd" label="旧密码" type="password" variant="outlined" style="width: 100%; margin-bottom: 12px"></mdui-text-field>
+                    <mdui-text-field id="new-pwd" label="新密码 (选填)" type="password" variant="outlined" style="width: 100%" helper="填写后会将 v${needOldVersion} 的密码统一更新为新密码"></mdui-text-field>
                 `,
                 closeOnEsc: true,
                 closeOnOverlayClick: true,
@@ -126,17 +128,37 @@ export default function ChatMessage({
                     {
                         text: '解锁',
                         onClick: () => {
-                            const input = dlg.querySelector('#old-pwd') as HTMLInputElement
-                            const pwd = input?.value ?? ''
-                            unlockSpecificVersion(needOldVersion, pwd).then(success => {
-                                if (success) {
-                                    showSnackbar({ message: '旧密钥解锁成功' })
+                            // @ts-ignore
+                            const oldPwd = (dlg.querySelector('#old-pwd') as any)?.value ?? ''
+                            // @ts-ignore
+                            const newPwd = (dlg.querySelector('#new-pwd') as any)?.value ?? ''
+
+                            if (!oldPwd) {
+                                showSnackbar({ message: '请输入旧密码' })
+                                return false
+                            }
+
+                            const doTask = async () => {
+                                if (newPwd) {
+                                    if (newPwd.length < 6) return '新密码至少需要 6 位'
+                                    const ok = await changeVersionPassword(needOldVersion, oldPwd, newPwd)
+                                    return ok ? null : '密码错误或修改失败'
+                                } else {
+                                    const ok = await unlockSpecificVersion(needOldVersion, oldPwd)
+                                    return ok ? null : '密码错误'
+                                }
+                            }
+
+                            doTask().then(errMsg => {
+                                if (!errMsg) {
+                                    showSnackbar({ message: newPwd ? '密码已更新并解锁' : '旧密钥解锁成功' })
                                     dlg.open = false
                                 } else {
-                                    showSnackbar({ message: `密码错误，无法解锁 v${needOldVersion}` })
+                                    showSnackbar({ message: errMsg })
                                 }
                             })
-                            return false
+
+                            return false // 阻止 MDUI 自动关闭
                         }
                     }
                 ]
