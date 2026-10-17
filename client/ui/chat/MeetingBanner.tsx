@@ -21,6 +21,20 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
 
     const meetingMembers = useMeetingParticipants(chatId, activeMeeting?.meetingId)
 
+    // 打开对话/回到前台时向服务端同步一次进行中的会议
+    // (重构后丢失了这次查询: 只靠 Meeting_Started_Event 广播, 错过广播的人看不到横幅)
+    React.useEffect(() => {
+        const refresh = () => useMeetingStore.getState().refreshActiveMeeting(chatId)
+        refresh()
+        const timer = setInterval(refresh, 60_000)
+        const onVisible = () => { if (!document.hidden) refresh() }
+        document.addEventListener('visibilitychange', onVisible)
+        return () => {
+            clearInterval(timer)
+            document.removeEventListener('visibilitychange', onVisible)
+        }
+    }, [chatId])
+
     const joinOrOpen = async () => {
         if (isInThisMeeting) {
             if (!uiOpen) useMeetingUIStore.getState().open()
