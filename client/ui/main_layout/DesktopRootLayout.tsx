@@ -73,6 +73,22 @@ export function DesktopRootLayout({
             d.removeEventListener('closed', onClosed as EventListener)
         }
     }, []) 
+    // 分栏分隔条拖动
+    const onDividerDown = (e: React.PointerEvent) => {
+        const rect = dockRowRef.current?.getBoundingClientRect()
+        if (!rect || !onDockPercentChange) return
+        e.preventDefault()
+        const onMove = (ev: PointerEvent) => {
+            onDockPercentChange(((ev.clientX - rect.left) / rect.width) * 100)
+        }
+        const onUp = () => {
+            window.removeEventListener('pointermove', onMove)
+            window.removeEventListener('pointerup', onUp)
+        }
+        window.addEventListener('pointermove', onMove)
+        window.addEventListener('pointerup', onUp)
+    }
+
     const drawerCtx = React.useMemo<DrawerContextValue>(() => ({
         open: drawerOpen,
         toggle: () => {
@@ -113,7 +129,30 @@ export function DesktopRootLayout({
 
             <mdui-layout-main style={{ flexGrow: 1, display: 'flex', minWidth: 0 }}>
                 <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
-                    {dockedPanel}
+                    {dockedPanel && (<>
+                        <div style={{
+                            width: dockPercent + '%',
+                            height: '100%',
+                            minWidth: 0,
+                            flexShrink: 0,
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}>
+                            {dockedPanel}
+                        </div>
+                        <div
+                            onPointerDown={onDividerDown}
+                            title="拖动调整大小"
+                            style={{
+                                width: '6px',
+                                flexShrink: 0,
+                                cursor: 'col-resize',
+                                background: 'rgb(var(--mdui-color-outline-variant))',
+                                touchAction: 'none',
+                                userSelect: 'none',
+                            }}
+                        />
+                    </>)}
                     <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
                         {main}
                     </div>

@@ -16,6 +16,8 @@ export function DesktopMeetingWindow() {
     const setSize = useMeetingUIStore(s => s.setSize)
     const toggleMinimized = useMeetingUIStore(s => s.toggleMinimized)
     const toggleMaximized = useMeetingUIStore(s => s.toggleMaximized)
+    const split = useMeetingUIStore(s => s.split)
+    const setSplit = useMeetingUIStore(s => s.setSplit)
 
     // ============================================================
     //  拖动
@@ -78,7 +80,8 @@ export function DesktopMeetingWindow() {
     // ============================================================
     //  渲染
     // ============================================================
-    if (!isOpen) return null
+    // 分栏模式由 UserMainLayout 渲染会议面板, 这里不再画悬浮窗
+    if (!isOpen || split) return null
 
     const style: React.CSSProperties = isMaximized
         ? { top: 0, left: 0, right: 0, bottom: 0 }
@@ -91,6 +94,9 @@ export function DesktopMeetingWindow() {
 
     const headerExtra = (
         <>
+            <mdui-tooltip content="切换为分栏 (左画面 / 右聊天)">
+                <mdui-button-icon icon="view_sidebar" onClick={() => setSplit(true)} />
+            </mdui-tooltip>
             <mdui-tooltip content={isMinimized ? '展开' : '最小化'}>
                 <mdui-button-icon
                     icon={isMinimized ? 'open_in_full' : 'minimize'}

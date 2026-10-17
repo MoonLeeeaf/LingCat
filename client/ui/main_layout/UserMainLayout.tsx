@@ -19,6 +19,8 @@ import SwitchUserDialog from "../main/SwitchUserDialog.tsx"
 import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
 import { MobileMeetingDialog } from "../meeting/MobileMeetingDialog.tsx"
 import { DesktopMeetingWindow } from "../meeting/DesktopMeetingWindow.tsx"
+import { MeetingView } from "../meeting/MeetingView.tsx"
+import { useMeetingUIStore } from "../meeting/MeetingUIStore.ts"
 import { useMeetingStore } from "../meeting/MeetingManager.ts"
 import { checkServer, acceptServerPublicKey } from '../../lib/trustServer.ts'
 import { confirmTrust } from '../../lib/confirmTrust.tsx'
@@ -264,6 +266,31 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
     const [navValue, setNavValue] = React.useState<ChatListShow>('recents')
 
+    // ============================================================
+    //  会议分栏 (桌面端: 会议在左, 聊天在右)
+    // ============================================================
+    const meetingUIOpen = useMeetingUIStore(s => s.isOpen)
+    const meetingSplit = useMeetingUIStore(s => s.split)
+    const meetingSplitWidth = useMeetingUIStore(s => s.splitWidthPercent)
+    const setMeetingSplitWidth = useMeetingUIStore(s => s.setSplitWidthPercent)
+    const closeMeetingUI = useMeetingUIStore(s => s.close)
+    const meetingActive = useMeetingStore(s => s.phase !== 'idle' || !!s.room)
+    const showSplit = !isMobile && meetingSplit && meetingUIOpen && meetingActive
+
+    const splitPanel = showSplit ? (
+        <MeetingView
+            onClose={closeMeetingUI}
+            headerExtra={
+                <mdui-tooltip content="切换为悬浮窗">
+                    <mdui-button-icon
+                        icon="picture_in_picture_alt"
+                        onClick={() => useMeetingUIStore.getState().setSplit(false)}
+                    />
+                </mdui-tooltip>
+            }
+        />
+    ) : undefined
+
     const avatarIconMenuItem = loaded ? (
         <mdui-dropdown trigger="click" slot={isMobile ? undefined : 'top'}>
             <Avatar
@@ -353,7 +380,10 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     navValue={navValue}
                     onNavValueChange={(v) => setNavValue(v as any)}
                     list={chatListFragment}
-                    main={mainContent} />
+                    main={mainContent}
+                    dockedPanel={splitPanel}
+                    dockPercent={meetingSplitWidth}
+                    onDockPercentChange={setMeetingSplitWidth} />
                 <DesktopMeetingWindow />
             </>
         )
