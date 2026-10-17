@@ -26,6 +26,8 @@ export interface DesktopLayoutProps extends AppLayoutSharedProps {
     navTop?: React.ReactNode
     navBottom?: React.ReactNode
     dockedPanel?: React.ReactNode
+    /** 隐藏分栏面板 (但仍挂载, 用于最小化到悬浮球时保留音频) */
+    dockedPanelHidden?: boolean
     dockPercent?: number
     onDockPercentChange?: (percent: number) => void
 }
@@ -39,6 +41,7 @@ export function DesktopRootLayout({
     list,
     main,
     dockedPanel,
+    dockedPanelHidden,
     dockPercent = 50,
     onDockPercentChange,
 }: DesktopLayoutProps) {
@@ -131,27 +134,29 @@ export function DesktopRootLayout({
                 <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
                     {dockedPanel && (<>
                         <div style={{
-                            width: dockPercent + '%',
+                            width: dockedPanelHidden ? 0 : dockPercent + '%',
                             height: '100%',
                             minWidth: 0,
                             flexShrink: 0,
-                            display: 'flex',
+                            display: dockedPanelHidden ? 'none' : 'flex',
                             flexDirection: 'column',
                         }}>
                             {dockedPanel}
                         </div>
-                        <div
-                            onPointerDown={onDividerDown}
-                            title="拖动调整大小"
-                            style={{
-                                width: '6px',
-                                flexShrink: 0,
-                                cursor: 'col-resize',
-                                background: 'rgb(var(--mdui-color-outline-variant))',
-                                touchAction: 'none',
-                                userSelect: 'none',
-                            }}
-                        />
+                        {!dockedPanelHidden && (
+                            <div
+                                onPointerDown={onDividerDown}
+                                title="拖动调整大小"
+                                style={{
+                                    width: '6px',
+                                    flexShrink: 0,
+                                    cursor: 'col-resize',
+                                    background: 'rgb(var(--mdui-color-outline-variant))',
+                                    touchAction: 'none',
+                                    userSelect: 'none',
+                                }}
+                            />
+                        )}
                     </>)}
                     <div style={{ flex: 1, minWidth: 0, display: 'flex' }}>
                         {main}

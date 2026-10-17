@@ -20,6 +20,7 @@ import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
 import { MobileMeetingDialog } from "../meeting/MobileMeetingDialog.tsx"
 import { DesktopMeetingWindow } from "../meeting/DesktopMeetingWindow.tsx"
 import { MeetingView } from "../meeting/MeetingView.tsx"
+import { MeetingBall } from "../meeting/MeetingBall.tsx"
 import { useMeetingUIStore } from "../meeting/MeetingUIStore.ts"
 import { useMeetingStore } from "../meeting/MeetingManager.ts"
 import { checkServer, acceptServerPublicKey } from '../../lib/trustServer.ts'
@@ -270,6 +271,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     //  会议分栏 (桌面端: 会议在左, 聊天在右)
     // ============================================================
     const meetingUIOpen = useMeetingUIStore(s => s.isOpen)
+    const meetingMinimized = useMeetingUIStore(s => s.isMinimized)
     const meetingSplit = useMeetingUIStore(s => s.split)
     const meetingSplitWidth = useMeetingUIStore(s => s.splitWidthPercent)
     const setMeetingSplitWidth = useMeetingUIStore(s => s.setSplitWidthPercent)
@@ -281,12 +283,20 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         <MeetingView
             onClose={closeMeetingUI}
             headerExtra={
-                <mdui-tooltip content="切换为悬浮窗">
-                    <mdui-button-icon
-                        icon="picture_in_picture_alt"
-                        onClick={() => useMeetingUIStore.getState().setSplit(false)}
-                    />
-                </mdui-tooltip>
+                <>
+                    <mdui-tooltip content="最小化">
+                        <mdui-button-icon
+                            icon="minimize"
+                            onClick={() => useMeetingUIStore.getState().setMinimized(true)}
+                        />
+                    </mdui-tooltip>
+                    <mdui-tooltip content="切换为悬浮窗">
+                        <mdui-button-icon
+                            icon="picture_in_picture_alt"
+                            onClick={() => useMeetingUIStore.getState().setSplit(false)}
+                        />
+                    </mdui-tooltip>
+                </>
             }
         />
     ) : undefined
@@ -382,9 +392,11 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     list={chatListFragment}
                     main={mainContent}
                     dockedPanel={splitPanel}
+                    dockedPanelHidden={meetingMinimized}
                     dockPercent={meetingSplitWidth}
                     onDockPercentChange={setMeetingSplitWidth} />
                 <DesktopMeetingWindow />
+                {meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall />}
             </>
         )
         : <div style={{
