@@ -509,6 +509,7 @@ export function MeetingView({
                         {roomName || ''} · {participants.length} 人{phase === 'connecting' ? ' · 连接中...' : ''}
                     </div>
                 </div>
+                {headerExtra}
                 <mdui-tooltip content="关闭窗口">
                     <mdui-button-icon icon="close" onClick={onClose} />
                 </mdui-tooltip>
