@@ -10,8 +10,17 @@ import default_avatar from '../../default_avatar.png'
 const SIZE = 56
 const MARGIN = 24
 const RING_INSET = 6
-const RING_MAX_SCALE = 1.08        // 外层最大视觉直径约 68*1.08≈73px (< 56*1.35≈76)
+const RING_MAX_SCALE = 1.10        // 外层最大视觉直径约 68*1.10≈75px (< 56*1.35≈76)
+// 说话效果相对上一版整体增强约 25%
+const OUTER_OPACITY = 0.625        // 原 0.5 -> +25%
+const GLOW_SPREAD = 12.5           // 原 10 -> +25%
+const GLOW_ALPHA = 0.44            // 原 0.35 -> +25%
+const INNER_LIFT = 0.88            // 内环透明度增益 (上限 1)
 const GATE = 0.06                  // 噪声门限
+const VOICE_LEVEL = 0.04           // 判定"有人在说话"的平滑音量
+const IDLE_DELAY_MS = 1000         // 静音约 1s 后进入待机呼吸
+const IDLE_FADE_MS = 300           // 待机呼吸环淡入/淡出
+const BREATH_DURATION = '4.4s'     // 无声呼吸周期 (4-5s)
 const ATTACK_TAU = 0.10            // 上升时间常数 ~100ms
 const RELEASE_TAU = 0.36           // 回落 ~360ms
 const FRAME_MS = 33                // 约 30fps
@@ -76,6 +85,9 @@ export function MeetingBall() {
     const [prev, setPrev] = React.useState<SpeakerInfo | undefined>(undefined)
     const [chatAvatar, setChatAvatar] = React.useState<string | undefined>(undefined)
     const [dragging, setDragging] = React.useState(false)
+    // 待机呼吸状态 (无人说话时)
+    const [idle, setIdle] = React.useState(false)
+    const idleRef = React.useRef(false)
 
     const curRef = React.useRef<SpeakerInfo | undefined>(undefined)
     const prevTimer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -147,6 +159,7 @@ export function MeetingBall() {
         let candidateId = ''
         let candidateSince = 0
         let lastSwitch = 0
+        let lastVoiceAt = performance.now()
 
         const rms = (m: Meter) => {
             m.analyser.getFloatTimeDomainData(m.buf as any)
@@ -178,6 +191,15 @@ export function MeetingBall() {
             const tau = target > smooth ? ATTACK_TAU : RELEASE_TAU
             smooth += (target - smooth) * (1 - Math.exp(-dt / tau))
             if (smooth < 0.002) smooth = 0
+
+            // 说话 / 待机呼吸 状态切换: 静音约 1s 后进入待机, 避免突然跳变
+            if (smooth > VOICE_LEVEL) {
+                lastVoiceAt = now
+                if (idleRef.current) { idleRef.current = false; setIdle(false) }
+            } else if (!idleRef.current && now - lastVoiceAt > IDLE_DELAY_MS) {
+                idleRef.current = true
+                setIdle(true)
+            }
 
             // 说话者切换 (防抖 + 迟滞 + 最短间隔)
             if (best) {
@@ -218,13 +240,13 @@ export function MeetingBall() {
             const inner = innerRingRef.current
             const outer = outerRingRef.current
             if (inner) {
-                inner.style.opacity = String(0.12 + smooth * 0.78)
+                inner.style.opacity = String(Math.min(1, 0.12 + smooth * INNER_LIFT))
             }
             if (outer) {
                 const scale = REDUCED_MOTION ? 1 : (1 + smooth * (RING_MAX_SCALE - 1))
                 outer.style.transform = `scale(${scale})`
-                outer.style.opacity = String(smooth * 0.5)
-                outer.style.boxShadow = `0 0 ${8 + smooth * 10}px rgba(74,222,128,${(smooth * 0.35).toFixed(3)})`
+                outer.style.opacity = String(smooth * OUTER_OPACITY)
+                outer.style.boxShadow = `0 0 ${8 + smooth * GLOW_SPREAD}px rgba(74,222,128,${(smooth * GLOW_ALPHA).toFixed(3)})`
             }
         }
 
@@ -295,7 +317,13 @@ export function MeetingBall() {
                 overflow: 'visible',
             }}
         >
-            <style>{`@keyframes lcBallFadeIn{from{opacity:0}to{opacity:1}}`}</style>
+            <style>{`
+@keyframes lcBallFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes lcBallBreath{
+    0%,100%{transform:scale(1);opacity:.18;box-shadow:0 0 8px rgba(74,222,128,.18)}
+    50%{transform:scale(1.06);opacity:.34;box-shadow:0 0 16px rgba(74,222,128,.34)}
+}
+`}</style>
 
             {/* 外层柔光环 */}
             <div ref={outerRingRef} style={{
@@ -308,6 +336,28 @@ export function MeetingBall() {
                 transition: 'opacity 90ms linear',
                 willChange: 'transform, opacity, box-shadow',
             }} />
+
+            {/* 待机呼吸环 (无人说话时, 纯 CSS 动画, 与说话环交叉淡入淡出) */}
+            <div style={{
+                position: 'absolute',
+                inset: -RING_INSET,
+                borderRadius: '50%',
+                pointerEvents: 'none',
+                opacity: idle && !REDUCED_MOTION ? 1 : 0,
+                transition: `opacity ${IDLE_FADE_MS}ms ease`,
+                willChange: 'opacity',
+            }}>
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '50%',
+                    border: '1.5px solid rgba(74,222,128,0.55)',
+                    opacity: 0.18,
+                    animation: (idle && !REDUCED_MOTION) ? `lcBallBreath ${BREATH_DURATION} ease-in-out infinite` : undefined,
+                    willChange: 'transform, opacity, box-shadow',
+                }} />
+            </div>
+
             {/* 内层光环 (紧贴头像) */}
             <div ref={innerRingRef} style={{
                 position: 'absolute',
