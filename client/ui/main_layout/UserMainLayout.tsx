@@ -28,6 +28,7 @@ import ProfileCache from "../../ProfileCache.ts"
 import ClientConfig from "../../ClientConfig.ts"
 import RemarksCache from "../../RemarksCache.ts"
 import OpenChatDialog from "../main/OpenChatDialog.tsx"
+import CreateGroupDialog from "../main/CreateGroupDialog.tsx"
 
 const navItems = [
     {
@@ -205,7 +206,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
     React.useEffect(() => {
         if (!client) return
-    
+
         // ============================================================
         //  会议事件
         // ============================================================
@@ -231,7 +232,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 console.warn('[Meeting] 处理会议事件失败', e)
             }
         }
-    
+
         // ============================================================
         //  备注变更事件（多设备同步）
         // ============================================================
@@ -240,13 +241,13 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 RemarksCache.refresh().catch(() => { })
             }
         }
-    
+
         client.addOnReceiveListener(onMeetingEvent)
         client.addOnReceiveListener(onRemarksEvent)
-    
+
         // 首屏加载备注
         RemarksCache.loadAll().catch(() => { })
-    
+
         return () => {
             client.removeOnReceiveListener(onMeetingEvent)
             client.removeOnReceiveListener(onRemarksEvent)
@@ -254,7 +255,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     }, [client])
 
     useAsyncEffect(async (signal) => {
-        if (!activeChatId) return void(document.title = ClientConfig.site_title)
+        if (!activeChatId) return void (document.title = ClientConfig.site_title)
         const chat = await ProfileCache.queryChatInfo(activeChatId)
         document.title = ClientConfig.site_title + ' | ' + (chat.peer_user_id ? (RemarksCache.get(chat.peer_user_id) || chat.title) : chat?.title)
     }, [activeChatId])
@@ -289,7 +290,12 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 >
                     打开对话
                 </mdui-menu-item>
-                {/* TODO: 创建群组 */}
+                <mdui-menu-item
+                    icon="group_add"
+                    onClick={() => CreateGroupDialog.show()}
+                >
+                    创建群组
+                </mdui-menu-item>
             </mdui-menu>
         </mdui-dropdown>
     ) : null
