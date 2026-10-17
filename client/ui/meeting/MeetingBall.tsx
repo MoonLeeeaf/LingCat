@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { Track } from 'livekit-client'
 import { useMeetingStore } from './MeetingManager.ts'
 import { useMeetingUIStore } from './MeetingUIStore.ts'
@@ -122,20 +123,6 @@ export function MeetingBall() {
             return p.identity + ':' + (mic?.track?.sid || '') + ':' + (mic?.isMuted ? 1 : 0) + ':' + (p.metadata || '')
         }).join('|')
         : ''
-
-    // 待机拼贴: 最多 4 位成员头像
-    const memberAvatars = React.useMemo(() => {
-        if (!room) return [default_avatar]
-        const out: string[] = []
-        for (const p of [room.localParticipant, ...Array.from(room.remoteParticipants.values())]) {
-            let meta: any = {}
-            try { meta = JSON.parse(p.metadata || '{}') } catch { }
-            const hash = meta.avatar_file_hash as string | undefined
-            out.push((hash ? getFileUrl(hash, SessionEnv.myFileAccessToken) : undefined) || default_avatar)
-            if (out.length >= 4) break
-        }
-        return out.length ? out : [default_avatar]
-    }, [room, sig])
 
     // 音量分析 + 说话者识别 + 光环动画
     React.useEffect(() => {
@@ -304,7 +291,7 @@ export function MeetingBall() {
         else if (d.moved) savePos(pos)
     }
 
-    return (
+    return createPortal(
         <div
             role="button"
             tabIndex={0}
@@ -322,7 +309,8 @@ export function MeetingBall() {
                 top: pos.y,
                 width: SIZE,
                 height: SIZE,
-                zIndex: 2000,
+                // portal 到 body, 用较高层级确保在移动端底部导航/对话框之上
+                zIndex: 5000,
                 cursor: dragging ? 'grabbing' : 'grab',
                 touchAction: 'none',
                 userSelect: 'none',
@@ -332,8 +320,17 @@ export function MeetingBall() {
         >
             <style>{`
 @keyframes lcBallFadeIn{from{opacity:0}to{opacity:1}}
-@keyframes lcBallFlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes lcBallFlow2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(55%,45%) scale(1.25)}}
+@keyframes lcOrbA{
+    0%{transform:translate(-18%,-8%) scale(1);border-radius:42% 58% 60% 40%/55% 45% 55% 45%}
+    50%{transform:translate(12%,8%) scale(1.18);border-radius:60% 40% 45% 55%/45% 55% 45% 55%}
+    100%{transform:translate(-6%,18%) scale(1.06);border-radius:50% 50% 55% 45%/50% 50% 50% 50%}
+}
+@keyframes lcOrbB{
+    0%{transform:translate(15%,10%) scale(1.1);border-radius:55% 45% 40% 60%/50% 50% 50% 50%}
+    50%{transform:translate(-12%,-6%) scale(1);border-radius:45% 55% 58% 42%/55% 45% 55% 45%}
+    100%{transform:translate(8%,-14%) scale(1.15);border-radius:50% 50% 45% 55%/50% 50% 50% 50%}
+}
+@keyframes lcOrbC{from{transform:rotate(0deg) translateX(6%)}to{transform:rotate(360deg) translateX(6%)}}
 `}</style>
 
             {/* 外层柔光环 */}
@@ -369,34 +366,6 @@ export function MeetingBall() {
                 background: '#202020',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
             }}>
-                {/* 待机: 多人拼贴头像 */}
-                <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${memberAvatars.length === 1 ? 1 : 2}, 1fr)`,
-                    gridAutoRows: '1fr',
-                    opacity: idle ? 1 : 0,
-                    transition: `opacity ${IDLE_FADE_MS}ms ease`,
-                    pointerEvents: 'none',
-                }}>
-                    {memberAvatars.map((src, i) => (
-                        <img
-                            key={i}
-                            src={src}
-                            alt=""
-                            draggable={false}
-                            onError={(e) => {
-                                const el = e.currentTarget
-                                if (el.dataset.fallback) return
-                                el.dataset.fallback = '1'
-                                el.src = default_avatar
-                            }}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: 0 }}
-                        />
-                    ))}
-                </div>
-
                 {/* 说话: 当前/上一位说话者头像 (待机时淡出) */}
                 <div style={{
                     position: 'absolute',
@@ -435,7 +404,7 @@ export function MeetingBall() {
                     />
                 </div>
 
-                {/* 待机: 圆形内部流光 (裁切在 56px 圆内, 半透明, 不遮挡面部) */}
+                {/* 待机: Liquid Orb 液态玻璃球 (严格裁切在 56px 圆内) */}
                 <div style={{
                     position: 'absolute',
                     inset: 0,
@@ -444,26 +413,39 @@ export function MeetingBall() {
                     pointerEvents: 'none',
                     opacity: idle ? 1 : 0,
                     transition: `opacity ${IDLE_FADE_MS}ms ease`,
+                    background: 'radial-gradient(circle at 35% 28%, #16323a 0%, #0a171c 62%, #04090c 100%)',
                 }}>
                     <div style={{
-                        position: 'absolute',
-                        inset: '-45%',
-                        background: 'conic-gradient(from 0deg, rgba(74,222,128,0), rgba(74,222,128,0.45), rgba(96,165,250,0.35), rgba(74,222,128,0))',
-                        mixBlendMode: 'screen',
-                        animation: (idle && !REDUCED_MOTION) ? 'lcBallFlow 6.5s linear infinite' : undefined,
-                        willChange: 'transform',
+                        position: 'absolute', width: '85%', height: '85%', left: '-12%', top: '-12%',
+                        background: 'radial-gradient(circle at 42% 42%, rgba(45,212,191,0.80), rgba(45,212,191,0) 70%)',
+                        filter: 'blur(6px)',
+                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbA 9s ease-in-out infinite alternate' : undefined,
+                        willChange: 'transform, border-radius',
                     }} />
                     <div style={{
-                        position: 'absolute',
-                        width: '70%',
-                        height: '70%',
-                        left: '-15%',
-                        top: '-15%',
-                        borderRadius: '50%',
-                        background: 'radial-gradient(circle, rgba(255,255,255,0.35), rgba(255,255,255,0) 70%)',
-                        mixBlendMode: 'screen',
-                        animation: (idle && !REDUCED_MOTION) ? 'lcBallFlow2 8s ease-in-out infinite' : undefined,
+                        position: 'absolute', width: '90%', height: '90%', right: '-18%', bottom: '-18%',
+                        background: 'radial-gradient(circle at 50% 50%, rgba(34,211,238,0.62), rgba(34,211,238,0) 70%)',
+                        filter: 'blur(7px)',
+                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbB 12s ease-in-out infinite alternate' : undefined,
+                        willChange: 'transform, border-radius',
+                    }} />
+                    <div style={{
+                        position: 'absolute', width: '72%', height: '72%', left: '12%', bottom: '-22%',
+                        background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.45), rgba(59,130,246,0) 70%)',
+                        filter: 'blur(8px)',
+                        animation: (idle && !REDUCED_MOTION) ? 'lcOrbC 15s linear infinite' : undefined,
                         willChange: 'transform',
+                    }} />
+                    {/* 玻璃高光 */}
+                    <div style={{
+                        position: 'absolute', inset: 0,
+                        background: 'radial-gradient(circle at 32% 26%, rgba(255,255,255,0.30), rgba(255,255,255,0.06) 36%, rgba(255,255,255,0) 60%)',
+                        mixBlendMode: 'screen',
+                    }} />
+                    {/* 内缘玻璃反光 */}
+                    <div style={{
+                        position: 'absolute', inset: 0, borderRadius: '50%',
+                        boxShadow: 'inset 0 0 12px rgba(120,220,220,0.20), inset 0 1px 2px rgba(255,255,255,0.20)',
                     }} />
                 </div>
             </div>
@@ -495,6 +477,7 @@ export function MeetingBall() {
                     />
                     : <mdui-icon name="forum" style={{ fontSize: '13px', color: '#fff' }} />}
             </div>
-        </div>
+        </div>,
+        document.body,
     )
 }
