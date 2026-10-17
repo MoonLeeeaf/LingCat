@@ -375,6 +375,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     onNavValueChange={(v) => setNavValue(v as any)}
                     main={mainContent} />
                 <MobileMeetingDialog />
+                {meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall />}
             </>
 
             : <>
