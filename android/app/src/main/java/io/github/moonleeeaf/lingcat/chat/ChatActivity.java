@@ -91,9 +91,19 @@ public class ChatActivity extends Activity {
             this::onMeetingChanged;
 
     private android.widget.ImageButton e2eToggleBtn;
-    private boolean isEncryptMode = false;
-    private String peerUserId = null;
+    private volatile boolean isEncryptMode = false;
+    private boolean isEncryptModeBeforeEdit = false;
+    private volatile String peerUserId = null;
     private io.github.moonleeeaf.lingcat.e2e.E2EStateManager e2eMgr;
+
+    /** 固定监听器实例，避免匿名 lambda 无法反注册造成泄漏 */
+    private final io.github.moonleeeaf.lingcat.e2e.E2EStateManager.OnE2EStateChangedListener e2eListener = () -> {
+        runOnUiThread(() -> {
+            if (isFinishing()) return;
+            updateE2EToggleUI();
+            if (adapter != null) adapter.notifyDataSetChanged();
+        });
+    };
 
     // ============================================================
 //                      附件
@@ -299,17 +309,31 @@ public class ChatActivity extends Activity {
         e2eMgr = io.github.moonleeeaf.lingcat.e2e.E2EStateManager.getInstance();
         e2eToggleBtn = findViewById(R.id.chat_e2e_toggle);
 
+        if (e2eMgr.getStatus() != io.github.moonleeeaf.lingcat.e2e.E2EStateManager.Status.UNLOCKED) {
+            e2eMgr.loadKeyState();
+        }
+
         // 查询该对话是否是私聊以获取对方 ID
         IO.execute(() -> {
             try {
                 lingcat.classes.Classes.IChat chat = ChatApi.queryChatInfo(client, accessToken, chatId, API_TIMEOUT_MS);
                 if (chat != null && "private".equals(chat.getType()) && chat.hasPeerUserId()) {
                     peerUserId = chat.getPeerUserId();
+
+                    // 1. 在当前 IO 线程同步拉取对方公钥（如果没有缓存）
+                    e2eMgr.fetchPeerKeys(java.util.Collections.singletonList(peerUserId));
+
+                    // 2. 判断是否可以默认开启加密
+                    boolean peerCanEncrypt = e2eMgr.getPeerKeys().containsKey(peerUserId);
+                    boolean selfCanEncrypt = e2eMgr.getStatus() != io.github.moonleeeaf.lingcat.e2e.E2EStateManager.Status.DISABLED;
+
+                    if (peerCanEncrypt && selfCanEncrypt) {
+                        isEncryptMode = true; // 双方都有能力，默认开启加密
+                    }
+
                     runOnUiThread(() -> {
                         e2eToggleBtn.setVisibility(android.view.View.VISIBLE);
                         updateE2EToggleUI();
-                        // 拉取对方公钥，决定是否默认开启加密
-                        e2eMgr.fetchPeerKeys(java.util.Collections.singletonList(peerUserId));
                     });
                 }
             } catch (Exception ignored) {}
@@ -320,11 +344,7 @@ public class ChatActivity extends Activity {
             updateE2EToggleUI();
         });
 
-        e2eMgr.addListener(() -> {
-            runOnUiThread(() -> {
-                if (adapter != null) adapter.notifyDataSetChanged();
-            });
-        });
+        e2eMgr.addListener(e2eListener);
 
         // 改 adapter 构造
         adapter = new MessageListAdapter(this, messages, myUserId, new MessageActionListener() {
@@ -407,20 +427,29 @@ public class ChatActivity extends Activity {
         loadInitial();
     }
 
+    /**
+     * 图标只反映"用户意图"(isEncryptMode)；
+     * 按钮是否可点由 peerUserId 是否就绪决定；
+     * 实际能否加密发送由 canEncryptNow() 决定（发送路径强制校验）。
+     */
     private void updateE2EToggleUI() {
+        if (e2eToggleBtn == null) return;
+
+        boolean ready = peerUserId != null;
+        e2eToggleBtn.setEnabled(ready);
+
+        if (!ready) {
+            e2eToggleBtn.setAlpha(0.4f);
+            e2eToggleBtn.setImageResource(R.drawable.ic_lock_open);
+            return;
+        }
+
+        e2eToggleBtn.setAlpha(1f);
+
         if (isEncryptMode) {
             e2eToggleBtn.setImageResource(R.drawable.ic_lock);
-            // ★ 传入 View 即可
-            e2eToggleBtn.setColorFilter(
-                    com.google.android.material.color.MaterialColors.getColor(e2eToggleBtn,
-                            com.google.android.material.R.attr.colorPrimary)
-            );
         } else {
             e2eToggleBtn.setImageResource(R.drawable.ic_lock_open);
-            e2eToggleBtn.setColorFilter(
-                    com.google.android.material.color.MaterialColors.getColor(e2eToggleBtn,
-                            com.google.android.material.R.attr.colorOnSurfaceVariant)
-            );
         }
     }
 
@@ -500,6 +529,7 @@ public class ChatActivity extends Activity {
 
         input.setText(raw);
         input.setSelection(raw.length());
+        isEncryptModeBeforeEdit = isEncryptMode;
         isEncryptMode = msg.getEntitiesList().stream().anyMatch(e -> "e2e".equals(e.getType()));
         updateE2EToggleUI();
 
@@ -512,8 +542,12 @@ public class ChatActivity extends Activity {
         replyingTo = null;
         editingMessage = null;
         chatStateBar.setVisibility(android.view.View.GONE);
+
         if (wasEditing) {
             input.setText("");
+            // ★ 退出编辑状态时，恢复之前的加密开关状态
+            isEncryptMode = isEncryptModeBeforeEdit;
+            updateE2EToggleUI();
         }
     }
 
@@ -646,6 +680,7 @@ public class ChatActivity extends Activity {
         io.github.moonleeeaf.lingcat.chat.meeting.MeetingManager.get()
                 .removeListener(meetingListener);
         if (client != null) client.removeOnReceiveListener(onMessageEvent);
+        if (e2eMgr != null) e2eMgr.removeListener(e2eListener);
         super.onDestroy();
     }
 
@@ -800,6 +835,26 @@ public class ChatActivity extends Activity {
     //                      发送
     // ============================================================
 
+    /** 当前是否真的具备加密发送能力 */
+    private boolean canEncryptNow() {
+        return peerUserId != null
+                && e2eMgr != null
+                && e2eMgr.getStatus() == io.github.moonleeeaf.lingcat.e2e.E2EStateManager.Status.UNLOCKED
+                && e2eMgr.getPeerKeys().containsKey(peerUserId);
+    }
+
+    /** 加密模式下发送失败：恢复 UI + 明确提示，绝不静默降级 */
+    private void failSend(String reason) {
+        runOnUiThread(() -> {
+            if (isFinishing()) return;
+            sending = false;
+            sendBtn.setEnabled(true);
+            input.setEnabled(true);
+            toast("加密发送失败：" + reason);
+        });
+    }
+
+
     private void onSendClicked() {
         if (sending) return;
 
@@ -838,54 +893,65 @@ public class ChatActivity extends Activity {
                 // 2. 解析
                 MessageParser.ParsedMessage parsed = MessageParser.parseMessage(processed);
 
-                // 3. E2E 拦截处理
-                boolean useE2E = isEncryptMode && peerUserId != null && !parsed.text.isEmpty();
-
-                if (useE2E) {
+                // 3. E2E 拦截处理 —— 加密模式下绝不静默降级为明文
+                if (isEncryptMode) {
+                    if (peerUserId == null) {
+                        failSend("无法确定私聊对象（对话信息未就绪）");
+                        return;
+                    }
+                    if (parsed.text.isEmpty()) {
+                        failSend("加密模式暂不支持纯附件消息");
+                        return;
+                    }
                     if (e2eMgr.getStatus() != io.github.moonleeeaf.lingcat.e2e.E2EStateManager.Status.UNLOCKED) {
                         runOnUiThread(() -> {
                             sending = false;
                             sendBtn.setEnabled(true);
                             input.setEnabled(true);
                             io.github.moonleeeaf.lingcat.chat.e2e.E2EUnlockDialog.showUnlock(this, () -> {
-                                onSendClicked(); // 解锁成功后重试发送
+                                onSendClicked(); // 解锁成功后重试
                             });
                         });
                         return;
                     }
 
-                    // 强制拉取一次最新公钥
-                    e2eMgr.fetchPeerKeys(java.util.Collections.singletonList(peerUserId));
+                    // 确保对方公钥就绪；拉取失败则中止，绝不发明文
                     if (!e2eMgr.getPeerKeys().containsKey(peerUserId)) {
-                        useE2E = false; // 拉不到降级
-                    } else {
-                        // 组装明文 JSON 发去加密
-                        org.json.JSONObject root = new org.json.JSONObject();
-                        root.put("text", parsed.text);
-                        org.json.JSONArray arr = new org.json.JSONArray();
-                        if (parsed.entities != null) {
-                            for (lingcat.classes.Classes.IMessageEntity e : parsed.entities) {
-                                org.json.JSONObject je = new org.json.JSONObject();
-                                je.put("type", e.getType());
-                                je.put("offset", e.getOffset());
-                                je.put("length", e.getLength());
-                                if (e.hasData()) je.put("data", e.getData());
-                                arr.put(je);
-                            }
-                        }
-                        root.put("entities", arr);
+                        e2eMgr.fetchPeerKeys(java.util.Collections.singletonList(peerUserId));
+                    }
+                    if (!e2eMgr.getPeerKeys().containsKey(peerUserId)) {
+                        failSend("对方未开启端到端加密，或公钥拉取失败");
+                        return;
+                    }
 
-                        String entityJson = e2eMgr.encryptForPeer(root.toString(), peerUserId);
-                        if (entityJson != null) {
-                            ArrayList entities = new java.util.ArrayList<>();
-                            entities.add(io.github.moonleeeaf.lingcat.e2e.E2EManager.buildE2EEntity(entityJson));
-                            parsed = new MessageParser.ParsedMessage("🔒", entities);
-                        } else {
-                            useE2E = false;
+                    // 组装明文 JSON
+                    org.json.JSONObject root = new org.json.JSONObject();
+                    root.put("text", parsed.text);
+                    org.json.JSONArray arr = new org.json.JSONArray();
+                    if (parsed.entities != null) {
+                        for (lingcat.classes.Classes.IMessageEntity e : parsed.entities) {
+                            org.json.JSONObject je = new org.json.JSONObject();
+                            je.put("type", e.getType());
+                            je.put("offset", e.getOffset());
+                            je.put("length", e.getLength());
+                            if (e.hasData()) je.put("data", e.getData());
+                            arr.put(je);
                         }
                     }
-                }
+                    root.put("entities", arr);
 
+                    String entityJson;
+                    try {
+                        entityJson = e2eMgr.encryptForPeer(root.toString(), peerUserId);
+                    } catch (Exception e) {
+                        failSend(e.getMessage());
+                        return;
+                    }
+
+                    ArrayList entities = new java.util.ArrayList<>();
+                    entities.add(io.github.moonleeeaf.lingcat.e2e.E2EManager.buildE2EEntity(entityJson));
+                    parsed = new MessageParser.ParsedMessage("🔒", entities);
+                }
                 // 4. 发送/编辑
                 if (editing != null) {
                     // 如果是编辑且原本是加密的，这里比较复杂。暂时按普通逻辑走，若要完美支持加密编辑需进一步调整
@@ -907,7 +973,7 @@ public class ChatActivity extends Activity {
                     exitStateMode();
                 });
             } catch (Exception e) {
-                // ... 原错误处理
+                failSend("发送异常：" + e.getMessage());
             }
         });
     }

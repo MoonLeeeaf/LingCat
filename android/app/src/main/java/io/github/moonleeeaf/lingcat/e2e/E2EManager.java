@@ -1,6 +1,7 @@
 package io.github.moonleeeaf.lingcat.e2e;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.goterl.lazysodium.LazySodiumAndroid;
 import com.goterl.lazysodium.Sodium;
@@ -18,6 +19,8 @@ import lingcat.protocol.LazySodiumStore;
  * 纯密码学与 E2E 数据处理封装。
  */
 public final class E2EManager {
+
+    private static final String TAG = "E2EDBG";
 
     // 获取全局单例，并直接取底层的 Sodium 实例
     private static final LazySodiumAndroid lazySodium = LazySodiumStore.getLazySodium();
@@ -70,6 +73,57 @@ public final class E2EManager {
     }
 
     // ============================================================
+    //                Base64 容错解码（URL-safe / padding / 空白）
+    // ============================================================
+
+    /**
+     * 容错 Base64 解码：
+     *  - 兼容 URL-safe（- / _）→ 标准（+ / /）
+     *  - 兼容缺失 padding（长度%4==2 补 "=="，%4==3 补 "="）
+     *  - 兼容夹杂的空白字符（换行/空格/制表）
+     *  - 失败时打印字段名 / 长度 / 前 60 字符，方便定位坏字段
+     */
+    private static byte[] tolerantB64Decode(String s, String fieldName) {
+        if (s == null) {
+            throw new IllegalArgumentException("E2E field '" + fieldName + "' is null");
+        }
+
+        // 1. URL-safe → 标准
+        String norm = s.replace('-', '+').replace('_', '/');
+
+        // 2. 去除所有空白字符（避免正则开销，手写循环）
+        StringBuilder sb = new StringBuilder(norm.length());
+        for (int i = 0; i < norm.length(); i++) {
+            char c = norm.charAt(i);
+            if (!Character.isWhitespace(c)) sb.append(c);
+        }
+        norm = sb.toString();
+
+        // 3. 补齐 padding（%4==1 属非法长度，Base64 不可能出现）
+        int mod = norm.length() % 4;
+        if (mod == 2) norm += "==";
+        else if (mod == 3) norm += "=";
+        else if (mod == 1) {
+            String preview = s.length() > 60 ? s.substring(0, 60) + "..." : s;
+            Log.e(TAG, "b64 invalid-length field=" + fieldName
+                    + " len=" + s.length() + " preview=" + preview);
+            throw new IllegalArgumentException(
+                    "E2E field '" + fieldName + "' base64 长度非法");
+        }
+
+        // 4. 解码
+        try {
+            return Base64.decode(norm, Base64.NO_WRAP);
+        } catch (IllegalArgumentException e) {
+            String preview = s.length() > 60 ? s.substring(0, 60) + "..." : s;
+            Log.e(TAG, "b64 fail field=" + fieldName
+                    + " len=" + s.length() + " preview=" + preview, e);
+            throw new IllegalArgumentException(
+                    "E2E field '" + fieldName + "' base64 解析失败", e);
+        }
+    }
+
+    // ============================================================
     //                      核心密码学操作
     // ============================================================
 
@@ -88,14 +142,14 @@ public final class E2EManager {
         String privB64 = Base64.encodeToString(privBytes, Base64.NO_WRAP);
 
         Arrays.fill(privBytes, (byte) 0);
-        return new IdentityKeyPair(pubB64, privBytes == null ? null : privB64);
+        return new IdentityKeyPair(pubB64, privB64);
     }
 
     /**
      * 用密码加密私钥 (Argon2id + XChaCha20)
      */
     public static EncryptedPrivateKey encryptPrivateKey(String privateKeyB64, String password) {
-        byte[] privKeyBytes = Base64.decode(privateKeyB64, Base64.NO_WRAP);
+        byte[] privKeyBytes = tolerantB64Decode(privateKeyB64, "privateKey");
         byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_8);
 
         // 1. 生成 salt
@@ -148,15 +202,16 @@ public final class E2EManager {
     /**
      * 用密码解密私钥
      */
-    public static String decryptPrivateKey(String encryptedB64, String saltB64, String nonceB64, String kdfParamsJson, String password) throws Exception {
+    public static String decryptPrivateKey(String encryptedB64, String saltB64, String nonceB64,
+                                           String kdfParamsJson, String password) throws Exception {
         JSONObject kdf = new JSONObject(kdfParamsJson);
         int m = kdf.optInt("m", 64 * 1024);
         long memlimitLong = (long) m * 1024L;
         long opslimit = kdf.optLong("t", 3);
 
-        byte[] salt = Base64.decode(saltB64, Base64.NO_WRAP);
-        byte[] nonce = Base64.decode(nonceB64, Base64.NO_WRAP);
-        byte[] ciphertext = Base64.decode(encryptedB64, Base64.NO_WRAP);
+        byte[] salt       = tolerantB64Decode(saltB64,       "kdfSalt");
+        byte[] nonce      = tolerantB64Decode(nonceB64,      "privNonce");
+        byte[] ciphertext = tolerantB64Decode(encryptedB64,  "encryptedPrivateKey");
         byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_8);
 
         byte[] key = new byte[32];
@@ -196,8 +251,8 @@ public final class E2EManager {
      * 计算共享密钥
      */
     public static byte[] deriveSharedKey(String myPrivateKeyB64, String peerPublicKeyB64) {
-        byte[] myPriv = Base64.decode(myPrivateKeyB64, Base64.NO_WRAP);
-        byte[] peerPub = Base64.decode(peerPublicKeyB64, Base64.NO_WRAP);
+        byte[] myPriv  = tolerantB64Decode(myPrivateKeyB64,  "myPrivateKey");
+        byte[] peerPub = tolerantB64Decode(peerPublicKeyB64, "peerPublicKey");
 
         // X25519 ECDH
         byte[] shared = new byte[CRYPTO_SCALARMULT_BYTES];
@@ -245,8 +300,8 @@ public final class E2EManager {
      * 解密消息
      */
     public static String decryptMessage(String ciphertextB64, String nonceB64, byte[] sharedKey) throws Exception {
-        byte[] nonce = Base64.decode(nonceB64, Base64.NO_WRAP);
-        byte[] ciphertext = Base64.decode(ciphertextB64, Base64.NO_WRAP);
+        byte[] nonce      = tolerantB64Decode(nonceB64,      "msgNonce");
+        byte[] ciphertext = tolerantB64Decode(ciphertextB64, "msgCiphertext");
 
         byte[] decrypted = new byte[ciphertext.length - CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES];
         long[] decryptedLen = new long[1];

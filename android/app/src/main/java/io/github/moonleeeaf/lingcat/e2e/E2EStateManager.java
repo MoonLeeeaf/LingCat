@@ -61,6 +61,11 @@ public class E2EStateManager {
     private volatile String myPublicKey = null;
     private volatile int myKeyVersion = 1;
 
+    /** 最近一次 unlock() 失败的具体原因，供 UI 直接展示 */
+    private volatile String lastUnlockError = null;
+
+    public String getLastUnlockError() { return lastUnlockError; }
+
     // 内存缓存的私钥字典 (版本 -> Base64私钥)
     private final Map<Integer, String> myPrivateKeys = new HashMap<>();
     // 缓存的对方公钥
@@ -199,7 +204,11 @@ public class E2EStateManager {
                     }
                 }
 
-                status = Status.LOCKED;
+                if (loadLocalKeys()) {
+                    status = Status.UNLOCKED;
+                } else {
+                    status = Status.LOCKED;
+                }
             } catch (Exception e) {
                 status = Status.ERROR_SERVER;
             }
@@ -250,6 +259,7 @@ public class E2EStateManager {
         myPrivateKeys.put(newVersion, pair.privateKey);
         myPublicKey = pair.publicKey;
         myKeyVersion = newVersion;
+        saveLocalKeys();
         status = Status.UNLOCKED;
         notifyChanged();
     }
@@ -257,39 +267,83 @@ public class E2EStateManager {
     /**
      * 解锁 (拉取全量历史密钥并尝试解密)
      */
+    /**
+     * 解锁 (拉取全量历史密钥并尝试解密)
+     */
     public boolean unlock(String password) {
+        lastUnlockError = null;
+
         LingCatClient client = getClient();
         String token = getToken();
-        if (client == null || token == null) return false;
+        if (client == null || token == null) {
+            lastUnlockError = "未连接服务器或登录失效";
+            Log.w(TAG, "unlock aborted: client/token null");
+            return false;
+        }
 
         try {
             List<E2EApi.E2EKey> allBundles = E2EApi.getAllMyKeys(client, token);
-            if (allBundles == null || allBundles.isEmpty()) return false;
+            if (allBundles == null || allBundles.isEmpty()) {
+                lastUnlockError = "服务端没有你的密钥记录";
+                Log.w(TAG, "unlock: server has no key bundles");
+                return false;
+            }
+
+            int maxVersion = 0;
+            for (E2EApi.E2EKey b : allBundles) {
+                if (b.keyVersion > maxVersion) maxVersion = b.keyVersion;
+            }
 
             Map<Integer, String> newPrivateKeys = new HashMap<>();
             boolean decryptedLatest = false;
+            Exception latestError = null;
 
             for (E2EApi.E2EKey bundle : allBundles) {
                 try {
                     String priv = E2EManager.decryptPrivateKey(
-                            bundle.encryptedPrivateKey, bundle.kdfSalt, bundle.kdfParams, bundle.privNonce, password);
+                            bundle.encryptedPrivateKey, bundle.kdfSalt,
+                            bundle.privNonce, bundle.kdfParams, password);
                     newPrivateKeys.put(bundle.keyVersion, priv);
-                    if (bundle.keyVersion == myKeyVersion) {
+                    if (bundle.keyVersion == maxVersion) {
                         decryptedLatest = true;
                     }
                 } catch (Exception e) {
-                    Log.w(TAG, "历史密钥 v" + bundle.keyVersion + " 解密失败");
+                    if (bundle.keyVersion == maxVersion) latestError = e;
+                    Log.w(TAG, "历史密钥 v" + bundle.keyVersion + " 解密失败", e);
                 }
             }
 
-            if (!decryptedLatest) return false;
+            if (!decryptedLatest) {
+                String msg = "最新版 v" + maxVersion + " 解密失败："
+                        + (latestError != null ? latestError.getMessage() : "未知");
+                lastUnlockError = msg;
+                Log.w(TAG, "unlock failed: " + msg
+                        + "（成功解出版本: " + newPrivateKeys.keySet() + "）");
+                return false;
+            }
 
             myPrivateKeys.clear();
             myPrivateKeys.putAll(newPrivateKeys);
+            myKeyVersion = maxVersion;
+
+            // ★ 修复：如果此前没拉取过公钥，在解锁成功时顺手拉取最新公钥
+            if (myPublicKey == null) {
+                for (E2EApi.E2EKey b : allBundles) {
+                    if (b.keyVersion == maxVersion) {
+                        myPublicKey = b.publicKey;
+                        break;
+                    }
+                }
+            }
+
+            saveLocalKeys();
             status = Status.UNLOCKED;
             notifyChanged();
             return true;
         } catch (Exception e) {
+            lastUnlockError = "网络或协议异常：" + e.getClass().getSimpleName()
+                    + (e.getMessage() != null ? " (" + e.getMessage() + ")" : "");
+            Log.e(TAG, "unlock outer failed", e);
             return false;
         }
     }
@@ -345,12 +399,26 @@ public class E2EStateManager {
     /**
      * 加密发送
      */
+    /**
+     * 加密发送
+     */
     public String encryptForPeer(String plaintext, String peerUserId) {
-        if (status != Status.UNLOCKED || myPublicKey == null) return null;
+        // ★ 拆开判断，精准报错
+        if (status != Status.UNLOCKED) {
+            throw new IllegalStateException("加密未解锁");
+        }
+        if (myPublicKey == null) {
+            throw new IllegalStateException("本地公钥为空（可能是密钥数据未加载）");
+        }
+
         String myPriv = myPrivateKeys.get(myKeyVersion);
-        if (myPriv == null) return null;
+        if (myPriv == null) {
+            throw new IllegalStateException("本地私钥缺失：找不到版本 v" + myKeyVersion);
+        }
         String receiverPub = peerKeys.get(peerUserId);
-        if (receiverPub == null) return null;
+        if (receiverPub == null) {
+            throw new IllegalStateException("缺少对方公钥");
+        }
 
         try {
             byte[] sharedKey = E2EManager.deriveSharedKey(myPriv, receiverPub);
@@ -367,7 +435,8 @@ public class E2EStateManager {
 
             return payload.toString();
         } catch (Exception e) {
-            return null;
+            Log.e(TAG, "encryptForPeer 底层加解密失败", e);
+            throw new IllegalStateException("底层加解密算法失败: " + e.getMessage());
         }
     }
 
@@ -423,7 +492,7 @@ public class E2EStateManager {
             if (bundle == null) return false;
 
             String priv = E2EManager.decryptPrivateKey(
-                    bundle.encryptedPrivateKey, bundle.kdfSalt, bundle.kdfParams, bundle.privNonce, password);
+                    bundle.encryptedPrivateKey, bundle.kdfSalt, bundle.privNonce, bundle.kdfParams, password);
 
             myPrivateKeys.put(version, priv);
             notifyChanged();
@@ -439,23 +508,44 @@ public class E2EStateManager {
     public boolean changeVersionPassword(int version, String oldPassword, String newPassword) {
         LingCatClient client = getClient();
         String token = getToken();
-        if (client == null || token == null) return false;
+        if (client == null || token == null) {
+            Log.w(TAG, "changeVersionPassword v" + version + " aborted: client/token null");
+            return false;
+        }
+
+        E2EApi.E2EKey bundle;
+        try {
+            bundle = E2EApi.getMyKey(client, token, version);
+        } catch (Exception e) {
+            Log.e(TAG, "changeVersionPassword v" + version + " fetch bundle failed", e);
+            return false;
+        }
+        if (bundle == null) {
+            Log.w(TAG, "changeVersionPassword v" + version + " bundle not found");
+            return false;
+        }
+
+        String priv;
+        try {
+            priv = E2EManager.decryptPrivateKey(
+                    bundle.encryptedPrivateKey, bundle.kdfSalt,
+                    bundle.privNonce, bundle.kdfParams, oldPassword);
+        } catch (Exception e) {
+            Log.w(TAG, "changeVersionPassword v" + version + " 旧密码解密失败", e);
+            return false;
+        }
 
         try {
-            E2EApi.E2EKey bundle = E2EApi.getMyKey(client, token, version);
-            if (bundle == null) return false;
-
-            String priv = E2EManager.decryptPrivateKey(
-                    bundle.encryptedPrivateKey, bundle.kdfSalt, bundle.kdfParams, bundle.privNonce, oldPassword);
-
             E2EManager.EncryptedPrivateKey enc = E2EManager.encryptPrivateKey(priv, newPassword);
 
-            E2EApi.uploadKey(client, token, bundle.publicKey, enc.encrypted, enc.salt, enc.kdfParams, enc.nonce, version);
+            E2EApi.uploadKey(client, token, bundle.publicKey, enc.encrypted,
+                    enc.salt, enc.kdfParams, enc.nonce, version);
 
             myPrivateKeys.put(version, priv);
             notifyChanged();
             return true;
         } catch (Exception e) {
+            Log.e(TAG, "changeVersionPassword v" + version + " 重新加密/上传失败", e);
             return false;
         }
     }
@@ -466,40 +556,143 @@ public class E2EStateManager {
     public boolean changePassword(String oldPassword, String newPassword) {
         LingCatClient client = getClient();
         String token = getToken();
-        if (client == null || token == null) return false;
+        if (client == null || token == null) {
+            Log.w(TAG, "changePassword aborted: client/token null");
+            return false;
+        }
 
+        List<E2EApi.E2EKey> allBundles;
         try {
-            List<E2EApi.E2EKey> allBundles = E2EApi.getAllMyKeys(client, token);
-            if (allBundles == null || allBundles.isEmpty()) return false;
+            allBundles = E2EApi.getAllMyKeys(client, token);
+        } catch (Exception e) {
+            Log.e(TAG, "changePassword fetch all keys failed", e);
+            return false;
+        }
+        if (allBundles == null || allBundles.isEmpty()) {
+            Log.w(TAG, "changePassword: server has no key bundles");
+            return false;
+        }
 
-            List<E2EApi.E2EKey> toUpdate = new ArrayList<>();
+        // 以服务端实际存在的最新版本为准，避免 myKeyVersion 异步未初始化时误判
+        int maxVersion = 0;
+        for (E2EApi.E2EKey b : allBundles) {
+            if (b.keyVersion > maxVersion) maxVersion = b.keyVersion;
+        }
 
-            for (E2EApi.E2EKey bundle : allBundles) {
-                try {
-                    String priv = E2EManager.decryptPrivateKey(
-                            bundle.encryptedPrivateKey, bundle.kdfSalt, bundle.kdfParams, bundle.privNonce, oldPassword);
-                    E2EManager.EncryptedPrivateKey enc = E2EManager.encryptPrivateKey(priv, newPassword);
+        List<E2EApi.E2EKey> toUpdate = new ArrayList<>();
+        boolean latestDecrypted = false;
 
-                    // 复用对象结构，稍微改一下
-                    E2EApi.E2EKey updated = new E2EApi.E2EKey(
-                            bundle.publicKey, enc.encrypted, enc.salt, enc.kdfParams, enc.nonce, bundle.keyVersion);
-                    toUpdate.add(updated);
-                } catch (Exception e) {
-                    if (bundle.keyVersion == myKeyVersion) {
-                        throw new Exception("旧密码错误，终止修改");
-                    }
-                }
+        for (E2EApi.E2EKey bundle : allBundles) {
+            try {
+                String priv = E2EManager.decryptPrivateKey(
+                        bundle.encryptedPrivateKey, bundle.kdfSalt,
+                        bundle.privNonce, bundle.kdfParams, oldPassword);
+                E2EManager.EncryptedPrivateKey enc = E2EManager.encryptPrivateKey(priv, newPassword);
+
+                toUpdate.add(new E2EApi.E2EKey(
+                        bundle.publicKey, enc.encrypted, enc.salt,
+                        enc.kdfParams, enc.nonce, bundle.keyVersion));
+
+                if (bundle.keyVersion == maxVersion) latestDecrypted = true;
+            } catch (Exception e) {
+                // 非最新版解密失败：保留原行为，跳过该版本，不阻断主流程
+                Log.w(TAG, "changePassword v" + bundle.keyVersion + " 旧密码解密/重加密失败（跳过）", e);
             }
+        }
 
-            for (E2EApi.E2EKey bundle : toUpdate) {
+        if (!latestDecrypted) {
+            Log.w(TAG, "changePassword aborted: 最新版 v" + maxVersion
+                    + " 旧密码解密失败（成功解出版本: 待确认，toUpdate=" + toUpdate.size() + "）");
+            return false;
+        }
+
+        // 逐个上传；任一失败立即中止并锁定，避免"云端已改一半、内存还开着"的脏状态
+        for (E2EApi.E2EKey bundle : toUpdate) {
+            try {
                 E2EApi.uploadKey(client, token, bundle.publicKey, bundle.encryptedPrivateKey,
                         bundle.kdfSalt, bundle.kdfParams, bundle.privNonce, bundle.keyVersion);
+            } catch (Exception e) {
+                Log.e(TAG, "changePassword upload v" + bundle.keyVersion + " failed（已中止）", e);
+                lock();
+                return false;
+            }
+        }
+
+        // 改完后锁定并要求重新解锁
+        lock();
+        return true;
+    }
+
+    /** 解锁成功后，将私钥包用 Keystore 加密并存入 SharedPrefs */
+    private void saveLocalKeys() {
+        try {
+            org.json.JSONObject obj = new org.json.JSONObject();
+            obj.put("pub", myPublicKey);
+            obj.put("ver", myKeyVersion);
+            org.json.JSONObject keysObj = new org.json.JSONObject();
+            for (Map.Entry<Integer, String> e : myPrivateKeys.entrySet()) {
+                keysObj.put(String.valueOf(e.getKey()), e.getValue());
+            }
+            obj.put("keys", keysObj);
+
+            String encrypted = KeyStoreManager.encrypt(obj.toString());
+            if (encrypted != null) {
+                sp.edit().putString("local_keys_" + getCurrentAccountId(), encrypted).apply();
+                Log.d(TAG, "本地私钥已加密保存");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "saveLocalKeys failed", e);
+        }
+    }
+
+    /** 尝试从本地加载并解密私钥 */
+    /** 获取当前账号的唯一标识 */
+    private String getCurrentAccountId() {
+        ServerConfig s = LingCatClientManager.getInstance().getCurrentServer();
+        Account acc = s != null ? AppDataStore.data().getActiveAccount(s.url) : null;
+        String id = (s != null ? s.url : "unknown") + "_" + (acc != null ? acc.userId : "unknown");
+        Log.d(TAG, "currentAccountId = " + id);
+        return id;
+    }
+
+    /** 尝试从本地加载并解密私钥 */
+    private boolean loadLocalKeys() {
+        try {
+            String key = "local_keys_" + getCurrentAccountId();
+            String encrypted = sp.getString(key, null);
+            if (encrypted == null) {
+                Log.d(TAG, "loadLocalKeys: 没找到本地缓存 " + key);
+                return false;
             }
 
-            // 改完后锁定并要求重新解锁
-            lock();
-            return true;
+            String json = KeyStoreManager.decrypt(encrypted);
+            if (json == null) {
+                Log.e(TAG, "loadLocalKeys: KeyStore 解密失败");
+                return false;
+            }
+
+            org.json.JSONObject obj = new org.json.JSONObject(json);
+            int savedVer = obj.optInt("ver", 0);
+
+            // 如果本地版本和服务端最新版本不一致（例如在其他设备生成过新密钥），则废弃本地缓存
+            if (savedVer != myKeyVersion) {
+                Log.w(TAG, "loadLocalKeys: 版本不匹配 本地v" + savedVer + " vs 服务端v" + myKeyVersion);
+                sp.edit().remove(key).apply();
+                return false;
+            }
+
+            myPublicKey = obj.getString("pub");
+            org.json.JSONObject keysObj = obj.getJSONObject("keys");
+            java.util.Iterator<String> iter = keysObj.keys();
+            myPrivateKeys.clear();
+            while (iter.hasNext()) {
+                String k = iter.next();
+                myPrivateKeys.put(Integer.parseInt(k), keysObj.getString(k));
+            }
+            Log.d(TAG, "loadLocalKeys: 成功恢复本地私钥，版本 v" + savedVer);
+            return !myPrivateKeys.isEmpty();
         } catch (Exception e) {
+            Log.e(TAG, "loadLocalKeys failed", e);
             return false;
         }
     }

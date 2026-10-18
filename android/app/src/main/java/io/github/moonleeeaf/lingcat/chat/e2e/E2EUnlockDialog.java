@@ -36,7 +36,9 @@ public class E2EUnlockDialog {
                     if (ok) {
                         callback.onSuccess();
                     } else {
-                        FastToast.shortToast(ctx, "密码错误或网络异常").show();
+                        String reason = E2EStateManager.getInstance().getLastUnlockError();
+                        FastToast.shortToast(ctx,
+                                "解锁失败：" + (reason != null ? reason : "未知原因")).show();
                     }
                 })
                 .setNegativeButton("取消", null)
