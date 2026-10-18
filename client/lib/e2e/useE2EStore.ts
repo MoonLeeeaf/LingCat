@@ -297,7 +297,8 @@ export const useE2EStore = create<E2EState>((set, get) => ({
                 ciphertext
             }
             return JSON.stringify(payload)
-        } catch {
+        } catch(e) {
+            console.error('加密失败:', e)
             return null
         }
     },
