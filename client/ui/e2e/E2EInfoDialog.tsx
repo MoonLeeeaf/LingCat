@@ -96,7 +96,6 @@ export default function E2EInfoDialog({ ref, chatId, peerUserId, onClose }: E2EI
                                     { text: '取消', onClick: () => true },
                                     {
                                         text: '确认重置',
-                                        variant: 'tonal',
                                         onClick: () => {
                                             // @ts-ignore
                                             const input = pwdDlg.querySelector('#rotate-pwd') as HTMLInputElement
