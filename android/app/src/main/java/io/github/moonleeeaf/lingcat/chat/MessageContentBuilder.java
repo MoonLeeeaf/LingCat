@@ -19,6 +19,7 @@ import java.util.List;
 
 import io.github.moonleeeaf.lingcat.R;
 import io.github.moonleeeaf.lingcat.data.ProfileCache;
+import io.github.moonleeeaf.lingcat.e2e.E2EStateManager;
 import lingcat.classes.Classes.IMessage;
 import lingcat.classes.Classes.IMessageEntity;
 import lingcat.classes.Classes.IUser;
@@ -50,6 +51,65 @@ public final class MessageContentBuilder {
     // ============================================================
 
     public static void build(LinearLayout container, IMessage msg, @Nullable Listener listener) {
+        container.removeAllViews();
+        if (msg == null) return;
+
+        // ★ 拦截 E2E 消息
+        IMessageEntity e2eEntity = null;
+        for (IMessageEntity e : msg.getEntitiesList()) {
+            if ("e2e".equals(e.getType())) {
+                e2eEntity = e;
+                break;
+            }
+        }
+
+        if (e2eEntity != null && e2eEntity.hasData()) {
+            E2EStateManager e2eMgr = E2EStateManager.getInstance();
+            if (e2eMgr.getStatus() != E2EStateManager.Status.UNLOCKED) {
+                container.addView(makeLockedView(container.getContext(), container, "🔒 [加密消息，请先解锁]", -1));
+                return;
+            }
+
+            String plainJson = e2eMgr.decryptFromPeer(e2eEntity.getData(), msg.getSenderUserId());
+            if (plainJson != null) {
+                try {
+                    org.json.JSONObject obj = new org.json.JSONObject(plainJson);
+                    // 如果是因为缺少历史密钥返回的占位符
+                    if (obj.has("needVersion")) {
+                        container.addView(makeLockedView(container.getContext(), container, obj.optString("text", "🔒 [需要旧密码]"), obj.optInt("needVersion", 1)));
+                        return;
+                    }
+
+                    // 解密成功，解析 JSON，替换原来的 text 和 entities
+                    String text = obj.optString("text", "");
+                    org.json.JSONArray entArr = obj.optJSONArray("entities");
+                    java.util.List<IMessageEntity> newEntities = new java.util.ArrayList<>();
+                    if (entArr != null) {
+                        for (int i = 0; i < entArr.length(); i++) {
+                            org.json.JSONObject je = entArr.getJSONObject(i);
+                            newEntities.add(IMessageEntity.newBuilder()
+                                    .setType(je.getString("type"))
+                                    .setOffset(je.getInt("offset"))
+                                    .setLength(je.getInt("length"))
+                                    .setData(je.optString("data", ""))
+                                    .build());
+                        }
+                    }
+
+                    IMessage decryptedMsg = msg.toBuilder().setText(text).clearEntities().addAllEntities(newEntities).build();
+                    buildNormal(container, decryptedMsg, listener);
+                    return;
+                } catch (Exception ignored) {}
+            }
+
+            container.addView(makeLockedView(container.getContext(), container, "🔒 [无法解密的消息]", -1));
+            return;
+        }
+
+        buildNormal(container, msg, listener);
+    }
+
+    public static void buildNormal(LinearLayout container, IMessage msg, @Nullable Listener listener) {
         container.removeAllViews();
         if (msg == null) return;
 
@@ -127,6 +187,27 @@ public final class MessageContentBuilder {
                 container.addView(makeInlineGroup(ctx, group, listener, container));
             }
         }
+    }
+
+    private static View makeLockedView(Context ctx, View container, String text, int needVersion) {
+        TextView tv = new TextView(ctx);
+        tv.setText(text);
+        tv.setTextSize(14);
+        tv.setTextColor(0xFFFF5252); // 红色
+        int pad = Math.round(12 * ctx.getResources().getDisplayMetrics().density);
+        tv.setPadding(pad, pad, pad, pad);
+        tv.setOnClickListener(v -> {
+            if (needVersion > 0) {
+                io.github.moonleeeaf.lingcat.chat.e2e.E2EUnlockDialog.showUnlockSpecificVersion(ctx, needVersion, () -> {
+                    container.performClick(); // 触发 RecyclerView 刷新（也可以通知 Adapter）
+                });
+            } else {
+                io.github.moonleeeaf.lingcat.chat.e2e.E2EUnlockDialog.showUnlock(ctx, () -> {
+                    container.performClick();
+                });
+            }
+        });
+        return tv;
     }
 
     // ============================================================

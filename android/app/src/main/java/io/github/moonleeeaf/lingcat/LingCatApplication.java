@@ -16,6 +16,7 @@ import io.github.moonleeeaf.lingcat.app.NotificationRouter;
 import io.github.moonleeeaf.lingcat.app.ServiceController;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
+import io.github.moonleeeaf.lingcat.e2e.E2EStateManager;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 
 import lingcat.client_protocol.HttpClientProvider;
@@ -47,6 +48,7 @@ public class LingCatApplication extends Application {
         NotificationHelper.get().ensureChannels(this);
         NotificationRouter.get();
         LingCatClientManager.init(this);
+        E2EStateManager.init(this);
         setupCoil();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

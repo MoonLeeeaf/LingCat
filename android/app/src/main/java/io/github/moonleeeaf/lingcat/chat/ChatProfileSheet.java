@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,10 +26,12 @@ import coil.Coil;
 import coil.request.ImageRequest;
 
 import io.github.moonleeeaf.lingcat.R;
+import io.github.moonleeeaf.lingcat.chat.e2e.E2EInfoSheet;
 import io.github.moonleeeaf.lingcat.data.Account;
 import io.github.moonleeeaf.lingcat.data.AppDataStore;
 import io.github.moonleeeaf.lingcat.data.ProfileCache;
 import io.github.moonleeeaf.lingcat.data.ServerConfig;
+import io.github.moonleeeaf.lingcat.e2e.E2EStateManager;
 import io.github.moonleeeaf.lingcat.net.FileUrlBuilder;
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager;
 import lingcat.classes.Classes.IChat;
@@ -61,12 +64,31 @@ public class ChatProfileSheet {
     private ImageView favIcon;
     private TextView favText;
 
+    // E2E 状态监听，拉取到对方公钥后自动刷新 UI
+    private final E2EStateManager.OnE2EStateChangedListener e2eListener;
+
     private ChatProfileSheet(Context ctx, String chatId, @Nullable String currentChatId) {
         this.chatId = chatId;
         this.currentChatId = currentChatId;
         this.dialog = new BottomSheetDialog(ctx);
+
+        // ★ 在这之后初始化监听器
+        this.e2eListener = () -> {
+            if (actionsContainer != null) {
+                IChat chat = ProfileCache.getCachedChat(this.chatId);
+                if (chat != null) {
+                    actionsContainer.post(() -> {
+                        if (this.dialog.isShowing()) buildActions(chat);
+                    });
+                }
+            }
+        };
+
         buildUi(ctx);
         bindData();
+
+        E2EStateManager.getInstance().addListener(e2eListener);
+        dialog.setOnDismissListener(d -> E2EStateManager.getInstance().removeListener(e2eListener));
     }
 
     public static void show(Context ctx, String chatId, @Nullable String currentChatId) {
@@ -178,6 +200,35 @@ public class ChatProfileSheet {
             actionsContainer.addView(makeItem(ctx, R.drawable.ic_info,
                     "用户信息", null,
                     this::openUserInfo));
+        }
+
+        // ★ 私聊：端到端加密信息
+        if (isPrivate) {
+            String peerId = chat.getPeerUserId();
+            E2EStateManager mgr = E2EStateManager.getInstance();
+
+            // 主动去拉一次对方公钥（如果缓存中没有）
+            if (peerId != null && !mgr.getPeerKeys().containsKey(peerId)) {
+                mgr.fetchPeerKeys(Collections.singletonList(peerId));
+            }
+
+            boolean peerEnabled = peerId != null && mgr.getPeerKeys().containsKey(peerId);
+
+            String subtext = peerEnabled ? null : "对方尚未开启加密";
+            Runnable onClick = peerEnabled ? () -> {
+                dialog.dismiss();
+                E2EInfoSheet.show(ctx, chatId, peerId);
+            } : () -> {
+                Toast.makeText(ctx, "等待对方开启端到端加密", Toast.LENGTH_SHORT).show();
+            };
+
+            View e2eItem = makeItem(ctx, R.drawable.ic_lock, "端到端加密信息", subtext, onClick);
+
+            // 如果对方没开启，变灰
+            if (!peerEnabled) {
+                e2eItem.setAlpha(0.5f);
+            }
+            actionsContainer.addView(e2eItem);
         }
 
         // 群聊：查看成员
