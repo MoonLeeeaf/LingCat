@@ -87,12 +87,34 @@ public class Methods {
     public static final int Unbind_OAuth_Request = 0x88;
     public static final int Unbind_OAuth_Response = 0x89;
 
+    // 会议在场成员
+    public static final int Get_Meeting_Participants_Request = 0x8a;
+    public static final int Get_Meeting_Participants_Response = 0x8b;
+
+    // 用户备注
+    public static final int Set_User_Remark_Request = 0x91;
+    public static final int Set_User_Remark_Response = 0x92;
+    public static final int Get_My_User_Remarks_Request = 0x93;
+    public static final int Get_My_User_Remarks_Response = 0x94;
+
+    // 端到端加密 (E2E)
+    public static final int Upload_E2E_Key_Request = 0x96;
+    public static final int Upload_E2E_Key_Response = 0x97;
+    public static final int Get_My_E2E_Key_Request = 0x98;
+    public static final int Get_My_E2E_Key_Response = 0x99;
+    public static final int Get_E2E_Public_Keys_Request = 0x9a;
+    public static final int Get_E2E_Public_Keys_Response = 0x9b;
+    public static final int Get_All_My_E2E_Keys_Request = 0x9c;
+    public static final int Get_All_My_E2E_Keys_Response = 0x9d;
+
+    // 事件
     public static final int Receive_Chat_Message_Event = 0x31;
     public static final int Update_My_Chats_Event = 0x32;
     public static final int Message_Edited_Event = 0x73;
     public static final int Meeting_Started_Event = 0x80;
     public static final int Meeting_Ended_Event = 0x81;
     public static final int Meeting_Participants_Changed_Event = 0x90;
+    public static final int User_Remarks_Changed_Event = 0x95;
 
     private Methods() { }
 
@@ -183,12 +205,31 @@ public class Methods {
             case Get_OAuth_Bindings_Response: return "Get_OAuth_Bindings_Response";
             case Unbind_OAuth_Request: return "Unbind_OAuth_Request";
             case Unbind_OAuth_Response: return "Unbind_OAuth_Response";
+
+            case Get_Meeting_Participants_Request: return "Get_Meeting_Participants_Request";
+            case Get_Meeting_Participants_Response: return "Get_Meeting_Participants_Response";
+
+            case Set_User_Remark_Request: return "Set_User_Remark_Request";
+            case Set_User_Remark_Response: return "Set_User_Remark_Response";
+            case Get_My_User_Remarks_Request: return "Get_My_User_Remarks_Request";
+            case Get_My_User_Remarks_Response: return "Get_My_User_Remarks_Response";
+
+            case Upload_E2E_Key_Request: return "Upload_E2E_Key_Request";
+            case Upload_E2E_Key_Response: return "Upload_E2E_Key_Response";
+            case Get_My_E2E_Key_Request: return "Get_My_E2E_Key_Request";
+            case Get_My_E2E_Key_Response: return "Get_My_E2E_Key_Response";
+            case Get_E2E_Public_Keys_Request: return "Get_E2E_Public_Keys_Request";
+            case Get_E2E_Public_Keys_Response: return "Get_E2E_Public_Keys_Response";
+            case Get_All_My_E2E_Keys_Request: return "Get_All_My_E2E_Keys_Request";
+            case Get_All_My_E2E_Keys_Response: return "Get_All_My_E2E_Keys_Response";
+
             case Receive_Chat_Message_Event: return "Receive_Chat_Message_Event";
             case Update_My_Chats_Event: return "Update_My_Chats_Event";
             case Message_Edited_Event: return "Message_Edited_Event";
             case Meeting_Started_Event: return "Meeting_Started_Event";
             case Meeting_Ended_Event: return "Meeting_Ended_Event";
             case Meeting_Participants_Changed_Event: return "Meeting_Participants_Changed_Event";
+            case User_Remarks_Changed_Event: return "User_Remarks_Changed_Event";
             default: return "Unknown(" + id + ")";
         }
     }
