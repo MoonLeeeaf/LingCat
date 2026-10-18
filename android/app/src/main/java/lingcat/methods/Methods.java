@@ -37686,6 +37686,5396 @@ public final class Methods {
     }
   }
 
+  public interface Set_User_Remark_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_User_Remark_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @return The targetUserId.
+     */
+    java.lang.String getTargetUserId();
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @return The bytes for targetUserId.
+     */
+    com.google.protobuf.ByteString
+        getTargetUserIdBytes();
+
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @return The remark.
+     */
+    java.lang.String getRemark();
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @return The bytes for remark.
+     */
+    com.google.protobuf.ByteString
+        getRemarkBytes();
+  }
+  /**
+   * <pre>
+   * 设置某个用户的备注名 (对自己生效)
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Set_User_Remark_Request}
+   */
+  public  static final class Set_User_Remark_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_User_Remark_Request, Set_User_Remark_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_User_Remark_Request)
+      Set_User_Remark_RequestOrBuilder {
+    private Set_User_Remark_Request() {
+      accessToken_ = "";
+      targetUserId_ = "";
+      remark_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int TARGET_USER_ID_FIELD_NUMBER = 2;
+    private java.lang.String targetUserId_;
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @return The targetUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getTargetUserId() {
+      return targetUserId_;
+    }
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @return The bytes for targetUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTargetUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(targetUserId_);
+    }
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @param value The targetUserId to set.
+     */
+    private void setTargetUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      targetUserId_ = value;
+    }
+    /**
+     * <code>string target_user_id = 2;</code>
+     */
+    private void clearTargetUserId() {
+      
+      targetUserId_ = getDefaultInstance().getTargetUserId();
+    }
+    /**
+     * <code>string target_user_id = 2;</code>
+     * @param value The bytes for targetUserId to set.
+     */
+    private void setTargetUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      targetUserId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int REMARK_FIELD_NUMBER = 3;
+    private java.lang.String remark_;
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @return The remark.
+     */
+    @java.lang.Override
+    public java.lang.String getRemark() {
+      return remark_;
+    }
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @return The bytes for remark.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRemarkBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(remark_);
+    }
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @param value The remark to set.
+     */
+    private void setRemark(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      remark_ = value;
+    }
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     */
+    private void clearRemark() {
+      
+      remark_ = getDefaultInstance().getRemark();
+    }
+    /**
+     * <pre>
+     * 空字符串 = 删除备注
+     * </pre>
+     *
+     * <code>string remark = 3;</code>
+     * @param value The bytes for remark to set.
+     */
+    private void setRemarkBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      remark_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_User_Remark_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 设置某个用户的备注名 (对自己生效)
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Set_User_Remark_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_User_Remark_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_User_Remark_Request)
+        lingcat.methods.Methods.Set_User_Remark_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_User_Remark_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string target_user_id = 2;</code>
+       * @return The targetUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getTargetUserId() {
+        return instance.getTargetUserId();
+      }
+      /**
+       * <code>string target_user_id = 2;</code>
+       * @return The bytes for targetUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getTargetUserIdBytes() {
+        return instance.getTargetUserIdBytes();
+      }
+      /**
+       * <code>string target_user_id = 2;</code>
+       * @param value The targetUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTargetUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setTargetUserId(value);
+        return this;
+      }
+      /**
+       * <code>string target_user_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTargetUserId() {
+        copyOnWrite();
+        instance.clearTargetUserId();
+        return this;
+      }
+      /**
+       * <code>string target_user_id = 2;</code>
+       * @param value The bytes for targetUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTargetUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setTargetUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 空字符串 = 删除备注
+       * </pre>
+       *
+       * <code>string remark = 3;</code>
+       * @return The remark.
+       */
+      @java.lang.Override
+      public java.lang.String getRemark() {
+        return instance.getRemark();
+      }
+      /**
+       * <pre>
+       * 空字符串 = 删除备注
+       * </pre>
+       *
+       * <code>string remark = 3;</code>
+       * @return The bytes for remark.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRemarkBytes() {
+        return instance.getRemarkBytes();
+      }
+      /**
+       * <pre>
+       * 空字符串 = 删除备注
+       * </pre>
+       *
+       * <code>string remark = 3;</code>
+       * @param value The remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemark(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRemark(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 空字符串 = 删除备注
+       * </pre>
+       *
+       * <code>string remark = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRemark() {
+        copyOnWrite();
+        instance.clearRemark();
+        return this;
+      }
+      /**
+       * <pre>
+       * 空字符串 = 删除备注
+       * </pre>
+       *
+       * <code>string remark = 3;</code>
+       * @param value The bytes for remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemarkBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRemarkBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_User_Remark_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_User_Remark_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "targetUserId_",
+              "remark_",
+            };
+            java.lang.String info =
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_User_Remark_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_User_Remark_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_User_Remark_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_User_Remark_Request)
+    private static final lingcat.methods.Methods.Set_User_Remark_Request DEFAULT_INSTANCE;
+    static {
+      Set_User_Remark_Request defaultInstance = new Set_User_Remark_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_User_Remark_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_User_Remark_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_User_Remark_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Set_User_Remark_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Set_User_Remark_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_User_Remark_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Set_User_Remark_Response}
+   */
+  public  static final class Set_User_Remark_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_User_Remark_Response, Set_User_Remark_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_User_Remark_Response)
+      Set_User_Remark_ResponseOrBuilder {
+    private Set_User_Remark_Response() {
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_User_Remark_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_User_Remark_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Set_User_Remark_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_User_Remark_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_User_Remark_Response)
+        lingcat.methods.Methods.Set_User_Remark_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_User_Remark_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_User_Remark_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_User_Remark_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_User_Remark_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_User_Remark_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_User_Remark_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_User_Remark_Response)
+    private static final lingcat.methods.Methods.Set_User_Remark_Response DEFAULT_INSTANCE;
+    static {
+      Set_User_Remark_Response defaultInstance = new Set_User_Remark_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_User_Remark_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_User_Remark_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_User_Remark_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Set_User_Remark_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_My_User_Remarks_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_User_Remarks_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+  }
+  /**
+   * <pre>
+   * 拉取自己设置的所有备注
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Get_My_User_Remarks_Request}
+   */
+  public  static final class Get_My_User_Remarks_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_User_Remarks_Request, Get_My_User_Remarks_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_User_Remarks_Request)
+      Get_My_User_Remarks_RequestOrBuilder {
+    private Get_My_User_Remarks_Request() {
+      accessToken_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_User_Remarks_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 拉取自己设置的所有备注
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Get_My_User_Remarks_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_User_Remarks_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_User_Remarks_Request)
+        lingcat.methods.Methods.Get_My_User_Remarks_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_User_Remarks_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_User_Remarks_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_User_Remarks_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+            };
+            java.lang.String info =
+                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u0208";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_User_Remarks_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_User_Remarks_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_User_Remarks_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_User_Remarks_Request)
+    private static final lingcat.methods.Methods.Get_My_User_Remarks_Request DEFAULT_INSTANCE;
+    static {
+      Get_My_User_Remarks_Request defaultInstance = new Get_My_User_Remarks_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_User_Remarks_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_User_Remarks_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_User_Remarks_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_My_User_Remarks_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_User_Remarks_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    java.lang.String getMyUserId();
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    com.google.protobuf.ByteString
+        getMyUserIdBytes();
+
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    java.util.List<lingcat.classes.Classes.IUserRemark> 
+        getRemarksList();
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    lingcat.classes.Classes.IUserRemark getRemarks(int index);
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    int getRemarksCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_My_User_Remarks_Response}
+   */
+  public  static final class Get_My_User_Remarks_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_User_Remarks_Response, Get_My_User_Remarks_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_User_Remarks_Response)
+      Get_My_User_Remarks_ResponseOrBuilder {
+    private Get_My_User_Remarks_Response() {
+      myUserId_ = "";
+      remarks_ = emptyProtobufList();
+    }
+    public static final int MY_USER_ID_FIELD_NUMBER = 1;
+    private java.lang.String myUserId_;
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getMyUserId() {
+      return myUserId_;
+    }
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMyUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(myUserId_);
+    }
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @param value The myUserId to set.
+     */
+    private void setMyUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      myUserId_ = value;
+    }
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     */
+    private void clearMyUserId() {
+      
+      myUserId_ = getDefaultInstance().getMyUserId();
+    }
+    /**
+     * <pre>
+     * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+     * </pre>
+     *
+     * <code>string my_user_id = 1;</code>
+     * @param value The bytes for myUserId to set.
+     */
+    private void setMyUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      myUserId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int REMARKS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IUserRemark> remarks_;
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.IUserRemark> getRemarksList() {
+      return remarks_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.IUserRemarkOrBuilder> 
+        getRemarksOrBuilderList() {
+      return remarks_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    @java.lang.Override
+    public int getRemarksCount() {
+      return remarks_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IUserRemark getRemarks(int index) {
+      return remarks_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    public lingcat.classes.Classes.IUserRemarkOrBuilder getRemarksOrBuilder(
+        int index) {
+      return remarks_.get(index);
+    }
+    private void ensureRemarksIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IUserRemark> tmp = remarks_;
+      if (!tmp.isModifiable()) {
+        remarks_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void setRemarks(
+        int index, lingcat.classes.Classes.IUserRemark value) {
+      value.getClass();
+  ensureRemarksIsMutable();
+      remarks_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void addRemarks(lingcat.classes.Classes.IUserRemark value) {
+      value.getClass();
+  ensureRemarksIsMutable();
+      remarks_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void addRemarks(
+        int index, lingcat.classes.Classes.IUserRemark value) {
+      value.getClass();
+  ensureRemarksIsMutable();
+      remarks_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void addAllRemarks(
+        java.lang.Iterable<? extends lingcat.classes.Classes.IUserRemark> values) {
+      ensureRemarksIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, remarks_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void clearRemarks() {
+      remarks_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+     */
+    private void removeRemarks(int index) {
+      ensureRemarksIsMutable();
+      remarks_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_User_Remarks_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_My_User_Remarks_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_User_Remarks_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_User_Remarks_Response)
+        lingcat.methods.Methods.Get_My_User_Remarks_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_User_Remarks_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+       * </pre>
+       *
+       * <code>string my_user_id = 1;</code>
+       * @return The myUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getMyUserId() {
+        return instance.getMyUserId();
+      }
+      /**
+       * <pre>
+       * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+       * </pre>
+       *
+       * <code>string my_user_id = 1;</code>
+       * @return The bytes for myUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMyUserIdBytes() {
+        return instance.getMyUserIdBytes();
+      }
+      /**
+       * <pre>
+       * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+       * </pre>
+       *
+       * <code>string my_user_id = 1;</code>
+       * @param value The myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMyUserId(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+       * </pre>
+       *
+       * <code>string my_user_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMyUserId() {
+        copyOnWrite();
+        instance.clearMyUserId();
+        return this;
+      }
+      /**
+       * <pre>
+       * 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
+       * </pre>
+       *
+       * <code>string my_user_id = 1;</code>
+       * @param value The bytes for myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMyUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.IUserRemark> getRemarksList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getRemarksList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      @java.lang.Override
+      public int getRemarksCount() {
+        return instance.getRemarksCount();
+      }/**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IUserRemark getRemarks(int index) {
+        return instance.getRemarks(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder setRemarks(
+          int index, lingcat.classes.Classes.IUserRemark value) {
+        copyOnWrite();
+        instance.setRemarks(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder setRemarks(
+          int index, lingcat.classes.Classes.IUserRemark.Builder builderForValue) {
+        copyOnWrite();
+        instance.setRemarks(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder addRemarks(lingcat.classes.Classes.IUserRemark value) {
+        copyOnWrite();
+        instance.addRemarks(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder addRemarks(
+          int index, lingcat.classes.Classes.IUserRemark value) {
+        copyOnWrite();
+        instance.addRemarks(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder addRemarks(
+          lingcat.classes.Classes.IUserRemark.Builder builderForValue) {
+        copyOnWrite();
+        instance.addRemarks(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder addRemarks(
+          int index, lingcat.classes.Classes.IUserRemark.Builder builderForValue) {
+        copyOnWrite();
+        instance.addRemarks(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder addAllRemarks(
+          java.lang.Iterable<? extends lingcat.classes.Classes.IUserRemark> values) {
+        copyOnWrite();
+        instance.addAllRemarks(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder clearRemarks() {
+        copyOnWrite();
+        instance.clearRemarks();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserRemark remarks = 2;</code>
+       */
+      public Builder removeRemarks(int index) {
+        copyOnWrite();
+        instance.removeRemarks(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_User_Remarks_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_User_Remarks_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "myUserId_",
+              "remarks_",
+              lingcat.classes.Classes.IUserRemark.class,
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0001\u0000\u0001\u0208\u0002\u001b" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_User_Remarks_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_User_Remarks_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_User_Remarks_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_User_Remarks_Response)
+    private static final lingcat.methods.Methods.Get_My_User_Remarks_Response DEFAULT_INSTANCE;
+    static {
+      Get_My_User_Remarks_Response defaultInstance = new Get_My_User_Remarks_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_User_Remarks_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_User_Remarks_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_User_Remarks_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_User_Remarks_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface User_Remarks_Changed_EventOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.User_Remarks_Changed_Event)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * <pre>
+   * 备注变更事件 (广播给自己的所有在线设备, 用于多设备同步)
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.User_Remarks_Changed_Event}
+   */
+  public  static final class User_Remarks_Changed_Event extends
+      com.google.protobuf.GeneratedMessageLite<
+          User_Remarks_Changed_Event, User_Remarks_Changed_Event.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.User_Remarks_Changed_Event)
+      User_Remarks_Changed_EventOrBuilder {
+    private User_Remarks_Changed_Event() {
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.User_Remarks_Changed_Event prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 备注变更事件 (广播给自己的所有在线设备, 用于多设备同步)
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.User_Remarks_Changed_Event}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.User_Remarks_Changed_Event, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.User_Remarks_Changed_Event)
+        lingcat.methods.Methods.User_Remarks_Changed_EventOrBuilder {
+      // Construct using lingcat.methods.Methods.User_Remarks_Changed_Event.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.User_Remarks_Changed_Event)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.User_Remarks_Changed_Event();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.User_Remarks_Changed_Event> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.User_Remarks_Changed_Event.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.User_Remarks_Changed_Event>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.User_Remarks_Changed_Event)
+    private static final lingcat.methods.Methods.User_Remarks_Changed_Event DEFAULT_INSTANCE;
+    static {
+      User_Remarks_Changed_Event defaultInstance = new User_Remarks_Changed_Event();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        User_Remarks_Changed_Event.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.User_Remarks_Changed_Event getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<User_Remarks_Changed_Event> PARSER;
+
+    public static com.google.protobuf.Parser<User_Remarks_Changed_Event> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Upload_E2E_Key_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Upload_E2E_Key_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The publicKey.
+     */
+    java.lang.String getPublicKey();
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The bytes for publicKey.
+     */
+    com.google.protobuf.ByteString
+        getPublicKeyBytes();
+
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @return The encryptedPrivateKey.
+     */
+    java.lang.String getEncryptedPrivateKey();
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @return The bytes for encryptedPrivateKey.
+     */
+    com.google.protobuf.ByteString
+        getEncryptedPrivateKeyBytes();
+
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @return The kdfSalt.
+     */
+    java.lang.String getKdfSalt();
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @return The bytes for kdfSalt.
+     */
+    com.google.protobuf.ByteString
+        getKdfSaltBytes();
+
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @return The kdfParams.
+     */
+    java.lang.String getKdfParams();
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @return The bytes for kdfParams.
+     */
+    com.google.protobuf.ByteString
+        getKdfParamsBytes();
+
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @return The privNonce.
+     */
+    java.lang.String getPrivNonce();
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @return The bytes for privNonce.
+     */
+    com.google.protobuf.ByteString
+        getPrivNonceBytes();
+
+    /**
+     * <code>int32 key_version = 7;</code>
+     * @return The keyVersion.
+     */
+    int getKeyVersion();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Upload_E2E_Key_Request}
+   */
+  public  static final class Upload_E2E_Key_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Upload_E2E_Key_Request, Upload_E2E_Key_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Upload_E2E_Key_Request)
+      Upload_E2E_Key_RequestOrBuilder {
+    private Upload_E2E_Key_Request() {
+      accessToken_ = "";
+      publicKey_ = "";
+      encryptedPrivateKey_ = "";
+      kdfSalt_ = "";
+      kdfParams_ = "";
+      privNonce_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PUBLIC_KEY_FIELD_NUMBER = 2;
+    private java.lang.String publicKey_;
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The publicKey.
+     */
+    @java.lang.Override
+    public java.lang.String getPublicKey() {
+      return publicKey_;
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The bytes for publicKey.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPublicKeyBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(publicKey_);
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @param value The publicKey to set.
+     */
+    private void setPublicKey(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      publicKey_ = value;
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     */
+    private void clearPublicKey() {
+      
+      publicKey_ = getDefaultInstance().getPublicKey();
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @param value The bytes for publicKey to set.
+     */
+    private void setPublicKeyBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      publicKey_ = value.toStringUtf8();
+      
+    }
+
+    public static final int ENCRYPTED_PRIVATE_KEY_FIELD_NUMBER = 3;
+    private java.lang.String encryptedPrivateKey_;
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @return The encryptedPrivateKey.
+     */
+    @java.lang.Override
+    public java.lang.String getEncryptedPrivateKey() {
+      return encryptedPrivateKey_;
+    }
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @return The bytes for encryptedPrivateKey.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getEncryptedPrivateKeyBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(encryptedPrivateKey_);
+    }
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @param value The encryptedPrivateKey to set.
+     */
+    private void setEncryptedPrivateKey(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      encryptedPrivateKey_ = value;
+    }
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     */
+    private void clearEncryptedPrivateKey() {
+      
+      encryptedPrivateKey_ = getDefaultInstance().getEncryptedPrivateKey();
+    }
+    /**
+     * <code>string encrypted_private_key = 3;</code>
+     * @param value The bytes for encryptedPrivateKey to set.
+     */
+    private void setEncryptedPrivateKeyBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      encryptedPrivateKey_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KDF_SALT_FIELD_NUMBER = 4;
+    private java.lang.String kdfSalt_;
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @return The kdfSalt.
+     */
+    @java.lang.Override
+    public java.lang.String getKdfSalt() {
+      return kdfSalt_;
+    }
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @return The bytes for kdfSalt.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKdfSaltBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(kdfSalt_);
+    }
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @param value The kdfSalt to set.
+     */
+    private void setKdfSalt(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      kdfSalt_ = value;
+    }
+    /**
+     * <code>string kdf_salt = 4;</code>
+     */
+    private void clearKdfSalt() {
+      
+      kdfSalt_ = getDefaultInstance().getKdfSalt();
+    }
+    /**
+     * <code>string kdf_salt = 4;</code>
+     * @param value The bytes for kdfSalt to set.
+     */
+    private void setKdfSaltBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      kdfSalt_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KDF_PARAMS_FIELD_NUMBER = 5;
+    private java.lang.String kdfParams_;
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @return The kdfParams.
+     */
+    @java.lang.Override
+    public java.lang.String getKdfParams() {
+      return kdfParams_;
+    }
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @return The bytes for kdfParams.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKdfParamsBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(kdfParams_);
+    }
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @param value The kdfParams to set.
+     */
+    private void setKdfParams(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      kdfParams_ = value;
+    }
+    /**
+     * <code>string kdf_params = 5;</code>
+     */
+    private void clearKdfParams() {
+      
+      kdfParams_ = getDefaultInstance().getKdfParams();
+    }
+    /**
+     * <code>string kdf_params = 5;</code>
+     * @param value The bytes for kdfParams to set.
+     */
+    private void setKdfParamsBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      kdfParams_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PRIV_NONCE_FIELD_NUMBER = 6;
+    private java.lang.String privNonce_;
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @return The privNonce.
+     */
+    @java.lang.Override
+    public java.lang.String getPrivNonce() {
+      return privNonce_;
+    }
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @return The bytes for privNonce.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPrivNonceBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(privNonce_);
+    }
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @param value The privNonce to set.
+     */
+    private void setPrivNonce(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      privNonce_ = value;
+    }
+    /**
+     * <code>string priv_nonce = 6;</code>
+     */
+    private void clearPrivNonce() {
+      
+      privNonce_ = getDefaultInstance().getPrivNonce();
+    }
+    /**
+     * <code>string priv_nonce = 6;</code>
+     * @param value The bytes for privNonce to set.
+     */
+    private void setPrivNonceBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      privNonce_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KEY_VERSION_FIELD_NUMBER = 7;
+    private int keyVersion_;
+    /**
+     * <code>int32 key_version = 7;</code>
+     * @return The keyVersion.
+     */
+    @java.lang.Override
+    public int getKeyVersion() {
+      return keyVersion_;
+    }
+    /**
+     * <code>int32 key_version = 7;</code>
+     * @param value The keyVersion to set.
+     */
+    private void setKeyVersion(int value) {
+      
+      keyVersion_ = value;
+    }
+    /**
+     * <code>int32 key_version = 7;</code>
+     */
+    private void clearKeyVersion() {
+      
+      keyVersion_ = 0;
+    }
+
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Upload_E2E_Key_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Upload_E2E_Key_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Upload_E2E_Key_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Upload_E2E_Key_Request)
+        lingcat.methods.Methods.Upload_E2E_Key_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Upload_E2E_Key_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string public_key = 2;</code>
+       * @return The publicKey.
+       */
+      @java.lang.Override
+      public java.lang.String getPublicKey() {
+        return instance.getPublicKey();
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @return The bytes for publicKey.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPublicKeyBytes() {
+        return instance.getPublicKeyBytes();
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @param value The publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKey(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPublicKey(value);
+        return this;
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPublicKey() {
+        copyOnWrite();
+        instance.clearPublicKey();
+        return this;
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @param value The bytes for publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKeyBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPublicKeyBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string encrypted_private_key = 3;</code>
+       * @return The encryptedPrivateKey.
+       */
+      @java.lang.Override
+      public java.lang.String getEncryptedPrivateKey() {
+        return instance.getEncryptedPrivateKey();
+      }
+      /**
+       * <code>string encrypted_private_key = 3;</code>
+       * @return The bytes for encryptedPrivateKey.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getEncryptedPrivateKeyBytes() {
+        return instance.getEncryptedPrivateKeyBytes();
+      }
+      /**
+       * <code>string encrypted_private_key = 3;</code>
+       * @param value The encryptedPrivateKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEncryptedPrivateKey(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setEncryptedPrivateKey(value);
+        return this;
+      }
+      /**
+       * <code>string encrypted_private_key = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEncryptedPrivateKey() {
+        copyOnWrite();
+        instance.clearEncryptedPrivateKey();
+        return this;
+      }
+      /**
+       * <code>string encrypted_private_key = 3;</code>
+       * @param value The bytes for encryptedPrivateKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEncryptedPrivateKeyBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setEncryptedPrivateKeyBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string kdf_salt = 4;</code>
+       * @return The kdfSalt.
+       */
+      @java.lang.Override
+      public java.lang.String getKdfSalt() {
+        return instance.getKdfSalt();
+      }
+      /**
+       * <code>string kdf_salt = 4;</code>
+       * @return The bytes for kdfSalt.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getKdfSaltBytes() {
+        return instance.getKdfSaltBytes();
+      }
+      /**
+       * <code>string kdf_salt = 4;</code>
+       * @param value The kdfSalt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfSalt(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setKdfSalt(value);
+        return this;
+      }
+      /**
+       * <code>string kdf_salt = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKdfSalt() {
+        copyOnWrite();
+        instance.clearKdfSalt();
+        return this;
+      }
+      /**
+       * <code>string kdf_salt = 4;</code>
+       * @param value The bytes for kdfSalt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfSaltBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setKdfSaltBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string kdf_params = 5;</code>
+       * @return The kdfParams.
+       */
+      @java.lang.Override
+      public java.lang.String getKdfParams() {
+        return instance.getKdfParams();
+      }
+      /**
+       * <code>string kdf_params = 5;</code>
+       * @return The bytes for kdfParams.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getKdfParamsBytes() {
+        return instance.getKdfParamsBytes();
+      }
+      /**
+       * <code>string kdf_params = 5;</code>
+       * @param value The kdfParams to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfParams(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setKdfParams(value);
+        return this;
+      }
+      /**
+       * <code>string kdf_params = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKdfParams() {
+        copyOnWrite();
+        instance.clearKdfParams();
+        return this;
+      }
+      /**
+       * <code>string kdf_params = 5;</code>
+       * @param value The bytes for kdfParams to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfParamsBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setKdfParamsBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string priv_nonce = 6;</code>
+       * @return The privNonce.
+       */
+      @java.lang.Override
+      public java.lang.String getPrivNonce() {
+        return instance.getPrivNonce();
+      }
+      /**
+       * <code>string priv_nonce = 6;</code>
+       * @return The bytes for privNonce.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPrivNonceBytes() {
+        return instance.getPrivNonceBytes();
+      }
+      /**
+       * <code>string priv_nonce = 6;</code>
+       * @param value The privNonce to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPrivNonce(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPrivNonce(value);
+        return this;
+      }
+      /**
+       * <code>string priv_nonce = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPrivNonce() {
+        copyOnWrite();
+        instance.clearPrivNonce();
+        return this;
+      }
+      /**
+       * <code>string priv_nonce = 6;</code>
+       * @param value The bytes for privNonce to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPrivNonceBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPrivNonceBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>int32 key_version = 7;</code>
+       * @return The keyVersion.
+       */
+      @java.lang.Override
+      public int getKeyVersion() {
+        return instance.getKeyVersion();
+      }
+      /**
+       * <code>int32 key_version = 7;</code>
+       * @param value The keyVersion to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyVersion(int value) {
+        copyOnWrite();
+        instance.setKeyVersion(value);
+        return this;
+      }
+      /**
+       * <code>int32 key_version = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKeyVersion() {
+        copyOnWrite();
+        instance.clearKeyVersion();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Upload_E2E_Key_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Upload_E2E_Key_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "publicKey_",
+              "encryptedPrivateKey_",
+              "kdfSalt_",
+              "kdfParams_",
+              "privNonce_",
+              "keyVersion_",
+            };
+            java.lang.String info =
+                "\u0000\u0007\u0000\u0000\u0001\u0007\u0007\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208\u0004\u0208\u0005\u0208\u0006\u0208\u0007\u0004";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Upload_E2E_Key_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Upload_E2E_Key_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Upload_E2E_Key_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Upload_E2E_Key_Request)
+    private static final lingcat.methods.Methods.Upload_E2E_Key_Request DEFAULT_INSTANCE;
+    static {
+      Upload_E2E_Key_Request defaultInstance = new Upload_E2E_Key_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Upload_E2E_Key_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Upload_E2E_Key_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Upload_E2E_Key_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Upload_E2E_Key_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Upload_E2E_Key_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Upload_E2E_Key_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Upload_E2E_Key_Response}
+   */
+  public  static final class Upload_E2E_Key_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Upload_E2E_Key_Response, Upload_E2E_Key_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Upload_E2E_Key_Response)
+      Upload_E2E_Key_ResponseOrBuilder {
+    private Upload_E2E_Key_Response() {
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Upload_E2E_Key_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Upload_E2E_Key_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Upload_E2E_Key_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Upload_E2E_Key_Response)
+        lingcat.methods.Methods.Upload_E2E_Key_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Upload_E2E_Key_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Upload_E2E_Key_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Upload_E2E_Key_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Upload_E2E_Key_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Upload_E2E_Key_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Upload_E2E_Key_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Upload_E2E_Key_Response)
+    private static final lingcat.methods.Methods.Upload_E2E_Key_Response DEFAULT_INSTANCE;
+    static {
+      Upload_E2E_Key_Response defaultInstance = new Upload_E2E_Key_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Upload_E2E_Key_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Upload_E2E_Key_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Upload_E2E_Key_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Upload_E2E_Key_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_My_E2E_Key_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_E2E_Key_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     * @return Whether the keyVersion field is set.
+     */
+    boolean hasKeyVersion();
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     * @return The keyVersion.
+     */
+    int getKeyVersion();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_My_E2E_Key_Request}
+   */
+  public  static final class Get_My_E2E_Key_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_E2E_Key_Request, Get_My_E2E_Key_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_E2E_Key_Request)
+      Get_My_E2E_Key_RequestOrBuilder {
+    private Get_My_E2E_Key_Request() {
+      accessToken_ = "";
+    }
+    private int bitField0_;
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KEY_VERSION_FIELD_NUMBER = 2;
+    private int keyVersion_;
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     * @return Whether the keyVersion field is set.
+     */
+    @java.lang.Override
+    public boolean hasKeyVersion() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     * @return The keyVersion.
+     */
+    @java.lang.Override
+    public int getKeyVersion() {
+      return keyVersion_;
+    }
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     * @param value The keyVersion to set.
+     */
+    private void setKeyVersion(int value) {
+      bitField0_ |= 0x00000001;
+      keyVersion_ = value;
+    }
+    /**
+     * <pre>
+     * 不传 = 拉最新；传了 = 拉特定版本
+     * </pre>
+     *
+     * <code>optional int32 key_version = 2;</code>
+     */
+    private void clearKeyVersion() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      keyVersion_ = 0;
+    }
+
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_E2E_Key_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_My_E2E_Key_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_E2E_Key_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_E2E_Key_Request)
+        lingcat.methods.Methods.Get_My_E2E_Key_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_E2E_Key_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 不传 = 拉最新；传了 = 拉特定版本
+       * </pre>
+       *
+       * <code>optional int32 key_version = 2;</code>
+       * @return Whether the keyVersion field is set.
+       */
+      @java.lang.Override
+      public boolean hasKeyVersion() {
+        return instance.hasKeyVersion();
+      }
+      /**
+       * <pre>
+       * 不传 = 拉最新；传了 = 拉特定版本
+       * </pre>
+       *
+       * <code>optional int32 key_version = 2;</code>
+       * @return The keyVersion.
+       */
+      @java.lang.Override
+      public int getKeyVersion() {
+        return instance.getKeyVersion();
+      }
+      /**
+       * <pre>
+       * 不传 = 拉最新；传了 = 拉特定版本
+       * </pre>
+       *
+       * <code>optional int32 key_version = 2;</code>
+       * @param value The keyVersion to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyVersion(int value) {
+        copyOnWrite();
+        instance.setKeyVersion(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 不传 = 拉最新；传了 = 拉特定版本
+       * </pre>
+       *
+       * <code>optional int32 key_version = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKeyVersion() {
+        copyOnWrite();
+        instance.clearKeyVersion();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_E2E_Key_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_E2E_Key_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "accessToken_",
+              "keyVersion_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0001\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u1004" +
+                "\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_E2E_Key_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_E2E_Key_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_E2E_Key_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_E2E_Key_Request)
+    private static final lingcat.methods.Methods.Get_My_E2E_Key_Request DEFAULT_INSTANCE;
+    static {
+      Get_My_E2E_Key_Request defaultInstance = new Get_My_E2E_Key_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_E2E_Key_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_E2E_Key_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_E2E_Key_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_My_E2E_Key_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_E2E_Key_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     * @return Whether the key field is set.
+     */
+    boolean hasKey();
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     * @return The key.
+     */
+    lingcat.classes.Classes.IUserE2EKey getKey();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_My_E2E_Key_Response}
+   */
+  public  static final class Get_My_E2E_Key_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_E2E_Key_Response, Get_My_E2E_Key_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_E2E_Key_Response)
+      Get_My_E2E_Key_ResponseOrBuilder {
+    private Get_My_E2E_Key_Response() {
+    }
+    private int bitField0_;
+    public static final int KEY_FIELD_NUMBER = 1;
+    private lingcat.classes.Classes.IUserE2EKey key_;
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     */
+    @java.lang.Override
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IUserE2EKey getKey() {
+      return key_ == null ? lingcat.classes.Classes.IUserE2EKey.getDefaultInstance() : key_;
+    }
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     */
+    private void setKey(lingcat.classes.Classes.IUserE2EKey value) {
+      value.getClass();
+  key_ = value;
+      bitField0_ |= 0x00000001;
+      }
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     */
+    @java.lang.SuppressWarnings({"ReferenceEquality"})
+    private void mergeKey(lingcat.classes.Classes.IUserE2EKey value) {
+      value.getClass();
+  if (key_ != null &&
+          key_ != lingcat.classes.Classes.IUserE2EKey.getDefaultInstance()) {
+        key_ =
+          lingcat.classes.Classes.IUserE2EKey.newBuilder(key_).mergeFrom(value).buildPartial();
+      } else {
+        key_ = value;
+      }
+      bitField0_ |= 0x00000001;
+    }
+    /**
+     * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+     */
+    private void clearKey() {  key_ = null;
+      bitField0_ = (bitField0_ & ~0x00000001);
+    }
+
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_E2E_Key_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_My_E2E_Key_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_E2E_Key_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_E2E_Key_Response)
+        lingcat.methods.Methods.Get_My_E2E_Key_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_E2E_Key_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      @java.lang.Override
+      public boolean hasKey() {
+        return instance.hasKey();
+      }
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IUserE2EKey getKey() {
+        return instance.getKey();
+      }
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      public Builder setKey(lingcat.classes.Classes.IUserE2EKey value) {
+        copyOnWrite();
+        instance.setKey(value);
+        return this;
+        }
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      public Builder setKey(
+          lingcat.classes.Classes.IUserE2EKey.Builder builderForValue) {
+        copyOnWrite();
+        instance.setKey(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      public Builder mergeKey(lingcat.classes.Classes.IUserE2EKey value) {
+        copyOnWrite();
+        instance.mergeKey(value);
+        return this;
+      }
+      /**
+       * <code>optional .lingcat.classes.IUserE2EKey key = 1;</code>
+       */
+      public Builder clearKey() {  copyOnWrite();
+        instance.clearKey();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_E2E_Key_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_E2E_Key_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "key_",
+            };
+            java.lang.String info =
+                "\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u1009\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_E2E_Key_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_E2E_Key_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_E2E_Key_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_E2E_Key_Response)
+    private static final lingcat.methods.Methods.Get_My_E2E_Key_Response DEFAULT_INSTANCE;
+    static {
+      Get_My_E2E_Key_Response defaultInstance = new Get_My_E2E_Key_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_E2E_Key_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_E2E_Key_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_E2E_Key_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_E2E_Key_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_E2E_Public_Keys_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_E2E_Public_Keys_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @return A list containing the userIds.
+     */
+    java.util.List<java.lang.String>
+        getUserIdsList();
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @return The count of userIds.
+     */
+    int getUserIdsCount();
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param index The index of the element to return.
+     * @return The userIds at the given index.
+     */
+    java.lang.String getUserIds(int index);
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param index The index of the element to return.
+     * @return The userIds at the given index.
+     */
+    com.google.protobuf.ByteString
+        getUserIdsBytes(int index);
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_E2E_Public_Keys_Request}
+   */
+  public  static final class Get_E2E_Public_Keys_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_E2E_Public_Keys_Request, Get_E2E_Public_Keys_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_E2E_Public_Keys_Request)
+      Get_E2E_Public_Keys_RequestOrBuilder {
+    private Get_E2E_Public_Keys_Request() {
+      accessToken_ = "";
+      userIds_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int USER_IDS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<java.lang.String> userIds_;
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @return A list containing the userIds.
+     */
+    @java.lang.Override
+    public java.util.List<java.lang.String> getUserIdsList() {
+      return userIds_;
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @return The count of userIds.
+     */
+    @java.lang.Override
+    public int getUserIdsCount() {
+      return userIds_.size();
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param index The index of the element to return.
+     * @return The userIds at the given index.
+     */
+    @java.lang.Override
+    public java.lang.String getUserIds(int index) {
+      return userIds_.get(index);
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the userIds at the given index.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUserIdsBytes(int index) {
+      return com.google.protobuf.ByteString.copyFromUtf8(
+          userIds_.get(index));
+    }
+    private void ensureUserIdsIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<java.lang.String> tmp =
+          userIds_;  if (!tmp.isModifiable()) {
+        userIds_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param index The index to set the value at.
+     * @param value The userIds to set.
+     */
+    private void setUserIds(
+        int index, java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  ensureUserIdsIsMutable();
+      userIds_.set(index, value);
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param value The userIds to add.
+     */
+    private void addUserIds(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  ensureUserIdsIsMutable();
+      userIds_.add(value);
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param values The userIds to add.
+     */
+    private void addAllUserIds(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureUserIdsIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, userIds_);
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     */
+    private void clearUserIds() {
+      userIds_ = com.google.protobuf.GeneratedMessageLite.emptyProtobufList();
+    }
+    /**
+     * <code>repeated string user_ids = 2;</code>
+     * @param value The bytes of the userIds to add.
+     */
+    private void addUserIdsBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      ensureUserIdsIsMutable();
+      userIds_.add(value.toStringUtf8());
+    }
+
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_E2E_Public_Keys_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_E2E_Public_Keys_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_E2E_Public_Keys_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_E2E_Public_Keys_Request)
+        lingcat.methods.Methods.Get_E2E_Public_Keys_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_E2E_Public_Keys_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @return A list containing the userIds.
+       */
+      @java.lang.Override
+      public java.util.List<java.lang.String>
+          getUserIdsList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getUserIdsList());
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @return The count of userIds.
+       */
+      @java.lang.Override
+      public int getUserIdsCount() {
+        return instance.getUserIdsCount();
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param index The index of the element to return.
+       * @return The userIds at the given index.
+       */
+      @java.lang.Override
+      public java.lang.String getUserIds(int index) {
+        return instance.getUserIds(index);
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the userIds at the given index.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getUserIdsBytes(int index) {
+        return instance.getUserIdsBytes(index);
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param index The index to set the value at.
+       * @param value The userIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserIds(
+          int index, java.lang.String value) {
+        copyOnWrite();
+        instance.setUserIds(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param value The userIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addUserIds(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.addUserIds(value);
+        return this;
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param values The userIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllUserIds(
+          java.lang.Iterable<java.lang.String> values) {
+        copyOnWrite();
+        instance.addAllUserIds(values);
+        return this;
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserIds() {
+        copyOnWrite();
+        instance.clearUserIds();
+        return this;
+      }
+      /**
+       * <code>repeated string user_ids = 2;</code>
+       * @param value The bytes of the userIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addUserIdsBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.addUserIdsBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_E2E_Public_Keys_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_E2E_Public_Keys_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "userIds_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0001\u0000\u0001\u0208\u0002\u021a" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_E2E_Public_Keys_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_E2E_Public_Keys_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_E2E_Public_Keys_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_E2E_Public_Keys_Request)
+    private static final lingcat.methods.Methods.Get_E2E_Public_Keys_Request DEFAULT_INSTANCE;
+    static {
+      Get_E2E_Public_Keys_Request defaultInstance = new Get_E2E_Public_Keys_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_E2E_Public_Keys_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_E2E_Public_Keys_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_E2E_Public_Keys_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_E2E_Public_Keys_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_E2E_Public_Keys_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    java.lang.String getMyUserId();
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    com.google.protobuf.ByteString
+        getMyUserIdBytes();
+
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    java.util.List<lingcat.classes.Classes.E2E_PublicKeyItem> 
+        getKeysList();
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    lingcat.classes.Classes.E2E_PublicKeyItem getKeys(int index);
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    int getKeysCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_E2E_Public_Keys_Response}
+   */
+  public  static final class Get_E2E_Public_Keys_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_E2E_Public_Keys_Response, Get_E2E_Public_Keys_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_E2E_Public_Keys_Response)
+      Get_E2E_Public_Keys_ResponseOrBuilder {
+    private Get_E2E_Public_Keys_Response() {
+      myUserId_ = "";
+      keys_ = emptyProtobufList();
+    }
+    public static final int MY_USER_ID_FIELD_NUMBER = 1;
+    private java.lang.String myUserId_;
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getMyUserId() {
+      return myUserId_;
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMyUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(myUserId_);
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @param value The myUserId to set.
+     */
+    private void setMyUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      myUserId_ = value;
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     */
+    private void clearMyUserId() {
+      
+      myUserId_ = getDefaultInstance().getMyUserId();
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @param value The bytes for myUserId to set.
+     */
+    private void setMyUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      myUserId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KEYS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.E2E_PublicKeyItem> keys_;
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.E2E_PublicKeyItem> getKeysList() {
+      return keys_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.E2E_PublicKeyItemOrBuilder> 
+        getKeysOrBuilderList() {
+      return keys_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    @java.lang.Override
+    public int getKeysCount() {
+      return keys_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.E2E_PublicKeyItem getKeys(int index) {
+      return keys_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    public lingcat.classes.Classes.E2E_PublicKeyItemOrBuilder getKeysOrBuilder(
+        int index) {
+      return keys_.get(index);
+    }
+    private void ensureKeysIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.E2E_PublicKeyItem> tmp = keys_;
+      if (!tmp.isModifiable()) {
+        keys_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void setKeys(
+        int index, lingcat.classes.Classes.E2E_PublicKeyItem value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void addKeys(lingcat.classes.Classes.E2E_PublicKeyItem value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void addKeys(
+        int index, lingcat.classes.Classes.E2E_PublicKeyItem value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void addAllKeys(
+        java.lang.Iterable<? extends lingcat.classes.Classes.E2E_PublicKeyItem> values) {
+      ensureKeysIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, keys_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void clearKeys() {
+      keys_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+     */
+    private void removeKeys(int index) {
+      ensureKeysIsMutable();
+      keys_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_E2E_Public_Keys_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_E2E_Public_Keys_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_E2E_Public_Keys_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_E2E_Public_Keys_Response)
+        lingcat.methods.Methods.Get_E2E_Public_Keys_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_E2E_Public_Keys_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return The myUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getMyUserId() {
+        return instance.getMyUserId();
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return The bytes for myUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMyUserIdBytes() {
+        return instance.getMyUserIdBytes();
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @param value The myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMyUserId(value);
+        return this;
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMyUserId() {
+        copyOnWrite();
+        instance.clearMyUserId();
+        return this;
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @param value The bytes for myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMyUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.E2E_PublicKeyItem> getKeysList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getKeysList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      @java.lang.Override
+      public int getKeysCount() {
+        return instance.getKeysCount();
+      }/**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.E2E_PublicKeyItem getKeys(int index) {
+        return instance.getKeys(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder setKeys(
+          int index, lingcat.classes.Classes.E2E_PublicKeyItem value) {
+        copyOnWrite();
+        instance.setKeys(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder setKeys(
+          int index, lingcat.classes.Classes.E2E_PublicKeyItem.Builder builderForValue) {
+        copyOnWrite();
+        instance.setKeys(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder addKeys(lingcat.classes.Classes.E2E_PublicKeyItem value) {
+        copyOnWrite();
+        instance.addKeys(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder addKeys(
+          int index, lingcat.classes.Classes.E2E_PublicKeyItem value) {
+        copyOnWrite();
+        instance.addKeys(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder addKeys(
+          lingcat.classes.Classes.E2E_PublicKeyItem.Builder builderForValue) {
+        copyOnWrite();
+        instance.addKeys(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder addKeys(
+          int index, lingcat.classes.Classes.E2E_PublicKeyItem.Builder builderForValue) {
+        copyOnWrite();
+        instance.addKeys(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder addAllKeys(
+          java.lang.Iterable<? extends lingcat.classes.Classes.E2E_PublicKeyItem> values) {
+        copyOnWrite();
+        instance.addAllKeys(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder clearKeys() {
+        copyOnWrite();
+        instance.clearKeys();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.E2E_PublicKeyItem keys = 2;</code>
+       */
+      public Builder removeKeys(int index) {
+        copyOnWrite();
+        instance.removeKeys(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_E2E_Public_Keys_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_E2E_Public_Keys_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "myUserId_",
+              "keys_",
+              lingcat.classes.Classes.E2E_PublicKeyItem.class,
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0001\u0000\u0001\u0208\u0002\u001b" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_E2E_Public_Keys_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_E2E_Public_Keys_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_E2E_Public_Keys_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_E2E_Public_Keys_Response)
+    private static final lingcat.methods.Methods.Get_E2E_Public_Keys_Response DEFAULT_INSTANCE;
+    static {
+      Get_E2E_Public_Keys_Response defaultInstance = new Get_E2E_Public_Keys_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_E2E_Public_Keys_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_E2E_Public_Keys_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_E2E_Public_Keys_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_E2E_Public_Keys_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_All_My_E2E_Keys_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_All_My_E2E_Keys_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_All_My_E2E_Keys_Request}
+   */
+  public  static final class Get_All_My_E2E_Keys_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_All_My_E2E_Keys_Request, Get_All_My_E2E_Keys_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_All_My_E2E_Keys_Request)
+      Get_All_My_E2E_Keys_RequestOrBuilder {
+    private Get_All_My_E2E_Keys_Request() {
+      accessToken_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_All_My_E2E_Keys_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_All_My_E2E_Keys_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_All_My_E2E_Keys_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_All_My_E2E_Keys_Request)
+        lingcat.methods.Methods.Get_All_My_E2E_Keys_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_All_My_E2E_Keys_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_All_My_E2E_Keys_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_All_My_E2E_Keys_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+            };
+            java.lang.String info =
+                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u0208";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_All_My_E2E_Keys_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_All_My_E2E_Keys_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_All_My_E2E_Keys_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_All_My_E2E_Keys_Request)
+    private static final lingcat.methods.Methods.Get_All_My_E2E_Keys_Request DEFAULT_INSTANCE;
+    static {
+      Get_All_My_E2E_Keys_Request defaultInstance = new Get_All_My_E2E_Keys_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_All_My_E2E_Keys_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_All_My_E2E_Keys_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_All_My_E2E_Keys_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_All_My_E2E_Keys_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_All_My_E2E_Keys_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    java.lang.String getMyUserId();
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    com.google.protobuf.ByteString
+        getMyUserIdBytes();
+
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    java.util.List<lingcat.classes.Classes.IUserE2EKey> 
+        getKeysList();
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    lingcat.classes.Classes.IUserE2EKey getKeys(int index);
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    int getKeysCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_All_My_E2E_Keys_Response}
+   */
+  public  static final class Get_All_My_E2E_Keys_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_All_My_E2E_Keys_Response, Get_All_My_E2E_Keys_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_All_My_E2E_Keys_Response)
+      Get_All_My_E2E_Keys_ResponseOrBuilder {
+    private Get_All_My_E2E_Keys_Response() {
+      myUserId_ = "";
+      keys_ = emptyProtobufList();
+    }
+    public static final int MY_USER_ID_FIELD_NUMBER = 1;
+    private java.lang.String myUserId_;
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The myUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getMyUserId() {
+      return myUserId_;
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @return The bytes for myUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMyUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(myUserId_);
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @param value The myUserId to set.
+     */
+    private void setMyUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      myUserId_ = value;
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     */
+    private void clearMyUserId() {
+      
+      myUserId_ = getDefaultInstance().getMyUserId();
+    }
+    /**
+     * <code>string my_user_id = 1;</code>
+     * @param value The bytes for myUserId to set.
+     */
+    private void setMyUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      myUserId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KEYS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IUserE2EKey> keys_;
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.IUserE2EKey> getKeysList() {
+      return keys_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.IUserE2EKeyOrBuilder> 
+        getKeysOrBuilderList() {
+      return keys_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    @java.lang.Override
+    public int getKeysCount() {
+      return keys_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IUserE2EKey getKeys(int index) {
+      return keys_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    public lingcat.classes.Classes.IUserE2EKeyOrBuilder getKeysOrBuilder(
+        int index) {
+      return keys_.get(index);
+    }
+    private void ensureKeysIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IUserE2EKey> tmp = keys_;
+      if (!tmp.isModifiable()) {
+        keys_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void setKeys(
+        int index, lingcat.classes.Classes.IUserE2EKey value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void addKeys(lingcat.classes.Classes.IUserE2EKey value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void addKeys(
+        int index, lingcat.classes.Classes.IUserE2EKey value) {
+      value.getClass();
+  ensureKeysIsMutable();
+      keys_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void addAllKeys(
+        java.lang.Iterable<? extends lingcat.classes.Classes.IUserE2EKey> values) {
+      ensureKeysIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, keys_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void clearKeys() {
+      keys_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+     */
+    private void removeKeys(int index) {
+      ensureKeysIsMutable();
+      keys_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_All_My_E2E_Keys_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_All_My_E2E_Keys_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_All_My_E2E_Keys_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_All_My_E2E_Keys_Response)
+        lingcat.methods.Methods.Get_All_My_E2E_Keys_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_All_My_E2E_Keys_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return The myUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getMyUserId() {
+        return instance.getMyUserId();
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return The bytes for myUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMyUserIdBytes() {
+        return instance.getMyUserIdBytes();
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @param value The myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMyUserId(value);
+        return this;
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMyUserId() {
+        copyOnWrite();
+        instance.clearMyUserId();
+        return this;
+      }
+      /**
+       * <code>string my_user_id = 1;</code>
+       * @param value The bytes for myUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMyUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMyUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.IUserE2EKey> getKeysList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getKeysList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      @java.lang.Override
+      public int getKeysCount() {
+        return instance.getKeysCount();
+      }/**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IUserE2EKey getKeys(int index) {
+        return instance.getKeys(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder setKeys(
+          int index, lingcat.classes.Classes.IUserE2EKey value) {
+        copyOnWrite();
+        instance.setKeys(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder setKeys(
+          int index, lingcat.classes.Classes.IUserE2EKey.Builder builderForValue) {
+        copyOnWrite();
+        instance.setKeys(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder addKeys(lingcat.classes.Classes.IUserE2EKey value) {
+        copyOnWrite();
+        instance.addKeys(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder addKeys(
+          int index, lingcat.classes.Classes.IUserE2EKey value) {
+        copyOnWrite();
+        instance.addKeys(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder addKeys(
+          lingcat.classes.Classes.IUserE2EKey.Builder builderForValue) {
+        copyOnWrite();
+        instance.addKeys(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder addKeys(
+          int index, lingcat.classes.Classes.IUserE2EKey.Builder builderForValue) {
+        copyOnWrite();
+        instance.addKeys(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder addAllKeys(
+          java.lang.Iterable<? extends lingcat.classes.Classes.IUserE2EKey> values) {
+        copyOnWrite();
+        instance.addAllKeys(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder clearKeys() {
+        copyOnWrite();
+        instance.clearKeys();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IUserE2EKey keys = 2;</code>
+       */
+      public Builder removeKeys(int index) {
+        copyOnWrite();
+        instance.removeKeys(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_All_My_E2E_Keys_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_All_My_E2E_Keys_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "myUserId_",
+              "keys_",
+              lingcat.classes.Classes.IUserE2EKey.class,
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0001\u0000\u0001\u0208\u0002\u001b" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_All_My_E2E_Keys_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_All_My_E2E_Keys_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_All_My_E2E_Keys_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_All_My_E2E_Keys_Response)
+    private static final lingcat.methods.Methods.Get_All_My_E2E_Keys_Response DEFAULT_INSTANCE;
+    static {
+      Get_All_My_E2E_Keys_Response defaultInstance = new Get_All_My_E2E_Keys_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_All_My_E2E_Keys_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_All_My_E2E_Keys_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_All_My_E2E_Keys_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_All_My_E2E_Keys_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
 
   static {
   }

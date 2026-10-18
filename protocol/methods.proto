@@ -520,7 +520,7 @@ message Get_My_User_Remarks_Request {
 message Get_My_User_Remarks_Response {
     // 冗余字段: 保证字段 1 是 length-delimited, 避免被 decodeOrThrow 误判为 Error_Response
     string my_user_id = 1;
-    repeated IUserRemark remarks = 2;
+    repeated lingcat.classes.IUserRemark remarks = 2;
 }
 
 // 备注变更事件 (广播给自己的所有在线设备, 用于多设备同步)
@@ -550,7 +550,7 @@ message Get_My_E2E_Key_Request {
 }
 
 message Get_My_E2E_Key_Response {
-    optional IUserE2EKey key = 1;
+    optional lingcat.classes.IUserE2EKey key = 1;
 }
 
 message Get_E2E_Public_Keys_Request {
@@ -560,7 +560,7 @@ message Get_E2E_Public_Keys_Request {
 
 message Get_E2E_Public_Keys_Response {
     string my_user_id = 1;
-    repeated E2E_PublicKeyItem keys = 2;
+    repeated lingcat.classes.E2E_PublicKeyItem keys = 2;
 }
 
 message Get_All_My_E2E_Keys_Request {
@@ -569,5 +569,5 @@ message Get_All_My_E2E_Keys_Request {
 
 message Get_All_My_E2E_Keys_Response {
     string my_user_id = 1;
-    repeated IUserE2EKey keys = 2;
+    repeated lingcat.classes.IUserE2EKey keys = 2;
 }

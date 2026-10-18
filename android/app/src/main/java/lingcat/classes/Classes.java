@@ -4067,6 +4067,35 @@ public final class Classes {
      * @return The isMember.
      */
     boolean getIsMember();
+
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return Whether the peerUserId field is set.
+     */
+    boolean hasPeerUserId();
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return The peerUserId.
+     */
+    java.lang.String getPeerUserId();
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return The bytes for peerUserId.
+     */
+    com.google.protobuf.ByteString
+        getPeerUserIdBytes();
   }
   /**
    * Protobuf type {@code lingcat.classes.IChat}
@@ -4085,6 +4114,7 @@ public final class Classes {
       settings_ = "";
       description_ = "";
       lastMessageText_ = "";
+      peerUserId_ = "";
     }
     private int bitField0_;
     public static final int ID_FIELD_NUMBER = 1;
@@ -4579,6 +4609,85 @@ public final class Classes {
     private void clearIsMember() {
       
       isMember_ = false;
+    }
+
+    public static final int PEER_USER_ID_FIELD_NUMBER = 12;
+    private java.lang.String peerUserId_;
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return Whether the peerUserId field is set.
+     */
+    @java.lang.Override
+    public boolean hasPeerUserId() {
+      return ((bitField0_ & 0x00000020) != 0);
+    }
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return The peerUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getPeerUserId() {
+      return peerUserId_;
+    }
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @return The bytes for peerUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPeerUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(peerUserId_);
+    }
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @param value The peerUserId to set.
+     */
+    private void setPeerUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000020;
+      peerUserId_ = value;
+    }
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     */
+    private void clearPeerUserId() {
+      bitField0_ = (bitField0_ & ~0x00000020);
+      peerUserId_ = getDefaultInstance().getPeerUserId();
+    }
+    /**
+     * <pre>
+     * 私聊时是对方 userId, 群聊为 null
+     * </pre>
+     *
+     * <code>optional string peer_user_id = 12;</code>
+     * @param value The bytes for peerUserId to set.
+     */
+    private void setPeerUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      peerUserId_ = value.toStringUtf8();
+      bitField0_ |= 0x00000020;
     }
 
     public static lingcat.classes.Classes.IChat parseFrom(
@@ -5192,6 +5301,87 @@ public final class Classes {
         return this;
       }
 
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @return Whether the peerUserId field is set.
+       */
+      @java.lang.Override
+      public boolean hasPeerUserId() {
+        return instance.hasPeerUserId();
+      }
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @return The peerUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getPeerUserId() {
+        return instance.getPeerUserId();
+      }
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @return The bytes for peerUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPeerUserIdBytes() {
+        return instance.getPeerUserIdBytes();
+      }
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @param value The peerUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPeerUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPeerUserId(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPeerUserId() {
+        copyOnWrite();
+        instance.clearPeerUserId();
+        return this;
+      }
+      /**
+       * <pre>
+       * 私聊时是对方 userId, 群聊为 null
+       * </pre>
+       *
+       * <code>optional string peer_user_id = 12;</code>
+       * @param value The bytes for peerUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPeerUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPeerUserIdBytes(value);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:lingcat.classes.IChat)
     }
     @java.lang.Override
@@ -5220,11 +5410,12 @@ public final class Classes {
               "description_",
               "lastMessageText_",
               "isMember_",
+              "peerUserId_",
             };
             java.lang.String info =
-                "\u0000\u000b\u0000\u0001\u0001\u000b\u000b\u0000\u0000\u0000\u0001\u0208\u0002\u1208" +
-                "\u0000\u0003\u1208\u0001\u0004\u0208\u0005\u1208\u0002\u0006\u0208\u0007\u000b\b" +
-                "\u0003\t\u1208\u0003\n\u1208\u0004\u000b\u0007";
+                "\u0000\f\u0000\u0001\u0001\f\f\u0000\u0000\u0000\u0001\u0208\u0002\u1208\u0000\u0003" +
+                "\u1208\u0001\u0004\u0208\u0005\u1208\u0002\u0006\u0208\u0007\u000b\b\u0003\t\u1208" +
+                "\u0003\n\u1208\u0004\u000b\u0007\f\u1208\u0005";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -7762,6 +7953,1606 @@ public final class Classes {
     private static volatile com.google.protobuf.Parser<IMessage> PARSER;
 
     public static com.google.protobuf.Parser<IMessage> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface IUserRemarkOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.IUserRemark)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The userId.
+     */
+    java.lang.String getUserId();
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The bytes for userId.
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>string remark = 2;</code>
+     * @return The remark.
+     */
+    java.lang.String getRemark();
+    /**
+     * <code>string remark = 2;</code>
+     * @return The bytes for remark.
+     */
+    com.google.protobuf.ByteString
+        getRemarkBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.IUserRemark}
+   */
+  public  static final class IUserRemark extends
+      com.google.protobuf.GeneratedMessageLite<
+          IUserRemark, IUserRemark.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.IUserRemark)
+      IUserRemarkOrBuilder {
+    private IUserRemark() {
+      userId_ = "";
+      remark_ = "";
+    }
+    public static final int USER_ID_FIELD_NUMBER = 1;
+    private java.lang.String userId_;
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public java.lang.String getUserId() {
+      return userId_;
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The bytes for userId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(userId_);
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @param value The userId to set.
+     */
+    private void setUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      userId_ = value;
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     */
+    private void clearUserId() {
+      
+      userId_ = getDefaultInstance().getUserId();
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @param value The bytes for userId to set.
+     */
+    private void setUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      userId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int REMARK_FIELD_NUMBER = 2;
+    private java.lang.String remark_;
+    /**
+     * <code>string remark = 2;</code>
+     * @return The remark.
+     */
+    @java.lang.Override
+    public java.lang.String getRemark() {
+      return remark_;
+    }
+    /**
+     * <code>string remark = 2;</code>
+     * @return The bytes for remark.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRemarkBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(remark_);
+    }
+    /**
+     * <code>string remark = 2;</code>
+     * @param value The remark to set.
+     */
+    private void setRemark(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      remark_ = value;
+    }
+    /**
+     * <code>string remark = 2;</code>
+     */
+    private void clearRemark() {
+      
+      remark_ = getDefaultInstance().getRemark();
+    }
+    /**
+     * <code>string remark = 2;</code>
+     * @param value The bytes for remark to set.
+     */
+    private void setRemarkBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      remark_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserRemark parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.IUserRemark prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.IUserRemark}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.IUserRemark, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.IUserRemark)
+        lingcat.classes.Classes.IUserRemarkOrBuilder {
+      // Construct using lingcat.classes.Classes.IUserRemark.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string user_id = 1;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public java.lang.String getUserId() {
+        return instance.getUserId();
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @return The bytes for userId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        return instance.getUserIdBytes();
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setUserId(value);
+        return this;
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        copyOnWrite();
+        instance.clearUserId();
+        return this;
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @param value The bytes for userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string remark = 2;</code>
+       * @return The remark.
+       */
+      @java.lang.Override
+      public java.lang.String getRemark() {
+        return instance.getRemark();
+      }
+      /**
+       * <code>string remark = 2;</code>
+       * @return The bytes for remark.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRemarkBytes() {
+        return instance.getRemarkBytes();
+      }
+      /**
+       * <code>string remark = 2;</code>
+       * @param value The remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemark(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRemark(value);
+        return this;
+      }
+      /**
+       * <code>string remark = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRemark() {
+        copyOnWrite();
+        instance.clearRemark();
+        return this;
+      }
+      /**
+       * <code>string remark = 2;</code>
+       * @param value The bytes for remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemarkBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRemarkBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.IUserRemark)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.IUserRemark();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "userId_",
+              "remark_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.IUserRemark> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.IUserRemark.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.IUserRemark>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.IUserRemark)
+    private static final lingcat.classes.Classes.IUserRemark DEFAULT_INSTANCE;
+    static {
+      IUserRemark defaultInstance = new IUserRemark();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        IUserRemark.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.IUserRemark getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<IUserRemark> PARSER;
+
+    public static com.google.protobuf.Parser<IUserRemark> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface E2E_PublicKeyItemOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.E2E_PublicKeyItem)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The userId.
+     */
+    java.lang.String getUserId();
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The bytes for userId.
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The publicKey.
+     */
+    java.lang.String getPublicKey();
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The bytes for publicKey.
+     */
+    com.google.protobuf.ByteString
+        getPublicKeyBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.E2E_PublicKeyItem}
+   */
+  public  static final class E2E_PublicKeyItem extends
+      com.google.protobuf.GeneratedMessageLite<
+          E2E_PublicKeyItem, E2E_PublicKeyItem.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.E2E_PublicKeyItem)
+      E2E_PublicKeyItemOrBuilder {
+    private E2E_PublicKeyItem() {
+      userId_ = "";
+      publicKey_ = "";
+    }
+    public static final int USER_ID_FIELD_NUMBER = 1;
+    private java.lang.String userId_;
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public java.lang.String getUserId() {
+      return userId_;
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @return The bytes for userId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(userId_);
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @param value The userId to set.
+     */
+    private void setUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      userId_ = value;
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     */
+    private void clearUserId() {
+      
+      userId_ = getDefaultInstance().getUserId();
+    }
+    /**
+     * <code>string user_id = 1;</code>
+     * @param value The bytes for userId to set.
+     */
+    private void setUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      userId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PUBLIC_KEY_FIELD_NUMBER = 2;
+    private java.lang.String publicKey_;
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The publicKey.
+     */
+    @java.lang.Override
+    public java.lang.String getPublicKey() {
+      return publicKey_;
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @return The bytes for publicKey.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPublicKeyBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(publicKey_);
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @param value The publicKey to set.
+     */
+    private void setPublicKey(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      publicKey_ = value;
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     */
+    private void clearPublicKey() {
+      
+      publicKey_ = getDefaultInstance().getPublicKey();
+    }
+    /**
+     * <code>string public_key = 2;</code>
+     * @param value The bytes for publicKey to set.
+     */
+    private void setPublicKeyBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      publicKey_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.E2E_PublicKeyItem parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.E2E_PublicKeyItem prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.E2E_PublicKeyItem}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.E2E_PublicKeyItem, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.E2E_PublicKeyItem)
+        lingcat.classes.Classes.E2E_PublicKeyItemOrBuilder {
+      // Construct using lingcat.classes.Classes.E2E_PublicKeyItem.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string user_id = 1;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public java.lang.String getUserId() {
+        return instance.getUserId();
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @return The bytes for userId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        return instance.getUserIdBytes();
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setUserId(value);
+        return this;
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        copyOnWrite();
+        instance.clearUserId();
+        return this;
+      }
+      /**
+       * <code>string user_id = 1;</code>
+       * @param value The bytes for userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string public_key = 2;</code>
+       * @return The publicKey.
+       */
+      @java.lang.Override
+      public java.lang.String getPublicKey() {
+        return instance.getPublicKey();
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @return The bytes for publicKey.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPublicKeyBytes() {
+        return instance.getPublicKeyBytes();
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @param value The publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKey(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPublicKey(value);
+        return this;
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPublicKey() {
+        copyOnWrite();
+        instance.clearPublicKey();
+        return this;
+      }
+      /**
+       * <code>string public_key = 2;</code>
+       * @param value The bytes for publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKeyBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPublicKeyBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.E2E_PublicKeyItem)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.E2E_PublicKeyItem();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "userId_",
+              "publicKey_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.E2E_PublicKeyItem> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.E2E_PublicKeyItem.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.E2E_PublicKeyItem>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.E2E_PublicKeyItem)
+    private static final lingcat.classes.Classes.E2E_PublicKeyItem DEFAULT_INSTANCE;
+    static {
+      E2E_PublicKeyItem defaultInstance = new E2E_PublicKeyItem();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        E2E_PublicKeyItem.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.E2E_PublicKeyItem getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<E2E_PublicKeyItem> PARSER;
+
+    public static com.google.protobuf.Parser<E2E_PublicKeyItem> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface IUserE2EKeyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.IUserE2EKey)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string public_key = 1;</code>
+     * @return The publicKey.
+     */
+    java.lang.String getPublicKey();
+    /**
+     * <code>string public_key = 1;</code>
+     * @return The bytes for publicKey.
+     */
+    com.google.protobuf.ByteString
+        getPublicKeyBytes();
+
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @return The encryptedPrivateKey.
+     */
+    java.lang.String getEncryptedPrivateKey();
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @return The bytes for encryptedPrivateKey.
+     */
+    com.google.protobuf.ByteString
+        getEncryptedPrivateKeyBytes();
+
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @return The kdfSalt.
+     */
+    java.lang.String getKdfSalt();
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @return The bytes for kdfSalt.
+     */
+    com.google.protobuf.ByteString
+        getKdfSaltBytes();
+
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @return The kdfParams.
+     */
+    java.lang.String getKdfParams();
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @return The bytes for kdfParams.
+     */
+    com.google.protobuf.ByteString
+        getKdfParamsBytes();
+
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @return The privNonce.
+     */
+    java.lang.String getPrivNonce();
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @return The bytes for privNonce.
+     */
+    com.google.protobuf.ByteString
+        getPrivNonceBytes();
+
+    /**
+     * <code>int32 key_version = 6;</code>
+     * @return The keyVersion.
+     */
+    int getKeyVersion();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.IUserE2EKey}
+   */
+  public  static final class IUserE2EKey extends
+      com.google.protobuf.GeneratedMessageLite<
+          IUserE2EKey, IUserE2EKey.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.IUserE2EKey)
+      IUserE2EKeyOrBuilder {
+    private IUserE2EKey() {
+      publicKey_ = "";
+      encryptedPrivateKey_ = "";
+      kdfSalt_ = "";
+      kdfParams_ = "";
+      privNonce_ = "";
+    }
+    public static final int PUBLIC_KEY_FIELD_NUMBER = 1;
+    private java.lang.String publicKey_;
+    /**
+     * <code>string public_key = 1;</code>
+     * @return The publicKey.
+     */
+    @java.lang.Override
+    public java.lang.String getPublicKey() {
+      return publicKey_;
+    }
+    /**
+     * <code>string public_key = 1;</code>
+     * @return The bytes for publicKey.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPublicKeyBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(publicKey_);
+    }
+    /**
+     * <code>string public_key = 1;</code>
+     * @param value The publicKey to set.
+     */
+    private void setPublicKey(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      publicKey_ = value;
+    }
+    /**
+     * <code>string public_key = 1;</code>
+     */
+    private void clearPublicKey() {
+      
+      publicKey_ = getDefaultInstance().getPublicKey();
+    }
+    /**
+     * <code>string public_key = 1;</code>
+     * @param value The bytes for publicKey to set.
+     */
+    private void setPublicKeyBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      publicKey_ = value.toStringUtf8();
+      
+    }
+
+    public static final int ENCRYPTED_PRIVATE_KEY_FIELD_NUMBER = 2;
+    private java.lang.String encryptedPrivateKey_;
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @return The encryptedPrivateKey.
+     */
+    @java.lang.Override
+    public java.lang.String getEncryptedPrivateKey() {
+      return encryptedPrivateKey_;
+    }
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @return The bytes for encryptedPrivateKey.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getEncryptedPrivateKeyBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(encryptedPrivateKey_);
+    }
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @param value The encryptedPrivateKey to set.
+     */
+    private void setEncryptedPrivateKey(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      encryptedPrivateKey_ = value;
+    }
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     */
+    private void clearEncryptedPrivateKey() {
+      
+      encryptedPrivateKey_ = getDefaultInstance().getEncryptedPrivateKey();
+    }
+    /**
+     * <code>string encrypted_private_key = 2;</code>
+     * @param value The bytes for encryptedPrivateKey to set.
+     */
+    private void setEncryptedPrivateKeyBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      encryptedPrivateKey_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KDF_SALT_FIELD_NUMBER = 3;
+    private java.lang.String kdfSalt_;
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @return The kdfSalt.
+     */
+    @java.lang.Override
+    public java.lang.String getKdfSalt() {
+      return kdfSalt_;
+    }
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @return The bytes for kdfSalt.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKdfSaltBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(kdfSalt_);
+    }
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @param value The kdfSalt to set.
+     */
+    private void setKdfSalt(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      kdfSalt_ = value;
+    }
+    /**
+     * <code>string kdf_salt = 3;</code>
+     */
+    private void clearKdfSalt() {
+      
+      kdfSalt_ = getDefaultInstance().getKdfSalt();
+    }
+    /**
+     * <code>string kdf_salt = 3;</code>
+     * @param value The bytes for kdfSalt to set.
+     */
+    private void setKdfSaltBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      kdfSalt_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KDF_PARAMS_FIELD_NUMBER = 4;
+    private java.lang.String kdfParams_;
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @return The kdfParams.
+     */
+    @java.lang.Override
+    public java.lang.String getKdfParams() {
+      return kdfParams_;
+    }
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @return The bytes for kdfParams.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKdfParamsBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(kdfParams_);
+    }
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @param value The kdfParams to set.
+     */
+    private void setKdfParams(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      kdfParams_ = value;
+    }
+    /**
+     * <code>string kdf_params = 4;</code>
+     */
+    private void clearKdfParams() {
+      
+      kdfParams_ = getDefaultInstance().getKdfParams();
+    }
+    /**
+     * <code>string kdf_params = 4;</code>
+     * @param value The bytes for kdfParams to set.
+     */
+    private void setKdfParamsBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      kdfParams_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PRIV_NONCE_FIELD_NUMBER = 5;
+    private java.lang.String privNonce_;
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @return The privNonce.
+     */
+    @java.lang.Override
+    public java.lang.String getPrivNonce() {
+      return privNonce_;
+    }
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @return The bytes for privNonce.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPrivNonceBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(privNonce_);
+    }
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @param value The privNonce to set.
+     */
+    private void setPrivNonce(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      privNonce_ = value;
+    }
+    /**
+     * <code>string priv_nonce = 5;</code>
+     */
+    private void clearPrivNonce() {
+      
+      privNonce_ = getDefaultInstance().getPrivNonce();
+    }
+    /**
+     * <code>string priv_nonce = 5;</code>
+     * @param value The bytes for privNonce to set.
+     */
+    private void setPrivNonceBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      privNonce_ = value.toStringUtf8();
+      
+    }
+
+    public static final int KEY_VERSION_FIELD_NUMBER = 6;
+    private int keyVersion_;
+    /**
+     * <code>int32 key_version = 6;</code>
+     * @return The keyVersion.
+     */
+    @java.lang.Override
+    public int getKeyVersion() {
+      return keyVersion_;
+    }
+    /**
+     * <code>int32 key_version = 6;</code>
+     * @param value The keyVersion to set.
+     */
+    private void setKeyVersion(int value) {
+      
+      keyVersion_ = value;
+    }
+    /**
+     * <code>int32 key_version = 6;</code>
+     */
+    private void clearKeyVersion() {
+      
+      keyVersion_ = 0;
+    }
+
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IUserE2EKey parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.IUserE2EKey prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.IUserE2EKey}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.IUserE2EKey, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.IUserE2EKey)
+        lingcat.classes.Classes.IUserE2EKeyOrBuilder {
+      // Construct using lingcat.classes.Classes.IUserE2EKey.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string public_key = 1;</code>
+       * @return The publicKey.
+       */
+      @java.lang.Override
+      public java.lang.String getPublicKey() {
+        return instance.getPublicKey();
+      }
+      /**
+       * <code>string public_key = 1;</code>
+       * @return The bytes for publicKey.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPublicKeyBytes() {
+        return instance.getPublicKeyBytes();
+      }
+      /**
+       * <code>string public_key = 1;</code>
+       * @param value The publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKey(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPublicKey(value);
+        return this;
+      }
+      /**
+       * <code>string public_key = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPublicKey() {
+        copyOnWrite();
+        instance.clearPublicKey();
+        return this;
+      }
+      /**
+       * <code>string public_key = 1;</code>
+       * @param value The bytes for publicKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPublicKeyBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPublicKeyBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string encrypted_private_key = 2;</code>
+       * @return The encryptedPrivateKey.
+       */
+      @java.lang.Override
+      public java.lang.String getEncryptedPrivateKey() {
+        return instance.getEncryptedPrivateKey();
+      }
+      /**
+       * <code>string encrypted_private_key = 2;</code>
+       * @return The bytes for encryptedPrivateKey.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getEncryptedPrivateKeyBytes() {
+        return instance.getEncryptedPrivateKeyBytes();
+      }
+      /**
+       * <code>string encrypted_private_key = 2;</code>
+       * @param value The encryptedPrivateKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEncryptedPrivateKey(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setEncryptedPrivateKey(value);
+        return this;
+      }
+      /**
+       * <code>string encrypted_private_key = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEncryptedPrivateKey() {
+        copyOnWrite();
+        instance.clearEncryptedPrivateKey();
+        return this;
+      }
+      /**
+       * <code>string encrypted_private_key = 2;</code>
+       * @param value The bytes for encryptedPrivateKey to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEncryptedPrivateKeyBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setEncryptedPrivateKeyBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string kdf_salt = 3;</code>
+       * @return The kdfSalt.
+       */
+      @java.lang.Override
+      public java.lang.String getKdfSalt() {
+        return instance.getKdfSalt();
+      }
+      /**
+       * <code>string kdf_salt = 3;</code>
+       * @return The bytes for kdfSalt.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getKdfSaltBytes() {
+        return instance.getKdfSaltBytes();
+      }
+      /**
+       * <code>string kdf_salt = 3;</code>
+       * @param value The kdfSalt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfSalt(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setKdfSalt(value);
+        return this;
+      }
+      /**
+       * <code>string kdf_salt = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKdfSalt() {
+        copyOnWrite();
+        instance.clearKdfSalt();
+        return this;
+      }
+      /**
+       * <code>string kdf_salt = 3;</code>
+       * @param value The bytes for kdfSalt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfSaltBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setKdfSaltBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string kdf_params = 4;</code>
+       * @return The kdfParams.
+       */
+      @java.lang.Override
+      public java.lang.String getKdfParams() {
+        return instance.getKdfParams();
+      }
+      /**
+       * <code>string kdf_params = 4;</code>
+       * @return The bytes for kdfParams.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getKdfParamsBytes() {
+        return instance.getKdfParamsBytes();
+      }
+      /**
+       * <code>string kdf_params = 4;</code>
+       * @param value The kdfParams to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfParams(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setKdfParams(value);
+        return this;
+      }
+      /**
+       * <code>string kdf_params = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKdfParams() {
+        copyOnWrite();
+        instance.clearKdfParams();
+        return this;
+      }
+      /**
+       * <code>string kdf_params = 4;</code>
+       * @param value The bytes for kdfParams to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKdfParamsBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setKdfParamsBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string priv_nonce = 5;</code>
+       * @return The privNonce.
+       */
+      @java.lang.Override
+      public java.lang.String getPrivNonce() {
+        return instance.getPrivNonce();
+      }
+      /**
+       * <code>string priv_nonce = 5;</code>
+       * @return The bytes for privNonce.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPrivNonceBytes() {
+        return instance.getPrivNonceBytes();
+      }
+      /**
+       * <code>string priv_nonce = 5;</code>
+       * @param value The privNonce to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPrivNonce(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPrivNonce(value);
+        return this;
+      }
+      /**
+       * <code>string priv_nonce = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPrivNonce() {
+        copyOnWrite();
+        instance.clearPrivNonce();
+        return this;
+      }
+      /**
+       * <code>string priv_nonce = 5;</code>
+       * @param value The bytes for privNonce to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPrivNonceBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPrivNonceBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>int32 key_version = 6;</code>
+       * @return The keyVersion.
+       */
+      @java.lang.Override
+      public int getKeyVersion() {
+        return instance.getKeyVersion();
+      }
+      /**
+       * <code>int32 key_version = 6;</code>
+       * @param value The keyVersion to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyVersion(int value) {
+        copyOnWrite();
+        instance.setKeyVersion(value);
+        return this;
+      }
+      /**
+       * <code>int32 key_version = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearKeyVersion() {
+        copyOnWrite();
+        instance.clearKeyVersion();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.IUserE2EKey)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.IUserE2EKey();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "publicKey_",
+              "encryptedPrivateKey_",
+              "kdfSalt_",
+              "kdfParams_",
+              "privNonce_",
+              "keyVersion_",
+            };
+            java.lang.String info =
+                "\u0000\u0006\u0000\u0000\u0001\u0006\u0006\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208\u0004\u0208\u0005\u0208\u0006\u0004";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.IUserE2EKey> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.IUserE2EKey.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.IUserE2EKey>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.IUserE2EKey)
+    private static final lingcat.classes.Classes.IUserE2EKey DEFAULT_INSTANCE;
+    static {
+      IUserE2EKey defaultInstance = new IUserE2EKey();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        IUserE2EKey.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.IUserE2EKey getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<IUserE2EKey> PARSER;
+
+    public static com.google.protobuf.Parser<IUserE2EKey> parser() {
       return DEFAULT_INSTANCE.getParserForType();
     }
   }
