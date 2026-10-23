@@ -2,11 +2,15 @@ import React from 'react'
 import { Dropdown } from 'mdui'
 import useEventListener from '../../lib/useEventListener.ts'
 import { useIsMobile } from '../../lib/useIsMobile.ts'
+import { useIsOnline } from '../presence/PresenceStore.ts'
+import { PresenceAvatar } from '../presence/PresenceAvatar.tsx'
 
 export interface MessageProps {
     children: React.ReactNode
     avatar: string
     senderName: string
+    /** 发送者 user_id; 传入后会显示在线绿点 (自己/系统消息不显示) */
+    senderUserId?: string
     isSystem?: boolean
     hideSender?: boolean
     isAtRight?: boolean
@@ -20,6 +24,7 @@ export interface MessageProps {
 export default function Message({
     children,
     senderName,
+    senderUserId,
     hideSender,
     isAtRight,
     isSystem,
@@ -31,6 +36,8 @@ export default function Message({
     edited_time,
 }: MessageProps) {
     const isMobile = useIsMobile()
+    // 自己/系统消息不显示在线点
+    const online = useIsOnline(isAtRight ? undefined : senderUserId)
 
     const dropDownRef = React.useRef<Dropdown>(null)
     const avatarDropDownRef = React.useRef<Dropdown>(null)
@@ -115,25 +122,26 @@ export default function Message({
                     <span style={{ alignSelf: 'center', fontSize: '90%' }}>{senderName}</span>
                 )}
                 <mdui-dropdown ref={avatarDropDownRef} open={isAvatarDropDownOpen} trigger="manual">
-                    <mdui-avatar
-                        onContextMenu={(e) => {
-                            if (isMobile) return
-                            e.preventDefault()
-                            setAvatarDropDownOpen(!isDropDownOpen)
-                        }}
-                        onClick={(e) => {
-                            if (!isMobile) {
-                                onAvatarClick?.()
-                                isAvatarDropDownOpen && setAvatarDropDownOpen(false)
-                                return
-                            }
-                            e.preventDefault()
-                            setAvatarDropDownOpen(!isDropDownOpen)
-                        }}
-                        slot="trigger"
-                        src={avatar}
-                        style={{ width: '43px', height: '43px', margin: '11px' }}
-                    />
+                    <PresenceAvatar slot="trigger" online={online} size={12} style={{ margin: '11px' }}>
+                        <mdui-avatar
+                            onContextMenu={(e) => {
+                                if (isMobile) return
+                                e.preventDefault()
+                                setAvatarDropDownOpen(!isDropDownOpen)
+                            }}
+                            onClick={(e) => {
+                                if (!isMobile) {
+                                    onAvatarClick?.()
+                                    isAvatarDropDownOpen && setAvatarDropDownOpen(false)
+                                    return
+                                }
+                                e.preventDefault()
+                                setAvatarDropDownOpen(!isDropDownOpen)
+                            }}
+                            src={avatar}
+                            style={{ width: '43px', height: '43px' }}
+                        />
+                    </PresenceAvatar>
                     <mdui-menu>{avatarMenus}</mdui-menu>
                 </mdui-dropdown>
                 {!isAtRight && (

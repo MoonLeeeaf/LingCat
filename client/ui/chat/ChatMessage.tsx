@@ -204,6 +204,7 @@ export default function ChatMessage({
                 : default_avatar}
             isAtRight={isMe}
             hideSender={hideSender}
+            senderUserId={msg.sender_user_id ?? undefined}
         >
                         {isLockedPlaceholder || decryptError ? (
                 <div

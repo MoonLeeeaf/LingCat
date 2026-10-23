@@ -9,6 +9,8 @@ import ClientManager from '../../ClientManager.ts'
 import default_avatar from '../../default_avatar.png'
 import { ChatApi } from 'lingcat-client-protocol'
 import Avatar from '../Avatar.tsx'
+import { useOnlineStatus } from '../presence/PresenceStore.ts'
+import { PresenceAvatar } from '../presence/PresenceAvatar.tsx'
 import tipError from '../tipError.ts'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
 import showSnackbar from '../showSnackbar.ts'
@@ -34,6 +36,12 @@ export default function ChatMembersAndAdminsDialog({
     const [iAmAdmin, setIAmAdmin] = React.useState(false)
     const [members, setMembers] = React.useState<IUser[]>()
     const [admins, setAdmins] = React.useState<IChatAdmin[]>()
+
+    // 成员 + 管理员 的在线状态 (批量)
+    const onlineMap = useOnlineStatus([
+        ...((members || []).map((m) => m.id)),
+        ...((admins || []).map((a) => a.id)),
+    ])
 
     const refreshData = React.useCallback(async () => {
         const client = ClientManager.getActiveClient()
@@ -130,12 +138,13 @@ export default function ChatMembersAndAdminsDialog({
                                     rounded
                                     onClick={() => UserProfileDialog.show(v.id)}
                                 >
-                                    <Avatar
-                                        slot="icon"
-                                        src={v.avatar_file_hash
-                                            ? getFileUrl(v.avatar_file_hash, SessionEnv.myFileAccessToken)
-                                            : default_avatar}
-                                    />
+                                    <PresenceAvatar slot="icon" online={onlineMap[v.id]}>
+                                        <Avatar
+                                            src={v.avatar_file_hash
+                                                ? getFileUrl(v.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                                : default_avatar}
+                                        />
+                                    </PresenceAvatar>
                                     {v.nickname}
                                 </mdui-list-item>
 
@@ -171,12 +180,13 @@ export default function ChatMembersAndAdminsDialog({
                                     rounded
                                     onClick={() => UserProfileDialog.show(v.id)}
                                 >
-                                    <Avatar
-                                        slot="icon"
-                                        src={v.avatar_file_hash
-                                            ? getFileUrl(v.avatar_file_hash, SessionEnv.myFileAccessToken)
-                                            : default_avatar}
-                                    />
+                                    <PresenceAvatar slot="icon" online={onlineMap[v.id]}>
+                                        <Avatar
+                                            src={v.avatar_file_hash
+                                                ? getFileUrl(v.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                                : default_avatar}
+                                        />
+                                    </PresenceAvatar>
                                     {v.nickname}
                                     <span slot="description">
                                         {({ admin: '管理员', owner: '所有者' } as const)[v.role as 'admin' | 'owner']}

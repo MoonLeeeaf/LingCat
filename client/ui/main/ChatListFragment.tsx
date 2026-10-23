@@ -8,6 +8,8 @@ import default_avatar from '../../default_avatar.png'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import SessionEnv from '../../SessionEnv.ts'
 import Avatar from '../Avatar.tsx'
+import { useIsOnline } from '../presence/PresenceStore.ts'
+import { PresenceAvatar } from '../presence/PresenceAvatar.tsx'
 import ChatProfileDialog from '../viewer/ChatProfileDialog.tsx'
 import tipError from '../tipError.ts'
 import useEventListener from '../../lib/useEventListener.ts'
@@ -47,6 +49,8 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
 
     const userRemark = chat.peer_user_id && RemarksCache.get(chat.peer_user_id)
     const title = userRemark || chat.title || ''
+    // 仅私聊显示对方在线绿点
+    const online = useIsOnline(chat.peer_user_id)
 
     return (
         <mdui-dropdown trigger="hover">
@@ -64,12 +68,13 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
                 headline={title}
                 description-line={2}
             >
-                <Avatar
-                    slot="icon"
-                    src={chat.avatar_file_hash
-                        ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
-                        : default_avatar}
-                />
+                <PresenceAvatar slot="icon" online={online}>
+                    <Avatar
+                        src={chat.avatar_file_hash
+                            ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
+                            : default_avatar}
+                    />
+                </PresenceAvatar>
                 <span slot="description">{chat.last_message_text}</span>
             </mdui-list-item>
 

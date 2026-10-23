@@ -8,6 +8,8 @@ import ClientManager from '../../ClientManager.ts'
 import default_avatar from '../../default_avatar.png'
 import { ChatApi, UserApi } from 'lingcat-client-protocol'
 import Avatar from '../Avatar.tsx'
+import { useIsOnline } from '../presence/PresenceStore.ts'
+import { PresenceAvatar } from '../presence/PresenceAvatar.tsx'
 import tipError from '../tipError.ts'
 import EditMyProfileDialog from '../main/EditMyProfileDialog.tsx'
 import ProfileCache from '../../ProfileCache.ts'
@@ -31,6 +33,7 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
     const [loading, setLoading] = React.useState(true)
     const [profile, setProfile] = React.useState<IUser>()
     const [isMe, setIsMe] = React.useState(false)
+    const online = useIsOnline(userId)
 
     React.useEffect(() => {
         let cancelled = false
@@ -149,7 +152,9 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar onClick={() => ImageViewerDialog.show(avatar!)} src={avatar} />
+                <PresenceAvatar online={online} size={12}>
+                    <Avatar onClick={() => ImageViewerDialog.show(avatar!)} src={avatar} />
+                </PresenceAvatar>
                 <div style={{
                     display: 'flex',
                     marginLeft: '15px',
@@ -167,6 +172,11 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                             marginTop: '2px',
                         }}>
                             {profile.nickname}
+                        </span>
+                    )}
+                    {online && (
+                        <span style={{ color: '#22c55e', fontSize: '0.8rem', marginTop: '2px' }}>
+                            ● 在线
                         </span>
                     )}
                 </div>
