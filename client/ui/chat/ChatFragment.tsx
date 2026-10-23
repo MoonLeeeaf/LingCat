@@ -164,6 +164,7 @@ export function ChatFragment() {
                             chatId={chatId}
                             chatTitle={chat.title ?? ''}
                             peerUserId={chat.type === 'private' ? chat.peer_user_id : undefined}
+                            enableMentions={chat.type === 'group'}
                             editingMessage={editingMessage}
                             onEditCancel={() => setEditingMessage(null)}
                             onEditDone={() => setEditingMessage(null)}
