@@ -10,7 +10,7 @@ import getFileUrl from '../../lib/getFileUrl.ts'
 import Avatar from '../Avatar.tsx'
 import tipError from '../tipError.ts'
 
-export function MeetingBanner({ chatId }: { chatId: string }) {
+export function MeetingBanner({ chatId, translucent }: { chatId: string, translucent?: boolean }) {
     // 本对话是否有会议
     const activeMeeting = useMeetingStore(s => s.activeMeetings[chatId])
     // 我是否在这个对话的会议里
@@ -71,7 +71,9 @@ export function MeetingBanner({ chatId }: { chatId: string }) {
             margin: '6px 8px',
             padding: '6px 6px 6px 14px',
             borderRadius: '999px',
-            background: 'rgb(var(--mdui-color-primary-container))',
+            background: translucent
+                ? 'rgba(var(--mdui-color-primary-container), 0.82)'
+                : 'rgb(var(--mdui-color-primary-container))',
             color: 'rgb(var(--mdui-color-on-primary-container))',
             boxShadow: 'var(--mdui-shadow-2)',
             fontSize: '13px',

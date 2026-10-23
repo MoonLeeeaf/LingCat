@@ -19,6 +19,8 @@ import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { MeetingBanner } from './MeetingBanner.tsx'
+import { useChatBackground } from './useChatBackground.ts'
+import ChatBackground from './ChatBackground.tsx'
 import RemarksCache from '../../RemarksCache.ts'
 import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
 
@@ -30,6 +32,7 @@ export function ChatFragment() {
     const [chat, setChat] = React.useState<IChat>()
     const [editingMessage, setEditingMessage] = React.useState<IMessage | null>(null)
     const messageInputRef = React.useRef<MessageInputHandle>(null)
+    const chatBackgroundUrl = useChatBackground(chatId)
 
     const reloadChat = React.useCallback(async () => {
         const client = ClientManager.getActiveClient()
@@ -152,13 +155,32 @@ export function ChatFragment() {
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <MeetingBanner chatId={chatId} />
-                        <MessageList
-                            chatId={chatId}
-                            isMember={true}
-                            onStartEdit={setEditingMessage}
-                            onInsertText={insertIntoInput}
-                        />
+                        <div style={{
+                            flex: 1,
+                            minHeight: 0,
+                            position: 'relative',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}>
+                            {chatBackgroundUrl && <ChatBackground url={chatBackgroundUrl} />}
+                            <div style={{
+                                position: 'relative',
+                                zIndex: 1,
+                                flex: 1,
+                                minHeight: 0,
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}>
+                                <MeetingBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
+                                <MessageList
+                                    chatId={chatId}
+                                    isMember={true}
+                                    onStartEdit={setEditingMessage}
+                                    onInsertText={insertIntoInput}
+                                />
+                            </div>
+                        </div>
                         <MessageInput
                             ref={messageInputRef}
                             chatId={chatId}
