@@ -6,6 +6,7 @@ import { useChatMessages } from './useChatMessages.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import ChatMessage from './ChatMessage.tsx'
 import MessageContainer from './MessageContainer.tsx'
+import { useChatBackground } from './useChatBackground.ts'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
 import ProfileCache from '../../ProfileCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -68,6 +69,7 @@ export function MessageList({
     onInsertText,
 }: MessageListProps) {
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
+    const backgroundUrl = useChatBackground(chatId)
     const isAtBottomRef = React.useRef(true)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
@@ -277,12 +279,31 @@ export function MessageList({
     if (!isMember) return null
 
     return (
-        <MessageContainer style={{ flex: 1, minHeight: 0 }}>
+        <MessageContainer style={{ flex: 1, minHeight: 0, position: 'relative', overflow: 'hidden' }}>
+            {backgroundUrl && (
+                <>
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundImage: `url(${JSON.stringify(backgroundUrl)})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        pointerEvents: 'none',
+                    }} />
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(var(--mdui-color-surface), 0.55)',
+                        pointerEvents: 'none',
+                    }} />
+                </>
+            )}
             {sortedIds.length > 0 && (
                 <Virtuoso
                     ref={virtuosoRef}
                     key={chatId}
-                    style={{ overflowY: 'auto', height: '100%' }}
+                    style={{ overflowY: 'auto', height: '100%', position: 'relative', zIndex: 1 }}
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}

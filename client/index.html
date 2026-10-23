@@ -38,6 +38,35 @@
         height: 100%;
         width: 100%;
       }
+
+      /* 统一滚动条 (跟随 mdui 主题色) */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(var(--mdui-color-outline), 0.38);
+        border-radius: 999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(var(--mdui-color-outline), 0.58);
+      }
+      ::-webkit-scrollbar-thumb:active {
+        background-color: rgba(var(--mdui-color-outline), 0.72);
+      }
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+      /* Firefox: 仅在其上使用标准属性, 避免覆盖 WebKit 自定义样式 */
+      @supports (-moz-appearance: none) {
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(var(--mdui-color-outline), 0.38) transparent;
+        }
+      }
     </style>
   </head>
   <body id="app"></body>

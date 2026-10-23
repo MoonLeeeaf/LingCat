@@ -10,6 +10,7 @@ import tipError from '../tipError.ts'
 import ProfileCache from '../../ProfileCache.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { cropImageToSquare } from '../../lib/imageUtils.ts'
+import { getChatBackground, setChatBackground, deleteChatBackground, emitChatBackgroundChange } from '../../lib/chatBackground.ts'
 
 interface ChatSettingsDialogProps {
     ref?: React.RefObject<Dialog | undefined>
@@ -21,12 +22,14 @@ export default function ChatSettingsDialog({ ref, chatId, onClose }: ChatSetting
     ref = ref || React.useRef<Dialog | undefined>(undefined)
 
     const uploadChatAvatarRef = React.useRef<HTMLInputElement>(null)
+    const backgroundInputRef = React.useRef<HTMLInputElement>(null)
     const tabsRef = React.useRef<Tabs>(null)
 
     const [loading, setLoading] = React.useState(true)
     const [profile, setProfile] = React.useState<IChat>()
     const [localSettings, setLocalSettings] = React.useState<IChatSettings>({} as any)
     const [isSaving, setIsSaving] = React.useState(false)
+    const [hasBackground, setHasBackground] = React.useState(false)
 
     React.useEffect(() => {
         let cancelled = false
@@ -195,6 +198,48 @@ export default function ChatSettingsDialog({ ref, chatId, onClose }: ChatSetting
         }, 10)
     }
 
+    // 本地对话背景
+    React.useEffect(() => {
+        let cancelled = false
+        getChatBackground(chatId)
+            .then((b) => { if (!cancelled) setHasBackground(!!b) })
+            .catch(() => { })
+        return () => { cancelled = true }
+    }, [chatId])
+
+    const handleBackgroundPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        e.target.value = ''
+        if (!file) return
+        if (!file.type.startsWith('image/')) {
+            showSnackbar({ message: '请选择图片文件' })
+            return
+        }
+        if (file.size > 20 * 1024 * 1024) {
+            showSnackbar({ message: '图片不能超过 20MB' })
+            return
+        }
+        try {
+            await setChatBackground(chatId, file)
+            setHasBackground(true)
+            emitChatBackgroundChange(chatId)
+            showSnackbar({ message: '已设置对话背景' })
+        } catch (err) {
+            tipError(err, '设置背景失败')
+        }
+    }
+
+    const clearBackground = async () => {
+        try {
+            await deleteChatBackground(chatId)
+            setHasBackground(false)
+            emitChatBackgroundChange(chatId)
+            showSnackbar({ message: '已清除对话背景' })
+        } catch (err) {
+            tipError(err, '清除背景失败')
+        }
+    }
+
     if (loading) {
         return <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
     }
@@ -281,9 +326,29 @@ export default function ChatSettingsDialog({ ref, chatId, onClose }: ChatSetting
                         </mdui-list>
                     </mdui-tab-panel>
                 </mdui-tabs>
-            ) : (
-                <span slot="description">暂无可以设定的内容</span>
-            )}
+            ) : null}
+
+            <input
+                accept="image/*"
+                type="file"
+                ref={backgroundInputRef}
+                style={{ display: 'none' }}
+                onChange={handleBackgroundPick}
+            />
+            <mdui-list>
+                <mdui-list-item
+                    icon="wallpaper"
+                    rounded
+                    onClick={() => backgroundInputRef.current?.click()}
+                >
+                    {hasBackground ? '更换对话背景' : '设置对话背景'}
+                </mdui-list-item>
+                {hasBackground && (
+                    <mdui-list-item icon="delete" rounded onClick={clearBackground}>
+                        清除对话背景
+                    </mdui-list-item>
+                )}
+            </mdui-list>
         </mdui-dialog>
     )
 }
