@@ -204,17 +204,18 @@ export function MessageList({
         return (
             <React.Fragment key={seq}>
                 {timeInfo && (
-                    <mdui-tooltip content={timeInfo.full}>
-                        <div style={{
+                    <div
+                        title={timeInfo.full}
+                        style={{
                             fontSize: '87%',
                             marginTop: '13px',
                             marginBottom: '10px',
                             textAlign: 'center',
                             opacity: 0.6,
-                        }}>
-                            {timeInfo.short}
-                        </div>
-                    </mdui-tooltip>
+                        }}
+                    >
+                        {timeInfo.short}
+                    </div>
                 )}
                 <ChatMessage
                     key={seq}

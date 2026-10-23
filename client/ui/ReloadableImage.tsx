@@ -27,11 +27,9 @@ export default function ReloadableImage({ src, alt, ...props }: { src: string, a
                 paddingTop: '7px',
                 paddingBottom: '7px',
             }}>
-                <mdui-tooltip content="点击重载图片">
-                    <mdui-button-icon icon="broken_image" onClick={() => setK(Date.now() + '')} style={{
-                        alignSelf: 'center',
-                    }}></mdui-button-icon>
-                </mdui-tooltip>
+                <mdui-button-icon icon="broken_image" title="点击重载图片" onClick={() => setK(Date.now() + '')} style={{
+                    alignSelf: 'center',
+                }}></mdui-button-icon>
             </div>}
             {...props}
         />
