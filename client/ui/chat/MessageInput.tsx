@@ -580,7 +580,9 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             position: 'absolute',
                             bottom: 'calc(100% + 4px)',
                             left: 0,
-                            right: 0,
+                            // 按列表中最长的昵称/@用户名自动收窄, 最长 340px
+                            width: 'max-content',
+                            maxWidth: 'min(340px, 100%)',
                             zIndex: 40,
                             background: 'rgb(var(--mdui-color-surface-container))',
                             borderRadius: '8px',
@@ -611,9 +613,9 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                                             src={c.m.avatar_file_hash
                                                 ? getFileUrl(c.m.avatar_file_hash, SessionEnv.myFileAccessToken)
                                                 : default_avatar}
-                                            style={{ width: '28px', height: '28px' }}
+                                            style={{ width: '28px', height: '28px', flexShrink: 0 }}
                                         />
-                                        <div style={{ minWidth: 0, flex: 1 }}>
+                                        <div style={{ minWidth: 0, flex: '0 1 auto' }}>
                                             <div style={{
                                                 fontSize: '14px',
                                                 whiteSpace: 'nowrap',

@@ -30,6 +30,26 @@ export default function ChatMembersAndAdminsDialog({
 }: ChatMembersAndAdminsDialogProps) {
     ref = ref || React.useRef<Dialog | undefined>(undefined)
     const tabsRef = React.useRef<Tabs>(null)
+    const [uniqueClass] = React.useState(() => `members-dialog-${Math.random().toString(36).slice(2, 8)}`)
+
+    // 限制弹窗宽度, 并让成员列表在固定高度内滚动
+    React.useEffect(() => {
+        const styleEl = document.createElement('style')
+        styleEl.textContent = `
+        .${uniqueClass}::part(panel) {
+            min-width: 0;
+            width: min(560px, calc(100vw - 96px));
+            max-width: 560px;
+            max-height: calc(100vh - 96px);
+        }
+        .${uniqueClass}::part(body) {
+            max-height: min(60vh, 520px);
+            overflow-y: auto;
+        }
+        `
+        document.head.appendChild(styleEl)
+        return () => { styleEl.remove() }
+    }, [uniqueClass])
 
     const [loading, setLoading] = React.useState(true)
     const [iAmOwner, setIAmOwner] = React.useState(false)
@@ -124,7 +144,7 @@ export default function ChatMembersAndAdminsDialog({
     }
 
     return (
-        <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc headline="对话成员">
+        <mdui-dialog ref={ref as any} className={uniqueClass} close-on-overlay-click close-on-esc headline="对话成员">
             <mdui-tabs value="成员" ref={tabsRef}>
                 <mdui-tab value="成员">成员</mdui-tab>
                 <mdui-tab value="管理员">管理员</mdui-tab>
