@@ -37163,6 +37163,920 @@ export const lingcat = $root.lingcat = (() => {
             return Get_All_My_E2E_Keys_Response;
         })();
 
+        methods.Get_Online_Status_Request = (function() {
+
+            /**
+             * Properties of a Get_Online_Status_Request.
+             * @typedef {Object} lingcat.methods.Get_Online_Status_Request.$Properties
+             * @property {string|null} [accessToken] Get_Online_Status_Request accessToken
+             * @property {Array.<string>|null} [userIds] Get_Online_Status_Request userIds
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Online_Status_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_Online_Status_Request
+             * @augments lingcat.methods.Get_Online_Status_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_Online_Status_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Online_Status_Request.
+             * @typedef {lingcat.methods.Get_Online_Status_Request.$Properties} lingcat.methods.Get_Online_Status_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Online_Status_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Online_Status_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_Online_Status_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Online_Status_Request = function (properties) {
+                this.userIds = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Online_Status_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @instance
+             */
+            Get_Online_Status_Request.prototype.accessToken = "";
+
+            /**
+             * Get_Online_Status_Request userIds.
+             * @member {Array.<string>} userIds
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @instance
+             */
+            Get_Online_Status_Request.prototype.userIds = $util.emptyArray;
+
+            /**
+             * Creates a new Get_Online_Status_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Online_Status_Request} Get_Online_Status_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Online_Status_Request.$Shape): lingcat.methods.Get_Online_Status_Request & lingcat.methods.Get_Online_Status_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_Online_Status_Request.$Properties): lingcat.methods.Get_Online_Status_Request;
+             * }}
+             */
+            Get_Online_Status_Request.create = function(properties) {
+                return new Get_Online_Status_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Online_Status_Request message. Does not implicitly {@link lingcat.methods.Get_Online_Status_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Request.$Properties} message Get_Online_Status_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Online_Status_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.userIds != null && message.userIds.length)
+                    for (let i = 0; i < message.userIds.length; ++i)
+                        writer.uint32(/* id 2, wireType 2 =*/18).string(message.userIds[i]);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Online_Status_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_Online_Status_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Request.$Properties} message Get_Online_Status_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Online_Status_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Online_Status_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Online_Status_Request & lingcat.methods.Get_Online_Status_Request.$Shape} Get_Online_Status_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Online_Status_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_Online_Status_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.userIds && message.userIds.length))
+                                message.userIds = [];
+                            message.userIds.push(reader.stringVerify());
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Online_Status_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Online_Status_Request & lingcat.methods.Get_Online_Status_Request.$Shape} Get_Online_Status_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Online_Status_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_Online_Status_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Online_Status_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.userIds != null && $Object.hasOwnProperty.call(message, "userIds")) {
+                    if (!$Array.isArray(message.userIds))
+                        return "userIds: array expected";
+                    for (let i = 0; i < message.userIds.length; ++i)
+                        if (!$util.isString(message.userIds[i]))
+                            return "userIds: string[] expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Online_Status_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Online_Status_Request} Get_Online_Status_Request
+             */
+            Get_Online_Status_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Online_Status_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Online_Status_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Online_Status_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.userIds) {
+                    if (!$Array.isArray(object.userIds))
+                        throw $TypeError(".lingcat.methods.Get_Online_Status_Request.userIds: array expected");
+                    message.userIds = $Array(object.userIds.length);
+                    for (let i = 0; i < object.userIds.length; ++i)
+                        message.userIds[i] = $String(object.userIds[i]);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Online_Status_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Request} message Get_Online_Status_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Online_Status_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.userIds = [];
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.userIds && message.userIds.length) {
+                    object.userIds = $Array(message.userIds.length);
+                    for (let j = 0; j < message.userIds.length; ++j)
+                        object.userIds[j] = message.userIds[j];
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_Online_Status_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Online_Status_Request.prototype.toJSON = function() {
+                return Get_Online_Status_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Online_Status_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Online_Status_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Online_Status_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Online_Status_Request";
+            };
+
+            return Get_Online_Status_Request;
+        })();
+
+        methods.UserOnlineStatus = (function() {
+
+            /**
+             * Properties of a UserOnlineStatus.
+             * @typedef {Object} lingcat.methods.UserOnlineStatus.$Properties
+             * @property {string|null} [userId] UserOnlineStatus userId
+             * @property {boolean|null} [online] UserOnlineStatus online
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a UserOnlineStatus.
+             * @memberof lingcat.methods
+             * @interface IUserOnlineStatus
+             * @augments lingcat.methods.UserOnlineStatus.$Properties
+             * @deprecated Use lingcat.methods.UserOnlineStatus.$Properties instead.
+             */
+
+            /**
+             * Shape of a UserOnlineStatus.
+             * @typedef {lingcat.methods.UserOnlineStatus.$Properties} lingcat.methods.UserOnlineStatus.$Shape
+             */
+
+            /**
+             * Constructs a new UserOnlineStatus.
+             * @memberof lingcat.methods
+             * @classdesc Represents a UserOnlineStatus.
+             * @constructor
+             * @param {lingcat.methods.UserOnlineStatus.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const UserOnlineStatus = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * UserOnlineStatus userId.
+             * @member {string} userId
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @instance
+             */
+            UserOnlineStatus.prototype.userId = "";
+
+            /**
+             * UserOnlineStatus online.
+             * @member {boolean} online
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @instance
+             */
+            UserOnlineStatus.prototype.online = false;
+
+            /**
+             * Creates a new UserOnlineStatus instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {lingcat.methods.UserOnlineStatus.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.UserOnlineStatus} UserOnlineStatus instance
+             * @type {{
+             *   (properties: lingcat.methods.UserOnlineStatus.$Shape): lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape;
+             *   (properties?: lingcat.methods.UserOnlineStatus.$Properties): lingcat.methods.UserOnlineStatus;
+             * }}
+             */
+            UserOnlineStatus.create = function(properties) {
+                return new UserOnlineStatus(properties);
+            };
+
+            /**
+             * Encodes the specified UserOnlineStatus message. Does not implicitly {@link lingcat.methods.UserOnlineStatus.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {lingcat.methods.UserOnlineStatus.$Properties} message UserOnlineStatus message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            UserOnlineStatus.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId") && message.userId !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+                if (message.online != null && $Object.hasOwnProperty.call(message, "online") && message.online !== false)
+                    writer.uint32(/* id 2, wireType 0 =*/16).bool(message.online);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified UserOnlineStatus message, length delimited. Does not implicitly {@link lingcat.methods.UserOnlineStatus.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {lingcat.methods.UserOnlineStatus.$Properties} message UserOnlineStatus message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            UserOnlineStatus.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a UserOnlineStatus message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape} UserOnlineStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            UserOnlineStatus.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.UserOnlineStatus();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.userId = value;
+                            else
+                                delete message.userId;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.bool())
+                                message.online = value;
+                            else
+                                delete message.online;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a UserOnlineStatus message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape} UserOnlineStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            UserOnlineStatus.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a UserOnlineStatus message.
+             * @function verify
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            UserOnlineStatus.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                if (message.online != null && $Object.hasOwnProperty.call(message, "online"))
+                    if (typeof message.online !== "boolean")
+                        return "online: boolean expected";
+                return null;
+            };
+
+            /**
+             * Creates a UserOnlineStatus message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.UserOnlineStatus} UserOnlineStatus
+             */
+            UserOnlineStatus.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.UserOnlineStatus)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.UserOnlineStatus: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.UserOnlineStatus();
+                if (object.userId != null)
+                    if (typeof object.userId !== "string" || object.userId.length)
+                        message.userId = $String(object.userId);
+                if (object.online != null)
+                    if (object.online)
+                        message.online = $Boolean(object.online);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a UserOnlineStatus message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {lingcat.methods.UserOnlineStatus} message UserOnlineStatus
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            UserOnlineStatus.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.userId = "";
+                    object.online = false;
+                }
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                if (message.online != null && $Object.hasOwnProperty.call(message, "online"))
+                    object.online = message.online;
+                return object;
+            };
+
+            /**
+             * Converts this UserOnlineStatus to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            UserOnlineStatus.prototype.toJSON = function() {
+                return UserOnlineStatus.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for UserOnlineStatus
+             * @function getTypeUrl
+             * @memberof lingcat.methods.UserOnlineStatus
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            UserOnlineStatus.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.UserOnlineStatus";
+            };
+
+            return UserOnlineStatus;
+        })();
+
+        methods.Get_Online_Status_Response = (function() {
+
+            /**
+             * Properties of a Get_Online_Status_Response.
+             * @typedef {Object} lingcat.methods.Get_Online_Status_Response.$Properties
+             * @property {Array.<lingcat.methods.UserOnlineStatus.$Properties>|null} [statuses] Get_Online_Status_Response statuses
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_Online_Status_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_Online_Status_Response
+             * @augments lingcat.methods.Get_Online_Status_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_Online_Status_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_Online_Status_Response.
+             * @typedef {lingcat.methods.Get_Online_Status_Response.$Properties} lingcat.methods.Get_Online_Status_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_Online_Status_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_Online_Status_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_Online_Status_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_Online_Status_Response = function (properties) {
+                this.statuses = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_Online_Status_Response statuses.
+             * @member {Array.<lingcat.methods.UserOnlineStatus.$Properties>} statuses
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @instance
+             */
+            Get_Online_Status_Response.prototype.statuses = $util.emptyArray;
+
+            /**
+             * Creates a new Get_Online_Status_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_Online_Status_Response} Get_Online_Status_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_Online_Status_Response.$Shape): lingcat.methods.Get_Online_Status_Response & lingcat.methods.Get_Online_Status_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_Online_Status_Response.$Properties): lingcat.methods.Get_Online_Status_Response;
+             * }}
+             */
+            Get_Online_Status_Response.create = function(properties) {
+                return new Get_Online_Status_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_Online_Status_Response message. Does not implicitly {@link lingcat.methods.Get_Online_Status_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Response.$Properties} message Get_Online_Status_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Online_Status_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.statuses != null && message.statuses.length)
+                    for (let i = 0; i < message.statuses.length; ++i)
+                        $root.lingcat.methods.UserOnlineStatus.encode(message.statuses[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_Online_Status_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_Online_Status_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Response.$Properties} message Get_Online_Status_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_Online_Status_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_Online_Status_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_Online_Status_Response & lingcat.methods.Get_Online_Status_Response.$Shape} Get_Online_Status_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Online_Status_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_Online_Status_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.statuses && message.statuses.length))
+                                message.statuses = [];
+                            message.statuses.push($root.lingcat.methods.UserOnlineStatus.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_Online_Status_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_Online_Status_Response & lingcat.methods.Get_Online_Status_Response.$Shape} Get_Online_Status_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_Online_Status_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_Online_Status_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_Online_Status_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.statuses != null && $Object.hasOwnProperty.call(message, "statuses")) {
+                    if (!$Array.isArray(message.statuses))
+                        return "statuses: array expected";
+                    for (let i = 0; i < message.statuses.length; ++i) {
+                        let error = $root.lingcat.methods.UserOnlineStatus.verify(message.statuses[i], _depth + 1);
+                        if (error)
+                            return "statuses." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_Online_Status_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_Online_Status_Response} Get_Online_Status_Response
+             */
+            Get_Online_Status_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_Online_Status_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_Online_Status_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_Online_Status_Response();
+                if (object.statuses) {
+                    if (!$Array.isArray(object.statuses))
+                        throw $TypeError(".lingcat.methods.Get_Online_Status_Response.statuses: array expected");
+                    message.statuses = $Array(object.statuses.length);
+                    for (let i = 0; i < object.statuses.length; ++i) {
+                        if (!$util.isObject(object.statuses[i]))
+                            throw $TypeError(".lingcat.methods.Get_Online_Status_Response.statuses: object expected");
+                        message.statuses[i] = $root.lingcat.methods.UserOnlineStatus.fromObject(object.statuses[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_Online_Status_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {lingcat.methods.Get_Online_Status_Response} message Get_Online_Status_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_Online_Status_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.statuses = [];
+                if (message.statuses && message.statuses.length) {
+                    object.statuses = $Array(message.statuses.length);
+                    for (let j = 0; j < message.statuses.length; ++j)
+                        object.statuses[j] = $root.lingcat.methods.UserOnlineStatus.toObject(message.statuses[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_Online_Status_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_Online_Status_Response.prototype.toJSON = function() {
+                return Get_Online_Status_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_Online_Status_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_Online_Status_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_Online_Status_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_Online_Status_Response";
+            };
+
+            return Get_Online_Status_Response;
+        })();
+
         return methods;
     })();
 

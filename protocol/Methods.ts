@@ -97,6 +97,9 @@ export default class Methods {
     static Get_All_My_E2E_Keys_Request = 0x9c
     static Get_All_My_E2E_Keys_Response = 0x9d
 
+    static Get_Online_Status_Request = 0x9e
+    static Get_Online_Status_Response = 0x9f
+
     static Get_Meeting_Participants_Request = 0x8a
     static Get_Meeting_Participants_Response = 0x8b
 

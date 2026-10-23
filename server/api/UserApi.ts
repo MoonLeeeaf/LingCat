@@ -279,6 +279,36 @@ export default class UserApi {
                 }))
                 break
             }
+            /**
+             * ===============================
+             *         查询用户在线状态
+             * ===============================
+             */
+            case Methods.Get_Online_Status_Request: {
+                const data = LingCatProto.methods.Get_Online_Status_Request.decode(mPackage.data)
+
+                // 必须已登录
+                try {
+                    await TokenManager.verifyAccessToken(data.accessToken)
+                } catch {
+                    return sendError(sendPackage, mPackage.method_id, 'Token is invalid', Code.UnAuthorized)
+                }
+
+                // 去重并限制单次查询数量
+                const ids = Array.from(new Set(data.userIds ?? [])).slice(0, 500)
+                const statuses = ids.map((id) => ({
+                    userId: id,
+                    // clients_emiter[user_id] 存在且至少有一个已授权会话即在线
+                    online: !!clients_emiter[id] && Object.keys(clients_emiter[id]).length > 0,
+                }))
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Get_Online_Status_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Get_Online_Status_Response.encode({ statuses }).finish(),
+                }))
+                break
+            }
             default: {
                 return false
             }

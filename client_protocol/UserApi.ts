@@ -286,4 +286,35 @@ export default class UserApi {
             remark: r.remark!,
         })) as IUserRemark[]
     }
+
+    /**
+     * 批量查询用户在线状态 (是否存在已授权且未断开的客户端)
+     * @returns userId -> online
+     */
+    static async getOnlineStatus(client: LingCatClient, {
+        access_token,
+        user_ids,
+        timeout,
+    }: {
+        access_token: string
+        user_ids: string[]
+        timeout?: number
+    }): Promise<Record<string, boolean>> {
+        const decoded = decodeOrThrow<LingCatProto.methods.Get_Online_Status_Response>(
+            LingCatProto.methods.Get_Online_Status_Response,
+            (await client.invoke({
+                method_id: Methods.Get_Online_Status_Request,
+                data: LingCatProto.methods.Get_Online_Status_Request.encode({
+                    accessToken: access_token,
+                    userIds: user_ids,
+                }).finish(),
+                timeout,
+            })).data,
+        )
+        const out: Record<string, boolean> = {}
+        for (const s of decoded.statuses || []) {
+            if (s.userId) out[s.userId] = !!s.online
+        }
+        return out
+    }
 }

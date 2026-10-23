@@ -569,5 +569,27 @@ message Get_All_My_E2E_Keys_Request {
 
 message Get_All_My_E2E_Keys_Response {
     string my_user_id = 1;
-    repeated lingcat.classes.IUserE2EKey keys = 2;
+    repeated IUserE2EKey keys = 2;
+}
+
+/**
+ * =======================================================
+ *                 用户在线状态
+ * =======================================================
+ */
+
+// 批量查询用户是否在线 (是否存在已授权且未断开的客户端)
+message Get_Online_Status_Request {
+    string access_token = 1;
+    repeated string user_ids = 2;
+}
+
+message UserOnlineStatus {
+    string user_id = 1;
+    bool online = 2;
+}
+
+// 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
+message Get_Online_Status_Response {
+    repeated UserOnlineStatus statuses = 1;
 }
