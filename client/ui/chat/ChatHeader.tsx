@@ -44,7 +44,7 @@ export function ChatHeader({
             : 'var(--mdui-color-outline)'
 
     return (
-        <mdui-top-app-bar scroll-target='#thishumandoesnotexists' style={{ position: 'relative' }}>
+        <mdui-top-app-bar scroll-target='#thishumandoesnotexists' style={{ position: 'relative', backgroundColor: 'inherit' }}>
             {isMobile ? (
                 <mdui-button-icon
                     icon="arrow_back"

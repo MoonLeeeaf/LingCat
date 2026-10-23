@@ -133,82 +133,81 @@ export function ChatFragment() {
     const title = userRemark || chat?.title || '加载中...'
 
     const content = (
-        <>
-            <ChatHeader
-                title={chat?.title ?? '加载中...'}
-                isMobile={isMobile}
-                drawerOpen={drawerOpen}
-                onToggleDrawer={toggleDrawer}
-                isE2E={isE2EActive}
-                e2eStatus={verifyStatus}
-                onOpenMembers={() => ChatMembersAndAdminsDialog.show(chatId)}
-                onOpenSettings={() => ChatSettingsDialog.show(chatId)}
-                onOpenInfo={() => ChatProfileDialog.show(chatId)}
-                onCall={chat?.is_member ? onCall : undefined}
-            />
+        <div style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            overflow: 'hidden',
+        }}>
+            {chatBackgroundUrl && <ChatBackground url={chatBackgroundUrl} />}
 
-            {chat ? (
-                chat.is_member ? (
-                    <div style={{
-                        flex: 1,
-                        minHeight: 0,
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
+            <div style={{
+                position: 'relative',
+                zIndex: 1,
+                flex: 1,
+                minHeight: 0,
+                display: 'flex',
+                flexDirection: 'column',
+            }}>
+                <ChatHeader
+                    title={chat?.title ?? '加载中...'}
+                    isMobile={isMobile}
+                    drawerOpen={drawerOpen}
+                    onToggleDrawer={toggleDrawer}
+                    isE2E={isE2EActive}
+                    e2eStatus={verifyStatus}
+                    onOpenMembers={() => ChatMembersAndAdminsDialog.show(chatId)}
+                    onOpenSettings={() => ChatSettingsDialog.show(chatId)}
+                    onOpenInfo={() => ChatProfileDialog.show(chatId)}
+                    onCall={chat?.is_member ? onCall : undefined}
+                />
+
+                {chat ? (
+                    chat.is_member ? (
                         <div style={{
                             flex: 1,
                             minHeight: 0,
-                            position: 'relative',
-                            overflow: 'hidden',
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                            {chatBackgroundUrl && <ChatBackground url={chatBackgroundUrl} />}
-                            <div style={{
-                                position: 'relative',
-                                zIndex: 1,
-                                flex: 1,
-                                minHeight: 0,
-                                display: 'flex',
-                                flexDirection: 'column',
-                            }}>
-                                <MeetingBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
-                                <MessageList
-                                    chatId={chatId}
-                                    isMember={true}
-                                    onStartEdit={setEditingMessage}
-                                    onInsertText={insertIntoInput}
-                                />
-                            </div>
+                            <MeetingBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
+                            <MessageList
+                                chatId={chatId}
+                                isMember={true}
+                                onStartEdit={setEditingMessage}
+                                onInsertText={insertIntoInput}
+                            />
+                            <MessageInput
+                                ref={messageInputRef}
+                                chatId={chatId}
+                                chatTitle={chat.title ?? ''}
+                                peerUserId={chat.type === 'private' ? chat.peer_user_id : undefined}
+                                enableMentions={chat.type === 'group'}
+                                editingMessage={editingMessage}
+                                onEditCancel={() => setEditingMessage(null)}
+                                onEditDone={() => setEditingMessage(null)}
+                            />
                         </div>
-                        <MessageInput
-                            ref={messageInputRef}
-                            chatId={chatId}
-                            chatTitle={chat.title ?? ''}
-                            peerUserId={chat.type === 'private' ? chat.peer_user_id : undefined}
-                            enableMentions={chat.type === 'group'}
-                            editingMessage={editingMessage}
-                            onEditCancel={() => setEditingMessage(null)}
-                            onEditDone={() => setEditingMessage(null)}
+                    ) : (
+                        <JoinChatPrompt
+                            chat={chat}
+                            onJoined={() => reloadChat()}
                         />
-                    </div>
+                    )
                 ) : (
-                    <JoinChatPrompt
-                        chat={chat}
-                        onJoined={() => reloadChat()}
-                    />
-                )
-            ) : (
-                <div style={{
-                    flex: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                    <mdui-circular-progress />
-                </div>
-            )}
-        </>
+                    <div style={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <mdui-circular-progress />
+                    </div>
+                )}
+            </div>
+        </div>
     )
 
     if (isMobile) {

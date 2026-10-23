@@ -78,6 +78,8 @@ export function MeetingBanner({ chatId, translucent }: { chatId: string, translu
             boxShadow: 'var(--mdui-shadow-2)',
             fontSize: '13px',
             flexShrink: 0,
+            marginLeft: '10px',
+            marginRight: '10px',
         }}>
             <span style={{ opacity: 0.9 }}>会议进行中</span>
 
