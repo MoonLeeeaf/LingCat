@@ -132,3 +132,8 @@ message IUserE2EKey {
     string priv_nonce = 5;
     int32 key_version = 6;
 }
+
+message IUserOnlineStatus {
+    string user_id = 1;
+    bool online = 2;
+}

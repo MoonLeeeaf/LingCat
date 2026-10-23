@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from "protobufjs/minimal.js";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -1634,6 +1634,129 @@ export namespace lingcat {
 
             /** Shape of a IUserE2EKey. */
             type $Shape = lingcat.classes.IUserE2EKey.$Properties;
+        }
+
+        /**
+         * Properties of a IUserOnlineStatus.
+         * @deprecated Use lingcat.classes.IUserOnlineStatus.$Properties instead.
+         */
+        interface IIUserOnlineStatus extends lingcat.classes.IUserOnlineStatus.$Properties {
+        }
+
+        /** Represents a IUserOnlineStatus. */
+        class IUserOnlineStatus {
+
+            /**
+             * Constructs a new IUserOnlineStatus.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IUserOnlineStatus.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IUserOnlineStatus userId. */
+            userId: string;
+
+            /** IUserOnlineStatus online. */
+            online: boolean;
+
+            /**
+             * Creates a new IUserOnlineStatus instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IUserOnlineStatus instance
+             */
+            static create(properties: lingcat.classes.IUserOnlineStatus.$Shape): lingcat.classes.IUserOnlineStatus & lingcat.classes.IUserOnlineStatus.$Shape;
+            static create(properties?: lingcat.classes.IUserOnlineStatus.$Properties): lingcat.classes.IUserOnlineStatus;
+
+            /**
+             * Encodes the specified IUserOnlineStatus message. Does not implicitly {@link lingcat.classes.IUserOnlineStatus.verify|verify} messages.
+             * @param message IUserOnlineStatus message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IUserOnlineStatus.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IUserOnlineStatus message, length delimited. Does not implicitly {@link lingcat.classes.IUserOnlineStatus.verify|verify} messages.
+             * @param message IUserOnlineStatus message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IUserOnlineStatus.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IUserOnlineStatus message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IUserOnlineStatus & lingcat.classes.IUserOnlineStatus.$Shape} IUserOnlineStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IUserOnlineStatus & lingcat.classes.IUserOnlineStatus.$Shape;
+
+            /**
+             * Decodes a IUserOnlineStatus message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IUserOnlineStatus & lingcat.classes.IUserOnlineStatus.$Shape} IUserOnlineStatus
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IUserOnlineStatus & lingcat.classes.IUserOnlineStatus.$Shape;
+
+            /**
+             * Verifies a IUserOnlineStatus message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IUserOnlineStatus message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IUserOnlineStatus
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IUserOnlineStatus;
+
+            /**
+             * Creates a plain object from a IUserOnlineStatus message. Also converts values to other types if specified.
+             * @param message IUserOnlineStatus
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IUserOnlineStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IUserOnlineStatus to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IUserOnlineStatus
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IUserOnlineStatus {
+
+            /** Properties of a IUserOnlineStatus. */
+            interface $Properties {
+
+                /** IUserOnlineStatus userId */
+                userId?: (string|null);
+
+                /** IUserOnlineStatus online */
+                online?: (boolean|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IUserOnlineStatus. */
+            type $Shape = lingcat.classes.IUserOnlineStatus.$Properties;
         }
     }
 
@@ -14643,129 +14766,6 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a UserOnlineStatus.
-         * @deprecated Use lingcat.methods.UserOnlineStatus.$Properties instead.
-         */
-        interface IUserOnlineStatus extends lingcat.methods.UserOnlineStatus.$Properties {
-        }
-
-        /** Represents a UserOnlineStatus. */
-        class UserOnlineStatus {
-
-            /**
-             * Constructs a new UserOnlineStatus.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: lingcat.methods.UserOnlineStatus.$Properties);
-
-            /** Unknown fields preserved while decoding when enabled */
-            $unknowns?: Uint8Array[];
-
-            /** UserOnlineStatus userId. */
-            userId: string;
-
-            /** UserOnlineStatus online. */
-            online: boolean;
-
-            /**
-             * Creates a new UserOnlineStatus instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns UserOnlineStatus instance
-             */
-            static create(properties: lingcat.methods.UserOnlineStatus.$Shape): lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape;
-            static create(properties?: lingcat.methods.UserOnlineStatus.$Properties): lingcat.methods.UserOnlineStatus;
-
-            /**
-             * Encodes the specified UserOnlineStatus message. Does not implicitly {@link lingcat.methods.UserOnlineStatus.verify|verify} messages.
-             * @param message UserOnlineStatus message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encode(message: lingcat.methods.UserOnlineStatus.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified UserOnlineStatus message, length delimited. Does not implicitly {@link lingcat.methods.UserOnlineStatus.verify|verify} messages.
-             * @param message UserOnlineStatus message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encodeDelimited(message: lingcat.methods.UserOnlineStatus.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a UserOnlineStatus message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape} UserOnlineStatus
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape;
-
-            /**
-             * Decodes a UserOnlineStatus message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape} UserOnlineStatus
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.UserOnlineStatus & lingcat.methods.UserOnlineStatus.$Shape;
-
-            /**
-             * Verifies a UserOnlineStatus message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a UserOnlineStatus message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns UserOnlineStatus
-             */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.UserOnlineStatus;
-
-            /**
-             * Creates a plain object from a UserOnlineStatus message. Also converts values to other types if specified.
-             * @param message UserOnlineStatus
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            static toObject(message: lingcat.methods.UserOnlineStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this UserOnlineStatus to JSON.
-             * @returns JSON object
-             */
-            toJSON(): { [k: string]: any };
-
-            /**
-             * Gets the type url for UserOnlineStatus
-             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-             * @returns The type url
-             */
-            static getTypeUrl(prefix?: string): string;
-        }
-
-        namespace UserOnlineStatus {
-
-            /** Properties of a UserOnlineStatus. */
-            interface $Properties {
-
-                /** UserOnlineStatus userId */
-                userId?: (string|null);
-
-                /** UserOnlineStatus online */
-                online?: (boolean|null);
-
-                /** Unknown fields preserved while decoding when enabled */
-                $unknowns?: Uint8Array[];
-            }
-
-            /** Shape of a UserOnlineStatus. */
-            type $Shape = lingcat.methods.UserOnlineStatus.$Properties;
-        }
-
-        /**
          * Properties of a Get_Online_Status_Response.
          * @deprecated Use lingcat.methods.Get_Online_Status_Response.$Properties instead.
          */
@@ -14785,7 +14785,7 @@ export namespace lingcat {
             $unknowns?: Uint8Array[];
 
             /** Get_Online_Status_Response statuses. */
-            statuses: lingcat.methods.UserOnlineStatus.$Properties[];
+            statuses: lingcat.classes.IUserOnlineStatus.$Properties[];
 
             /**
              * Creates a new Get_Online_Status_Response instance using the specified properties.
@@ -14872,7 +14872,7 @@ export namespace lingcat {
             interface $Properties {
 
                 /** Get_Online_Status_Response statuses */
-                statuses?: (lingcat.methods.UserOnlineStatus.$Properties[]|null);
+                statuses?: (lingcat.classes.IUserOnlineStatus.$Properties[]|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

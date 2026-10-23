@@ -584,12 +584,7 @@ message Get_Online_Status_Request {
     repeated string user_ids = 2;
 }
 
-message UserOnlineStatus {
-    string user_id = 1;
-    bool online = 2;
-}
-
 // 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
 message Get_Online_Status_Response {
-    repeated UserOnlineStatus statuses = 1;
+    repeated lingcat.classes.IUserOnlineStatus statuses = 1;
 }
