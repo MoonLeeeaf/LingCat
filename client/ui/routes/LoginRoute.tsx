@@ -25,7 +25,7 @@ function LoginPage() {
         : undefined
 
     return (
-        <DialogForRouter open onCloseRequest={() => navigate({ to: '..' })}>
+        <DialogForRouter open closeOnOverlayClick={false} onCloseRequest={() => navigate({ to: '..' })}>
             <span slot="headline">{mode === 'login' ? '登录' : '注册'}</span>
             <LoginOrRegisterForm
                 serverLabel={serverLabel}
