@@ -15,6 +15,9 @@ import { ChatApi } from 'lingcat-client-protocol'
 import ClientManager from '../../ClientManager.ts'
 
 /** 判断是否需要在 msg 上方显示时间分隔条 */
+// 距底部多少像素内才跟随新消息 (太大导致小幅上滑也被拉回底部)
+const NEAR_BOTTOM_PX = 24
+
 const ListFooter = () => <div style={{ height: '12px', flexShrink: 0 }} />
 
 function shouldShowTime(msg: IMessage, prevMsg?: IMessage): boolean {
@@ -132,7 +135,7 @@ export function MessageList({
         if (!sc) return
         const onScroll = () => {
             const distance = sc.scrollHeight - sc.clientHeight - sc.scrollTop
-            isNearBottomRef.current = distance < 160
+            isNearBottomRef.current = distance < NEAR_BOTTOM_PX
             isAtBottomRef.current = distance < 3
         }
         sc.addEventListener('scroll', onScroll, { passive: true })
