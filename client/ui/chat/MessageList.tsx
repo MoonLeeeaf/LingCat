@@ -6,7 +6,7 @@ import { useChatMessages } from './useChatMessages.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import ChatMessage from './ChatMessage.tsx'
 import MessageContainer from './MessageContainer.tsx'
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import MessageHighlight from './MessageHighlight.tsx'
 import CopyMessageMenuItem from './CopyMessageMenuItem.tsx'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
@@ -85,16 +85,13 @@ export function MessageList({
     const returningToBottomRef = React.useRef(false)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
     const [awayFromBottom, setAwayFromBottom] = React.useState(false)
-    const [following, setFollowing] = React.useState(true)
     const [unreadCount, setUnreadCount] = React.useState(0)
-    const reduceMotion = useReducedMotion()
 
     // 切对话时重置
     React.useEffect(() => {
         setInitialScrollDone(false)
         isAtBottomRef.current = true
         followBottomRef.current = true
-        setFollowing(true)
         scrollIntentRef.current = null
         newMessageIdsRef.current = new Set()
         setAwayFromBottom(false)
@@ -174,13 +171,11 @@ export function MessageList({
             returningToBottomRef.current = false
             scrollIntentRef.current = 'up'
             followBottomRef.current = false
-            setFollowing(false)
         }
         const resumeFollow = () => {
             scrollIntentRef.current = 'down'
             if (sc.scrollHeight - sc.clientHeight - sc.scrollTop <= BOTTOM_REENABLE_PX) {
                 followBottomRef.current = true
-                setFollowing(true)
             }
         }
         const onScroll = () => {
@@ -192,7 +187,6 @@ export function MessageList({
             }
             if (scrollIntentRef.current === 'down' && distance <= BOTTOM_REENABLE_PX) {
                 followBottomRef.current = true
-                setFollowing(true)
             }
             if (distance <= BOTTOM_REENABLE_PX) returningToBottomRef.current = false
             setAwayFromBottom(!returningToBottomRef.current && (distance > BOTTOM_REENABLE_PX || (!followBottomRef.current && distance > 0)))
@@ -278,7 +272,6 @@ export function MessageList({
         if (scrollToSeqRequest == null) return
         returningToBottomRef.current = false
         followBottomRef.current = false
-        setFollowing(false)
         scrollIntentRef.current = null
         const seq = scrollToSeqRequest
         const jumpVersion = ++jumpVersionRef.current
@@ -289,7 +282,7 @@ export function MessageList({
 
         if (index !== -1) {
             useChatMessageStore.getState().highlightMessage(seq)
-            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: reduceMotion ? 'auto' : 'smooth' })
+            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: 'auto' })
             return
         }
 
@@ -347,7 +340,7 @@ export function MessageList({
                 tipError(e, '无法加载消息')
             }
         })()
-    }, [scrollToSeqRequest, chatId, reduceMotion])
+    }, [scrollToSeqRequest, chatId])
 
     // ============================================================
     //  Virtuoso 回调
@@ -487,8 +480,8 @@ export function MessageList({
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}
-                    // false 必须作为属性值传入；函数返回 false 仍会启用 Virtuoso 的尺寸补偿贴底。
-                    followOutput={following ? 'auto' : false}
+                    // 统一由 followBottomRef 控制贴底，避免 Virtuoso 延迟的尺寸补偿打断引用跳转。
+                    followOutput={false}
                     atTopThreshold={300}
                     atBottomThreshold={0}
                     atTopStateChange={atTopStateChange}
@@ -502,21 +495,21 @@ export function MessageList({
             )}
             <AnimatePresence>
                 {(awayFromBottom || unreadCount > 0) && <motion.div key="back-to-bottom"
-                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     transition={{ duration: 0.16 }} style={{ position: 'absolute', right: '16px', bottom: '16px', zIndex: 3 }}>
-                    <mdui-button icon="arrow_downward" variant="elevated"
+                    <button type="button" className="lingcat-back-to-bottom" title="回到底部"
                         aria-label={unreadCount > 0 ? `${unreadCount} 条新消息，回到底部` : '回到底部'}
                         onClick={() => {
+                            jumpVersionRef.current++
                             returningToBottomRef.current = true
                             followBottomRef.current = true
-                            setFollowing(true)
                             scrollIntentRef.current = 'down'
                             setUnreadCount(0)
                             setAwayFromBottom(false)
-                            virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior: reduceMotion ? 'auto' : 'smooth' })
+                            virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior: 'auto' })
                         }}>
-                        {unreadCount > 0 ? `${unreadCount} 条新消息` : '回到底部'}
-                    </mdui-button>
+                        <mdui-icon name="arrow_downward" aria-hidden="true" />
+                    </button>
                 </motion.div>}
             </AnimatePresence>
         </MessageContainer>

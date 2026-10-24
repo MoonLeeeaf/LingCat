@@ -108,7 +108,7 @@ export function DesktopRootLayout({
 
     return (
         <DrawerContext.Provider value={drawerCtx}>
-            <mdui-navigation-drawer open ref={drawerRef as any} close-on-overlay-click>
+            <mdui-navigation-drawer className="lingcat-desktop-sidebar" open ref={drawerRef as any} close-on-overlay-click>
                 <mdui-navigation-rail
                     ref={railRef as any}
                     contained
@@ -158,7 +158,7 @@ export function DesktopRootLayout({
                     {navBottom}
                 </mdui-navigation-rail>
 
-                <mdui-list style={{ marginLeft: 'calc(5px + 5rem)', marginRight: '5px' }}>
+                <mdui-list className="lingcat-desktop-sidebar-list" style={{ marginLeft: 'calc(12px + 5rem)', marginRight: '5px' }}>
                     {list}
                 </mdui-list>
             </mdui-navigation-drawer>
