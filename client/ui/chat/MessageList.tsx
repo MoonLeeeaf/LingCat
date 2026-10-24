@@ -93,7 +93,6 @@ export function MessageList({
             if (behavior === 'smooth') el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
             else el.scrollTop = el.scrollHeight
         }
-        virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
     }, [])
 
     // 新消息到达时，若跟随开关开启 → 贴底
