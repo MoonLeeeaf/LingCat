@@ -81,7 +81,20 @@ export function MeetingBanner({ chatId, translucent }: { chatId: string, translu
             marginLeft: '10px',
             marginRight: '10px',
         }}>
-            <span style={{ opacity: 0.9 }}>会议进行中</span>
+            <span
+                title={activeMeeting.title || '会议进行中'}
+                style={{
+                    opacity: 0.9,
+                    minWidth: 0,
+                    flexShrink: 1,
+                    maxWidth: '260px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                }}
+            >
+                {activeMeeting.title ? `会议进行中 · ${activeMeeting.title}` : '会议进行中'}
+            </span>
 
             {meetingMembers.length > 0 && (
                 <>

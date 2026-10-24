@@ -147,7 +147,7 @@ interface MeetingState {
 
 interface MeetingActions {
     joinMeeting(chatId: string, meetingId: string, chatTitle?: string): Promise<void>
-    startMeeting(chat: Pick<IChat, 'id' | 'title'>): Promise<void>
+    startMeeting(chat: Pick<IChat, 'id' | 'title'>, title?: string): Promise<void>
     leave(): void
     endMeeting(): Promise<void>
 
@@ -432,11 +432,12 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
             }
         },
 
-        startMeeting: async (chat) => {
+        startMeeting: async (chat, title) => {
+            const meetingTitle = title?.trim() || chat.title?.trim() || undefined
             set({
                 error: undefined,
                 phase: 'connecting',
-                chatTitle: chat.title ?? undefined,
+                chatTitle: meetingTitle,
             })
             try {
                 const client = ClientManager.getActiveClient()
@@ -445,7 +446,7 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 const res = await MeetingApi.startMeeting(client, {
                     access_token: accessToken(),
                     chat_id: chat.id,
-                    title: chat.title ?? undefined,
+                    title: meetingTitle,
                 })
 
                 // 立即登记，发起人马上能拿到 starterUserId
@@ -455,14 +456,14 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                         [chat.id]: {
                             meetingId: res.meeting_id,
                             room: res.room,
-                            title: chat.title ?? undefined,
+                            title: meetingTitle,
                             starterUserId: res.starter_user_id,
                             startedAt: Date.now(),
                         },
                     },
                 }))
 
-                await get().joinMeeting(chat.id, res.meeting_id, chat.title ?? undefined)
+                await get().joinMeeting(chat.id, res.meeting_id, meetingTitle)
             } catch (e: any) {
                 set({
                     phase: 'error',
