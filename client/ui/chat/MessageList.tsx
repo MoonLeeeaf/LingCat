@@ -89,15 +89,15 @@ export function MessageList({
         virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
     }, [])
 
-    // 新消息到达时，若在底部 → 滚到底
+    // 新消息到达时，若在底部附近 → 贴底
     const handleNewMessage = React.useCallback(() => {
-        if (!isAtBottomRef.current) return
+        const sc = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
+        if (!sc) return
+        const nearBottom = sc.scrollHeight - sc.clientHeight - sc.scrollTop < 160
+        if (!isAtBottomRef.current && !nearBottom) return
         requestAnimationFrame(() => {
-            virtuosoRef.current?.scrollToIndex({
-                index: 'LAST',
-                align: 'end',
-                behavior: 'smooth',
-            })
+            const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
+            if (el) el.scrollTop = el.scrollHeight
         })
     }, [])
 
