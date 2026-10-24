@@ -94,10 +94,15 @@ export function MessageList({
     // 新消息到达时，若变化前在底部附近 → 贴底
     const handleNewMessage = React.useCallback(() => {
         if (!isNearBottomRef.current) return
-        requestAnimationFrame(() => {
+        const pin = () => {
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
             if (el) el.scrollTop = el.scrollHeight
-        })
+        }
+        requestAnimationFrame(pin)
+        // 消息/图片高度可能在下一帧才稳定, 再补一次
+        window.setTimeout(() => {
+            if (isNearBottomRef.current) pin()
+        }, 120)
     }, [])
 
     const { sortedIds, firstItemIndex, loadOlder, loadNewer } = useChatMessages({
