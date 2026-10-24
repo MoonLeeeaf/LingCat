@@ -125,7 +125,7 @@ export function ChatFragment() {
                 // 发起前填写会议标题
                 const dlg = dialog({
                     headline: '发起会议',
-                    body: '<mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field>',
+                    body: '<div style="padding-top: 12px"><mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field></div>',
                     closeOnEsc: true,
                     closeOnOverlayClick: true,
                     actions: [
