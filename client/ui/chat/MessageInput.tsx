@@ -586,7 +586,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             zIndex: 40,
                             background: 'rgb(var(--mdui-color-surface-container))',
                             borderRadius: '8px',
-                            boxShadow: '0 4px 16px rgba(0,0,0,.25)',
+                            // boxShadow: '0 4px 16px rgba(0,0,0,.25)',
                             overflow: 'hidden',
                         }}>
                             <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
