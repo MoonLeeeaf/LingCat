@@ -8,6 +8,7 @@ import { useMeetingStore } from './MeetingManager.ts'
 import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts'
 import SessionEnv from '../../SessionEnv.ts'
+import { isPipSupported, togglePip, usePipActive } from '../../lib/pip.ts'
 
 // ============================================================
 //                      工具函数
@@ -128,6 +129,7 @@ export function MeetingView({
 
     const focusRef = React.useRef<HTMLDivElement>(null)
     const focusVideoRef = React.useRef<HTMLVideoElement>(null)
+    const focusPip = usePipActive(focusVideoRef, focusedPub?.track?.sid)
     const [isFullscreen, setIsFullscreen] = React.useState(false)
 
     React.useEffect(() => {
@@ -268,6 +270,15 @@ export function MeetingView({
                             {focused.name || focused.identity} · {focusedSource === 'camera' ? '摄像头' : '共享屏幕'}
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px', zIndex: 2 }}>
+                            {focusedPub?.track && !(focused instanceof LocalParticipant) && isPipSupported() && (
+                                <mdui-button-icon
+                                    title={focusPip ? '退出悬浮窗' : '悬浮播放'}
+                                    icon={focusPip ? 'picture_in_picture' : 'picture_in_picture_alt'}
+                                    onClick={() => {
+                                        void togglePip(focusVideoRef.current).catch(() => showSnackbar({ message: '悬浮播放失败' }))
+                                    }}
+                                />
+                            )}
                             <mdui-button-icon
                                 title={isFullscreen ? '退出全屏' : '全屏'}
                                 icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
