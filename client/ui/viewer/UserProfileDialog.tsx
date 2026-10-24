@@ -174,11 +174,6 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                             {profile.nickname}
                         </span>
                     )}
-                    {online && (
-                        <span style={{ color: '#22c55e', fontSize: '0.8rem', marginTop: '2px' }}>
-                            ● 在线
-                        </span>
-                    )}
                 </div>
             </div>
 
