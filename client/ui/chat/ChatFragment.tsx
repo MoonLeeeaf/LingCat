@@ -172,7 +172,7 @@ export function ChatFragment() {
             position: 'relative',
             overflow: 'hidden',
         }}>
-            {chatBackgroundUrl && <ChatBackground url={chatBackgroundUrl} />}
+            <ChatBackground key={chatId} url={chatBackgroundUrl} />
 
             <div style={{
                 position: 'relative',

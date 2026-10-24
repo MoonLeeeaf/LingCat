@@ -1,6 +1,7 @@
 /// <reference types="./env.d.ts" />
 
 import 'mdui/mdui.css'
+import './styles.css'
 import 'mdui'
 
 import 'pinch-zoom-element'

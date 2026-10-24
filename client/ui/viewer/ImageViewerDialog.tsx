@@ -2,11 +2,13 @@ import { Dialog } from 'mdui'
 import PinchZoom from 'pinch-zoom-element/dist/pinch-zoom'
 import ReactClient from "react-dom/client"
 import React from 'react'
+import { motion, MotionConfig } from 'motion/react'
 import useEventListener from '../../lib/useEventListener.ts'
 
 export default function ImageViewerDialog({ src, onClose }: { src: string, onClose?: () => void }) {
     const dialogRef = React.useRef<Dialog>(null)
     const innerRef = React.useRef<PinchZoom>(null)
+    const [visible, setVisible] = React.useState(false)
     const imageRef = React.useRef<HTMLImageElement>(null)
     const activePointersRef = React.useRef(new Set<number>())
     const gestureRef = React.useRef<{ x: number, y: number, dragged: boolean } | null>(null)
@@ -45,11 +47,16 @@ export default function ImageViewerDialog({ src, onClose }: { src: string, onClo
         onClose?.()
     })
 
+    useEventListener(dialogRef, 'close', (e) => {
+        if (e.target === dialogRef.current) setVisible(false)
+    })
+
     // 注入样式（含 ::part 和 内部按钮样式）
     React.useEffect(() => {
         const styleEl = document.createElement('style')
         styleEl.textContent = `
         .${uniqueClass}::part(panel) {
+            transform: none !important;
             background: rgba(0, 0, 0, 0) !important;
             padding: 0 !important;
             display: flex;
@@ -61,24 +68,27 @@ export default function ImageViewerDialog({ src, onClose }: { src: string, onClo
             width: 100%;
             height: 100%;
         }
-        .${uniqueClass} > mdui-button-icon[icon="close"],
-        .${uniqueClass} > mdui-button-icon[icon="open_in_new"] {
+        .${uniqueClass} mdui-button-icon[icon="close"],
+        .${uniqueClass} mdui-button-icon[icon="open_in_new"] {
             z-index: 114514;
             position: fixed;
             top: 15px;
             color: #ffffff;
         }
-        .${uniqueClass} > mdui-button-icon[icon="close"] {
+        .${uniqueClass} mdui-button-icon[icon="close"] {
             right: 15px;
         }
-        .${uniqueClass} > mdui-button-icon[icon="open_in_new"] {
+        .${uniqueClass} mdui-button-icon[icon="open_in_new"] {
             right: 65px;
         }`
         document.head.appendChild(styleEl)
-        requestAnimationFrame(() => {
-            dialogRef.current!.open = true
+        const frame = requestAnimationFrame(() => {
+            if (!dialogRef.current) return
+            dialogRef.current.open = true
+            setVisible(true)
         })
         return () => {
+            cancelAnimationFrame(frame)
             document.head.removeChild(styleEl)
         }
     }, [uniqueClass])
@@ -91,7 +101,11 @@ export default function ImageViewerDialog({ src, onClose }: { src: string, onClo
             style={{
                 width: '100%',
                 height: '100%',
-            }}>
+                '--mdui-motion-duration-medium4': '160ms',
+                '--mdui-motion-duration-short3': '160ms',
+            } as React.CSSProperties}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: visible ? 1 : 0 }}
+                transition={{ duration: 0.16 }} style={{ width: '100%', height: '100%' }}>
             <mdui-button-icon
                 icon="open_in_new"
                 onClick={() => window.open(src, '_blank')} />
@@ -127,6 +141,7 @@ export default function ImageViewerDialog({ src, onClose }: { src: string, onClo
                 {src && <img ref={imageRef} src={src} alt="预览" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                 {/* @ts-ignore */}
             </pinch-zoom>
+            </motion.div>
         </mdui-dialog>
     )
 }
@@ -140,5 +155,5 @@ ImageViewerDialog.show = function (src: string) {
         root.unmount()
         container.remove()
     }
-    root.render(<ImageViewerDialog src={src} onClose={onClose} />)
+    root.render(<MotionConfig reducedMotion="user"><ImageViewerDialog src={src} onClose={onClose} /></MotionConfig>)
 }

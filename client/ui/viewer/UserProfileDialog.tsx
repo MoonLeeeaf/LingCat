@@ -1,9 +1,9 @@
 import ReactClient from 'react-dom/client'
 import React from 'react'
+import { MotionConfig } from 'motion/react'
+import ProfileContent from './ProfileContent.tsx'
 import { dialog, Dialog } from 'mdui'
 import type { IUser } from 'lingcat-protocol'
-import EffectOnly from '../EffectOnly.tsx'
-import CircleProgressDialog from '../CircleProgressDialog.tsx'
 import ClientManager from '../../ClientManager.ts'
 import default_avatar from '../../default_avatar.png'
 import { ChatApi, UserApi } from 'lingcat-client-protocol'
@@ -53,9 +53,8 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
         return () => { cancelled = true }
     }, [userId])
 
-    // loading 结束 → 等 mdui-dialog 首次更新完成再 open（走"非首次渲染"路径 → 有动画）
+    // 先显示资料占位，数据到达后在同一个弹窗内淡入。
     React.useEffect(() => {
-        if (loading) return
         const dialog = ref.current
         if (!dialog) return
         let cancelled = false
@@ -77,7 +76,7 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
             cancelled = true
             dialog.removeEventListener('closed', handleClosed)
         }
-    }, [loading, onClose])
+    }, [onClose])
 
     const avatar = profile?.avatar_file_hash
         ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)
@@ -143,14 +142,11 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
         }, 10)
     }, [userId])
 
-    if (loading) {
-        return (
-            <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
-        )
-    }
+
 
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
+            <ProfileContent loading={loading}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <PresenceAvatar online={online} size={12}>
                     <Avatar onClick={() => ImageViewerDialog.show(avatar!)} src={avatar} />
@@ -232,6 +228,7 @@ export default function UserProfileDialog({ ref, userId, onClose }: UserProfileD
                     打开对话
                 </mdui-list-item>
             </mdui-list>
+            </ProfileContent>
         </mdui-dialog>
     )
 }
@@ -245,5 +242,5 @@ UserProfileDialog.show = function (userId: string) {
         root.unmount()
         container.remove()
     }
-    root.render(<UserProfileDialog userId={userId} onClose={onClose} />)
+    root.render(<MotionConfig reducedMotion="user"><UserProfileDialog userId={userId} onClose={onClose} /></MotionConfig>)
 }

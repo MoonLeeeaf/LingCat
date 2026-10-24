@@ -6,7 +6,9 @@ import { useChatMessages } from './useChatMessages.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import ChatMessage from './ChatMessage.tsx'
 import MessageContainer from './MessageContainer.tsx'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import MessageHighlight from './MessageHighlight.tsx'
+import CopyMessageMenuItem from './CopyMessageMenuItem.tsx'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
 import ProfileCache from '../../ProfileCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -79,15 +81,26 @@ export function MessageList({
     const followBottomRef = React.useRef(true)
     const scrollIntentRef = React.useRef<'up' | 'down' | null>(null)
     const newMessageIdsRef = React.useRef<Set<number>>(new Set())
+    const jumpVersionRef = React.useRef(0)
+    const returningToBottomRef = React.useRef(false)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
+    const [awayFromBottom, setAwayFromBottom] = React.useState(false)
+    const [following, setFollowing] = React.useState(true)
+    const [unreadCount, setUnreadCount] = React.useState(0)
+    const reduceMotion = useReducedMotion()
 
     // 切对话时重置
     React.useEffect(() => {
         setInitialScrollDone(false)
         isAtBottomRef.current = true
         followBottomRef.current = true
+        setFollowing(true)
         scrollIntentRef.current = null
         newMessageIdsRef.current = new Set()
+        setAwayFromBottom(false)
+        setUnreadCount(0)
+        returningToBottomRef.current = false
+        return () => { jumpVersionRef.current++ }
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
@@ -109,7 +122,11 @@ export function MessageList({
             newMessageIdsRef.current.add(seq)
             window.setTimeout(() => newMessageIdsRef.current.delete(seq), 600)
         }
-        if (!followBottomRef.current) return
+        if (!followBottomRef.current) {
+            setUnreadCount(count => count + 1)
+            setAwayFromBottom(true)
+            return
+        }
         const pin = () => {
             if (!followBottomRef.current) return
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
@@ -154,13 +171,16 @@ export function MessageList({
         // 不能仅因暂时靠近底部就重新开启跟随，否则上滑会被拉回去。
 
         const stopFollow = () => {
+            returningToBottomRef.current = false
             scrollIntentRef.current = 'up'
             followBottomRef.current = false
+            setFollowing(false)
         }
         const resumeFollow = () => {
             scrollIntentRef.current = 'down'
             if (sc.scrollHeight - sc.clientHeight - sc.scrollTop <= BOTTOM_REENABLE_PX) {
                 followBottomRef.current = true
+                setFollowing(true)
             }
         }
         const onScroll = () => {
@@ -172,7 +192,11 @@ export function MessageList({
             }
             if (scrollIntentRef.current === 'down' && distance <= BOTTOM_REENABLE_PX) {
                 followBottomRef.current = true
+                setFollowing(true)
             }
+            if (distance <= BOTTOM_REENABLE_PX) returningToBottomRef.current = false
+            setAwayFromBottom(!returningToBottomRef.current && (distance > BOTTOM_REENABLE_PX || (!followBottomRef.current && distance > 0)))
+            if (followBottomRef.current && distance <= BOTTOM_REENABLE_PX) setUnreadCount(0)
             lastTop = sc.scrollTop
         }
         const onWheel = (e: WheelEvent) => {
@@ -252,16 +276,20 @@ export function MessageList({
 
     React.useEffect(() => {
         if (scrollToSeqRequest == null) return
+        returningToBottomRef.current = false
         followBottomRef.current = false
+        setFollowing(false)
         scrollIntentRef.current = null
         const seq = scrollToSeqRequest
+        const jumpVersion = ++jumpVersionRef.current
         useChatMessageStore.getState().clearScrollToSeqRequest()
 
         const { sortedIds: ids } = useChatMessageStore.getState()
         const index = ids.indexOf(seq)
 
         if (index !== -1) {
-            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: 'smooth' })
+            useChatMessageStore.getState().highlightMessage(seq)
+            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: reduceMotion ? 'auto' : 'smooth' })
             return
         }
 
@@ -284,6 +312,7 @@ export function MessageList({
                 ])
 
                 const merged = [...older, ...newer]
+                if (jumpVersion !== jumpVersionRef.current) return
                 const seen = new Set<number>()
                 const unique = merged.filter(m => {
                     if (seen.has(m.id)) return false
@@ -300,9 +329,11 @@ export function MessageList({
                 useChatMessageStore.getState().initMessages(unique, seq)
 
                 requestAnimationFrame(() => {
+                    if (jumpVersion !== jumpVersionRef.current) return
                     const { sortedIds: newIds } = useChatMessageStore.getState()
                     const newIndex = newIds.indexOf(seq)
                     if (newIndex >= 0) {
+                        useChatMessageStore.getState().highlightMessage(seq)
                         virtuosoRef.current?.scrollToIndex({
                             index: newIndex,
                             align: 'center',
@@ -311,11 +342,12 @@ export function MessageList({
                     }
                 })
             } catch (e) {
+                if (jumpVersion !== jumpVersionRef.current) return
                 console.error('跳转消息失败:', e)
                 tipError(e, '无法加载消息')
             }
         })()
-    }, [scrollToSeqRequest, chatId])
+    }, [scrollToSeqRequest, chatId, reduceMotion])
 
     // ============================================================
     //  Virtuoso 回调
@@ -361,6 +393,7 @@ export function MessageList({
                 initial={isNew ? { opacity: 0, y: 10, scale: 0.99 } : false}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.22, ease: 'easeOut' }}
+                style={{ position: 'relative' }}
             >
                 {timeInfo && (
                     <div
@@ -402,6 +435,7 @@ export function MessageList({
                         </mdui-menu-item>
                     </>}
                     messageMenus={<>
+                        {msg.text && !msg.entities?.some(entity => entity.type === 'e2e') && <CopyMessageMenuItem text={msg.text} />}
                         {msg.sender_user_id === SessionEnv.myUserId && !msg.system && onStartEdit && (
                             <mdui-menu-item icon="edit" onClick={() => onStartEdit(msg)}>
                                 编辑
@@ -430,6 +464,7 @@ export function MessageList({
                         </mdui-menu-item>
                     </>}
                 />
+                <MessageHighlight seq={seq} />
             </motion.div>
         )
     }, [onStartEdit, onInsertText])
@@ -438,58 +473,6 @@ export function MessageList({
 
     return (
         <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0, position: 'relative' }}>
-            <AnimatePresence>
-                {loading && (
-                    <motion.div
-                        key="message-skeleton"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        style={{
-                            position: 'absolute',
-                            inset: 0,
-                            zIndex: 2,
-                            padding: '16px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                            gap: '12px',
-                            pointerEvents: 'none',
-                        }}
-                    >
-                        {[0, 1, 2, 3].map((i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 6 }}
-                                animate={{ opacity: [0.45, 0.8, 0.45], y: 0 }}
-                                transition={{
-                                    opacity: { duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.08 },
-                                    y: { duration: 0.2, delay: i * 0.04 },
-                                }}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: i % 2 ? 'flex-end' : 'flex-start',
-                                    gap: '8px',
-                                }}
-                            >
-                                {i % 2 === 0 && (
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(var(--mdui-color-on-surface), 0.08)' }} />
-                                )}
-                                <div style={{
-                                    width: `${42 + (i * 13) % 28}%`,
-                                    height: i === 1 ? '52px' : '38px',
-                                    borderRadius: '12px',
-                                    background: 'rgba(var(--mdui-color-on-surface), 0.07)',
-                                }} />
-                                {i % 2 === 1 && (
-                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(var(--mdui-color-on-surface), 0.08)' }} />
-                                )}
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
             {sortedIds.length > 0 && (
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -504,9 +487,10 @@ export function MessageList({
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}
-                    followOutput={() => (followBottomRef.current ? 'auto' : false)}
+                    // false 必须作为属性值传入；函数返回 false 仍会启用 Virtuoso 的尺寸补偿贴底。
+                    followOutput={following ? 'auto' : false}
                     atTopThreshold={300}
-                    atBottomThreshold={40}
+                    atBottomThreshold={0}
                     atTopStateChange={atTopStateChange}
                     atBottomStateChange={atBottomStateChange}
                     computeItemKey={(_, seq) => seq}
@@ -516,6 +500,25 @@ export function MessageList({
                 />
                 </motion.div>
             )}
+            <AnimatePresence>
+                {(awayFromBottom || unreadCount > 0) && <motion.div key="back-to-bottom"
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.16 }} style={{ position: 'absolute', right: '16px', bottom: '16px', zIndex: 3 }}>
+                    <mdui-button icon="arrow_downward" variant="elevated"
+                        aria-label={unreadCount > 0 ? `${unreadCount} 条新消息，回到底部` : '回到底部'}
+                        onClick={() => {
+                            returningToBottomRef.current = true
+                            followBottomRef.current = true
+                            setFollowing(true)
+                            scrollIntentRef.current = 'down'
+                            setUnreadCount(0)
+                            setAwayFromBottom(false)
+                            virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior: reduceMotion ? 'auto' : 'smooth' })
+                        }}>
+                        {unreadCount > 0 ? `${unreadCount} 条新消息` : '回到底部'}
+                    </mdui-button>
+                </motion.div>}
+            </AnimatePresence>
         </MessageContainer>
     )
 }

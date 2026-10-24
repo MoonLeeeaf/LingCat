@@ -1,6 +1,6 @@
 import { NavigationDrawer, NavigationRail } from 'mdui'
 import React from 'react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { DrawerContext, DrawerContextValue } from './DrawerContext.ts'
 
 export interface NavItem {
@@ -46,6 +46,7 @@ export function DesktopRootLayout({
     dockPercent = 50,
     onDockPercentChange,
 }: DesktopLayoutProps) {
+    const reduceMotion = useReducedMotion()
     const railRef = React.useRef<NavigationRail>(null)
     const drawerRef = React.useRef<NavigationDrawer>(null) 
     const dockRowRef = React.useRef<HTMLDivElement>(null)
@@ -165,16 +166,20 @@ export function DesktopRootLayout({
             <mdui-layout-main style={{ flexGrow: 1, display: 'flex', minWidth: 0 }}>
                 <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
                     {dockedPanel && (<>
-                        <div style={{
-                            width: dockedPanelHidden ? 0 : dockPercent + '%',
+                        <motion.div initial={false} inert={!!dockedPanelHidden}
+                            animate={{ width: dockedPanelHidden ? '0%' : dockPercent + '%', opacity: dockedPanelHidden ? 0 : 1, visibility: 'visible', transitionEnd: { visibility: dockedPanelHidden ? 'hidden' : 'visible' } }}
+                            transition={{ duration: 0.16, width: { duration: dockedPanelHidden && !reduceMotion ? 0.16 : 0 } }}
+                            style={{
                             height: '100%',
                             minWidth: 0,
                             flexShrink: 0,
-                            display: dockedPanelHidden ? 'none' : 'flex',
+                            display: 'flex',
+                            overflow: 'hidden',
+                            pointerEvents: dockedPanelHidden ? 'none' : undefined,
                             flexDirection: 'column',
                         }}>
                             {dockedPanel}
-                        </div>
+                        </motion.div>
                         {!dockedPanelHidden && (
                             <div
                                 onPointerDown={onDividerDown}

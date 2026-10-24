@@ -1,4 +1,5 @@
 import React from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import { AudioPublication, VideoPublication } from './VideoTrack.tsx'
 import { AudioLevelBar } from './AudioLevel.tsx'
@@ -96,16 +97,21 @@ export default function ParticipantTile({
                 ...style,
             }}
         >
+            <AnimatePresence initial={false}>
             {primary?.track
-                ? <VideoPublication
+                ? <motion.div key={primary.track.sid} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 0.16 }} style={{ position: 'absolute', inset: 0 }}>
+                  <VideoPublication
                     key={primary.track.sid}
                     publication={primary}
                     muted={isLocal}
                     videoRef={videoRef}
                     style={{ position: 'absolute', inset: 0 }}
                 />
+                  </motion.div>
                 : (
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 8px 26px', boxSizing: 'border-box' }}>
+                    <motion.div key="avatar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.16 }}
+                        style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 8px 26px', boxSizing: 'border-box' }}>
                         <img
                             src={avatarUrl}
                             alt=""
@@ -120,9 +126,10 @@ export default function ParticipantTile({
                                 background: 'rgba(255,255,255,0.08)',
                             }}
                         />
-                    </div>
+                    </motion.div>
                 )
             }
+            </AnimatePresence>
 
             {!isLocal && <AudioPublication publication={mic} muted={locallyMuted} />}
             {!isLocal && <AudioPublication publication={screenAudio} muted={locallyMuted} />}

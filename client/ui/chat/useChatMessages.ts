@@ -48,8 +48,6 @@ export function useChatMessages({
 
         useChatMessageStore.getState().clear()
         setLoading(true)
-        const startedAt = Date.now()
-        let hideTimer: ReturnType<typeof setTimeout> | undefined
 
         ;(async () => {
             loadingOlderRef.current = true
@@ -66,20 +64,12 @@ export function useChatMessages({
                 if (!cancelled) tipError(e, '拉取消息失败')
             } finally {
                 loadingOlderRef.current = false
-                if (!cancelled) {
-                    const remain = 240 - (Date.now() - startedAt)
-                    if (remain > 0) {
-                        hideTimer = setTimeout(() => { if (!cancelled) setLoading(false) }, remain)
-                    } else {
-                        setLoading(false)
-                    }
-                }
+                if (!cancelled) setLoading(false)
             }
         })()
 
         return () => {
             cancelled = true
-            if (hideTimer) clearTimeout(hideTimer)
         }
     }, [chatId, isMember])
 
@@ -113,6 +103,7 @@ export function useChatMessages({
             if (pkg.method_id === Methods.Receive_Chat_Message_Event) {
                 const raw = LingCatProto.methods.Receive_Chat_Message_Event.decode(pkg.data).msg
                 if (!raw || chatId !== raw.chatId) return
+                if (useChatMessageStore.getState().messageMap.has(raw.id!)) return
 
                 appendMessages([{
                     id: raw.id!,

@@ -1,4 +1,6 @@
 import React from 'react'
+import { motion } from 'motion/react'
+import AnimatedIcon from '../AnimatedIcon.tsx'
 import { dialog } from 'mdui'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import ParticipantTile from './ParticipantTile.tsx'
@@ -148,7 +150,7 @@ export function MeetingView({
         const cam = cameraActive(p)
         if (scr) tiles.push({ key: p.identity + ':screen', participant: p, source: 'screen' })
         if (cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'camera' })
-        if (!scr && !cam) tiles.push({ key: p.identity, participant: p, source: 'auto' })
+        if (!scr && !cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'auto' })
     }
 
     // ============================================================
@@ -299,7 +301,8 @@ export function MeetingView({
                     </div>
                     <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
                         {tiles.map(t => (
-                            <div key={t.key} style={{ flex: '0 0 130px', minWidth: 0 }}>
+                            <motion.div key={t.key} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                transition={{ duration: 0.18 }} style={{ flex: '0 0 130px', minWidth: 0 }}>
                                 <ParticipantTile
                                     compact
                                     participant={t.participant}
@@ -311,7 +314,7 @@ export function MeetingView({
                                         maximize(t.participant.identity, t.source)
                                     }}
                                 />
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -327,8 +330,9 @@ export function MeetingView({
                     {tiles.map(t => {
                         const src = t.source
                         return (
+                            <motion.div key={t.key} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }} style={{ minWidth: 0 }}>
                             <ParticipantTile
-                                key={t.key}
                                 participant={t.participant}
                                 prefer={src}
                                 bubble={settings.showBubble ? bubbles[t.participant.identity] : undefined}
@@ -346,6 +350,7 @@ export function MeetingView({
                                     />
                                 </> : undefined}
                             />
+                            </motion.div>
                         )
                     })}
                 </div>
@@ -379,9 +384,9 @@ export function MeetingView({
                 <mdui-dropdown trigger='hover'>
                     <mdui-button-icon
                         slot="trigger"
-                        icon={isMicOn ? 'mic' : 'mic_off'}
+                        aria-label={isMicOn ? '关闭麦克风' : '开启麦克风'}
                         onClick={() => toggleMic().catch(e => tipError(e, '切换麦克风失败'))}
-                    />
+                    ><AnimatedIcon name={isMicOn ? 'mic' : 'mic_off'} /></mdui-button-icon>
                     <mdui-menu>
                         <mdui-menu-item
                             icon={noiseSuppression ? 'check' : undefined}
@@ -405,17 +410,17 @@ export function MeetingView({
                 {settings.showCameraButton && (
                     <mdui-tooltip content={isCameraOn ? '关闭摄像头' : '开启摄像头'}>
                         <mdui-button-icon
-                            icon={isCameraOn ? 'videocam' : 'videocam_off'}
+                            aria-label={isCameraOn ? '关闭摄像头' : '开启摄像头'}
                             onClick={() => toggleCamera().catch(e => tipError(e, '切换摄像头失败'))}
-                        />
+                        ><AnimatedIcon name={isCameraOn ? 'videocam' : 'videocam_off'} /></mdui-button-icon>
                     </mdui-tooltip>
                 )}
 
                 <mdui-tooltip content={isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
-                        icon={isSharingScreen ? 'screen_share' : 'stop_screen_share'}
+                        aria-label={isSharingScreen ? '停止共享' : '共享屏幕'}
                         onClick={onToggleScreenShare}
-                    />
+                    ><AnimatedIcon name={isSharingScreen ? 'screen_share' : 'stop_screen_share'} /></mdui-button-icon>
                 </mdui-tooltip>
                 {isSharingScreen && (
                     <span style={{ fontSize: '12px', opacity: 0.7 }}>
