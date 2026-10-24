@@ -41,11 +41,11 @@ export default function PawSendButton({ hasContent, isSending, sendVersion, edit
                     if (sending) setCompletedVersion(current => Math.max(current, sendVersion))
                 }}
                 fill="currentColor">
-                <ellipse cx="6.4" cy="12" rx="3.1" ry="4.2" transform="rotate(-28 6.4 12)" />
-                <ellipse cx="12.7" cy="7.3" rx="3.1" ry="4.3" transform="rotate(-9 12.7 7.3)" />
-                <ellipse cx="20" cy="7.3" rx="3.1" ry="4.3" transform="rotate(9 20 7.3)" />
-                <ellipse cx="26" cy="12" rx="3.1" ry="4.2" transform="rotate(28 26 12)" />
-                <path d="M16.2 14c-3.3 0-4.9 3.5-6.9 5.8-1.7 2-3 3.5-2.3 5.8.8 2.8 4 3.3 6.6 2.4a7.9 7.9 0 0 1 5.2 0c2.6.9 5.8.4 6.6-2.4.7-2.3-.6-3.8-2.3-5.8-2-2.3-3.6-5.8-6.9-5.8Z" />
+                <ellipse cx="6.8" cy="12" rx="3.2" ry="3.7" transform="rotate(-32 6.8 12)" />
+                <ellipse cx="12.4" cy="7" rx="3.3" ry="3.8" transform="rotate(-12 12.4 7)" />
+                <ellipse cx="19.6" cy="7" rx="3.3" ry="3.8" transform="rotate(12 19.6 7)" />
+                <ellipse cx="25.2" cy="12" rx="3.2" ry="3.7" transform="rotate(32 25.2 12)" />
+                <path d="M16 16C13.2 12.6 10.2 14.8 9.3 17.4 8.7 19.1 5.7 20.5 6.4 23.5 6.9 26.1 9.4 27.1 11.8 25.7 13.8 28.8 18.2 28.8 20.2 25.7 22.6 27.1 25.1 26.1 25.6 23.5 26.3 20.5 23.3 19.1 22.7 17.4 21.8 14.8 18.8 12.6 16 16Z" />
             </motion.svg>
         </button>
     )
