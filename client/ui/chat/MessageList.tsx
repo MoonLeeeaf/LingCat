@@ -68,6 +68,7 @@ export function MessageList({
     onInsertText,
 }: MessageListProps) {
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
+    const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
@@ -76,6 +77,10 @@ export function MessageList({
         setInitialScrollDone(false)
         isAtBottomRef.current = true
     }, [chatId])
+
+    const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+        virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
+    }, [])
 
     // 新消息到达时，若在底部 → 滚到底
     const handleNewMessage = React.useCallback(() => {
@@ -94,6 +99,36 @@ export function MessageList({
         isMember,
         onNewMessage: handleNewMessage,
     })
+
+    // 首屏/切会话: 输入框、会议横幅高度在首帧后才确定, 再贴一次底
+    const hasMessages = sortedIds.length > 0
+    React.useEffect(() => {
+        if (!hasMessages) return
+        const timers = [
+            window.setTimeout(() => scrollToBottom('auto'), 50),
+            window.setTimeout(() => scrollToBottom('auto'), 300),
+        ]
+        return () => timers.forEach((t) => window.clearTimeout(t))
+    }, [chatId, hasMessages, scrollToBottom])
+
+    // 容器高度变化 (输入框 autosize / 横幅出现 / 窗口缩放) 时保持贴底
+    React.useEffect(() => {
+        const el = containerRef.current
+        if (!el) return
+        let raf = 0
+        const ro = new ResizeObserver(() => {
+            if (initialScrollDone && !isAtBottomRef.current) return
+            cancelAnimationFrame(raf)
+            raf = requestAnimationFrame(() => {
+                virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end' })
+            })
+        })
+        ro.observe(el)
+        return () => {
+            ro.disconnect()
+            cancelAnimationFrame(raf)
+        }
+    }, [initialScrollDone])
 
     // ============================================================
     //  跳转定位（响应 store 的 scrollToSeqRequest）
@@ -278,7 +313,7 @@ export function MessageList({
     if (!isMember) return null
 
     return (
-        <MessageContainer style={{ flex: 1, minHeight: 0 }}>
+        <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0 }}>
             {sortedIds.length > 0 && (
                 <Virtuoso
                     ref={virtuosoRef}
