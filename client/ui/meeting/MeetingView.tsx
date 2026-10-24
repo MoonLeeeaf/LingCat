@@ -299,7 +299,7 @@ export function MeetingView({
                     </div>
                     <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
                         {tiles.map(t => (
-                            <div key={t.key} style={{ flex: '0 0 130px' }}>
+                            <div key={t.key} style={{ flex: '0 0 130px', minWidth: 0 }}>
                                 <ParticipantTile
                                     compact
                                     participant={t.participant}
@@ -319,7 +319,7 @@ export function MeetingView({
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: gridCols
-                        ? `repeat(${gridCols}, 1fr)`
+                        ? `repeat(${gridCols}, minmax(0, 1fr))`
                         : `repeat(auto-fit, minmax(${isMobile ? 130 : 240}px, 1fr))`,
                     gap: '6px',
                     alignContent: 'start',

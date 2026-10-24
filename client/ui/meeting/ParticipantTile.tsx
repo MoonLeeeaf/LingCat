@@ -83,8 +83,12 @@ export default function ParticipantTile({
                 background: '#202020',
                 border: '1px solid rgba(255,255,255,0.08)',
                 boxShadow: speaking ? 'inset 0 0 0 2px rgb(var(--mdui-color-primary))' : undefined,
-                aspectRatio: primary?.track ? '16 / 9' : undefined,
-                minHeight: primary?.track ? undefined : (compact ? '84px' : '160px'),
+                // 瓦片尺寸由布局决定，开关摄像头/共享屏幕不改变外框大小。
+                aspectRatio: '16 / 9',
+                width: '100%',
+                minWidth: 0,
+                minHeight: 0,
+                boxSizing: 'border-box',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -93,24 +97,29 @@ export default function ParticipantTile({
             }}
         >
             {primary?.track
-                ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} videoRef={videoRef} />
+                ? <VideoPublication
+                    key={primary.track.sid}
+                    publication={primary}
+                    muted={isLocal}
+                    videoRef={videoRef}
+                    style={{ position: 'absolute', inset: 0 }}
+                />
                 : (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: compact ? '4px' : '8px', padding: '8px' }}>
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 8px 26px', boxSizing: 'border-box' }}>
                         <img
                             src={avatarUrl}
                             alt=""
                             onError={(e) => { (e.currentTarget as HTMLImageElement).src = default_avatar }}
                             style={{
-                                width: compact ? '40px' : '64px',
-                                height: compact ? '40px' : '64px',
+                                width: compact ? 'min(40px, 30%)' : 'min(64px, 30%)',
+                                height: 'auto',
+                                aspectRatio: '1 / 1',
+                                flexShrink: 0,
                                 borderRadius: '50%',
                                 objectFit: 'cover',
                                 background: 'rgba(255,255,255,0.08)',
                             }}
                         />
-                        <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: compact ? '11px' : '13px' }}>
-                            {micMuted ? '(Muted) ' : ''}{name}
-                        </div>
                     </div>
                 )
             }
