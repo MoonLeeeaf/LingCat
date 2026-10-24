@@ -3,6 +3,7 @@ import { useAsyncEffect } from "../lib/useAsyncEffect.ts"
 import SessionEnv from "../SessionEnv.ts"
 import { RouterProvider } from "@tanstack/react-router"
 import { Router } from "./routes/Router.ts"
+import { MotionConfig } from "motion/react"
 
 export default function Main() {
     const [loaded, setLoaded] = useState(false)
@@ -18,15 +19,19 @@ export default function Main() {
         if (!signal.aborted) setLoaded(true)
     }, [])
 
-    return loaded
-        ? <RouterProvider router={Router} />
-        : <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            width: '100%',
-        }}>
-            <mdui-circular-progress></mdui-circular-progress>
-        </div>
+    return (
+        <MotionConfig reducedMotion="user">
+            {loaded
+                ? <RouterProvider router={Router} />
+                : <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    width: '100%',
+                }}>
+                    <mdui-circular-progress></mdui-circular-progress>
+                </div>}
+        </MotionConfig>
+    )
 }

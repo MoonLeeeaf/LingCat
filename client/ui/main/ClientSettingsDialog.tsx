@@ -1,5 +1,6 @@
 import ReactClient from 'react-dom/client'
 import React from 'react'
+import { motion } from 'motion/react'
 import { Dialog } from 'mdui'
 import SwitchUserDialog from './SwitchUserDialog.tsx'
 import ManagePublicKeysDialog from './ManagePublicKeysDialog.tsx'
@@ -41,20 +42,24 @@ export function ClientSettingsDialog({ ref, onClose }: ClientSettingsDialogProps
             <span slot="headline">客户端设置</span>
 
             <mdui-list>
-                <mdui-list-item
-                    icon="switch_account"
-                    rounded
-                    onClick={() => SwitchUserDialog.show()}
-                >
-                    切换用户
-                </mdui-list-item>
-                <mdui-list-item
-                    icon="key"
-                    rounded
-                    onClick={() => ManagePublicKeysDialog.show()}
-                >
-                    服务端公钥管理
-                </mdui-list-item>
+                <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.16, ease: 'easeOut' }}>
+                    <mdui-list-item
+                        icon="switch_account"
+                        rounded
+                        onClick={() => SwitchUserDialog.show()}
+                    >
+                        切换用户
+                    </mdui-list-item>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.16, delay: 0.04, ease: 'easeOut' }}>
+                    <mdui-list-item
+                        icon="key"
+                        rounded
+                        onClick={() => ManagePublicKeysDialog.show()}
+                    >
+                        服务端公钥管理
+                    </mdui-list-item>
+                </motion.div>
             </mdui-list>
         </mdui-dialog>
     )

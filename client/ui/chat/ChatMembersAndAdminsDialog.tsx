@@ -1,5 +1,6 @@
 import ReactClient from 'react-dom/client'
 import React from 'react'
+import { motion } from 'motion/react'
 import { $, dialog, Dialog, Tabs } from 'mdui'
 import type { IChatAdmin, IUser } from 'lingcat-protocol'
 import { AvailableChatAdminPermissions } from 'lingcat-protocol'
@@ -151,8 +152,14 @@ export default function ChatMembersAndAdminsDialog({
 
                 <mdui-tab-panel slot="panel" value="成员">
                     <mdui-list>
-                        {members?.map((v) => (
-                            <mdui-dropdown trigger="hover" key={v.id}>
+                        {members?.map((v, index) => (
+                            <motion.div
+                                key={v.id}
+                                initial={{ opacity: 0, y: 4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.16, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
+                            >
+                            <mdui-dropdown trigger="hover">
                                 <mdui-list-item
                                     slot="trigger"
                                     rounded
@@ -187,14 +194,21 @@ export default function ChatMembersAndAdminsDialog({
                                     )}
                                 </mdui-menu>
                             </mdui-dropdown>
+                            </motion.div>
                         ))}
                     </mdui-list>
                 </mdui-tab-panel>
 
                 <mdui-tab-panel slot="panel" value="管理员">
                     <mdui-list>
-                        {admins?.map((v) => (
-                            <mdui-dropdown trigger="hover" key={v.id}>
+                        {admins?.map((v, index) => (
+                            <motion.div
+                                key={v.id}
+                                initial={{ opacity: 0, y: 4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.16, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
+                            >
+                            <mdui-dropdown trigger="hover">
                                 <mdui-list-item
                                     slot="trigger"
                                     rounded
@@ -235,6 +249,7 @@ export default function ChatMembersAndAdminsDialog({
                                     </mdui-menu-item>
                                 </mdui-menu>
                             </mdui-dropdown>
+                            </motion.div>
                         ))}
                     </mdui-list>
                 </mdui-tab-panel>

@@ -55,9 +55,15 @@ function ChatListItem({ chat, active, index }: { chat: IChat; active: boolean; i
 
     return (
         <motion.div
+            layout
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.18, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
+            transition={{
+                duration: 0.18,
+                delay: Math.min(index * 0.02, 0.2),
+                ease: 'easeOut',
+                layout: { duration: 0.2, ease: 'easeOut' },
+            }}
         >
         <mdui-dropdown trigger="hover">
             <mdui-list-item

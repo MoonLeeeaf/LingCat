@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from '@tanstack/react-router'
 import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
@@ -59,14 +60,20 @@ export function MeetingBanner({ chatId, translucent }: { chatId: string, translu
         }
     }
 
-    if (!activeMeeting) return null
-
     const actionLabel = isInThisMeeting ? '会议中' : '加入'
 
     return (
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
+        <AnimatePresence>
+            {activeMeeting && (
+                <motion.div
+                    key="meeting-banner"
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
             gap: '8px',
             margin: '6px 8px',
             padding: '6px 6px 6px 14px',
@@ -134,13 +141,20 @@ export function MeetingBanner({ chatId, translucent }: { chatId: string, translu
 
             <div style={{ flex: 1 }} />
 
-            <mdui-button
-                variant="text"
-                onClick={joinOrOpen}
-                disabled={isInThisMeeting && uiOpen && !isMinimized || undefined}
+            <motion.div
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 24 }}
             >
-                {actionLabel}
-            </mdui-button>
-        </div>
+                <mdui-button
+                    variant="text"
+                    onClick={joinOrOpen}
+                    disabled={isInThisMeeting && uiOpen && !isMinimized || undefined}
+                >
+                    {actionLabel}
+                </mdui-button>
+            </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     )
 }

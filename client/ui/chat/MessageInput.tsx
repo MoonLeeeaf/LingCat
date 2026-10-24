@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { TextField } from 'mdui'
 import { MessageParser, ChatApi } from 'lingcat-client-protocol'
 import type { IMessage, IMessageEntity, IUser } from 'lingcat-protocol'
@@ -540,21 +541,36 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                     onChange={handleFilePick}
                 />
 
+                <AnimatePresence initial={false}>
                 {editingMessage && (
-                    <div style={{
-                        display: 'flex', alignItems: 'center',
-                        padding: '6px 12px',
-                        background: 'rgba(var(--mdui-color-primary), 0.08)',
-                        borderLeft: '3px solid rgb(var(--mdui-color-primary))',
-                        margin: '0 4px', borderRadius: '4px',
-                    }}>
+                    <motion.div
+                        key="editing"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        style={{
+                            display: 'flex', alignItems: 'center',
+                            padding: '6px 12px',
+                            background: 'rgba(var(--mdui-color-primary), 0.08)',
+                            borderLeft: '3px solid rgb(var(--mdui-color-primary))',
+                            margin: '0 4px', borderRadius: '4px',
+                        }}>
                         <span style={{ flex: 1, fontSize: '90%', opacity: 0.8 }}>正在编辑消息</span>
                         <mdui-button-icon icon="close" onClick={cancelEdit} />
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
 
+                <AnimatePresence initial={false}>
                 {isRecording && (
-                    <div style={{
+                    <motion.div
+                        key="recording"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         padding: '6px 12px',
                         background: 'rgba(var(--mdui-color-error), 0.08)',
@@ -571,12 +587,20 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             正在录音... {formatDuration(seconds)}
                         </span>
                         <mdui-button-icon icon="close" onClick={stopRecording} />
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
 
                 <div style={{ position: 'relative' }}>
+                    <AnimatePresence>
                     {mentionQuery && mentionCandidates.length > 0 && (
-                        <div style={{
+                        <motion.div
+                            key="mentions"
+                            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                            transition={{ duration: 0.15, ease: 'easeOut' }}
+                            style={{
                             position: 'absolute',
                             bottom: 'calc(100% + 4px)',
                             left: 0,
@@ -588,6 +612,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             borderRadius: '8px',
                             // boxShadow: '0 4px 16px rgba(0,0,0,.25)',
                             overflow: 'hidden',
+                            transformOrigin: 'bottom left',
                         }}>
                             <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
                                 {mentionCandidates.map((c, i) => (
@@ -635,8 +660,9 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     )}
+                    </AnimatePresence>
 
                     <mdui-text-field
                         ref={inputRef as any}
@@ -674,42 +700,47 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         onPaste={handlePaste}
                         onDrop={handleDrop}
                     >
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon={isRecording ? 'stop_circle' : 'mic'}
-                        onClick={toggleRecording}
-                        style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
-                    />
+                    <motion.div slot="end-icon" whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                        <mdui-button-icon
+                            icon={isRecording ? 'stop_circle' : 'mic'}
+                            onClick={toggleRecording}
+                            style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
+                        />
+                    </motion.div>
                     <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon="attachment"
-                        onClick={() => attachFileInputRef.current?.click()}
-                    />
+                    <motion.div slot="end-icon" whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                        <mdui-button-icon
+                            icon="attachment"
+                            onClick={() => attachFileInputRef.current?.click()}
+                        />
+                    </motion.div>
 
                     {/* ★ 发送按钮旁边的锁图标 */}
                     {canE2E && (
                         <>
                             <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                            <mdui-tooltip  slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
-                                <mdui-button-icon
-                                    icon={isEncryptMode ? 'lock' : 'lock_open'}
-                                    onClick={() => setIsEncryptMode(!isEncryptMode)}
-                                    style={{
-                                        color: isEncryptMode ? 'var(--mdui-color-primary)' : 'var(--mdui-color-outline)'
-                                    }}
-                                />
+                            <mdui-tooltip slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
+                                <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                                    <mdui-button-icon
+                                        icon={isEncryptMode ? 'lock' : 'lock_open'}
+                                        onClick={() => setIsEncryptMode(!isEncryptMode)}
+                                        style={{
+                                            color: isEncryptMode ? 'var(--mdui-color-primary)' : 'var(--mdui-color-outline)'
+                                        }}
+                                    />
+                                </motion.div>
                             </mdui-tooltip>
                         </>
                     )}
 
                     <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon="send"
-                        loading={isSending || undefined}
-                        onClick={send}
-                    />
+                    <motion.div slot="end-icon" whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                        <mdui-button-icon
+                            icon="send"
+                            loading={isSending || undefined}
+                            onClick={send}
+                        />
+                    </motion.div>
                     <div slot="end-icon" style={{ paddingRight: '5px' }} />
                     </mdui-text-field>
                 </div>

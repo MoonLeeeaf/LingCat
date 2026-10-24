@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 
 /** 头像右下角的在线绿点 */
 export function PresenceDot({ online, size = 10, borderColor }: {
@@ -6,23 +7,33 @@ export function PresenceDot({ online, size = 10, borderColor }: {
     size?: number
     borderColor?: string
 }) {
-    if (!online) return null
-    return <span
-        aria-label="在线"
-        style={{
-            position: 'absolute',
-            right: -1,
-            bottom: -1,
-            width: size,
-            height: size,
-            borderRadius: '50%',
-            background: '#22c55e',
-            border: `2px solid ${borderColor || 'rgb(var(--mdui-color-surface-container-low))'}`,
-            boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
-            pointerEvents: 'none',
-            zIndex: 1,
-        }}
-    />
+    return (
+        <AnimatePresence>
+            {online && (
+                <motion.span
+                    key="online"
+                    aria-label="在线"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 1] }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.32, ease: 'easeOut' }}
+                    style={{
+                        position: 'absolute',
+                        right: -1,
+                        bottom: -1,
+                        width: size,
+                        height: size,
+                        borderRadius: '50%',
+                        background: '#22c55e',
+                        border: `2px solid ${borderColor || 'rgb(var(--mdui-color-surface-container-low))'}`,
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                        pointerEvents: 'none',
+                        zIndex: 1,
+                    }}
+                />
+            )}
+        </AnimatePresence>
+    )
 }
 
 /** 包裹头像并叠加右下角在线绿点 (可传 slot 用于 mdui-list-item 的 icon 槽) */

@@ -60,6 +60,15 @@
       ::-webkit-scrollbar-corner {
         background: transparent;
       }
+      /* 图片淡入 */
+      @keyframes lingcat-img-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      img[src*="uploaded_files"] {
+        animation: lingcat-img-in 180ms ease-out;
+      }
+
       /* Firefox: 仅在其上使用标准属性, 避免覆盖 WebKit 自定义样式 */
       @supports (-moz-appearance: none) {
         * {
