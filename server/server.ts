@@ -102,7 +102,11 @@ export default function createLingCatServer(base_data_path: string) {
             /* if (file.belong_to_chat_id && !await UserChatLinker.isUserChatLinked(user_id, file.belong_to_chat_id))
                 return res.status(403).send({ message: "This file belongs to a chat you have no access" }) */
 
-            res.setHeader('Content-Disposition', `inline; filename="${file.uploaded_at}"`)
+            // 保留原始文件名 (RFC 5987, 兼容中文)
+            const originalName = file.first_upload_file_name || String(file.uploaded_at)
+            const asciiName = originalName.replace(/[^\x20-\x7E]/g, '_').replace(/["\\]/g, '_') || 'file'
+            const encodedName = encodeURIComponent(originalName).replace(/['()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase())
+            res.setHeader('Content-Disposition', `inline; filename="${asciiName}"; filename*=UTF-8''${encodedName}`)
             res.setHeader('Content-Type', file.mime)
             res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
             res.sendFile(node_path.resolve(FileManager.getFilePath(file.hash)))

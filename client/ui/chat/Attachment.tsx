@@ -81,7 +81,7 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
                     color: 'inherit',
                 }}
                 href={url}
-                download={url}
+                download={data.name?.trim() || data.hash}
             >
                 <mdui-card clickable style={{
                     display: 'flex',
