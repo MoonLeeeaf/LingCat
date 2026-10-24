@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'motion/react'
 import { TextField } from 'mdui'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import type { IChat } from 'lingcat-protocol'
@@ -43,7 +44,7 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
 //                      列表项
 // ============================================================
 
-function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
+function ChatListItem({ chat, active, index }: { chat: IChat; active: boolean; index: number }) {
     const navigate = useNavigate()
     const isMobile = useIsMobile()
 
@@ -53,6 +54,11 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
     const online = useIsOnline(chat.peer_user_id)
 
     return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.18, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
+        >
         <mdui-dropdown trigger="hover">
             <mdui-list-item
                 active={active}
@@ -87,6 +93,7 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
                 </mdui-menu-item>
             </mdui-menu>
         </mdui-dropdown>
+        </motion.div>
     )
 }
 
@@ -281,11 +288,12 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
             {!isLoading && dataSource.length === 0 && (
                 <mdui-list-item rounded>暂无对话</mdui-list-item>
             )}
-            {dataSource.filter(chatFilter).map(chat => (
+            {dataSource.filter(chatFilter).map((chat, index) => (
                 <ChatListItem
                     key={chat.id}
                     chat={chat}
                     active={activeChatId === chat.id}
+                    index={index}
                 />
             ))}
         </>

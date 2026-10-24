@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { TextField } from 'mdui'
 
 export type AuthMode = 'login' | 'register'
@@ -89,7 +90,11 @@ export function LoginOrRegisterForm({
     }
 
     return (
-        <div>
+        <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+        >
             {serverLabel !== undefined && (
                 <>
                     <mdui-text-field
@@ -101,13 +106,21 @@ export function LoginOrRegisterForm({
                 </>
             )}
 
-            {mode === 'login' ? (
-                <>
-                    <mdui-text-field
-                        variant="outlined"
-                        label="用户名 / 用户 ID"
-                        ref={accountRef as any}
-                    />
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                    key={mode}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.16, ease: 'easeOut' }}
+                >
+                    {mode === 'login' ? (
+                        <>
+                            <mdui-text-field
+                                variant="outlined"
+                                label="用户名 / 用户 ID"
+                                ref={accountRef as any}
+                            />
                     <div style={{ paddingTop: '15px' }} />
                     <mdui-text-field
                         variant="outlined"
@@ -137,7 +150,9 @@ export function LoginOrRegisterForm({
                         ref={regPasswordRef as any}
                     />
                 </>
-            )}
+                    )}
+                </motion.div>
+            </AnimatePresence>
 
             {oauthProviders.map((p) => (
                 <mdui-button
@@ -212,6 +227,6 @@ export function LoginOrRegisterForm({
                     </>
                 )}
             </div>
-        </div>
+        </motion.div>
     )
 }
