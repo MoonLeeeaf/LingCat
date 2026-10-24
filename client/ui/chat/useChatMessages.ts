@@ -31,6 +31,7 @@ export function useChatMessages({
     const sortedIds = useChatMessageStore(s => s.sortedIds)
     const firstItemIndex = useChatMessageStore(s => s.firstItemIndex)
 
+    const [loading, setLoading] = React.useState(false)
     const loadingOlderRef = React.useRef(false)
     const loadingNewerRef = React.useRef(false)
 
@@ -46,6 +47,9 @@ export function useChatMessages({
         let cancelled = false
 
         useChatMessageStore.getState().clear()
+        setLoading(true)
+        const startedAt = Date.now()
+        let hideTimer: ReturnType<typeof setTimeout> | undefined
 
         ;(async () => {
             loadingOlderRef.current = true
@@ -62,10 +66,21 @@ export function useChatMessages({
                 if (!cancelled) tipError(e, '拉取消息失败')
             } finally {
                 loadingOlderRef.current = false
+                if (!cancelled) {
+                    const remain = 240 - (Date.now() - startedAt)
+                    if (remain > 0) {
+                        hideTimer = setTimeout(() => { if (!cancelled) setLoading(false) }, remain)
+                    } else {
+                        setLoading(false)
+                    }
+                }
             }
         })()
 
-        return () => { cancelled = true }
+        return () => {
+            cancelled = true
+            if (hideTimer) clearTimeout(hideTimer)
+        }
     }, [chatId, isMember])
 
     // ============================================================
@@ -172,5 +187,5 @@ export function useChatMessages({
         }
     }, [chatId, isMember])
 
-    return { sortedIds, firstItemIndex, loadOlder, loadNewer }
+    return { sortedIds, firstItemIndex, loadOlder, loadNewer, loading }
 }

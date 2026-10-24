@@ -6,6 +6,7 @@ import { useChatMessages } from './useChatMessages.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import ChatMessage from './ChatMessage.tsx'
 import MessageContainer from './MessageContainer.tsx'
+import { motion, AnimatePresence } from 'motion/react'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
 import ProfileCache from '../../ProfileCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -76,6 +77,7 @@ export function MessageList({
     const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
     const followBottomRef = React.useRef(true)
+    const newMessageIdsRef = React.useRef<Set<number>>(new Set())
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
     // 切对话时重置
@@ -83,6 +85,7 @@ export function MessageList({
         setInitialScrollDone(false)
         isAtBottomRef.current = true
         followBottomRef.current = true
+        newMessageIdsRef.current = new Set()
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
@@ -95,8 +98,14 @@ export function MessageList({
         }
     }, [])
 
-    // 新消息到达时，若跟随开关开启 → 贴底
+    // 新消息到达时，记录 id 用于入场动画，并在跟随开关开启时贴底
     const handleNewMessage = React.useCallback(() => {
+        const ids = useChatMessageStore.getState().sortedIds
+        const seq = ids[ids.length - 1]
+        if (seq != null) {
+            newMessageIdsRef.current.add(seq)
+            window.setTimeout(() => newMessageIdsRef.current.delete(seq), 600)
+        }
         if (!followBottomRef.current) return
         const pin = () => {
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
@@ -109,7 +118,7 @@ export function MessageList({
         }, 120)
     }, [])
 
-    const { sortedIds, firstItemIndex, loadOlder, loadNewer } = useChatMessages({
+    const { sortedIds, firstItemIndex, loadOlder, loadNewer, loading } = useChatMessages({
         chatId,
         isMember,
         onNewMessage: handleNewMessage,
@@ -307,8 +316,15 @@ export function MessageList({
             && !prevMsg.system
             && prevMsg.sender_user_id === msg.sender_user_id
 
+        const isNew = newMessageIdsRef.current.has(seq)
+
         return (
-            <React.Fragment key={seq}>
+            <motion.div
+                key={seq}
+                initial={isNew ? { opacity: 0, y: 10, scale: 0.99 } : false}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
                 {timeInfo && (
                     <div
                         title={timeInfo.full}
@@ -377,15 +393,73 @@ export function MessageList({
                         </mdui-menu-item>
                     </>}
                 />
-            </React.Fragment>
+            </motion.div>
         )
     }, [onStartEdit, onInsertText])
 
     if (!isMember) return null
 
     return (
-        <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0 }}>
+        <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0, position: 'relative' }}>
+            <AnimatePresence>
+                {loading && (
+                    <motion.div
+                        key="message-skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            zIndex: 2,
+                            padding: '16px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'flex-end',
+                            gap: '12px',
+                            pointerEvents: 'none',
+                        }}
+                    >
+                        {[0, 1, 2, 3].map((i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 6 }}
+                                animate={{ opacity: [0.45, 0.8, 0.45], y: 0 }}
+                                transition={{
+                                    opacity: { duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.08 },
+                                    y: { duration: 0.2, delay: i * 0.04 },
+                                }}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: i % 2 ? 'flex-end' : 'flex-start',
+                                    gap: '8px',
+                                }}
+                            >
+                                {i % 2 === 0 && (
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(var(--mdui-color-on-surface), 0.08)' }} />
+                                )}
+                                <div style={{
+                                    width: `${42 + (i * 13) % 28}%`,
+                                    height: i === 1 ? '52px' : '38px',
+                                    borderRadius: '12px',
+                                    background: 'rgba(var(--mdui-color-on-surface), 0.07)',
+                                }} />
+                                {i % 2 === 1 && (
+                                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(var(--mdui-color-on-surface), 0.08)' }} />
+                                )}
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {sortedIds.length > 0 && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: loading ? 0 : 1 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    style={{ height: '100%' }}
+                >
                 <Virtuoso
                     ref={virtuosoRef}
                     key={chatId}
@@ -403,6 +477,7 @@ export function MessageList({
                     components={{ Footer: ListFooter }}
                     itemContent={itemContent}
                 />
+                </motion.div>
             )}
         </MessageContainer>
     )
