@@ -70,12 +70,14 @@ export function MessageList({
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
     const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
+    const isNearBottomRef = React.useRef(true)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
     // 切对话时重置
     React.useEffect(() => {
         setInitialScrollDone(false)
         isAtBottomRef.current = true
+        isNearBottomRef.current = true
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
@@ -89,12 +91,9 @@ export function MessageList({
         virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
     }, [])
 
-    // 新消息到达时，若在底部附近 → 贴底
+    // 新消息到达时，若变化前在底部附近 → 贴底
     const handleNewMessage = React.useCallback(() => {
-        const sc = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
-        if (!sc) return
-        const nearBottom = sc.scrollHeight - sc.clientHeight - sc.scrollTop < 160
-        if (!isAtBottomRef.current && !nearBottom) return
+        if (!isNearBottomRef.current) return
         requestAnimationFrame(() => {
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
             if (el) el.scrollTop = el.scrollHeight
@@ -118,24 +117,45 @@ export function MessageList({
         return () => timers.forEach((t) => window.clearTimeout(t))
     }, [chatId, hasMessages, scrollToBottom])
 
-    // 容器高度变化 (输入框 autosize / 横幅出现 / 窗口缩放) 时保持贴底
+    // 记录用户是否在底部附近 (以变化前的位置为准, 避免大消息/图片撑高后误判)
     React.useEffect(() => {
-        const el = containerRef.current
-        if (!el) return
+        if (!hasMessages) return
+        const container = containerRef.current
+        const sc = container?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
+        if (!sc) return
+        const onScroll = () => {
+            const distance = sc.scrollHeight - sc.clientHeight - sc.scrollTop
+            isNearBottomRef.current = distance < 160
+            isAtBottomRef.current = distance < 3
+        }
+        sc.addEventListener('scroll', onScroll, { passive: true })
+        onScroll()
+        return () => sc.removeEventListener('scroll', onScroll)
+    }, [chatId, hasMessages])
+
+    // 容器/内容高度变化 (输入框 autosize / 横幅 / 新消息 / 图片加载) 时保持贴底
+    React.useEffect(() => {
+        if (!hasMessages) return
+        const container = containerRef.current
+        if (!container) return
         let raf = 0
-        const ro = new ResizeObserver(() => {
-            if (initialScrollDone && !isAtBottomRef.current) return
+        const pin = () => {
+            if (!isNearBottomRef.current) return
             cancelAnimationFrame(raf)
             raf = requestAnimationFrame(() => {
-                virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end' })
+                const el = container.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
+                if (el) el.scrollTop = el.scrollHeight
             })
-        })
-        ro.observe(el)
+        }
+        const ro = new ResizeObserver(pin)
+        ro.observe(container)
+        const list = container.querySelector('[data-testid="virtuoso-item-list"]')
+        if (list) ro.observe(list)
         return () => {
             ro.disconnect()
             cancelAnimationFrame(raf)
         }
-    }, [initialScrollDone])
+    }, [chatId, hasMessages])
 
     // ============================================================
     //  跳转定位（响应 store 的 scrollToSeqRequest）
@@ -329,7 +349,7 @@ export function MessageList({
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}
-                    followOutput="smooth"
+                    followOutput={() => (isNearBottomRef.current ? 'auto' : false)}
                     atTopThreshold={300}
                     atBottomThreshold={40}
                     atTopStateChange={atTopStateChange}
