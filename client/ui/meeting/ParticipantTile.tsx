@@ -149,12 +149,11 @@ export default function ParticipantTile({
                     style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}
                 >
                     {showLocalMute && !isLocal && (hover || locallyMuted) && (
-                        <mdui-tooltip content={locallyMuted ? '取消本地静音' : '本地静音(仅自己)'}>
-                            <mdui-button-icon
-                                icon={locallyMuted ? 'volume_off' : 'volume_up'}
-                                onClick={() => toggleLocalMute(participant.identity)}
-                            />
-                        </mdui-tooltip>
+                        <mdui-button-icon
+                            title={locallyMuted ? '取消本地静音' : '本地静音(仅自己)'}
+                            icon={locallyMuted ? 'volume_off' : 'volume_up'}
+                            onClick={() => toggleLocalMute(participant.identity)}
+                        />
                     )}
                     {actions}
                 </div>

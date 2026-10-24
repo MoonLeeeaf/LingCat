@@ -267,24 +267,22 @@ export function MeetingView({
                             {focused.name || focused.identity} · {focusedSource === 'camera' ? '摄像头' : '共享屏幕'}
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px', zIndex: 2 }}>
-                            <mdui-tooltip content={isFullscreen ? '退出全屏' : '全屏'}>
-                                <mdui-button-icon
-                                    icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
-                                    onClick={() => {
-                                        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
-                                        else focusRef.current?.requestFullscreen?.().catch(() => { })
-                                    }}
-                                />
-                            </mdui-tooltip>
-                            <mdui-tooltip content="退出最大化">
-                                <mdui-button-icon
-                                    icon="close_fullscreen"
-                                    onClick={() => {
-                                        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
-                                        setFocused(undefined)
-                                    }}
-                                />
-                            </mdui-tooltip>
+                            <mdui-button-icon
+                                title={isFullscreen ? '退出全屏' : '全屏'}
+                                icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
+                                onClick={() => {
+                                    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
+                                    else focusRef.current?.requestFullscreen?.().catch(() => { })
+                                }}
+                            />
+                            <mdui-button-icon
+                                title="退出最大化"
+                                icon="close_fullscreen"
+                                onClick={() => {
+                                    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
+                                    setFocused(undefined)
+                                }}
+                            />
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
@@ -324,12 +322,16 @@ export function MeetingView({
                                 bubble={settings.showBubble ? bubbles[t.participant.identity] : undefined}
                                 onClick={() => { if (src !== 'auto') maximize(t.participant.identity, src) }}
                                 actions={src !== 'auto' ? <>
-                                    <mdui-tooltip content={src === 'camera' ? '最大化摄像头' : '最大化共享'}>
-                                        <mdui-button-icon icon="zoom_out_map" onClick={() => maximize(t.participant.identity, src)} />
-                                    </mdui-tooltip>
-                                    <mdui-tooltip content="全屏">
-                                        <mdui-button-icon icon="fullscreen" onClick={() => maximizeAndFullscreen(t.participant.identity, src)} />
-                                    </mdui-tooltip>
+                                    <mdui-button-icon
+                                        title={src === 'camera' ? '最大化摄像头' : '最大化共享'}
+                                        icon="zoom_out_map"
+                                        onClick={() => maximize(t.participant.identity, src)}
+                                    />
+                                    <mdui-button-icon
+                                        title="全屏"
+                                        icon="fullscreen"
+                                        onClick={() => maximizeAndFullscreen(t.participant.identity, src)}
+                                    />
                                 </> : undefined}
                             />
                         )
