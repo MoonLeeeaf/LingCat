@@ -16,7 +16,7 @@ import ClientManager from '../../ClientManager.ts'
 
 /** 判断是否需要在 msg 上方显示时间分隔条 */
 // 距底部多少像素内才跟随新消息 (太大导致小幅上滑也被拉回底部)
-const NEAR_BOTTOM_PX = 24
+const BOTTOM_REENABLE_PX = 16
 
 const ListFooter = () => <div style={{ height: '12px', flexShrink: 0 }} />
 
@@ -75,14 +75,14 @@ export function MessageList({
     const virtuosoRef = React.useRef<VirtuosoHandle>(null)
     const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
-    const isNearBottomRef = React.useRef(true)
+    const followBottomRef = React.useRef(true)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
     // 切对话时重置
     React.useEffect(() => {
         setInitialScrollDone(false)
         isAtBottomRef.current = true
-        isNearBottomRef.current = true
+        followBottomRef.current = true
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
@@ -96,9 +96,9 @@ export function MessageList({
         virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
     }, [])
 
-    // 新消息到达时，若变化前在底部附近 → 贴底
+    // 新消息到达时，若跟随开关开启 → 贴底
     const handleNewMessage = React.useCallback(() => {
-        if (!isNearBottomRef.current) return
+        if (!followBottomRef.current) return
         const pin = () => {
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
             if (el) el.scrollTop = el.scrollHeight
@@ -106,7 +106,7 @@ export function MessageList({
         requestAnimationFrame(pin)
         // 消息/图片高度可能在下一帧才稳定, 再补一次
         window.setTimeout(() => {
-            if (isNearBottomRef.current) pin()
+            if (followBottomRef.current) pin()
         }, 120)
     }, [])
 
@@ -127,20 +127,55 @@ export function MessageList({
         return () => timers.forEach((t) => window.clearTimeout(t))
     }, [chatId, hasMessages, scrollToBottom])
 
-    // 记录用户是否在底部附近 (以变化前的位置为准, 避免大消息/图片撑高后误判)
+    // 跟随开关: 只有用户主动上滑 (滚轮/触摸/键盘/拖拽) 才关闭;
+    // 程序滚动、Virtuoso 追加消息后的中间调整、内容增高都不会关闭, 避免误判后不贴底
     React.useEffect(() => {
         if (!hasMessages) return
         const container = containerRef.current
         const sc = container?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
         if (!sc) return
+
+        let pointerDown = false
+        let lastTop = sc.scrollTop
+        let touchY: number | null = null
+
+        const stopFollow = () => { followBottomRef.current = false }
         const onScroll = () => {
             const distance = sc.scrollHeight - sc.clientHeight - sc.scrollTop
-            isNearBottomRef.current = distance < NEAR_BOTTOM_PX
             isAtBottomRef.current = distance < 3
+            if (distance < BOTTOM_REENABLE_PX) followBottomRef.current = true
+            if (pointerDown && sc.scrollTop < lastTop - 2) stopFollow()
+            lastTop = sc.scrollTop
         }
+        const onWheel = (e: WheelEvent) => { if (e.deltaY < 0) stopFollow() }
+        const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0]?.clientY ?? null }
+        const onTouchMove = (e: TouchEvent) => {
+            const y = e.touches[0]?.clientY
+            if (touchY != null && y != null && y > touchY + 4) stopFollow()
+        }
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Home') stopFollow()
+        }
+        const onPointerDown = () => { pointerDown = true; lastTop = sc.scrollTop }
+        const onPointerUp = () => { pointerDown = false }
+
         sc.addEventListener('scroll', onScroll, { passive: true })
+        sc.addEventListener('wheel', onWheel, { passive: true })
+        sc.addEventListener('touchstart', onTouchStart, { passive: true })
+        sc.addEventListener('touchmove', onTouchMove, { passive: true })
+        sc.addEventListener('keydown', onKeyDown)
+        sc.addEventListener('pointerdown', onPointerDown)
+        window.addEventListener('pointerup', onPointerUp)
         onScroll()
-        return () => sc.removeEventListener('scroll', onScroll)
+        return () => {
+            sc.removeEventListener('scroll', onScroll)
+            sc.removeEventListener('wheel', onWheel)
+            sc.removeEventListener('touchstart', onTouchStart)
+            sc.removeEventListener('touchmove', onTouchMove)
+            sc.removeEventListener('keydown', onKeyDown)
+            sc.removeEventListener('pointerdown', onPointerDown)
+            window.removeEventListener('pointerup', onPointerUp)
+        }
     }, [chatId, hasMessages])
 
     // 容器/内容高度变化 (输入框 autosize / 横幅 / 新消息 / 图片加载) 时保持贴底
@@ -150,7 +185,7 @@ export function MessageList({
         if (!container) return
         let raf = 0
         const pin = () => {
-            if (!isNearBottomRef.current) return
+            if (!followBottomRef.current) return
             cancelAnimationFrame(raf)
             raf = requestAnimationFrame(() => {
                 const el = container.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
@@ -359,7 +394,7 @@ export function MessageList({
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}
-                    followOutput={() => (isNearBottomRef.current ? 'auto' : false)}
+                    followOutput={() => (followBottomRef.current ? 'auto' : false)}
                     atTopThreshold={300}
                     atBottomThreshold={40}
                     atTopStateChange={atTopStateChange}
