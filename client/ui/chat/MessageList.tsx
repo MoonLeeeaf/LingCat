@@ -77,6 +77,7 @@ export function MessageList({
     const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
     const followBottomRef = React.useRef(true)
+    const scrollIntentRef = React.useRef<'up' | 'down' | null>(null)
     const newMessageIdsRef = React.useRef<Set<number>>(new Set())
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
 
@@ -85,10 +86,12 @@ export function MessageList({
         setInitialScrollDone(false)
         isAtBottomRef.current = true
         followBottomRef.current = true
+        scrollIntentRef.current = null
         newMessageIdsRef.current = new Set()
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+        if (!followBottomRef.current) return
         // Virtuoso 的 scrollToIndex('LAST') 偶尔会差一截 (输入框/横幅高度在首帧后才确定),
         // 直接操作 scroller 兜底, 保证真正贴底
         const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
@@ -108,6 +111,7 @@ export function MessageList({
         }
         if (!followBottomRef.current) return
         const pin = () => {
+            if (!followBottomRef.current) return
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
             if (el) el.scrollTop = el.scrollHeight
         }
@@ -146,25 +150,53 @@ export function MessageList({
         let pointerDown = false
         let lastTop = sc.scrollTop
         let touchY: number | null = null
+        // 以用户的滚动方向为准。虚拟列表测量/补偿高度也会触发 scroll，
+        // 不能仅因暂时靠近底部就重新开启跟随，否则上滑会被拉回去。
 
-        const stopFollow = () => { followBottomRef.current = false }
+        const stopFollow = () => {
+            scrollIntentRef.current = 'up'
+            followBottomRef.current = false
+        }
+        const resumeFollow = () => {
+            scrollIntentRef.current = 'down'
+            if (sc.scrollHeight - sc.clientHeight - sc.scrollTop <= BOTTOM_REENABLE_PX) {
+                followBottomRef.current = true
+            }
+        }
         const onScroll = () => {
             const distance = sc.scrollHeight - sc.clientHeight - sc.scrollTop
             isAtBottomRef.current = distance < 3
-            if (distance < BOTTOM_REENABLE_PX) followBottomRef.current = true
-            if (pointerDown && sc.scrollTop < lastTop - 2) stopFollow()
+            if (pointerDown) {
+                if (sc.scrollTop < lastTop) stopFollow()
+                else if (sc.scrollTop > lastTop) scrollIntentRef.current = 'down'
+            }
+            if (scrollIntentRef.current === 'down' && distance <= BOTTOM_REENABLE_PX) {
+                followBottomRef.current = true
+            }
             lastTop = sc.scrollTop
         }
-        const onWheel = (e: WheelEvent) => { if (e.deltaY < 0) stopFollow() }
+        const onWheel = (e: WheelEvent) => {
+            if (e.deltaY < 0) stopFollow()
+            else if (e.deltaY > 0) resumeFollow()
+        }
         const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0]?.clientY ?? null }
         const onTouchMove = (e: TouchEvent) => {
             const y = e.touches[0]?.clientY
-            if (touchY != null && y != null && y > touchY + 4) stopFollow()
+            if (touchY != null && y != null) {
+                if (y > touchY) stopFollow()
+                else if (y < touchY) resumeFollow()
+            }
+            touchY = y ?? null
         }
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Home') stopFollow()
+            else if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'End') resumeFollow()
         }
-        const onPointerDown = () => { pointerDown = true; lastTop = sc.scrollTop }
+        const onPointerDown = (e: PointerEvent) => {
+            // 触摸方向由 touchmove 判断，避免高度补偿被误认为手指向下滚动。
+            pointerDown = e.pointerType === 'mouse' && e.target === sc
+            lastTop = sc.scrollTop
+        }
         const onPointerUp = () => { pointerDown = false }
 
         sc.addEventListener('scroll', onScroll, { passive: true })
@@ -174,6 +206,7 @@ export function MessageList({
         sc.addEventListener('keydown', onKeyDown)
         sc.addEventListener('pointerdown', onPointerDown)
         window.addEventListener('pointerup', onPointerUp)
+        window.addEventListener('pointercancel', onPointerUp)
         onScroll()
         return () => {
             sc.removeEventListener('scroll', onScroll)
@@ -183,6 +216,7 @@ export function MessageList({
             sc.removeEventListener('keydown', onKeyDown)
             sc.removeEventListener('pointerdown', onPointerDown)
             window.removeEventListener('pointerup', onPointerUp)
+            window.removeEventListener('pointercancel', onPointerUp)
         }
     }, [chatId, hasMessages])
 
@@ -196,6 +230,7 @@ export function MessageList({
             if (!followBottomRef.current) return
             cancelAnimationFrame(raf)
             raf = requestAnimationFrame(() => {
+                if (!followBottomRef.current) return
                 const el = container.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
                 if (el) el.scrollTop = el.scrollHeight
             })
@@ -217,6 +252,8 @@ export function MessageList({
 
     React.useEffect(() => {
         if (scrollToSeqRequest == null) return
+        followBottomRef.current = false
+        scrollIntentRef.current = null
         const seq = scrollToSeqRequest
         useChatMessageStore.getState().clearScrollToSeqRequest()
 
