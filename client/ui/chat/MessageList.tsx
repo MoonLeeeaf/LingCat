@@ -79,6 +79,13 @@ export function MessageList({
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+        // Virtuoso 的 scrollToIndex('LAST') 偶尔会差一截 (输入框/横幅高度在首帧后才确定),
+        // 直接操作 scroller 兜底, 保证真正贴底
+        const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
+        if (el) {
+            if (behavior === 'smooth') el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+            else el.scrollTop = el.scrollHeight
+        }
         virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior })
     }, [])
 
