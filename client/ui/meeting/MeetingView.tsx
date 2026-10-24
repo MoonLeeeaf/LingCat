@@ -490,6 +490,7 @@ export function MeetingView({
                     { key: 'showCameraButton', label: '摄像头按钮' },
                     { key: 'autoMuteStreams', label: '直播流加入时自动本地静音' },
                     { key: 'showMediaStats', label: '显示视频统计信息 (调试)' },
+                    { key: 'joinSound', label: '其他人入会提示音' },
                 ] as const).map(({ key, label }) => (
                     <mdui-list-item
                         key={key}
