@@ -17,8 +17,10 @@ export default function PawSendButton({ hasContent, isSending, sendVersion, edit
     const onPrimary = 'rgb(var(--mdui-color-on-primary))'
     const ready = hasContent && !isSending
     const idleColor = ready ? onPrimary : 'rgb(var(--mdui-color-on-surface-variant))'
-    // 0–180ms 先按压猫掌；180–420ms 才收缩纯色圆形背景。
-    const sequence = { duration: reduceMotion ? 0 : 0.42, times: [0, 0.22, 0.43, 1], ease: 'easeInOut' as const }
+    // 图标独立按压 240ms，背景保持原尺寸；图标恢复后再收缩背景。
+    const pressDuration = reduceMotion ? 0 : 0.24
+    const fillDelay = reduceMotion ? 0 : 0.28
+    const fillDuration = reduceMotion ? 0 : 0.22
 
     return (
         <button type="button" className="lingcat-paw-send"
@@ -27,19 +29,24 @@ export default function PawSendButton({ hasContent, isSending, sendVersion, edit
             <motion.span className="lingcat-paw-fill"
                 key={`fill-${sendVersion}`}
                 initial={sending ? { scale: 1 } : false}
-                animate={{ scale: sending ? [1, 1, 1, 0] : ready ? 1 : 0 }}
-                transition={sending ? sequence : { duration: reduceMotion ? 0 : 0.14 }}
+                animate={{ scale: sending ? 0 : ready ? 1 : 0 }}
+                transition={sending
+                    ? { delay: fillDelay, duration: fillDuration, ease: 'easeIn' }
+                    : { duration: reduceMotion ? 0 : 0.14 }}
+                onAnimationComplete={() => {
+                    if (sending) setCompletedVersion(current => Math.max(current, sendVersion))
+                }}
                 style={{ background: primary }} />
             <motion.svg key={`paw-${sendVersion}`} viewBox="0 0 32 32" aria-hidden="true"
                 initial={sending ? { scale: 1, color: onPrimary } : false}
                 animate={{
-                    scale: sending ? [1, 0.78, 1, 1] : 1,
-                    color: sending ? [onPrimary, onPrimary, onPrimary, idleColor] : idleColor,
+                    scale: sending ? [1, 0.86, 1] : 1,
+                    color: idleColor,
                 }}
-                transition={sending ? sequence : { duration: reduceMotion ? 0 : 0.14 }}
-                onAnimationComplete={() => {
-                    if (sending) setCompletedVersion(current => Math.max(current, sendVersion))
-                }}
+                transition={sending ? {
+                    scale: { duration: pressDuration, times: [0, 0.45, 1], ease: 'easeInOut' },
+                    color: { delay: fillDelay, duration: fillDuration },
+                } : { duration: reduceMotion ? 0 : 0.14 }}
                 fill="currentColor">
                 <ellipse cx="6.8" cy="12" rx="3.2" ry="3.7" transform="rotate(-32 6.8 12)" />
                 <ellipse cx="12.4" cy="7" rx="3.3" ry="3.8" transform="rotate(-12 12.4 7)" />
