@@ -44,7 +44,7 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
 //                      列表项
 // ============================================================
 
-function ChatListItem({ chat, active, index }: { chat: IChat; active: boolean; index: number }) {
+function ChatListItem({ chat, active, index, enableLayout }: { chat: IChat; active: boolean; index: number; enableLayout: boolean }) {
     const navigate = useNavigate()
     const isMobile = useIsMobile()
 
@@ -55,14 +55,14 @@ function ChatListItem({ chat, active, index }: { chat: IChat; active: boolean; i
 
     return (
         <motion.div
-            layout
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            layout={enableLayout ? 'position' : undefined}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-                duration: 0.18,
-                delay: Math.min(index * 0.02, 0.2),
+                duration: 0.22,
+                delay: Math.min(index * 0.02, 0.18),
                 ease: 'easeOut',
-                layout: { duration: 0.2, ease: 'easeOut' },
+                layout: { type: 'spring', stiffness: 260, damping: 30 },
             }}
         >
         <mdui-dropdown trigger="hover">
@@ -143,6 +143,22 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
     const [favouritedChats, setFavouritedChats] = React.useState<IChat[]>([])
     const [allChats, setAllChats] = React.useState<IChat[]>([])
     const [loading, setLoading] = React.useState({ recent: false, fav: false, all: false })
+
+    // 首次加载/切换列表时先只做淡入，稳定后再启用 layout 重排动画，避免首屏生硬
+    const [layoutReady, setLayoutReady] = React.useState(false)
+    React.useEffect(() => {
+        const currentLoading = show === 'recents'
+            ? loading.recent
+            : show === 'favourites'
+                ? loading.fav
+                : loading.all
+        if (currentLoading) {
+            setLayoutReady(false)
+            return
+        }
+        const timer = window.setTimeout(() => setLayoutReady(true), 500)
+        return () => window.clearTimeout(timer)
+    }, [show, loading.recent, loading.fav, loading.all])
 
     // search
     const [searchKeyword, setSearchKeyword] = React.useState('')
@@ -300,6 +316,7 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
                     chat={chat}
                     active={activeChatId === chat.id}
                     index={index}
+                    enableLayout={layoutReady}
                 />
             ))}
         </>

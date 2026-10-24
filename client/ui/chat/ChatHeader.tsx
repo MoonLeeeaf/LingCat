@@ -62,9 +62,9 @@ export function ChatHeader({
                 <AnimatePresence mode="wait" initial={false}>
                     <motion.span
                         key={title}
-                        initial={{ opacity: 0, x: 8 }}
+                        initial={{ opacity: 0, x: -8 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -8 }}
+                        exit={{ opacity: 0, x: 8 }}
                         transition={{ duration: 0.16, ease: 'easeOut' }}
                         style={{
                             display: 'inline-block',
