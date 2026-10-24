@@ -408,6 +408,24 @@ message Meeting_Ended_Event {
     string meeting_id = 2;
 }
 
+// 修改进行中会议的标题
+message Update_Meeting_Title_Request {
+    string access_token = 1;
+    string chat_id = 2;
+    string meeting_id = 3;
+    string title = 4;
+}
+
+message Update_Meeting_Title_Response {
+    string title = 1;
+}
+
+message Meeting_Title_Changed_Event {
+    string chat_id = 1;
+    string meeting_id = 2;
+    string title = 3;
+}
+
 // 查询对话中正在进行的会议
 message Get_Active_Meeting_Request {
     string access_token = 1;

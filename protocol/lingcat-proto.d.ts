@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs/minimal.js";
+import * as $protobuf from "protobufjs";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -11547,6 +11547,387 @@ export namespace lingcat {
 
             /** Shape of a Meeting_Ended_Event. */
             type $Shape = lingcat.methods.Meeting_Ended_Event.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Meeting_Title_Request.
+         * @deprecated Use lingcat.methods.Update_Meeting_Title_Request.$Properties instead.
+         */
+        interface IUpdate_Meeting_Title_Request extends lingcat.methods.Update_Meeting_Title_Request.$Properties {
+        }
+
+        /** Represents an Update_Meeting_Title_Request. */
+        class Update_Meeting_Title_Request {
+
+            /**
+             * Constructs a new Update_Meeting_Title_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Meeting_Title_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Update_Meeting_Title_Request accessToken. */
+            accessToken: string;
+
+            /** Update_Meeting_Title_Request chatId. */
+            chatId: string;
+
+            /** Update_Meeting_Title_Request meetingId. */
+            meetingId: string;
+
+            /** Update_Meeting_Title_Request title. */
+            title: string;
+
+            /**
+             * Creates a new Update_Meeting_Title_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Meeting_Title_Request instance
+             */
+            static create(properties: lingcat.methods.Update_Meeting_Title_Request.$Shape): lingcat.methods.Update_Meeting_Title_Request & lingcat.methods.Update_Meeting_Title_Request.$Shape;
+            static create(properties?: lingcat.methods.Update_Meeting_Title_Request.$Properties): lingcat.methods.Update_Meeting_Title_Request;
+
+            /**
+             * Encodes the specified Update_Meeting_Title_Request message. Does not implicitly {@link lingcat.methods.Update_Meeting_Title_Request.verify|verify} messages.
+             * @param message Update_Meeting_Title_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Meeting_Title_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Meeting_Title_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Meeting_Title_Request.verify|verify} messages.
+             * @param message Update_Meeting_Title_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Meeting_Title_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Meeting_Title_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Meeting_Title_Request & lingcat.methods.Update_Meeting_Title_Request.$Shape} Update_Meeting_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Meeting_Title_Request & lingcat.methods.Update_Meeting_Title_Request.$Shape;
+
+            /**
+             * Decodes an Update_Meeting_Title_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Meeting_Title_Request & lingcat.methods.Update_Meeting_Title_Request.$Shape} Update_Meeting_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Meeting_Title_Request & lingcat.methods.Update_Meeting_Title_Request.$Shape;
+
+            /**
+             * Verifies an Update_Meeting_Title_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Meeting_Title_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Meeting_Title_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Meeting_Title_Request;
+
+            /**
+             * Creates a plain object from an Update_Meeting_Title_Request message. Also converts values to other types if specified.
+             * @param message Update_Meeting_Title_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Meeting_Title_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Meeting_Title_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Meeting_Title_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Meeting_Title_Request {
+
+            /** Properties of an Update_Meeting_Title_Request. */
+            interface $Properties {
+
+                /** Update_Meeting_Title_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Update_Meeting_Title_Request chatId */
+                chatId?: (string|null);
+
+                /** Update_Meeting_Title_Request meetingId */
+                meetingId?: (string|null);
+
+                /** Update_Meeting_Title_Request title */
+                title?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Meeting_Title_Request. */
+            type $Shape = lingcat.methods.Update_Meeting_Title_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Meeting_Title_Response.
+         * @deprecated Use lingcat.methods.Update_Meeting_Title_Response.$Properties instead.
+         */
+        interface IUpdate_Meeting_Title_Response extends lingcat.methods.Update_Meeting_Title_Response.$Properties {
+        }
+
+        /** Represents an Update_Meeting_Title_Response. */
+        class Update_Meeting_Title_Response {
+
+            /**
+             * Constructs a new Update_Meeting_Title_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Meeting_Title_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Update_Meeting_Title_Response title. */
+            title: string;
+
+            /**
+             * Creates a new Update_Meeting_Title_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Meeting_Title_Response instance
+             */
+            static create(properties: lingcat.methods.Update_Meeting_Title_Response.$Shape): lingcat.methods.Update_Meeting_Title_Response & lingcat.methods.Update_Meeting_Title_Response.$Shape;
+            static create(properties?: lingcat.methods.Update_Meeting_Title_Response.$Properties): lingcat.methods.Update_Meeting_Title_Response;
+
+            /**
+             * Encodes the specified Update_Meeting_Title_Response message. Does not implicitly {@link lingcat.methods.Update_Meeting_Title_Response.verify|verify} messages.
+             * @param message Update_Meeting_Title_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Meeting_Title_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Meeting_Title_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Meeting_Title_Response.verify|verify} messages.
+             * @param message Update_Meeting_Title_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Meeting_Title_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Meeting_Title_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Meeting_Title_Response & lingcat.methods.Update_Meeting_Title_Response.$Shape} Update_Meeting_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Meeting_Title_Response & lingcat.methods.Update_Meeting_Title_Response.$Shape;
+
+            /**
+             * Decodes an Update_Meeting_Title_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Meeting_Title_Response & lingcat.methods.Update_Meeting_Title_Response.$Shape} Update_Meeting_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Meeting_Title_Response & lingcat.methods.Update_Meeting_Title_Response.$Shape;
+
+            /**
+             * Verifies an Update_Meeting_Title_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Meeting_Title_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Meeting_Title_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Meeting_Title_Response;
+
+            /**
+             * Creates a plain object from an Update_Meeting_Title_Response message. Also converts values to other types if specified.
+             * @param message Update_Meeting_Title_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Meeting_Title_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Meeting_Title_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Meeting_Title_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Meeting_Title_Response {
+
+            /** Properties of an Update_Meeting_Title_Response. */
+            interface $Properties {
+
+                /** Update_Meeting_Title_Response title */
+                title?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Meeting_Title_Response. */
+            type $Shape = lingcat.methods.Update_Meeting_Title_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Meeting_Title_Changed_Event.
+         * @deprecated Use lingcat.methods.Meeting_Title_Changed_Event.$Properties instead.
+         */
+        interface IMeeting_Title_Changed_Event extends lingcat.methods.Meeting_Title_Changed_Event.$Properties {
+        }
+
+        /** Represents a Meeting_Title_Changed_Event. */
+        class Meeting_Title_Changed_Event {
+
+            /**
+             * Constructs a new Meeting_Title_Changed_Event.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Meeting_Title_Changed_Event.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Meeting_Title_Changed_Event chatId. */
+            chatId: string;
+
+            /** Meeting_Title_Changed_Event meetingId. */
+            meetingId: string;
+
+            /** Meeting_Title_Changed_Event title. */
+            title: string;
+
+            /**
+             * Creates a new Meeting_Title_Changed_Event instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Meeting_Title_Changed_Event instance
+             */
+            static create(properties: lingcat.methods.Meeting_Title_Changed_Event.$Shape): lingcat.methods.Meeting_Title_Changed_Event & lingcat.methods.Meeting_Title_Changed_Event.$Shape;
+            static create(properties?: lingcat.methods.Meeting_Title_Changed_Event.$Properties): lingcat.methods.Meeting_Title_Changed_Event;
+
+            /**
+             * Encodes the specified Meeting_Title_Changed_Event message. Does not implicitly {@link lingcat.methods.Meeting_Title_Changed_Event.verify|verify} messages.
+             * @param message Meeting_Title_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Meeting_Title_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Meeting_Title_Changed_Event message, length delimited. Does not implicitly {@link lingcat.methods.Meeting_Title_Changed_Event.verify|verify} messages.
+             * @param message Meeting_Title_Changed_Event message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Meeting_Title_Changed_Event.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Meeting_Title_Changed_Event message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Meeting_Title_Changed_Event & lingcat.methods.Meeting_Title_Changed_Event.$Shape} Meeting_Title_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Meeting_Title_Changed_Event & lingcat.methods.Meeting_Title_Changed_Event.$Shape;
+
+            /**
+             * Decodes a Meeting_Title_Changed_Event message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Meeting_Title_Changed_Event & lingcat.methods.Meeting_Title_Changed_Event.$Shape} Meeting_Title_Changed_Event
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Meeting_Title_Changed_Event & lingcat.methods.Meeting_Title_Changed_Event.$Shape;
+
+            /**
+             * Verifies a Meeting_Title_Changed_Event message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Meeting_Title_Changed_Event message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Meeting_Title_Changed_Event
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Meeting_Title_Changed_Event;
+
+            /**
+             * Creates a plain object from a Meeting_Title_Changed_Event message. Also converts values to other types if specified.
+             * @param message Meeting_Title_Changed_Event
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Meeting_Title_Changed_Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Meeting_Title_Changed_Event to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Meeting_Title_Changed_Event
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Meeting_Title_Changed_Event {
+
+            /** Properties of a Meeting_Title_Changed_Event. */
+            interface $Properties {
+
+                /** Meeting_Title_Changed_Event chatId */
+                chatId?: (string|null);
+
+                /** Meeting_Title_Changed_Event meetingId */
+                meetingId?: (string|null);
+
+                /** Meeting_Title_Changed_Event title */
+                title?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Meeting_Title_Changed_Event. */
+            type $Shape = lingcat.methods.Meeting_Title_Changed_Event.$Properties;
         }
 
         /**

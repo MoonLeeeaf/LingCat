@@ -150,6 +150,7 @@ interface MeetingActions {
     startMeeting(chat: Pick<IChat, 'id' | 'title'>, title?: string): Promise<void>
     leave(): void
     endMeeting(): Promise<void>
+    updateMeetingTitle(title: string): Promise<void>
 
     toggleMic(): Promise<void>
     toggleCamera(): Promise<void>
@@ -168,6 +169,7 @@ interface MeetingActions {
 
     onMeetingStarted(ev: { chatId: string, meetingId: string, room: string, starterUserId: string, title?: string | null }): void
     onMeetingEnded(ev: { chatId: string, meetingId: string }): void
+    onMeetingTitleChanged(ev: { chatId: string, meetingId: string, title: string }): void
     refreshActiveMeeting(chatId: string): Promise<void>
 
     getActiveMeeting(chatId: string): ActiveMeeting | undefined
@@ -513,6 +515,26 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
             // 服务端广播 Meeting_Ended_Event → onMeetingEnded → leave
         },
 
+        updateMeetingTitle: async (title) => {
+            const { chatId, meetingId } = get()
+            if (!chatId || !meetingId) return
+            const client = ClientManager.getActiveClient()
+            if (!client) return
+            const res = await MeetingApi.updateMeetingTitle(client, {
+                access_token: accessToken(),
+                chat_id: chatId,
+                meeting_id: meetingId,
+                title,
+            })
+            const clean = (res.title ?? title).trim() || undefined
+            set(s => ({
+                chatTitle: clean,
+                activeMeetings: s.activeMeetings[chatId]
+                    ? { ...s.activeMeetings, [chatId]: { ...s.activeMeetings[chatId], title: clean } }
+                    : s.activeMeetings,
+            }))
+        },
+
         toggleMic: async () => {
             const lp = get().room?.localParticipant
             if (!lp) return
@@ -627,6 +649,19 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                         startedAt: Date.now(),
                     },
                 },
+            }))
+        },
+
+        onMeetingTitleChanged: (ev) => {
+            const active = get().activeMeetings[ev.chatId]
+            if (!active || active.meetingId !== ev.meetingId) return
+            const title = ev.title?.trim() || undefined
+            set(s => ({
+                activeMeetings: {
+                    ...s.activeMeetings,
+                    [ev.chatId]: { ...s.activeMeetings[ev.chatId], title },
+                },
+                chatTitle: s.chatId === ev.chatId && s.meetingId === ev.meetingId ? title : s.chatTitle,
             }))
         },
 

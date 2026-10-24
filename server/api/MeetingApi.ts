@@ -66,6 +66,10 @@ class MeetingStore {
         return { ...m, title: m.title ?? undefined }
     }
 
+    async updateTitle(id: string, title: string) {
+        await MeetingDataBase.updateTitle(id, title)
+    }
+
     async remove(id: string) {
         await MeetingDataBase.remove(id)
     }
@@ -316,6 +320,41 @@ export default class MeetingApi {
                     method_id: Methods.End_Meeting_Response,
                     flags: 0,
                     data: LingCatProto.methods.End_Meeting_Response.encode({}).finish(),
+                }))
+                break
+            }
+            /**
+             * ===============================
+             *        修改会议标题
+             * ===============================
+             */
+            case Methods.Update_Meeting_Title_Request: {
+                const data = LingCatProto.methods.Update_Meeting_Title_Request.decode(mPackage.data)
+                const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
+
+                if (!await assertMeetingAllowed(sendPackage, mPackage.method_id, user_id, data.chatId)) return
+
+                const meeting = await store.get(data.meetingId)
+                if (!meeting || meeting.chat_id != data.chatId)
+                    return sendError(sendPackage, mPackage.method_id, '会议不存在或已结束', Code.Not_Found)
+
+                const title = String(data.title ?? '').trim().slice(0, 64)
+                await store.updateTitle(meeting.id, title)
+
+                await broadcastToChatMembers(clients_emiter, data.chatId, () => Package.encode({
+                    method_id: Methods.Meeting_Title_Changed_Event,
+                    flags: 0,
+                    data: LingCatProto.methods.Meeting_Title_Changed_Event.encode({
+                        chatId: data.chatId,
+                        meetingId: meeting.id,
+                        title,
+                    }).finish(),
+                }))
+
+                sendPackage(Package.encode({
+                    method_id: Methods.Update_Meeting_Title_Response,
+                    flags: 0,
+                    data: LingCatProto.methods.Update_Meeting_Title_Response.encode({ title }).finish(),
                 }))
                 break
             }

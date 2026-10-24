@@ -39,6 +39,10 @@ export default class MeetingDataBase {
         return await db<IMeetingRecord>(tableName).where({ chat_id }).orderBy('created_at', 'desc').first()
     }
 
+    static async updateTitle(id: string, title: string) {
+        await db<IMeetingRecord>(tableName).where({ id }).update({ title })
+    }
+
     static async remove(id: string) {
         await db<IMeetingRecord>(tableName).where({ id }).del()
     }

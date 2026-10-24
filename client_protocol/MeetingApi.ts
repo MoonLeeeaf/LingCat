@@ -187,4 +187,36 @@ export default class MeetingApi {
             })),
         }
     }
+    /**
+     * 修改进行中会议的标题
+     */
+    static async updateMeetingTitle(client: LingCatClient, {
+        access_token,
+        chat_id,
+        meeting_id,
+        title,
+        timeout,
+    }: {
+        access_token: string
+        chat_id: string
+        meeting_id: string
+        title: string
+        timeout?: number
+    }): Promise<{ title: string }> {
+        const res = decodeOrThrow<LingCatProto.methods.Update_Meeting_Title_Response>(
+            LingCatProto.methods.Update_Meeting_Title_Response,
+            (await client.invoke({
+                method_id: Methods.Update_Meeting_Title_Request,
+                data: LingCatProto.methods.Update_Meeting_Title_Request.encode({
+                    accessToken: access_token,
+                    chatId: chat_id,
+                    meetingId: meeting_id,
+                    title,
+                }).finish(),
+                timeout,
+            })).data,
+        )
+        return { title: res.title ?? '' }
+    }
+
 }

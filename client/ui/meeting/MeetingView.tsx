@@ -1,4 +1,5 @@
 import React from 'react'
+import { dialog } from 'mdui'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import ParticipantTile from './ParticipantTile.tsx'
 import { VideoPublication } from './VideoTrack.tsx'
@@ -436,9 +437,53 @@ export function MeetingView({
         </div>
     )
 
+    const editMeetingTitle = () => {
+        const dlg = dialog({
+            headline: '修改会议标题',
+            body: '<div style="padding-top: 12px"><mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field></div>',
+            closeOnEsc: true,
+            closeOnOverlayClick: true,
+            actions: [
+                { text: '取消', onClick: () => true },
+                {
+                    text: '保存',
+                    onClick: async () => {
+                        const input = dlg.querySelector('#meeting-title') as any
+                        const title = String(input?.value ?? '').trim()
+                        dlg.open = false
+                        try {
+                            await useMeetingStore.getState().updateMeetingTitle(title)
+                        } catch (e) {
+                            tipError(e, '修改会议标题失败')
+                        }
+                    },
+                },
+            ],
+        })
+        setTimeout(() => {
+            const input = dlg.querySelector('#meeting-title') as any
+            if (input) {
+                input.value = chatTitle ?? ''
+                input.focus?.()
+            }
+        }, 10)
+    }
+
     const settingsDialog = (
         <mdui-dialog ref={settingsRef} close-on-overlay-click close-on-esc headline="会议设置">
             <mdui-list>
+                <mdui-list-item icon="edit" rounded onClick={editMeetingTitle}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                        <span style={{ flex: 1 }}>会议标题</span>
+                        <span style={{
+                            opacity: 0.6,
+                            maxWidth: '50%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}>{chatTitle || '未设置'}</span>
+                    </div>
+                </mdui-list-item>
                 {([
                     { key: 'showBubble', label: '消息气泡' },
                     { key: 'showLocalMute', label: '本地静音按钮' },

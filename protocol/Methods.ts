@@ -103,6 +103,10 @@ export default class Methods {
     static Get_Meeting_Participants_Request = 0x8a
     static Get_Meeting_Participants_Response = 0x8b
 
+    static Update_Meeting_Title_Request = 0xa0
+    static Update_Meeting_Title_Response = 0xa1
+    static Meeting_Title_Changed_Event = 0xa2
+
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32
     static Message_Edited_Event = 0x73

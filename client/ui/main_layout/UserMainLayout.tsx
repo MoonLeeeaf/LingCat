@@ -230,6 +230,13 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                         chatId: ev.chatId,
                         meetingId: ev.meetingId,
                     })
+                } else if (pkg.method_id === Methods.Meeting_Title_Changed_Event) {
+                    const ev = LingCatProto.methods.Meeting_Title_Changed_Event.decode(pkg.data)
+                    useMeetingStore.getState().onMeetingTitleChanged({
+                        chatId: ev.chatId,
+                        meetingId: ev.meetingId,
+                        title: ev.title,
+                    })
                 }
             } catch (e) {
                 console.warn('[Meeting] 处理会议事件失败', e)
