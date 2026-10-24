@@ -118,6 +118,7 @@ export function DesktopMeetingWindow() {
 
     return (
         <motion.div
+            layoutRoot
             initial={false}
             animate={{ opacity: isMinimized ? 0 : 1, scale: isMinimized && !reduceMotion ? 0.97 : 1 }}
             transition={{ duration: 0.16 }}

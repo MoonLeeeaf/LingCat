@@ -152,6 +152,8 @@ export function MeetingView({
         if (cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'camera' })
         if (!scr && !cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'auto' })
     }
+    // 仅成员/媒体瓦片集合变化时重排；拖动、缩放和最大化窗口不触发位置补间。
+    const tileLayoutKey = JSON.stringify(tiles.map(tile => tile.key))
 
     // ============================================================
     //  网格列数
@@ -233,7 +235,8 @@ export function MeetingView({
     //  渲染
     // ============================================================
     const body = (
-        <div
+        <motion.div
+            layoutScroll
             ref={bodyRef}
             style={{
                 flex: 1,
@@ -299,9 +302,9 @@ export function MeetingView({
                             />
                         </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
+                    <motion.div layoutScroll style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
                         {tiles.map(t => (
-                            <motion.div key={t.key} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                            <motion.div key={t.key} layout="position" layoutDependency={tileLayoutKey} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                 transition={{ duration: 0.18 }} style={{ flex: '0 0 130px', minWidth: 0 }}>
                                 <ParticipantTile
                                     compact
@@ -316,7 +319,7 @@ export function MeetingView({
                                 />
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             ) : (
                 <div style={{
@@ -330,7 +333,7 @@ export function MeetingView({
                     {tiles.map(t => {
                         const src = t.source
                         return (
-                            <motion.div key={t.key} layout="position" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                            <motion.div key={t.key} layout="position" layoutDependency={tileLayoutKey} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                 transition={{ duration: 0.2, ease: 'easeOut' }} style={{ minWidth: 0 }}>
                             <ParticipantTile
                                 participant={t.participant}
@@ -355,7 +358,7 @@ export function MeetingView({
                     })}
                 </div>
             ))}
-        </div>
+        </motion.div>
     )
 
     const controls = (
