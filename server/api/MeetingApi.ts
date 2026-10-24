@@ -23,7 +23,8 @@ export interface IMeeting {
 
 type ClientsEmiter = { [k: string]: { [k: string]: (mPackage: Package) => void } }
 
-const MEETING_IDLE_TIMEOUT_MS = 1000 * 60 * 60 * 6
+// 无活跃参与者后的空闲超时 (活跃房间由 poller 每 5s 续期)
+const MEETING_IDLE_TIMEOUT_MS = 1000 * 60 * 30
 
 // 会议在场成员缓存: 同一 room 5 秒内共享一次 LiveKit 查询 (只存原始数据, 发送时再 encode)
 const participantsCache = new Map<string, {
@@ -43,6 +44,7 @@ class MeetingStore {
             starter_user_id,
             title: title?.trim() || undefined,
             created_at: Date.now(),
+            last_active_at: Date.now(),
         }
         await MeetingDataBase.create(meeting)
         return meeting
@@ -52,7 +54,8 @@ class MeetingStore {
         await MeetingDataBase.removeExpired(Date.now() - MEETING_IDLE_TIMEOUT_MS)
         const m = await MeetingDataBase.get(id)
         if (!m) return undefined
-        if (Date.now() - m.created_at > MEETING_IDLE_TIMEOUT_MS) {
+        const lastActive = m.last_active_at ?? m.created_at
+        if (Date.now() - lastActive > MEETING_IDLE_TIMEOUT_MS) {
             await MeetingDataBase.remove(id)
             return undefined
         }
@@ -68,6 +71,10 @@ class MeetingStore {
 
     async updateTitle(id: string, title: string) {
         await MeetingDataBase.updateTitle(id, title)
+    }
+
+    async touch(id: string) {
+        await MeetingDataBase.touch(id)
     }
 
     async remove(id: string) {
@@ -219,6 +226,7 @@ export default class MeetingApi {
                 const meeting = await store.get(data.meetingId)
                 if (!meeting || meeting.chat_id != data.chatId)
                     return sendError(sendPackage, mPackage.method_id, '会议不存在或已结束', Code.Not_Found)
+                await store.touch(meeting.id)
 
                 const max_participants = config.max_meeting_participants || 6
 
@@ -340,6 +348,7 @@ export default class MeetingApi {
 
                 const title = String(data.title ?? '').trim().slice(0, 64)
                 await store.updateTitle(meeting.id, title)
+                await store.touch(meeting.id)
 
                 await broadcastToChatMembers(clients_emiter, data.chatId, () => Package.encode({
                     method_id: Methods.Meeting_Title_Changed_Event,
@@ -513,8 +522,7 @@ class MeetingParticipantPoller {
 
     private async tick(clients_emiter: ClientsEmiter) {
         if (!config.livekit_enabled) return
-        const cutoff = Date.now() - MEETING_IDLE_TIMEOUT_MS
-        const meetings = await MeetingDataBase.getAllActive(cutoff)
+        const meetings = await MeetingDataBase.getAll()
         if (meetings.length === 0) {
             // 没有会议, 清空快照
             this.snapshots.clear()
@@ -545,6 +553,8 @@ class MeetingParticipantPoller {
                     }
                 })
                 const identities = new Set(data.map(d => d.identity))
+                // 有活跃参与者 → 续期, 长会议不会被 created_at 超时误删
+                if (identities.size > 0) await MeetingDataBase.touch(meeting.id, now)
 
                 const prev = this.snapshots.get(meeting.room)
 
@@ -595,6 +605,9 @@ class MeetingParticipantPoller {
                 this.snapshots.delete(room)
             }
         }
+
+        // 清理长时间无活跃参与者的会议记录
+        await MeetingDataBase.removeExpired(now - MEETING_IDLE_TIMEOUT_MS)
     }
 
     private async broadcast(
