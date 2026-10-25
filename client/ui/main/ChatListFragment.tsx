@@ -61,40 +61,40 @@ function ChatListItem({ chat, active, index, enableLayout }: { chat: IChat; acti
                 layout: { type: 'spring', stiffness: 260, damping: 30 },
             }}
         >
-        <mdui-dropdown trigger="hover">
-            <mdui-list-item
-                active={active}
-                slot="trigger"
-                rounded
-                onClick={() => {
-                    navigate({
-                        to: '/chat/$chatId',
-                        params: { chatId: chat.id },
-                        replace: !isMobile,   // 桌面端 replace，移动端 push
-                    })
-                }}
-                headline={title}
-                description-line={2}
-            >
-                <PresenceAvatar slot="icon" online={online}>
-                    <Avatar
-                        src={chat.avatar_file_hash
-                            ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
-                            : default_avatar}
-                    />
-                </PresenceAvatar>
-                <span slot="description">{chat.last_message_text}</span>
-            </mdui-list-item>
-
-            <mdui-menu>
-                <mdui-menu-item
-                    icon="info"
-                    onClick={() => ChatProfileDialog.show(chat.id)}
+            <mdui-dropdown trigger="hover">
+                <mdui-list-item
+                    active={active}
+                    slot="trigger"
+                    rounded
+                    onClick={() => {
+                        navigate({
+                            to: '/chat/$chatId',
+                            params: { chatId: chat.id },
+                            replace: !isMobile,   // 桌面端 replace，移动端 push
+                        })
+                    }}
+                    headline={title}
+                    description-line={2}
                 >
-                    对话信息
-                </mdui-menu-item>
-            </mdui-menu>
-        </mdui-dropdown>
+                    <PresenceAvatar slot="icon" online={online}>
+                        <Avatar
+                            src={chat.avatar_file_hash
+                                ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                : default_avatar}
+                        />
+                    </PresenceAvatar>
+                    <span slot="description">{chat.last_message_text}</span>
+                </mdui-list-item>
+
+                <mdui-menu>
+                    <mdui-menu-item
+                        icon="info"
+                        onClick={() => ChatProfileDialog.show(chat.id)}
+                    >
+                        对话信息
+                    </mdui-menu-item>
+                </mdui-menu>
+            </mdui-dropdown>
         </motion.div>
     )
 }
@@ -239,7 +239,7 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
 
     if (show === 'search') {
         return (
-            <>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <mdui-text-field
                     variant="outlined"
                     placeholder="查找我的对话..."
@@ -248,29 +248,34 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
                         const val = e.target.value
                         setSearchKeyword(val)
                     }}
-                    style={{ width: '100%', paddingBottom: '10px' }}
+                    style={{ width: '100%', paddingBottom: '10px', flexShrink: 0 }}
                     clearable
                 />
-                <SearchFeedback busy={searching} count={searchResults.length} hasQuery={!!searchKeyword.trim()}
-                    emptyText="输入关键词查找对话" />
-                {!searching && searchKeyword.trim() && searchResults.map(chat => (
-                    <mdui-list-item
-                        key={chat.id}
-                        active={activeChatId === chat.id}
-                        rounded
-                        onClick={() => ChatProfileDialog.show(chat.id)}
-                        headline={chat.title || '私聊'}
-                    >
-                        <Avatar
-                            slot="icon"
-                            src={chat.avatar_file_hash
-                                ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
-                                : default_avatar}
-                        />
-                    </mdui-list-item>
-                ))}
+
+                {/* 搜索列表区域，允许内部滚动 */}
+                <div style={{ flexGrow: 1, overflowY: 'auto', minHeight: 0 }}>
+                    <SearchFeedback busy={searching} count={searchResults.length} hasQuery={!!searchKeyword.trim()}
+                        emptyText="输入关键词查找对话" />
+                    {!searching && searchKeyword.trim() && searchResults.map(chat => (
+                        <mdui-list-item
+                            key={chat.id}
+                            active={activeChatId === chat.id}
+                            rounded
+                            onClick={() => ChatProfileDialog.show(chat.id)}
+                            headline={chat.title || '私聊'}
+                        >
+                            <Avatar
+                                slot="icon"
+                                src={chat.avatar_file_hash
+                                    ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                    : default_avatar}
+                            />
+                        </mdui-list-item>
+                    ))}
+                </div>
+
                 {showBuildInfoFooter && <BuildInfoFooter />}
-            </>
+            </div>
         )
     }
 
@@ -288,19 +293,26 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
     const filteredChats = dataSource.filter(chatFilter)
 
     return (
-        <>
-            <ChatFilterField onFilterChange={setFilterText} />
-            <SearchFeedback busy={isLoading} count={filteredChats.length} hasQuery={!!filterText.trim()} />
-            {filteredChats.map((chat, index) => (
-                <ChatListItem
-                    key={chat.id}
-                    chat={chat}
-                    active={activeChatId === chat.id}
-                    index={index}
-                    enableLayout={layoutReady}
-                />
-            ))}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ flexShrink: 0 }}>
+                <ChatFilterField onFilterChange={setFilterText} />
+            </div>
+
+            {/* 聊天列表区域，允许内部滚动 */}
+            <div style={{ flexGrow: 1, overflowY: 'auto', minHeight: 0 }}>
+                <SearchFeedback busy={isLoading} count={filteredChats.length} hasQuery={!!filterText.trim()} />
+                {filteredChats.map((chat, index) => (
+                    <ChatListItem
+                        key={chat.id}
+                        chat={chat}
+                        active={activeChatId === chat.id}
+                        index={index}
+                        enableLayout={layoutReady}
+                    />
+                ))}
+            </div>
+
             {showBuildInfoFooter && <BuildInfoFooter />}
-        </>
+        </div>
     )
 }

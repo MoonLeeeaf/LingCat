@@ -321,7 +321,7 @@ function BuildInfoContent() {
         <mdui-dialog ref={dialogRef} close-on-overlay-click close-on-esc>
             <span slot="headline">构建与连接</span>
 
-            <div style={{ width: 'min(480px, 82vw)', maxHeight: '65vh', overflowY: 'auto', paddingRight: '4px' }}>
+            <div style={{ width: 'min(480px, 82vw)', paddingRight: '4px' }}>
                 {updateAvailable && (
                     <div style={{
                         display: 'flex',
@@ -398,7 +398,7 @@ function BuildInfoContent() {
 
                 <Section title="操作">
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '4px' }}>
-                        <mdui-button variant="tonal" onClick={() => void checkNow()} disabled={checking}>
+                        <mdui-button variant="text" onClick={() => void checkNow()} disabled={checking}>
                             {checking ? '检查中…' : '检查更新'}
                         </mdui-button>
                         <mdui-button variant="text" onClick={refreshPage}>刷新页面</mdui-button>
@@ -426,7 +426,6 @@ function BuildInfoContent() {
                     gap: '4px 6px',
                     marginTop: '6px',
                     padding: '10px 8px 12px',
-                    borderTop: '1px solid rgba(127,127,127,0.18)',
                     color: 'rgb(var(--mdui-color-on-surface))',
                     fontSize: '11px',
                     lineHeight: 1.4,

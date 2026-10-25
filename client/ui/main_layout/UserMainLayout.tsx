@@ -471,6 +471,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 isMobile && <div style={{
                     paddingLeft: '10px',
                     paddingRight: '10px',
+                    height: '100%',
                 }}>
                     {chatListFragment}
                 </div>
