@@ -14,15 +14,17 @@ export interface AudioAttachmentProps {
 
 /** 消息内的音频附件: 只负责控制全局播放器, 播放不随消息项卸载而停止 */
 export default function AudioAttachment({ url, name, hash, chatId, chatTitle, messageId, senderName }: AudioAttachmentProps) {
-    const active = useChatAudioStore(s => s.track?.url === url)
-    const playing = useChatAudioStore(s => (s.track?.url === url ? s.playing : false))
-    const currentTime = useChatAudioStore(s => (s.track?.url === url ? s.currentTime : 0))
-    const duration = useChatAudioStore(s => (s.track?.url === url ? s.duration : 0))
-    const error = useChatAudioStore(s => (s.track?.url === url ? s.error : undefined))
+    const key = hash || url
+    const active = useChatAudioStore(s => s.track?.key === key)
+    const playing = useChatAudioStore(s => (s.track?.key === key ? s.playing : false))
+    const currentTime = useChatAudioStore(s => (s.track?.key === key ? s.currentTime : 0))
+    const duration = useChatAudioStore(s => (s.track?.key === key ? s.duration : 0))
+    const error = useChatAudioStore(s => (s.track?.key === key ? s.error : undefined))
 
     const toggle = () => {
         if (active) useChatAudioStore.getState().toggle()
         else useChatAudioStore.getState().play({
+            key,
             url,
             name: name || '语音',
             hash,

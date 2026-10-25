@@ -1,6 +1,9 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { useNavigate } from '@tanstack/react-router'
 import { useChatAudioStore, formatAudioTime } from './chatAudioStore.ts'
+import { useChatMessageStore } from './useChatMessageStore.ts'
+import { useMeetingStore } from '../meeting/MeetingManager.ts'
 
 /**
  * 全局音频横幅: 位于聊天标题栏下方、会议横幅上方。
@@ -12,6 +15,21 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
     const currentTime = useChatAudioStore(s => s.currentTime)
     const duration = useChatAudioStore(s => s.duration)
     const error = useChatAudioStore(s => s.error)
+    const navigate = useNavigate()
+    const meetingActive = useMeetingStore(s => s.phase === 'connected' || !!s.room)
+
+    React.useEffect(() => {
+        if (meetingActive) useChatAudioStore.getState().pause()
+    }, [meetingActive])
+
+    const openTrack = () => {
+        if (!track?.chatId) return
+        navigate({ to: '/chat/$chatId', params: { chatId: track.chatId } })
+        if (track.messageId != null) {
+            const seq = track.messageId
+            window.setTimeout(() => useChatMessageStore.getState().requestScrollToSeq(seq), 100)
+        }
+    }
 
     const toggle = () => useChatAudioStore.getState().toggle()
     const stop = () => useChatAudioStore.getState().stop()
@@ -31,7 +49,9 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.18, ease: 'easeOut' }}
+                    onClick={openTrack}
                     style={{
+                        cursor: track.chatId ? 'pointer' : undefined,
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',

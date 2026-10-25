@@ -1,4 +1,8 @@
 import { create } from 'zustand'
+import { FileApi } from 'lingcat-client-protocol'
+import ClientManager from '../../ClientManager.ts'
+import SessionEnv from '../../SessionEnv.ts'
+import getFileUrl from '../../lib/getFileUrl.ts'
 
 /**
  * 全局聊天音频播放器。
@@ -7,6 +11,8 @@ import { create } from 'zustand'
  */
 
 export interface ChatAudioTrack {
+    /** 稳定标识 (hash 或 url), 用于重试换 URL 后仍保持同一条 */
+    key: string
     url: string
     name: string
     /** 用于点击横幅跳回对应会话 */
@@ -34,6 +40,7 @@ interface ChatAudioState {
 }
 
 let audio: HTMLAudioElement | null = null
+const retriedKeys = new Set<string>()
 
 function getAudio(): HTMLAudioElement | null {
     if (typeof Audio === 'undefined') return null
@@ -59,10 +66,49 @@ function getAudio(): HTMLAudioElement | null {
         useChatAudioStore.setState({ playing: false, currentTime: audio?.duration || 0 })
     })
     audio.addEventListener('error', () => {
+        const state = useChatAudioStore.getState()
+        const track = state.track
         useChatAudioStore.setState({ playing: false, error: '音频播放失败' })
+        if (track?.hash && !retriedKeys.has(track.key)) {
+            retriedKeys.add(track.key)
+            void retryWithFreshToken(track, state.currentTime)
+        }
     })
 
     return audio
+}
+
+async function retryWithFreshToken(track: ChatAudioTrack, position: number) {
+    const client = ClientManager.getActiveClient()
+    const session = ClientManager.getActiveSession()
+    if (!client || !session || !track.hash) return
+    try {
+        const token = await FileApi.requestAccessUploadFileToken(client, {
+            access_token: session.token,
+            file_hash: track.hash,
+        })
+        SessionEnv.myFileAccessToken = token
+        const freshUrl = getFileUrl(track.hash, token)
+        const el = getAudio()
+        if (!freshUrl || !el) return
+        el.src = freshUrl
+        el.load()
+        const resume = Math.max(0, position)
+        el.addEventListener('loadedmetadata', () => {
+            try {
+                el.currentTime = Math.min(resume, Number.isFinite(el.duration) ? el.duration : resume)
+            } catch { /* ignore */ }
+        }, { once: true })
+        useChatAudioStore.setState({
+            track: { ...track, url: freshUrl },
+            currentTime: resume,
+            duration: 0,
+            error: undefined,
+        })
+        void el.play().catch(() => useChatAudioStore.setState({ playing: false, error: '音频播放失败' }))
+    } catch {
+        useChatAudioStore.setState({ playing: false, error: '音频播放失败' })
+    }
 }
 
 export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
@@ -76,7 +122,7 @@ export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
         if (!el) return
 
         const current = get().track
-        if (current?.url === track.url) {
+        if (current?.key === track.key) {
             // 同一条音频: 续播/重播
             if (el.ended || (el.duration && el.currentTime >= el.duration - 0.05)) el.currentTime = 0
             set({ track: { ...current, ...track }, error: undefined })

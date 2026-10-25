@@ -9,6 +9,7 @@ import showSnackbar from '../showSnackbar.ts'
 import escapeHtml from '../../lib/escapeHtml.ts'
 import { useChatFileUpload } from './useChatFileUpload.ts'
 import { useAudioRecorder } from './useAudioRecorder.ts'
+import { useChatAudioStore } from './chatAudioStore.ts'
 import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
 import { UnlockPasswordDialog } from '../e2e/UnlockPasswordDialog.tsx'
 import Avatar from '../Avatar.tsx'
@@ -337,6 +338,11 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                 }
             },
         })
+
+        const handleToggleRecording = () => {
+            if (!isRecording) useChatAudioStore.getState().pause()
+            toggleRecording()
+        }
 
         // ============================================================
         //  初始化：拉取对方公钥，决定默认开关状态
@@ -729,7 +735,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             <mdui-button-icon
                                 icon={isRecording ? 'stop_circle' : 'mic'}
                                 title={isRecording ? '停止录音' : '录制语音'}
-                                onClick={toggleRecording}
+                                onClick={handleToggleRecording}
                                 style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
                             />
                         </motion.div>
