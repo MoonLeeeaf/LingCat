@@ -12,6 +12,7 @@ import crypto from 'node:crypto'
 import os from 'node:os'
 import FileManager from './data/FileManager.ts'
 import { config } from './config.ts'
+import { versionInfo } from './version.ts'
 import TokenManager from './api/TokenManager.ts'
 import node_path from 'node:path'
 import UserChatLinker from './data/UserChatLinker.ts'
@@ -83,6 +84,11 @@ export default function createLingCatServer(base_data_path: string) {
         res.setHeader('Cache-Control', 'no-cache')
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.json(pub)
+    })
+    app.get('/version', (req, res) => {
+        res.setHeader('Cache-Control', 'no-store')
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.json(versionInfo)
     })
     app.get('/uploaded_files/:hash', async (req, res) => {
         const token = req.headers.file_access_token || req.cookies.file_access_token || req.query.file_access_token

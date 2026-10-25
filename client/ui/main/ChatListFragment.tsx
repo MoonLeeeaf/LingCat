@@ -19,6 +19,7 @@ import { useIsMobile } from '../../lib/useIsMobile.ts'
 import { Methods, Package } from 'lingcat-protocol'
 import RemarksCache from '../../RemarksCache.ts'
 import SearchFeedback from './SearchFeedback.tsx'
+import { BuildInfoFooter } from '../BuildInfo.tsx'
 
 export type ChatListShow = 'recents' | 'search' | 'favourites' | 'all'
 
@@ -27,6 +28,8 @@ export interface ChatListFragmentProps {
     show: ChatListShow
     /** 当前选中的 chatId（用于高亮），从路由取也行 */
     activeChatId?: string
+    /** 移动端由列表自己渲染底部构建信息；桌面端固定在左侧栏底部 */
+    showBuildInfoFooter?: boolean
 }
 
 // ============================================================
@@ -115,7 +118,7 @@ function ChatFilterField({ onFilterChange }: { onFilterChange: (text: string) =>
 //                      主组件
 // ============================================================
 
-export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) {
+export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = true }: ChatListFragmentProps) {
     // filter field
     const [filterText, setFilterText] = React.useState('')
 
@@ -266,6 +269,7 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
                         />
                     </mdui-list-item>
                 ))}
+                {showBuildInfoFooter && <BuildInfoFooter />}
             </>
         )
     }
@@ -296,6 +300,7 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
                     enableLayout={layoutReady}
                 />
             ))}
+            {showBuildInfoFooter && <BuildInfoFooter />}
         </>
     )
 }

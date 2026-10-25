@@ -11,6 +11,13 @@ export type ClientConnectionState = 'idle' | 'connecting' | 'connected' | 'recon
 
 export default class LingCatClient {
     connectionState: ClientConnectionState = 'idle'
+    /** 最近一次心跳 RTT (ms), 未收到心跳响应时为 null */
+    lastPingRtt: number | null = null
+    /** 最近一次收到任意服务端消息的时间, 用于诊断“最后同步” */
+    lastMessageAt: number | null = null
+    /** 自动重连次数 (页面会话内累计) */
+    reconnectCount = 0
+    private lastPingSentAt = 0
     private connectionListeners = new Set<() => void>()
 
     subscribeConnectionState(listener: () => void) {
@@ -20,6 +27,7 @@ export default class LingCatClient {
 
     private setConnectionState(state: ClientConnectionState) {
         if (state === this.connectionState) return
+        if (state === 'reconnecting') this.reconnectCount++
         this.connectionState = state
         for (const listener of this.connectionListeners) {
             try { listener() } catch (e) { console.error('[Client] connection listener failed', e) }
@@ -140,6 +148,7 @@ export default class LingCatClient {
             const keySend = this.session.keySend
             if (!client || !keySend || client.readyState !== WebSocket.OPEN) return
             try {
+                this.lastPingSentAt = Date.now()
                 const pkt = Package.encode({
                     method_id: Methods.Ping_Request,
                     flags: 0,
@@ -192,6 +201,7 @@ export default class LingCatClient {
         client.addEventListener('close', () => {
             if (this.client !== client) return
             this.stopPing()
+            this.lastPingRtt = null
             this.rejectAllPending('Connection closed')
             if (this.client === client) this.client = undefined
             if (this.manualDisconnect) { this.setConnectionState('disconnected'); return }
@@ -216,6 +226,7 @@ export default class LingCatClient {
             client.addEventListener('message', async (event) => {
                 if (this.client !== client || this.manualDisconnect) return
                 if (!(event.data instanceof ArrayBuffer)) return
+                this.lastMessageAt = Date.now()
                 try {
                     const mPackage = Package.decode(toUint8Array(event.data), session.keyRecv!, session.recvSeq)
                     session.recvSeq = mPackage.seq
@@ -273,9 +284,13 @@ export default class LingCatClient {
                             break
                         }
                         case Methods.Ping_Response: {
+                            const usage = LingCatProto.methods.Ping_Response.decode(mPackage.data).usage
+                            if (this.lastPingSentAt) {
+                                this.lastPingRtt = Date.now() - this.lastPingSentAt
+                            }
                             console.log(
-                                '[Client] Server recv time:',
-                                LingCatProto.methods.Ping_Response.decode(mPackage.data).usage + 'ms'
+                                '[Client] RTT:', this.lastPingRtt ?? '?', 'ms | server time:',
+                                usage + 'ms'
                             )
                             break
                         }
@@ -305,10 +320,25 @@ export default class LingCatClient {
         })
     }
 
+    /** 手动强制重连: 丢弃旧 socket 后重新握手 */
+    reconnect() {
+        const old = this.client
+        this.manualDisconnect = false
+        this.stopPing()
+        this.lastPingRtt = null
+        this.rejectAllPending('Reconnecting')
+        this.client = undefined
+        if (old) {
+            try { old.close() } catch { /* ignore */ }
+        }
+        this.init()
+    }
+
     disconnect() {
         this.manualDisconnect = true
         this.setConnectionState('disconnected')
         this.stopPing()
+        this.lastPingRtt = null
         this.rejectAllPending('Client disconnected')
         this.client?.close()
         this.client = undefined

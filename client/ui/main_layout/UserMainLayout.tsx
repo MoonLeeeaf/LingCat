@@ -19,6 +19,7 @@ import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import { ChatListFragment, ChatListShow } from "../main/ChatListFragment.tsx"
 import SwitchUserDialog from "../main/SwitchUserDialog.tsx"
 import ClientSettingsDialog from "../main/ClientSettingsDialog.tsx"
+import { BuildInfoFooter } from "../BuildInfo.tsx"
 import { MobileMeetingDialog } from "../meeting/MobileMeetingDialog.tsx"
 import { DesktopMeetingWindow } from "../meeting/DesktopMeetingWindow.tsx"
 import { MeetingView } from "../meeting/MeetingView.tsx"
@@ -424,6 +425,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     const chatListFragment = <ChatListFragment
         show={navValue}
         activeChatId={activeChatId}
+        showBuildInfoFooter={isMobile}
     />
     const mainContent = (
         <>
@@ -477,6 +479,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     navValue={navValue}
                     onNavValueChange={(v) => setNavValue(v as any)}
                     list={chatListFragment}
+                    listFooter={<BuildInfoFooter />}
                     main={mainContent}
                     dockedPanel={splitPanel}
                     dockedPanelHidden={meetingMinimized}

@@ -22,6 +22,8 @@ export interface AppLayoutSharedProps {
 export interface DesktopLayoutProps extends AppLayoutSharedProps {
     /** 会话列表内容 */
     list: React.ReactNode
+    /** 固定在左侧栏底部的 footer */
+    listFooter?: React.ReactNode
     /** 主区内容（会话详情 / 聊天） */
     main: React.ReactNode
     navTop?: React.ReactNode
@@ -40,6 +42,7 @@ export function DesktopRootLayout({
     navTop,
     navBottom,
     list,
+    listFooter,
     main,
     dockedPanel,
     dockedPanelHidden,
@@ -144,9 +147,19 @@ export function DesktopRootLayout({
                     {navBottom}
                 </mdui-navigation-rail>
 
-                <mdui-list style={{ marginLeft: 'calc(5px + 5rem)', marginRight: '5px' }}>
-                    {list}
-                </mdui-list>
+                <div style={{
+                    marginLeft: 'calc(5px + 5rem)',
+                    marginRight: '5px',
+                    height: '100%',
+                    minHeight: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}>
+                    <mdui-list style={{ flex: 1, minHeight: 0, overflowY: 'auto', margin: 0 }}>
+                        {list}
+                    </mdui-list>
+                    {listFooter}
+                </div>
             </mdui-navigation-drawer>
 
             <mdui-layout-main style={{ flexGrow: 1, display: 'flex', minWidth: 0 }}>
