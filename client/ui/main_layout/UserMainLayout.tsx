@@ -272,6 +272,81 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         document.title = ClientConfig.site_title + ' | ' + (chat.peer_user_id ? (RemarksCache.get(chat.peer_user_id) || chat.title) : chat?.title)
     }, [activeChatId])
 
+    React.useEffect(() => {
+        const activeClient = ClientManager.getActiveClient()
+        if (!activeClient) return
+
+        async function onPackage(mPackage: Package) {
+            if (mPackage.method_id !== Methods.Receive_Chat_Message_Event) return
+            
+            const data = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data)
+            const msg = data.msg
+            if (!msg || !msg.chatId) return
+
+            // 1. 自己发的消息不提醒
+            if (msg.senderUserId === profile?.id) return
+            // 2. 正在该聊天窗口不提醒
+            if (msg.chatId === activeChatId) return
+            
+            // 3. 群聊且没有 @ 我，不提醒
+            const chat = await ProfileCache.queryChatInfo(msg.chatId)
+            if (chat.type === 'group' && msg.entities?.find((v) => v.type === 'user_mention' && v.data === profile?.id) == null) return
+
+            // ============================================================
+            //  4. 浏览器系统通知 (Notification)
+            // ============================================================
+            if (Notification.permission === 'granted'/*  && document.visibilityState === 'hidden' */) {
+                const senderId = msg.senderUserId
+                const sender = senderId ? await ProfileCache.queryUserInfo(senderId) : null
+                const senderName = senderId ? (RemarksCache.get(senderId) || sender?.nickname || sender?.username || senderId) : '未知'
+                
+                const chatTitle = (chat.peer_user_id && RemarksCache.get(chat.peer_user_id)) || chat.title || '对话'
+                
+                // 解析消息摘要 (处理加密和附件)
+                let bodyText = msg.text || ''
+                if (msg.entities?.some(e => e.type === 'e2e')) {
+                    bodyText = '🔒 [加密消息]'
+                } else if (msg.entities?.some(e => ['file', 'image', 'audio', 'video'].includes(e.type!))) {
+                    const e = msg.entities.find(e => ['file', 'image', 'audio', 'video'].includes(e.type!))
+                    if (e) bodyText = `[${e.type === 'image' ? '图片' : e.type === 'video' ? '视频' : e.type === 'audio' ? '语音' : '文件'}] ${bodyText}`.trim()
+                }
+
+                // 发送者头像
+                const iconUrl = sender?.avatar_file_hash 
+                    ? getFileUrl(sender.avatar_file_hash, SessionEnv.myFileAccessToken) 
+                    : default_avatar
+
+                const notification = new Notification(`${ClientConfig.site_title} | ${chatTitle}`, {
+                    body: `${senderName}: ${bodyText}`,
+                    icon: iconUrl,
+                    tag: msg.chatId, // 同一个聊天的通知会合并/覆盖，而不是刷屏
+                })
+
+                notification.onclick = () => {
+                    window.focus()
+                    navigate({
+                        to: '/chat/$chatId',
+                        params: { chatId: msg.chatId! },
+                    })
+                    notification.close()
+                }
+            }
+        }
+
+        activeClient.addOnReceiveListener(onPackage)
+        return () => activeClient.removeOnReceiveListener(onPackage)
+    }, [activeChatId, navigate, profile?.id])
+
+    React.useEffect(() => {
+        if ('Notification' in window && Notification.permission === 'default') {
+            // 延迟几秒请求，避免影响页面初始加载体验
+            const timer = setTimeout(() => {
+                Notification.requestPermission()
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [])
+
     const isMobile = useIsMobile()
 
     const [navValue, setNavValue] = React.useState<ChatListShow>('recents')
