@@ -322,7 +322,7 @@ function BuildInfoContent() {
             <span slot="headline">构建与连接</span>
 
             <div style={{ width: '100%', paddingRight: '4px' }}>
-                {(updateAvailable || true) && (
+                {updateAvailable && (
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
