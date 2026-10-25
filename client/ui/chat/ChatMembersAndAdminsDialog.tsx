@@ -174,7 +174,7 @@ export default function ChatMembersAndAdminsDialog({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.16, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
                             >
-                            <mdui-dropdown trigger="hover">
+                            <mdui-dropdown trigger="contextmenu">
                                 <mdui-list-item
                                     slot="trigger"
                                     rounded
@@ -223,7 +223,7 @@ export default function ChatMembersAndAdminsDialog({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.16, delay: Math.min(index * 0.02, 0.2), ease: 'easeOut' }}
                             >
-                            <mdui-dropdown trigger="hover">
+                            <mdui-dropdown trigger="contextmenu">
                                 <mdui-list-item
                                     slot="trigger"
                                     rounded
