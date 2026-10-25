@@ -321,8 +321,8 @@ function BuildInfoContent() {
         <mdui-dialog ref={dialogRef} close-on-overlay-click close-on-esc>
             <span slot="headline">构建与连接</span>
 
-            <div style={{ width: 'min(480px, 82vw)', paddingRight: '4px' }}>
-                {updateAvailable && (
+            <div style={{ width: '100%', paddingRight: '4px' }}>
+                {(updateAvailable || true) && (
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
