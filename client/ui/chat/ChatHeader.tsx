@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import E2EInfoDialog from '../e2e/E2EInfoDialog'
+import { useRouter } from '@tanstack/react-router'
 
 export interface ChatHeaderProps {
     /** 聊天标题 */
@@ -47,12 +48,27 @@ export function ChatHeader({
             ? 'var(--mdui-color-error)'
             : 'var(--mdui-color-outline)'
 
+    const router = useRouter()
+
+    // 统一处理移动端关闭聊天
+    const handleCloseChat = React.useCallback(() => {
+        // TanStack Router 底层会维护 history.state.idx
+        // idx 为 0 或不存在，说明这是直接打开的新页面（没有上一页）
+        const idx = window.history.state?.idx ?? 0
+        if (idx > 0) {
+            router.history.back()
+        } else {
+            // 替换当前历史记录，跳回首页
+            router.navigate({ to: '/', replace: true })
+        }
+    }, [router])
+
     return (
         <mdui-top-app-bar scroll-target='#thishumandoesnotexists' style={{ position: 'relative', backgroundColor: 'inherit' }}>
             {isMobile ? (
                 <mdui-button-icon
                     icon="arrow_back"
-                    onClick={() => window.history.back()}
+                    onClick={handleCloseChat}
                 />
             ) : (
                 <mdui-button-icon

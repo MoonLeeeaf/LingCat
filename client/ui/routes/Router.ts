@@ -19,9 +19,9 @@ const routeTree = RootRoute.addChildren([
 export const Router = createRouter({
     routeTree,
     defaultPreload: 'intent',
-    defaultPendingMs: 200, 
-    defaultPendingMinMs: 300, 
-    // defaultPendingComponent: () => <FullScreenLoading />,  // 可选
+    defaultPendingMs: 200,
+    defaultPendingMinMs: 300,
+    basepath: import.meta.env.BASE_URL.replace(/\/$/, ''),
 })
 
 declare module '@tanstack/react-router' {
