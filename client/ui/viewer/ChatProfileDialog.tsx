@@ -1,4 +1,6 @@
 import React from 'react'
+import { MotionConfig } from 'motion/react'
+import ProfileContent from './ProfileContent.tsx'
 import ReactClient from 'react-dom/client'
 import { dialog, Dialog } from 'mdui' // ★ 引入 dialog
 import type { IChat } from 'lingcat-protocol'
@@ -10,8 +12,6 @@ import default_avatar from '../../default_avatar.png'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import Avatar from '../Avatar.tsx'
 import CopyableListItem from '../CopyableListItem.tsx'
-import CircleProgressDialog from '../CircleProgressDialog.tsx'
-import EffectOnly from '../EffectOnly.tsx'
 import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts' // ★ 引入 showSnackbar
 import UserProfileDialog from './UserProfileDialog.tsx'
@@ -61,9 +61,8 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         return () => { cancelled = true }
     }, [chatId])
 
-    // loading 结束 → 等 mdui-dialog 首次更新完成再 open（走"非首次渲染"路径 → 有动画）
+    // 先显示资料占位，数据到达后在同一个弹窗内淡入。
     React.useEffect(() => {
-        if (loading) return
         const dialog = ref.current
         if (!dialog) return
         let cancelled = false
@@ -89,7 +88,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
                         // @ts-ignore
             dialog.removeEventListener('closed', handleClosed)
         }
-    }, [loading, onClose])
+    }, [onClose])
 
     const avatar = profile?.avatar_file_hash
         ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)
@@ -99,11 +98,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
         ? RemarksCache.get(profile.peer_user_id)
         : undefined
 
-    if (loading) {
-        return (
-            <EffectOnly deps={[]} effect={() => CircleProgressDialog.show('加载中...')} />
-        )
-    }
+
 
     const renderE2ESection = () => {
         if (profile?.type !== 'private') return null
@@ -126,6 +121,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
 
     return (
         <mdui-dialog ref={ref as any} close-on-overlay-click close-on-esc>
+            <ProfileContent loading={loading}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar onClick={() => ImageViewerDialog.show(avatar!)} src={avatar} />
                 <div style={{
@@ -244,6 +240,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
                     打开对话
                 </mdui-list-item>
             </mdui-list>
+            </ProfileContent>
         </mdui-dialog>
     )
 }
@@ -257,5 +254,5 @@ ChatProfileDialog.show = function (chatId: string) {
         root.unmount()
         container.remove()
     }
-    root.render(<ChatProfileDialog chatId={chatId} onClose={onClose} />)
+    root.render(<MotionConfig reducedMotion="user"><ChatProfileDialog chatId={chatId} onClose={onClose} /></MotionConfig>)
 }

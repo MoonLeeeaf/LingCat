@@ -3,6 +3,7 @@ import { create } from 'zustand'
 
 /** Virtuoso 的 firstItemIndex 初值。越大越安全，但要留够向下的空间 */
 const INITIAL_FIRST_ITEM_INDEX = 100000
+let highlightToken = 0
 
 /** 消息补丁：id 不可改 */
 type MessagePatch = Omit<Partial<IMessage>, 'id'>
@@ -34,6 +35,9 @@ function mergeSorted(a: number[], b: number[]): number[] {
 }
 
 interface ChatMessageStore {
+    highlightRequest: { seq: number, token: number } | null
+    highlightMessage: (seq: number) => void
+    clearHighlight: (token: number) => void
     /** seq -> IMessage */
     messageMap: Map<number, IMessage>
     /** 升序 seq 列表 */
@@ -61,6 +65,11 @@ interface ChatMessageStore {
 }
 
 export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
+    highlightRequest: null,
+    highlightMessage: (seq) => set({ highlightRequest: { seq, token: ++highlightToken } }),
+    clearHighlight: (token) => {
+        if (get().highlightRequest?.token === token) set({ highlightRequest: null })
+    },
     messageMap: new Map(),
     sortedIds: [],
     firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
@@ -164,6 +173,7 @@ export const useChatMessageStore = create<ChatMessageStore>((set, get) => ({
 
     clear: () => {
         set({
+            highlightRequest: null,
             messageMap: new Map(),
             sortedIds: [],
             firstItemIndex: INITIAL_FIRST_ITEM_INDEX,

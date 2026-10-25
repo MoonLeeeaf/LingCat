@@ -6,6 +6,9 @@ import { useChatMessages } from './useChatMessages.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import ChatMessage from './ChatMessage.tsx'
 import MessageContainer from './MessageContainer.tsx'
+import { motion, AnimatePresence } from 'motion/react'
+import MessageHighlight from './MessageHighlight.tsx'
+import CopyMessageMenuItem from './CopyMessageMenuItem.tsx'
 import UserProfileDialog from '../viewer/UserProfileDialog.tsx'
 import ProfileCache from '../../ProfileCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -76,16 +79,29 @@ export function MessageList({
     const containerRef = React.useRef<HTMLDivElement>(null)
     const isAtBottomRef = React.useRef(true)
     const followBottomRef = React.useRef(true)
+    const scrollIntentRef = React.useRef<'up' | 'down' | null>(null)
+    const newMessageIdsRef = React.useRef<Set<number>>(new Set())
+    const jumpVersionRef = React.useRef(0)
+    const returningToBottomRef = React.useRef(false)
     const [initialScrollDone, setInitialScrollDone] = React.useState(false)
+    const [awayFromBottom, setAwayFromBottom] = React.useState(false)
+    const [unreadCount, setUnreadCount] = React.useState(0)
 
     // 切对话时重置
     React.useEffect(() => {
         setInitialScrollDone(false)
         isAtBottomRef.current = true
         followBottomRef.current = true
+        scrollIntentRef.current = null
+        newMessageIdsRef.current = new Set()
+        setAwayFromBottom(false)
+        setUnreadCount(0)
+        returningToBottomRef.current = false
+        return () => { jumpVersionRef.current++ }
     }, [chatId])
 
     const scrollToBottom = React.useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+        if (!followBottomRef.current) return
         // Virtuoso 的 scrollToIndex('LAST') 偶尔会差一截 (输入框/横幅高度在首帧后才确定),
         // 直接操作 scroller 兜底, 保证真正贴底
         const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
@@ -95,10 +111,21 @@ export function MessageList({
         }
     }, [])
 
-    // 新消息到达时，若跟随开关开启 → 贴底
+    // 新消息到达时，记录 id 用于入场动画，并在跟随开关开启时贴底
     const handleNewMessage = React.useCallback(() => {
-        if (!followBottomRef.current) return
+        const ids = useChatMessageStore.getState().sortedIds
+        const seq = ids[ids.length - 1]
+        if (seq != null) {
+            newMessageIdsRef.current.add(seq)
+            window.setTimeout(() => newMessageIdsRef.current.delete(seq), 600)
+        }
+        if (!followBottomRef.current) {
+            setUnreadCount(count => count + 1)
+            setAwayFromBottom(true)
+            return
+        }
         const pin = () => {
+            if (!followBottomRef.current) return
             const el = containerRef.current?.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
             if (el) el.scrollTop = el.scrollHeight
         }
@@ -109,7 +136,7 @@ export function MessageList({
         }, 120)
     }, [])
 
-    const { sortedIds, firstItemIndex, loadOlder, loadNewer } = useChatMessages({
+    const { sortedIds, firstItemIndex, loadOlder, loadNewer, loading } = useChatMessages({
         chatId,
         isMember,
         onNewMessage: handleNewMessage,
@@ -137,25 +164,57 @@ export function MessageList({
         let pointerDown = false
         let lastTop = sc.scrollTop
         let touchY: number | null = null
+        // 以用户的滚动方向为准。虚拟列表测量/补偿高度也会触发 scroll，
+        // 不能仅因暂时靠近底部就重新开启跟随，否则上滑会被拉回去。
 
-        const stopFollow = () => { followBottomRef.current = false }
+        const stopFollow = () => {
+            returningToBottomRef.current = false
+            scrollIntentRef.current = 'up'
+            followBottomRef.current = false
+        }
+        const resumeFollow = () => {
+            scrollIntentRef.current = 'down'
+            if (sc.scrollHeight - sc.clientHeight - sc.scrollTop <= BOTTOM_REENABLE_PX) {
+                followBottomRef.current = true
+            }
+        }
         const onScroll = () => {
             const distance = sc.scrollHeight - sc.clientHeight - sc.scrollTop
             isAtBottomRef.current = distance < 3
-            if (distance < BOTTOM_REENABLE_PX) followBottomRef.current = true
-            if (pointerDown && sc.scrollTop < lastTop - 2) stopFollow()
+            if (pointerDown) {
+                if (sc.scrollTop < lastTop) stopFollow()
+                else if (sc.scrollTop > lastTop) scrollIntentRef.current = 'down'
+            }
+            if (scrollIntentRef.current === 'down' && distance <= BOTTOM_REENABLE_PX) {
+                followBottomRef.current = true
+            }
+            if (distance <= BOTTOM_REENABLE_PX) returningToBottomRef.current = false
+            setAwayFromBottom(!returningToBottomRef.current && (distance > BOTTOM_REENABLE_PX || (!followBottomRef.current && distance > 0)))
+            if (followBottomRef.current && distance <= BOTTOM_REENABLE_PX) setUnreadCount(0)
             lastTop = sc.scrollTop
         }
-        const onWheel = (e: WheelEvent) => { if (e.deltaY < 0) stopFollow() }
+        const onWheel = (e: WheelEvent) => {
+            if (e.deltaY < 0) stopFollow()
+            else if (e.deltaY > 0) resumeFollow()
+        }
         const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0]?.clientY ?? null }
         const onTouchMove = (e: TouchEvent) => {
             const y = e.touches[0]?.clientY
-            if (touchY != null && y != null && y > touchY + 4) stopFollow()
+            if (touchY != null && y != null) {
+                if (y > touchY) stopFollow()
+                else if (y < touchY) resumeFollow()
+            }
+            touchY = y ?? null
         }
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Home') stopFollow()
+            else if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'End') resumeFollow()
         }
-        const onPointerDown = () => { pointerDown = true; lastTop = sc.scrollTop }
+        const onPointerDown = (e: PointerEvent) => {
+            // 触摸方向由 touchmove 判断，避免高度补偿被误认为手指向下滚动。
+            pointerDown = e.pointerType === 'mouse' && e.target === sc
+            lastTop = sc.scrollTop
+        }
         const onPointerUp = () => { pointerDown = false }
 
         sc.addEventListener('scroll', onScroll, { passive: true })
@@ -165,6 +224,7 @@ export function MessageList({
         sc.addEventListener('keydown', onKeyDown)
         sc.addEventListener('pointerdown', onPointerDown)
         window.addEventListener('pointerup', onPointerUp)
+        window.addEventListener('pointercancel', onPointerUp)
         onScroll()
         return () => {
             sc.removeEventListener('scroll', onScroll)
@@ -174,6 +234,7 @@ export function MessageList({
             sc.removeEventListener('keydown', onKeyDown)
             sc.removeEventListener('pointerdown', onPointerDown)
             window.removeEventListener('pointerup', onPointerUp)
+            window.removeEventListener('pointercancel', onPointerUp)
         }
     }, [chatId, hasMessages])
 
@@ -187,6 +248,7 @@ export function MessageList({
             if (!followBottomRef.current) return
             cancelAnimationFrame(raf)
             raf = requestAnimationFrame(() => {
+                if (!followBottomRef.current) return
                 const el = container.querySelector('[data-virtuoso-scroller="true"]') as HTMLElement | null
                 if (el) el.scrollTop = el.scrollHeight
             })
@@ -208,14 +270,19 @@ export function MessageList({
 
     React.useEffect(() => {
         if (scrollToSeqRequest == null) return
+        returningToBottomRef.current = false
+        followBottomRef.current = false
+        scrollIntentRef.current = null
         const seq = scrollToSeqRequest
+        const jumpVersion = ++jumpVersionRef.current
         useChatMessageStore.getState().clearScrollToSeqRequest()
 
         const { sortedIds: ids } = useChatMessageStore.getState()
         const index = ids.indexOf(seq)
 
         if (index !== -1) {
-            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: 'smooth' })
+            useChatMessageStore.getState().highlightMessage(seq)
+            virtuosoRef.current?.scrollToIndex({ index, align: 'center', behavior: 'auto' })
             return
         }
 
@@ -238,6 +305,7 @@ export function MessageList({
                 ])
 
                 const merged = [...older, ...newer]
+                if (jumpVersion !== jumpVersionRef.current) return
                 const seen = new Set<number>()
                 const unique = merged.filter(m => {
                     if (seen.has(m.id)) return false
@@ -254,9 +322,11 @@ export function MessageList({
                 useChatMessageStore.getState().initMessages(unique, seq)
 
                 requestAnimationFrame(() => {
+                    if (jumpVersion !== jumpVersionRef.current) return
                     const { sortedIds: newIds } = useChatMessageStore.getState()
                     const newIndex = newIds.indexOf(seq)
                     if (newIndex >= 0) {
+                        useChatMessageStore.getState().highlightMessage(seq)
                         virtuosoRef.current?.scrollToIndex({
                             index: newIndex,
                             align: 'center',
@@ -265,6 +335,7 @@ export function MessageList({
                     }
                 })
             } catch (e) {
+                if (jumpVersion !== jumpVersionRef.current) return
                 console.error('跳转消息失败:', e)
                 tipError(e, '无法加载消息')
             }
@@ -307,8 +378,16 @@ export function MessageList({
             && !prevMsg.system
             && prevMsg.sender_user_id === msg.sender_user_id
 
+        const isNew = newMessageIdsRef.current.has(seq)
+
         return (
-            <React.Fragment key={seq}>
+            <motion.div
+                key={seq}
+                initial={isNew ? { opacity: 0, y: 10, scale: 0.99 } : false}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                style={{ position: 'relative' }}
+            >
                 {timeInfo && (
                     <div
                         title={timeInfo.full}
@@ -349,6 +428,7 @@ export function MessageList({
                         </mdui-menu-item>
                     </>}
                     messageMenus={<>
+                        {msg.text && !msg.entities?.some(entity => entity.type === 'e2e') && <CopyMessageMenuItem text={msg.text} />}
                         {msg.sender_user_id === SessionEnv.myUserId && !msg.system && onStartEdit && (
                             <mdui-menu-item icon="edit" onClick={() => onStartEdit(msg)}>
                                 编辑
@@ -377,15 +457,22 @@ export function MessageList({
                         </mdui-menu-item>
                     </>}
                 />
-            </React.Fragment>
+                <MessageHighlight seq={seq} />
+            </motion.div>
         )
     }, [onStartEdit, onInsertText])
 
     if (!isMember) return null
 
     return (
-        <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0 }}>
+        <MessageContainer ref={containerRef} style={{ flex: 1, minHeight: 0, position: 'relative' }}>
             {sortedIds.length > 0 && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: loading ? 0 : 1 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    style={{ height: '100%' }}
+                >
                 <Virtuoso
                     ref={virtuosoRef}
                     key={chatId}
@@ -393,9 +480,10 @@ export function MessageList({
                     data={sortedIds}
                     firstItemIndex={firstItemIndex}
                     initialTopMostItemIndex={{ index: 'LAST', align: 'end' }}
-                    followOutput={() => (followBottomRef.current ? 'auto' : false)}
+                    // 统一由 followBottomRef 控制贴底，避免 Virtuoso 延迟的尺寸补偿打断引用跳转。
+                    followOutput={false}
                     atTopThreshold={300}
-                    atBottomThreshold={40}
+                    atBottomThreshold={0}
                     atTopStateChange={atTopStateChange}
                     atBottomStateChange={atBottomStateChange}
                     computeItemKey={(_, seq) => seq}
@@ -403,7 +491,27 @@ export function MessageList({
                     components={{ Footer: ListFooter }}
                     itemContent={itemContent}
                 />
+                </motion.div>
             )}
+            <AnimatePresence>
+                {(awayFromBottom || unreadCount > 0) && <motion.div key="back-to-bottom"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 0.16 }} style={{ position: 'absolute', right: '16px', bottom: '16px', zIndex: 3 }}>
+                    <button type="button" className="lingcat-back-to-bottom" title="回到底部"
+                        aria-label={unreadCount > 0 ? `${unreadCount} 条新消息，回到底部` : '回到底部'}
+                        onClick={() => {
+                            jumpVersionRef.current++
+                            returningToBottomRef.current = true
+                            followBottomRef.current = true
+                            scrollIntentRef.current = 'down'
+                            setUnreadCount(0)
+                            setAwayFromBottom(false)
+                            virtuosoRef.current?.scrollToIndex({ index: 'LAST', align: 'end', behavior: 'auto' })
+                        }}>
+                        <mdui-icon name="arrow_downward" aria-hidden="true" />
+                    </button>
+                </motion.div>}
+            </AnimatePresence>
         </MessageContainer>
     )
 }

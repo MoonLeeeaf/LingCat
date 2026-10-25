@@ -1,4 +1,5 @@
 import React from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import { AudioPublication, VideoPublication } from './VideoTrack.tsx'
 import { AudioLevelBar } from './AudioLevel.tsx'
@@ -7,6 +8,8 @@ import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import default_avatar from '../../default_avatar.png'
 import { useMeetingStore } from './MeetingManager.ts'
+import { isPipSupported, togglePip, usePipActive } from '../../lib/pip.ts'
+import showSnackbar from '../showSnackbar.ts'
 
 export interface ParticipantTileProps {
     participant: Participant
@@ -61,6 +64,8 @@ export default function ParticipantTile({
 
     const [hover, setHover] = React.useState(false)
     const videoRef = React.useRef<HTMLVideoElement>(null)
+    const pipSupported = isPipSupported()
+    const inPip = usePipActive(videoRef, primary?.track?.sid)
 
     const avatarHash = meta?.avatar_file_hash as string | null | undefined
     const avatarUrl = avatarHash
@@ -79,8 +84,12 @@ export default function ParticipantTile({
                 background: '#202020',
                 border: '1px solid rgba(255,255,255,0.08)',
                 boxShadow: speaking ? 'inset 0 0 0 2px rgb(var(--mdui-color-primary))' : undefined,
-                aspectRatio: primary?.track ? '16 / 9' : undefined,
-                minHeight: primary?.track ? undefined : (compact ? '84px' : '160px'),
+                // 瓦片尺寸由布局决定，开关摄像头/共享屏幕不改变外框大小。
+                aspectRatio: '16 / 9',
+                width: '100%',
+                minWidth: 0,
+                minHeight: 0,
+                boxSizing: 'border-box',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -88,28 +97,39 @@ export default function ParticipantTile({
                 ...style,
             }}
         >
+            <AnimatePresence initial={false}>
             {primary?.track
-                ? <VideoPublication key={primary.track.sid} publication={primary} muted={isLocal} videoRef={videoRef} />
+                ? <motion.div key={primary.track.sid} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 0.16 }} style={{ position: 'absolute', inset: 0 }}>
+                  <VideoPublication
+                    key={primary.track.sid}
+                    publication={primary}
+                    muted={isLocal}
+                    videoRef={videoRef}
+                    style={{ position: 'absolute', inset: 0 }}
+                />
+                  </motion.div>
                 : (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: compact ? '4px' : '8px', padding: '8px' }}>
+                    <motion.div key="avatar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.16 }}
+                        style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px 8px 26px', boxSizing: 'border-box' }}>
                         <img
                             src={avatarUrl}
                             alt=""
                             onError={(e) => { (e.currentTarget as HTMLImageElement).src = default_avatar }}
                             style={{
-                                width: compact ? '40px' : '64px',
-                                height: compact ? '40px' : '64px',
+                                width: compact ? 'min(40px, 30%)' : 'min(64px, 30%)',
+                                height: 'auto',
+                                aspectRatio: '1 / 1',
+                                flexShrink: 0,
                                 borderRadius: '50%',
                                 objectFit: 'cover',
                                 background: 'rgba(255,255,255,0.08)',
                             }}
                         />
-                        <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: compact ? '11px' : '13px' }}>
-                            {micMuted ? '(Muted) ' : ''}{name}
-                        </div>
-                    </div>
+                    </motion.div>
                 )
             }
+            </AnimatePresence>
 
             {!isLocal && <AudioPublication publication={mic} muted={locallyMuted} />}
             {!isLocal && <AudioPublication publication={screenAudio} muted={locallyMuted} />}
@@ -148,6 +168,16 @@ export default function ParticipantTile({
                     onClick={(e) => e.stopPropagation()}
                     style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '2px', zIndex: 1 }}
                 >
+                    {!isLocal && primary?.track && pipSupported && (
+                        <mdui-button-icon
+                            icon={inPip ? 'picture_in_picture' : 'picture_in_picture_alt'}
+                            title={inPip ? '退出悬浮窗' : '悬浮播放'}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                void togglePip(videoRef.current).catch(() => showSnackbar({ message: '悬浮播放失败' }))
+                            }}
+                        />
+                    )}
                     {showLocalMute && !isLocal && (hover || locallyMuted) && (
                         <mdui-button-icon
                             title={locallyMuted ? '取消本地静音' : '本地静音(仅自己)'}

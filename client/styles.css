@@ -1,0 +1,114 @@
+/* 单行框统一为胶囊形；多行框保留 28px 圆角和足够的编辑空间。 */
+mdui-text-field {
+    --lingcat-field-radius: 999px;
+    --mdui-shape-corner-extra-small: var(--lingcat-field-radius);
+}
+
+mdui-text-field::part(container) {
+    border-radius: var(--lingcat-field-radius);
+}
+
+mdui-text-field[rows],
+mdui-text-field[autosize],
+mdui-text-field[use-patched-textarea] {
+    --lingcat-field-radius: 28px;
+}
+
+input:not([type="file"]):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="button"]):not([type="submit"]):not([type="reset"]) {
+    border-radius: 999px;
+}
+
+textarea {
+    border-radius: 28px;
+}
+
+.lingcat-composer-row {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 4px;
+}
+
+.lingcat-composer-field {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+}
+
+.lingcat-composer-field::part(icon),
+.lingcat-composer-field::part(end-icon) {
+    align-self: flex-end;
+    align-items: center;
+    height: 52px;
+    margin: 0;
+}
+
+.lingcat-composer-field::part(container) {
+    padding-inline: 6px;
+}
+
+.lingcat-paw-send,
+.lingcat-attach-button,
+.lingcat-back-to-bottom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    color: rgb(var(--mdui-color-on-surface-variant));
+    background: rgb(var(--mdui-color-surface-container-high));
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.lingcat-attach-button {
+    margin-bottom: 6px;
+}
+
+.lingcat-back-to-bottom {
+    background: rgb(var(--mdui-color-surface-container-high));
+    box-shadow: var(--mdui-elevation-level2);
+}
+
+.lingcat-paw-send {
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+}
+
+.lingcat-paw-send:disabled {
+    cursor: default;
+}
+
+.lingcat-paw-fill {
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.lingcat-paw-send svg {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    pointer-events: none;
+}
+
+.lingcat-paw-send:focus-visible,
+.lingcat-attach-button:focus-visible,
+.lingcat-back-to-bottom:focus-visible {
+    outline: 2px solid rgb(var(--mdui-color-primary));
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    mdui-dialog::part(panel) {
+        transform: none !important;
+    }
+}

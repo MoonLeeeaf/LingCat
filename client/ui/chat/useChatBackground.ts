@@ -9,11 +9,13 @@ export function useChatBackground(chatId: string): string | null {
     React.useEffect(() => {
         let disposed = false
         let objectUrl: string | null = null
+        let version = 0
 
         const load = async () => {
+            const request = ++version
             try {
                 const blob = await getChatBackground(chatId)
-                if (disposed) return
+                if (disposed || request !== version) return
                 if (objectUrl) {
                     URL.revokeObjectURL(objectUrl)
                     objectUrl = null
@@ -25,7 +27,7 @@ export function useChatBackground(chatId: string): string | null {
                     setUrl(null)
                 }
             } catch {
-                if (!disposed) setUrl(null)
+                if (!disposed && request === version) setUrl(null)
             }
         }
 

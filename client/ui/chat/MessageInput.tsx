@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { TextField } from 'mdui'
 import { MessageParser, ChatApi } from 'lingcat-client-protocol'
 import type { IMessage, IMessageEntity, IUser } from 'lingcat-protocol'
@@ -15,6 +16,7 @@ import RemarksCache from '../../RemarksCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import default_avatar from '../../default_avatar.png'
+import PawSendButton from './PawSendButton.tsx'
 
 // ============================================================
 //                  contenteditable 光标 / @提及 工具
@@ -104,6 +106,31 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         const inputRef = React.useRef<TextField>(null)
         const attachFileInputRef = React.useRef<HTMLInputElement>(null)
         const [isSending, setIsSending] = React.useState(false)
+        const [hasContent, setHasContent] = React.useState(false)
+        const [sendVersion, setSendVersion] = React.useState(0)
+        const sendPendingRef = React.useRef(false)
+
+        // 同时覆盖键盘输入、粘贴、文件/引用插入和编辑回填。
+        React.useEffect(() => {
+            let observer: MutationObserver | undefined
+            let raf = 0
+            const syncContent = () => setHasContent(!!inputRef.current?.value?.trim())
+            const bind = () => {
+                const div = getPatchedInput(inputRef)?.inputDiv as HTMLDivElement | undefined
+                if (!div) {
+                    raf = requestAnimationFrame(bind)
+                    return
+                }
+                syncContent()
+                observer = new MutationObserver(syncContent)
+                observer.observe(div, { childList: true, characterData: true, subtree: true })
+            }
+            bind()
+            return () => {
+                cancelAnimationFrame(raf)
+                observer?.disconnect()
+            }
+        }, [])
         const preEditValueRef = React.useRef('')
 
         // E2E 状态
@@ -463,36 +490,35 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         //  发送入口：检查状态并处理未解锁的情况
         // ============================================================
         const send = async () => {
-            let text = inputRef.current?.value ?? ''
+            if (sendPendingRef.current || isSending) return
+            const text = inputRef.current?.value ?? ''
             if (!text.trim()) return
+            sendPendingRef.current = true
+            setSendVersion(version => version + 1)
+            setIsSending(true)
             if (isRecording) stopRecording()
 
-            // 如果是加密模式，且是私聊
-            if (isEncryptMode && peerUserId) {
-                // 发送前，强制拉取一次对方的最新公钥
-                await fetchPeerKeys([peerUserId])
-                const currentPeerKey = useE2EStore.getState().peerKeys[peerUserId]
+            try {
+                if (isEncryptMode && peerUserId) {
+                    await fetchPeerKeys([peerUserId])
+                    const currentPeerKey = useE2EStore.getState().peerKeys[peerUserId]
 
-                // 如果拉完发现对方没公钥（可能刚重置/删除了），降级为明文
-                if (!currentPeerKey) {
-                    setIsEncryptMode(false)
-                    showSnackbar({ message: '对方未开启端到端加密，将以明文发送' })
-                    executeSend(text)
-                    return
+                    if (!currentPeerKey) {
+                        setIsEncryptMode(false)
+                        showSnackbar({ message: '对方未开启端到端加密，将以明文发送' })
+                        await executeSend(text)
+                        return
+                    }
+                    if (e2eStatus !== 'unlocked') {
+                        UnlockPasswordDialog.show('unlock', () => { void executeSend(text) })
+                        return
+                    }
                 }
-
-                // 如果处于锁定状态，拦截并弹窗，★ 成功后自动重试发送
-                if (e2eStatus !== 'unlocked') {
-                    UnlockPasswordDialog.show('unlock', () => {
-                        // 解锁成功，直接触发真实发送
-                        executeSend(text)
-                    })
-                    return
-                }
+                await executeSend(text)
+            } finally {
+                sendPendingRef.current = false
+                setIsSending(false)
             }
-
-            // 如果没开加密，或者已经解锁，直接发
-            executeSend(text)
         }
 
         // ============================================================
@@ -540,21 +566,36 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                     onChange={handleFilePick}
                 />
 
+                <AnimatePresence initial={false}>
                 {editingMessage && (
-                    <div style={{
-                        display: 'flex', alignItems: 'center',
-                        padding: '6px 12px',
-                        background: 'rgba(var(--mdui-color-primary), 0.08)',
-                        borderLeft: '3px solid rgb(var(--mdui-color-primary))',
-                        margin: '0 4px', borderRadius: '4px',
-                    }}>
+                    <motion.div
+                        key="editing"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        style={{
+                            display: 'flex', alignItems: 'center',
+                            padding: '6px 12px',
+                            background: 'rgba(var(--mdui-color-primary), 0.08)',
+                            borderLeft: '3px solid rgb(var(--mdui-color-primary))',
+                            margin: '0 4px', borderRadius: '4px',
+                        }}>
                         <span style={{ flex: 1, fontSize: '90%', opacity: 0.8 }}>正在编辑消息</span>
                         <mdui-button-icon icon="close" onClick={cancelEdit} />
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
 
+                <AnimatePresence initial={false}>
                 {isRecording && (
-                    <div style={{
+                    <motion.div
+                        key="recording"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         padding: '6px 12px',
                         background: 'rgba(var(--mdui-color-error), 0.08)',
@@ -571,12 +612,20 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             正在录音... {formatDuration(seconds)}
                         </span>
                         <mdui-button-icon icon="close" onClick={stopRecording} />
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
 
-                <div style={{ position: 'relative' }}>
+                <div className="lingcat-composer-row">
+                    <AnimatePresence>
                     {mentionQuery && mentionCandidates.length > 0 && (
-                        <div style={{
+                        <motion.div
+                            key="mentions"
+                            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                            transition={{ duration: 0.15, ease: 'easeOut' }}
+                            style={{
                             position: 'absolute',
                             bottom: 'calc(100% + 4px)',
                             left: 0,
@@ -588,6 +637,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             borderRadius: '8px',
                             // boxShadow: '0 4px 16px rgba(0,0,0,.25)',
                             overflow: 'hidden',
+                            transformOrigin: 'bottom left',
                         }}>
                             <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
                                 {mentionCandidates.map((c, i) => (
@@ -635,8 +685,9 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     )}
+                    </AnimatePresence>
 
                     <mdui-text-field
                         ref={inputRef as any}
@@ -645,7 +696,8 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         autosize
                         max-rows={10}
                         placeholder="输入..."
-                        style={{ padding: '4px' }}
+                        className="lingcat-composer-field"
+                        onInput={() => setHasContent(!!inputRef.current?.value?.trim())}
                         onKeyDown={(e) => {
                             if (mentionQuery && mentionCandidates.length > 0) {
                                 if (e.key === 'ArrowDown') {
@@ -674,44 +726,42 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         onPaste={handlePaste}
                         onDrop={handleDrop}
                     >
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon={isRecording ? 'stop_circle' : 'mic'}
-                        onClick={toggleRecording}
-                        style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
-                    />
-                    <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon="attachment"
-                        onClick={() => attachFileInputRef.current?.click()}
-                    />
+                    <motion.div slot="icon" whileTap={{ scale: 0.9 }} style={{ display: 'inline-flex' }}>
+                        <mdui-button-icon
+                            icon={isRecording ? 'stop_circle' : 'mic'}
+                            title={isRecording ? '停止录音' : '录制语音'}
+                            onClick={toggleRecording}
+                            style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
+                        />
+                    </motion.div>
 
                     {/* ★ 发送按钮旁边的锁图标 */}
                     {canE2E && (
                         <>
-                            <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                            <mdui-tooltip  slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
-                                <mdui-button-icon
-                                    icon={isEncryptMode ? 'lock' : 'lock_open'}
-                                    onClick={() => setIsEncryptMode(!isEncryptMode)}
-                                    style={{
-                                        color: isEncryptMode ? 'var(--mdui-color-primary)' : 'var(--mdui-color-outline)'
-                                    }}
-                                />
+                            <mdui-tooltip slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
+                                <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                                    <mdui-button-icon
+                                        icon={isEncryptMode ? 'lock' : 'lock_open'}
+                                        onClick={() => setIsEncryptMode(!isEncryptMode)}
+                                        style={{
+                                            color: isEncryptMode ? 'rgb(var(--mdui-color-primary))' : 'rgb(var(--mdui-color-outline))'
+                                        }}
+                                    />
+                                </motion.div>
                             </mdui-tooltip>
                         </>
                     )}
 
-                    <div slot="end-icon" style={{ paddingRight: '20px' }} />
-                    <mdui-button-icon
-                        slot="end-icon"
-                        icon="send"
-                        loading={isSending || undefined}
-                        onClick={send}
-                    />
-                    <div slot="end-icon" style={{ paddingRight: '5px' }} />
+                    <div slot="end-icon" style={{ display: 'inline-flex' }}>
+                        <PawSendButton hasContent={hasContent} isSending={isSending}
+                            sendVersion={sendVersion} editing={!!editingMessage} onSend={send} />
+                    </div>
                     </mdui-text-field>
+                    <motion.button type="button" className="lingcat-attach-button" aria-label="添加附件" title="添加附件"
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => attachFileInputRef.current?.click()}>
+                        <mdui-icon name="attachment" aria-hidden="true" />
+                    </motion.button>
                 </div>
             </>
         )

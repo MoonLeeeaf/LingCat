@@ -1,4 +1,7 @@
 import React from 'react'
+import { motion } from 'motion/react'
+import AnimatedIcon from '../AnimatedIcon.tsx'
+import { dialog } from 'mdui'
 import { LocalParticipant, Track, type Participant } from 'livekit-client'
 import ParticipantTile from './ParticipantTile.tsx'
 import { VideoPublication } from './VideoTrack.tsx'
@@ -7,6 +10,7 @@ import { useMeetingStore } from './MeetingManager.ts'
 import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts'
 import SessionEnv from '../../SessionEnv.ts'
+import { isPipSupported, togglePip, usePipActive } from '../../lib/pip.ts'
 
 // ============================================================
 //                      工具函数
@@ -127,6 +131,7 @@ export function MeetingView({
 
     const focusRef = React.useRef<HTMLDivElement>(null)
     const focusVideoRef = React.useRef<HTMLVideoElement>(null)
+    const focusPip = usePipActive(focusVideoRef, focusedPub?.track?.sid)
     const [isFullscreen, setIsFullscreen] = React.useState(false)
 
     React.useEffect(() => {
@@ -145,8 +150,10 @@ export function MeetingView({
         const cam = cameraActive(p)
         if (scr) tiles.push({ key: p.identity + ':screen', participant: p, source: 'screen' })
         if (cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'camera' })
-        if (!scr && !cam) tiles.push({ key: p.identity, participant: p, source: 'auto' })
+        if (!scr && !cam) tiles.push({ key: p.identity + ':camera', participant: p, source: 'auto' })
     }
+    // 仅成员/媒体瓦片集合变化时重排；拖动、缩放和最大化窗口不触发位置补间。
+    const tileLayoutKey = JSON.stringify(tiles.map(tile => tile.key))
 
     // ============================================================
     //  网格列数
@@ -228,7 +235,8 @@ export function MeetingView({
     //  渲染
     // ============================================================
     const body = (
-        <div
+        <motion.div
+            layoutScroll
             ref={bodyRef}
             style={{
                 flex: 1,
@@ -267,6 +275,15 @@ export function MeetingView({
                             {focused.name || focused.identity} · {focusedSource === 'camera' ? '摄像头' : '共享屏幕'}
                         </div>
                         <div style={{ position: 'absolute', top: '6px', right: '6px', display: 'flex', gap: '2px', zIndex: 2 }}>
+                            {focusedPub?.track && !(focused instanceof LocalParticipant) && isPipSupported() && (
+                                <mdui-button-icon
+                                    title={focusPip ? '退出悬浮窗' : '悬浮播放'}
+                                    icon={focusPip ? 'picture_in_picture' : 'picture_in_picture_alt'}
+                                    onClick={() => {
+                                        void togglePip(focusVideoRef.current).catch(() => showSnackbar({ message: '悬浮播放失败' }))
+                                    }}
+                                />
+                            )}
                             <mdui-button-icon
                                 title={isFullscreen ? '退出全屏' : '全屏'}
                                 icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
@@ -285,9 +302,10 @@ export function MeetingView({
                             />
                         </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
+                    <motion.div layoutScroll style={{ display: 'flex', gap: '6px', overflowX: 'auto', flex: '0 0 auto' }}>
                         {tiles.map(t => (
-                            <div key={t.key} style={{ flex: '0 0 130px' }}>
+                            <motion.div key={t.key} layout="position" layoutDependency={tileLayoutKey} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                transition={{ duration: 0.18 }} style={{ flex: '0 0 130px', minWidth: 0 }}>
                                 <ParticipantTile
                                     compact
                                     participant={t.participant}
@@ -299,15 +317,15 @@ export function MeetingView({
                                         maximize(t.participant.identity, t.source)
                                     }}
                                 />
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             ) : (
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: gridCols
-                        ? `repeat(${gridCols}, 1fr)`
+                        ? `repeat(${gridCols}, minmax(0, 1fr))`
                         : `repeat(auto-fit, minmax(${isMobile ? 130 : 240}px, 1fr))`,
                     gap: '6px',
                     alignContent: 'start',
@@ -315,8 +333,9 @@ export function MeetingView({
                     {tiles.map(t => {
                         const src = t.source
                         return (
+                            <motion.div key={t.key} layout="position" layoutDependency={tileLayoutKey} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }} style={{ minWidth: 0 }}>
                             <ParticipantTile
-                                key={t.key}
                                 participant={t.participant}
                                 prefer={src}
                                 bubble={settings.showBubble ? bubbles[t.participant.identity] : undefined}
@@ -334,11 +353,12 @@ export function MeetingView({
                                     />
                                 </> : undefined}
                             />
+                            </motion.div>
                         )
                     })}
                 </div>
             ))}
-        </div>
+        </motion.div>
     )
 
     const controls = (
@@ -367,9 +387,9 @@ export function MeetingView({
                 <mdui-dropdown trigger='hover'>
                     <mdui-button-icon
                         slot="trigger"
-                        icon={isMicOn ? 'mic' : 'mic_off'}
+                        aria-label={isMicOn ? '关闭麦克风' : '开启麦克风'}
                         onClick={() => toggleMic().catch(e => tipError(e, '切换麦克风失败'))}
-                    />
+                    ><AnimatedIcon name={isMicOn ? 'mic' : 'mic_off'} /></mdui-button-icon>
                     <mdui-menu>
                         <mdui-menu-item
                             icon={noiseSuppression ? 'check' : undefined}
@@ -393,17 +413,17 @@ export function MeetingView({
                 {settings.showCameraButton && (
                     <mdui-tooltip content={isCameraOn ? '关闭摄像头' : '开启摄像头'}>
                         <mdui-button-icon
-                            icon={isCameraOn ? 'videocam' : 'videocam_off'}
+                            aria-label={isCameraOn ? '关闭摄像头' : '开启摄像头'}
                             onClick={() => toggleCamera().catch(e => tipError(e, '切换摄像头失败'))}
-                        />
+                        ><AnimatedIcon name={isCameraOn ? 'videocam' : 'videocam_off'} /></mdui-button-icon>
                     </mdui-tooltip>
                 )}
 
                 <mdui-tooltip content={isSharingScreen ? '停止共享' : '共享屏幕'}>
                     <mdui-button-icon
-                        icon={isSharingScreen ? 'screen_share' : 'stop_screen_share'}
+                        aria-label={isSharingScreen ? '停止共享' : '共享屏幕'}
                         onClick={onToggleScreenShare}
-                    />
+                    ><AnimatedIcon name={isSharingScreen ? 'screen_share' : 'stop_screen_share'} /></mdui-button-icon>
                 </mdui-tooltip>
                 {isSharingScreen && (
                     <span style={{ fontSize: '12px', opacity: 0.7 }}>
@@ -436,15 +456,60 @@ export function MeetingView({
         </div>
     )
 
+    const editMeetingTitle = () => {
+        const dlg = dialog({
+            headline: '修改会议标题',
+            body: '<div style="padding-top: 12px"><mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field></div>',
+            closeOnEsc: true,
+            closeOnOverlayClick: true,
+            actions: [
+                { text: '取消', onClick: () => true },
+                {
+                    text: '保存',
+                    onClick: async () => {
+                        const input = dlg.querySelector('#meeting-title') as any
+                        const title = String(input?.value ?? '').trim()
+                        dlg.open = false
+                        try {
+                            await useMeetingStore.getState().updateMeetingTitle(title)
+                        } catch (e) {
+                            tipError(e, '修改会议标题失败')
+                        }
+                    },
+                },
+            ],
+        })
+        setTimeout(() => {
+            const input = dlg.querySelector('#meeting-title') as any
+            if (input) {
+                input.value = chatTitle ?? ''
+                input.focus?.()
+            }
+        }, 10)
+    }
+
     const settingsDialog = (
         <mdui-dialog ref={settingsRef} close-on-overlay-click close-on-esc headline="会议设置">
             <mdui-list>
+                <mdui-list-item icon="edit" rounded onClick={editMeetingTitle}>
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '12px' }}>
+                        <span style={{ flex: 1 }}>会议标题</span>
+                        <span style={{
+                            opacity: 0.6,
+                            maxWidth: '50%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}>{chatTitle || '未设置'}</span>
+                    </div>
+                </mdui-list-item>
                 {([
                     { key: 'showBubble', label: '消息气泡' },
                     { key: 'showLocalMute', label: '本地静音按钮' },
                     { key: 'showCameraButton', label: '摄像头按钮' },
                     { key: 'autoMuteStreams', label: '直播流加入时自动本地静音' },
                     { key: 'showMediaStats', label: '显示视频统计信息 (调试)' },
+                    { key: 'joinSound', label: '其他人入会提示音' },
                 ] as const).map(({ key, label }) => (
                     <mdui-list-item
                         key={key}

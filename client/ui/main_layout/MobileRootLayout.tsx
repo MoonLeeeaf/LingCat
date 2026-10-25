@@ -1,5 +1,6 @@
 import { NavigationBar } from 'mdui'
 import React from 'react'
+import { motion } from 'motion/react'
 import { NavItem, AppLayoutSharedProps } from './DesktopRootLayout.tsx'
 
 export interface MobileLayoutProps extends AppLayoutSharedProps {
@@ -40,16 +41,46 @@ export function MobileRootLayout({
                 {content}
             </div>
             <mdui-navigation-bar ref={navRef as any} value={navValue}>
-                {navItems?.map(item => (
-                    <mdui-navigation-bar-item
-                        key={item.value}
-                        icon={item.icon}
-                        active-icon={item.activeIcon}
-                        value={item.value}
-                    >
-                        {item.label ?? ''}
-                    </mdui-navigation-bar-item>
-                ))}
+                {navItems?.map(item => {
+                    const active = navValue === item.value
+                    return (
+                        <mdui-navigation-bar-item key={item.value} value={item.value}>
+                            <motion.div
+                                slot="icon"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.92 }}
+                                transition={{ type: 'spring', stiffness: 400, damping: 24 }}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                <mdui-icon name={item.icon} />
+                            </motion.div>
+                            <motion.div
+                                slot="active-icon"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.92 }}
+                                transition={{ type: 'spring', stiffness: 400, damping: 24 }}
+                                style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            >
+                                <mdui-icon name={item.activeIcon} />
+                                {active && (
+                                    <motion.span
+                                        layoutId="nav-active-dot-mobile"
+                                        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: '-5px',
+                                            width: '4px',
+                                            height: '4px',
+                                            borderRadius: '50%',
+                                            background: 'rgb(var(--mdui-color-primary))',
+                                        }}
+                                    />
+                                )}
+                            </motion.div>
+                            {item.label ?? ''}
+                        </mdui-navigation-bar-item>
+                    )
+                })}
             </mdui-navigation-bar>
         </>
     )

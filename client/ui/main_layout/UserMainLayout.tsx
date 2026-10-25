@@ -1,4 +1,6 @@
 import React from "react"
+import { AnimatePresence } from "motion/react"
+import ConnectionStatusBar from '../ConnectionStatusBar.tsx'
 import { useIsMobile } from "../../lib/useIsMobile.ts"
 import { DesktopRootLayout } from "./DesktopRootLayout.tsx"
 import { MobileRootLayout } from "./MobileRootLayout.tsx"
@@ -230,6 +232,13 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                         chatId: ev.chatId,
                         meetingId: ev.meetingId,
                     })
+                } else if (pkg.method_id === Methods.Meeting_Title_Changed_Event) {
+                    const ev = LingCatProto.methods.Meeting_Title_Changed_Event.decode(pkg.data)
+                    useMeetingStore.getState().onMeetingTitleChanged({
+                        chatId: ev.chatId,
+                        meetingId: ev.meetingId,
+                        title: ev.title,
+                    })
                 }
             } catch (e) {
                 console.warn('[Meeting] 处理会议事件失败', e)
@@ -358,6 +367,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     return loaded
         ? (isMobile
             ? <>
+                <ConnectionStatusBar client={client} />
                 <MobileRootLayout
                     topBar={
                         <mdui-top-app-bar>
@@ -375,10 +385,11 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     onNavValueChange={(v) => setNavValue(v as any)}
                     main={mainContent} />
                 <MobileMeetingDialog />
-                {meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall />}
+                <AnimatePresence>{meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall key="meeting-ball" />}</AnimatePresence>
             </>
 
             : <>
+                <ConnectionStatusBar client={client} />
                 <DesktopRootLayout
                     navTop={[
                         avatarIconMenuItem,
@@ -397,7 +408,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     dockPercent={meetingSplitWidth}
                     onDockPercentChange={setMeetingSplitWidth} />
                 <DesktopMeetingWindow />
-                {meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall />}
+                <AnimatePresence>{meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall key="meeting-ball" />}</AnimatePresence>
             </>
         )
         : <div style={{

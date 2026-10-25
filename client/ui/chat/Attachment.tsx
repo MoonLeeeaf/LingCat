@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'motion/react'
 import ReloadableImage from '../ReloadableImage.tsx'
 import ImageViewerDialog from '../viewer/ImageViewerDialog.tsx'
 import VideoViewerDialog from '../viewer/VideoViewerDialog.tsx'
@@ -73,7 +74,10 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
         case 'audio':
             return <audio controls src={url} style={{ display: 'block' }} />
         default:
-            return <a
+            return <motion.a
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
                 style={{
                     display: 'block',
                     width: '100%',
@@ -98,6 +102,6 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
                         maxWidth: '100%',
                     }}>{data.name}</span>
                 </mdui-card>
-            </a>
+            </motion.a>
     }
 }

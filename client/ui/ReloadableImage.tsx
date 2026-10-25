@@ -1,5 +1,6 @@
 import { Img } from "react-image"
 import React from "react"
+import { motion } from "motion/react"
 
 export default function ReloadableImage({ src, alt, ...props }: { src: string, alt?: string } & React.HTMLAttributes<HTMLImageElement>) {
     const [k, setK] = React.useState(Date.now() + '')
@@ -9,15 +10,19 @@ export default function ReloadableImage({ src, alt, ...props }: { src: string, a
             key={k}
             src={src}
             alt={alt}
-            loader={<div style={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'center',
-            }}>
+            loader={<motion.div
+                initial={{ opacity: 0.45 }}
+                animate={{ opacity: [0.45, 0.9, 0.45] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                    display: 'flex',
+                    flex: 1,
+                    justifyContent: 'center',
+                }}>
                 <mdui-circular-progress style={{
                     alignSelf: 'center',
                 }}></mdui-circular-progress>
-            </div>}
+            </motion.div>}
             unloader={<div style={{
                 display: 'flex',
                 flex: 1,

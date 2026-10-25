@@ -7,7 +7,24 @@ type PendingRequest = {
     timer: ReturnType<typeof setTimeout>
 }
 
+export type ClientConnectionState = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
+
 export default class LingCatClient {
+    connectionState: ClientConnectionState = 'idle'
+    private connectionListeners = new Set<() => void>()
+
+    subscribeConnectionState(listener: () => void) {
+        this.connectionListeners.add(listener)
+        return () => { this.connectionListeners.delete(listener) }
+    }
+
+    private setConnectionState(state: ClientConnectionState) {
+        if (state === this.connectionState) return
+        this.connectionState = state
+        for (const listener of this.connectionListeners) {
+            try { listener() } catch (e) { console.error('[Client] connection listener failed', e) }
+        }
+    }
     server_ws: string
     server_http: string
     server_public_key: Uint8Array
@@ -164,6 +181,7 @@ export default class LingCatClient {
         if (this.client != null) return
 
         this.manualDisconnect = false
+        if (this.connectionState !== 'reconnecting') this.setConnectionState('connecting')
 
         const client = new WebSocket(this.server_ws)
         this.client = client
@@ -172,15 +190,18 @@ export default class LingCatClient {
         client.binaryType = 'arraybuffer'
 
         client.addEventListener('close', () => {
+            if (this.client !== client) return
             this.stopPing()
             this.rejectAllPending('Connection closed')
             if (this.client === client) this.client = undefined
-            if (this.manualDisconnect) return
+            if (this.manualDisconnect) { this.setConnectionState('disconnected'); return }
             // 自动重连
+            this.setConnectionState('reconnecting')
             this.init()
         })
 
         client.addEventListener('open', async () => {
+            if (this.client !== client || this.manualDisconnect) return
             const keyPair = SecureKey.All_generateExchangeKeyPair()
 
             // 发送握手请求 (未加密)
@@ -193,6 +214,7 @@ export default class LingCatClient {
             }).toBuffer())
 
             client.addEventListener('message', async (event) => {
+                if (this.client !== client || this.manualDisconnect) return
                 if (!(event.data instanceof ArrayBuffer)) return
                 try {
                     const mPackage = Package.decode(toUint8Array(event.data), session.keyRecv!, session.recvSeq)
@@ -224,6 +246,7 @@ export default class LingCatClient {
                                 console.error('[Client] Server verification failed, closing connection')
                                 // ★ 阻止自动重连（否则 close → init() → 死循环）
                                 this.manualDisconnect = true
+                                this.setConnectionState('disconnected')
                                 // ★ 通知调用方
                                 this.onHandshakeFailed('server_public_key_mismatch')
                                 client.close()
@@ -245,6 +268,7 @@ export default class LingCatClient {
                             sharedSecret.fill(0)
 
                             this.startPing()
+                            this.setConnectionState('connected')
                             this.onInit()
                             break
                         }
@@ -283,6 +307,7 @@ export default class LingCatClient {
 
     disconnect() {
         this.manualDisconnect = true
+        this.setConnectionState('disconnected')
         this.stopPing()
         this.rejectAllPending('Client disconnected')
         this.client?.close()

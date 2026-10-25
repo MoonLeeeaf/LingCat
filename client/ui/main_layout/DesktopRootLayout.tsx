@@ -1,5 +1,6 @@
 import { NavigationDrawer, NavigationRail } from 'mdui'
 import React from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { DrawerContext, DrawerContextValue } from './DrawerContext.ts'
 
 export interface NavItem {
@@ -45,6 +46,7 @@ export function DesktopRootLayout({
     dockPercent = 50,
     onDockPercentChange,
 }: DesktopLayoutProps) {
+    const reduceMotion = useReducedMotion()
     const railRef = React.useRef<NavigationRail>(null)
     const drawerRef = React.useRef<NavigationDrawer>(null) 
     const dockRowRef = React.useRef<HTMLDivElement>(null)
@@ -114,14 +116,45 @@ export function DesktopRootLayout({
                     value={navValue}
                 >
                     {navTop}
-                    {navItems?.map((item) => (
-                        <mdui-navigation-rail-item
-                            key={item.value}
-                            icon={item.icon}
-                            active-icon={item.activeIcon}
-                            value={item.value}
-                        />
-                    ))}
+                    {navItems?.map((item) => {
+                        const active = navValue === item.value
+                        return (
+                            <mdui-navigation-rail-item key={item.value} value={item.value}>
+                                <motion.div
+                                    slot="icon"
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.92 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 24 }}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                >
+                                    <mdui-icon name={item.icon} />
+                                </motion.div>
+                                <motion.div
+                                    slot="active-icon"
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.92 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 24 }}
+                                    style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                >
+                                    <mdui-icon name={item.activeIcon} />
+                                    {active && (
+                                        <motion.span
+                                            layoutId="nav-active-dot-desktop"
+                                            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+                                            style={{
+                                                position: 'absolute',
+                                                bottom: '-5px',
+                                                width: '4px',
+                                                height: '4px',
+                                                borderRadius: '50%',
+                                                background: 'rgb(var(--mdui-color-primary))',
+                                            }}
+                                        />
+                                    )}
+                                </motion.div>
+                            </mdui-navigation-rail-item>
+                        )
+                    })}
                     {navBottom}
                 </mdui-navigation-rail>
 
@@ -133,16 +166,20 @@ export function DesktopRootLayout({
             <mdui-layout-main style={{ flexGrow: 1, display: 'flex', minWidth: 0 }}>
                 <div ref={dockRowRef} style={{ display: 'flex', width: '100%', height: '100%', minWidth: 0 }}>
                     {dockedPanel && (<>
-                        <div style={{
-                            width: dockedPanelHidden ? 0 : dockPercent + '%',
+                        <motion.div initial={false} inert={!!dockedPanelHidden}
+                            animate={{ width: dockedPanelHidden ? '0%' : dockPercent + '%', opacity: dockedPanelHidden ? 0 : 1, visibility: 'visible', transitionEnd: { visibility: dockedPanelHidden ? 'hidden' : 'visible' } }}
+                            transition={{ duration: 0.16, width: { duration: dockedPanelHidden && !reduceMotion ? 0.16 : 0 } }}
+                            style={{
                             height: '100%',
                             minWidth: 0,
                             flexShrink: 0,
-                            display: dockedPanelHidden ? 'none' : 'flex',
+                            display: 'flex',
+                            overflow: 'hidden',
+                            pointerEvents: dockedPanelHidden ? 'none' : undefined,
                             flexDirection: 'column',
                         }}>
                             {dockedPanel}
-                        </div>
+                        </motion.div>
                         {!dockedPanelHidden && (
                             <div
                                 onPointerDown={onDividerDown}

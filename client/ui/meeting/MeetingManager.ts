@@ -29,6 +29,8 @@ export interface MeetingSettings {
     autoMuteStreams: boolean
     /** 在视频瓦片上显示统计信息 (调试) */
     showMediaStats: boolean
+    /** 其他人入会提示音 */
+    joinSound: boolean
 }
 
 const DEFAULT_SETTINGS: MeetingSettings = {
@@ -37,6 +39,7 @@ const DEFAULT_SETTINGS: MeetingSettings = {
     showCameraButton: true,
     autoMuteStreams: true,
     showMediaStats: false,
+    joinSound: true,
 }
 
 function loadMeetingSettings(): MeetingSettings {
@@ -93,6 +96,47 @@ let autoMuteDecided: Record<string, boolean> = {}
 let chatMsgListener: ((pkg: Package) => void) | undefined
 let bubbleTimers: Record<string, ReturnType<typeof setTimeout>> = {}
 
+// 入会提示音: 首屏已有成员不响, 只对之后加入的人响
+let suppressJoinSoundUntil = 0
+let notificationAudioCtx: AudioContext | null = null
+
+function ensureNotificationAudio(): AudioContext | null {
+    try {
+        if (!notificationAudioCtx) notificationAudioCtx = new AudioContext()
+        if (notificationAudioCtx.state === 'suspended') void notificationAudioCtx.resume()
+        return notificationAudioCtx
+    } catch {
+        return null
+    }
+}
+
+function playJoinSound() {
+    const ctx = ensureNotificationAudio()
+    if (!ctx) return
+
+    const play = () => {
+        const t = ctx.currentTime
+        const tone = (freq: number, at: number, dur: number, vol: number) => {
+            const osc = ctx.createOscillator()
+            const gain = ctx.createGain()
+            osc.type = 'sine'
+            osc.frequency.setValueAtTime(freq, at)
+            gain.gain.setValueAtTime(0.0001, at)
+            gain.gain.exponentialRampToValueAtTime(vol, at + 0.012)
+            gain.gain.exponentialRampToValueAtTime(0.0001, at + dur)
+            osc.connect(gain).connect(ctx.destination)
+            osc.start(at)
+            osc.stop(at + dur + 0.02)
+        }
+        // 柔和的两音提示 (A5 -> D6)
+        tone(880, t, 0.14, 0.10)
+        tone(1174.66, t + 0.12, 0.18, 0.08)
+    }
+
+    if (ctx.state === 'suspended') void ctx.resume().then(play).catch(() => { })
+    else play()
+}
+
 // ============================================================
 //                      Store
 // ============================================================
@@ -147,9 +191,10 @@ interface MeetingState {
 
 interface MeetingActions {
     joinMeeting(chatId: string, meetingId: string, chatTitle?: string): Promise<void>
-    startMeeting(chat: Pick<IChat, 'id' | 'title'>): Promise<void>
+    startMeeting(chat: Pick<IChat, 'id' | 'title'>, title?: string): Promise<void>
     leave(): void
     endMeeting(): Promise<void>
+    updateMeetingTitle(title: string): Promise<void>
 
     toggleMic(): Promise<void>
     toggleCamera(): Promise<void>
@@ -168,6 +213,7 @@ interface MeetingActions {
 
     onMeetingStarted(ev: { chatId: string, meetingId: string, room: string, starterUserId: string, title?: string | null }): void
     onMeetingEnded(ev: { chatId: string, meetingId: string }): void
+    onMeetingTitleChanged(ev: { chatId: string, meetingId: string, title: string }): void
     refreshActiveMeeting(chatId: string): Promise<void>
 
     getActiveMeeting(chatId: string): ActiveMeeting | undefined
@@ -288,7 +334,11 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
 
     const bindRoom = (room: Room) => {
         const refresh = bumpRev
-        room.on(RoomEvent.ParticipantConnected, (p) => { maybeAutoLocalMute(p); refresh() })
+        room.on(RoomEvent.ParticipantConnected, (p) => {
+            if (get().phase === 'connected' && Date.now() >= suppressJoinSoundUntil && get().settings.joinSound) playJoinSound()
+            maybeAutoLocalMute(p)
+            refresh()
+        })
         room.on(RoomEvent.ParticipantDisconnected, refresh)
         room.on(RoomEvent.TrackSubscribed, refresh)
         room.on(RoomEvent.TrackUnsubscribed, refresh)
@@ -377,6 +427,8 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
         // -------------------- Actions --------------------
 
         joinMeeting: async (chatId, meetingId, chatTitle) => {
+            ensureNotificationAudio()
+            suppressJoinSoundUntil = Date.now() + 60_000
             if (get().room) await get().leave()
 
             set({
@@ -408,6 +460,7 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 bindRoom(room)
 
                 await room.connect(serverUrl, creds.token)
+                suppressJoinSoundUntil = Date.now() + 1_500
 
                 try {
                     await room.localParticipant.setMicrophoneEnabled(true, micCaptureOptions())
@@ -432,11 +485,13 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
             }
         },
 
-        startMeeting: async (chat) => {
+        startMeeting: async (chat, title) => {
+            ensureNotificationAudio()
+            const meetingTitle = title?.trim() || chat.title?.trim() || undefined
             set({
                 error: undefined,
                 phase: 'connecting',
-                chatTitle: chat.title ?? undefined,
+                chatTitle: meetingTitle,
             })
             try {
                 const client = ClientManager.getActiveClient()
@@ -445,7 +500,7 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 const res = await MeetingApi.startMeeting(client, {
                     access_token: accessToken(),
                     chat_id: chat.id,
-                    title: chat.title ?? undefined,
+                    title: meetingTitle,
                 })
 
                 // 立即登记，发起人马上能拿到 starterUserId
@@ -455,14 +510,14 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                         [chat.id]: {
                             meetingId: res.meeting_id,
                             room: res.room,
-                            title: chat.title ?? undefined,
+                            title: meetingTitle,
                             starterUserId: res.starter_user_id,
                             startedAt: Date.now(),
                         },
                     },
                 }))
 
-                await get().joinMeeting(chat.id, res.meeting_id, chat.title ?? undefined)
+                await get().joinMeeting(chat.id, res.meeting_id, meetingTitle)
             } catch (e: any) {
                 set({
                     phase: 'error',
@@ -510,6 +565,26 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 meeting_id: meetingId,
             })
             // 服务端广播 Meeting_Ended_Event → onMeetingEnded → leave
+        },
+
+        updateMeetingTitle: async (title) => {
+            const { chatId, meetingId } = get()
+            if (!chatId || !meetingId) return
+            const client = ClientManager.getActiveClient()
+            if (!client) return
+            const res = await MeetingApi.updateMeetingTitle(client, {
+                access_token: accessToken(),
+                chat_id: chatId,
+                meeting_id: meetingId,
+                title,
+            })
+            const clean = (res.title ?? title).trim() || undefined
+            set(s => ({
+                chatTitle: clean,
+                activeMeetings: s.activeMeetings[chatId]
+                    ? { ...s.activeMeetings, [chatId]: { ...s.activeMeetings[chatId], title: clean } }
+                    : s.activeMeetings,
+            }))
         },
 
         toggleMic: async () => {
@@ -626,6 +701,19 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                         startedAt: Date.now(),
                     },
                 },
+            }))
+        },
+
+        onMeetingTitleChanged: (ev) => {
+            const active = get().activeMeetings[ev.chatId]
+            if (!active || active.meetingId !== ev.meetingId) return
+            const title = ev.title?.trim() || undefined
+            set(s => ({
+                activeMeetings: {
+                    ...s.activeMeetings,
+                    [ev.chatId]: { ...s.activeMeetings[ev.chatId], title },
+                },
+                chatTitle: s.chatId === ev.chatId && s.meetingId === ev.meetingId ? title : s.chatTitle,
             }))
         },
 

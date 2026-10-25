@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'motion/react'
 import { TextField } from 'mdui'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import type { IChat } from 'lingcat-protocol'
@@ -17,6 +18,7 @@ import { ChatApi } from 'lingcat-client-protocol'
 import { useIsMobile } from '../../lib/useIsMobile.ts'
 import { Methods, Package } from 'lingcat-protocol'
 import RemarksCache from '../../RemarksCache.ts'
+import SearchFeedback from './SearchFeedback.tsx'
 
 export type ChatListShow = 'recents' | 'search' | 'favourites' | 'all'
 
@@ -31,19 +33,11 @@ export interface ChatListFragmentProps {
 //                      工具函数
 // ============================================================
 
-function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
-    let timer: ReturnType<typeof setTimeout>
-    return (...args: Parameters<T>) => {
-        clearTimeout(timer)
-        timer = setTimeout(() => fn(...args), delay)
-    }
-}
-
 // ============================================================
 //                      列表项
 // ============================================================
 
-function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
+function ChatListItem({ chat, active, index, enableLayout }: { chat: IChat; active: boolean; index: number; enableLayout: boolean }) {
     const navigate = useNavigate()
     const isMobile = useIsMobile()
 
@@ -53,6 +47,17 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
     const online = useIsOnline(chat.peer_user_id)
 
     return (
+        <motion.div
+            layout={enableLayout ? 'position' : undefined}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+                duration: 0.22,
+                delay: Math.min(index * 0.02, 0.18),
+                ease: 'easeOut',
+                layout: { type: 'spring', stiffness: 260, damping: 30 },
+            }}
+        >
         <mdui-dropdown trigger="hover">
             <mdui-list-item
                 active={active}
@@ -87,6 +92,7 @@ function ChatListItem({ chat, active }: { chat: IChat; active: boolean }) {
                 </mdui-menu-item>
             </mdui-menu>
         </mdui-dropdown>
+        </motion.div>
     )
 }
 
@@ -131,38 +137,50 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
     const [allChats, setAllChats] = React.useState<IChat[]>([])
     const [loading, setLoading] = React.useState({ recent: false, fav: false, all: false })
 
+    // 首次加载/切换列表时先只做淡入，稳定后再启用 layout 重排动画，避免首屏生硬
+    const [layoutReady, setLayoutReady] = React.useState(false)
+    React.useEffect(() => {
+        const currentLoading = show === 'recents'
+            ? loading.recent
+            : show === 'favourites'
+                ? loading.fav
+                : loading.all
+        if (currentLoading) {
+            setLayoutReady(false)
+            return
+        }
+        const timer = window.setTimeout(() => setLayoutReady(true), 500)
+        return () => window.clearTimeout(timer)
+    }, [show, loading.recent, loading.fav, loading.all])
+
     // search
     const [searchKeyword, setSearchKeyword] = React.useState('')
     const [searchResults, setSearchResults] = React.useState<IChat[]>([])
     const [searching, setSearching] = React.useState(false)
 
-    const debouncedSearch = React.useCallback(
-        debounce(async (keyword: string) => {
-            if (!keyword.trim()) {
-                setSearchResults([])
-                setSearching(false)
-                return
-            }
-            const client = ClientManager.getActiveClient()
-            const session = ClientManager.getActiveSession()
-            if (!client || !session) return
-
-            setSearching(true)
+    React.useEffect(() => {
+        if (show !== 'search') return
+        const keyword = searchKeyword.trim()
+        if (!keyword) { setSearchResults([]); setSearching(false); return }
+        let cancelled = false
+        setSearching(true)
+        const timer = window.setTimeout(async () => {
             try {
+                const client = ClientManager.getActiveClient()
+                const session = ClientManager.getActiveSession()
+                if (!client || !session) return
                 const chats = await ChatApi.searchMyChats(client, {
-                    access_token: session.token,
-                    keyword: keyword.trim(),
+                    access_token: session.token, keyword,
                 })
-                setSearchResults(chats)
+                if (!cancelled) setSearchResults(chats)
             } catch (e) {
-                tipError(e, '搜索失败')
-                setSearchResults([])
+                if (!cancelled) { tipError(e, '搜索失败'); setSearchResults([]) }
             } finally {
-                setSearching(false)
+                if (!cancelled) setSearching(false)
             }
-        }, 300),
-        [],
-    )
+        }, 300)
+        return () => { cancelled = true; window.clearTimeout(timer) }
+    }, [searchKeyword, show])
 
     // 拉取 chats + 监听 Update_My_Chats_Event
     React.useEffect(() => {
@@ -226,22 +244,13 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
                     onInput={(e: any) => {
                         const val = e.target.value
                         setSearchKeyword(val)
-                        debouncedSearch(val)
                     }}
                     style={{ width: '100%', paddingBottom: '10px' }}
                     clearable
                 />
-                {searching && <mdui-circular-progress style={{ margin: '20px auto', display: 'block' }} />}
-                {!searching && searchKeyword.trim() !== '' && searchResults.length === 0 && (
-                    <div style={{
-                        padding: '20px',
-                        textAlign: 'center',
-                        color: 'var(--mdui-color-secondary)',
-                    }}>
-                        没有找到匹配的对话
-                    </div>
-                )}
-                {searchResults.map(chat => (
+                <SearchFeedback busy={searching} count={searchResults.length} hasQuery={!!searchKeyword.trim()}
+                    emptyText="输入关键词查找对话" />
+                {!searching && searchKeyword.trim() && searchResults.map(chat => (
                     <mdui-list-item
                         key={chat.id}
                         active={activeChatId === chat.id}
@@ -272,20 +281,19 @@ export function ChatListFragment({ show, activeChatId }: ChatListFragmentProps) 
             show === 'favourites' ? loading.fav :
                 loading.all
 
+    const filteredChats = dataSource.filter(chatFilter)
+
     return (
         <>
             <ChatFilterField onFilterChange={setFilterText} />
-            {isLoading && (
-                <mdui-circular-progress style={{ margin: '10px auto', display: 'block' }} />
-            )}
-            {!isLoading && dataSource.length === 0 && (
-                <mdui-list-item rounded>暂无对话</mdui-list-item>
-            )}
-            {dataSource.filter(chatFilter).map(chat => (
+            <SearchFeedback busy={isLoading} count={filteredChats.length} hasQuery={!!filterText.trim()} />
+            {filteredChats.map((chat, index) => (
                 <ChatListItem
                     key={chat.id}
                     chat={chat}
                     active={activeChatId === chat.id}
+                    index={index}
+                    enableLayout={layoutReady}
                 />
             ))}
         </>

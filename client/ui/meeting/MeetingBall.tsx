@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { createPortal } from 'react-dom'
 import { Track } from 'livekit-client'
 import { useMeetingStore } from './MeetingManager.ts'
@@ -74,6 +75,7 @@ function savePos(p: { x: number, y: number }) {
  * - 点击 / Enter / Space 恢复会议窗口 (悬浮/分栏/移动端按原模式)
  */
 export function MeetingBall() {
+    const reduceMotion = useReducedMotion()
     const room = useMeetingStore(s => s.room)
     const chatId = useMeetingStore(s => s.chatId)
     // 订阅 rev: 参与者/音轨/静音变化时重建分析器
@@ -292,7 +294,8 @@ export function MeetingBall() {
     }
 
     return createPortal(
-        <div
+        <motion.div initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.85 }} animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.85 }} transition={{ duration: 0.16 }}
             role="button"
             tabIndex={0}
             aria-label="回到会议"
@@ -458,7 +461,7 @@ export function MeetingBall() {
                     />
                     : <mdui-icon name="forum" style={{ fontSize: '13px', color: '#fff' }} />}
             </div>
-        </div>,
+        </motion.div>,
         document.body,
     )
 }

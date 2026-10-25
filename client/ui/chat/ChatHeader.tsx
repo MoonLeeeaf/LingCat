@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 
 export interface ChatHeaderProps {
     /** 聊天标题 */
@@ -58,9 +59,24 @@ export function ChatHeader({
             )}
 
             <mdui-top-app-bar-title style={{ marginLeft: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {title}
-                </span>
+                <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                        key={title}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 8 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        style={{
+                            display: 'inline-block',
+                            maxWidth: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {title}
+                    </motion.span>
+                </AnimatePresence>
                 {isE2E && (
                     <mdui-tooltip content={
                         e2eStatus === 'verified' ? '端到端加密 (已验证)' :

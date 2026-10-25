@@ -1,4 +1,5 @@
 import React from 'react'
+import { dialog } from 'mdui'
 import { ChatRoute } from '../routes/ChatRoute.tsx'
 import { DialogForRouter } from '../DialogForRouter.tsx'
 import { useIsMobile } from '../../lib/useIsMobile.ts'
@@ -118,11 +119,41 @@ export function ChatFragment() {
         try {
             if (hasActiveMeeting) {
                 const active = useMeetingStore.getState().activeMeetings[chatId]
-                await useMeetingStore.getState().joinMeeting(chatId, active.meetingId, chat.title ?? undefined)
+                await useMeetingStore.getState().joinMeeting(chatId, active.meetingId, active.title ?? chat.title ?? undefined)
+                useMeetingUIStore.getState().open()
             } else {
-                await useMeetingStore.getState().startMeeting(chat)
+                // 发起前填写会议标题
+                const dlg = dialog({
+                    headline: '发起会议',
+                    body: '<div style="padding-top: 12px"><mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field></div>',
+                    closeOnEsc: true,
+                    closeOnOverlayClick: true,
+                    actions: [
+                        { text: '取消', onClick: () => true },
+                        {
+                            text: '发起',
+                            onClick: async () => {
+                                const input = dlg.querySelector('#meeting-title') as any
+                                const title = String(input?.value ?? '').trim()
+                                dlg.open = false
+                                try {
+                                    await useMeetingStore.getState().startMeeting(chat, title || undefined)
+                                    useMeetingUIStore.getState().open()
+                                } catch (e) {
+                                    tipError(e, '发起会议失败')
+                                }
+                            },
+                        },
+                    ],
+                })
+                setTimeout(() => {
+                    const input = dlg.querySelector('#meeting-title') as any
+                    if (input) {
+                        input.value = chat.title ?? ''
+                        input.focus?.()
+                    }
+                }, 10)
             }
-            useMeetingUIStore.getState().open()
         } catch (e) {
             tipError(e, '发起会议失败')
         }
@@ -141,7 +172,7 @@ export function ChatFragment() {
             position: 'relative',
             overflow: 'hidden',
         }}>
-            {chatBackgroundUrl && <ChatBackground url={chatBackgroundUrl} />}
+            <ChatBackground key={chatId} url={chatBackgroundUrl} />
 
             <div style={{
                 position: 'relative',

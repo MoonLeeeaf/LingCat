@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { MeetingView } from './MeetingView.tsx'
 import { useMeetingUIStore } from './MeetingUIStore.ts'
 
@@ -16,6 +17,9 @@ export function DesktopMeetingWindow() {
     const setSize = useMeetingUIStore(s => s.setSize)
     const toggleMinimized = useMeetingUIStore(s => s.toggleMinimized)
     const toggleMaximized = useMeetingUIStore(s => s.toggleMaximized)
+    const reduceMotion = useReducedMotion()
+    const [hidden, setHidden] = React.useState(isMinimized)
+    React.useEffect(() => { if (!isMinimized) setHidden(false) }, [isMinimized])
     const split = useMeetingUIStore(s => s.split)
     const setSplit = useMeetingUIStore(s => s.setSplit)
 
@@ -113,7 +117,13 @@ export function DesktopMeetingWindow() {
     )
 
     return (
-        <div
+        <motion.div
+            layoutRoot
+            initial={false}
+            animate={{ opacity: isMinimized ? 0 : 1, scale: isMinimized && !reduceMotion ? 0.97 : 1 }}
+            transition={{ duration: 0.16 }}
+            onAnimationComplete={() => setHidden(isMinimized)}
+            inert={isMinimized}
             style={{
                 position: 'fixed',
                 zIndex: 2100,
@@ -123,7 +133,9 @@ export function DesktopMeetingWindow() {
                 boxShadow: isMaximized ? 'none' : 'var(--mdui-elevation-level3)',
                 border: isMaximized ? 'none' : '1px solid rgb(var(--mdui-color-outline-variant))',
                 // 最小化 = 整个窗口隐藏, 但仍挂载 (会议保持连接、音频继续播放)
-                display: isMinimized ? 'none' : 'flex',
+                display: 'flex',
+                visibility: isMinimized && hidden ? 'hidden' : 'visible',
+                pointerEvents: isMinimized ? 'none' : undefined,
                 flexDirection: 'column',
                 overflow: 'hidden',
                 ...style,
@@ -161,6 +173,6 @@ export function DesktopMeetingWindow() {
                     </svg>
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }
