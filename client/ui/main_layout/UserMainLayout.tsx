@@ -7,7 +7,7 @@ import { MobileRootLayout } from "./MobileRootLayout.tsx"
 import Avatar from "../Avatar.tsx"
 import { useAsyncEffect } from "../../lib/useAsyncEffect.ts"
 import { IUser, LingCatProto, Methods, Package } from "lingcat-protocol"
-import { FileApi, UserApi } from "lingcat-client-protocol"
+import { ChatApi, FileApi, UserApi } from "lingcat-client-protocol"
 import ClientManager from "../../ClientManager.ts"
 import tipError from "../tipError.ts"
 import default_avatar from '../../default_avatar.png'
@@ -35,6 +35,7 @@ import ClientConfig from "../../ClientConfig.ts"
 import RemarksCache from "../../RemarksCache.ts"
 import OpenChatDialog from "../main/OpenChatDialog.tsx"
 import CreateGroupDialog from "../main/CreateGroupDialog.tsx"
+import { useChatMessageStore } from "../chat/useChatMessageStore.ts"
 
 const navItems = [
     {
@@ -279,7 +280,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
         async function onPackage(mPackage: Package) {
             if (mPackage.method_id !== Methods.Receive_Chat_Message_Event) return
-            
+
             const data = LingCatProto.methods.Receive_Chat_Message_Event.decode(mPackage.data)
             const msg = data.msg
             if (!msg || !msg.chatId) return
@@ -288,10 +289,47 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
             if (msg.senderUserId === profile?.id) return
             // 2. 正在该聊天窗口不提醒
             if (msg.chatId === activeChatId) return
-            
-            // 3. 群聊且没有 @ 我，不提醒
+
+            // 3. 群聊且既没有 @ 我，也没有回复我，不提醒
             const chat = await ProfileCache.queryChatInfo(msg.chatId)
-            if (chat.type === 'group' && msg.entities?.find((v) => v.type === 'user_mention' && v.data === profile?.id) == null) return
+            if (chat.type === 'group') {
+                // 判断是否 @ 了我
+                const isMentioned = msg.entities?.some((v) => v.type === 'user_mention' && v.data === profile?.id)
+
+                // 判断是否回复了我（带本地+远程兜底）
+                let isReplied = false
+                const replyEntity = msg.entities?.find((v) => v.type === 'reply')
+
+                if (replyEntity?.data) {
+                    const targetSeq = Number(replyEntity.data)
+                    // 1. 先查本地 Zustand 缓存
+                    let targetMsg = useChatMessageStore.getState().messageMap.get(targetSeq)
+
+                    // 2. 本地没找到 → 异步请求服务端兜底（防止消息没加载到本地）
+                    if (!targetMsg && activeClient) {
+                        const session = ClientManager.getActiveSession()
+                        if (session) {
+                            try {
+                                // 利用 before 游标查单条：拉取 seq <= targetSeq 的最新 1 条
+                                const fetched = await ChatApi.getChatMessages(activeClient, {
+                                    access_token: session.token,
+                                    chat_id: msg.chatId,
+                                    before: targetSeq + 1,
+                                    limit: 1,
+                                })
+                                targetMsg = fetched.find(m => m.id === targetSeq)
+                            } catch (e) {
+                                // 兜底请求失败，静默忽略
+                            }
+                        }
+                    }
+
+                    isReplied = targetMsg?.sender_user_id === profile?.id
+                }
+
+                // 既没艾特我，也没回复我，直接退出，不弹通知
+                if (!isMentioned && !isReplied) return
+            }
 
             // ============================================================
             //  4. 浏览器系统通知 (Notification)
@@ -300,9 +338,9 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 const senderId = msg.senderUserId
                 const sender = senderId ? await ProfileCache.queryUserInfo(senderId) : null
                 const senderName = senderId ? (RemarksCache.get(senderId) || sender?.nickname || sender?.username || senderId) : '未知'
-                
+
                 const chatTitle = (chat.peer_user_id && RemarksCache.get(chat.peer_user_id)) || chat.title || '对话'
-                
+
                 // 解析消息摘要 (处理加密和附件)
                 let bodyText = msg.text || ''
                 if (msg.entities?.some(e => e.type === 'e2e')) {
@@ -313,8 +351,8 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 }
 
                 // 发送者头像
-                const iconUrl = sender?.avatar_file_hash 
-                    ? getFileUrl(sender.avatar_file_hash, SessionEnv.myFileAccessToken) 
+                const iconUrl = sender?.avatar_file_hash
+                    ? getFileUrl(sender.avatar_file_hash, SessionEnv.myFileAccessToken)
                     : default_avatar
 
                 const notification = new Notification(`${ClientConfig.site_title} | ${chatTitle}`, {
