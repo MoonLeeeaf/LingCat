@@ -137,20 +137,6 @@ export function DesktopRootLayout({
                                     style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 >
                                     <mdui-icon name={item.activeIcon} />
-                                    {active && (
-                                        <motion.span
-                                            layoutId="nav-active-dot-desktop"
-                                            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                                            style={{
-                                                position: 'absolute',
-                                                bottom: '-5px',
-                                                width: '4px',
-                                                height: '4px',
-                                                borderRadius: '50%',
-                                                background: 'rgb(var(--mdui-color-primary))',
-                                            }}
-                                        />
-                                    )}
                                 </motion.div>
                             </mdui-navigation-rail-item>
                         )
