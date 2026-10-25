@@ -6,10 +6,18 @@ import VideoViewerDialog from '../viewer/VideoViewerDialog.tsx'
 import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import { queryAttachmentMime } from '../../AttachmentMimeCache.ts'
+import AudioAttachment from './AudioAttachment.tsx'
 
 export interface IAttachmentData {
     hash: string
     name: string
+}
+
+export interface AttachmentContext {
+    messageId?: number
+    chatId?: string
+    chatTitle?: string
+    senderName?: string
 }
 
 function resolveKind(mime: string): 'image' | 'video' | 'audio' | 'file' {
@@ -19,7 +27,7 @@ function resolveKind(mime: string): 'image' | 'video' | 'audio' | 'file' {
     return 'file'
 }
 
-export default function Attachment({ data }: { data: IAttachmentData }) {
+export default function Attachment({ data, context }: { data: IAttachmentData; context?: AttachmentContext }) {
     const url = getFileUrl(data.hash, SessionEnv.myFileAccessToken)!
     const [mime, setMime] = React.useState<string | null>(null)
 
@@ -72,7 +80,15 @@ export default function Attachment({ data }: { data: IAttachmentData }) {
                 }}
             />
         case 'audio':
-            return <audio controls src={url} style={{ display: 'block' }} />
+            return <AudioAttachment
+                url={url}
+                name={data.name}
+                hash={data.hash}
+                chatId={context?.chatId}
+                chatTitle={context?.chatTitle}
+                messageId={context?.messageId}
+                senderName={context?.senderName}
+            />
         default:
             return <motion.a
                 whileHover={{ y: -1 }}

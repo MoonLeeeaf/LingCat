@@ -20,6 +20,7 @@ import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { MeetingBanner } from './MeetingBanner.tsx'
+import ChatAudioBanner from './ChatAudioBanner.tsx'
 import { useChatBackground } from './useChatBackground.ts'
 import ChatBackground from './ChatBackground.tsx'
 import RemarksCache from '../../RemarksCache.ts'
@@ -185,7 +186,6 @@ export function ChatFragment() {
             }}>
                 <ChatHeader
                     onOpenE2EInfo={() => E2EInfoDialog.show(chatId, peerUserId)}
-                    chatId={chat?.id!}
                     title={chat?.title ?? '加载中...'}
                     isMobile={isMobile}
                     drawerOpen={drawerOpen}
@@ -206,6 +206,7 @@ export function ChatFragment() {
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
+                            <ChatAudioBanner translucent={!!chatBackgroundUrl} />
                             <MeetingBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
                             <MessageList
                                 chatId={chatId}

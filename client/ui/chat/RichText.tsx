@@ -2,13 +2,17 @@ import React from "react"
 import { IMessageEntity } from "lingcat-protocol"
 import UserProfileDialog from "../viewer/UserProfileDialog.tsx"
 import ChatProfileDialog from "../viewer/ChatProfileDialog.tsx"
-import Attachment, { IAttachmentData } from "./Attachment.tsx"
+import Attachment, { IAttachmentData, type AttachmentContext } from "./Attachment.tsx"
 import QuoteReply from "./QuoteReply.tsx"
 
 interface IRichTextProps {
     text: string
     entities: IMessageEntity[]
     isSystem?: boolean
+    messageId?: number
+    chatId?: string
+    chatTitle?: string
+    senderName?: string
 }
 
 function Spoiler({ children }: { children: React.ReactNode }) {
@@ -48,7 +52,7 @@ function TextContainerSystem({ children }: { children: React.ReactNode }) {
     </div>
 }
 
-export default function RichText({ text, entities, isSystem }: IRichTextProps) {
+export default function RichText({ text, entities, isSystem, messageId, chatId, chatTitle, senderName }: IRichTextProps) {
     if (!entities?.length)
         if (isSystem)
             return <TextContainerSystem>{text}</TextContainerSystem>
@@ -64,6 +68,8 @@ export default function RichText({ text, entities, isSystem }: IRichTextProps) {
         cursor = e.offset + e.length
     }
     if (cursor < text.length) segments.push({ text: text.slice(cursor) })
+
+    const attachmentContext: AttachmentContext = { messageId, chatId, chatTitle, senderName }
 
     const groups: Array<
         { type: 'inline', segments: typeof segments } |
@@ -91,21 +97,21 @@ export default function RichText({ text, entities, isSystem }: IRichTextProps) {
     return <>{groups.map((g, gi) => {
         if (g.type === 'block') {
             return <React.Fragment key={gi}>
-                {renderSegment(g.segment, 0)}
+                {renderSegment(g.segment, 0, attachmentContext)}
             </React.Fragment>
         }
         if (isSystem)
             return <TextContainerSystem key={gi}>
-                {g.segments.map((s, si) => renderSegment(s, si))}
+                {g.segments.map((s, si) => renderSegment(s, si, attachmentContext))}
             </TextContainerSystem>
         else
             return <TextContainer key={gi}>
-                {g.segments.map((s, si) => renderSegment(s, si))}
+                {g.segments.map((s, si) => renderSegment(s, si, attachmentContext))}
             </TextContainer>
     })}</>
 }
 
-function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number) {
+function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number, ctx?: AttachmentContext) {
     if (!seg.entity) return <React.Fragment key={i}>{seg.text}</React.Fragment>
     const e = seg.entity
     switch (e.type) {
@@ -178,7 +184,7 @@ function renderSegment(seg: { text: string, entity?: IMessageEntity }, i: number
             } catch {
                 return <em key={i}>[无效附件]</em>
             }
-            return <Attachment key={i} data={parsed} />
+            return <Attachment key={i} data={parsed} context={ctx} />
         }
 
         case 'e2e': {

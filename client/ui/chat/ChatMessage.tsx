@@ -190,6 +190,8 @@ export default function ChatMessage({
         renderEntities = decryptedPayload.entities || []
     }
 
+    const senderName = RemarksCache.get(msg.sender_user_id!) || profile?.nickname || ''
+
     return (
         <Message
             time={msg.time}
@@ -198,7 +200,7 @@ export default function ChatMessage({
             onAvatarClick={onAvatarClick}
             messageMenus={messageMenus}
             isSystem={msg.system || false}
-            senderName={RemarksCache.get(msg.sender_user_id!) || profile?.nickname || ''}
+            senderName={senderName}
             avatar={profile?.avatar_file_hash
                 ? getFileUrl(profile.avatar_file_hash, SessionEnv.myFileAccessToken)!
                 : default_avatar}
@@ -231,6 +233,9 @@ export default function ChatMessage({
                         text={renderText}
                         entities={renderEntities}
                         isSystem={msg.system!}
+                        messageId={msg.id}
+                        chatId={msg.chat_id}
+                        senderName={senderName}
                     />
                     {isE2EMessage && (
                         <mdui-icon
