@@ -23,13 +23,17 @@ export interface ChatAudioTrack {
     senderName?: string
     /** 文件 hash (P2: token 过期后续播) */
     hash?: string
+    /** 语音消息不进入顶部横幅, 仅消息内播放 */
+    isVoice?: boolean
 }
 
 interface ChatAudioState {
     track: ChatAudioTrack | null
     playing: boolean
+    buffering: boolean
     currentTime: number
     duration: number
+    rate: number
     error?: string
 
     play: (track: ChatAudioTrack) => void
@@ -38,10 +42,26 @@ interface ChatAudioState {
     pause: () => void
     stop: () => void
     seek: (time: number) => void
+    setRate: (rate: number) => void
+    retry: () => void
 }
 
 let audio: HTMLAudioElement | null = null
 const retriedKeys = new Set<string>()
+const RATE_STORAGE_KEY = 'lingcat_audio_rate'
+const PLAYBACK_RATES = [1, 1.5, 2]
+
+function loadPlaybackRate(): number {
+    try {
+        if (typeof localStorage === 'undefined') return 1
+        const rate = Number(localStorage.getItem(RATE_STORAGE_KEY))
+        return PLAYBACK_RATES.includes(rate) ? rate : 1
+    } catch {
+        return 1
+    }
+}
+
+const initialRate = loadPlaybackRate()
 
 function hasMediaSession(): boolean {
     return typeof navigator !== 'undefined' && 'mediaSession' in navigator
@@ -87,6 +107,7 @@ function getAudio(): HTMLAudioElement | null {
 
     audio = new Audio()
     audio.preload = 'metadata'
+    audio.playbackRate = initialRate
 
     if (hasMediaSession()) {
         const ms = navigator.mediaSession
@@ -122,22 +143,32 @@ function getAudio(): HTMLAudioElement | null {
         useChatAudioStore.setState({ currentTime: audio?.currentTime ?? 0 })
         updatePositionState()
     })
+    audio.addEventListener('loadstart', () => {
+        if (useChatAudioStore.getState().track) useChatAudioStore.setState({ buffering: true })
+    })
+    audio.addEventListener('waiting', () => {
+        if (useChatAudioStore.getState().track) useChatAudioStore.setState({ buffering: true })
+    })
+    audio.addEventListener('stalled', () => {
+        if (useChatAudioStore.getState().track) useChatAudioStore.setState({ buffering: true })
+    })
+    audio.addEventListener('canplay', () => useChatAudioStore.setState({ buffering: false }))
     audio.addEventListener('play', () => {
-        useChatAudioStore.setState({ playing: true, error: undefined })
+        useChatAudioStore.setState({ playing: true, buffering: false, error: undefined })
         setPlaybackState('playing')
     })
     audio.addEventListener('pause', () => {
-        useChatAudioStore.setState({ playing: false })
+        useChatAudioStore.setState({ playing: false, buffering: false })
         setPlaybackState('paused')
     })
     audio.addEventListener('ended', () => {
-        useChatAudioStore.setState({ playing: false, currentTime: audio?.duration || 0 })
+        useChatAudioStore.setState({ playing: false, buffering: false, currentTime: audio?.duration || 0 })
         setPlaybackState('paused')
     })
     audio.addEventListener('error', () => {
         const state = useChatAudioStore.getState()
         const track = state.track
-        useChatAudioStore.setState({ playing: false, error: '音频播放失败' })
+        useChatAudioStore.setState({ playing: false, buffering: false, error: '音频播放失败' })
         if (track?.hash && !retriedKeys.has(track.key)) {
             retriedKeys.add(track.key)
             void retryWithFreshToken(track, state.currentTime)
@@ -151,6 +182,7 @@ async function retryWithFreshToken(track: ChatAudioTrack, position: number) {
     const client = ClientManager.getActiveClient()
     const session = ClientManager.getActiveSession()
     if (!client || !session || !track.hash) return
+    useChatAudioStore.setState({ error: undefined, buffering: true })
     try {
         const token = await FileApi.requestAccessUploadFileToken(client, {
             access_token: session.token,
@@ -159,9 +191,13 @@ async function retryWithFreshToken(track: ChatAudioTrack, position: number) {
         SessionEnv.myFileAccessToken = token
         const freshUrl = getFileUrl(track.hash, token)
         const el = getAudio()
-        if (!freshUrl || !el) return
+        if (!freshUrl || !el) {
+            useChatAudioStore.setState({ buffering: false })
+            return
+        }
         el.src = freshUrl
         el.load()
+        el.playbackRate = useChatAudioStore.getState().rate
         const resume = Math.max(0, position)
         el.addEventListener('loadedmetadata', () => {
             try {
@@ -173,39 +209,43 @@ async function retryWithFreshToken(track: ChatAudioTrack, position: number) {
             currentTime: resume,
             duration: 0,
             error: undefined,
+            buffering: true,
         })
-        void el.play().catch(() => useChatAudioStore.setState({ playing: false, error: '音频播放失败' }))
+        void el.play().catch(() => useChatAudioStore.setState({ playing: false, buffering: false, error: '音频播放失败' }))
     } catch {
-        useChatAudioStore.setState({ playing: false, error: '音频播放失败' })
+        useChatAudioStore.setState({ playing: false, buffering: false, error: '音频播放失败' })
     }
 }
 
 export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
     track: null,
     playing: false,
+    buffering: false,
     currentTime: 0,
     duration: 0,
+    rate: initialRate,
 
     play: (track) => {
         const el = getAudio()
         if (!el) return
 
+        el.playbackRate = get().rate
         const current = get().track
         if (current?.key === track.key) {
             // 同一条音频: 续播/重播
             if (el.ended || (el.duration && el.currentTime >= el.duration - 0.05)) el.currentTime = 0
             set({ track: { ...current, ...track }, error: undefined })
             updateMediaMetadata({ ...current, ...track })
-            void el.play().catch(() => set({ playing: false, error: '音频播放失败' }))
+            void el.play().catch(() => set({ playing: false, buffering: false, error: '音频播放失败' }))
             return
         }
 
         el.pause()
         el.src = track.url
         el.load()
-        set({ track, playing: false, currentTime: 0, duration: 0, error: undefined })
+        set({ track, playing: false, buffering: true, currentTime: 0, duration: 0, error: undefined })
         updateMediaMetadata(track)
-        void el.play().catch(() => set({ playing: false, error: '音频播放失败' }))
+        void el.play().catch(() => set({ playing: false, buffering: false, error: '音频播放失败' }))
     },
 
     toggle: () => {
@@ -216,16 +256,18 @@ export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
             el.pause()
             return
         }
+        el.playbackRate = get().rate
         if (el.ended || (el.duration && el.currentTime >= el.duration - 0.05)) el.currentTime = 0
-        void el.play().catch(() => set({ playing: false, error: '音频播放失败' }))
+        void el.play().catch(() => set({ playing: false, buffering: false, error: '音频播放失败' }))
     },
 
     resume: () => {
         const el = getAudio()
         const track = get().track
         if (!el || !track) return
+        el.playbackRate = get().rate
         if (el.ended || (el.duration && el.currentTime >= el.duration - 0.05)) el.currentTime = 0
-        void el.play().catch(() => set({ playing: false, error: '音频播放失败' }))
+        void el.play().catch(() => set({ playing: false, buffering: false, error: '音频播放失败' }))
     },
 
     pause: () => {
@@ -239,7 +281,7 @@ export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
             el.removeAttribute('src')
             el.load()
         }
-        set({ track: null, playing: false, currentTime: 0, duration: 0, error: undefined })
+        set({ track: null, playing: false, buffering: false, currentTime: 0, duration: 0, error: undefined })
         updateMediaMetadata(null)
         setPlaybackState('none')
     },
@@ -252,6 +294,37 @@ export const useChatAudioStore = create<ChatAudioState>((set, get) => ({
         try { el.currentTime = next } catch { /* ignore */ }
         set({ currentTime: next })
         updatePositionState()
+    },
+
+    setRate: (rate) => {
+        const next = PLAYBACK_RATES.includes(rate) ? rate : 1
+        const el = getAudio()
+        if (el) el.playbackRate = next
+        try { localStorage.setItem(RATE_STORAGE_KEY, String(next)) } catch { /* ignore */ }
+        set({ rate: next })
+        updatePositionState()
+    },
+
+    retry: () => {
+        const { track, currentTime } = get()
+        if (!track) return
+        set({ error: undefined, buffering: true })
+        if (track.hash) {
+            void retryWithFreshToken(track, currentTime)
+            return
+        }
+        const el = getAudio()
+        if (!el) {
+            set({ buffering: false })
+            return
+        }
+        el.playbackRate = get().rate
+        el.src = track.url
+        el.load()
+        el.addEventListener('loadedmetadata', () => {
+            try { el.currentTime = Math.min(currentTime, el.duration || currentTime) } catch { /* ignore */ }
+        }, { once: true })
+        void el.play().catch(() => set({ playing: false, buffering: false, error: '音频播放失败' }))
     },
 }))
 

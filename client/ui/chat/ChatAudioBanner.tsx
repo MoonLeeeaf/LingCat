@@ -5,15 +5,20 @@ import { useChatAudioStore, formatAudioTime } from './chatAudioStore.ts'
 import { useChatMessageStore } from './useChatMessageStore.ts'
 import { useMeetingStore } from '../meeting/MeetingManager.ts'
 
+const RATES = [1, 1.5, 2]
+
 /**
  * 全局音频横幅: 位于聊天标题栏下方、会议横幅上方。
  * 切会话/滚动仍显示同一条音频; 点横幅可跳回消息 (P2)。
+ * 语音消息不上横幅, 只在消息内播放; 离开会话时停止语音。
  */
-export default function ChatAudioBanner({ translucent }: { translucent?: boolean }) {
+export default function ChatAudioBanner({ translucent, chatId }: { translucent?: boolean; chatId?: string }) {
     const track = useChatAudioStore(s => s.track)
     const playing = useChatAudioStore(s => s.playing)
+    const buffering = useChatAudioStore(s => s.buffering)
     const currentTime = useChatAudioStore(s => s.currentTime)
     const duration = useChatAudioStore(s => s.duration)
+    const rate = useChatAudioStore(s => s.rate)
     const error = useChatAudioStore(s => s.error)
     const [dragTime, setDragTime] = React.useState<number | null>(null)
     const barRef = React.useRef<HTMLDivElement>(null)
@@ -24,6 +29,21 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
     React.useEffect(() => {
         if (meetingActive) useChatAudioStore.getState().pause()
     }, [meetingActive])
+
+    // 语音不跨会话继续播放, 避免没有横幅时变成“后台孤儿”
+    React.useEffect(() => {
+        const current = useChatAudioStore.getState().track
+        if (current?.isVoice && current.chatId && current.chatId !== chatId) {
+            useChatAudioStore.getState().stop()
+        }
+    }, [chatId])
+
+    React.useEffect(() => {
+        return () => {
+            const current = useChatAudioStore.getState().track
+            if (current?.isVoice) useChatAudioStore.getState().stop()
+        }
+    }, [])
 
     const openTrack = () => {
         if (!track?.chatId) return
@@ -36,6 +56,7 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
 
     const toggle = () => useChatAudioStore.getState().toggle()
     const stop = () => useChatAudioStore.getState().stop()
+    const retry = () => useChatAudioStore.getState().retry()
     const timeFromPointer = (e: React.PointerEvent<HTMLDivElement>) => {
         const rect = barRef.current?.getBoundingClientRect()
         if (!rect || !duration) return 0
@@ -62,7 +83,7 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
 
     return (
         <AnimatePresence>
-            {track && (
+            {track && !track.isVoice && (
                 <motion.div
                     key="chat-audio-banner"
                     initial={{ opacity: 0, y: -8 }}
@@ -126,7 +147,7 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
                             )}
                             <div style={{ flex: 1 }} />
                             <span style={{ opacity: 0.6, fontSize: '11px', flexShrink: 0 }}>
-                                {formatAudioTime(displayTime)} / {duration ? formatAudioTime(duration) : '--:--'}
+                                {buffering ? '加载中…' : formatAudioTime(displayTime)} / {duration ? formatAudioTime(duration) : '--:--'}
                             </span>
                         </div>
 
@@ -160,11 +181,50 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
                         </div>
 
                         {error && (
-                            <div style={{ color: 'rgb(var(--mdui-color-error))', fontSize: '11px', marginTop: '2px' }}>
-                                {error}
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                color: 'rgb(var(--mdui-color-error))',
+                                fontSize: '11px',
+                                marginTop: '2px',
+                            }}>
+                                <span>{error}</span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); retry() }}
+                                    style={{
+                                        border: 'none',
+                                        background: 'transparent',
+                                        color: 'inherit',
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        fontSize: 'inherit',
+                                    }}
+                                >重试</button>
                             </div>
                         )}
                     </div>
+
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            const index = RATES.indexOf(rate)
+                            useChatAudioStore.getState().setRate(RATES[(index + 1) % RATES.length])
+                        }}
+                        title="播放速度"
+                        style={{
+                            flexShrink: 0,
+                            border: 'none',
+                            background: 'rgba(var(--mdui-color-on-secondary-container), 0.1)',
+                            color: 'inherit',
+                            borderRadius: '999px',
+                            padding: '0 7px',
+                            height: '24px',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                        }}
+                    >{rate}x</button>
 
                     <mdui-button-icon
                         icon="close"

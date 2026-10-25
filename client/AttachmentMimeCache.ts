@@ -2,12 +2,13 @@ const cache = new Map<string, Promise<string>>()
 
 /**
  * 查询附件的 MIME 类型。
- * - 用 URL 作为缓存键（同一个 hash 只请求一次）
+ * - 优先用 hash 作为缓存键（token 刷新导致 URL 变化时仍能命中）
  * - HEAD 请求只取响应头，不下载内容
  * - 失败时降级为 application/octet-stream
  */
-export function queryAttachmentMime(url: string): Promise<string> {
-    const existing = cache.get(url)
+export function queryAttachmentMime(url: string, cacheKey?: string): Promise<string> {
+    const key = cacheKey || url
+    const existing = cache.get(key)
     if (existing) return existing
 
     const promise = fetch(url, { method: 'HEAD' })
@@ -17,6 +18,6 @@ export function queryAttachmentMime(url: string): Promise<string> {
         })
         .catch(() => 'application/octet-stream')
 
-    cache.set(url, promise)
+    cache.set(key, promise)
     return promise
 }

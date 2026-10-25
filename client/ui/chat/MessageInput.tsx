@@ -329,7 +329,8 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         // ============================================================
         const { addFile, uploadAll, countInText, clear: clearFiles } = useChatFileUpload({ onInsertText: insertText })
 
-        const { isRecording, seconds, toggle: toggleRecording, stop: stopRecording } = useAudioRecorder({
+        const { isRecording, seconds, toggle: toggleRecording, stop: stopRecording, cancel: cancelRecording } = useAudioRecorder({
+            cancelKey: chatId,
             onRecorded: async (blob, mime, name) => {
                 try {
                     await addFile(mime, name, blob)
@@ -615,8 +616,12 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                             }} />
                             <span style={{ flex: 1, fontSize: '90%' }}>
                                 正在录音... {formatDuration(seconds)}
+                                <span style={{ opacity: 0.5, marginLeft: '6px' }}>
+                                    点 ✓ 完成，× 取消
+                                </span>
                             </span>
-                            <mdui-button-icon icon="close" onClick={stopRecording} />
+                            <mdui-button-icon icon="close" title="取消录音" onClick={cancelRecording} />
+                            <mdui-button-icon icon="check" title="完成录音" onClick={stopRecording} />
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -733,8 +738,8 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                     >
                         <motion.div slot="icon" whileTap={{ scale: 0.9 }} style={{ display: 'inline-flex' }}>
                             <mdui-button-icon
-                                icon={isRecording ? 'stop_circle' : 'mic'}
-                                title={isRecording ? '停止录音' : '录制语音'}
+                                icon={isRecording ? 'check_circle' : 'mic'}
+                                title={isRecording ? '完成录音' : '录制语音'}
                                 onClick={handleToggleRecording}
                                 style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
                             />

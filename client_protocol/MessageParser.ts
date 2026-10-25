@@ -87,9 +87,9 @@ export default class MessageParser {
             m = rest.match(/^!\[([^\]]+)\]\((?:lingcat:\/\/file\?hash=|file:)([^)]+)\)/)
             if (m) {
                 // m[1] 可能是 "图片" / "Video=video.mp4" / "File=doc.pdf"
-                // 剥掉 Video= / File= / Image= 前缀，只留文件名
+                // 剥掉 Video= / File= / Image= 或 图片- / 音频- 等前缀，只留文件名
                 let name = m[1]
-                const prefixMatch = name.match(/^(?:Image|Video|File)=/)
+                const prefixMatch = name.match(/^(?:(?:Image|Video|File)=|(?:图片|视频|音频|文件)-)/)
                 if (prefixMatch) name = name.slice(prefixMatch[0].length)
 
                 entities.push({

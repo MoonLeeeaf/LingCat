@@ -206,7 +206,7 @@ export function ChatFragment() {
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                            <ChatAudioBanner translucent={!!chatBackgroundUrl} />
+                            <ChatAudioBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
                             <MeetingBanner chatId={chatId} translucent={!!chatBackgroundUrl} />
                             <MessageList
                                 chatId={chatId}

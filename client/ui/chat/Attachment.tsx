@@ -27,19 +27,51 @@ function resolveKind(mime: string): 'image' | 'video' | 'audio' | 'file' {
     return 'file'
 }
 
+const AUDIO_EXTENSIONS = new Set(['webm', 'ogg', 'oga', 'opus', 'm4a', 'mp3', 'wav', 'aac', 'caf', 'flac'])
+
+function looksLikeAudioName(name?: string): boolean {
+    const ext = name?.split('.').pop()?.toLowerCase()
+    return !!ext && AUDIO_EXTENSIONS.has(ext)
+}
+
 export default function Attachment({ data, context }: { data: IAttachmentData; context?: AttachmentContext }) {
     const url = getFileUrl(data.hash, SessionEnv.myFileAccessToken)!
     const [mime, setMime] = React.useState<string | null>(null)
 
     React.useEffect(() => {
         let alive = true
-        queryAttachmentMime(url).then((m) => {
-            if (alive) setMime(m)
+        queryAttachmentMime(url, data.hash).then((m) => {
+            if (!alive) return
+            // HEAD 失败时按扩展名兜底，避免语音被当成普通文件
+            if (m === 'application/octet-stream' && looksLikeAudioName(data.name)) setMime('audio/mpeg')
+            else setMime(m)
         })
         return () => { alive = false }
-    }, [url])
+    }, [url, data.hash, data.name])
 
     if (!mime) {
+        if (looksLikeAudioName(data.name)) {
+            return <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                width: '220px',
+                height: '44px',
+                padding: '4px 8px 4px 2px',
+                background: 'rgba(127,127,127,0.06)',
+                borderRadius: '6px',
+                verticalAlign: 'middle',
+            }}>
+                <span style={{
+                    width: '24px', height: '24px', borderRadius: '50%',
+                    background: 'rgba(127,127,127,0.15)', flexShrink: 0,
+                }} />
+                <span style={{ flex: 1 }}>
+                    <span style={{ display: 'block', height: '8px', width: '60%', borderRadius: '4px', background: 'rgba(127,127,127,0.15)' }} />
+                    <span style={{ display: 'block', height: '5px', width: '90%', borderRadius: '3px', background: 'rgba(127,127,127,0.1)', marginTop: '6px' }} />
+                </span>
+            </span>
+        }
         return <span style={{
             display: 'inline-block',
             width: '200px',
