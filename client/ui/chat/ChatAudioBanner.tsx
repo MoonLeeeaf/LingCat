@@ -15,6 +15,9 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
     const currentTime = useChatAudioStore(s => s.currentTime)
     const duration = useChatAudioStore(s => s.duration)
     const error = useChatAudioStore(s => s.error)
+    const [dragTime, setDragTime] = React.useState<number | null>(null)
+    const barRef = React.useRef<HTMLDivElement>(null)
+    const displayTime = dragTime ?? currentTime
     const navigate = useNavigate()
     const meetingActive = useMeetingStore(s => s.phase === 'connected' || !!s.room)
 
@@ -33,11 +36,28 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
 
     const toggle = () => useChatAudioStore.getState().toggle()
     const stop = () => useChatAudioStore.getState().stop()
-    const seek = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!duration) return
-        const rect = e.currentTarget.getBoundingClientRect()
+    const timeFromPointer = (e: React.PointerEvent<HTMLDivElement>) => {
+        const rect = barRef.current?.getBoundingClientRect()
+        if (!rect || !duration) return 0
         const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
-        useChatAudioStore.getState().seek(ratio * duration)
+        return ratio * duration
+    }
+    const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!duration) return
+        e.stopPropagation()
+        e.preventDefault()
+        try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* ignore */ }
+        setDragTime(timeFromPointer(e))
+    }
+    const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (dragTime === null) return
+        setDragTime(timeFromPointer(e))
+    }
+    const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (dragTime === null) return
+        e.stopPropagation()
+        useChatAudioStore.getState().seek(timeFromPointer(e))
+        setDragTime(null)
     }
 
     return (
@@ -106,15 +126,21 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
                             )}
                             <div style={{ flex: 1 }} />
                             <span style={{ opacity: 0.6, fontSize: '11px', flexShrink: 0 }}>
-                                {formatAudioTime(currentTime)} / {duration ? formatAudioTime(duration) : '--:--'}
+                                {formatAudioTime(displayTime)} / {duration ? formatAudioTime(duration) : '--:--'}
                             </span>
                         </div>
 
                         <div
-                            onClick={(e) => { e.stopPropagation(); seek(e) }}
+                            ref={barRef}
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDown={onPointerDown}
+                            onPointerMove={onPointerMove}
+                            onPointerUp={onPointerUp}
+                            onPointerCancel={() => setDragTime(null)}
                             style={{
                                 position: 'relative',
                                 height: '4px',
+                                touchAction: 'none',
                                 borderRadius: '999px',
                                 background: 'rgba(var(--mdui-color-on-secondary-container), 0.2)',
                                 marginTop: '5px',
@@ -126,7 +152,7 @@ export default function ChatAudioBanner({ translucent }: { translucent?: boolean
                                 left: 0,
                                 top: 0,
                                 bottom: 0,
-                                width: duration ? `${Math.min(100, (currentTime / duration) * 100)}%` : '0%',
+                                width: duration ? `${Math.min(100, (displayTime / duration) * 100)}%` : '0%',
                                 borderRadius: '999px',
                                 background: 'rgb(var(--mdui-color-primary))',
                                 transition: 'width 120ms linear',
