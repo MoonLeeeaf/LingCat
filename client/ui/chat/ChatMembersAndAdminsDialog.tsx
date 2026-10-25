@@ -44,8 +44,23 @@ export default function ChatMembersAndAdminsDialog({
             max-height: calc(100vh - 96px);
         }
         .${uniqueClass}::part(body) {
-            max-height: min(60vh, 520px);
-            overflow-y: auto;
+            /* 不要让 dialog body 再套一层滚动, 成员列表只由 tab-panel 滚动 */
+            min-height: 0;
+            max-height: none;
+            overflow: visible;
+        }
+        .${uniqueClass} mdui-tabs {
+            display: flex;
+            flex-direction: column;
+            height: min(60vh, 520px);
+            min-height: 0;
+        }
+        .${uniqueClass} mdui-tab-panel {
+            min-height: 0;
+            overflow-anchor: none;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
         `
         document.head.appendChild(styleEl)
