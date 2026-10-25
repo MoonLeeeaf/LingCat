@@ -16,7 +16,6 @@ import RemarksCache from '../../RemarksCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import default_avatar from '../../default_avatar.png'
-import PawSendButton from './PawSendButton.tsx'
 
 // ============================================================
 //                  contenteditable 光标 / @提及 工具
@@ -567,126 +566,126 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                 />
 
                 <AnimatePresence initial={false}>
-                {editingMessage && (
-                    <motion.div
-                        key="editing"
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.16, ease: 'easeOut' }}
-                        style={{
-                            display: 'flex', alignItems: 'center',
-                            padding: '6px 12px',
-                            background: 'rgba(var(--mdui-color-primary), 0.08)',
-                            borderLeft: '3px solid rgb(var(--mdui-color-primary))',
-                            margin: '0 4px', borderRadius: '4px',
-                        }}>
-                        <span style={{ flex: 1, fontSize: '90%', opacity: 0.8 }}>正在编辑消息</span>
-                        <mdui-button-icon icon="close" onClick={cancelEdit} />
-                    </motion.div>
-                )}
+                    {editingMessage && (
+                        <motion.div
+                            key="editing"
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.16, ease: 'easeOut' }}
+                            style={{
+                                display: 'flex', alignItems: 'center',
+                                padding: '6px 12px',
+                                background: 'rgba(var(--mdui-color-primary), 0.08)',
+                                borderLeft: '3px solid rgb(var(--mdui-color-primary))',
+                                margin: '0 4px', borderRadius: '4px',
+                            }}>
+                            <span style={{ flex: 1, fontSize: '90%', opacity: 0.8 }}>正在编辑消息</span>
+                            <mdui-button-icon icon="close" onClick={cancelEdit} />
+                        </motion.div>
+                    )}
                 </AnimatePresence>
 
                 <AnimatePresence initial={false}>
-                {isRecording && (
-                    <motion.div
-                        key="recording"
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.16, ease: 'easeOut' }}
-                        style={{
-                        display: 'flex', alignItems: 'center', gap: '8px',
-                        padding: '6px 12px',
-                        background: 'rgba(var(--mdui-color-error), 0.08)',
-                        borderLeft: '3px solid rgb(var(--mdui-color-error))',
-                        margin: '0 4px', borderRadius: '4px',
-                    }}>
-                        <style>{`@keyframes lingcat-pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
-                        <span style={{
-                            width: '8px', height: '8px', borderRadius: '50%',
-                            background: 'rgb(var(--mdui-color-error))',
-                            animation: 'lingcat-pulse 1s infinite',
-                        }} />
-                        <span style={{ flex: 1, fontSize: '90%' }}>
-                            正在录音... {formatDuration(seconds)}
-                        </span>
-                        <mdui-button-icon icon="close" onClick={stopRecording} />
-                    </motion.div>
-                )}
+                    {isRecording && (
+                        <motion.div
+                            key="recording"
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.16, ease: 'easeOut' }}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '8px',
+                                padding: '6px 12px',
+                                background: 'rgba(var(--mdui-color-error), 0.08)',
+                                borderLeft: '3px solid rgb(var(--mdui-color-error))',
+                                margin: '0 4px', borderRadius: '4px',
+                            }}>
+                            <style>{`@keyframes lingcat-pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
+                            <span style={{
+                                width: '8px', height: '8px', borderRadius: '50%',
+                                background: 'rgb(var(--mdui-color-error))',
+                                animation: 'lingcat-pulse 1s infinite',
+                            }} />
+                            <span style={{ flex: 1, fontSize: '90%' }}>
+                                正在录音... {formatDuration(seconds)}
+                            </span>
+                            <mdui-button-icon icon="close" onClick={stopRecording} />
+                        </motion.div>
+                    )}
                 </AnimatePresence>
 
                 <div className="lingcat-composer-row">
                     <AnimatePresence>
-                    {mentionQuery && mentionCandidates.length > 0 && (
-                        <motion.div
-                            key="mentions"
-                            initial={{ opacity: 0, y: 4, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                            transition={{ duration: 0.15, ease: 'easeOut' }}
-                            style={{
-                            position: 'absolute',
-                            bottom: 'calc(100% + 4px)',
-                            left: 0,
-                            // 按列表中最长的昵称/@用户名自动收窄, 最长 340px
-                            width: 'max-content',
-                            maxWidth: 'min(340px, 100%)',
-                            zIndex: 40,
-                            background: 'rgb(var(--mdui-color-surface-container))',
-                            borderRadius: '8px',
-                            // boxShadow: '0 4px 16px rgba(0,0,0,.25)',
-                            overflow: 'hidden',
-                            transformOrigin: 'bottom left',
-                        }}>
-                            <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
-                                {mentionCandidates.map((c, i) => (
-                                    <div
-                                        key={c.m.id}
-                                        onMouseDown={(e) => {
-                                            e.preventDefault()
-                                            insertMention(c.m)
-                                        }}
-                                        onMouseEnter={() => setMentionIndex(i)}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                            padding: '6px 10px',
-                                            cursor: 'pointer',
-                                            background: i === activeMentionIndex
-                                                ? 'rgba(var(--mdui-color-primary), 0.12)'
-                                                : undefined,
-                                        }}
-                                    >
-                                        <Avatar
-                                            src={c.m.avatar_file_hash
-                                                ? getFileUrl(c.m.avatar_file_hash, SessionEnv.myFileAccessToken)
-                                                : default_avatar}
-                                            style={{ width: '28px', height: '28px', flexShrink: 0 }}
-                                        />
-                                        <div style={{ minWidth: 0, flex: '0 1 auto' }}>
-                                            <div style={{
-                                                fontSize: '14px',
-                                                whiteSpace: 'nowrap',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                            }}>{c.display}</div>
-                                            {c.username && c.username !== c.display && (
+                        {mentionQuery && mentionCandidates.length > 0 && (
+                            <motion.div
+                                key="mentions"
+                                initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                                transition={{ duration: 0.15, ease: 'easeOut' }}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 'calc(100% + 4px)',
+                                    left: 0,
+                                    // 按列表中最长的昵称/@用户名自动收窄, 最长 340px
+                                    width: 'max-content',
+                                    maxWidth: 'min(340px, 100%)',
+                                    zIndex: 40,
+                                    background: 'rgb(var(--mdui-color-surface-container))',
+                                    borderRadius: '8px',
+                                    // boxShadow: '0 4px 16px rgba(0,0,0,.25)',
+                                    overflow: 'hidden',
+                                    transformOrigin: 'bottom left',
+                                }}>
+                                <div style={{ maxHeight: '40vh', overflowY: 'auto' }}>
+                                    {mentionCandidates.map((c, i) => (
+                                        <div
+                                            key={c.m.id}
+                                            onMouseDown={(e) => {
+                                                e.preventDefault()
+                                                insertMention(c.m)
+                                            }}
+                                            onMouseEnter={() => setMentionIndex(i)}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '8px',
+                                                padding: '6px 10px',
+                                                cursor: 'pointer',
+                                                background: i === activeMentionIndex
+                                                    ? 'rgba(var(--mdui-color-primary), 0.12)'
+                                                    : undefined,
+                                            }}
+                                        >
+                                            <Avatar
+                                                src={c.m.avatar_file_hash
+                                                    ? getFileUrl(c.m.avatar_file_hash, SessionEnv.myFileAccessToken)
+                                                    : default_avatar}
+                                                style={{ width: '28px', height: '28px', flexShrink: 0 }}
+                                            />
+                                            <div style={{ minWidth: 0, flex: '0 1 auto' }}>
                                                 <div style={{
-                                                    fontSize: '11px',
-                                                    opacity: 0.55,
+                                                    fontSize: '14px',
                                                     whiteSpace: 'nowrap',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
-                                                }}>@{c.username}</div>
-                                            )}
+                                                }}>{c.display}</div>
+                                                {c.username && c.username !== c.display && (
+                                                    <div style={{
+                                                        fontSize: '11px',
+                                                        opacity: 0.55,
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                    }}>@{c.username}</div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
                     </AnimatePresence>
 
                     <mdui-text-field
@@ -726,42 +725,50 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         onPaste={handlePaste}
                         onDrop={handleDrop}
                     >
-                    <motion.div slot="icon" whileTap={{ scale: 0.9 }} style={{ display: 'inline-flex' }}>
-                        <mdui-button-icon
-                            icon={isRecording ? 'stop_circle' : 'mic'}
-                            title={isRecording ? '停止录音' : '录制语音'}
-                            onClick={toggleRecording}
-                            style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
-                        />
-                    </motion.div>
+                        <motion.div slot="icon" whileTap={{ scale: 0.9 }} style={{ display: 'inline-flex' }}>
+                            <mdui-button-icon
+                                icon={isRecording ? 'stop_circle' : 'mic'}
+                                title={isRecording ? '停止录音' : '录制语音'}
+                                onClick={toggleRecording}
+                                style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
+                            />
+                        </motion.div>
 
-                    {/* ★ 发送按钮旁边的锁图标 */}
-                    {canE2E && (
-                        <>
-                            <mdui-tooltip slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
-                                <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
-                                    <mdui-button-icon
-                                        icon={isEncryptMode ? 'lock' : 'lock_open'}
-                                        onClick={() => setIsEncryptMode(!isEncryptMode)}
-                                        style={{
-                                            color: isEncryptMode ? 'rgb(var(--mdui-color-primary))' : 'rgb(var(--mdui-color-outline))'
-                                        }}
-                                    />
-                                </motion.div>
-                            </mdui-tooltip>
-                        </>
-                    )}
+                        <motion.div slot="end-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            <mdui-button-icon
+                                icon="attachment"
+                                title="添加附件"
+                                onClick={() => attachFileInputRef.current?.click()}
+                            />
+                        </motion.div>
 
-                    <div slot="end-icon" style={{ display: 'inline-flex' }}>
-                        <PawSendButton hasContent={hasContent} isSending={isSending}
-                            sendVersion={sendVersion} editing={!!editingMessage} onSend={send} />
-                    </div>
+                        {/* ★ 发送按钮旁边的锁图标 */}
+                        {canE2E && (
+                            <>
+                                <mdui-tooltip slot="end-icon" content={isEncryptMode ? '端到端加密已开启 (点击关闭)' : '端到端加密已关闭 (点击开启)'}>
+                                    <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.9 }} transition={{ type: 'spring', stiffness: 400, damping: 22 }} style={{ display: 'inline-flex' }}>
+                                        <mdui-button-icon
+                                            icon={isEncryptMode ? 'lock' : 'lock_open'}
+                                            onClick={() => setIsEncryptMode(!isEncryptMode)}
+                                            style={{
+                                                color: isEncryptMode ? 'rgb(var(--mdui-color-primary))' : 'rgb(var(--mdui-color-outline))'
+                                            }}
+                                        />
+                                    </motion.div>
+                                </mdui-tooltip>
+                            </>
+                        )}
+
+                        <div slot="end-icon" style={{ display: 'inline-flex' }}>
+                            <mdui-button-icon
+                                slot="end-icon"
+                                icon={editingMessage ? 'check' : 'send'}
+                                loading={isSending || undefined}
+                                disabled={(!hasContent || isSending) || undefined}
+                                onClick={send}
+                            />
+                        </div>
                     </mdui-text-field>
-                    <motion.button type="button" className="lingcat-attach-button" aria-label="添加附件" title="添加附件"
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => attachFileInputRef.current?.click()}>
-                        <mdui-icon name="attachment" aria-hidden="true" />
-                    </motion.button>
                 </div>
             </>
         )

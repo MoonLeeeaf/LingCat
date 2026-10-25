@@ -1,27 +1,3 @@
-/* 单行框统一为胶囊形；多行框保留 28px 圆角和足够的编辑空间。 */
-mdui-text-field {
-    --lingcat-field-radius: 999px;
-    --mdui-shape-corner-extra-small: var(--lingcat-field-radius);
-}
-
-mdui-text-field::part(container) {
-    border-radius: var(--lingcat-field-radius);
-}
-
-mdui-text-field[rows],
-mdui-text-field[autosize],
-mdui-text-field[use-patched-textarea] {
-    --lingcat-field-radius: 28px;
-}
-
-input:not([type="file"]):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="button"]):not([type="submit"]):not([type="reset"]) {
-    border-radius: 999px;
-}
-
-textarea {
-    border-radius: 28px;
-}
-
 .lingcat-composer-row {
     position: relative;
     display: flex;
