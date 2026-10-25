@@ -24,6 +24,7 @@ import { useChatBackground } from './useChatBackground.ts'
 import ChatBackground from './ChatBackground.tsx'
 import RemarksCache from '../../RemarksCache.ts'
 import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
+import E2EInfoDialog from '../e2e/E2EInfoDialog.tsx'
 
 export function ChatFragment() {
     const { chatId } = ChatRoute.useParams()
@@ -183,6 +184,8 @@ export function ChatFragment() {
                 flexDirection: 'column',
             }}>
                 <ChatHeader
+                    onOpenE2EInfo={() => E2EInfoDialog.show(chatId, peerUserId)}
+                    chatId={chat?.id!}
                     title={chat?.title ?? '加载中...'}
                     isMobile={isMobile}
                     drawerOpen={drawerOpen}

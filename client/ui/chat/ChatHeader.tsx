@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import E2EInfoDialog from '../e2e/E2EInfoDialog'
 
 export interface ChatHeaderProps {
     /** 聊天标题 */
@@ -24,10 +25,12 @@ export interface ChatHeaderProps {
     onOpenInfo?: () => void
     /** 点击"发起会议"（暂不实现，传 undefined 时不显示） */
     onCall?: () => void
+    onOpenE2EInfo?: () => void
 }
 
 export function ChatHeader({
     title,
+    onOpenE2EInfo,
     isMobile,
     onToggleDrawer,
     isE2E,
@@ -38,10 +41,10 @@ export function ChatHeader({
     onCall,
 }: ChatHeaderProps) {
     // 根据状态决定锁的颜色
-    const lockColor = e2eStatus === 'verified' 
-        ? 'var(--mdui-color-primary)' 
-        : e2eStatus === 'mismatch' 
-            ? 'var(--mdui-color-error)' 
+    const lockColor = e2eStatus === 'verified'
+        ? 'var(--mdui-color-primary)'
+        : e2eStatus === 'mismatch'
+            ? 'var(--mdui-color-error)'
             : 'var(--mdui-color-outline)'
 
     return (
@@ -58,41 +61,43 @@ export function ChatHeader({
                 />
             )}
 
-            <mdui-top-app-bar-title style={{ marginLeft: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <AnimatePresence mode="wait" initial={false}>
-                    <motion.span
-                        key={title}
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 8 }}
-                        transition={{ duration: 0.16, ease: 'easeOut' }}
-                        style={{
-                            display: 'inline-block',
-                            maxWidth: '100%',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                        }}
-                    >
-                        {title}
-                    </motion.span>
-                </AnimatePresence>
-                {isE2E && (
-                    <mdui-tooltip content={
-                        e2eStatus === 'verified' ? '端到端加密 (已验证)' :
-                        e2eStatus === 'mismatch' ? '端到端加密 (安全码已变更)' :
-                        '端到端加密'
-                    }>
-                        <mdui-icon 
-                            name="lock" 
-                            style={{ 
-                                fontSize: '16px', 
-                                color: lockColor,
-                                flexShrink: 0 
+            <mdui-top-app-bar-title style={{ marginLeft: '8px', display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden' }}>
+                {/* 左侧：文字容器 */}
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center' }}>
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.span
+                            key={title}
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 8 }}
+                            transition={{ duration: 0.16, ease: 'easeOut' }}
+                            style={{
+                                display: 'block',
+                                width: '100%',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
                             }}
+                        >
+                            {title}
+                        </motion.span>
+                    </AnimatePresence>
+                    {/* 右侧：锁图标 */}
+                    {isE2E && (
+                        <mdui-button-icon
+                            icon="lock"
+                            style={{
+                                fontSize: '16px',
+                                color: lockColor,
+                                flexShrink: 0,
+                                display: 'flex', // ★ 确保图标自身的外框也居中对齐
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onClick={onOpenE2EInfo}
                         />
-                    </mdui-tooltip>
-                )}
+                    )}
+                </div>
             </mdui-top-app-bar-title>
 
             <div style={{ flexGrow: 1 }} />
