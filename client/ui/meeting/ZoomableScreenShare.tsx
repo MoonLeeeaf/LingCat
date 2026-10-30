@@ -23,7 +23,28 @@ export function ZoomableScreenShare({
     videoRef?: React.RefObject<HTMLVideoElement | null>
 }) {
     const zoomRef = React.useRef<PinchZoom>(null)
+    const containerRef = React.useRef<HTMLDivElement>(null)
     const [scale, setScale] = React.useState(1)
+
+    // ★ 修复：拦截滚轮缩小到临界点时自动归位
+    React.useEffect(() => {
+        const container = containerRef.current
+        const el = zoomRef.current
+        if (!container || !el) return
+
+        const handleWheel = (e: WheelEvent) => {
+            // e.deltaY > 0 表示向下滚（缩小），且当前倍率接近 1
+            if (e.deltaY > 0 && el.scale <= 1.05) {
+                el.setTransform({ scale: 1, x: 0, y: 0, allowChangeEvent: true })
+                e.preventDefault()
+                e.stopPropagation()
+            }
+        }
+
+        // 使用 capture 捕获阶段，防止事件被内部 Web Component 拦截
+        container.addEventListener('wheel', handleWheel, { capture: true, passive: false })
+        return () => container.removeEventListener('wheel', handleWheel, { capture: true })
+    }, [])
 
     const activePointersRef = React.useRef(new Set<number>())
     const multiTouchRef = React.useRef(false)
@@ -54,12 +75,19 @@ export function ZoomableScreenShare({
         }
     }, [reset])
 
-    // 复制 pinch-zoom 的 scale, 同时限制最大倍率
+    // 复制 pinch-zoom 的 scale, 同时限制最小为 1.0
     React.useEffect(() => {
         const el = zoomRef.current
         if (!el) return
         const onChange = () => {
             const current = el.scale
+            // ★ 只要试图缩小到 1 以下，立刻强制重置回原始比例和位置
+            if (current < 1) {
+                el.setTransform({ scale: 1, x: 0, y: 0, allowChangeEvent: true })
+                setScale(1)
+                return
+            }
+            // 为了避免 React 频繁重渲染，设定一个微小的阈值
             setScale(prev => Math.abs(prev - current) > 0.04 ? current : prev)
         }
         el.addEventListener('change', onChange)
@@ -157,6 +185,7 @@ export function ZoomableScreenShare({
 
     return (
         <div
+            ref={containerRef}
             aria-label="屏幕共享，可双指缩放"
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
@@ -174,7 +203,6 @@ export function ZoomableScreenShare({
             {/* @ts-ignore */}
             <pinch-zoom
                 ref={zoomRef}
-                min-scale="1"
                 style={{ display: 'block', width: '100%', height: '100%' }}
             >
                 <VideoPublication
