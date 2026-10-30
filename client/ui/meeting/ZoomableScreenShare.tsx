@@ -6,10 +6,10 @@ import { VideoPublication } from './VideoTrack.tsx'
 const DOUBLE_TAP_SCALE = 2.5
 
 /**
- * 移动端最大化屏幕共享的缩放层。
- * 复用 pinch-zoom-element 处理双指/平移, 这里只补:
- * - 最大 4x / 最小 1x
- * - 双击 1x <-> 2.5x
+ * 聚焦视频的缩放层 (移动端屏幕共享 / 桌面端屏幕共享/摄像头)。
+ * 复用 pinch-zoom-element 处理双指/滚轮/平移, 这里只补:
+ * - 最小 1x, 不设最大倍率
+ * - 双击 1x <-> 2.5x (触摸用双击手势, 桌面用鼠标双击)
  * - 右下角“适应”按钮
  * 顶部按钮/名称/统计浮层都放在组件外, 不参与缩放。
  */
@@ -43,11 +43,15 @@ export function ZoomableScreenShare({
         reset()
     }, [publication?.track?.sid, reset])
 
-    // 旋转后回到适应屏幕, 避免旧平移量落到可视区外
+    // 旋转/进入或退出原生全屏后回到适应屏幕, 避免旧平移量落到可视区外
     React.useEffect(() => {
-        const onOrientation = () => reset()
-        window.addEventListener('orientationchange', onOrientation)
-        return () => window.removeEventListener('orientationchange', onOrientation)
+        const onRefit = () => reset()
+        window.addEventListener('orientationchange', onRefit)
+        document.addEventListener('fullscreenchange', onRefit)
+        return () => {
+            window.removeEventListener('orientationchange', onRefit)
+            document.removeEventListener('fullscreenchange', onRefit)
+        }
     }, [reset])
 
     // 复制 pinch-zoom 的 scale, 同时限制最大倍率
@@ -131,6 +135,26 @@ export function ZoomableScreenShare({
         lastTapRef.current = null
     }
 
+    // 桌面鼠标双击缩放; 触摸设备继续用上面的双击手势, 避免重复触发
+    const onDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.detail < 2) return
+        if (typeof window !== 'undefined' && !window.matchMedia('(pointer: fine)').matches) return
+        if ((e.target as HTMLElement).closest('button')) return
+        const el = zoomRef.current
+        if (!el) return
+        if (el.scale > 1.01) {
+            reset()
+        } else {
+            const rect = el.getBoundingClientRect()
+            el.scaleTo(DOUBLE_TAP_SCALE, {
+                originX: e.clientX - rect.left,
+                originY: e.clientY - rect.top,
+                relativeTo: 'container',
+                allowChangeEvent: true,
+            })
+        }
+    }
+
     return (
         <div
             aria-label="屏幕共享，可双指缩放"
@@ -138,6 +162,7 @@ export function ZoomableScreenShare({
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             onPointerCancel={onPointerCancel}
+            onDoubleClick={onDoubleClick}
             style={{
                 position: 'absolute',
                 inset: 0,

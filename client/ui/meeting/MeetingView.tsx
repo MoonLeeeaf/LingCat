@@ -276,7 +276,7 @@ export function MeetingView({
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
                         {!mobileScreenFullscreen && (
-                            isMobile && focusedSource === 'screen' ? (
+                            (isMobile ? focusedSource === 'screen' : true) ? (
                                 <ZoomableScreenShare
                                     publication={focusedPub}
                                     muted={focused instanceof LocalParticipant}
