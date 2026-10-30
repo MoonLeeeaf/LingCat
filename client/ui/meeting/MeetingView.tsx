@@ -12,6 +12,8 @@ import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts'
 import SessionEnv from '../../SessionEnv.ts'
 import { isPipSupported, togglePip, usePipActive } from '../../lib/pip.ts'
+import { ZoomableScreenShare } from './ZoomableScreenShare.tsx'
+import { MobileScreenShareFullscreen } from './MobileScreenShareFullscreen.tsx'
 
 // ============================================================
 //                      工具函数
@@ -134,6 +136,7 @@ export function MeetingView({
     const focusVideoRef = React.useRef<HTMLVideoElement>(null)
     const focusPip = usePipActive(focusVideoRef, focusedPub?.track?.sid)
     const [isFullscreen, setIsFullscreen] = React.useState(false)
+    const [mobileScreenFullscreen, setMobileScreenFullscreen] = React.useState(false)
 
     React.useEffect(() => {
         const onChange = () => setIsFullscreen(!!document.fullscreenElement)
@@ -141,6 +144,13 @@ export function MeetingView({
         onChange()
         return () => document.removeEventListener('fullscreenchange', onChange)
     }, [])
+
+    // 屏幕共享结束/切换焦点后自动退出移动端全屏层
+    React.useEffect(() => {
+        if (!isMobile || !focused || focusedSource !== 'screen') {
+            setMobileScreenFullscreen(false)
+        }
+    }, [isMobile, focused, focusedSource])
 
     // ============================================================
     //  Tiles
@@ -211,6 +221,11 @@ export function MeetingView({
     }
     const maximize = (id: string, source: 'screen' | 'camera') => setFocused(id, source)
     const maximizeAndFullscreen = (id: string, source: 'screen' | 'camera') => {
+        if (isMobile && source === 'screen') {
+            maximize(id, source)
+            setMobileScreenFullscreen(true)
+            return
+        }
         setFocused(id, source)
         // 等 DOM 更新后再全屏
         requestAnimationFrame(() => {
@@ -260,11 +275,21 @@ export function MeetingView({
             {!!room && (focused ? (
                 <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '6px' }}>
                     <div ref={focusRef} style={{ position: 'relative', flex: 1, minHeight: 0, borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
-                        <VideoPublication
-                            publication={focusedPub}
-                            muted={focused instanceof LocalParticipant}
-                            videoRef={focusVideoRef}
-                        />
+                        {!mobileScreenFullscreen && (
+                            isMobile && focusedSource === 'screen' ? (
+                                <ZoomableScreenShare
+                                    publication={focusedPub}
+                                    muted={focused instanceof LocalParticipant}
+                                    videoRef={focusVideoRef}
+                                />
+                            ) : (
+                                <VideoPublication
+                                    publication={focusedPub}
+                                    muted={focused instanceof LocalParticipant}
+                                    videoRef={focusVideoRef}
+                                />
+                            )
+                        )}
                         {settings.showMediaStats && focusedPub && (
                             <MediaStatsOverlay publication={focusedPub} videoRef={focusVideoRef} />
                         )}
@@ -289,6 +314,10 @@ export function MeetingView({
                                 title={isFullscreen ? '退出全屏' : '全屏'}
                                 icon={isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
                                 onClick={() => {
+                                    if (isMobile && focusedSource === 'screen') {
+                                        setMobileScreenFullscreen(true)
+                                        return
+                                    }
                                     if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { })
                                     else focusRef.current?.requestFullscreen?.().catch(() => { })
                                 }}
@@ -593,6 +622,14 @@ export function MeetingView({
             {body}
             {controls}
             {settingsDialog}
+
+            {isMobile && mobileScreenFullscreen && focused && focusedSource === 'screen' && (
+                <MobileScreenShareFullscreen
+                    publication={focusedPub}
+                    muted={focused instanceof LocalParticipant}
+                    onClose={() => setMobileScreenFullscreen(false)}
+                />
+            )}
 
             {audioBlocked && !!room && (
                 <div

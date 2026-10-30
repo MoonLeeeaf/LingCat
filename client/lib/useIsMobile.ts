@@ -1,33 +1,40 @@
 import React from 'react'
-
-/** 移动端断点（< 这个宽度认为是移动端） */
-const MOBILE_BREAKPOINT = 768
+import { breakpoint } from 'mdui'
 
 /**
- * 判断当前视口是否是"移动端"宽度。
+ * 判断当前设备是否应使用手机端布局。
  *
- * - 用 matchMedia，和 CSS 媒体查询走同一套标准，行为一致
- * - 只用于"功能分支"（决定渲染 DesktopLayout 还是 MobileLayout）
- * - 布局细节用 CSS 媒体查询，别用它
+ * - 看设备屏幕的短边，而不是窗口宽度：横屏手机仍然是移动端
+ * - 用 mdui 的 xs/sm 断点（默认 sm=600px）区分手机和平板/电脑
+ * - 平板和电脑无论横竖屏、窗口多窄都保持桌面端
+ * - 不使用 pointer/hover/maxTouchPoints，避免触屏电脑被误判
  */
-export function useIsMobile(breakpoint: number = MOBILE_BREAKPOINT): boolean {
-    const query = `(max-width: ${breakpoint - 1}px)`
+const PHONE_FALLBACK_SHORT_SIDE = 600
 
-    const [isMobile, setIsMobile] = React.useState(() => {
-        if (typeof window === 'undefined') return false
-        return window.matchMedia(query).matches
-    })
+function isPhoneScreen(): boolean {
+    if (typeof window === 'undefined') return false
+    const shortSide = Math.min(window.screen.width, window.screen.height)
+    const bp = breakpoint(shortSide)
+    // mdui 的 CSS 变量尚未注入时 down/up 都会是 false，使用默认 sm 兜底
+    if (bp.down('sm')) return true
+    if (bp.up('sm')) return false
+    return shortSide < PHONE_FALLBACK_SHORT_SIDE
+}
+
+export function useIsMobile(): boolean {
+    const [isMobile, setIsMobile] = React.useState(isPhoneScreen)
 
     React.useEffect(() => {
-        const mq = window.matchMedia(query)
-        const update = (e: MediaQueryListEvent | MediaQueryList) => {
-            setIsMobile(e.matches)
+        const update = () => setIsMobile(isPhoneScreen())
+        // 立即同步一次（防止首帧时机差）
+        update()
+        window.addEventListener('resize', update)
+        window.addEventListener('orientationchange', update)
+        return () => {
+            window.removeEventListener('resize', update)
+            window.removeEventListener('orientationchange', update)
         }
-        // 立即同步一次（防止 SSR / 首次渲染时机差）
-        update(mq)
-        mq.addEventListener('change', update)
-        return () => mq.removeEventListener('change', update)
-    }, [query])
+    }, [])
 
     return isMobile
 }
