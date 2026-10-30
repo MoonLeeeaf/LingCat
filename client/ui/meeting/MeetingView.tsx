@@ -7,6 +7,7 @@ import ParticipantTile from './ParticipantTile.tsx'
 import { VideoPublication } from './VideoTrack.tsx'
 import { MediaStatsOverlay } from './MediaStats.tsx'
 import { useMeetingStore } from './MeetingManager.ts'
+import { MeetingConnectionStatus } from './MeetingConnectionStatus.tsx'
 import tipError from '../tipError.ts'
 import showSnackbar from '../showSnackbar.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -572,10 +573,17 @@ export function MeetingView({
                     }}>
                         {chatTitle || '会议'}
                     </div>
-                    <div style={{ fontSize: '11px', opacity: 0.6 }}>
-                        {roomName || ''} · {participants.length} 人{phase === 'connecting' ? ' · 连接中...' : ''}
+                    <div style={{
+                        fontSize: '11px',
+                        opacity: 0.6,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                    }}>
+                        {roomName || ''} · {participants.length} 人
                     </div>
                 </div>
+                <MeetingConnectionStatus />
                 {headerExtra}
                 <mdui-tooltip content="关闭窗口">
                     <mdui-button-icon icon="close" onClick={onClose} />
