@@ -76,6 +76,8 @@ export function MeetingView({
     const noiseSuppression = useMeetingStore(s => s.noiseSuppression)
     const audioInputs = useMeetingStore(s => s.audioInputs)
     const activeAudioInput = useMeetingStore(s => s.activeAudioInput)
+    const videoInputs = useMeetingStore(s => s.videoInputs)
+    const activeVideoInput = useMeetingStore(s => s.activeVideoInput)
     const settings = useMeetingStore(s => s.settings)
     const bubbles = useMeetingStore(s => s.bubbles)
     const focusedIdentity = useMeetingStore(s => s.focusedIdentity)
@@ -93,6 +95,7 @@ export function MeetingView({
     const resumeAudio = useMeetingStore(s => s.resumeAudio)
     const setNoiseSuppression = useMeetingStore(s => s.setNoiseSuppression)
     const setAudioInput = useMeetingStore(s => s.setAudioInput)
+    const setVideoInput = useMeetingStore(s => s.setVideoInput)
     const setMeetingSetting = useMeetingStore(s => s.setMeetingSetting)
     const setFocused = useMeetingStore(s => s.setFocused)
     const endMeeting = useMeetingStore(s => s.endMeeting)
@@ -414,39 +417,69 @@ export function MeetingView({
                     </mdui-tooltip>
                 )}
 
-                <mdui-dropdown trigger='hover'>
+                <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                     <mdui-button-icon
-                        slot="trigger"
                         aria-label={isMicOn ? '关闭麦克风' : '开启麦克风'}
                         onClick={() => toggleMic().catch(e => tipError(e, '切换麦克风失败'))}
                     ><AnimatedIcon name={isMicOn ? 'mic' : 'mic_off'} /></mdui-button-icon>
-                    <mdui-menu>
-                        <mdui-menu-item
-                            icon={noiseSuppression ? 'check' : undefined}
-                            onClick={() => setNoiseSuppression(!noiseSuppression).catch(e => tipError(e, '切换降噪失败'))}
-                        >
-                            麦克风降噪
-                        </mdui-menu-item>
-                        {audioInputs.length > 0 && <mdui-divider />}
-                        {audioInputs.map(d => (
+                    <mdui-dropdown trigger='click'>
+                        <mdui-icon
+                            slot="trigger"
+                            name="arrow_drop_up"
+                            title="麦克风选项"
+                            style={{ fontSize: '20px', marginLeft: '-10px', padding: '2px', opacity: 0.7, cursor: 'pointer' }}
+                        />
+                        <mdui-menu>
                             <mdui-menu-item
-                                key={d.deviceId}
-                                icon={d.deviceId === activeAudioInput ? 'check' : undefined}
-                                onClick={() => setAudioInput(d.deviceId).catch(e => tipError(e, '切换麦克风失败'))}
+                                icon={noiseSuppression ? 'check' : undefined}
+                                onClick={() => setNoiseSuppression(!noiseSuppression).catch(e => tipError(e, '切换降噪失败'))}
                             >
-                                {d.label}
+                                麦克风降噪
                             </mdui-menu-item>
-                        ))}
-                    </mdui-menu>
-                </mdui-dropdown>
+                            {audioInputs.length > 0 && <mdui-divider />}
+                            {audioInputs.map(d => (
+                                <mdui-menu-item
+                                    key={d.deviceId}
+                                    icon={d.deviceId === activeAudioInput ? 'check' : undefined}
+                                    onClick={() => setAudioInput(d.deviceId).catch(e => tipError(e, '切换麦克风失败'))}
+                                >
+                                    {d.label}
+                                </mdui-menu-item>
+                            ))}
+                        </mdui-menu>
+                    </mdui-dropdown>
+                </div>
 
                 {settings.showCameraButton && (
-                    <mdui-tooltip content={isCameraOn ? '关闭摄像头' : '开启摄像头'}>
-                        <mdui-button-icon
-                            aria-label={isCameraOn ? '关闭摄像头' : '开启摄像头'}
-                            onClick={() => toggleCamera().catch(e => tipError(e, '切换摄像头失败'))}
-                        ><AnimatedIcon name={isCameraOn ? 'videocam' : 'videocam_off'} /></mdui-button-icon>
-                    </mdui-tooltip>
+                    <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <mdui-tooltip content={isCameraOn ? '关闭摄像头' : '开启摄像头'}>
+                            <mdui-button-icon
+                                aria-label={isCameraOn ? '关闭摄像头' : '开启摄像头'}
+                                onClick={() => toggleCamera().catch(e => tipError(e, '切换摄像头失败'))}
+                            ><AnimatedIcon name={isCameraOn ? 'videocam' : 'videocam_off'} /></mdui-button-icon>
+                        </mdui-tooltip>
+                        {videoInputs.length > 0 && (
+                            <mdui-dropdown trigger='click'>
+                                <mdui-icon
+                                    slot="trigger"
+                                    name="arrow_drop_up"
+                                    title="选择摄像头"
+                                    style={{ fontSize: '20px', marginLeft: '-10px', padding: '2px', opacity: 0.7, cursor: 'pointer' }}
+                                />
+                                <mdui-menu>
+                                    {videoInputs.map(d => (
+                                        <mdui-menu-item
+                                            key={d.deviceId}
+                                            icon={d.deviceId === activeVideoInput ? 'check' : undefined}
+                                            onClick={() => setVideoInput(d.deviceId).catch(e => tipError(e, '选择摄像头失败'))}
+                                        >
+                                            {d.label}
+                                        </mdui-menu-item>
+                                    ))}
+                                </mdui-menu>
+                            </mdui-dropdown>
+                        )}
+                    </div>
                 )}
 
                 <mdui-tooltip content={isSharingScreen ? '停止共享' : '共享屏幕'}>
