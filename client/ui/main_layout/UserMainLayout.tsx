@@ -464,6 +464,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
         show={navValue}
         activeChatId={activeChatId}
         showBuildInfoFooter={isMobile}
+        client={client}
     />
     const mainContent = (
         <>
