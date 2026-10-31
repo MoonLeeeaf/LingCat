@@ -24,7 +24,7 @@ public class MessageParser {
             "!\\[([^\\]]+)\\]\\((?:lingcat://file\\?hash=|file:)([^)]+)\\)");
     private static final Pattern LINK          = Pattern.compile("\\[([^\\]]+)\\]\\(([^)]+)\\)");
     private static final Pattern REPLY         = Pattern.compile("\\[reply:(\\d+)\\]");
-    private static final Pattern ATTACH_PREFIX = Pattern.compile("^(?:Image|Video|File)=");
+    private static final Pattern ATTACH_PREFIX = Pattern.compile("^(?:(?:Image|Video|File)=|(?:图片|视频|音频|文件)-)");
 
     public static class ParsedMessage {
         public final String text;

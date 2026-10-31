@@ -44,6 +44,44 @@ public class LingCatClient {
     private final Map<String, PendingRequest> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<OnReceiveListener> onReceiveListeners = new CopyOnWriteArrayList<>();
 
+    // ============================================================
+    //               连接状态与监听器
+    // ============================================================
+    public enum ConnectionState {
+        IDLE, CONNECTING, CONNECTED, RECONNECTING, DISCONNECTED
+    }
+
+    private volatile ConnectionState connectionState = ConnectionState.IDLE;
+    private final CopyOnWriteArrayList<OnConnectionStateChangedListener> connectionStateListeners = new CopyOnWriteArrayList<>();
+
+    public interface OnConnectionStateChangedListener {
+        void onConnectionStateChanged(ConnectionState state);
+    }
+
+    public interface OnHandshakeFailedListener {
+        void onHandshakeFailed(String reason);
+    }
+
+    public ConnectionState getConnectionState() { return connectionState; }
+
+    public void addConnectionStateListener(OnConnectionStateChangedListener l) {
+        connectionStateListeners.add(l);
+    }
+
+    public void removeConnectionStateListener(OnConnectionStateChangedListener l) {
+        connectionStateListeners.remove(l);
+    }
+
+    private void setConnectionState(ConnectionState state) {
+        if (this.connectionState == state) return;
+        this.connectionState = state;
+        for (OnConnectionStateChangedListener l : connectionStateListeners) {
+            try { l.onConnectionStateChanged(state); } catch (Exception ignored) {}
+        }
+    }
+
+    // ============================================================
+
     private volatile WebSocket webSocket;
     private volatile boolean manualDisconnect = false;
     private volatile KeyPair handshakeKeyPair;
@@ -55,13 +93,15 @@ public class LingCatClient {
     private volatile ScheduledFuture<?> pingCheckTask;
     private volatile long lastPongTime = 0;
 
-    private static final long PING_INTERVAL_MS = 90_000;
-    private static final long PING_TIMEOUT_MS = 90_000;
+    // 心跳参数与 Web 端对齐
+    private static final long PING_INTERVAL_MS = 30_000;
+    private static final long PING_TIMEOUT_MS = 45_000;
     private static final long RECONNECT_BASE_MS = 1_000;
     private static final long RECONNECT_CAP_MS = 30_000;
 
     private volatile OnInitListener onInitListener;
     private volatile Runnable onAuthFailed;
+    private volatile OnHandshakeFailedListener onHandshakeFailedListener;
     private volatile ExecutorCallback executorCallback = Runnable::run;
 
     /** 保护"取 seq → encrypt → send"三步的原子性 */
@@ -141,6 +181,7 @@ public class LingCatClient {
 
     public void setOnInitListener(OnInitListener l) { this.onInitListener = l; }
     public void setOnAuthFailed(Runnable r) { this.onAuthFailed = r; }
+    public void setOnHandshakeFailedListener(OnHandshakeFailedListener l) { this.onHandshakeFailedListener = l; }
     public void setExecutorCallback(ExecutorCallback cb) {
         this.executorCallback = cb != null ? cb : Runnable::run;
     }
@@ -213,16 +254,16 @@ public class LingCatClient {
 
         WebSocket ws = this.webSocket;
         if (ws == null) {
-            pendingRequests.remove(requestId);
-            timeoutTask.cancel(false);
+            PendingRequest removed = pendingRequests.remove(requestId);
+            if (removed != null) removed.timeoutTask.cancel(false); // 修复 Timer 泄漏
             future.completeExceptionally(new IOException("WebSocket not connected"));
             return future;
         }
 
         boolean sent = ws.send(okio.ByteString.of(pkg.toBuffer()));
         if (!sent) {
-            pendingRequests.remove(requestId);
-            timeoutTask.cancel(false);
+            PendingRequest removed = pendingRequests.remove(requestId);
+            if (removed != null) removed.timeoutTask.cancel(false); // 修复 Timer 泄漏
             future.completeExceptionally(new IOException("WebSocket send failed"));
             return future;
         }
@@ -292,6 +333,8 @@ public class LingCatClient {
         if (manualDisconnect) return;
         if (reconnectTask != null && !reconnectTask.isDone()) return;
 
+        setConnectionState(ConnectionState.RECONNECTING);
+
         long exp = Math.min(RECONNECT_BASE_MS * (1L << Math.min(reconnectAttempt, 5)), RECONNECT_CAP_MS);
         long jitter = Math.round(exp * (0.75 + Math.random() * 0.5));
 
@@ -315,6 +358,9 @@ public class LingCatClient {
             Log.w(TAG, "init() called but webSocket already exists, skip");
             return;
         }
+
+        setConnectionState(ConnectionState.CONNECTING);
+
         Log.i(TAG, "init() called, ws url = " + serverWs);
         this.manualDisconnect = false;
         cancelReconnect();
@@ -390,6 +436,7 @@ public class LingCatClient {
     public void disconnect() {
         Log.i(TAG, "disconnect() called");
         manualDisconnect = true;
+        setConnectionState(ConnectionState.DISCONNECTED);
         cancelReconnect();
         stopPing();
         rejectAllPending("Client disconnected");
@@ -498,6 +545,11 @@ public class LingCatClient {
 
             if (!verified) {
                 Log.e(TAG, "server verification failed, closing connection");
+                manualDisconnect = true;
+                setConnectionState(ConnectionState.DISCONNECTED);
+                if (onHandshakeFailedListener != null) {
+                    onHandshakeFailedListener.onHandshakeFailed("server_public_key_mismatch");
+                }
                 WebSocket ws = this.webSocket;
                 if (ws != null) ws.close(4001, "handshake verify failed");
                 return;
@@ -519,6 +571,8 @@ public class LingCatClient {
             reconnectAttempt = 0;
 
             Log.i(TAG, "handshake complete, session keys established");
+
+            setConnectionState(ConnectionState.CONNECTED);
 
             startPing();
             OnInitListener l = onInitListener;
@@ -542,20 +596,23 @@ public class LingCatClient {
 
         if (manualDisconnect) {
             Log.d(TAG, "manual disconnect, no reconnect");
+            setConnectionState(ConnectionState.DISCONNECTED);
             return;
         }
         if (code == 1000) {
             Log.d(TAG, "normal close, no reconnect");
+            setConnectionState(ConnectionState.DISCONNECTED);
             return;
         }
         if (code == 1008) {
             Log.d(TAG, "policy violation close, no reconnect");
+            setConnectionState(ConnectionState.DISCONNECTED);
             return;
         }
         if (code == 4001) {
-            Log.w(TAG, "auth failed close, triggering onAuthFailed");
-            Runnable cb = onAuthFailed;
-            if (cb != null) cb.run();
+            Log.w(TAG, "auth/handshake failed close, no reconnect");
+            setConnectionState(ConnectionState.DISCONNECTED);
+            // 由 handleHandshakeResponse 统一处理 onHandshakeFailedListener
             return;
         }
         Log.i(TAG, "scheduling reconnect due to close code " + code);
@@ -573,6 +630,7 @@ public class LingCatClient {
 
         if (manualDisconnect) {
             Log.d(TAG, "manual disconnect, no reconnect");
+            setConnectionState(ConnectionState.DISCONNECTED);
             return;
         }
         Log.i(TAG, "scheduling reconnect due to failure");
