@@ -190,15 +190,42 @@ fun LoginScreen(
                     }
                 }
 
-                OutlinedTextField(
-                    value = uiState.username,
-                    onValueChange = viewModel::onUsernameChange,
-                    label = { Text("账号") },
-                    leadingIcon = { Icon(Icons.Default.Person, null) },
-                    singleLine = true,
-                    enabled = !uiState.isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                if (uiState.isRegisterMode) {
+                    // ★ 注册模式：显示昵称（必填）
+                    OutlinedTextField(
+                        value = uiState.nickname,
+                        onValueChange = viewModel::onNicknameChange,
+                        label = { Text("昵称") },
+                        leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null) },
+                        singleLine = true,
+                        enabled = !uiState.isLoading,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(16.dp))
+
+                    // ★ 注册模式：显示用户名（可选）
+                    OutlinedTextField(
+                        value = uiState.username,
+                        onValueChange = viewModel::onUsernameChange,
+                        label = { Text("用户名 (可选)") },
+                        leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                        singleLine = true,
+                        enabled = !uiState.isLoading,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                } else {
+                    // 登录模式：还是原来的账号
+                    OutlinedTextField(
+                        value = uiState.username,
+                        onValueChange = viewModel::onUsernameChange,
+                        label = { Text("账号") },
+                        leadingIcon = { Icon(Icons.Default.Person, null) },
+                        singleLine = true,
+                        enabled = !uiState.isLoading,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
                 Spacer(Modifier.height(16.dp))
 
                 OutlinedTextField(
@@ -236,7 +263,11 @@ fun LoginScreen(
 
                 Button(
                     onClick = viewModel::submit,
-                    enabled = !uiState.isLoading && !uiState.serverLoading && uiState.username.isNotBlank() && uiState.password.isNotBlank(),
+                    enabled = if (uiState.isRegisterMode) {
+                        uiState.nickname.isNotBlank() && uiState.password.isNotBlank() && uiState.confirmPassword.isNotBlank() && !uiState.isLoading
+                    } else {
+                        uiState.username.isNotBlank() && uiState.password.isNotBlank() && !uiState.isLoading
+                    },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                 ) {
                     if (uiState.isLoading) {

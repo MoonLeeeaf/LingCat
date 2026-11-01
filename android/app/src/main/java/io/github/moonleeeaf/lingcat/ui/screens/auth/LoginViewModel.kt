@@ -21,6 +21,7 @@ data class LoginUiState(
     val serverLoading: Boolean = false,
 
     // 账号相关
+    val nickname: String = "", // ★ 新增：注册用的昵称
     val username: String = "",
     val password: String = "",
     val confirmPassword: String = "",
@@ -132,13 +133,25 @@ class LoginViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(historyAccounts = accounts)
     }
 
-    fun toggleMode() {
-        _uiState.value = _uiState.value.copy(isRegisterMode = !_uiState.value.isRegisterMode, password = "", confirmPassword = "", errorMsg = null)
-    }
+
     fun onUsernameChange(value: String) { _uiState.value = _uiState.value.copy(username = value, errorMsg = null) }
     fun onPasswordChange(value: String) { _uiState.value = _uiState.value.copy(password = value, errorMsg = null) }
     fun onConfirmPasswordChange(value: String) { _uiState.value = _uiState.value.copy(confirmPassword = value, errorMsg = null) }
     fun clearError() { _uiState.value = _uiState.value.copy(errorMsg = null) }
+    fun onNicknameChange(value: String) {
+        _uiState.value = _uiState.value.copy(nickname = value, errorMsg = null)
+    }
+
+    // ★ 切换登录/注册模式时，清空多余状态
+    fun toggleMode() {
+        _uiState.value = _uiState.value.copy(
+            isRegisterMode = !_uiState.value.isRegisterMode,
+            nickname = "",
+            password = "",
+            confirmPassword = "",
+            errorMsg = null
+        )
+    }
 
     fun submit() {
         val state = _uiState.value
@@ -146,12 +159,29 @@ class LoginViewModel : ViewModel() {
             _uiState.value = state.copy(errorMsg = "请先选择或添加一个服务器喵")
             return
         }
+
         val username = state.username.trim()
+        val nickname = state.nickname.trim()
         val password = state.password
 
-        if (username.isEmpty() || password.isEmpty()) {
-            _uiState.value = state.copy(errorMsg = "账号和密码不能为空")
-            return
+        if (state.isRegisterMode) {
+            // ★ 注册模式：严格校验昵称
+            if (nickname.isEmpty()) {
+                _uiState.value = state.copy(errorMsg = "昵称不能为空喵")
+                return
+            }
+            if (password != state.confirmPassword) {
+                _uiState.value = state.copy(errorMsg = "两次输入的密码不一致喵")
+                return
+            }
+            // 如果用户没填用户名，我们可以用随机字符串或者留空，让服务端生成
+            // 但为了方便，如果为空，我们就传 null 或者空字符串
+        } else {
+            // 登录模式：严格校验账号
+            if (username.isEmpty() || password.isEmpty()) {
+                _uiState.value = state.copy(errorMsg = "账号和密码不能为空")
+                return
+            }
         }
 
         _uiState.value = state.copy(isLoading = true, errorMsg = null)
@@ -167,9 +197,24 @@ class LoginViewModel : ViewModel() {
 
                 val token = withContext(Dispatchers.IO) {
                     if (state.isRegisterMode) {
-                        UserApi.register(client, username, password, username)
+                        // 1. 先注册，拿到服务端分配的用户 ID
+                        val newUserId = UserApi.register(
+                            client,
+                            username.ifEmpty { null }, // username 可选，如果为空传 null
+                            password,
+                            nickname
+                        )
+
+                        // 2. 决定用什么账号去登录
+                        // 优先用用户填写的 username，如果没填，就用刚刚注册返回的 newUserId
+                        val accountToLogin = username.ifEmpty { newUserId }
+
+                        // 3. 调用登录获取 Token
+                        UserApi.login(client, accountToLogin, password)
+                    } else {
+                        // 正常登录模式
+                        UserApi.login(client, username, password)
                     }
-                    UserApi.login(client, username, password)
                 }
 
                 if (token.isNullOrEmpty()) throw Exception("获取 Token 失败")
