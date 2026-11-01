@@ -587,7 +587,7 @@ message Get_All_My_E2E_Keys_Request {
 
 message Get_All_My_E2E_Keys_Response {
     string my_user_id = 1;
-    repeated IUserE2EKey keys = 2;
+    repeated lingcat.classes.IUserE2EKey keys = 2;
 }
 
 /**
