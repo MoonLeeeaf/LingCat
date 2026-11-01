@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { TextField } from 'mdui'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import type { IChat } from 'lingcat-protocol'
+import type LingCatClient from 'lingcat-client-protocol'
 import ClientManager from '../../ClientManager.ts'
 import ProfileCache from '../../ProfileCache.ts'
 import default_avatar from '../../default_avatar.png'
@@ -30,6 +31,8 @@ export interface ChatListFragmentProps {
     activeChatId?: string
     /** 移动端由列表自己渲染底部构建信息；桌面端固定在左侧栏底部 */
     showBuildInfoFooter?: boolean
+    /** 当前已授权的 client；由 UserMainLayout 传入，避免子组件在就绪前读到 null */
+    client?: LingCatClient | null
 }
 
 // ============================================================
@@ -118,9 +121,26 @@ function ChatFilterField({ onFilterChange }: { onFilterChange: (text: string) =>
 //                      主组件
 // ============================================================
 
-export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = true }: ChatListFragmentProps) {
+export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = true, client }: ChatListFragmentProps) {
     // filter field
     const [filterText, setFilterText] = React.useState('')
+
+    // client / session / 连接状态：都作为依赖，避免首次挂载时提前 return 后不再拉取
+    const subscribeClient = React.useCallback((notify: () => void) => ClientManager.subscribe(notify), [])
+    const sessionKey = React.useSyncExternalStore(
+        subscribeClient,
+        () => ClientManager.getActiveSession()?.key ?? null,
+        () => null,
+    )
+    const subscribeConnection = React.useCallback(
+        (notify: () => void) => client?.subscribeConnectionState(notify) ?? (() => {}),
+        [client],
+    )
+    const connectionState = React.useSyncExternalStore(
+        subscribeConnection,
+        () => client?.connectionState ?? 'idle',
+        () => 'idle',
+    )
 
     const chatFilter = (chat: IChat) => {
         const filter = filterText.trim().toLowerCase()
@@ -187,9 +207,9 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
 
     // 拉取 chats + 监听 Update_My_Chats_Event
     React.useEffect(() => {
-        const client = ClientManager.getActiveClient()
+        if (!client || !sessionKey || connectionState !== 'connected') return
         const session = ClientManager.getActiveSession()
-        if (!client || !session) return
+        if (!session || session.key !== sessionKey) return
 
         let cancelled = false
 
@@ -231,7 +251,7 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
             cancelled = true
             client.removeOnReceiveListener(onUpdate)
         }
-    }, [])
+    }, [client, sessionKey, connectionState])
 
     // ============================================================
     //                      渲染

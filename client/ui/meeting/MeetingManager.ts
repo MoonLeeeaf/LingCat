@@ -168,6 +168,8 @@ interface MeetingState {
 
     audioInputs: { deviceId: string, label: string }[]
     activeAudioInput?: string
+    videoInputs: { deviceId: string, label: string }[]
+    activeVideoInput?: string
 
     // 其他成员
     locallyMuted: Record<string, boolean>
@@ -204,6 +206,8 @@ interface MeetingActions {
     setNoiseSuppression(enabled: boolean): Promise<void>
     setAudioInput(deviceId: string): Promise<boolean>
     refreshAudioInputs(): Promise<void>
+    setVideoInput(deviceId: string): Promise<boolean>
+    refreshVideoInputs(): Promise<void>
 
     toggleLocalMute(identity: string): void
     isLocallyMuted(identity: string): boolean
@@ -325,6 +329,8 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
             isSharingScreen: false,
             isSharingAudio: false,
             activeAudioInput: undefined,
+            videoInputs: [],
+            activeVideoInput: undefined,
             locallyMuted: {},
             iAmChatAdmin: false,
             myChatAdminRole: null,
@@ -347,7 +353,10 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
         room.on(RoomEvent.ParticipantNameChanged, refresh)
         room.on(RoomEvent.ParticipantMetadataChanged, (_meta, p) => { maybeAutoLocalMute(p); refresh() })
         room.on(RoomEvent.ActiveSpeakersChanged, refresh)
-        room.on(RoomEvent.MediaDevicesChanged, () => { void get().refreshAudioInputs() })
+        room.on(RoomEvent.MediaDevicesChanged, () => {
+            void get().refreshAudioInputs()
+            void get().refreshVideoInputs()
+        })
         room.on(RoomEvent.LocalTrackPublished, syncLocalFlags)
         room.on(RoomEvent.LocalTrackUnpublished, syncLocalFlags)
         room.on(RoomEvent.AudioPlaybackStatusChanged, () => {
@@ -413,6 +422,8 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
 
         audioInputs: [],
         activeAudioInput: undefined,
+        videoInputs: [],
+        activeVideoInput: undefined,
 
         locallyMuted: {},
         settings: loadMeetingSettings(),
@@ -468,6 +479,7 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                     console.warn('[Meeting] 麦克风开启失败', e)
                 }
                 await get().refreshAudioInputs()
+                await get().refreshVideoInputs()
 
                 set({ audioBlocked: !room.canPlaybackAudio })
                 startChatBubbles(chatId)
@@ -546,6 +558,8 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 roomName: undefined,
                 focusedIdentity: undefined,
                 activeAudioInput: undefined,
+                videoInputs: [],
+                activeVideoInput: undefined,
                 locallyMuted: {},
                 bubbles: {},
                 iAmChatAdmin: false,
@@ -595,10 +609,23 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
         },
 
         toggleCamera: async () => {
-            const lp = get().room?.localParticipant
-            if (!lp) return
-            await lp.setCameraEnabled(!get().isCameraOn)
+            const room = get().room
+            const lp = room?.localParticipant
+            if (!lp || !room) return
+            const enabling = !get().isCameraOn
+            const preferred = get().activeVideoInput
+            try {
+                await lp.setCameraEnabled(
+                    enabling,
+                    enabling && preferred ? { deviceId: { exact: preferred } } : undefined,
+                )
+            } catch (e) {
+                // 选中的设备已失效时回退到默认摄像头, 不让整个开启失败
+                if (!enabling || !preferred) throw e
+                await lp.setCameraEnabled(true)
+            }
             syncLocalFlags()
+            if (enabling) void get().refreshVideoInputs()
         },
 
         toggleScreenShare: async () => {
@@ -664,6 +691,39 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 })
             } catch (e) {
                 console.warn('[Meeting] 枚举麦克风失败', e)
+            }
+        },
+
+        setVideoInput: async (deviceId) => {
+            const room = get().room
+            if (!room) {
+                set({ activeVideoInput: deviceId })
+                return true
+            }
+            // 摄像头关闭时只记录选择, 下次开启时应用
+            if (!get().isCameraOn) {
+                set({ activeVideoInput: deviceId })
+                return true
+            }
+            const ok = await room.switchActiveDevice('videoinput', deviceId)
+            if (ok) set({ activeVideoInput: deviceId })
+            return ok
+        },
+
+        refreshVideoInputs: async () => {
+            try {
+                const devices = await Room.getLocalDevices('videoinput')
+                set({
+                    videoInputs: devices.map(d => ({
+                        deviceId: d.deviceId,
+                        label: d.label || ('摄像头 ' + d.deviceId.slice(0, 4)),
+                    })),
+                    activeVideoInput: get().room?.getActiveDevice('videoinput')
+                        || get().activeVideoInput
+                        || devices[0]?.deviceId,
+                })
+            } catch (e) {
+                console.warn('[Meeting] 枚举摄像头失败', e)
             }
         },
 
