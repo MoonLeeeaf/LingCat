@@ -7,6 +7,24 @@ await sodium.ready
 
 export default class E2EKeyManager {
     /**
+     * 容错 Base64 解码器
+     * 兼容标准、URL-Safe、缺失 padding 的 Base64
+     */
+        static tolerantFromBase64(str: string): Uint8Array {
+            if (!str) return new Uint8Array(0)
+            // 把 URL-Safe 字符替换回标准字符
+            let s = str.replace(/-/g, '+').replace(/_/g, '/')
+            // 补齐 padding (Base64 长度必须是 4 的倍数)
+            while (s.length % 4 !== 0) s += '='
+            
+            try {
+                return sodium.from_base64(s, sodium.base64_variants.ORIGINAL)
+            } catch (e) {
+                console.error('[E2E] Base64 decode failed for:', str)
+                throw new Error('密钥格式错误，无法解析')
+            }
+        }
+    /**
      * 1. 生成长期身份密钥对
      */
     static generateIdentityKeyPair() {
@@ -97,22 +115,6 @@ export default class E2EKeyManager {
         }
     }
 
-    /**
-     * 4. 计算共享密钥并加解密消息
-     */
-    static deriveSharedKey(myPrivateKeyB64: string, peerPublicKeyB64: string): Uint8Array {
-        const myPriv = sodium.from_base64(myPrivateKeyB64)
-        const peerPub = sodium.from_base64(peerPublicKeyB64)
-
-        const shared = sodium.crypto_scalarmult(myPriv, peerPub)
-        // 使用 BLAKE2b 作为 KDF 派生最终对称密钥
-        const key = sodium.crypto_generichash(32, shared, null)
-
-        sodium.memzero(myPriv)
-        sodium.memzero(shared)
-        return key
-    }
-
     static encryptMessage(text: string, sharedKey: Uint8Array) {
         const nonce = sodium.randombytes_buf(sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES)
         const textBytes = sodium.from_string(text)
@@ -128,15 +130,35 @@ export default class E2EKeyManager {
         }
     }
 
+    static deriveSharedKey(myPrivateKeyB64: string, peerPublicKeyB64: string): Uint8Array {
+        // ★ 使用容错解码器
+        const myPriv = E2EKeyManager.tolerantFromBase64(myPrivateKeyB64)
+        const peerPub = E2EKeyManager.tolerantFromBase64(peerPublicKeyB64)
+
+        // 防御性校验：X25519 密钥必须是 32 字节
+        if (myPriv.length !== 32 || peerPub.length !== 32) {
+            throw new Error(`密钥长度不合法 (myPriv: ${myPriv.length}, peerPub: ${peerPub.length})`)
+        }
+
+        const shared = sodium.crypto_scalarmult(myPriv, peerPub)
+        const key = sodium.crypto_generichash(32, shared, null)
+
+        sodium.memzero(myPriv)
+        sodium.memzero(shared)
+        return key
+    }
+
     static decryptMessage(payload: E2EPayload, sharedKey: Uint8Array): string {
-        const nonce = sodium.from_base64(payload.nonce)
-        const ciphertext = sodium.from_base64(payload.ciphertext)
+        // ★ 这里的 nonce 和 ciphertext 也要用容错解码器！
+        const nonce = E2EKeyManager.tolerantFromBase64(payload.nonce)
+        const ciphertext = E2EKeyManager.tolerantFromBase64(payload.ciphertext)
+        
         try {
             const decrypted = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
                 null, ciphertext, null, nonce, sharedKey
             )
             const text = sodium.to_string(decrypted)
-            sodium.memzero(decrypted) // 清理明文缓冲
+            sodium.memzero(decrypted)
             return text
         } catch {
             throw new Error('消息解密失败，可能密钥不匹配或消息被篡改')

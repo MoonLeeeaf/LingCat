@@ -350,7 +350,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         // ============================================================
         React.useEffect(() => {
             if (peerUserId) {
-                fetchPeerKeys([peerUserId])
+                fetchPeerKeys([peerUserId], true)
             }
         }, [peerUserId, fetchPeerKeys])
 
@@ -439,7 +439,6 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                 let sendText = parsed.text
                 let sendEntities: IMessageEntity[] = parsed.entities ?? []
 
-                // 群聊: 把文本里命中的 @用户名/@昵称/@备注 补成 user_mention 实体
                 if (enableMentions) {
                     if (!membersLoadedRef.current && parsed.text.includes('@')) {
                         await ensureMembers()
@@ -455,11 +454,11 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                         text: parsed.text,
                         entities: sendEntities
                     })
+                    // ★ 因为底层现在会抛出非常详细的 Error，这里直接 await 即可
                     const entityJson = await encryptForPeer(rawPayload, peerUserId)
-                    if (!entityJson) throw new Error('加密失败')
 
                     sendText = '🔒'
-                    sendEntities = [{ type: 'e2e', offset: 0, length: 1, data: entityJson }]
+                    sendEntities = [{ type: 'e2e', offset: 0, length: 1, data: entityJson! }]
                 }
 
                 // 发送或编辑
@@ -483,11 +482,12 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
 
                 clearFiles()
                 inputRef.current!.value = ''
-            } catch (e) {
+            } catch (e: any) {
+                // 这里的 e.message 现在会是人类可读的，比如“对方尚未开启端到端加密...”
                 tipError(e, editingMessage ? '编辑失败' : '发送失败')
             } finally {
                 setIsSending(false)
-                onClose()
+                onClose() // ★ 确保百分之百关闭 snackbar
                 client.client?.removeEventListener('close', onClose)
             }
         }
@@ -506,7 +506,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
 
             try {
                 if (isEncryptMode && peerUserId) {
-                    await fetchPeerKeys([peerUserId])
+                    await fetchPeerKeys([peerUserId], true)
                     const currentPeerKey = useE2EStore.getState().peerKeys[peerUserId]
 
                     if (!currentPeerKey) {

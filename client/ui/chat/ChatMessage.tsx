@@ -58,7 +58,7 @@ export default function ChatMessage({
         return () => { cancelled = true }
     }, [msg.sender_user_id, msg.system])
 
-    const myPrivateKeys = useE2EStore(s => s.myPrivateKeys) 
+    const myPrivateKeys = useE2EStore(s => s.myPrivateKeys)
     React.useEffect(() => {
         const e2eEntity = msg.entities?.find(e => e.type === 'e2e')
 
@@ -116,10 +116,9 @@ export default function ChatMessage({
                 headline: `解锁历史消息 (v${needOldVersion})`,
                 body: `
                     <div style="margin-bottom: 12px; font-size: 14px; opacity: 0.8;">
-                        该消息使用了旧版本的密码加密。
+                        该消息使用了旧密钥 (v${needOldVersion}) 加密，或者发送方缓存了你的旧公钥。请输入当时的历史密码来解锁。
                     </div>
                     <mdui-text-field id="old-pwd" label="旧密码" type="password" variant="outlined" style="width: 100%; margin-bottom: 12px"></mdui-text-field>
-                    <mdui-text-field id="new-pwd" label="新密码 (选填)" type="password" variant="outlined" style="width: 100%" helper="填写后会将 v${needOldVersion} 的密码统一更新为新密码"></mdui-text-field>
                 `,
                 closeOnEsc: true,
                 closeOnOverlayClick: true,
@@ -130,8 +129,6 @@ export default function ChatMessage({
                         onClick: () => {
                             // @ts-ignore
                             const oldPwd = (dlg.querySelector('#old-pwd') as any)?.value ?? ''
-                            // @ts-ignore
-                            const newPwd = (dlg.querySelector('#new-pwd') as any)?.value ?? ''
 
                             if (!oldPwd) {
                                 showSnackbar({ message: '请输入旧密码' })
@@ -139,19 +136,13 @@ export default function ChatMessage({
                             }
 
                             const doTask = async () => {
-                                if (newPwd) {
-                                    if (newPwd.length < 6) return '新密码至少需要 6 位'
-                                    const ok = await changeVersionPassword(needOldVersion, oldPwd, newPwd)
-                                    return ok ? null : '密码错误或修改失败'
-                                } else {
-                                    const ok = await unlockSpecificVersion(needOldVersion, oldPwd)
-                                    return ok ? null : '密码错误'
-                                }
+                                const ok = await unlockSpecificVersion(needOldVersion, oldPwd)
+                                return ok ? null : '密码错误'
                             }
 
                             doTask().then(errMsg => {
                                 if (!errMsg) {
-                                    showSnackbar({ message: newPwd ? '密码已更新并解锁' : '旧密钥解锁成功' })
+                                    showSnackbar({ message: '旧密钥解锁成功' })
                                     dlg.open = false
                                 } else {
                                     showSnackbar({ message: errMsg })
@@ -208,7 +199,7 @@ export default function ChatMessage({
             hideSender={hideSender}
             senderUserId={msg.sender_user_id ?? undefined}
         >
-                        {isLockedPlaceholder || decryptError ? (
+            {isLockedPlaceholder || decryptError ? (
                 <div
                     onClick={handleUnlockClick}
                     style={{
@@ -222,7 +213,7 @@ export default function ChatMessage({
                 >
                     {decryptedPayload?.text}
                     {(e2eStatus === 'locked' || needOldVersion) && (
-                        <span style={{ marginLeft: '4px',}}>
+                        <span style={{ marginLeft: '4px' }}>
                             (点击解锁)
                         </span>
                     )}

@@ -30,7 +30,7 @@ interface E2EState {
     generateNewKey: (password: string, newVersion: number) => Promise<void>
     unlock: (password: string) => Promise<boolean>
     lock: () => void
-    fetchPeerKeys: (userIds: string[]) => Promise<void>
+    fetchPeerKeys: (userIds: string[], force: boolean) => Promise<void>
     setPeerVerified: (userId: string) => void
     encryptForPeer: (plaintext: string, peerUserId: string) => Promise<string | null>
     decryptFromPeer: (entityJson: string, senderUserId: string) => Promise<string | null>
@@ -226,12 +226,16 @@ export const useE2EStore = create<E2EState>((set, get) => ({
         }
     },
 
-    fetchPeerKeys: async (userIds) => {
+    fetchPeerKeys: async (userIds, force = false) => { // ★ 新增 force 参数
         const client = ClientManager.getActiveClient()
         const session = ClientManager.getActiveSession()
         if (!client || !session) return
 
-        const missing = userIds.filter(uid => !get().peerKeys[uid])
+        // ★ 如果是强制刷新，就不管本地有没有缓存，全部去拉
+        const missing = force 
+            ? userIds 
+            : userIds.filter(uid => !get().peerKeys[uid])
+            
         if (missing.length === 0) return
 
         const res = await E2EApi.getPublicKeys(client, {
@@ -275,13 +279,19 @@ export const useE2EStore = create<E2EState>((set, get) => ({
 
     encryptForPeer: async (plaintext, peerUserId) => {
         const { myPrivateKeys, peerKeys, status, myPublicKey, myKeyVersion } = get()
-        if (status !== 'unlocked' || !myPublicKey) return null
+        if (status !== 'unlocked' || !myPublicKey) {
+            throw new Error('你的端到端加密未解锁')
+        }
 
         const myPriv = myPrivateKeys[myKeyVersion]
-        if (!myPriv) return null
+        if (!myPriv) {
+            throw new Error('本地私钥缺失，请重新解锁')
+        }
 
         const receiverPub = peerKeys[peerUserId]
-        if (!receiverPub) return null
+        if (!receiverPub) {
+            throw new Error('对方尚未开启端到端加密，或公钥拉取失败')
+        }
 
         try {
             const sharedKey = E2EManager.deriveSharedKey(myPriv, receiverPub)
@@ -299,7 +309,8 @@ export const useE2EStore = create<E2EState>((set, get) => ({
             return JSON.stringify(payload)
         } catch(e) {
             console.error('加密失败:', e)
-            return null
+            // console.error(myPriv, receiverPub)
+            throw new Error('底层加密算法执行失败')
         }
     },
 
@@ -326,8 +337,9 @@ export const useE2EStore = create<E2EState>((set, get) => ({
                 }
             }
 
+            // ★ 同步 Android 端的文案
             return JSON.stringify({
-                text: `🔒 [此消息使用了旧密码]`,
+                text: `🔒 [使用了旧密钥 (v${payload.keyVersion}), 但无法解密此消息]`,
                 entities: [],
                 needVersion: payload.keyVersion
             })
