@@ -51,7 +51,7 @@ fun MessageContent(
     isSystem: Boolean = false,
     onReplyClick: (Int) -> Unit,
     onMentionClick: (String, Boolean) -> Unit,
-    onAttachmentClick: (hash: String, name: String) -> Unit,
+    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
     onLongClick: () -> Unit,
     findMessage: suspend (Int) -> IMessage? = { null },
 ) {
@@ -337,7 +337,7 @@ fun MessageContent(
                 // ★ Block 级别（附件、引用）直接渲染，不包统一的 13dp padding
                 when (seg.entity!!.type) {
                     "reply" -> ReplyBlock(seg.entity, onReplyClick, isMine, findMessage = findMessage)
-                    "attachment" -> AttachmentBlock(seg.entity, onClick = { hash, name -> onAttachmentClick(hash, name) }, onLongClick = onLongClick)
+                    "attachment" -> AttachmentBlock(seg.entity, onClick = { hash, name, isImage -> onAttachmentClick(hash, name, isImage) }, onLongClick = onLongClick)
                 }
             } else {
                 // ★ 文字级别：根据是否为系统消息，套用不同的 padding 容器
@@ -562,7 +562,7 @@ val mimeCache = ConcurrentHashMap<String, String>()
 @Composable
 fun AttachmentBlock(
     entity: IMessageEntity,
-    onClick: (String, String) -> Unit,
+    onClick: (String, String, Boolean) -> Unit,
     onLongClick: () -> Unit // ★ 新增参数
 ) {
     var hash = ""
@@ -635,7 +635,7 @@ fun AttachmentBlock(
                 .defaultMinSize(minWidth = 100.dp, minHeight = 100.dp)
                 // ★ 核心修复：图片用 combinedClickable
                 .combinedClickable(
-                    onClick = { onClick(hash, name) },
+                    onClick = { onClick(hash, name, isImage) },
                     onLongClick = onLongClick
                 ),
             contentScale = androidx.compose.ui.layout.ContentScale.Fit
@@ -647,7 +647,7 @@ fun AttachmentBlock(
             modifier = Modifier
                 .fillMaxWidth()
                 .combinedClickable(
-                    onClick = { onClick(hash, name) },
+                    onClick = { onClick(hash, name, isImage) },
                     onLongClick = onLongClick
                 )
         ) {

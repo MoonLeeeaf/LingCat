@@ -342,15 +342,51 @@ fun ChatScreen(
                             MessageBubble(
                                 message = msg,
                                 isMine = msg.senderUserId == LingCatClientManager.currentUserId,
-                                hideSender = hideSender, // ★ 传入
+                                hideSender = hideSender,
                                 onAvatarLongClick = { userId -> selectedAvatarUserId = userId },
                                 onReplyClick = { replyId ->
-                                    coroutineScope.launch { viewModel.jumpToMessage(replyId, listState) }
+                                    coroutineScope.launch {
+                                        viewModel.jumpToMessage(replyId, listState)
+                                    }
                                 },
-                                onAttachmentClick = { hash, name -> /* ... */ },
+                                // ★ 补全附件点击逻辑
+                                onAttachmentClick = { hash, name, isImage ->
+                                    val client = LingCatClientManager.currentClient
+                                    val token = LingCatClientManager.fileAccessToken.value ?: ""
+                                    val url = client?.getFileUrlByHashAndToken(hash, token)
+
+                                    if (url != null) {
+                                        if (isImage) {
+                                            // 弹出全屏预览
+                                            previewImageUrl = url
+                                        } else {
+                                            // 普通文件走外部应用
+                                            try {
+                                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                                                    data = android.net.Uri.parse(url)
+                                                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                }
+                                                context.startActivity(intent)
+                                            } catch (e: Exception) {
+                                                Toast.makeText(context, "无法打开文件", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "文件地址无效", Toast.LENGTH_SHORT).show()
+                                    }
+                                },
                                 onLongClick = { selectedMessage = msg },
                                 onAvatarClick = { userId -> showUserProfileId = userId },
-                                onMentionClick = { mentionId, isChat -> /* ... */ }
+                                // ★ 补全提及点击逻辑
+                                onMentionClick = { mentionId, isChat ->
+                                    if (isChat) {
+                                        // 群提及暂未做跳转，先给个提示
+                                        android.widget.Toast.makeText(context, "点击了群: $mentionId", android.widget.Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        // 点击用户，打开资料面板
+                                        showUserProfileId = mentionId
+                                    }
+                                }
                             )
                         }
                     }
@@ -771,7 +807,7 @@ fun MessageBubble(
     onAvatarClick: (String) -> Unit,
     onAvatarLongClick: (String) -> Unit,
     onMentionClick: (String, Boolean) -> Unit,
-    onAttachmentClick: (hash: String, name: String) -> Unit,
+    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
     findMessage: suspend (Int) -> IMessage? = { null },
     hideSender: Boolean = false,
 ) {

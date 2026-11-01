@@ -733,8 +733,7 @@ class ChatViewModel : ViewModel() {
         val rawText = _uiState.value.inputText.trim()
         if (rawText.isEmpty() || _uiState.value.isSending) return
 
-        val editingMsg = _uiState.value.editingMessage // ★ 获取当前编辑的消息
-
+        val editingMsg = _uiState.value.editingMessage
         val peerId = _uiState.value.peerUserId
         val isE2E = _uiState.value.isE2EActive && _uiState.value.encryptThisMessage && peerId != null
 
@@ -753,15 +752,21 @@ class ChatViewModel : ViewModel() {
                 val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
                 val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
 
+                // ★ 核心修复 1：先处理附件上传，拿到替换为 file:hash 后的文本
+                var processedText = rawText
+                if (cachedFiles.isNotEmpty()) {
+                    processedText = uploadAndReplaceAttachments(rawText)
+                }
+
+                // ★ 然后再去解析最终的文本
                 var parsed = withContext(Dispatchers.Default) {
-                    MessageParser.parseMessage(rawText)
+                    MessageParser.parseMessage(processedText)
                 }
 
                 var finalText = parsed.text
                 var finalEntities = parsed.entities ?: emptyList()
 
                 if (isE2E && peerId != null) {
-                    // (省略加密打包逻辑，和之前一样)
                     val payloadJson = JSONObject().apply {
                         put("text", parsed.text)
                         val arr = JSONArray()
@@ -792,7 +797,6 @@ class ChatViewModel : ViewModel() {
                     }
                 }
 
-                // ★ 核心判断：是编辑还是发送新消息
                 if (editingMsg != null) {
                     withContext(Dispatchers.IO) {
                         ChatApi.editChatMessage(client, token, chatId, editingMsg.id, finalText, finalEntities)
@@ -805,12 +809,15 @@ class ChatViewModel : ViewModel() {
                     _uiState.value = _uiState.value.copy(isSending = false)
                 }
 
+                // ★ 核心修复 2：发送成功后，一定要清空待上传的附件缓存
+                cachedFiles.clear()
+
             } catch (e: Exception) {
                 Log.e(TAG, "send/edit message failed", e)
                 _uiState.value = _uiState.value.copy(
                     isSending = false,
                     errorMsg = "失败: ${e.message}",
-                    inputText = rawText
+                    inputText = rawText // 失败时返还文本，让用户重试
                 )
             }
         }
