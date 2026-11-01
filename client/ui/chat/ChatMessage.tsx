@@ -233,11 +233,13 @@ export default function ChatMessage({
                             name="lock"
                             style={{
                                 position: 'absolute',
-                                bottom: '6px',  // 距底部 6px
-                                [isMe ? 'left' : 'right']: '6px',   // 距右侧 6px
-                                fontSize: '12px',
-                                opacity: 0.2,   // 非常淡，作为背景水印
-                                pointerEvents: 'none', // 让鼠标点击穿透，不影响长按菜单
+                                bottom: '6px',
+                                [isMe ? 'left' : 'right']: '6px',
+                                fontSize: '13px',
+                                // ★ 修改 1：根据是否是自己发的消息，调整颜色和透明度
+                                color: isMe ? 'rgba(255,255,255,0.6)' : 'var(--mdui-color-primary)',
+                                opacity: 0.8,
+                                pointerEvents: 'none',
                             }}
                         />
                     )}
