@@ -1,5 +1,6 @@
 package lingcat.client_protocol;
 
+import lingcat.classes.Classes;
 import lingcat.classes.Classes.IUser;
 import lingcat.methods.Methods.Authorize_Request;
 import lingcat.methods.Methods.Authorize_Response;
@@ -22,6 +23,9 @@ import lingcat.methods.Methods.Verify_Password_Identity_Response;
 import lingcat.protocol.Methods;
 import lingcat.protocol.Package;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -284,5 +288,80 @@ public final class UserApi {
                                       String changeToken, String newPassword)
             throws InterruptedException, ExecutionException, TimeoutException {
         changePassword(client, accessToken, changeToken, newPassword, DEFAULT_TIMEOUT_MS);
+    }
+
+    /**
+     * 设置用户备注
+     */
+    public static void setUserRemark(LingCatClient client,
+                                     String accessToken,
+                                     String targetUserId,
+                                     String remark,
+                                     long timeoutMs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        lingcat.methods.Methods.Set_User_Remark_Request req = lingcat.methods.Methods.Set_User_Remark_Request.newBuilder()
+                .setAccessToken(accessToken)
+                .setTargetUserId(targetUserId)
+                .setRemark(remark)
+                .build();
+
+        byte[] data = invokeData(client, Methods.Set_User_Remark_Request,
+                req.toByteArray(), timeoutMs);
+
+        DecodeOrThrow.decode(lingcat.methods.Methods.Set_User_Remark_Response.parser(), data);
+    }
+
+    public static void setUserRemark(LingCatClient client, String accessToken,
+                                     String targetUserId, String remark)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        setUserRemark(client, accessToken, targetUserId, remark, DEFAULT_TIMEOUT_MS);
+    }
+
+    /**
+     * 获取我的所有用户备注
+     */
+    public static List<Classes.IUserRemark> getMyUserRemarks(LingCatClient client,
+                                                             String accessToken,
+                                                             long timeoutMs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        lingcat.methods.Methods.Get_My_User_Remarks_Request req = lingcat.methods.Methods.Get_My_User_Remarks_Request.newBuilder()
+                .setAccessToken(accessToken)
+                .build();
+
+        byte[] data = invokeData(client, Methods.Get_My_User_Remarks_Request,
+                req.toByteArray(), timeoutMs);
+
+        return DecodeOrThrow.decode(lingcat.methods.Methods.Get_My_User_Remarks_Response.parser(), data)
+                .getRemarksList();
+    }
+
+    public static List<Classes.IUserRemark> getMyUserRemarks(LingCatClient client, String accessToken)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        return getMyUserRemarks(client, accessToken, DEFAULT_TIMEOUT_MS);
+    }
+
+    /**
+     * 批量查询用户在线状态
+     */
+    public static Map<String, Boolean> getOnlineStatus(LingCatClient client,
+                                                       String accessToken,
+                                                       List<String> userIds,
+                                                       long timeoutMs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        lingcat.methods.Methods.Get_Online_Status_Request req = lingcat.methods.Methods.Get_Online_Status_Request.newBuilder()
+                .setAccessToken(accessToken)
+                .addAllUserIds(userIds)
+                .build();
+
+        byte[] data = invokeData(client, Methods.Get_Online_Status_Request,
+                req.toByteArray(), timeoutMs);
+
+        lingcat.methods.Methods.Get_Online_Status_Response re = DecodeOrThrow.decode(lingcat.methods.Methods.Get_Online_Status_Response.parser(), data);
+
+        Map<String, Boolean> result = new HashMap<>();
+        for (Classes.IUserOnlineStatus status : re.getStatusesList()) {
+            result.put(status.getUserId(), status.getOnline());
+        }
+        return result;
     }
 }

@@ -72,6 +72,7 @@ public class Methods {
     public static final int Change_Password_Response = 0x70;
     public static final int Edit_Chat_Message_Request = 0x71;
     public static final int Edit_Chat_Message_Response = 0x72;
+
     public static final int Start_Meeting_Request = 0x74;
     public static final int Start_Meeting_Response = 0x75;
     public static final int Get_Meeting_Token_Request = 0x76;
@@ -106,6 +107,15 @@ public class Methods {
     public static final int Get_E2E_Public_Keys_Response = 0x9b;
     public static final int Get_All_My_E2E_Keys_Request = 0x9c;
     public static final int Get_All_My_E2E_Keys_Response = 0x9d;
+
+    // ★ 新增：在线状态
+    public static final int Get_Online_Status_Request = 0x9e;
+    public static final int Get_Online_Status_Response = 0x9f;
+
+    // ★ 新增：修改会议标题
+    public static final int Update_Meeting_Title_Request = 0xa0;
+    public static final int Update_Meeting_Title_Response = 0xa1;
+    public static final int Meeting_Title_Changed_Event = 0xa2;
 
     // 事件
     public static final int Receive_Chat_Message_Event = 0x31;
@@ -205,15 +215,12 @@ public class Methods {
             case Get_OAuth_Bindings_Response: return "Get_OAuth_Bindings_Response";
             case Unbind_OAuth_Request: return "Unbind_OAuth_Request";
             case Unbind_OAuth_Response: return "Unbind_OAuth_Response";
-
             case Get_Meeting_Participants_Request: return "Get_Meeting_Participants_Request";
             case Get_Meeting_Participants_Response: return "Get_Meeting_Participants_Response";
-
             case Set_User_Remark_Request: return "Set_User_Remark_Request";
             case Set_User_Remark_Response: return "Set_User_Remark_Response";
             case Get_My_User_Remarks_Request: return "Get_My_User_Remarks_Request";
             case Get_My_User_Remarks_Response: return "Get_My_User_Remarks_Response";
-
             case Upload_E2E_Key_Request: return "Upload_E2E_Key_Request";
             case Upload_E2E_Key_Response: return "Upload_E2E_Key_Response";
             case Get_My_E2E_Key_Request: return "Get_My_E2E_Key_Request";
@@ -222,6 +229,13 @@ public class Methods {
             case Get_E2E_Public_Keys_Response: return "Get_E2E_Public_Keys_Response";
             case Get_All_My_E2E_Keys_Request: return "Get_All_My_E2E_Keys_Request";
             case Get_All_My_E2E_Keys_Response: return "Get_All_My_E2E_Keys_Response";
+
+            // ★ 补充刚刚缺失的几个 case
+            case Get_Online_Status_Request: return "Get_Online_Status_Request";
+            case Get_Online_Status_Response: return "Get_Online_Status_Response";
+            case Update_Meeting_Title_Request: return "Update_Meeting_Title_Request";
+            case Update_Meeting_Title_Response: return "Update_Meeting_Title_Response";
+            case Meeting_Title_Changed_Event: return "Meeting_Title_Changed_Event";
 
             case Receive_Chat_Message_Event: return "Receive_Chat_Message_Event";
             case Update_My_Chats_Event: return "Update_My_Chats_Event";
