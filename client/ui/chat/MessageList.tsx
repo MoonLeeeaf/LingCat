@@ -24,7 +24,7 @@ const BOTTOM_REENABLE_PX = 16
 const ListFooter = () => <div style={{ height: '12px', flexShrink: 0 }} />
 
 function shouldShowTime(msg: IMessage, prevMsg?: IMessage): boolean {
-    if (msg.system || !msg.sender_user_id) return false   // 系统消息不显示
+    // if (msg.system || !msg.sender_user_id) return false   // 系统消息不显示
     if (!prevMsg) return true                             // 第一条一定显示
     const d = new Date(Number(msg.time))
     const ld = new Date(Number(prevMsg.time))
