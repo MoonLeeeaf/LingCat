@@ -135,15 +135,12 @@ class ChatViewModel : ViewModel() {
 
     // 在 initChat 中也要确保调用了初始化拉取逻辑：
     fun initChat(chatId: String, initialTitle: String? = null) {
-        // ★ 核心修复 1：把防抖删掉，每次进来都重新初始化
         currentChatId = chatId
 
-        // 1. 如果有传入的初始标题，先亮出来
         if (!initialTitle.isNullOrEmpty()) {
             _uiState.value = _uiState.value.copy(chatTitle = initialTitle)
         }
 
-        // 2. 收集全局消息流（如果之前已经收集过，这会重复收集，所以必须加个判断，保证只收集一次）
         if (receiveListener == null) {
             viewModelScope.launch {
                 LingCatClientManager.globalEvents.collect { pkg ->
@@ -162,13 +159,14 @@ class ChatViewModel : ViewModel() {
             receiveListener = LingCatClient.OnReceiveListener { /* 这是个假对象，只为了标记收集过了 */ }
         }
 
-        // 3. 清理之前的脏数据
         _uiState.value = _uiState.value.copy(messages = emptyList(), isLoading = true)
 
-        // 4. 重新拉取最新的网络消息
-        loadHistoryMessages(chatId)
+        // ★ 核心修复 2：每次进聊天室，强制刷新 E2E 状态
+        viewModelScope.launch {
+            E2EStateManager.loadKeyState()
+        }
 
-        // 5. 拉取聊天信息
+        loadHistoryMessages(chatId)
         fetchChatInfo(chatId)
     }
 

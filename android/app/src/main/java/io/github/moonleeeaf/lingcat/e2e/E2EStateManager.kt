@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -125,6 +126,13 @@ object E2EStateManager {
      * 初始化拉取自身状态
      */
     suspend fun loadKeyState() = withContext(Dispatchers.IO) {
+        // ★ 核心修复 1：最多等 5 秒，直到 Client 握手完成
+        var waitTime = 0
+        while (LingCatClientManager.currentClient?.isReady() != true && waitTime < 50) {
+            delay(100)
+            waitTime++
+        }
+
         val client = LingCatClientManager.currentClient ?: return@withContext
         val token = LingCatClientManager.currentToken ?: return@withContext
 
@@ -134,10 +142,10 @@ object E2EStateManager {
                 myPublicKey = bundle.publicKey
                 myKeyVersion = bundle.keyVersion
 
-                // 拉取成功后，尝试从本地加载，免去重新输入密码
+                // 尝试本地免密解锁
                 if (loadLocalKeys()) {
                     _status.value = Status.UNLOCKED
-                    Log.d(TAG, "免密解锁成功，已从本地加载私钥")
+                    Log.d(TAG, "loadKeyState: 免密解锁成功")
                 } else {
                     _status.value = Status.LOCKED
                 }
