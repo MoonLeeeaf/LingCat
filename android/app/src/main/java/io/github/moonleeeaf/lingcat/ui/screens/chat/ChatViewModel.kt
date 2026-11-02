@@ -304,44 +304,69 @@ class ChatViewModel : ViewModel() {
 
     // ★ 改造：加载历史消息
     fun loadHistoryMessages(chatId: String) {
-        _uiState.value = _uiState.value.copy(isLoading = true, errorMsg = null, messages = emptyList())
+        // 1. 一进来，先置为加载中
+        _uiState.value = _uiState.value.copy(isLoading = true, errorMsg = null)
 
         viewModelScope.launch {
+            // ★ 核心改动 1：不管有没有网，先死磕本地数据库，给用户兜底
+            val localEntities = withContext(Dispatchers.IO) {
+                messageDao.getLatestMessages(chatId, 50)
+            }
+            if (localEntities.isNotEmpty()) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false, // 只要本地有，立刻关掉全屏转圈
+                    messages = localEntities.map { it.toIMessage() }
+                )
+            }
+
+            // 2. 如果网络环境允许，再去拉网络数据
             try {
-                val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                val client = LingCatClientManager.currentClient
+                val token = LingCatClientManager.currentToken
 
-                // ★ 1. 先查本地，用作秒开占位
-                val localEntities = withContext(Dispatchers.IO) {
-                    messageDao.getLatestMessages(chatId, 50)
-                }
-                if (localEntities.isNotEmpty()) {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        messages = localEntities.map { it.toIMessage() }
-                    )
+                // 如果客户端没连上或者 token 为空，说明断网，直接返回，保留本地数据
+                if (client == null || token == null || !client.isReady()) {
+                    if (localEntities.isEmpty()) {
+                        _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "网络断开，无本地记录")
+                    }
+                    return@launch
                 }
 
-                // ★ 2. 网络拉取真实最新数据
+                // 3. 发起网络请求
                 val remoteHistory = withContext(Dispatchers.IO) {
                     ChatApi.getChatMessages(client, token, chatId, null, null, 50)
                 }
-                val reversedRemote = remoteHistory.reversed() // 降序，index 0 是最新的
+                val reversedRemote = remoteHistory.reversed()
 
-                // ★ 3. 存入数据库
-                withContext(Dispatchers.IO) {
-                    messageDao.insertMessages(reversedRemote.map { MessageEntity.from(it) })
+                if (reversedRemote.isNotEmpty()) {
+                    // 存入数据库
+                    withContext(Dispatchers.IO) {
+                        messageDao.insertMessages(reversedRemote.map { MessageEntity.from(it) })
+                    }
+
+                    // ★ 核心改动 2：网络数据安全合并
+                    // 这里只合并最新的 50 条，即使本地有陈旧的历史碎片，也不会造成中间断层
+                    // 因为万一中间有断层，用户往上滑时，loadMoreMessages 会检测到并去请求网络。
+                    val combined = (reversedRemote + _uiState.value.messages)
+                        .distinctBy { it.id }
+                        .sortedWith(compareByDescending<IMessage> { it.time }.thenByDescending { it.id })
+
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        messages = combined,
+                        errorMsg = null
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
 
-                // ★ 4. 核心修复：拿网络数据【完全覆盖】内存！不要做任何合并！
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    messages = reversedRemote
-                )
             } catch (e: Exception) {
-                Log.e(TAG, "load history failed", e)
+                Log.e(TAG, "load remote history failed", e)
+                // ★ 核心改动 3：网络炸了，如果本地有数据，千万别弹“加载失败”
                 if (_uiState.value.messages.isEmpty()) {
                     _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "加载失败")
+                } else {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
         }

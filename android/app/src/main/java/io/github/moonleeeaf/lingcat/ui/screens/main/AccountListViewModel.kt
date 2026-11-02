@@ -58,6 +58,7 @@ class AccountListViewModel : ViewModel() {
         viewModelScope.launch {
             val result = LingCatClientManager.switchAccount(target.account)
             if (result.isSuccess) {
+                AuthStorage.setActiveAccount(LingCatClientManager.appContext, target.account)
                 _uiState.value = _uiState.value.copy(isLoading = false)
                 // 成功后清空栈，回到主页
                 onSwitchSuccess()

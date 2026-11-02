@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
 import lingcat.client_protocol.FileApi
 import lingcat.client_protocol.LingCatClient
@@ -60,8 +62,6 @@ object LingCatClientManager {
     private val _globalEvents = MutableSharedFlow<Package>(extraBufferCapacity = 100)
     val globalEvents: SharedFlow<Package> = _globalEvents.asSharedFlow()
 
-    private var isAuthorized = false
-
     fun init(context: Context) {
         appContext = context.applicationContext
     }
@@ -70,23 +70,36 @@ object LingCatClientManager {
         return ServerStorage.getAll(appContext)
     }
 
+    private var isAuthorized = false
+    private val authMutex = Mutex() // ★ 新增防并发锁
+
     suspend fun authorize(client: LingCatClient, token: String) = withContext(Dispatchers.IO) {
-        if (isAuthorized && client == _currentClient) return@withContext
+        // ★ 核心修复：锁住，保证同一时间只有一个授权在执行
+        authMutex.withLock {
+            if (isAuthorized && client == _currentClient) return@withContext
 
-        UserApi.authorize(client, token, UUID.randomUUID().toString())
-        isAuthorized = true
+            try {
+                // 1. 主 WS 授权
+                UserApi.authorize(client, token, UUID.randomUUID().toString())
+                isAuthorized = true
 
-        try {
-            val newToken = FileApi.requestAccessUploadFileToken(client, token, null, 30_000L)
-            _fileAccessToken.value = newToken
-        } catch (e: Exception) {
-            _fileAccessToken.value = token
+                // 2. 同步等待首次获取 fileAccessToken
+                try {
+                    val newToken = FileApi.requestAccessUploadFileToken(client, token, null, 30_000L)
+                    _fileAccessToken.value = newToken
+                } catch (e: Exception) {
+                    _fileAccessToken.value = token
+                }
+
+                // 3. 拉取备注
+                RemarksCache.fetchFromServer()
+
+                // 4. 开启后台定时任务
+                startFileTokenRefresh(client, token)
+            } catch (e: Exception) {
+                Log.e(TAG, "Authorize failed", e)
+            }
         }
-
-        // ★ 登录成功/重连成功后，拉取备注
-        RemarksCache.fetchFromServer()
-
-        startFileTokenRefresh(client, token)
     }
 
     private fun startFileTokenRefresh(client: LingCatClient, token: String) {

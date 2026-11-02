@@ -4,7 +4,6 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 
-// 记录账号信息的实体
 data class AccountInfo(
     val username: String,
     val token: String,
@@ -34,6 +33,7 @@ data class AccountInfo(
 object AuthStorage {
     private const val PREFS_NAME = "lingcat_auth"
     private const val KEY_ACCOUNTS = "saved_accounts"
+    private const val KEY_ACTIVE_ACCOUNT = "active_account" // ★ 新增：记录当前活跃账号
 
     private fun getSp(context: Context) = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -56,7 +56,7 @@ object AuthStorage {
         return getAllAccounts(context).filter { it.serverWsUrl == wsUrl }
     }
 
-    /** 保存或更新账号（去重） */
+    /** 保存或更新账号（去重），并将它设为活跃账号 */
     fun saveAccount(context: Context, account: AccountInfo) {
         val list = getAllAccounts(context).toMutableList()
         // 移除同服务器下的同名账号，更新为最新的 Token
@@ -65,13 +65,33 @@ object AuthStorage {
 
         val array = JSONArray()
         list.forEach { array.put(it.toJson()) }
-        getSp(context).edit().putString(KEY_ACCOUNTS, array.toString()).apply()
+
+        // ★ 记录当前活跃账号的唯一键 (serverWsUrl + "_" + username)
+        val activeKey = "${account.serverWsUrl}_${account.username}"
+        getSp(context).edit()
+            .putString(KEY_ACCOUNTS, array.toString())
+            .putString(KEY_ACTIVE_ACCOUNT, activeKey)
+            .apply()
     }
 
-    /** 获取最近一次登录的账号（用于快速恢复） */
+    /** ★ 切换账号时，显式标记谁是活跃账号 */
+    fun setActiveAccount(context: Context, account: AccountInfo) {
+        val activeKey = "${account.serverWsUrl}_${account.username}"
+        getSp(context).edit().putString(KEY_ACTIVE_ACCOUNT, activeKey).apply()
+    }
+
+    /** 获取最近一次真正登录/切换的账号 */
     fun getLastAccount(context: Context): AccountInfo? {
-        val list = getAllAccounts(context)
-        return if (list.isNotEmpty()) list.last() else null
+        val sp = getSp(context)
+        val activeKey = sp.getString(KEY_ACTIVE_ACCOUNT, null)
+        val all = getAllAccounts(context)
+
+        if (activeKey != null) {
+            // 根据唯一标识去找
+            return all.find { "${it.serverWsUrl}_${it.username}" == activeKey }
+        }
+        // 如果以前的老版本没存 activeKey，那只能兜底取最后一个
+        return all.lastOrNull()
     }
 
     fun clear(context: Context) {

@@ -61,15 +61,16 @@ object ProfileCache {
 
                     // ★ 核心体验优化：查到本地后，后台静默去刷新一次网络，保证资料是最新的
                     kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
+                        val client = LingCatClientManager.currentClient
+                        val token = LingCatClientManager.currentToken
+                        // 如果没连上，直接返回，别报错
+                        if (client == null || token == null || !client.isReady()) return@launch
+
                         try {
-                            val client = LingCatClientManager.currentClient
-                            val token = LingCatClientManager.currentToken
-                            if (client != null && token != null) {
-                                val freshUser = UserApi.queryUserInfo(client, token, userId)
-                                if (freshUser != null) {
-                                    userCache[userId] = freshUser
-                                    userDao.insertUser(UserEntity.from(freshUser))
-                                }
+                            val freshUser = UserApi.queryUserInfo(client, token, userId)
+                            if (freshUser != null) {
+                                userCache[userId] = freshUser
+                                userDao.insertUser(UserEntity.from(freshUser))
                             }
                         } catch (e: Exception) {
                             Log.w(TAG, "background refresh user failed", e)
