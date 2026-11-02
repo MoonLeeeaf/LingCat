@@ -57,17 +57,24 @@ fun SplashScreen(
             }
         }
 
-        // ★ 核心修复 2：如果拉取成功，且公钥不匹配，拦截！
-        if (fetchedConfig != null && fetchedConfig.publicKeyHex != savedServer.publicKeyHex) {
-            originalServer = savedServer
-            tofuConflictConfig = fetchedConfig
-            isLoading = false
-            return@LaunchedEffect
+        var finalServerToUse = savedServer
+
+        // ★ 核心修复：如果拉取成功且公钥没变，顺手覆盖一下本地配置，更新 OAuth 列表等配置
+        if (fetchedConfig != null) {
+            if (fetchedConfig.publicKeyHex != savedServer.publicKeyHex) {
+                // TOFU 冲突逻辑...
+                originalServer = savedServer
+                tofuConflictConfig = fetchedConfig
+                isLoading = false
+                return@LaunchedEffect
+            } else {
+                // 公钥匹配，直接更新本地缓存并替换当前使用的 Server
+                ServerStorage.save(LingCatClientManager.appContext, fetchedConfig)
+                finalServerToUse = fetchedConfig
+            }
         }
 
-        // 如果拉取成功且公钥匹配，或者拉取失败（断网），都直接放行
-        // （底层握手依然会二次校验签名，所以断网时放行是安全的）
-        LingCatClientManager.currentServer = savedServer
+        LingCatClientManager.currentServer = finalServerToUse
         LingCatClientManager.setAuthSession(lastAccount.token, lastAccount.userId)
         LingCatClientManager.startKeepAliveService()
 

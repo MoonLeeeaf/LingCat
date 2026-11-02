@@ -90,13 +90,19 @@ object ServerConfigFetcher {
             throw Exception("配置文件缺少 public_key，返回内容: $body")
         }
 
+        // ★ 核心修复：解析服务端的 OAuth 配置
+        // 之前贴的服务端返回里字段叫 oauth2，如果是数组会被 optString 转为字符串
+        // 如果服务端下发的是 JSONArray，可以用 json.optJSONArray("oauth2")?.toString() ?: "[]"
+        val oauthJson = json.optJSONArray("oauth2")?.toString() ?: "[]"
+
         // 4. 返回构建好的实体
         ServerConfig(
             rawUrl = rawInput,
             httpUrl = httpUrl,
             wsUrl = wsUrl,
             publicKeyHex = publicKeyHex,
-            siteTitle = siteTitle
+            siteTitle = siteTitle,
+            oauth = oauthJson // ★ 补上这一行
         )
     }
 }

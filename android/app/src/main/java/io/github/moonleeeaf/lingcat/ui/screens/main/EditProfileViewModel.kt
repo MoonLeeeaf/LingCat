@@ -53,9 +53,18 @@ class EditProfileViewModel : ViewModel() {
     }
 
     private fun parseOAuthProviders() {
-        val json = server?.oauthProvidersJson ?: return
+        val json = server?.oauth
+        android.util.Log.d("OAuthDebug", "获取到的 oauth 字符串: $json")
+
+        if (json == null) {
+            android.util.Log.e("OAuthDebug", "server 为 null，无法解析 OAuth")
+            return
+        }
+
         try {
             val arr = JSONArray(json)
+            android.util.Log.d("OAuthDebug", "解析到的 OAuth 数组长度: ${arr.length()}")
+
             val list = mutableListOf<OAuthProvider>()
             for (i in 0 until arr.length()) {
                 val p = arr.getJSONObject(i)
@@ -65,14 +74,9 @@ class EditProfileViewModel : ViewModel() {
                     list.add(OAuthProvider(id, displayName))
                 }
             }
-            // ype mismatch.
-            //Required:
-            //List<String>
-            //Found:
-            //MutableList<OAuthProvider>
             _uiState.value = _uiState.value.copy(oauthProviders = list)
         } catch (e: Exception) {
-            Log.w(TAG, "parse oauth failed", e)
+            android.util.Log.e("OAuthDebug", "解析 OAuth 失败", e)
         }
     }
 

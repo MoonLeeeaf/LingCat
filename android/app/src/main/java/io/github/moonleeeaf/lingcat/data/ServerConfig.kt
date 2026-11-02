@@ -9,7 +9,7 @@ data class ServerConfig(
     val publicKeyHex: String,
     val siteTitle: String = "灵猫",
     // ★ 新增：服务端下发的 OAuth 提供者列表 (JSON 字符串)
-    val oauthProvidersJson: String = "[]"
+    val oauth: String = "[]"
 ) {
     fun toJsonString(): String {
         return JSONObject().apply {
@@ -18,7 +18,7 @@ data class ServerConfig(
             put("wsUrl", wsUrl)
             put("publicKeyHex", publicKeyHex)
             put("siteTitle", siteTitle)
-            put("oauthProvidersJson", oauthProvidersJson) // ★
+            put("oauth", oauth) // ★
         }.toString()
     }
 
@@ -32,7 +32,7 @@ data class ServerConfig(
                     wsUrl = obj.getString("wsUrl"),
                     publicKeyHex = obj.getString("publicKeyHex"),
                     siteTitle = obj.optString("siteTitle", "灵猫"),
-                    oauthProvidersJson = obj.optString("oauthProvidersJson", "[]") // ★
+                    oauth = obj.optString("oauth", "[]") // ★
                 )
             } catch (e: Exception) {
                 null
