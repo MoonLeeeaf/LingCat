@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
@@ -42,7 +43,8 @@ fun ChatListScreen(
     onManageAccounts: () -> Unit,
     onLogout: () -> Unit,
     onChatClick: (String) -> Unit,
-    viewModel: ChatListViewModel = viewModel()
+    viewModel: ChatListViewModel = viewModel(),
+    onEditProfile: () -> Unit,
 ) {
     val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
 
@@ -94,6 +96,14 @@ fun ChatListScreen(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false }
                         ) {
+                            DropdownMenuItem(
+                                text = { Text("编辑资料") },
+                                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+                                onClick = {
+                                    menuExpanded = false
+                                    onEditProfile() // ★ 传入回调
+                                }
+                            )
                             DropdownMenuItem(
                                 text = { Text("账号管理") },
                                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },

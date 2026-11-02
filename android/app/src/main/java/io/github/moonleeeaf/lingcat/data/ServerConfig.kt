@@ -3,18 +3,14 @@ package io.github.moonleeeaf.lingcat.data
 import org.json.JSONObject
 
 data class ServerConfig(
-    // 用户最初输入的地址
     val rawUrl: String,
-    // 实际使用的 HTTP 地址
     val httpUrl: String,
-    // 实际使用的 WS 地址
     val wsUrl: String,
-    // 服务器 Ed25519 公钥的 Hex 字符串
     val publicKeyHex: String,
-    // 服务器名称（来自 config.json 的 site_title 等）
-    val siteTitle: String = "灵猫"
+    val siteTitle: String = "灵猫",
+    // ★ 新增：服务端下发的 OAuth 提供者列表 (JSON 字符串)
+    val oauthProvidersJson: String = "[]"
 ) {
-    // 将对象转为 JSON 字符串存入本地
     fun toJsonString(): String {
         return JSONObject().apply {
             put("rawUrl", rawUrl)
@@ -22,11 +18,11 @@ data class ServerConfig(
             put("wsUrl", wsUrl)
             put("publicKeyHex", publicKeyHex)
             put("siteTitle", siteTitle)
+            put("oauthProvidersJson", oauthProvidersJson) // ★
         }.toString()
     }
 
     companion object {
-        // 从本地读取的 JSON 转回对象
         fun fromJson(jsonStr: String): ServerConfig? {
             return try {
                 val obj = JSONObject(jsonStr)
@@ -35,7 +31,8 @@ data class ServerConfig(
                     httpUrl = obj.getString("httpUrl"),
                     wsUrl = obj.getString("wsUrl"),
                     publicKeyHex = obj.getString("publicKeyHex"),
-                    siteTitle = obj.optString("siteTitle", "LingCat")
+                    siteTitle = obj.optString("siteTitle", "灵猫"),
+                    oauthProvidersJson = obj.optString("oauthProvidersJson", "[]") // ★
                 )
             } catch (e: Exception) {
                 null

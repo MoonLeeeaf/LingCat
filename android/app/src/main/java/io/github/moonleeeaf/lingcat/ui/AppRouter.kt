@@ -15,6 +15,7 @@ import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.AccountListScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.ChatListScreen
+import io.github.moonleeeaf.lingcat.ui.screens.main.EditProfileScreen
 import io.github.moonleeeaf.lingcat.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +27,7 @@ object Routes {
     const val CHAT = "chat/{chatId}"
     const val ACCOUNT_LIST = "account_list"
     const val CHAT_MEMBERS = "chat_members/{chatId}"
+    const val EDIT_PROFILE = "edit_profile"
 }
 
 // 动画时长，保持全局一致
@@ -114,6 +116,7 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>) {
             popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) }
         ) {
             ChatListScreen(
+                onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
                 onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) },
                 onLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } },
                 onChatClick = { chatId -> navController.navigate("chat/$chatId") }
@@ -158,6 +161,12 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>) {
             val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
             ChatMembersScreen(
                 chatId = chatId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.EDIT_PROFILE) {
+            EditProfileScreen(
                 onBack = { navController.popBackStack() }
             )
         }
