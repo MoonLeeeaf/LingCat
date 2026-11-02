@@ -46,6 +46,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="lingcat" android:host="oauth" android:pathPrefix="/callback" />
+            </intent-filter>
         </activity>
 
         <service
@@ -55,24 +62,6 @@
         <receiver
             android:name=".app.ReplyReceiver"
             android:exported="false" />
-
-        <activity
-            android:name=".auth.OAuthCallbackActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="lingcat"
-                    android:host="oauth"
-                    android:pathPrefix="/callback" />
-            </intent-filter>
-        </activity>
         
     </application>
 

@@ -1,47 +1,44 @@
 package io.github.moonleeeaf.lingcat
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import io.github.moonleeeaf.lingcat.data.AccountInfo
+import io.github.moonleeeaf.lingcat.data.AuthStorage
+import io.github.moonleeeaf.lingcat.data.ServerStorage
+import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.LingCatApp
 import io.github.moonleeeaf.lingcat.ui.theme.LingCatTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import lingcat.client_protocol.OAuthApi
+import lingcat.client_protocol.UserApi
 
 class MainActivity : ComponentActivity() {
 
-    // 用于处理通知跳转
+    // 传递聊天深链
     private val deepLinkChatId = MutableSharedFlow<String>(extraBufferCapacity = 1)
-
-    // ★ 权限申请 Launcher
-    private val permissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        // 这里可以处理用户拒绝后的逻辑（比如 Toast 提示），目前先静默
-        permissions.forEach { (permission, isGranted) ->
-            if (!isGranted) {
-                // 如果用户拒绝了通知或存储权限，可以在这里做点记录
-                android.util.Log.w("Permission", "权限被拒绝: $permission")
-            }
-        }
-    }
+    // ★ 传递 OAuth 事件
+    private val oauthEvents = MutableSharedFlow<OAuthEvent>(extraBufferCapacity = 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         handleIntent(intent)
-        requestAppPermissions() // ★ 发起权限申请
 
         setContent {
             LingCatTheme {
-                LingCatApp(deepLinkChatIdFlow = deepLinkChatId)
+                LingCatApp(
+                    deepLinkChatIdFlow = deepLinkChatId,
+                    oauthEventFlow = oauthEvents // 传给 Compose
+                )
             }
         }
     }
@@ -53,6 +50,19 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        val data = intent?.data
+
+        // 1. 处理 OAuth 回调
+        if (data != null && "lingcat" == data.scheme && "oauth" == data.host) {
+            val path = data.path
+            if (path != null && path.startsWith("/callback")) {
+                processOAuthCallback(data)
+                intent.data = null // 消费掉
+                return
+            }
+        }
+
+        // 2. 处理普通路由深链 (如通知点击)
         val chatId = intent?.getStringExtra("route_chat_id")
         if (!chatId.isNullOrEmpty()) {
             deepLinkChatId.tryEmit(chatId)
@@ -60,29 +70,64 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * 动态申请权限
-     */
-    private fun requestAppPermissions() {
-        val permissionsToRequest = mutableListOf<String>()
+    // ★ 核心：处理浏览器带回来的 ticket / bound / error
+    private fun processOAuthCallback(data: Uri) {
+        val bound = data.getQueryParameter("oauth_bound")
+        val ticket = data.getQueryParameter("oauth_ticket")
+        val error = data.getQueryParameter("oauth_error")
 
-        // 1. Android 13 (API 33) 及以上需要申请通知权限
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+        if (!error.isNullOrEmpty()) {
+            if ("access_denied" == error) {
+                oauthEvents.tryEmit(OAuthEvent.Error("你取消了授权"))
+            } else {
+                oauthEvents.tryEmit(OAuthEvent.Error("授权失败: $error"))
             }
+            return
         }
 
-        // 2. Android 9 (API 28) 及以下下载图片到相册需要存储权限
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            }
+        if (!bound.isNullOrEmpty()) {
+            // 这是【绑定账号】的回调
+            oauthEvents.tryEmit(OAuthEvent.Bound(bound))
+            return
         }
 
-        // 3. 如果有需要申请的权限，就发起请求
-        if (permissionsToRequest.isNotEmpty()) {
-            permissionLauncher.launch(permissionsToRequest.toTypedArray())
+        if (!ticket.isNullOrEmpty()) {
+            // 这是【登录/注册】的回调
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val client = LingCatClientManager.currentClient ?: throw Exception("客户端未连接")
+                    val server = LingCatClientManager.currentServer ?: throw Exception("服务器未连接")
+
+                    // 1. 换取 Token
+                    val token = OAuthApi.exchangeOAuthCode(client, ticket, 15000L)
+                    // 2. 查用户信息
+                    val user = UserApi.queryMyUserInfo(client, token, 15000L)
+
+                    // 3. 存本地
+                    val acc = AccountInfo(
+                        username = user.username.ifEmpty { user.id },
+                        token = token,
+                        userId = user.id,
+                        serverWsUrl = server.wsUrl
+                    )
+                    AuthStorage.saveAccount(this@MainActivity, acc)
+                    LingCatClientManager.setAuthSession(token, user.id)
+
+                    // 4. 授权
+                    withContext(Dispatchers.IO) {
+                        try {
+                            LingCatClientManager.authorize(client, token)
+                        } catch (e: Exception) {
+                            android.util.Log.w("OAuth", "authorize failed", e)
+                        }
+                    }
+
+                    oauthEvents.tryEmit(OAuthEvent.LoginSuccess(acc))
+                } catch (e: Exception) {
+                    android.util.Log.e("OAuth", "exchange failed", e)
+                    oauthEvents.tryEmit(OAuthEvent.Error("获取用户信息失败: ${e.message}"))
+                }
+            }
         }
     }
 }

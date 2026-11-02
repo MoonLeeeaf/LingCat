@@ -2,14 +2,17 @@ package io.github.moonleeeaf.lingcat.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.github.moonleeeaf.lingcat.OAuthEvent
 import io.github.moonleeeaf.lingcat.ui.screens.auth.LoginScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
@@ -34,8 +37,10 @@ object Routes {
 private const val DURATION = 300
 
 @Composable
-fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>) {
+fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlow<OAuthEvent> ) {
     val navController = rememberNavController()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // ★ 监听通知点击事件
     LaunchedEffect(Unit) {
@@ -56,6 +61,28 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>) {
             } else {
                 // 如果用户停留在登录页、选服务器页等，暂时先不跳，或者你可以做延迟跳转处理
                 android.util.Log.w("DeepLink", "用户尚未登录，忽略此次跳转")
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        oauthEventFlow.collect { event ->
+            when (event) {
+                is OAuthEvent.Bound -> {
+                    // 资料页绑定时，弹个提示
+                    snackbarHostState.showSnackbar("已成功绑定 ${event.provider}")
+                    // 此时 EditProfileViewModel 会自己调 loadBindings() 刷新
+                }
+                is OAuthEvent.LoginSuccess -> {
+                    // OAuth 登录成功，跳到主界面
+                    snackbarHostState.showSnackbar("登录成功")
+                    navController.navigate(Routes.CHAT_LIST) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                }
+                is OAuthEvent.Error -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
             }
         }
     }
