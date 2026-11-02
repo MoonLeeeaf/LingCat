@@ -67,7 +67,7 @@ class UserProfileViewModel : ViewModel() {
      */
     fun startPrivateChat(onSuccess: (String) -> Unit) {
         val userId = currentUserId ?: return
-        if (userId == LingCatClientManager.currentUserId) return // 不能和自己私聊
+        // if (userId == LingCatClientManager.currentUserId) return // 不能和自己私聊
 
         viewModelScope.launch {
             try {

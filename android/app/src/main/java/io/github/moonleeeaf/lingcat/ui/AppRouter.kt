@@ -175,7 +175,18 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
             popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(DURATION)) + fadeOut(tween(DURATION)) }
         ) { backStackEntry ->
             val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
-            ChatScreen(chatId = chatId, onBack = { navController.popBackStack() }, onNavigateToMembers = { chatId -> navController.navigate("chat_members/$chatId") })
+            ChatScreen(
+                chatId = chatId,
+                onBack = { navController.popBackStack() },
+                onNavigateToMembers = { chatId -> navController.navigate("chat_members/$chatId") },
+                onNavigateToChat = { newChatId ->
+                    // ★ 核心修复：跳转到新生成的私聊 ID
+                    navController.navigate("chat/$newChatId") {
+                        // 可选：如果你希望从当前聊天直接替换到新聊天，而不是叠加在返回栈里，可以加上：
+                        popUpTo(Routes.CHAT) { inclusive = true }
+                    }
+                },
+            )
         }
 
         composable(
@@ -188,7 +199,14 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
             val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
             ChatMembersScreen(
                 chatId = chatId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onNavigateToChatFromMember = { newChatId ->
+                    // ★ 核心修复：跳转到新生成的私聊 ID
+                    navController.navigate("chat/$newChatId") {
+                        // 可选：如果你希望从当前聊天直接替换到新聊天，而不是叠加在返回栈里，可以加上：
+                        popUpTo(Routes.CHAT) { inclusive = true }
+                    }
+                },
             )
         }
 

@@ -108,7 +108,8 @@ fun ChatScreen(
     chatId: String,
     onBack: () -> Unit,
     onNavigateToMembers: (String) -> Unit,
-    viewModel: ChatViewModel = viewModel()
+    viewModel: ChatViewModel = viewModel(),
+    onNavigateToChat: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -436,7 +437,8 @@ fun ChatScreen(
                 val mentionSyntax = "[@$name](user:${showUserProfileId}) "
                 viewModel.onInputChange(uiState.inputText + mentionSyntax)
                 focusRequester.requestFocus()
-            }
+            },
+            onNavigateToChat = onNavigateToChat,
         )
     }
 

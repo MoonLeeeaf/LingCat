@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -125,6 +126,17 @@ fun UserProfileDialog(
                     onClick = { clipboardManager.setText(AnnotatedString(user.id)) }
                 )
 
+                if (user.hasDescription() && user.description.isNotEmpty()) {
+                    ChatInfoItem(
+                        icon = Icons.Default.Description,
+                        title = user.description,
+                        subtitle = "简介",
+                        onClick = {
+                            clipboardManager.setText(AnnotatedString(user.description))
+                        }
+                    )
+                }
+
                 // 修改备注 (只能给别人改)
                 if (!isMyself) {
                     ProfileActionItem(
@@ -136,19 +148,17 @@ fun UserProfileDialog(
                 }
 
                 // 发起私聊 (如果不在当前聊天，且不是自己)
-                if (!isMyself && chatId == null) {
-                    ProfileActionItem(
-                        icon = Icons.Default.Chat,
-                        title = "发消息",
-                        subtitle = null,
-                        onClick = {
-                            viewModel.startPrivateChat { newChatId ->
-                                onDismiss()
-                                onNavigateToChat(newChatId)
-                            }
+                ProfileActionItem(
+                    icon = Icons.AutoMirrored.Filled.Chat,
+                    title = "打开对话",
+                    subtitle = null,
+                    onClick = {
+                        viewModel.startPrivateChat { newChatId ->
+                            onDismiss()
+                            onNavigateToChat(newChatId)
                         }
-                    )
-                }
+                    }
+                )
 
                 // 提及 (如果是从聊天界面打开，且不是自己)
                 if (!isMyself && chatId != null) {
