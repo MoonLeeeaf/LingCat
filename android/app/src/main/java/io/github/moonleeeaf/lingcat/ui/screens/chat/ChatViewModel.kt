@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lingcat.classes.Classes
 import lingcat.classes.Classes.IMessage
 import lingcat.client_protocol.ChatApi
 import lingcat.client_protocol.FileApi
@@ -26,7 +25,6 @@ import lingcat.client_protocol.LingCatClient
 import lingcat.client_protocol.MessageParser
 import lingcat.methods.Methods.Receive_Chat_Message_Event
 import lingcat.protocol.Methods
-import lingcat.protocol.Package
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -48,6 +46,8 @@ data class ChatUiState(
     val encryptThisMessage: Boolean = true,
 
     val editingMessage: IMessage? = null,
+
+    val chatMembers: List<lingcat.classes.Classes.IUser> = emptyList(),
 )
 
 class ChatViewModel : ViewModel() {
@@ -102,6 +102,30 @@ class ChatViewModel : ViewModel() {
                             Log.e(TAG, "parse edit event failed", e)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private var isLoadingMembers = false
+
+    fun fetchChatMembersIfNeeded() {
+        if (_uiState.value.isGroup && _uiState.value.chatMembers.isEmpty() && !isLoadingMembers) {
+            isLoadingMembers = true
+            viewModelScope.launch {
+                try {
+                    val client = LingCatClientManager.currentClient ?: return@launch
+                    val token = LingCatClientManager.currentToken ?: return@launch
+                    val chatId = currentChatId ?: return@launch
+
+                    val members = withContext(Dispatchers.IO) {
+                        ChatApi.getChatMembers(client, token, chatId)
+                    }
+                    _uiState.value = _uiState.value.copy(chatMembers = members)
+                } catch (e: Exception) {
+                    Log.e(TAG, "fetch members failed", e)
+                } finally {
+                    isLoadingMembers = false
                 }
             }
         }

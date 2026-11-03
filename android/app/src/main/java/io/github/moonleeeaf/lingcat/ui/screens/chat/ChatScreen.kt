@@ -1,29 +1,26 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
+import ChatInputBar
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -289,6 +285,8 @@ fun ChatScreen(
                 focusRequester = focusRequester,
                 editingMessage = uiState.editingMessage,
                 onCancelEdit = viewModel::cancelEditing,
+                chatMembers = uiState.chatMembers,
+                onRequestMembers = { viewModel.fetchChatMembersIfNeeded() },
             )
         }
     ) { padding ->
@@ -649,154 +647,6 @@ fun ChatScreen(
         imageUrl = previewImageUrl,
         onDismiss = { previewImageUrl = null }
     )
-}
-
-@Composable
-fun ChatInputBar(
-    text: String,
-    isSending: Boolean,
-    isE2EActive: Boolean,
-    encryptThisMessage: Boolean,
-    onToggleEncrypt: () -> Unit,
-    onTextChange: (String) -> Unit,
-    onSend: () -> Unit,
-    onAttachClick: () -> Unit,
-    focusRequester: FocusRequester,
-    editingMessage: IMessage?,
-    onCancelEdit: () -> Unit,
-) {
-    Surface(
-        tonalElevation = 2.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column { // ★ 外层套个 Column
-            // ★ 编辑状态条
-            if (editingMessage != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = "正在编辑消息...",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.weight(1f)
-                    )
-                    IconButton(onClick = onCancelEdit, modifier = Modifier.size(24.dp)) {
-                        Icon(
-                            Icons.Default.Close,
-                            contentDescription = "取消编辑",
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .navigationBarsPadding()
-                    .imePadding(),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Surface(
-                    shape = RoundedCornerShape(24.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    ) {
-                        IconButton(
-                            onClick = onAttachClick,
-                            modifier = Modifier.size(40.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AttachFile,
-                                contentDescription = "附件",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
-                        BasicTextField(
-                            value = text,
-                            onValueChange = onTextChange,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(vertical = 10.dp)
-                                .then(
-                                    if (focusRequester != null) Modifier.focusRequester(
-                                        focusRequester
-                                    ) else Modifier
-                                ),
-                            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurface
-                            ),
-                            maxLines = 4,
-                            decorationBox = { innerTextField ->
-                                Box {
-                                    if (text.isEmpty()) {
-                                        Text(
-                                            text = "输入...",
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            style = MaterialTheme.typography.bodyLarge
-                                        )
-                                    }
-                                    innerTextField()
-                                }
-                            }
-                        )
-
-                        if (isE2EActive) {
-                            IconButton(onClick = onToggleEncrypt) {
-                                Icon(
-                                    imageVector = if (encryptThisMessage) Icons.Default.Lock else Icons.Default.LockOpen,
-                                    contentDescription = "切换加密",
-                                    tint = if (encryptThisMessage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-
-                        FilledIconButton(
-                            onClick = onSend,
-                            enabled = !isSending && text.isNotBlank(),
-                            modifier = Modifier
-                                .padding(end = 4.dp)
-                                .size(36.dp),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
-                        ) {
-                            if (isSending) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(18.dp),
-                                    strokeWidth = 2.dp,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            } else {
-                                Icon(
-                                    // ★ 编辑时显示对勾，发送时显示纸飞机
-                                    imageVector = if (editingMessage != null) Icons.Default.Check else Icons.AutoMirrored.Filled.Send,
-                                    contentDescription = if (editingMessage != null) "保存编辑" else "发送",
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
