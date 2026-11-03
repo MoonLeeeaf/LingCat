@@ -71,6 +71,8 @@ class ChatViewModel : ViewModel() {
 
     private var encryptStateBeforeEdit = false
 
+    private val tempRawTextMap = mutableMapOf<Int, String>()
+
     init {
         viewModelScope.launch {
             E2EStateManager.status.collect { status ->
@@ -851,6 +853,9 @@ class ChatViewModel : ViewModel() {
             isSending = true
         )
 
+        // ★ 核心修复：记录首次发送时的原始完整文本
+        tempRawTextMap[tempId] = rawText
+
         // 3. 执行真正的发送
         performSend(chatId, rawText, tempId)
     }
@@ -860,8 +865,10 @@ class ChatViewModel : ViewModel() {
         val msg = _uiState.value.messages.find { it.id == tempId } ?: return
         if (_uiState.value.sendStatusMap[tempId] != SendStatus.FAILED) return
 
-        // 还原原始文本（使用 entitiesToRawRichText 兜底）
-        val rawText = MessageParser.entitiesToRawRichText(msg.text, msg.entitiesList)
+        // ★ 核心修复：优先从 Map 中恢复完整的原始文本（比如带有 ![]() 的附件占位）
+        // 如果 Map 里没有（极少数情况），再用旧方法兜底
+        val rawText = tempRawTextMap[tempId]
+            ?: MessageParser.entitiesToRawRichText(msg.text, msg.entitiesList)
 
         val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
         newStatusMap[tempId] = SendStatus.SENDING
@@ -955,6 +962,8 @@ class ChatViewModel : ViewModel() {
                         isSending = false
                     )
                     cachedFiles.clear()
+                    // ★ 核心修复：发送成功后，清理掉原始文本记录
+                    tempRawTextMap.remove(tempId)
                 }
 
             } catch (e: Exception) {
