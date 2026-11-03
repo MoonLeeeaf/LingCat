@@ -320,6 +320,8 @@ fun ChatScreen(
                                 !prevMsg.system &&
                                 prevMsg.senderUserId == msg.senderUserId
 
+                        val sendStatus = uiState.sendStatusMap[msg.id]
+
                         Column {
                             // 时间条
                             if (timeText != null) {
@@ -385,7 +387,9 @@ fun ChatScreen(
                                         // 点击用户，打开资料面板
                                         showUserProfileId = mentionId
                                     }
-                                }
+                                },
+                                sendStatus = sendStatus, // ★ 传入
+                                onRetrySend = { viewModel.resendMessage(msg.id) },
                             )
                         }
                     }
@@ -662,6 +666,8 @@ fun MessageBubble(
     onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
     findMessage: suspend (Int) -> IMessage? = { null },
     hideSender: Boolean = false,
+    sendStatus: SendStatus? = null, // ★ 新增
+    onRetrySend: () -> Unit = {},
 ) {
     val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
     if (message.system) {
@@ -724,6 +730,30 @@ fun MessageBubble(
                     onLongClick = { onAvatarLongClick(message.senderUserId) }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+            }
+        } else {
+            if (sendStatus != null) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = 8.dp)
+                ) {
+                    when (sendStatus) {
+                        SendStatus.SENDING -> CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        SendStatus.FAILED -> Icon(
+                            imageVector = Icons.Default.Error,
+                            contentDescription = "发送失败，点击重试",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { onRetrySend() }
+                        )
+                    }
+                }
             }
         }
 

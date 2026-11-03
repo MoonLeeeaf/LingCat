@@ -28,6 +28,8 @@ import lingcat.protocol.Methods
 import org.json.JSONArray
 import org.json.JSONObject
 
+enum class SendStatus { SENDING, FAILED }
+
 data class ChatUiState(
     val isLoading: Boolean = true,
     val messages: List<IMessage> = emptyList(),
@@ -48,6 +50,8 @@ data class ChatUiState(
     val editingMessage: IMessage? = null,
 
     val chatMembers: List<lingcat.classes.Classes.IUser> = emptyList(),
+
+    val sendStatusMap: Map<Int, SendStatus> = emptyMap(),
 )
 
 class ChatViewModel : ViewModel() {
@@ -780,40 +784,80 @@ class ChatViewModel : ViewModel() {
         val rawText = _uiState.value.inputText.trim()
         if (rawText.isEmpty() || _uiState.value.isSending) return
 
-        val editingMsg = _uiState.value.editingMessage
-        val peerId = _uiState.value.peerUserId
-        val isE2E = _uiState.value.isE2EActive && _uiState.value.encryptThisMessage && peerId != null
+        // 1. 构建临时消息
+        val tempId = -System.currentTimeMillis().toInt() // 负数 ID
+        val tempTime = System.currentTimeMillis()
+        val parsed = MessageParser.parseMessage(rawText)
 
-        if (isE2E) {
-            if (E2EStateManager.status.value != E2EStateManager.Status.UNLOCKED) {
-                _uiState.value = _uiState.value.copy(needUnlock = true)
-                return
-            }
-            // (省略 fetchPeerKey 代码)
-        }
+        val tempMsg = IMessage.newBuilder()
+            .setId(tempId)
+            .setChatId(chatId)
+            .setSenderUserId(LingCatClientManager.currentUserId ?: "")
+            .setText(parsed.text)
+            .addAllEntities(parsed.entities ?: emptyList())
+            .setTime(tempTime)
+            .build()
 
-        _uiState.value = _uiState.value.copy(isSending = true, inputText = "")
+        // 2. 立即上屏（乐观更新）
+        val currentList = _uiState.value.messages.toMutableList()
+        currentList.add(0, tempMsg)
+        val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+        newStatusMap[tempId] = SendStatus.SENDING
 
+        _uiState.value = _uiState.value.copy(
+            messages = currentList,
+            sendStatusMap = newStatusMap,
+            inputText = "",
+            isSending = true
+        )
+
+        // 3. 执行真正的发送
+        performSend(chatId, rawText, tempId)
+    }
+
+    fun resendMessage(tempId: Int) {
+        val chatId = currentChatId ?: return
+        val msg = _uiState.value.messages.find { it.id == tempId } ?: return
+        if (_uiState.value.sendStatusMap[tempId] != SendStatus.FAILED) return
+
+        // 还原原始文本（使用 entitiesToRawRichText 兜底）
+        val rawText = MessageParser.entitiesToRawRichText(msg.text, msg.entitiesList)
+
+        val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+        newStatusMap[tempId] = SendStatus.SENDING
+        _uiState.value = _uiState.value.copy(sendStatusMap = newStatusMap, isSending = true)
+
+        performSend(chatId, rawText, tempId)
+    }
+
+    private fun performSend(chatId: String, rawText: String, tempId: Int) {
         viewModelScope.launch {
             try {
                 val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
                 val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
 
-                // ★ 核心修复 1：先处理附件上传，拿到替换为 file:hash 后的文本
-                var processedText = rawText
-                if (cachedFiles.isNotEmpty()) {
-                    processedText = uploadAndReplaceAttachments(rawText)
-                }
-
-                // ★ 然后再去解析最终的文本
-                var parsed = withContext(Dispatchers.Default) {
-                    MessageParser.parseMessage(processedText)
-                }
-
+                // 1. 解析文本
+                var parsed = withContext(Dispatchers.Default) { MessageParser.parseMessage(rawText) }
                 var finalText = parsed.text
                 var finalEntities = parsed.entities ?: emptyList()
 
-                if (isE2E && peerId != null) {
+                // 2. 处理附件
+                if (cachedFiles.isNotEmpty()) {
+                    val uploadedText = uploadAndReplaceAttachments(rawText)
+                    parsed = withContext(Dispatchers.Default) { MessageParser.parseMessage(uploadedText) }
+                    finalText = parsed.text
+                    finalEntities = parsed.entities ?: emptyList()
+                }
+
+                // 3. 处理 E2E 加密
+                val peerId = _uiState.value.peerUserId
+                val isE2E = _uiState.value.isE2EActive && _uiState.value.encryptThisMessage && peerId != null
+                if (isE2E) {
+                    if (E2EStateManager.status.value != E2EStateManager.Status.UNLOCKED) {
+                        throw Exception("端到端加密未解锁")
+                    }
+                    withContext(Dispatchers.IO) { E2EStateManager.fetchPeerKey(peerId!!, force = true) }
+
                     val payloadJson = JSONObject().apply {
                         put("text", parsed.text)
                         val arr = JSONArray()
@@ -828,7 +872,7 @@ class ChatViewModel : ViewModel() {
                         put("entities", arr)
                     }.toString()
 
-                    val encryptedData = E2EStateManager.encryptForPeer(payloadJson, peerId)
+                    val encryptedData = E2EStateManager.encryptForPeer(payloadJson, peerId!!)
                     if (encryptedData != null) {
                         finalText = "🔒"
                         finalEntities = listOf(
@@ -844,28 +888,46 @@ class ChatViewModel : ViewModel() {
                     }
                 }
 
-                if (editingMsg != null) {
-                    withContext(Dispatchers.IO) {
-                        ChatApi.editChatMessage(client, token, chatId, editingMsg.id, finalText, finalEntities)
-                    }
-                    _uiState.value = _uiState.value.copy(isSending = false, editingMessage = null)
-                } else {
-                    withContext(Dispatchers.IO) {
-                        ChatApi.sendChatMessage(client, token, chatId, finalText, finalEntities)
-                    }
-                    _uiState.value = _uiState.value.copy(isSending = false)
+                // 4. 发送
+                val newMsgId = withContext(Dispatchers.IO) {
+                    ChatApi.sendChatMessage(client, token, chatId, finalText, finalEntities)
                 }
 
-                // ★ 核心修复 2：发送成功后，一定要清空待上传的附件缓存
-                cachedFiles.clear()
+                // 5. 发送成功，替换临时消息
+                withContext(Dispatchers.Main) {
+                    val currentList = _uiState.value.messages.toMutableList()
+                    val index = currentList.indexOfFirst { it.id == tempId }
+                    if (index != -1) {
+                        val finalMsg = currentList[index].toBuilder()
+                            .setId(newMsgId)
+                            .setText(finalText) // 如果加密了，这里就会替换成 🔒
+                            .clearEntities()
+                            .addAllEntities(finalEntities)
+                            .build()
+                        currentList[index] = finalMsg
+                    }
+                    val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+                    newStatusMap.remove(tempId)
+
+                    _uiState.value = _uiState.value.copy(
+                        messages = currentList,
+                        sendStatusMap = newStatusMap,
+                        isSending = false
+                    )
+                    cachedFiles.clear()
+                }
 
             } catch (e: Exception) {
-                Log.e(TAG, "send/edit message failed", e)
-                _uiState.value = _uiState.value.copy(
-                    isSending = false,
-                    errorMsg = "失败: ${e.message}",
-                    inputText = rawText // 失败时返还文本，让用户重试
-                )
+                Log.e(TAG, "send failed", e)
+                withContext(Dispatchers.Main) {
+                    val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+                    newStatusMap[tempId] = SendStatus.FAILED
+                    _uiState.value = _uiState.value.copy(
+                        sendStatusMap = newStatusMap,
+                        isSending = false,
+                        errorMsg = "发送失败: ${e.message}"
+                    )
+                }
             }
         }
     }
