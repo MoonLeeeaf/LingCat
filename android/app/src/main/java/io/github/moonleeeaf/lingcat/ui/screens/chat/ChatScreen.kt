@@ -6,9 +6,15 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,13 +35,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -52,6 +61,7 @@ import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import kotlinx.coroutines.launch
 import lingcat.classes.Classes.IMessage
 import java.util.Calendar
+import kotlin.math.roundToInt
 
 /**
  * 判断是否需要在 msg 上方显示时间分隔条
@@ -349,6 +359,11 @@ fun ChatScreen(
                                     coroutineScope.launch {
                                         viewModel.jumpToMessage(replyId, listState)
                                     }
+                                },
+                                onSwipeReply = {
+                                    val currentText = uiState.inputText
+                                    viewModel.onInputChange("[reply:${msg.id}]$currentText")
+                                    focusRequester.requestFocus()
                                 },
                                 // ★ 补全附件点击逻辑
                                 onAttachmentClick = { hash, name, isImage ->
@@ -658,23 +673,27 @@ fun ChatScreen(
 fun MessageBubble(
     message: IMessage,
     isMine: Boolean,
+    hideSender: Boolean = false,
+    sendStatus: SendStatus? = null,
+    onRetrySend: () -> Unit = {},
+    onSwipeReply: () -> Unit = {}, // ★ 新增：滑动回复
     onReplyClick: (Int) -> Unit,
     onLongClick: () -> Unit,
     onAvatarClick: (String) -> Unit,
     onAvatarLongClick: (String) -> Unit,
     onMentionClick: (String, Boolean) -> Unit,
-    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
-    findMessage: suspend (Int) -> IMessage? = { null },
-    hideSender: Boolean = false,
-    sendStatus: SendStatus? = null, // ★ 新增
-    onRetrySend: () -> Unit = {},
+    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit
 ) {
     val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
+    val scope = rememberCoroutineScope()
+    val offsetX = remember { Animatable(0f) }
+    val density = LocalDensity.current
+    // 触发回复的阈值（比如 60dp）
+    val threshold = with(density) { 60.dp.toPx() }
+
     if (message.system) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 32.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 32.dp),
             contentAlignment = Alignment.Center
         ) {
             MessageContent(
@@ -684,15 +703,14 @@ fun MessageBubble(
                 onReplyClick = {},
                 onMentionClick = onMentionClick,
                 onAttachmentClick = onAttachmentClick,
-                onLongClick = onLongClick,
-                findMessage = findMessage,
+                onLongClick = {}
             )
         }
         return
     }
 
+    // 1. 获取发送者信息
     var userInfo by remember { mutableStateOf(ProfileCache.getCachedUser(message.senderUserId)) }
-
     LaunchedEffect(message.senderUserId) {
         if (userInfo == null && !message.senderUserId.isNullOrEmpty()) {
             userInfo = ProfileCache.fetchUser(message.senderUserId)
@@ -705,24 +723,77 @@ fun MessageBubble(
         LingCatClientManager.currentClient?.getFileUrlByHashAndToken(avatarHash ?: "", fileToken ?: "")
     } else null
 
-    Row(
+    // ★ 核心包裹层：处理手势和滑动图标
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {},
-                onLongClick = onLongClick
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    scope.launch {
+                        // 只能向右滑，限制最大位移防止飘出屏幕
+                        val newValue = (offsetX.value + delta).coerceIn(0f, threshold + with(density) { 20.dp.toPx() })
+                        offsetX.snapTo(newValue)
+                    }
+                },
+                onDragStopped = {
+                    if (offsetX.value > threshold) {
+                        onSwipeReply()
+                        // 可选：加上触觉反馈（如震动）
+                    }
+                    // 松手后弹簧回弹到原位
+                    scope.launch {
+                        offsetX.animateTo(
+                            targetValue = 0f,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow
+                            )
+                        )
+                    }
+                }
             )
-            .padding(vertical = 4.dp),
-        horizontalArrangement = if (isMine) Arrangement.End else Arrangement.Start,
-        verticalAlignment = Alignment.Top,
     ) {
-        if (!isMine) {
-            if (hideSender) {
-                // 隐藏头像，但用 Spacer 占位，保持气泡对齐
-                Spacer(modifier = Modifier.width(36.dp + 8.dp))
-            } else {
+        // ==========================================
+        // 底层：回复图标（随滑动距离淡入）
+        // ==========================================
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(start = 20.dp),
+            contentAlignment = if (isMine) Alignment.CenterEnd else Alignment.CenterStart
+        ) {
+            val alpha = (offsetX.value / threshold).coerceIn(0f, 1f)
+            if (alpha > 0f) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Reply,
+                    contentDescription = "滑动回复",
+                    modifier = Modifier
+                        .size(28.dp)
+                        .graphicsLayer { this.alpha = alpha },
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+
+        // ==========================================
+        // 顶层：原来的 Row 气泡，加上平移
+        // ==========================================
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset { IntOffset(offsetX.value.roundToInt(), 0) } // ★ 随着手指滑动
+                .combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {},
+                    onLongClick = onLongClick
+                )
+                .padding(vertical = 4.dp),
+            horizontalArrangement = if (isMine) Arrangement.End else Arrangement.Start,
+            verticalAlignment = Alignment.Top,
+        ) {
+            if (!isMine) {
                 ChatAvatar(
                     avatarUrl,
                     avatarHash,
@@ -730,100 +801,94 @@ fun MessageBubble(
                     onLongClick = { onAvatarLongClick(message.senderUserId) }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-            }
-        } else {
-            if (sendStatus != null) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(end = 8.dp)
-                ) {
-                    when (sendStatus) {
-                        SendStatus.SENDING -> CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        SendStatus.FAILED -> Icon(
-                            imageVector = Icons.Default.Error,
-                            contentDescription = "发送失败，点击重试",
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable { onRetrySend() }
-                        )
+            } else {
+                // 左侧发送状态 (转圈/红叹号)
+                if (sendStatus != null) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(end = 8.dp)
+                    ) {
+                        when (sendStatus) {
+                            SendStatus.SENDING -> CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            SendStatus.FAILED -> Icon(
+                                imageVector = Icons.Default.Error,
+                                contentDescription = "发送失败，点击重试",
+                                tint = MaterialTheme.colorScheme.error,
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clickable { onRetrySend() }
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        Column(
-            horizontalAlignment = if (isMine) Alignment.End else Alignment.Start
-        ) {
-            // 昵称
-            if (!isMine && !hideSender) {
-                Text(
-                    text = senderName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
-                )
-            } else {
-                // 如果是连续消息且不需要显示昵称，给一点极小的顶部间距
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-
-
-            Surface(
-                color = if (isMine) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(
-                    bottomEnd = 16.dp,
-                    bottomStart = 16.dp,
-                    topStart = if (isMine) 16.dp else 4.dp,
-                    topEnd = if (isMine) 4.dp else 16.dp
-                ),
-                shadowElevation = 1.dp,
-                modifier = Modifier.widthIn(max = 280.dp)
+            Column(
+                horizontalAlignment = if (isMine) Alignment.End else Alignment.Start
             ) {
-                // ★ 核心修改：用 Box 包裹，把锁图标叠在内部
-                Box {
-                    MessageContent(
-                        message = message,
-                        isMine = isMine,
-                        onReplyClick = onReplyClick,
-                        onMentionClick = onMentionClick,
-                        onAttachmentClick = onAttachmentClick,
-                        onLongClick = onLongClick,
-                        findMessage = findMessage,
+                // 昵称
+                if (!isMine && !hideSender) {
+                    Text(
+                        text = senderName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
                     )
+                } else if (!isMine && hideSender) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                } else {
+                    Spacer(modifier = Modifier.height(15.dp))
+                }
 
-                    // 判断是否是 E2E 消息，如果是，则在右下角/左下角画一个极淡的锁
-                    val isE2EMessage = message.entitiesList.any { it.type == "e2e" }
-                    if (isE2EMessage) {
-                        Icon(
-                            imageVector = Icons.Default.Lock,
-                            contentDescription = "端到端加密",
-                            modifier = Modifier
-                                // 自己的消息在右下角，别人的消息在左下角，或者统一放在右下角都可以
-                                .align(if (isMine) Alignment.BottomStart else Alignment.BottomEnd)
-                                .padding(6.dp)
-                                .size(12.dp),
-                            // 颜色极淡，作为背景水印，不抢文字的视线
-                            tint = if (isMine) {
-                                MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
-                            } else {
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-                            }
+                Surface(
+                    color = if (isMine) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(
+                        bottomEnd = 16.dp,
+                        bottomStart = 16.dp,
+                        topStart = if (isMine) 16.dp else 4.dp,
+                        topEnd = if (isMine) 4.dp else 16.dp
+                    ),
+                    shadowElevation = 1.dp,
+                    modifier = Modifier.widthIn(max = 280.dp)
+                ) {
+                    // 气泡内部加上 Box 叠水印
+                    Box {
+                        MessageContent(
+                            message = message,
+                            isMine = isMine,
+                            onReplyClick = onReplyClick,
+                            onMentionClick = onMentionClick,
+                            onAttachmentClick = onAttachmentClick,
+                            onLongClick = onLongClick,
+                            // findMessage = { /* 如果之前加过，就传进去 */ }
                         )
+                        // 加密水印
+                        val isE2EMessage = message.entitiesList.any { it.type == "e2e" }
+                        if (isE2EMessage) {
+                            Icon(
+                                imageVector = Icons.Default.Lock,
+                                contentDescription = "端到端加密",
+                                modifier = Modifier
+                                    .align(if (isMine) Alignment.BottomStart else Alignment.BottomEnd)
+                                    .padding(6.dp)
+                                    .size(12.dp),
+                                tint = if (isMine) {
+                                    MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                                }
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        if (isMine) {
-            if (hideSender) {
-                Spacer(modifier = Modifier.width(36.dp + 8.dp))
-            } else {
+            if (isMine) {
                 Spacer(modifier = Modifier.width(8.dp))
                 ChatAvatar(
                     avatarUrl,
