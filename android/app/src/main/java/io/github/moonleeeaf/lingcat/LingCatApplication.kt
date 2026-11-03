@@ -7,6 +7,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import io.github.moonleeeaf.lingcat.app.AppState
 import io.github.moonleeeaf.lingcat.app.NotificationHelper
+import io.github.moonleeeaf.lingcat.data.DraftCache
 import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
@@ -22,6 +23,7 @@ class LingCatApplication : Application(), ImageLoaderFactory {
         RemarksCache.init(this)
         NotificationHelper.createChannels(this)
         AppDatabase.getDatabase(this)
+        DraftCache.init(this)
 
         // ★ 注册 Activity 生命周期回调，监控前后台
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {

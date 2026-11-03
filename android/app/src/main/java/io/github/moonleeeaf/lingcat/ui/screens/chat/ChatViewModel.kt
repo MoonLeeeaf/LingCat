@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.moonleeeaf.lingcat.data.DraftCache
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.data.db.MessageEntity
@@ -207,6 +208,25 @@ class ChatViewModel : ViewModel() {
     fun initChat(chatId: String, initialTitle: String? = null) {
         currentChatId = chatId
 
+        // ★ 核心修复 1：读取完整草稿
+        val draft = DraftCache.getDraft(chatId)
+        _uiState.value = _uiState.value.copy(inputText = draft?.text ?: "")
+
+        // 如果草稿里有编辑 ID，异步去数据库找回原消息
+        if (draft?.editingMsgId != null) {
+            viewModelScope.launch {
+                val editingMsg = getMessageById(draft.editingMsgId)
+                if (editingMsg != null) {
+                    _uiState.value = _uiState.value.copy(editingMessage = editingMsg)
+                } else {
+                    // 原消息找不到，只能退化成普通文本草稿
+                    _uiState.value = _uiState.value.copy(editingMessage = null)
+                }
+            }
+        } else {
+            _uiState.value = _uiState.value.copy(editingMessage = null)
+        }
+
         if (!initialTitle.isNullOrEmpty()) {
             _uiState.value = _uiState.value.copy(chatTitle = initialTitle)
         }
@@ -285,6 +305,8 @@ class ChatViewModel : ViewModel() {
         }
     }
 
+    private var draftBeforeEdit: DraftCache.DraftData? = null
+
     fun startEditing(message: IMessage) {
         viewModelScope.launch {
             encryptStateBeforeEdit = _uiState.value.encryptThisMessage
@@ -328,19 +350,22 @@ class ChatViewModel : ViewModel() {
             _uiState.value = _uiState.value.copy(
                 editingMessage = message,
                 inputText = rawText,
-                // ★ 同步挂锁状态：如果是加密消息，强制打开发送加密；如果是明文，就关掉
                 encryptThisMessage = isE2EMessage
             )
+            // 更新草稿为待编辑的文本，防止切走丢失
+            currentChatId?.let { DraftCache.saveDraft(it, rawText, message.id) }
         }
     }
 
     fun cancelEditing() {
         _uiState.value = _uiState.value.copy(
             editingMessage = null,
-            inputText = "",
-            // ★ 恢复编辑前的挂锁状态
+            inputText = draftBeforeEdit?.text ?: "", // ★ 恢复原来的草稿
             encryptThisMessage = encryptStateBeforeEdit
         )
+        // 恢复草稿存储
+        currentChatId?.let { DraftCache.saveDraft(it, draftBeforeEdit?.text ?: "", draftBeforeEdit?.editingMsgId) }
+        draftBeforeEdit = null
     }
 
     fun toggleEncryptThisMessage() {
@@ -439,26 +464,6 @@ class ChatViewModel : ViewModel() {
                     _uiState.value = _uiState.value.copy(isLoading = false)
                 }
             }
-        }
-    }
-
-    // 抽离出一个本地查询的方法，单纯用来断网兜底
-    private suspend fun loadFromLocal(chatId: String) {
-        try {
-            val localEntities = withContext(Dispatchers.IO) {
-                messageDao.getLatestMessages(chatId, 50)
-            }
-            val localMsgs = localEntities.map { it.toIMessage() }
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                messages = localMsgs,
-                errorMsg = if (localMsgs.isEmpty()) "网络断开，无本地记录" else null
-            )
-        } catch (dbE: Exception) {
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                errorMsg = "加载消息失败"
-            )
         }
     }
 
@@ -728,6 +733,10 @@ class ChatViewModel : ViewModel() {
 
     fun onInputChange(text: String) {
         _uiState.value = _uiState.value.copy(inputText = text)
+        // ★ 自动保存草稿，带上当前编辑的 ID（如果有的话）
+        currentChatId?.let {
+            DraftCache.saveDraft(it, text, _uiState.value.editingMessage?.id)
+        }
     }
 
     // ★ 1. 缓存待上传的文件 (原始文件名 -> 文件信息)
@@ -826,38 +835,43 @@ class ChatViewModel : ViewModel() {
         val rawText = _uiState.value.inputText.trim()
         if (rawText.isEmpty() || _uiState.value.isSending) return
 
-        // 1. 构建临时消息
-        val tempId = -System.currentTimeMillis().toInt() // 负数 ID
-        val tempTime = System.currentTimeMillis()
-        val parsed = MessageParser.parseMessage(rawText)
+        val editingMsg = _uiState.value.editingMessage
 
-        val tempMsg = IMessage.newBuilder()
-            .setId(tempId)
-            .setChatId(chatId)
-            .setSenderUserId(LingCatClientManager.currentUserId ?: "")
-            .setText(parsed.text)
-            .addAllEntities(parsed.entities ?: emptyList())
-            .setTime(tempTime)
-            .build()
+        if (editingMsg != null) {
+            // ★ 修复 1：如果是编辑模式，直接走编辑发送逻辑，不生成临时消息
+            _uiState.value = _uiState.value.copy(isSending = true, inputText = "")
+            performSend(chatId, rawText, tempId = null, editingMsgId = editingMsg.id)
+        } else {
+            // 正常发送新消息（乐观更新）
+            val tempId = -System.currentTimeMillis().toInt() // 负数 ID
+            val tempTime = System.currentTimeMillis()
+            val parsed = MessageParser.parseMessage(rawText)
 
-        // 2. 立即上屏（乐观更新）
-        val currentList = _uiState.value.messages.toMutableList()
-        currentList.add(0, tempMsg)
-        val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
-        newStatusMap[tempId] = SendStatus.SENDING
+            val tempMsg = IMessage.newBuilder()
+                .setId(tempId)
+                .setChatId(chatId)
+                .setSenderUserId(LingCatClientManager.currentUserId ?: "")
+                .setText(parsed.text)
+                .addAllEntities(parsed.entities ?: emptyList())
+                .setTime(tempTime)
+                .build()
 
-        _uiState.value = _uiState.value.copy(
-            messages = currentList,
-            sendStatusMap = newStatusMap,
-            inputText = "",
-            isSending = true
-        )
+            val currentList = _uiState.value.messages.toMutableList()
+            currentList.add(0, tempMsg)
+            val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+            newStatusMap[tempId] = SendStatus.SENDING
 
-        // ★ 核心修复：记录首次发送时的原始完整文本
-        tempRawTextMap[tempId] = rawText
+            _uiState.value = _uiState.value.copy(
+                messages = currentList,
+                sendStatusMap = newStatusMap,
+                inputText = "",
+                isSending = true
+            )
+            currentChatId?.let { DraftCache.clearDraft(it) }
+            tempRawTextMap[tempId] = rawText
 
-        // 3. 执行真正的发送
-        performSend(chatId, rawText, tempId)
+            performSend(chatId, rawText, tempId = tempId, editingMsgId = null)
+        }
     }
 
     fun resendMessage(tempId: Int) {
@@ -865,8 +879,6 @@ class ChatViewModel : ViewModel() {
         val msg = _uiState.value.messages.find { it.id == tempId } ?: return
         if (_uiState.value.sendStatusMap[tempId] != SendStatus.FAILED) return
 
-        // ★ 核心修复：优先从 Map 中恢复完整的原始文本（比如带有 ![]() 的附件占位）
-        // 如果 Map 里没有（极少数情况），再用旧方法兜底
         val rawText = tempRawTextMap[tempId]
             ?: MessageParser.entitiesToRawRichText(msg.text, msg.entitiesList)
 
@@ -874,10 +886,10 @@ class ChatViewModel : ViewModel() {
         newStatusMap[tempId] = SendStatus.SENDING
         _uiState.value = _uiState.value.copy(sendStatusMap = newStatusMap, isSending = true)
 
-        performSend(chatId, rawText, tempId)
+        performSend(chatId, rawText, tempId = tempId, editingMsgId = null)
     }
 
-    private fun performSend(chatId: String, rawText: String, tempId: Int) {
+    private fun performSend(chatId: String, rawText: String, tempId: Int?, editingMsgId: Int?) {
         viewModelScope.launch {
             try {
                 val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
@@ -935,47 +947,73 @@ class ChatViewModel : ViewModel() {
                     }
                 }
 
-                // 4. 发送
-                val newMsgId = withContext(Dispatchers.IO) {
-                    ChatApi.sendChatMessage(client, token, chatId, finalText, finalEntities)
-                }
-
-                // 5. 发送成功，替换临时消息
-                withContext(Dispatchers.Main) {
-                    val currentList = _uiState.value.messages.toMutableList()
-                    val index = currentList.indexOfFirst { it.id == tempId }
-                    if (index != -1) {
-                        val finalMsg = currentList[index].toBuilder()
-                            .setId(newMsgId)
-                            .setText(finalText) // 如果加密了，这里就会替换成 🔒
-                            .clearEntities()
-                            .addAllEntities(finalEntities)
-                            .build()
-                        currentList[index] = finalMsg
+                // 4. 发送或编辑
+                if (editingMsgId != null) {
+                    // ★ 修复 2：走编辑接口
+                    withContext(Dispatchers.IO) {
+                        ChatApi.editChatMessage(client, token, chatId, editingMsgId, finalText, finalEntities)
                     }
-                    val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
-                    newStatusMap.remove(tempId)
+                    // 编辑成功，不需要在本地插入消息，因为 WS 会推回 Message_Edited_Event
+                    withContext(Dispatchers.Main) {
+                        _uiState.value = _uiState.value.copy(
+                            isSending = false,
+                            editingMessage = null,
+                            encryptThisMessage = encryptStateBeforeEdit // 恢复加密状态
+                        )
+                        cachedFiles.clear()
+                        DraftCache.clearDraft(chatId)
+                    }
+                } else if (tempId != null) {
+                    // ★ 修复 3：走新建消息接口
+                    val newMsgId = withContext(Dispatchers.IO) {
+                        ChatApi.sendChatMessage(client, token, chatId, finalText, finalEntities)
+                    }
 
-                    _uiState.value = _uiState.value.copy(
-                        messages = currentList,
-                        sendStatusMap = newStatusMap,
-                        isSending = false
-                    )
-                    cachedFiles.clear()
-                    // ★ 核心修复：发送成功后，清理掉原始文本记录
-                    tempRawTextMap.remove(tempId)
+                    withContext(Dispatchers.Main) {
+                        val currentList = _uiState.value.messages.toMutableList()
+                        val index = currentList.indexOfFirst { it.id == tempId }
+                        if (index != -1) {
+                            val finalMsg = currentList[index].toBuilder()
+                                .setId(newMsgId)
+                                .setText(finalText)
+                                .clearEntities()
+                                .addAllEntities(finalEntities)
+                                .build()
+                            currentList[index] = finalMsg
+                        }
+                        val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+                        newStatusMap.remove(tempId)
+
+                        _uiState.value = _uiState.value.copy(
+                            messages = currentList,
+                            sendStatusMap = newStatusMap,
+                            isSending = false
+                        )
+                        cachedFiles.clear()
+                        DraftCache.clearDraft(chatId)
+                        tempRawTextMap.remove(tempId)
+                    }
                 }
 
             } catch (e: Exception) {
-                Log.e(TAG, "send failed", e)
+                Log.e(TAG, "send/edit failed", e)
                 withContext(Dispatchers.Main) {
-                    val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
-                    newStatusMap[tempId] = SendStatus.FAILED
-                    _uiState.value = _uiState.value.copy(
-                        sendStatusMap = newStatusMap,
-                        isSending = false,
-                        errorMsg = "发送失败: ${e.message}"
-                    )
+                    if (editingMsgId != null) {
+                        // 编辑失败，弹错误，保留编辑状态
+                        _uiState.value = _uiState.value.copy(
+                            isSending = false,
+                            errorMsg = "编辑失败: ${e.message}"
+                        )
+                    } else if (tempId != null) {
+                        // 发送失败，标红感叹号
+                        val newStatusMap = _uiState.value.sendStatusMap.toMutableMap()
+                        newStatusMap[tempId] = SendStatus.FAILED
+                        _uiState.value = _uiState.value.copy(
+                            sendStatusMap = newStatusMap,
+                            isSending = false,
+                            errorMsg = "发送失败: ${e.message}"
+                        )
+                    }
                 }
             }
         }
