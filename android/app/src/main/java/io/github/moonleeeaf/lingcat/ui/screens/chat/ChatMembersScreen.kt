@@ -2,18 +2,23 @@ package io.github.moonleeeaf.lingcat.ui.screens.chat
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.PersonRemove
+import androidx.compose.material.icons.filled.RemoveModerator
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,6 +47,13 @@ fun ChatMembersScreen(
     LaunchedEffect(chatId) {
         viewModel.init(chatId)
     }
+
+    var selectedUserForAction by remember { mutableStateOf<MemberUiModel?>(null) }
+
+    // ★ 新增：二次确认状态
+    var userToConfirmRemoveMember by remember { mutableStateOf<lingcat.classes.Classes.IUser?>(null) }
+    var userToConfirmAddAdmin by remember { mutableStateOf<lingcat.classes.Classes.IUser?>(null) }
+    var userToConfirmRemoveAdmin by remember { mutableStateOf<lingcat.classes.Classes.IUser?>(null) }
 
     Scaffold(
         topBar = {
@@ -84,7 +96,12 @@ fun ChatMembersScreen(
                         stickyHeader { MemberGroupHeader("所有者") }
                         items(uiState.owner, key = { it.user.id }) { model ->
                             // ★ 修复 2：传入点击回调
-                            MemberItem(model, fileToken) { selectedUserId = it }
+                            MemberItem(
+                                model = model,
+                                fileToken = fileToken,
+                                onClick = { selectedUserId = it },
+                                onLongClick = { selectedUserForAction = model }, // ★
+                            )
                         }
                     }
 
@@ -92,7 +109,12 @@ fun ChatMembersScreen(
                     if (uiState.admins.isNotEmpty()) {
                         stickyHeader { MemberGroupHeader("管理员") }
                         items(uiState.admins, key = { it.user.id }) { model ->
-                            MemberItem(model, fileToken) { selectedUserId = it }
+                            MemberItem(
+                                model = model,
+                                fileToken = fileToken,
+                                onClick = { selectedUserId = it },
+                                onLongClick = { selectedUserForAction = model }, // ★
+                            )
                         }
                     }
 
@@ -100,7 +122,12 @@ fun ChatMembersScreen(
                     if (uiState.members.isNotEmpty()) {
                         stickyHeader { MemberGroupHeader("成员 (${uiState.members.size})") }
                         items(uiState.members, key = { it.user.id }) { model ->
-                            MemberItem(model, fileToken) { selectedUserId = it }
+                            MemberItem(
+                                model = model,
+                                fileToken = fileToken,
+                                onClick = { selectedUserId = it },
+                                onLongClick = { selectedUserForAction = model }, // ★
+                            )
                         }
                     }
                 }
@@ -117,6 +144,133 @@ fun ChatMembersScreen(
                 onNavigateToChatFromMember(newChatId)
             }
         )
+    }
+
+    // ==========================================
+    // 二次确认弹窗组
+    // ==========================================
+
+    if (userToConfirmRemoveMember != null) {
+        val user = userToConfirmRemoveMember!!
+        AlertDialog(
+            onDismissRequest = { userToConfirmRemoveMember = null },
+            title = { Text("移出对话") },
+            text = { Text("确定要把 ${user.nickname.ifEmpty { user.username }} 移出对话吗？") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.removeMember(chatId, user)
+                        userToConfirmRemoveMember = null
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) { Text("确定") }
+            },
+            dismissButton = {
+                TextButton(onClick = { userToConfirmRemoveMember = null }) { Text("取消") }
+            }
+        )
+    }
+
+    if (userToConfirmAddAdmin != null) {
+        val user = userToConfirmAddAdmin!!
+        AlertDialog(
+            onDismissRequest = { userToConfirmAddAdmin = null },
+            title = { Text("设为管理员") },
+            text = { Text("确定要将 ${user.nickname.ifEmpty { user.username }} 设为管理员吗？") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.addAdmin(chatId, user)
+                        userToConfirmAddAdmin = null
+                    }
+                ) { Text("确定") }
+            },
+            dismissButton = {
+                TextButton(onClick = { userToConfirmAddAdmin = null }) { Text("取消") }
+            }
+        )
+    }
+
+    if (userToConfirmRemoveAdmin != null) {
+        val user = userToConfirmRemoveAdmin!!
+        AlertDialog(
+            onDismissRequest = { userToConfirmRemoveAdmin = null },
+            title = { Text("移除管理员") },
+            text = { Text("确定要移除 ${user.nickname.ifEmpty { user.username }} 的管理员权限吗？") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.removeAdmin(chatId, user)
+                        userToConfirmRemoveAdmin = null
+                    }
+                ) { Text("确定") }
+            },
+            dismissButton = {
+                TextButton(onClick = { userToConfirmRemoveAdmin = null }) { Text("取消") }
+            }
+        )
+    }
+
+    if (selectedUserForAction != null) {
+        val target = selectedUserForAction!!
+        val targetUser = target.user
+        val targetRole = target.role
+        val myRole = uiState.myRole
+
+        val canRemoveMember = myRole == "owner" || (myRole == "admin" && targetRole == "member")
+        val canAddAdmin = myRole == "owner" && targetRole == "member"
+        val canRemoveAdmin = myRole == "owner" && targetRole == "admin"
+
+        ModalBottomSheet(
+            onDismissRequest = { selectedUserForAction = null }
+        ) {
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+                Text(
+                    text = targetUser.nickname.ifEmpty { targetUser.username },
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                if (canAddAdmin) {
+                    ListItem(
+                        headlineContent = { Text("设为管理员") },
+                        leadingContent = { Icon(Icons.Default.AdminPanelSettings, contentDescription = null) },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier.clickable {
+                            // ★ 改为触发确认弹窗
+                            userToConfirmAddAdmin = targetUser
+                            selectedUserForAction = null
+                        }
+                    )
+                }
+
+                if (canRemoveAdmin) {
+                    ListItem(
+                        headlineContent = { Text("移除管理员权限") },
+                        leadingContent = { Icon(Icons.Default.RemoveModerator, contentDescription = null) },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier.clickable {
+                            // ★ 改为触发确认弹窗
+                            userToConfirmRemoveAdmin = targetUser
+                            selectedUserForAction = null
+                        }
+                    )
+                }
+
+                if (canRemoveMember && targetRole != "owner") {
+                    ListItem(
+                        headlineContent = { Text("移出对话", color = MaterialTheme.colorScheme.error) },
+                        leadingContent = { Icon(Icons.Default.PersonRemove, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier.clickable {
+                            // ★ 改为触发确认弹窗
+                            userToConfirmRemoveMember = targetUser
+                            selectedUserForAction = null
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -136,11 +290,13 @@ fun MemberGroupHeader(title: String) {
 }
 
 // ★ 修复 3：把 onClick 作为参数传进来
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MemberItem(
     model: MemberUiModel,
     fileToken: String?,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+    onLongClick: () -> Unit,
 ) {
     val user = model.user
     val avatarHash = user.avatarFileHash
@@ -184,8 +340,9 @@ fun MemberItem(
                 )
             }
         } else null,
-        modifier = Modifier.clickable {
-            onClick(user.id) // ★ 调用传入的回调
-        }
+        modifier = Modifier.combinedClickable(
+            onClick = { onClick(user.id) },
+            onLongClick = onLongClick
+        )
     )
 }

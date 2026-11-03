@@ -26,7 +26,8 @@ data class ChatMembersUiState(
     val searchQuery: String = "",
     val owner: List<MemberUiModel> = emptyList(),
     val admins: List<MemberUiModel> = emptyList(),
-    val members: List<MemberUiModel> = emptyList()
+    val members: List<MemberUiModel> = emptyList(),
+    val myRole: String = "member",
 )
 
 class ChatMembersViewModel : ViewModel() {
@@ -96,6 +97,10 @@ class ChatMembersViewModel : ViewModel() {
                     emptyList<IChatAdmin>() // 容错，如果没有管理员接口或没权限
                 }
 
+                val myId = LingCatClientManager.currentUserId
+                val myAdminInfo = rawAdmins.find { it.id == myId }
+                val myRole = myAdminInfo?.role ?: "member"
+
                 // 3. 处理角色分组
                 val adminMap = rawAdmins.associateBy { it.id }
                 val ownerList = mutableListOf<MemberUiModel>()
@@ -105,7 +110,7 @@ class ChatMembersViewModel : ViewModel() {
                 for (user in rawMembers) {
                     val adminInfo = adminMap[user.id]
                     when (adminInfo?.role) {
-                        "owner" -> ownerList.add(MemberUiModel(user, "owner", "群主"))
+                        "owner" -> ownerList.add(MemberUiModel(user, "owner", "所有者"))
                         "admin" -> adminList.add(MemberUiModel(user, "admin", "管理员"))
                         else -> memberList.add(MemberUiModel(user, "member", "成员"))
                     }
@@ -119,14 +124,64 @@ class ChatMembersViewModel : ViewModel() {
                     isLoading = false,
                     owner = allOwner,
                     admins = allAdmins,
-                    members = allMembers
+                    members = allMembers,
+                    myRole = myRole,
                 )
             } catch (e: Exception) {
                 Log.e(TAG, "load members failed", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMsg = "加载群成员失败: ${e.message}"
+                    errorMsg = "加载对话成员失败: ${e.message}"
                 )
+            }
+        }
+    }
+
+    fun removeMember(chatId: String, user: IUser) {
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient ?: return@launch
+                val token = LingCatClientManager.currentToken ?: return@launch
+                withContext(Dispatchers.IO) {
+                    ChatApi.removeChatMember(client, token, chatId, user.id)
+                }
+                // 成功后刷新列表
+                loadMembers(chatId)
+            } catch (e: Exception) {
+                Log.e(TAG, "remove member failed", e)
+            }
+        }
+    }
+
+    // ★ 新增操作：添加为管理员
+    fun addAdmin(chatId: String, user: IUser) {
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient ?: return@launch
+                val token = LingCatClientManager.currentToken ?: return@launch
+                withContext(Dispatchers.IO) {
+                    // 默认给予空权限，后续可再编辑
+                    ChatApi.addChatAdmin(client, token, chatId, user.id, "{}")
+                }
+                loadMembers(chatId)
+            } catch (e: Exception) {
+                Log.e(TAG, "add admin failed", e)
+            }
+        }
+    }
+
+    // ★ 新增操作：移除管理员
+    fun removeAdmin(chatId: String, user: IUser) {
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient ?: return@launch
+                val token = LingCatClientManager.currentToken ?: return@launch
+                withContext(Dispatchers.IO) {
+                    ChatApi.removeChatAdmin(client, token, chatId, user.id)
+                }
+                loadMembers(chatId)
+            } catch (e: Exception) {
+                Log.e(TAG, "remove admin failed", e)
             }
         }
     }
