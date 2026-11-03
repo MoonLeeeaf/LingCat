@@ -12,6 +12,7 @@ data class MessageEntity(
     @ColumnInfo(name = "chat_id") val chatId: String,
     @ColumnInfo(name = "sender_id") val senderId: String,
     @ColumnInfo(name = "time") val time: Long,
+    @ColumnInfo(name = "text") val text: String,
     @ColumnInfo(name = "raw_bytes") val rawBytes: ByteArray
 ) {
     fun toIMessage(): IMessage {
@@ -29,6 +30,7 @@ data class MessageEntity(
                 chatId = msg.chatId,
                 senderId = msg.senderUserId,
                 time = msg.time,
+                text = msg.text,
                 rawBytes = msg.toByteArray()
             )
         }

@@ -13,6 +13,8 @@ import io.github.moonleeeaf.lingcat.data.db.MessageEntity
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,6 +54,10 @@ data class ChatUiState(
     val chatMembers: List<lingcat.classes.Classes.IUser> = emptyList(),
 
     val sendStatusMap: Map<Int, SendStatus> = emptyMap(),
+
+    val searchKeyword: String = "",
+    val isSearching: Boolean = false,
+    val searchResults: List<IMessage> = emptyList(),
 )
 
 class ChatViewModel : ViewModel() {
@@ -109,6 +115,40 @@ class ChatViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private var searchJob: Job? = null
+
+    fun onSearchKeywordChange(keyword: String) {
+        _uiState.value = _uiState.value.copy(searchKeyword = keyword)
+
+        // 防抖处理：如果用户还在疯狂打字，取消上一次搜索
+        searchJob?.cancel()
+        if (keyword.isBlank()) {
+            _uiState.value = _uiState.value.copy(searchResults = emptyList(), isSearching = false)
+            return
+        }
+
+        searchJob = viewModelScope.launch {
+            delay(300) // 300ms 防抖
+            _uiState.value = _uiState.value.copy(isSearching = true)
+            try {
+                val chatId = currentChatId ?: return@launch
+                val results = withContext(Dispatchers.IO) {
+                    messageDao.searchMessages(chatId, keyword)
+                }
+                _uiState.value = _uiState.value.copy(
+                    searchResults = results.map { it.toIMessage() },
+                    isSearching = false
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(isSearching = false)
+            }
+        }
+    }
+
+    fun closeSearch() {
+        _uiState.value = _uiState.value.copy(searchKeyword = "", searchResults = emptyList(), isSearching = false)
     }
 
     private var isLoadingMembers = false

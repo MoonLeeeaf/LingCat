@@ -18,6 +18,7 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -42,8 +43,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -254,33 +258,67 @@ fun ChatScreen(
         derivedStateOf { uiState.messages.distinctBy { it.id } }
     }
 
+    var isSearchMode by remember { mutableStateOf(false) }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(
-                modifier = Modifier.clickable { showChatInfoId = chatId },
-                title = {
-                    Column {
-                        Text(uiState.chatTitle)
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-                    }
-                },
-                actions = {
-                    if (uiState.isE2EActive) {
-                        IconButton(onClick = { showE2EInfo = true }) {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = "E2E 信息",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+            if (isSearchMode) {
+                // ★ 搜索模式下的顶栏
+                TopAppBar(
+                    title = {
+                        TextField(
+                            value = uiState.searchKeyword,
+                            onValueChange = viewModel::onSearchKeywordChange,
+                            placeholder = { Text("搜索聊天记录...") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
+                            singleLine = true
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            isSearchMode = false
+                            viewModel.closeSearch()
+                        }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "退出搜索")
                         }
                     }
-                }
-            )
+                )
+            } else {
+                TopAppBar(
+                    modifier = Modifier.clickable { showChatInfoId = chatId },
+                    title = {
+                        Column {
+                            Text(uiState.chatTitle)
+                        }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { isSearchMode = true }) {
+                            Icon(Icons.Default.Search, contentDescription = "搜索")
+                        }
+                        if (uiState.isE2EActive) {
+                            IconButton(onClick = { showE2EInfo = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.Lock,
+                                    contentDescription = "E2E 信息",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                )
+            }
         },
         bottomBar = {
             ChatInputBar(
@@ -305,136 +343,211 @@ fun ChatScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            if (uiState.isLoading) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
-            } else {
-                LazyColumn(
-                    state = listState,
-                    reverseLayout = true, // index 0 是最新的（在底部）
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
-                ) {
-                    // ★ 核心修改：使用 itemsIndexed
-                    itemsIndexed(safeMessages, key = { _, msg -> msg.id }) { index, msg ->
-                        // 在 reverseLayout 中，index + 1 是视觉上位于其“上方”的较老消息
-                        val prevMsg = safeMessages.getOrNull(index + 1)
-
-                        val showTime = shouldShowTime(msg, prevMsg)
-                        val timeText = if (showTime) formatTimeDivider(msg.time) else null
-
-                        // 如果当前没显示时间，且和上一条是同一个人（非系统消息），就隐藏头像/昵称
-                        val hideSender = !showTime &&
-                                !msg.system &&
-                                prevMsg != null &&
-                                !prevMsg.system &&
-                                prevMsg.senderUserId == msg.senderUserId
-
-                        val sendStatus = uiState.sendStatusMap[msg.id]
-
-                        Column {
-                            // 时间条
-                            if (timeText != null) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 12.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
+            if (isSearchMode) {
+                // ★ 搜索结果列表
+                if (uiState.isSearching) {
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                } else if (uiState.searchResults.isEmpty() && uiState.searchKeyword.isNotBlank()) {
+                    Text("没有找到相关消息", Modifier.align(Alignment.Center))
+                } else {
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        items(uiState.searchResults) { msg ->
+                            ListItem(
+                                headlineContent = {
                                     Text(
-                                        text = timeText,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                                    )
-                                }
-                            }
-
-                            // 消息气泡
-                            MessageBubble(
-                                message = msg,
-                                isMine = msg.senderUserId == LingCatClientManager.currentUserId,
-                                hideSender = hideSender,
-                                onAvatarLongClick = { userId -> selectedAvatarUserId = userId },
-                                onReplyClick = { replyId ->
-                                    coroutineScope.launch {
-                                        viewModel.jumpToMessage(replyId, listState)
-                                    }
-                                },
-                                onSwipeReply = {
-                                    val currentText = uiState.inputText
-                                    viewModel.onInputChange("[reply:${msg.id}]$currentText")
-                                    focusRequester.requestFocus()
-                                },
-                                // ★ 补全附件点击逻辑
-                                onAttachmentClick = { hash, name, isImage ->
-                                    val client = LingCatClientManager.currentClient
-                                    val token = LingCatClientManager.fileAccessToken.value ?: ""
-                                    val url = client?.getFileUrlByHashAndToken(hash, token)
-
-                                    if (url != null) {
-                                        if (isImage) {
-                                            // 弹出全屏预览
-                                            previewImageUrl = url
-                                        } else {
-                                            // 普通文件走外部应用
-                                            try {
-                                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
-                                                    data = android.net.Uri.parse(url)
-                                                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        text = buildAnnotatedString {
+                                            // 高亮关键字 (简易版)
+                                            val start = msg.text.indexOf(uiState.searchKeyword, ignoreCase = true)
+                                            if (start >= 0) {
+                                                append(msg.text.substring(0, start))
+                                                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)) {
+                                                    append(msg.text.substring(start, start + uiState.searchKeyword.length))
                                                 }
-                                                context.startActivity(intent)
-                                            } catch (e: Exception) {
-                                                Toast.makeText(context, "无法打开文件", Toast.LENGTH_SHORT).show()
+                                                append(msg.text.substring(start + uiState.searchKeyword.length))
+                                            } else {
+                                                append(msg.text)
                                             }
                                         }
-                                    } else {
-                                        Toast.makeText(context, "文件地址无效", Toast.LENGTH_SHORT).show()
-                                    }
+                                    )
                                 },
-                                onLongClick = { selectedMessage = msg },
-                                onAvatarClick = { userId -> showUserProfileId = userId },
-                                // ★ 补全提及点击逻辑
-                                onMentionClick = { mentionId, isChat ->
-                                    if (isChat) {
-                                        // 群提及暂未做跳转，先给个提示
-                                        android.widget.Toast.makeText(context, "点击了群: $mentionId", android.widget.Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        // 点击用户，打开资料面板
-                                        showUserProfileId = mentionId
-                                    }
+                                supportingContent = {
+                                    // 发送者名字和时间
+                                    Text("${ProfileCache.getCachedUser(msg.senderUserId)?.nickname ?: ""} · ${formatTimeDivider(msg.time)}")
                                 },
-                                sendStatus = sendStatus, // ★ 传入
-                                onRetrySend = { viewModel.resendMessage(msg.id) },
+                                modifier = Modifier.clickable {
+                                    // ★ 点击结果，跳转定位
+                                    isSearchMode = false
+                                    viewModel.closeSearch()
+                                    coroutineScope.launch {
+                                        viewModel.jumpToMessage(msg.id, listState)
+                                    }
+                                }
                             )
-                        }
-                    }
-
-                    if (uiState.isLoadingMore) {
-                        item {
-                            Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                                CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
-                            }
-                        }
-                    } else if (!uiState.hasMore) {
-                        item {
-                            Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                                Text("到底啦喵~", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            }
+                            HorizontalDivider()
                         }
                     }
                 }
-                if (!isAtBottom) {
-                    FloatingActionButton(
-                        onClick = {
-                            coroutineScope.launch { listState.animateScrollToItem(0) }
-                        },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp)
-                            .size(40.dp),
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+            } else {
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                } else {
+                    LazyColumn(
+                        state = listState,
+                        reverseLayout = true, // index 0 是最新的（在底部）
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
                     ) {
-                        Icon(Icons.Default.ArrowDownward, contentDescription = "回到底部")
+                        // ★ 核心修改：使用 itemsIndexed
+                        itemsIndexed(safeMessages, key = { _, msg -> msg.id }) { index, msg ->
+                            // 在 reverseLayout 中，index + 1 是视觉上位于其“上方”的较老消息
+                            val prevMsg = safeMessages.getOrNull(index + 1)
+
+                            val showTime = shouldShowTime(msg, prevMsg)
+                            val timeText = if (showTime) formatTimeDivider(msg.time) else null
+
+                            // 如果当前没显示时间，且和上一条是同一个人（非系统消息），就隐藏头像/昵称
+                            val hideSender = !showTime &&
+                                    !msg.system &&
+                                    prevMsg != null &&
+                                    !prevMsg.system &&
+                                    prevMsg.senderUserId == msg.senderUserId
+
+                            val sendStatus = uiState.sendStatusMap[msg.id]
+
+                            Column {
+                                // 时间条
+                                if (timeText != null) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 12.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = timeText,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                                alpha = 0.6f
+                                            )
+                                        )
+                                    }
+                                }
+
+                                // 消息气泡
+                                MessageBubble(
+                                    message = msg,
+                                    isMine = msg.senderUserId == LingCatClientManager.currentUserId,
+                                    hideSender = hideSender,
+                                    onAvatarLongClick = { userId -> selectedAvatarUserId = userId },
+                                    onReplyClick = { replyId ->
+                                        coroutineScope.launch {
+                                            viewModel.jumpToMessage(replyId, listState)
+                                        }
+                                    },
+                                    onSwipeReply = {
+                                        val currentText = uiState.inputText
+                                        viewModel.onInputChange("[reply:${msg.id}]$currentText")
+                                        focusRequester.requestFocus()
+                                    },
+                                    // ★ 补全附件点击逻辑
+                                    onAttachmentClick = { hash, name, isImage ->
+                                        val client = LingCatClientManager.currentClient
+                                        val token = LingCatClientManager.fileAccessToken.value ?: ""
+                                        val url = client?.getFileUrlByHashAndToken(hash, token)
+
+                                        if (url != null) {
+                                            if (isImage) {
+                                                // 弹出全屏预览
+                                                previewImageUrl = url
+                                            } else {
+                                                // 普通文件走外部应用
+                                                try {
+                                                    val intent =
+                                                        android.content.Intent(android.content.Intent.ACTION_VIEW)
+                                                            .apply {
+                                                                data = android.net.Uri.parse(url)
+                                                                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                            }
+                                                    context.startActivity(intent)
+                                                } catch (e: Exception) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "无法打开文件",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "文件地址无效",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    },
+                                    onLongClick = { selectedMessage = msg },
+                                    onAvatarClick = { userId -> showUserProfileId = userId },
+                                    // ★ 补全提及点击逻辑
+                                    onMentionClick = { mentionId, isChat ->
+                                        if (isChat) {
+                                            // 群提及暂未做跳转，先给个提示
+                                            android.widget.Toast.makeText(
+                                                context,
+                                                "点击了群: $mentionId",
+                                                android.widget.Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            // 点击用户，打开资料面板
+                                            showUserProfileId = mentionId
+                                        }
+                                    },
+                                    sendStatus = sendStatus, // ★ 传入
+                                    onRetrySend = { viewModel.resendMessage(msg.id) },
+                                )
+                            }
+                        }
+
+                        if (uiState.isLoadingMore) {
+                            item {
+                                Box(
+                                    Modifier.fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        Modifier.size(24.dp),
+                                        strokeWidth = 2.dp
+                                    )
+                                }
+                            }
+                        } else if (!uiState.hasMore) {
+                            item {
+                                Box(
+                                    Modifier.fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        "到底啦喵~",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    if (!isAtBottom) {
+                        FloatingActionButton(
+                            onClick = {
+                                coroutineScope.launch { listState.animateScrollToItem(0) }
+                            },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(16.dp)
+                                .size(40.dp),
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            Icon(Icons.Default.ArrowDownward, contentDescription = "回到底部")
+                        }
                     }
                 }
             }
