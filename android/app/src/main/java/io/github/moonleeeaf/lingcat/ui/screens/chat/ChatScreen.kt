@@ -50,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -504,6 +505,7 @@ fun ChatScreen(
                                     },
                                     sendStatus = sendStatus, // ★ 传入
                                     onRetrySend = { viewModel.resendMessage(msg.id) },
+                                    uploadProgress = uiState.uploadProgress[msg.id] ?: 0,
                                 )
                             }
                         }
@@ -511,7 +513,9 @@ fun ChatScreen(
                         if (uiState.isLoadingMore) {
                             item {
                                 Box(
-                                    Modifier.fillMaxWidth().padding(16.dp),
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     CircularProgressIndicator(
@@ -523,7 +527,9 @@ fun ChatScreen(
                         } else if (!uiState.hasMore) {
                             item {
                                 Box(
-                                    Modifier.fillMaxWidth().padding(16.dp),
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
@@ -644,7 +650,9 @@ fun ChatScreen(
         ModalBottomSheet(
             onDismissRequest = { selectedAvatarUserId = null }
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)) {
                 Text(
                     text = displayName,
                     style = MaterialTheme.typography.titleMedium,
@@ -685,7 +693,9 @@ fun ChatScreen(
             onDismissRequest = { selectedMessage = null },
             sheetState = sheetState
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)) {
                 Text(
                     text = "消息 #${selectedMessage?.id}",
                     style = MaterialTheme.typography.titleMedium,
@@ -795,7 +805,8 @@ fun MessageBubble(
     onAvatarClick: (String) -> Unit,
     onAvatarLongClick: (String) -> Unit,
     onMentionClick: (String, Boolean) -> Unit,
-    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit
+    onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
+    uploadProgress: Int,
 ) {
     val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
     val scope = rememberCoroutineScope()
@@ -806,7 +817,9 @@ fun MessageBubble(
 
     if (message.system) {
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 32.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 32.dp),
             contentAlignment = Alignment.Center
         ) {
             MessageContent(
@@ -845,7 +858,9 @@ fun MessageBubble(
                 state = rememberDraggableState { delta ->
                     scope.launch {
                         // 只能向右滑，限制最大位移防止飘出屏幕
-                        val newValue = (offsetX.value + delta).coerceIn(0f, threshold + with(density) { 20.dp.toPx() })
+                        val newValue = (offsetX.value + delta).coerceIn(
+                            0f,
+                            threshold + with(density) { 20.dp.toPx() })
                         offsetX.snapTo(newValue)
                     }
                 },
@@ -923,11 +938,32 @@ fun MessageBubble(
                             .padding(end = 8.dp)
                     ) {
                         when (sendStatus) {
-                            SendStatus.SENDING -> CircularProgressIndicator(
-                                modifier = Modifier.size(16.dp),
-                                strokeWidth = 2.dp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            SendStatus.SENDING -> {
+                                val progress = uploadProgress // 0~100，如果没在传文件就是 0
+                                if (progress > 0 && progress < 100) {
+                                    // 显示带百分比的圆形进度条
+                                    Box(contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator(
+                                            progress = { progress / 100f },
+                                            modifier = Modifier.size(24.dp),
+                                            strokeWidth = 2.dp,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            text = "$progress",
+                                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                } else {
+                                    // 未开始传或已经传完，显示单纯的转圈
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(16.dp),
+                                        strokeWidth = 2.dp,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
                             SendStatus.FAILED -> Icon(
                                 imageVector = Icons.Default.Error,
                                 contentDescription = "发送失败，点击重试",

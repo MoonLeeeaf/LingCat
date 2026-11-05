@@ -275,6 +275,68 @@ public final class FileApi {
         }
     }
 
+    public static String uploadFile(LingCatClient client,
+                                    String fileUploadToken,
+                                    String belongToChatId,
+                                    byte[] fileData,
+                                    String mime,
+                                    String fileName,
+                                    ProgressRequestBody.ProgressCallback callback)
+            throws IOException {
+
+        String effectiveMime = (mime != null && !mime.isEmpty())
+                ? mime
+                : "application/octet-stream";
+        String effectiveName = (fileName != null && !fileName.isEmpty())
+                ? fileName
+                : "File";
+
+        // 1. 包装原始字节数据
+        RequestBody rawFileBody = RequestBody.create(
+                fileData,
+                MediaType.parse(effectiveMime)
+        );
+        // ★ 2. 用 ProgressRequestBody 包一层
+        ProgressRequestBody progressBody = new ProgressRequestBody(rawFileBody, callback);
+
+        MultipartBody.Builder form = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", effectiveName, progressBody); // ★ 使用包装后的进度 Body
+
+        if (belongToChatId != null && !belongToChatId.isEmpty()) {
+            form.addFormDataPart("belong_to_chat_id", belongToChatId);
+        }
+        if (mime != null && !mime.isEmpty()) {
+            form.addFormDataPart("mime", mime);
+        }
+        if (fileName != null && !fileName.isEmpty()) {
+            form.addFormDataPart("file_name", fileName);
+        }
+
+        Request request = new Request.Builder()
+                .url(buildUploadUrl(client.getServerHttp()))
+                .header("Token", fileUploadToken)
+                .post(form.build())
+                .build();
+
+        OkHttpClient http = client.getOkHttpClient();
+
+        try (Response response = http.newCall(request).execute()) {
+            ResponseBody body = response.body();
+            String text = body != null ? body.string() : "";
+            JSONObject json;
+            try {
+                json = new JSONObject(text);
+            } catch (Exception e) {
+                throw new FileUploadException(text, response.code(), text);
+            }
+            if (!response.isSuccessful()) {
+                throw new FileUploadException(text, response.code(), text);
+            }
+            return json.optString("file_hash", "");
+        }
+    }
+
     /*
     public static String sha256Hex(File file) throws IOException, NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");

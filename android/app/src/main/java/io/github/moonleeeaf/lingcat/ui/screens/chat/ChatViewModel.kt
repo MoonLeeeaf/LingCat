@@ -26,6 +26,7 @@ import lingcat.client_protocol.ChatApi
 import lingcat.client_protocol.FileApi
 import lingcat.client_protocol.LingCatClient
 import lingcat.client_protocol.MessageParser
+import lingcat.client_protocol.ProgressRequestBody
 import lingcat.methods.Methods.Receive_Chat_Message_Event
 import lingcat.protocol.Methods
 import org.json.JSONArray
@@ -59,6 +60,8 @@ data class ChatUiState(
     val searchKeyword: String = "",
     val isSearching: Boolean = false,
     val searchResults: List<IMessage> = emptyList(),
+
+    val uploadProgress: Map<Int, Int> = emptyMap(),
 )
 
 class ChatViewModel : ViewModel() {
@@ -796,7 +799,7 @@ class ChatViewModel : ViewModel() {
     /**
      * 发送时先上传所有附件，并替换文本中的占位符
      */
-    private suspend fun uploadAndReplaceAttachments(rawText: String): String = withContext(Dispatchers.IO) {
+    private suspend fun uploadAndReplaceAttachments(rawText: String, tempId: Int): String = withContext(Dispatchers.IO) {
         if (cachedFiles.isEmpty()) return@withContext rawText
 
         var processedText = rawText
@@ -821,7 +824,15 @@ class ChatViewModel : ViewModel() {
             } ?: throw Exception("读取文件失败: ${cf.name}")
 
             // 上传
-            val hash = FileApi.uploadFile(client, uploadToken, chatId, bytes, cf.mime, cf.name)
+            val hash = FileApi.uploadFile(
+                client, uploadToken, chatId, bytes, cf.mime, cf.name
+            ) { percent -> // 回到主线程更新 UI
+                viewModelScope.launch(Dispatchers.Main) {
+                    val currentProgress = _uiState.value.uploadProgress.toMutableMap()
+                    currentProgress[tempId] = percent
+                    _uiState.value = _uiState.value.copy(uploadProgress = currentProgress)
+                }
+            }
 
             // 替换文本里的 (文件名) 为 (file:hash)
             processedText = processedText.replace("($fileName)", "(file:$hash)")
@@ -900,9 +911,22 @@ class ChatViewModel : ViewModel() {
                 var finalText = parsed.text
                 var finalEntities = parsed.entities ?: emptyList()
 
-                // 2. 处理附件
-                if (cachedFiles.isNotEmpty()) {
-                    val uploadedText = uploadAndReplaceAttachments(rawText)
+                if (cachedFiles.isNotEmpty() && tempId != null) {
+                    // 只有新建消息才显示附件进度，编辑消息暂不需要
+                    val uploadedText = uploadAndReplaceAttachments(rawText, tempId)
+                    parsed = withContext(Dispatchers.Default) { MessageParser.parseMessage(uploadedText) }
+                    finalText = parsed.text
+                    finalEntities = parsed.entities ?: emptyList()
+
+                    // 发送完成后清理进度状态
+                    withContext(Dispatchers.Main) {
+                        val currentProgress = _uiState.value.uploadProgress.toMutableMap()
+                        currentProgress.remove(tempId)
+                        _uiState.value = _uiState.value.copy(uploadProgress = currentProgress)
+                    }
+                } else if (cachedFiles.isNotEmpty()) {
+                    // 编辑消息时如果带附件，直接传但不显示进度
+                    val uploadedText = uploadAndReplaceAttachments(rawText, -1)
                     parsed = withContext(Dispatchers.Default) { MessageParser.parseMessage(uploadedText) }
                     finalText = parsed.text
                     finalEntities = parsed.entities ?: emptyList()
