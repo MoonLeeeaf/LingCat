@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.lifecycle.lifecycleScope
 import io.github.moonleeeaf.lingcat.data.AccountInfo
 import io.github.moonleeeaf.lingcat.data.AuthStorage
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
     // ★ 传递 OAuth 事件
     private val oauthEvents = MutableSharedFlow<OAuthEvent>(extraBufferCapacity = 1)
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,9 +38,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LingCatTheme {
+                val windowSizeClass = calculateWindowSizeClass(this)
                 LingCatApp(
                     deepLinkChatIdFlow = deepLinkChatId,
-                    oauthEventFlow = oauthEvents // 传给 Compose
+                    oauthEventFlow = oauthEvents,
+                    windowSizeClass = windowSizeClass,
                 )
             }
         }
