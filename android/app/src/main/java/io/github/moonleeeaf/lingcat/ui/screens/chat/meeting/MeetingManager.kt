@@ -146,7 +146,7 @@ object MeetingManager {
                 val newRoom = LiveKit.create(
                     context.applicationContext,
                     RoomOptions(
-                        adaptiveStream = true,
+                        adaptiveStream = false,
                         dynacast = true,
                     ), LiveKitOverrides(
                         okHttpClient = HttpClientProvider.get(),
@@ -343,22 +343,40 @@ object MeetingManager {
         )
     }
 
+    /**
+     * 离开会议 (只断开自己)
+     */
     fun leaveMeeting(disconnectRoom: Boolean = true) {
-        if (disconnectRoom) {
+        // ★ 1. 先抓住当前的 room 引用，防止被 clearState 置空
+        val currentRoom = room 
+
+        if (disconnectRoom && currentRoom != null) {
             managerScope.launch {
                 try {
-                    room?.disconnect()
+                    currentRoom.disconnect() // 使用抓死的引用去断开
                 } catch (e: Exception) {
                     Log.w(TAG, "disconnect error", e)
+                } finally {
+                    clearState() // ★ 2. 等断开动作结束了，再清理 UI 状态
                 }
             }
+        } else {
+            clearState()
         }
-        clearState()
     }
 
+    /**
+     * 结束会议 (如果是发起人，需要通知服务端)
+     */
     fun endMeeting(context: Context) {
+        // ★ 同样要先抓住参数，防止被 clearState 清空
         val chatId = _uiState.value.chatId
         val meetingId = _uiState.value.meetingId
+
+        // 先断开本地连接并清理 UI
+        leaveMeeting(disconnectRoom = true)
+
+        // 再异步通知服务端会议结束
         if (chatId != null && meetingId != null) {
             managerScope.launch(Dispatchers.IO) {
                 try {
@@ -372,7 +390,6 @@ object MeetingManager {
                 }
             }
         }
-        leaveMeeting(disconnectRoom = true)
     }
 
     private fun clearState() {
