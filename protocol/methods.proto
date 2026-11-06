@@ -488,22 +488,12 @@ message Get_Meeting_Participants_Request {
     optional string meeting_id = 3;
 }
 
-message Meeting_Participant {
-    // LiveKit identity
-    string identity = 1;
-    optional string user_id = 2;
-    optional string nickname = 3;
-    // 主播备注 (机器人)
-    optional string remark = 4;
-    optional string avatar_file_hash = 5;
-}
-
 // 注意: 字段 1 必须是 length-delimited 类型, 否则会被 decodeOrThrow 误判为 Error_Response
 message Get_Meeting_Participants_Response {
     string meeting_id = 1;
     string room = 2;
     uint32 count = 3;
-    repeated Meeting_Participant participants = 4;
+    repeated lingcat.classes.IMeetingParticipant participants = 4;
 }
 
 message Meeting_Participants_Changed_Event {
@@ -511,7 +501,7 @@ message Meeting_Participants_Changed_Event {
     string meeting_id = 2;
     string room = 3;
     uint32 count = 4;
-    repeated Meeting_Participant participants = 5;
+    repeated lingcat.classes.IMeetingParticipant participants = 5;
 }
 
 /**

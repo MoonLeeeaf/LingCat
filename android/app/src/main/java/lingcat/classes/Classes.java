@@ -9911,6 +9911,933 @@ public final class Classes {
     }
   }
 
+  public interface IMeetingParticipantOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.IMeetingParticipant)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The identity.
+     */
+    java.lang.String getIdentity();
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The bytes for identity.
+     */
+    com.google.protobuf.ByteString
+        getIdentityBytes();
+
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return Whether the userId field is set.
+     */
+    boolean hasUserId();
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The userId.
+     */
+    java.lang.String getUserId();
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The bytes for userId.
+     */
+    com.google.protobuf.ByteString
+        getUserIdBytes();
+
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return Whether the nickname field is set.
+     */
+    boolean hasNickname();
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The nickname.
+     */
+    java.lang.String getNickname();
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The bytes for nickname.
+     */
+    com.google.protobuf.ByteString
+        getNicknameBytes();
+
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return Whether the remark field is set.
+     */
+    boolean hasRemark();
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The remark.
+     */
+    java.lang.String getRemark();
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The bytes for remark.
+     */
+    com.google.protobuf.ByteString
+        getRemarkBytes();
+
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return Whether the avatarFileHash field is set.
+     */
+    boolean hasAvatarFileHash();
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The avatarFileHash.
+     */
+    java.lang.String getAvatarFileHash();
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The bytes for avatarFileHash.
+     */
+    com.google.protobuf.ByteString
+        getAvatarFileHashBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.IMeetingParticipant}
+   */
+  public  static final class IMeetingParticipant extends
+      com.google.protobuf.GeneratedMessageLite<
+          IMeetingParticipant, IMeetingParticipant.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.IMeetingParticipant)
+      IMeetingParticipantOrBuilder {
+    private IMeetingParticipant() {
+      identity_ = "";
+      userId_ = "";
+      nickname_ = "";
+      remark_ = "";
+      avatarFileHash_ = "";
+    }
+    private int bitField0_;
+    public static final int IDENTITY_FIELD_NUMBER = 1;
+    private java.lang.String identity_;
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The identity.
+     */
+    @java.lang.Override
+    public java.lang.String getIdentity() {
+      return identity_;
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @return The bytes for identity.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIdentityBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(identity_);
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @param value The identity to set.
+     */
+    private void setIdentity(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      identity_ = value;
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     */
+    private void clearIdentity() {
+      
+      identity_ = getDefaultInstance().getIdentity();
+    }
+    /**
+     * <pre>
+     * LiveKit identity
+     * </pre>
+     *
+     * <code>string identity = 1;</code>
+     * @param value The bytes for identity to set.
+     */
+    private void setIdentityBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      identity_ = value.toStringUtf8();
+      
+    }
+
+    public static final int USER_ID_FIELD_NUMBER = 2;
+    private java.lang.String userId_;
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return Whether the userId field is set.
+     */
+    @java.lang.Override
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public java.lang.String getUserId() {
+      return userId_;
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @return The bytes for userId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(userId_);
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @param value The userId to set.
+     */
+    private void setUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      userId_ = value;
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     */
+    private void clearUserId() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      userId_ = getDefaultInstance().getUserId();
+    }
+    /**
+     * <code>optional string user_id = 2;</code>
+     * @param value The bytes for userId to set.
+     */
+    private void setUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      userId_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static final int NICKNAME_FIELD_NUMBER = 3;
+    private java.lang.String nickname_;
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return Whether the nickname field is set.
+     */
+    @java.lang.Override
+    public boolean hasNickname() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The nickname.
+     */
+    @java.lang.Override
+    public java.lang.String getNickname() {
+      return nickname_;
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @return The bytes for nickname.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getNicknameBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(nickname_);
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @param value The nickname to set.
+     */
+    private void setNickname(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000002;
+      nickname_ = value;
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     */
+    private void clearNickname() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      nickname_ = getDefaultInstance().getNickname();
+    }
+    /**
+     * <code>optional string nickname = 3;</code>
+     * @param value The bytes for nickname to set.
+     */
+    private void setNicknameBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      nickname_ = value.toStringUtf8();
+      bitField0_ |= 0x00000002;
+    }
+
+    public static final int REMARK_FIELD_NUMBER = 4;
+    private java.lang.String remark_;
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return Whether the remark field is set.
+     */
+    @java.lang.Override
+    public boolean hasRemark() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The remark.
+     */
+    @java.lang.Override
+    public java.lang.String getRemark() {
+      return remark_;
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @return The bytes for remark.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getRemarkBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(remark_);
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @param value The remark to set.
+     */
+    private void setRemark(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000004;
+      remark_ = value;
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     */
+    private void clearRemark() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      remark_ = getDefaultInstance().getRemark();
+    }
+    /**
+     * <pre>
+     * 主播备注 (机器人)
+     * </pre>
+     *
+     * <code>optional string remark = 4;</code>
+     * @param value The bytes for remark to set.
+     */
+    private void setRemarkBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      remark_ = value.toStringUtf8();
+      bitField0_ |= 0x00000004;
+    }
+
+    public static final int AVATAR_FILE_HASH_FIELD_NUMBER = 5;
+    private java.lang.String avatarFileHash_;
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return Whether the avatarFileHash field is set.
+     */
+    @java.lang.Override
+    public boolean hasAvatarFileHash() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The avatarFileHash.
+     */
+    @java.lang.Override
+    public java.lang.String getAvatarFileHash() {
+      return avatarFileHash_;
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @return The bytes for avatarFileHash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAvatarFileHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(avatarFileHash_);
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @param value The avatarFileHash to set.
+     */
+    private void setAvatarFileHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000008;
+      avatarFileHash_ = value;
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     */
+    private void clearAvatarFileHash() {
+      bitField0_ = (bitField0_ & ~0x00000008);
+      avatarFileHash_ = getDefaultInstance().getAvatarFileHash();
+    }
+    /**
+     * <code>optional string avatar_file_hash = 5;</code>
+     * @param value The bytes for avatarFileHash to set.
+     */
+    private void setAvatarFileHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      avatarFileHash_ = value.toStringUtf8();
+      bitField0_ |= 0x00000008;
+    }
+
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IMeetingParticipant parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.IMeetingParticipant prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.IMeetingParticipant}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.IMeetingParticipant, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.IMeetingParticipant)
+        lingcat.classes.Classes.IMeetingParticipantOrBuilder {
+      // Construct using lingcat.classes.Classes.IMeetingParticipant.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return The identity.
+       */
+      @java.lang.Override
+      public java.lang.String getIdentity() {
+        return instance.getIdentity();
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return The bytes for identity.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getIdentityBytes() {
+        return instance.getIdentityBytes();
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @param value The identity to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdentity(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setIdentity(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIdentity() {
+        copyOnWrite();
+        instance.clearIdentity();
+        return this;
+      }
+      /**
+       * <pre>
+       * LiveKit identity
+       * </pre>
+       *
+       * <code>string identity = 1;</code>
+       * @param value The bytes for identity to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdentityBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setIdentityBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return Whether the userId field is set.
+       */
+      @java.lang.Override
+      public boolean hasUserId() {
+        return instance.hasUserId();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public java.lang.String getUserId() {
+        return instance.getUserId();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return The bytes for userId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        return instance.getUserIdBytes();
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setUserId(value);
+        return this;
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        copyOnWrite();
+        instance.clearUserId();
+        return this;
+      }
+      /**
+       * <code>optional string user_id = 2;</code>
+       * @param value The bytes for userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return Whether the nickname field is set.
+       */
+      @java.lang.Override
+      public boolean hasNickname() {
+        return instance.hasNickname();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return The nickname.
+       */
+      @java.lang.Override
+      public java.lang.String getNickname() {
+        return instance.getNickname();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return The bytes for nickname.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getNicknameBytes() {
+        return instance.getNicknameBytes();
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @param value The nickname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNickname(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setNickname(value);
+        return this;
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNickname() {
+        copyOnWrite();
+        instance.clearNickname();
+        return this;
+      }
+      /**
+       * <code>optional string nickname = 3;</code>
+       * @param value The bytes for nickname to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNicknameBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setNicknameBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return Whether the remark field is set.
+       */
+      @java.lang.Override
+      public boolean hasRemark() {
+        return instance.hasRemark();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return The remark.
+       */
+      @java.lang.Override
+      public java.lang.String getRemark() {
+        return instance.getRemark();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return The bytes for remark.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getRemarkBytes() {
+        return instance.getRemarkBytes();
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @param value The remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemark(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setRemark(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRemark() {
+        copyOnWrite();
+        instance.clearRemark();
+        return this;
+      }
+      /**
+       * <pre>
+       * 主播备注 (机器人)
+       * </pre>
+       *
+       * <code>optional string remark = 4;</code>
+       * @param value The bytes for remark to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRemarkBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setRemarkBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return Whether the avatarFileHash field is set.
+       */
+      @java.lang.Override
+      public boolean hasAvatarFileHash() {
+        return instance.hasAvatarFileHash();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return The avatarFileHash.
+       */
+      @java.lang.Override
+      public java.lang.String getAvatarFileHash() {
+        return instance.getAvatarFileHash();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return The bytes for avatarFileHash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAvatarFileHashBytes() {
+        return instance.getAvatarFileHashBytes();
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @param value The avatarFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAvatarFileHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAvatarFileHash(value);
+        return this;
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAvatarFileHash() {
+        copyOnWrite();
+        instance.clearAvatarFileHash();
+        return this;
+      }
+      /**
+       * <code>optional string avatar_file_hash = 5;</code>
+       * @param value The bytes for avatarFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAvatarFileHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAvatarFileHashBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.IMeetingParticipant)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.IMeetingParticipant();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "identity_",
+              "userId_",
+              "nickname_",
+              "remark_",
+              "avatarFileHash_",
+            };
+            java.lang.String info =
+                "\u0000\u0005\u0000\u0001\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u0208\u0002\u1208" +
+                "\u0000\u0003\u1208\u0001\u0004\u1208\u0002\u0005\u1208\u0003";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.IMeetingParticipant> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.IMeetingParticipant.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.IMeetingParticipant>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.IMeetingParticipant)
+    private static final lingcat.classes.Classes.IMeetingParticipant DEFAULT_INSTANCE;
+    static {
+      IMeetingParticipant defaultInstance = new IMeetingParticipant();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        IMeetingParticipant.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.IMeetingParticipant getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<IMeetingParticipant> PARSER;
+
+    public static com.google.protobuf.Parser<IMeetingParticipant> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
 
   static {
   }

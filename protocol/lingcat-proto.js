@@ -5292,6 +5292,417 @@ export const lingcat = $root.lingcat = (() => {
             return IUserOnlineStatus;
         })();
 
+        classes.IMeetingParticipant = (function() {
+
+            /**
+             * Properties of a IMeetingParticipant.
+             * @typedef {Object} lingcat.classes.IMeetingParticipant.$Properties
+             * @property {string|null} [identity] IMeetingParticipant identity
+             * @property {string|null} [userId] IMeetingParticipant userId
+             * @property {string|null} [nickname] IMeetingParticipant nickname
+             * @property {string|null} [remark] IMeetingParticipant remark
+             * @property {string|null} [avatarFileHash] IMeetingParticipant avatarFileHash
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IMeetingParticipant.
+             * @memberof lingcat.classes
+             * @interface IIMeetingParticipant
+             * @augments lingcat.classes.IMeetingParticipant.$Properties
+             * @deprecated Use lingcat.classes.IMeetingParticipant.$Properties instead.
+             */
+
+            /**
+             * Shape of a IMeetingParticipant.
+             * @typedef {lingcat.classes.IMeetingParticipant.$Properties} lingcat.classes.IMeetingParticipant.$Shape
+             */
+
+            /**
+             * Constructs a new IMeetingParticipant.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IMeetingParticipant.
+             * @constructor
+             * @param {lingcat.classes.IMeetingParticipant.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IMeetingParticipant = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IMeetingParticipant identity.
+             * @member {string} identity
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             */
+            IMeetingParticipant.prototype.identity = "";
+
+            /**
+             * IMeetingParticipant userId.
+             * @member {string|null|undefined} userId
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             */
+            IMeetingParticipant.prototype.userId = null;
+
+            /**
+             * IMeetingParticipant nickname.
+             * @member {string|null|undefined} nickname
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             */
+            IMeetingParticipant.prototype.nickname = null;
+
+            /**
+             * IMeetingParticipant remark.
+             * @member {string|null|undefined} remark
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             */
+            IMeetingParticipant.prototype.remark = null;
+
+            /**
+             * IMeetingParticipant avatarFileHash.
+             * @member {string|null|undefined} avatarFileHash
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             */
+            IMeetingParticipant.prototype.avatarFileHash = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMeetingParticipant.prototype, "_userId", {
+                get: $util.oneOfGetter($oneOfFields = ["userId"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMeetingParticipant.prototype, "_nickname", {
+                get: $util.oneOfGetter($oneOfFields = ["nickname"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMeetingParticipant.prototype, "_remark", {
+                get: $util.oneOfGetter($oneOfFields = ["remark"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IMeetingParticipant.prototype, "_avatarFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new IMeetingParticipant instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {lingcat.classes.IMeetingParticipant.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IMeetingParticipant} IMeetingParticipant instance
+             * @type {{
+             *   (properties: lingcat.classes.IMeetingParticipant.$Shape): lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape;
+             *   (properties?: lingcat.classes.IMeetingParticipant.$Properties): lingcat.classes.IMeetingParticipant;
+             * }}
+             */
+            IMeetingParticipant.create = function(properties) {
+                return new IMeetingParticipant(properties);
+            };
+
+            /**
+             * Encodes the specified IMeetingParticipant message. Does not implicitly {@link lingcat.classes.IMeetingParticipant.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {lingcat.classes.IMeetingParticipant.$Properties} message IMeetingParticipant message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IMeetingParticipant.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity") && message.identity !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.identity);
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.remark);
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.avatarFileHash);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IMeetingParticipant message, length delimited. Does not implicitly {@link lingcat.classes.IMeetingParticipant.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {lingcat.classes.IMeetingParticipant.$Properties} message IMeetingParticipant message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IMeetingParticipant.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a IMeetingParticipant message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape} IMeetingParticipant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IMeetingParticipant.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.classes.IMeetingParticipant();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.identity = value;
+                            else
+                                delete message.identity;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.userId = reader.stringVerify();
+                            message._userId = "userId";
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            message.nickname = reader.stringVerify();
+                            message._nickname = "nickname";
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.remark = reader.stringVerify();
+                            message._remark = "remark";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 2)
+                                break;
+                            message.avatarFileHash = reader.stringVerify();
+                            message._avatarFileHash = "avatarFileHash";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IMeetingParticipant message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape} IMeetingParticipant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IMeetingParticipant.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a IMeetingParticipant message.
+             * @function verify
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IMeetingParticipant.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                    if (!$util.isString(message.identity))
+                        return "identity: string expected";
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId")) {
+                    properties._userId = 1;
+                    if (!$util.isString(message.userId))
+                        return "userId: string expected";
+                }
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname")) {
+                    properties._nickname = 1;
+                    if (!$util.isString(message.nickname))
+                        return "nickname: string expected";
+                }
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark")) {
+                    properties._remark = 1;
+                    if (!$util.isString(message.remark))
+                        return "remark: string expected";
+                }
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
+                    properties._avatarFileHash = 1;
+                    if (!$util.isString(message.avatarFileHash))
+                        return "avatarFileHash: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a IMeetingParticipant message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IMeetingParticipant} IMeetingParticipant
+             */
+            IMeetingParticipant.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IMeetingParticipant)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IMeetingParticipant: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IMeetingParticipant();
+                if (object.identity != null)
+                    if (typeof object.identity !== "string" || object.identity.length)
+                        message.identity = $String(object.identity);
+                if (object.userId != null)
+                    message.userId = $String(object.userId);
+                if (object.nickname != null)
+                    message.nickname = $String(object.nickname);
+                if (object.remark != null)
+                    message.remark = $String(object.remark);
+                if (object.avatarFileHash != null)
+                    message.avatarFileHash = $String(object.avatarFileHash);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IMeetingParticipant message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {lingcat.classes.IMeetingParticipant} message IMeetingParticipant
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IMeetingParticipant.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.identity = "";
+                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                    object.identity = message.identity;
+                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
+                    object.userId = message.userId;
+                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
+                    object.nickname = message.nickname;
+                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
+                    object.remark = message.remark;
+                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
+                    object.avatarFileHash = message.avatarFileHash;
+                return object;
+            };
+
+            /**
+             * Converts this IMeetingParticipant to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IMeetingParticipant.prototype.toJSON = function() {
+                return IMeetingParticipant.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IMeetingParticipant
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IMeetingParticipant
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IMeetingParticipant.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IMeetingParticipant";
+            };
+
+            return IMeetingParticipant;
+        })();
+
         return classes;
     })();
 
@@ -33319,417 +33730,6 @@ export const lingcat = $root.lingcat = (() => {
             return Get_Meeting_Participants_Request;
         })();
 
-        methods.Meeting_Participant = (function() {
-
-            /**
-             * Properties of a Meeting_Participant.
-             * @typedef {Object} lingcat.methods.Meeting_Participant.$Properties
-             * @property {string|null} [identity] Meeting_Participant identity
-             * @property {string|null} [userId] Meeting_Participant userId
-             * @property {string|null} [nickname] Meeting_Participant nickname
-             * @property {string|null} [remark] Meeting_Participant remark
-             * @property {string|null} [avatarFileHash] Meeting_Participant avatarFileHash
-             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
-             */
-
-            /**
-             * Properties of a Meeting_Participant.
-             * @memberof lingcat.methods
-             * @interface IMeeting_Participant
-             * @augments lingcat.methods.Meeting_Participant.$Properties
-             * @deprecated Use lingcat.methods.Meeting_Participant.$Properties instead.
-             */
-
-            /**
-             * Shape of a Meeting_Participant.
-             * @typedef {lingcat.methods.Meeting_Participant.$Properties} lingcat.methods.Meeting_Participant.$Shape
-             */
-
-            /**
-             * Constructs a new Meeting_Participant.
-             * @memberof lingcat.methods
-             * @classdesc Represents a Meeting_Participant.
-             * @constructor
-             * @param {lingcat.methods.Meeting_Participant.$Properties=} [properties] Properties to set
-             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
-             */
-            const Meeting_Participant = function (properties) {
-                if (properties)
-                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
-                            this[keys[i]] = properties[keys[i]];
-            };
-
-            /**
-             * Meeting_Participant identity.
-             * @member {string} identity
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             */
-            Meeting_Participant.prototype.identity = "";
-
-            /**
-             * Meeting_Participant userId.
-             * @member {string|null|undefined} userId
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             */
-            Meeting_Participant.prototype.userId = null;
-
-            /**
-             * Meeting_Participant nickname.
-             * @member {string|null|undefined} nickname
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             */
-            Meeting_Participant.prototype.nickname = null;
-
-            /**
-             * Meeting_Participant remark.
-             * @member {string|null|undefined} remark
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             */
-            Meeting_Participant.prototype.remark = null;
-
-            /**
-             * Meeting_Participant avatarFileHash.
-             * @member {string|null|undefined} avatarFileHash
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             */
-            Meeting_Participant.prototype.avatarFileHash = null;
-
-            // OneOf field names bound to virtual getters and setters
-            let $oneOfFields;
-
-            // Virtual OneOf for proto3 optional field
-            $Object.defineProperty(Meeting_Participant.prototype, "_userId", {
-                get: $util.oneOfGetter($oneOfFields = ["userId"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            // Virtual OneOf for proto3 optional field
-            $Object.defineProperty(Meeting_Participant.prototype, "_nickname", {
-                get: $util.oneOfGetter($oneOfFields = ["nickname"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            // Virtual OneOf for proto3 optional field
-            $Object.defineProperty(Meeting_Participant.prototype, "_remark", {
-                get: $util.oneOfGetter($oneOfFields = ["remark"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            // Virtual OneOf for proto3 optional field
-            $Object.defineProperty(Meeting_Participant.prototype, "_avatarFileHash", {
-                get: $util.oneOfGetter($oneOfFields = ["avatarFileHash"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            /**
-             * Creates a new Meeting_Participant instance using the specified properties.
-             * @function create
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {lingcat.methods.Meeting_Participant.$Properties=} [properties] Properties to set
-             * @returns {lingcat.methods.Meeting_Participant} Meeting_Participant instance
-             * @type {{
-             *   (properties: lingcat.methods.Meeting_Participant.$Shape): lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape;
-             *   (properties?: lingcat.methods.Meeting_Participant.$Properties): lingcat.methods.Meeting_Participant;
-             * }}
-             */
-            Meeting_Participant.create = function(properties) {
-                return new Meeting_Participant(properties);
-            };
-
-            /**
-             * Encodes the specified Meeting_Participant message. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
-             * @function encode
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {lingcat.methods.Meeting_Participant.$Properties} message Meeting_Participant message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Meeting_Participant.encode = function (message, writer, _depth) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity") && message.identity !== "")
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.identity);
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
-                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.userId);
-                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
-                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
-                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
-                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.remark);
-                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
-                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.avatarFileHash);
-                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
-                    for (let i = 0; i < message.$unknowns.length; ++i)
-                        writer.raw(message.$unknowns[i]);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified Meeting_Participant message, length delimited. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {lingcat.methods.Meeting_Participant.$Properties} message Meeting_Participant message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            Meeting_Participant.encodeDelimited = function(message, writer) {
-                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
-            };
-
-            /**
-             * Decodes a Meeting_Participant message from the specified reader or buffer.
-             * @function decode
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Meeting_Participant.decode = function (reader, length, _end, _depth, _target) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $Reader.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let end, message, value;
-                if (length === $undefined)
-                    end = reader.len;
-                else {
-                    end = reader.pos + length;
-                    if (end > reader.len)
-                        throw $RangeError("index out of range");
-                    length = reader.len;
-                    reader.len = end;
-                }
-                message = _target || new $root.lingcat.methods.Meeting_Participant();
-                while (reader.pos < end) {
-                    let start = reader.pos;
-                    let tag = reader.tag();
-                    if (tag === _end) {
-                        _end = $undefined;
-                        break;
-                    }
-                    let wireType = tag & 7;
-                    switch (tag >>>= 3) {
-                    case 1: {
-                            if (wireType !== 2)
-                                break;
-                            if ((value = reader.stringVerify()).length)
-                                message.identity = value;
-                            else
-                                delete message.identity;
-                            continue;
-                        }
-                    case 2: {
-                            if (wireType !== 2)
-                                break;
-                            message.userId = reader.stringVerify();
-                            message._userId = "userId";
-                            continue;
-                        }
-                    case 3: {
-                            if (wireType !== 2)
-                                break;
-                            message.nickname = reader.stringVerify();
-                            message._nickname = "nickname";
-                            continue;
-                        }
-                    case 4: {
-                            if (wireType !== 2)
-                                break;
-                            message.remark = reader.stringVerify();
-                            message._remark = "remark";
-                            continue;
-                        }
-                    case 5: {
-                            if (wireType !== 2)
-                                break;
-                            message.avatarFileHash = reader.stringVerify();
-                            message._avatarFileHash = "avatarFileHash";
-                            continue;
-                        }
-                    }
-                    reader.skipType(wireType, _depth, tag);
-                    if (!reader.discardUnknown) {
-                        $util.makeProp(message, "$unknowns", false);
-                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
-                    }
-                }
-                if (length !== $undefined) {
-                    if (reader.pos !== end)
-                        throw $RangeError("index out of range");
-                    reader.len = length;
-                }
-                if (_end !== $undefined)
-                    throw $Error("missing end group");
-                return message;
-            };
-
-            /**
-             * Decodes a Meeting_Participant message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            Meeting_Participant.decodeDelimited = function(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.size());
-            };
-
-            /**
-             * Verifies a Meeting_Participant message.
-             * @function verify
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Meeting_Participant.verify = function (message, _depth) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    return "max depth exceeded";
-                let properties = {};
-                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
-                    if (!$util.isString(message.identity))
-                        return "identity: string expected";
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId")) {
-                    properties._userId = 1;
-                    if (!$util.isString(message.userId))
-                        return "userId: string expected";
-                }
-                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname")) {
-                    properties._nickname = 1;
-                    if (!$util.isString(message.nickname))
-                        return "nickname: string expected";
-                }
-                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark")) {
-                    properties._remark = 1;
-                    if (!$util.isString(message.remark))
-                        return "remark: string expected";
-                }
-                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash")) {
-                    properties._avatarFileHash = 1;
-                    if (!$util.isString(message.avatarFileHash))
-                        return "avatarFileHash: string expected";
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Meeting_Participant message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {lingcat.methods.Meeting_Participant} Meeting_Participant
-             */
-            Meeting_Participant.fromObject = function (object, _depth) {
-                if (object instanceof $root.lingcat.methods.Meeting_Participant)
-                    return object;
-                if (!$util.isObject(object))
-                    throw $TypeError(".lingcat.methods.Meeting_Participant: object expected");
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let message = new $root.lingcat.methods.Meeting_Participant();
-                if (object.identity != null)
-                    if (typeof object.identity !== "string" || object.identity.length)
-                        message.identity = $String(object.identity);
-                if (object.userId != null)
-                    message.userId = $String(object.userId);
-                if (object.nickname != null)
-                    message.nickname = $String(object.nickname);
-                if (object.remark != null)
-                    message.remark = $String(object.remark);
-                if (object.avatarFileHash != null)
-                    message.avatarFileHash = $String(object.avatarFileHash);
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Meeting_Participant message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {lingcat.methods.Meeting_Participant} message Meeting_Participant
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Meeting_Participant.toObject = function (message, options, _depth) {
-                if (!options)
-                    options = {};
-                if (_depth === $undefined)
-                    _depth = 0;
-                if (_depth > $util.recursionLimit)
-                    throw $Error("max depth exceeded");
-                let object = {};
-                if (options.defaults)
-                    object.identity = "";
-                if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
-                    object.identity = message.identity;
-                if (message.userId != null && $Object.hasOwnProperty.call(message, "userId"))
-                    object.userId = message.userId;
-                if (message.nickname != null && $Object.hasOwnProperty.call(message, "nickname"))
-                    object.nickname = message.nickname;
-                if (message.remark != null && $Object.hasOwnProperty.call(message, "remark"))
-                    object.remark = message.remark;
-                if (message.avatarFileHash != null && $Object.hasOwnProperty.call(message, "avatarFileHash"))
-                    object.avatarFileHash = message.avatarFileHash;
-                return object;
-            };
-
-            /**
-             * Converts this Meeting_Participant to JSON.
-             * @function toJSON
-             * @memberof lingcat.methods.Meeting_Participant
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Meeting_Participant.prototype.toJSON = function() {
-                return Meeting_Participant.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            /**
-             * Gets the type url for Meeting_Participant
-             * @function getTypeUrl
-             * @memberof lingcat.methods.Meeting_Participant
-             * @static
-             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-             * @returns {string} The type url
-             */
-            Meeting_Participant.getTypeUrl = function(prefix) {
-                if (prefix === $undefined)
-                    prefix = "type.googleapis.com";
-                return prefix + "/lingcat.methods.Meeting_Participant";
-            };
-
-            return Meeting_Participant;
-        })();
-
         methods.Get_Meeting_Participants_Response = (function() {
 
             /**
@@ -33738,7 +33738,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [meetingId] Get_Meeting_Participants_Response meetingId
              * @property {string|null} [room] Get_Meeting_Participants_Response room
              * @property {number|null} [count] Get_Meeting_Participants_Response count
-             * @property {Array.<lingcat.methods.Meeting_Participant.$Properties>|null} [participants] Get_Meeting_Participants_Response participants
+             * @property {Array.<lingcat.classes.IMeetingParticipant.$Properties>|null} [participants] Get_Meeting_Participants_Response participants
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -33797,7 +33797,7 @@ export const lingcat = $root.lingcat = (() => {
 
             /**
              * Get_Meeting_Participants_Response participants.
-             * @member {Array.<lingcat.methods.Meeting_Participant.$Properties>} participants
+             * @member {Array.<lingcat.classes.IMeetingParticipant.$Properties>} participants
              * @memberof lingcat.methods.Get_Meeting_Participants_Response
              * @instance
              */
@@ -33843,7 +33843,7 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.count);
                 if (message.participants != null && message.participants.length)
                     for (let i = 0; i < message.participants.length; ++i)
-                        $root.lingcat.methods.Meeting_Participant.encode(message.participants[i], writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+                        $root.lingcat.classes.IMeetingParticipant.encode(message.participants[i], writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -33933,7 +33933,7 @@ export const lingcat = $root.lingcat = (() => {
                                 break;
                             if (!(message.participants && message.participants.length))
                                 message.participants = [];
-                            message.participants.push($root.lingcat.methods.Meeting_Participant.decode(reader, reader.size(), $undefined, _depth + 1));
+                            message.participants.push($root.lingcat.classes.IMeetingParticipant.decode(reader, reader.size(), $undefined, _depth + 1));
                             continue;
                         }
                     }
@@ -33997,7 +33997,7 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$Array.isArray(message.participants))
                         return "participants: array expected";
                     for (let i = 0; i < message.participants.length; ++i) {
-                        let error = $root.lingcat.methods.Meeting_Participant.verify(message.participants[i], _depth + 1);
+                        let error = $root.lingcat.classes.IMeetingParticipant.verify(message.participants[i], _depth + 1);
                         if (error)
                             return "participants." + error;
                     }
@@ -34039,7 +34039,7 @@ export const lingcat = $root.lingcat = (() => {
                     for (let i = 0; i < object.participants.length; ++i) {
                         if (!$util.isObject(object.participants[i]))
                             throw $TypeError(".lingcat.methods.Get_Meeting_Participants_Response.participants: object expected");
-                        message.participants[i] = $root.lingcat.methods.Meeting_Participant.fromObject(object.participants[i], _depth + 1);
+                        message.participants[i] = $root.lingcat.classes.IMeetingParticipant.fromObject(object.participants[i], _depth + 1);
                     }
                 }
                 return message;
@@ -34078,7 +34078,7 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.participants && message.participants.length) {
                     object.participants = $Array(message.participants.length);
                     for (let j = 0; j < message.participants.length; ++j)
-                        object.participants[j] = $root.lingcat.methods.Meeting_Participant.toObject(message.participants[j], options, _depth + 1);
+                        object.participants[j] = $root.lingcat.classes.IMeetingParticipant.toObject(message.participants[j], options, _depth + 1);
                 }
                 return object;
             };
@@ -34120,7 +34120,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [meetingId] Meeting_Participants_Changed_Event meetingId
              * @property {string|null} [room] Meeting_Participants_Changed_Event room
              * @property {number|null} [count] Meeting_Participants_Changed_Event count
-             * @property {Array.<lingcat.methods.Meeting_Participant.$Properties>|null} [participants] Meeting_Participants_Changed_Event participants
+             * @property {Array.<lingcat.classes.IMeetingParticipant.$Properties>|null} [participants] Meeting_Participants_Changed_Event participants
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -34187,7 +34187,7 @@ export const lingcat = $root.lingcat = (() => {
 
             /**
              * Meeting_Participants_Changed_Event participants.
-             * @member {Array.<lingcat.methods.Meeting_Participant.$Properties>} participants
+             * @member {Array.<lingcat.classes.IMeetingParticipant.$Properties>} participants
              * @memberof lingcat.methods.Meeting_Participants_Changed_Event
              * @instance
              */
@@ -34235,7 +34235,7 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.count);
                 if (message.participants != null && message.participants.length)
                     for (let i = 0; i < message.participants.length; ++i)
-                        $root.lingcat.methods.Meeting_Participant.encode(message.participants[i], writer.uint32(/* id 5, wireType 2 =*/42).fork(), _depth + 1).ldelim();
+                        $root.lingcat.classes.IMeetingParticipant.encode(message.participants[i], writer.uint32(/* id 5, wireType 2 =*/42).fork(), _depth + 1).ldelim();
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -34334,7 +34334,7 @@ export const lingcat = $root.lingcat = (() => {
                                 break;
                             if (!(message.participants && message.participants.length))
                                 message.participants = [];
-                            message.participants.push($root.lingcat.methods.Meeting_Participant.decode(reader, reader.size(), $undefined, _depth + 1));
+                            message.participants.push($root.lingcat.classes.IMeetingParticipant.decode(reader, reader.size(), $undefined, _depth + 1));
                             continue;
                         }
                     }
@@ -34401,7 +34401,7 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$Array.isArray(message.participants))
                         return "participants: array expected";
                     for (let i = 0; i < message.participants.length; ++i) {
-                        let error = $root.lingcat.methods.Meeting_Participant.verify(message.participants[i], _depth + 1);
+                        let error = $root.lingcat.classes.IMeetingParticipant.verify(message.participants[i], _depth + 1);
                         if (error)
                             return "participants." + error;
                     }
@@ -34446,7 +34446,7 @@ export const lingcat = $root.lingcat = (() => {
                     for (let i = 0; i < object.participants.length; ++i) {
                         if (!$util.isObject(object.participants[i]))
                             throw $TypeError(".lingcat.methods.Meeting_Participants_Changed_Event.participants: object expected");
-                        message.participants[i] = $root.lingcat.methods.Meeting_Participant.fromObject(object.participants[i], _depth + 1);
+                        message.participants[i] = $root.lingcat.classes.IMeetingParticipant.fromObject(object.participants[i], _depth + 1);
                     }
                 }
                 return message;
@@ -34488,7 +34488,7 @@ export const lingcat = $root.lingcat = (() => {
                 if (message.participants && message.participants.length) {
                     object.participants = $Array(message.participants.length);
                     for (let j = 0; j < message.participants.length; ++j)
-                        object.participants[j] = $root.lingcat.methods.Meeting_Participant.toObject(message.participants[j], options, _depth + 1);
+                        object.participants[j] = $root.lingcat.classes.IMeetingParticipant.toObject(message.participants[j], options, _depth + 1);
                 }
                 return object;
             };

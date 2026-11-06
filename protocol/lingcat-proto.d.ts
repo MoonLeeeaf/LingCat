@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import * as $protobuf from "protobufjs/minimal.js";
 import Long = require("long");
 
 /** Namespace lingcat. */
@@ -1757,6 +1757,147 @@ export namespace lingcat {
 
             /** Shape of a IUserOnlineStatus. */
             type $Shape = lingcat.classes.IUserOnlineStatus.$Properties;
+        }
+
+        /**
+         * Properties of a IMeetingParticipant.
+         * @deprecated Use lingcat.classes.IMeetingParticipant.$Properties instead.
+         */
+        interface IIMeetingParticipant extends lingcat.classes.IMeetingParticipant.$Properties {
+        }
+
+        /** Represents a IMeetingParticipant. */
+        class IMeetingParticipant {
+
+            /**
+             * Constructs a new IMeetingParticipant.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IMeetingParticipant.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IMeetingParticipant identity. */
+            identity: string;
+
+            /** IMeetingParticipant userId. */
+            userId?: (string|null);
+
+            /** IMeetingParticipant nickname. */
+            nickname?: (string|null);
+
+            /** IMeetingParticipant remark. */
+            remark?: (string|null);
+
+            /** IMeetingParticipant avatarFileHash. */
+            avatarFileHash?: (string|null);
+
+            /**
+             * Creates a new IMeetingParticipant instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IMeetingParticipant instance
+             */
+            static create(properties: lingcat.classes.IMeetingParticipant.$Shape): lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape;
+            static create(properties?: lingcat.classes.IMeetingParticipant.$Properties): lingcat.classes.IMeetingParticipant;
+
+            /**
+             * Encodes the specified IMeetingParticipant message. Does not implicitly {@link lingcat.classes.IMeetingParticipant.verify|verify} messages.
+             * @param message IMeetingParticipant message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IMeetingParticipant.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IMeetingParticipant message, length delimited. Does not implicitly {@link lingcat.classes.IMeetingParticipant.verify|verify} messages.
+             * @param message IMeetingParticipant message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IMeetingParticipant.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IMeetingParticipant message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape} IMeetingParticipant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape;
+
+            /**
+             * Decodes a IMeetingParticipant message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape} IMeetingParticipant
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IMeetingParticipant & lingcat.classes.IMeetingParticipant.$Shape;
+
+            /**
+             * Verifies a IMeetingParticipant message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IMeetingParticipant message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IMeetingParticipant
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IMeetingParticipant;
+
+            /**
+             * Creates a plain object from a IMeetingParticipant message. Also converts values to other types if specified.
+             * @param message IMeetingParticipant
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IMeetingParticipant, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IMeetingParticipant to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IMeetingParticipant
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IMeetingParticipant {
+
+            /** Properties of a IMeetingParticipant. */
+            interface $Properties {
+
+                /** IMeetingParticipant identity */
+                identity?: (string|null);
+
+                /** IMeetingParticipant userId */
+                userId?: (string|null);
+
+                /** IMeetingParticipant nickname */
+                nickname?: (string|null);
+
+                /** IMeetingParticipant remark */
+                remark?: (string|null);
+
+                /** IMeetingParticipant avatarFileHash */
+                avatarFileHash?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IMeetingParticipant. */
+            type $Shape = lingcat.classes.IMeetingParticipant.$Properties;
         }
     }
 
@@ -13026,147 +13167,6 @@ export namespace lingcat {
         }
 
         /**
-         * Properties of a Meeting_Participant.
-         * @deprecated Use lingcat.methods.Meeting_Participant.$Properties instead.
-         */
-        interface IMeeting_Participant extends lingcat.methods.Meeting_Participant.$Properties {
-        }
-
-        /** Represents a Meeting_Participant. */
-        class Meeting_Participant {
-
-            /**
-             * Constructs a new Meeting_Participant.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: lingcat.methods.Meeting_Participant.$Properties);
-
-            /** Unknown fields preserved while decoding when enabled */
-            $unknowns?: Uint8Array[];
-
-            /** Meeting_Participant identity. */
-            identity: string;
-
-            /** Meeting_Participant userId. */
-            userId?: (string|null);
-
-            /** Meeting_Participant nickname. */
-            nickname?: (string|null);
-
-            /** Meeting_Participant remark. */
-            remark?: (string|null);
-
-            /** Meeting_Participant avatarFileHash. */
-            avatarFileHash?: (string|null);
-
-            /**
-             * Creates a new Meeting_Participant instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns Meeting_Participant instance
-             */
-            static create(properties: lingcat.methods.Meeting_Participant.$Shape): lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape;
-            static create(properties?: lingcat.methods.Meeting_Participant.$Properties): lingcat.methods.Meeting_Participant;
-
-            /**
-             * Encodes the specified Meeting_Participant message. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
-             * @param message Meeting_Participant message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encode(message: lingcat.methods.Meeting_Participant.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified Meeting_Participant message, length delimited. Does not implicitly {@link lingcat.methods.Meeting_Participant.verify|verify} messages.
-             * @param message Meeting_Participant message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            static encodeDelimited(message: lingcat.methods.Meeting_Participant.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a Meeting_Participant message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape;
-
-            /**
-             * Decodes a Meeting_Participant message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns {lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape} Meeting_Participant
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Meeting_Participant & lingcat.methods.Meeting_Participant.$Shape;
-
-            /**
-             * Verifies a Meeting_Participant message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Meeting_Participant message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Meeting_Participant
-             */
-            static fromObject(object: { [k: string]: any }): lingcat.methods.Meeting_Participant;
-
-            /**
-             * Creates a plain object from a Meeting_Participant message. Also converts values to other types if specified.
-             * @param message Meeting_Participant
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            static toObject(message: lingcat.methods.Meeting_Participant, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Meeting_Participant to JSON.
-             * @returns JSON object
-             */
-            toJSON(): { [k: string]: any };
-
-            /**
-             * Gets the type url for Meeting_Participant
-             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
-             * @returns The type url
-             */
-            static getTypeUrl(prefix?: string): string;
-        }
-
-        namespace Meeting_Participant {
-
-            /** Properties of a Meeting_Participant. */
-            interface $Properties {
-
-                /** Meeting_Participant identity */
-                identity?: (string|null);
-
-                /** Meeting_Participant userId */
-                userId?: (string|null);
-
-                /** Meeting_Participant nickname */
-                nickname?: (string|null);
-
-                /** Meeting_Participant remark */
-                remark?: (string|null);
-
-                /** Meeting_Participant avatarFileHash */
-                avatarFileHash?: (string|null);
-
-                /** Unknown fields preserved while decoding when enabled */
-                $unknowns?: Uint8Array[];
-            }
-
-            /** Shape of a Meeting_Participant. */
-            type $Shape = lingcat.methods.Meeting_Participant.$Properties;
-        }
-
-        /**
          * Properties of a Get_Meeting_Participants_Response.
          * @deprecated Use lingcat.methods.Get_Meeting_Participants_Response.$Properties instead.
          */
@@ -13195,7 +13195,7 @@ export namespace lingcat {
             count: number;
 
             /** Get_Meeting_Participants_Response participants. */
-            participants: lingcat.methods.Meeting_Participant.$Properties[];
+            participants: lingcat.classes.IMeetingParticipant.$Properties[];
 
             /**
              * Creates a new Get_Meeting_Participants_Response instance using the specified properties.
@@ -13291,7 +13291,7 @@ export namespace lingcat {
                 count?: (number|null);
 
                 /** Get_Meeting_Participants_Response participants */
-                participants?: (lingcat.methods.Meeting_Participant.$Properties[]|null);
+                participants?: (lingcat.classes.IMeetingParticipant.$Properties[]|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];
@@ -13333,7 +13333,7 @@ export namespace lingcat {
             count: number;
 
             /** Meeting_Participants_Changed_Event participants. */
-            participants: lingcat.methods.Meeting_Participant.$Properties[];
+            participants: lingcat.classes.IMeetingParticipant.$Properties[];
 
             /**
              * Creates a new Meeting_Participants_Changed_Event instance using the specified properties.
@@ -13432,7 +13432,7 @@ export namespace lingcat {
                 count?: (number|null);
 
                 /** Meeting_Participants_Changed_Event participants */
-                participants?: (lingcat.methods.Meeting_Participant.$Properties[]|null);
+                participants?: (lingcat.classes.IMeetingParticipant.$Properties[]|null);
 
                 /** Unknown fields preserved while decoding when enabled */
                 $unknowns?: Uint8Array[];

@@ -137,3 +137,13 @@ message IUserOnlineStatus {
     string user_id = 1;
     bool online = 2;
 }
+
+message IMeetingParticipant {
+    // LiveKit identity
+    string identity = 1;
+    optional string user_id = 2;
+    optional string nickname = 3;
+    // 主播备注 (机器人)
+    optional string remark = 4;
+    optional string avatar_file_hash = 5;
+}
