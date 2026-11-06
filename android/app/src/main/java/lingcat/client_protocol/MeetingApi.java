@@ -13,6 +13,8 @@ import lingcat.methods.Methods.Start_Meeting_Response;
 import lingcat.protocol.Methods;
 import lingcat.protocol.Package;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -76,6 +78,129 @@ public final class MeetingApi {
             this.starterUserId = starterUserId;
             this.title = title;
         }
+    }
+
+    // ============================================================
+    //                      新增：会议成员信息
+    // ============================================================
+
+    public static class MeetingParticipant {
+        public final String identity;
+        public final String userId;
+        public final String nickname;
+        public final String remark;
+        public final String avatarFileHash;
+
+        public MeetingParticipant(String identity, String userId, String nickname, String remark, String avatarFileHash) {
+            this.identity = identity;
+            this.userId = userId;
+            this.nickname = nickname;
+            this.remark = remark;
+            this.avatarFileHash = avatarFileHash;
+        }
+    }
+
+    public static class MeetingParticipantsResult {
+        public final String meetingId;
+        public final String room;
+        public final int count;
+        public final List<MeetingParticipant> participants;
+
+        public MeetingParticipantsResult(String meetingId, String room, int count, List<MeetingParticipant> participants) {
+            this.meetingId = meetingId;
+            this.room = room;
+            this.count = count;
+            this.participants = participants;
+        }
+    }
+
+    // ============================================================
+    //                      新增的 API
+    // ============================================================
+
+    /**
+     * 查询会议在场成员 (供横幅显示人数/头像堆叠)
+     */
+    public static MeetingParticipantsResult getMeetingParticipants(LingCatClient client,
+                                                                   String accessToken,
+                                                                   String chatId,
+                                                                   String meetingId,
+                                                                   long timeoutMs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        lingcat.methods.Methods.Get_Meeting_Participants_Request.Builder b =
+                lingcat.methods.Methods.Get_Meeting_Participants_Request.newBuilder()
+                        .setAccessToken(accessToken)
+                        .setChatId(chatId);
+        if (meetingId != null) {
+            b.setMeetingId(meetingId);
+        }
+
+        byte[] data = await(client, Methods.Get_Meeting_Participants_Request,
+                b.build().toByteArray(), timeoutMs).data;
+
+        lingcat.methods.Methods.Get_Meeting_Participants_Response res =
+                decode(lingcat.methods.Methods.Get_Meeting_Participants_Response.parser(), data);
+
+        List<MeetingParticipant> list = new ArrayList<>();
+        for (lingcat.classes.Classes.IMeetingParticipant p : res.getParticipantsList()) {
+            list.add(new MeetingParticipant(
+                    p.getIdentity(),
+                    p.hasUserId() ? p.getUserId() : null,
+                    p.hasNickname() ? p.getNickname() : null,
+                    p.hasRemark() ? p.getRemark() : null,
+                    p.hasAvatarFileHash() ? p.getAvatarFileHash() : null
+            ));
+        }
+
+        return new MeetingParticipantsResult(
+                res.getMeetingId(),
+                res.getRoom(),
+                res.getCount(),
+                list
+        );
+    }
+
+    public static MeetingParticipantsResult getMeetingParticipants(LingCatClient client,
+                                                                   String accessToken,
+                                                                   String chatId,
+                                                                   String meetingId)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        return getMeetingParticipants(client, accessToken, chatId, meetingId, DEFAULT_TIMEOUT_MS);
+    }
+
+    /**
+     * 修改进行中会议的标题
+     */
+    public static String updateMeetingTitle(LingCatClient client,
+                                            String accessToken,
+                                            String chatId,
+                                            String meetingId,
+                                            String title,
+                                            long timeoutMs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        lingcat.methods.Methods.Update_Meeting_Title_Request req =
+                lingcat.methods.Methods.Update_Meeting_Title_Request.newBuilder()
+                        .setAccessToken(accessToken)
+                        .setChatId(chatId)
+                        .setMeetingId(meetingId)
+                        .setTitle(title)
+                        .build();
+
+        byte[] data = await(client, Methods.Update_Meeting_Title_Request,
+                req.toByteArray(), timeoutMs).data;
+
+        lingcat.methods.Methods.Update_Meeting_Title_Response res =
+                decode(lingcat.methods.Methods.Update_Meeting_Title_Response.parser(), data);
+        return res.getTitle();
+    }
+
+    public static String updateMeetingTitle(LingCatClient client,
+                                            String accessToken,
+                                            String chatId,
+                                            String meetingId,
+                                            String title)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        return updateMeetingTitle(client, accessToken, chatId, meetingId, title, DEFAULT_TIMEOUT_MS);
     }
 
     // ============================================================
