@@ -24,6 +24,8 @@ import kotlinx.coroutines.withContext
 import lingcat.client_protocol.HttpClientProvider
 import lingcat.client_protocol.MeetingApi
 import lingcat.client_protocol.ChatApi // ★ 新增导入
+import android.app.Activity
+import android.content.Intent
 
 enum class MeetingPhase { IDLE, CONNECTING, CONNECTED, ERROR }
 
@@ -305,17 +307,30 @@ object MeetingManager {
         }
     }
 
-    fun toggleScreenShare() {
+    /**
+     * 切换屏幕共享
+     */
+    fun toggleScreenShare(resultCode: Int = 0, data: Intent? = null) {
         managerScope.launch {
             try {
                 val lp = room?.localParticipant ?: return@launch
                 if (_uiState.value.isScreenShareOn) {
+                    // 关闭共享
                     lp.setScreenShareEnabled(false)
                 } else {
-                    lp.setScreenShareEnabled(true)
+                    // 开启共享
+                    if (resultCode == Activity.RESULT_OK && data != null) {
+                        // LiveKit 的 API 需要传 ScreenCaptureParams
+                        lp.setScreenShareEnabled(
+                            enabled = true,
+                            mediaProjectionPermissionResultData = data,
+                        )
+                    } else {
+                        Log.w(TAG, "Screen share permission denied or data is null")
+                    }
                 }
                 updateLocalState()
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 Log.e(TAG, "toggleScreenShare failed", e)
             }
         }

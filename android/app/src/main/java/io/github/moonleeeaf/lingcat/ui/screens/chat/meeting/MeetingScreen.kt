@@ -31,9 +31,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.moonleeeaf.lingcat.ui.utils.ZoomableBox
 import io.github.moonleeeaf.lingcat.ui.utils.rememberPermissionRequestHandler
 import io.github.moonleeeaf.lingcat.app.MeetingService
-
+import android.app.Activity
+import android.content.Context
+import android.media.projection.MediaProjectionManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import org.json.JSONObject
+import androidx.compose.material.icons.filled.ScreenShare 
+import androidx.compose.material.icons.filled.StopScreenShare 
 
 /**
  * 判断当前用户是否有结束会议的权限
@@ -93,6 +97,25 @@ fun MeetingScreen(
             onBack()
         }
     }
+
+        // ★ 1. 定义系统录屏权限请求器
+    val screenCaptureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            // 用户同意了，把结果传给 MeetingManager
+            MeetingManager.toggleScreenShare(result.resultCode, result.data)
+            // ★ 通知前台服务更新类型（Android 14 必须）
+            MeetingService.updateServiceType(context)
+        } else {
+            // 用户拒绝了
+            // 这里可以加个 Toast 提示
+        }
+    }
+
+    // ★ 2. 准备录屏意图
+    val mediaProjectionManager = context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    val captureIntent = mediaProjectionManager.createScreenCaptureIntent()
 
     var showEndMeetingDialog by remember { mutableStateOf(false) }
 
@@ -184,6 +207,26 @@ fun MeetingScreen(
                             imageVector = if (uiState.isCameraOn) Icons.Default.Videocam else Icons.Default.VideocamOff,
                             contentDescription = "摄像头",
                             tint = if (uiState.isCameraOn) Color.White else Color.Red
+                        )
+                    }
+
+                     // ★ 3. 屏幕共享按钮
+                    IconButton(
+                        onClick = {
+                            if (uiState.isScreenShareOn) {
+                                // 如果已经在共享，直接停止
+                                MeetingManager.toggleScreenShare()
+                            } else {
+                                // 如果没在共享，唤起系统弹窗
+                                screenCaptureLauncher.launch(captureIntent)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            // 这里用 Material 默认图标，你有自定义的可以换
+                            imageVector = if (uiState.isScreenShareOn) Icons.Default.ScreenShare else Icons.Default.StopScreenShare,
+                            contentDescription = "屏幕共享",
+                            tint = if (uiState.isScreenShareOn) Color.Green else Color.White
                         )
                     }
 

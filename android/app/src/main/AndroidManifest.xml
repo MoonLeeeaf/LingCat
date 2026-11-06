@@ -65,7 +65,7 @@
         <service
             android:name=".app.MeetingService"
             android:exported="false"
-            android:foregroundServiceType="microphone|camera|mediaPlayback" />
+            android:foregroundServiceType="microphone|camera|mediaPlayback|mediaProjection" />
 
         <receiver
             android:name=".app.ReplyReceiver"

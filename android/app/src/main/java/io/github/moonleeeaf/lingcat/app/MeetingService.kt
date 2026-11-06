@@ -77,21 +77,23 @@ class MeetingService : Service() {
         return START_NOT_STICKY
     }
 
-    /**
-     * 根据当前权限动态计算 ServiceType
-     */
     private fun calculateServiceType(): Int {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return 0
         
         var type = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
         
-        // 有麦克风权限才加上 MICROPHONE 类型
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             type = type or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
         }
-        // 有摄像头权限才加上 CAMERA 类型
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             type = type or ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA
+        }
+        
+        // ★ 新增：如果当前正在屏幕共享，或者系统支持，就把 MediaProjection 加上
+        // 注意：Android 14 上直接加上这个通常没问题，但如果在没有授权的情况下强行启动会崩溃。
+        // 稳妥的做法是：只有真正开启屏幕共享时，才把 Type 切过去。
+        if (MeetingManager.uiState.value.isScreenShareOn) {
+            type = type or ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
         }
         
         return type
