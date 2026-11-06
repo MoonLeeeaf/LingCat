@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private val deepLinkChatId = MutableSharedFlow<String>(extraBufferCapacity = 1)
     // ★ 传递 OAuth 事件
     private val oauthEvents = MutableSharedFlow<OAuthEvent>(extraBufferCapacity = 1)
+    private val openMeetingEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
                     deepLinkChatIdFlow = deepLinkChatId,
                     oauthEventFlow = oauthEvents,
                     windowSizeClass = windowSizeClass,
+                    openMeetingEventFlow = openMeetingEvent,
                 )
             }
         }
@@ -103,6 +105,11 @@ class MainActivity : ComponentActivity() {
         if (!chatId.isNullOrEmpty()) {
             deepLinkChatId.tryEmit(chatId)
             intent.removeExtra("route_chat_id")
+        }
+
+        if (intent?.getBooleanExtra("open_meeting", false) == true) {
+            openMeetingEvent.tryEmit(Unit)
+            intent.removeExtra("open_meeting") // 消费掉
         }
     }
 

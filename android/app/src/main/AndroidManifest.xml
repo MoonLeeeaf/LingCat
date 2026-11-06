@@ -13,10 +13,11 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -58,11 +59,13 @@
 
         <service
             android:name=".app.ConnectionKeepAliveService"
+            android:exported="false"
             android:foregroundServiceType="dataSync" />
 
         <service
             android:name=".app.MeetingService"
-            android:foregroundServiceType="camera|microphone" />
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera|mediaPlayback" />
 
         <receiver
             android:name=".app.ReplyReceiver"

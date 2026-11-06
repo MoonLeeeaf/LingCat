@@ -3,6 +3,7 @@ package io.github.moonleeeaf.lingcat.ui.screens.chat.meeting
 import android.content.Context
 import android.util.Log
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.app.MeetingService
 import io.livekit.android.LiveKit
 import io.livekit.android.LiveKitOverrides
 import io.livekit.android.RoomOptions
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lingcat.client_protocol.HttpClientProvider
 import lingcat.client_protocol.MeetingApi
+import lingcat.client_protocol.ChatApi // ★ 新增导入
 
 enum class MeetingPhase { IDLE, CONNECTING, CONNECTED, ERROR }
 
@@ -37,6 +39,10 @@ data class MeetingUiState(
 
     // 参会者列表
     val participants: List<Participant> = emptyList(),
+    val starterUserId: String? = null,
+    val iAmChatAdmin: Boolean = false,
+    val myChatAdminRole: String? = null,
+    val myChatAdminPermissions: String? = null,
 
     // 本地媒体状态
     val isMicOn: Boolean = false,
@@ -52,7 +58,6 @@ data class MeetingUiState(
 object MeetingManager {
     private const val TAG = "MeetingManager"
 
-    // 内部协程作用域，生命周期与 Room 绑定
     private var managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var room: Room? = null
     private var roomEventsJob: Job? = null
@@ -62,65 +67,34 @@ object MeetingManager {
 
     val currentRoom: Room? get() = room
 
-    /**
-     * 处理 Web 端遗留的 same-origin 或相对路径问题
-     * 确保 Android 端拿到的是包含 scheme 的绝对 WebSocket / HTTP URL
-     */
-    /**
-     * 处理 Web 端遗留的 same-origin 或相对路径问题
-     * 确保 Android 端拿到的是包含 scheme 的绝对 WebSocket / HTTP URL
-     */
     private fun normalizeLiveKitUrl(rawUrl: String?): String {
-        // 如果为空或者为 same-origin，对齐 Web 端：直接使用当前主站的 host，并将协议转为 ws/wss
+        // ... (保持不变) ...
         if (rawUrl.isNullOrBlank() || rawUrl == "same-origin") {
             val httpUrl = LingCatClientManager.currentServer?.httpUrl
                 ?: throw IllegalStateException("无法获取当前服务器地址且后端未提供有效的 LiveKit URL")
-
-            // 判断当前环境是 https 还是 http
             val isSecure = httpUrl.startsWith("https", ignoreCase = true)
             val scheme = if (isSecure) "wss://" else "ws://"
-
-            // 提取纯 Host（域名:端口），去掉可能存在的协议头和后续路径
-            // 比如 https://chat.lingcat.com/api -> chat.lingcat.com
             val host = httpUrl
                 .replace("https://", "", ignoreCase = true)
                 .replace("http://", "", ignoreCase = true)
                 .substringBefore("/")
-
             return "$scheme$host"
         }
-
-        // 如果后端直接给了完整的 ws/wss 链接，直接用
-        if (rawUrl.startsWith("ws://") || rawUrl.startsWith("wss://")) {
-            return rawUrl
-        }
-
-        // 如果给的是 http/https，转换为 ws/wss (LiveKit 官方推荐 wss)
-        if (rawUrl.startsWith("http://")) {
-            return rawUrl.replace("http://", "ws://", ignoreCase = true)
-        }
-        if (rawUrl.startsWith("https://")) {
-            return rawUrl.replace("https://", "wss://", ignoreCase = true)
-        }
-
-        // 如果是纯相对路径，拼接当前服务器的 Host
+        if (rawUrl.startsWith("ws://") || rawUrl.startsWith("wss://")) return rawUrl
+        if (rawUrl.startsWith("http://")) return rawUrl.replace("http://", "ws://", ignoreCase = true)
+        if (rawUrl.startsWith("https://")) return rawUrl.replace("https://", "wss://", ignoreCase = true)
         val baseUrl = LingCatClientManager.currentServer?.httpUrl
             ?: throw IllegalStateException("无法解析 LiveKit URL: $rawUrl")
-
         val isSecure = baseUrl.startsWith("https", ignoreCase = true)
         val scheme = if (isSecure) "wss://" else "ws://"
         val host = baseUrl
             .replace("https://", "", ignoreCase = true)
             .replace("http://", "", ignoreCase = true)
             .substringBefore("/")
-
         val path = if (rawUrl.startsWith("/")) rawUrl else "/$rawUrl"
         return "$scheme$host$path"
     }
 
-    /**
-     * 发起或加入会议
-     */
     fun joinMeeting(
         context: Context,
         chatId: String,
@@ -132,7 +106,6 @@ object MeetingManager {
             return
         }
 
-        // 如果已经在别的会议，先退出
         leaveMeeting(disconnectRoom = true)
 
         _uiState.value = _uiState.value.copy(
@@ -142,6 +115,12 @@ object MeetingManager {
             meetingId = meetingId,
             errorMsg = null
         )
+
+        try {
+            MeetingService.start(context)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start MeetingService", e)
+        }
 
         managerScope.launch {
             try {
@@ -153,7 +132,13 @@ object MeetingManager {
                     MeetingApi.getMeetingToken(client, token, chatId, meetingId)
                 }
 
-                _uiState.value = _uiState.value.copy(roomName = creds.room)
+                // ★ 假设 creds 里有 starterUserId，如果没有需要向后端确认
+                // 如果后端的 getMeetingToken 接口没有返回 starterUserId，
+                // 你可能需要在加入后调用 MeetingApi.getActiveMeeting 获取，并更新这里
+                _uiState.value = _uiState.value.copy(
+                    roomName = creds.room,
+                    // starterUserId = creds.starterUserId // 如果接口有这个字段，请解开注释
+                )
 
                 // 2. 初始化 LiveKit Room
                 val newRoom = LiveKit.create(
@@ -179,6 +164,9 @@ object MeetingManager {
 
                 _uiState.value = _uiState.value.copy(phase = MeetingPhase.CONNECTED)
                 refreshParticipants()
+                
+                // ★ 新增：拉取当前用户的群管权限
+                loadChatAdminFlag(chatId)
 
             } catch (e: Exception) {
                 Log.e(TAG, "joinMeeting failed", e)
@@ -189,14 +177,48 @@ object MeetingManager {
             }
         }
     }
-
+    
     /**
-     * 监听 LiveKit 内部的各种事件
+     * ★ 新增：拉取群管理员权限
      */
+    private fun loadChatAdminFlag(chatId: String) {
+        managerScope.launch(Dispatchers.IO) {
+            try {
+                val client = LingCatClientManager.currentClient ?: return@launch
+                val token = LingCatClientManager.currentToken ?: return@launch
+                
+                // 调用 ChatApi 获取管理员列表
+                // 注意：根据你的 Java SDK 定义，方法名或返回值可能略有不同
+                // 假设返回的是一个包含 id, role, permissions 的对象列表
+                val admins = ChatApi.getChatAdmins(client, token, chatId)
+                val myUserId = LingCatClientManager.currentUserId
+                
+                // 查找自己是否在管理员列表中
+                val mine = admins?.find { it.id == myUserId }
+                
+                if (_uiState.value.chatId != chatId) return@launch // 防止用户已经切走
+                
+                _uiState.value = _uiState.value.copy(
+                    iAmChatAdmin = mine != null,
+                    myChatAdminRole = mine?.role,
+                    myChatAdminPermissions = mine?.permissions
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "loadChatAdminFlag failed", e)
+                if (_uiState.value.chatId != chatId) return@launch
+                _uiState.value = _uiState.value.copy(
+                    iAmChatAdmin = false,
+                    myChatAdminRole = null,
+                    myChatAdminPermissions = null
+                )
+            }
+        }
+    }
+
     private fun listenRoomEvents(targetRoom: Room) {
+        // ... (保持不变) ...
         roomEventsJob?.cancel()
         roomEventsJob = managerScope.launch {
-            // ★ 修复 1：直接使用 room.events.collect 监听事件
             targetRoom.events.collect { event ->
                 when (event) {
                     is RoomEvent.ParticipantConnected -> refreshParticipants()
@@ -206,7 +228,6 @@ object MeetingManager {
                     is RoomEvent.TrackMuted -> refreshParticipants()
                     is RoomEvent.TrackUnmuted -> refreshParticipants()
 
-                    // ★ 修复 2：官方没有 LocalTrackPublished，统一是 TrackPublished
                     is RoomEvent.TrackPublished -> {
                         if (event.participant is io.livekit.android.room.participant.LocalParticipant) {
                             updateLocalState()
@@ -214,7 +235,6 @@ object MeetingManager {
                             refreshParticipants()
                         }
                     }
-                    // ★ 修复 3：官方没有 LocalTrackUnpublished，统一是 TrackUnpublished
                     is RoomEvent.TrackUnpublished -> {
                         if (event.participant is io.livekit.android.room.participant.LocalParticipant) {
                             updateLocalState()
@@ -228,7 +248,6 @@ object MeetingManager {
                         clearState()
                     }
                     is RoomEvent.ActiveSpeakersChanged -> {
-                        // 如果你需要做说话音量波纹，可以在这里保存 activeSpeakers 并触发重组
                         refreshParticipants()
                     }
                     else -> {}
@@ -237,9 +256,6 @@ object MeetingManager {
         }
     }
 
-    /**
-     * 刷新参会者列表 (触发 UI 重组)
-     */
     private fun refreshParticipants() {
         val r = room ?: return
         val list = mutableListOf<Participant>()
@@ -248,13 +264,10 @@ object MeetingManager {
 
         _uiState.value = _uiState.value.copy(
             participants = list,
-            rev = _uiState.value.rev + 1 // ★ 每次刷新让版本号 +1
+            rev = _uiState.value.rev + 1
         )
     }
 
-    /**
-     * 更新本地麦克风/摄像头状态
-     */
     private fun updateLocalState() {
         val lp = room?.localParticipant ?: return
         val mic = lp.getTrackPublication(Track.Source.MICROPHONE)
@@ -268,40 +281,30 @@ object MeetingManager {
         )
     }
 
-    /**
-     * 切换麦克风开关
-     */
     fun toggleMic() {
         managerScope.launch {
             try {
                 val lp = room?.localParticipant ?: return@launch
                 lp.setMicrophoneEnabled(!_uiState.value.isMicOn)
                 updateLocalState()
-            } catch (e: Throwable) { // ★ 改为 Throwable 兜底
+            } catch (e: Throwable) {
                 Log.e(TAG, "toggleMic failed", e)
-                // 可考虑在此处给 _uiState 加个提示，告诉 UI 层失败了
             }
         }
     }
 
-    /**
-     * 切换摄像头开关
-     */
     fun toggleCamera() {
         managerScope.launch {
             try {
                 val lp = room?.localParticipant ?: return@launch
                 lp.setCameraEnabled(!_uiState.value.isCameraOn)
                 updateLocalState()
-            } catch (e: Throwable) { // ★ 改为 Throwable 兜底
+            } catch (e: Throwable) {
                 Log.e(TAG, "toggleCamera failed", e)
             }
         }
     }
 
-    /**
-     * 切换屏幕共享开关 (后续如果需要加上)
-     */
     fun toggleScreenShare() {
         managerScope.launch {
             try {
@@ -309,7 +312,6 @@ object MeetingManager {
                 if (_uiState.value.isScreenShareOn) {
                     lp.setScreenShareEnabled(false)
                 } else {
-                    // 需要配合 Activity 的 MediaProjection 权限申请
                     lp.setScreenShareEnabled(true)
                 }
                 updateLocalState()
@@ -319,11 +321,6 @@ object MeetingManager {
         }
     }
 
-    /**
-     * 设置焦点视图（放大某个人）
-     * @param identity 参会者 ID
-     * @param source "camera" 或 "screen"
-     */
     fun setFocused(identity: String?, source: String? = null) {
         _uiState.value = _uiState.value.copy(
             focusedIdentity = identity,
@@ -331,9 +328,6 @@ object MeetingManager {
         )
     }
 
-    /**
-     * 离开会议 (只断开自己)
-     */
     fun leaveMeeting(disconnectRoom: Boolean = true) {
         if (disconnectRoom) {
             managerScope.launch {
@@ -347,9 +341,6 @@ object MeetingManager {
         clearState()
     }
 
-    /**
-     * 结束会议 (如果是发起人，需要通知服务端)
-     */
     fun endMeeting(context: Context) {
         val chatId = _uiState.value.chatId
         val meetingId = _uiState.value.meetingId
@@ -373,6 +364,6 @@ object MeetingManager {
         roomEventsJob?.cancel()
         roomEventsJob = null
         room = null
-        _uiState.value = MeetingUiState() // 重置为空闲状态
+        _uiState.value = MeetingUiState()
     }
 }

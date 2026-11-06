@@ -1,5 +1,6 @@
 package io.github.moonleeeaf.lingcat.app
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,12 +8,16 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import io.github.moonleeeaf.lingcat.MainActivity
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,59 +29,124 @@ class MeetingService : Service() {
     private val NOTIFICATION_ID = 1001
     private val serviceScope = CoroutineScope(Dispatchers.Main + Job())
     private var stateJob: Job? = null
+    
+    // 记录当前的服务类型
+    private var currentServiceType = 0
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+    }
 
-        // 监听会议状态，如果退出了会议，自动关闭服务
-        stateJob = serviceScope.launch {
-            MeetingManager.uiState.collectLatest { state ->
-                if (state.phase == io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase.IDLE) {
-                    stopSelf()
-                } else {
-                    startForeground(NOTIFICATION_ID, buildNotification(state.chatTitle ?: "会议"))
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // 判断是否是动态更新类型的请求
+        if (intent?.action == ACTION_UPDATE_TYPE) {
+            updateServiceTypeIfNeeded()
+            return START_NOT_STICKY
+        }
+
+        // 正常启动流程
+        try {
+            currentServiceType = calculateServiceType()
+            val initialNotification = buildNotification("会议准备中...")
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(NOTIFICATION_ID, initialNotification, currentServiceType)
+            } else {
+                startForeground(NOTIFICATION_ID, initialNotification)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
+        if (stateJob == null) {
+            stateJob = serviceScope.launch {
+                MeetingManager.uiState.collectLatest { state ->
+                    if (state.phase == MeetingPhase.IDLE) {
+                        stopSelf()
+                    } else {
+                        val manager = getSystemService(NotificationManager::class.java)
+                        manager.notify(NOTIFICATION_ID, buildNotification(state.chatTitle ?: "会议进行中"))
+                    }
                 }
+            }
+        }
+
+        return START_NOT_STICKY
+    }
+
+    /**
+     * 根据当前权限动态计算 ServiceType
+     */
+    private fun calculateServiceType(): Int {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return 0
+        
+        var type = ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+        
+        // 有麦克风权限才加上 MICROPHONE 类型
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            type = type or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+        }
+        // 有摄像头权限才加上 CAMERA 类型
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            type = type or ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA
+        }
+        
+        return type
+    }
+
+    /**
+     * 如果权限变了，重新调用 startForeground 刷新类型
+     */
+    private fun updateServiceTypeIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val newType = calculateServiceType()
+            if (newType != currentServiceType) {
+                currentServiceType = newType
+                val notification = buildNotification(MeetingManager.uiState.value.chatTitle ?: "会议进行中")
+                // 重新调用 startForeground 更新类型
+                startForeground(NOTIFICATION_ID, notification, currentServiceType)
             }
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return START_NOT_STICKY
-    }
-
+   
     override fun onDestroy() {
         stateJob?.cancel()
+        stateJob = null
         super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun buildNotification(title: String): Notification {
-        // 点击通知回到会议
         val openIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra("open_meeting", true)
         }
         val pendingIntent = PendingIntent.getActivity(
             this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // 挂断按钮
-        val hangupIntent = Intent(this, MeetingHangupReceiver::class.java)
+        val hangupIntent = Intent(this, MeetingHangupReceiver::class.java).apply {
+            action = "ACTION_HANGUP_MEETING"
+        }
         val hangupPending = PendingIntent.getBroadcast(
             this, 1, hangupIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_call)
+            .setSmallIcon(R.drawable.ic_call) // 确保你有这个图标
             .setContentTitle(title)
             .setContentText("会议进行中，点击返回")
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_call_end, "挂断", hangupPending)
+            .addAction(R.drawable.ic_call_end, "挂断", hangupPending) // 确保你有这个图标
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .build()
     }
 
@@ -84,12 +154,33 @@ class MeetingService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID, "会议状态",
-                NotificationManager.IMPORTANCE_LOW // 降低提示音，保持常驻
+                NotificationManager.IMPORTANCE_LOW
             ).apply {
                 setShowBadge(false)
                 description = "保持会议在后台运行"
             }
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+        }
+    }
+
+
+    companion object {
+        const val ACTION_UPDATE_TYPE = "ACTION_UPDATE_TYPE"
+
+        fun start(context: Context) {
+            val intent = Intent(context, MeetingService::class.java)
+            ContextCompat.startForegroundService(context, intent)
+        }
+        
+        /**
+         * 暴露给外部调用的更新类型方法
+         */
+        fun updateServiceType(context: Context) {
+            val intent = Intent(context, MeetingService::class.java).apply {
+                action = ACTION_UPDATE_TYPE
+            }
+            // 服务已经在运行，用普通的 startService 即可触发 onStartCommand
+            context.startService(intent)
         }
     }
 }

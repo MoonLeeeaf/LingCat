@@ -56,7 +56,12 @@ object Routes {
 private const val DURATION = 300
 
 @Composable
-fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlow<OAuthEvent>, windowSizeClass: WindowSizeClass, ) {
+fun LingCatApp(
+    deepLinkChatIdFlow: SharedFlow<String>, 
+    oauthEventFlow: SharedFlow<OAuthEvent>,
+    windowSizeClass: WindowSizeClass,
+    openMeetingEventFlow: SharedFlow<Unit>,
+) {
     val navController = rememberNavController()
     val isExpanded = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded ||
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium
@@ -82,6 +87,20 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
             } else {
                 // 如果用户停留在登录页、选服务器页等，暂时先不跳，或者你可以做延迟跳转处理
                 android.util.Log.w("DeepLink", "用户尚未登录，忽略此次跳转")
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        openMeetingEventFlow.collect {
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
+            // 如果当前不在会议页，才进行跳转
+            if (currentRoute != Routes.MEETING) {
+                navController.navigate(Routes.MEETING) {
+                    // 如果你希望点返回能回到之前的列表页，不要用 popUpTo(0)
+                    // 如果希望确保会议页在最上面，可以加 launchSingleTop
+                    launchSingleTop = true
+                }
             }
         }
     }

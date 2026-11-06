@@ -30,6 +30,35 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.moonleeeaf.lingcat.ui.utils.ZoomableBox
 import io.github.moonleeeaf.lingcat.ui.utils.rememberPermissionRequestHandler
+import io.github.moonleeeaf.lingcat.app.MeetingService
+
+import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import org.json.JSONObject
+
+/**
+ * 判断当前用户是否有结束会议的权限
+ */
+fun MeetingUiState.canEndMeeting(): Boolean {
+    // 获取当前登录用户 ID
+    val myUserId = LingCatClientManager.currentUserId
+    
+    // 1. 如果未知发起人（比如还没拉取到），或者自己就是发起人
+    if (starterUserId == null || starterUserId == myUserId) return true
+    
+    // 2. 如果不是群管理员
+    if (!iAmChatAdmin) return false
+    
+    // 3. 如果是群主 (owner)
+    if (myChatAdminRole == "owner") return true
+    
+    // 4. 解析具体的权限 JSON
+    return try {
+        val json = JSONObject(myChatAdminPermissions ?: "{}")
+        json.optBoolean("end_meeting", false)
+    } catch (e: Exception) {
+        false
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,15 +71,69 @@ fun MeetingScreen(
     val requestMicPermission = rememberPermissionRequestHandler(
         permission = Manifest.permission.RECORD_AUDIO,
         rationaleMessage = "为了能在会议中发言，我们需要您的麦克风权限",
-        onGranted = { MeetingManager.toggleMic() }
+        onGranted = {
+            MeetingService.updateServiceType(context)
+            MeetingManager.toggleMic()
+        }
     )
 
     // 摄像头权限拦截
     val requestCameraPermission = rememberPermissionRequestHandler(
         permission = Manifest.permission.CAMERA,
         rationaleMessage = "为了能在会议中展示画面，我们需要您的摄像头权限",
-        onGranted = { MeetingManager.toggleCamera() }
+        onGranted = {
+            MeetingService.updateServiceType(context)
+            MeetingManager.toggleCamera()
+        }
     )
+
+    // ★ 新增：监听外部挂断（如通知栏挂断）自动退出
+    LaunchedEffect(uiState.phase) {
+        if (uiState.phase == MeetingPhase.IDLE) {
+            onBack()
+        }
+    }
+
+    var showEndMeetingDialog by remember { mutableStateOf(false) }
+
+    // ★ 获取是否有权限（请替换为你真实的判断逻辑）
+    // 比如：是否是发起人，或者是否是群管理员
+    // 假设你 uiState 里有一个 starterUserId，并且 LingCatClientManager.currentUserId 可用
+    // val canEndMeeting = LingCatClientManager.currentUserId == uiState.starterUserId
+    val canEndMeeting = uiState.canEndMeeting()
+
+    if (showEndMeetingDialog) {
+        AlertDialog(
+            onDismissRequest = { showEndMeetingDialog = false },
+            title = { Text("退出会议") },
+            text = { Text("是否要结束该会议？\n\n结束后所有参与者都将被移出。") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showEndMeetingDialog = false
+                        // 结束会议（包括服务端通知 + 本地退出）
+                        MeetingManager.endMeeting(context)
+                        // 注意：endMeeting 内部会触发 phase -> IDLE，
+                        // LaunchedEffect 会自动调用 onBack()，所以这里不需要手动调
+                    }
+                ) {
+                    Text("结束会议", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                // 用户选择只退出自己
+                TextButton(
+                    onClick = {
+                        showEndMeetingDialog = false
+                        MeetingManager.leaveMeeting()
+                        onBack()
+                    }
+                ) {
+                    Text("仅离开")
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -107,8 +190,14 @@ fun MeetingScreen(
                     // 挂断
                     IconButton(
                         onClick = {
-                            MeetingManager.leaveMeeting()
-                            onBack()
+                            if (canEndMeeting) {
+                                // 有权限，弹窗询问
+                                showEndMeetingDialog = true
+                            } else {
+                                // 没权限，直接退出
+                                MeetingManager.leaveMeeting()
+                                onBack()
+                            }
                         },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = Color.Red)
                     ) {
