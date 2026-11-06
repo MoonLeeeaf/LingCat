@@ -149,7 +149,6 @@ fun MeetingScreen(
                     onClick = {
                         showEndMeetingDialog = false
                         MeetingManager.leaveMeeting()
-                        onBack()
                     }
                 ) {
                     Text("仅离开")
@@ -197,7 +196,7 @@ fun MeetingScreen(
                         Icon(
                             imageVector = if (uiState.isMicOn) Icons.Default.Mic else Icons.Default.MicOff,
                             contentDescription = "麦克风",
-                            tint = if (uiState.isMicOn) Color.White else Color.Red
+                            tint = if (uiState.isMicOn) Color.Green else Color.White
                         )
                     }
 
@@ -206,7 +205,7 @@ fun MeetingScreen(
                         Icon(
                             imageVector = if (uiState.isCameraOn) Icons.Default.Videocam else Icons.Default.VideocamOff,
                             contentDescription = "摄像头",
-                            tint = if (uiState.isCameraOn) Color.White else Color.Red
+                            tint = if (uiState.isCameraOn) Color.Green else Color.White
                         )
                     }
 
