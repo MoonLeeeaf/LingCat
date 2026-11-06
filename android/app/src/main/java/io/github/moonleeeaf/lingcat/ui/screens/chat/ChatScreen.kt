@@ -63,8 +63,13 @@ import io.github.moonleeeaf.lingcat.e2e.E2EInfoDialog
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import lingcat.classes.Classes.IMessage
+import lingcat.client_protocol.MeetingApi
 import java.util.Calendar
 import kotlin.math.roundToInt
 
@@ -121,6 +126,7 @@ fun ChatScreen(
     onNavigateToMembers: (String) -> Unit,
     viewModel: ChatViewModel = viewModel(),
     onNavigateToChat: (String) -> Unit,
+    onNavigateToMeeting: () -> Unit,
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -261,6 +267,24 @@ fun ChatScreen(
 
     var isSearchMode by remember { mutableStateOf(false) }
 
+    var activeMeeting by remember { mutableStateOf<MeetingApi.ActiveMeetingResult?>(null) }
+
+    // 2. 进聊天室时拉取一次
+    LaunchedEffect(chatId) {
+        val client = LingCatClientManager.currentClient
+        val token = LingCatClientManager.currentToken
+        if (client != null && token != null) {
+            try {
+                val res = withContext(Dispatchers.IO) {
+                    MeetingApi.getActiveMeeting(client, token, chatId)
+                }
+                if (res.hasMeeting) {
+                    activeMeeting = res
+                }
+            } catch (e: Exception) { }
+        }
+    }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -305,6 +329,33 @@ fun ChatScreen(
                         }
                     },
                     actions = {
+                        IconButton(onClick = {
+                            if (activeMeeting != null) {
+                                // 如果已有会议，直接加入
+                                MeetingManager.joinMeeting(context, chatId, uiState.chatTitle, activeMeeting!!.meetingId)
+                                onNavigateToMeeting()
+                            } else {
+                                // 没有会议，发起
+                                coroutineScope.launch {
+                                    val client = LingCatClientManager.currentClient
+                                    val token = LingCatClientManager.currentToken
+                                    if (client != null && token != null) {
+                                        try {
+                                            val result = withContext(Dispatchers.IO) {
+                                                MeetingApi.startMeeting(client, token, chatId, "会议")
+                                            }
+                                            // 发起成功后，直接加入
+                                            MeetingManager.joinMeeting(context, chatId, uiState.chatTitle, result.meetingId)
+                                            onNavigateToMeeting()
+                                        } catch (e: Exception) {
+                                            Toast.makeText(context, "发起会议失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }) {
+                            Icon(Icons.Default.Call, contentDescription = "会议")
+                        }
                         IconButton(onClick = { isSearchMode = true }) {
                             Icon(Icons.Default.Search, contentDescription = "搜索")
                         }
@@ -351,6 +402,23 @@ fun ChatScreen(
                 } else if (uiState.searchResults.isEmpty() && uiState.searchKeyword.isNotBlank()) {
                     Text("没有找到相关消息", Modifier.align(Alignment.Center))
                 } else {
+                    val meetingState by MeetingManager.uiState.collectAsState()
+                    if (meetingState.phase != MeetingPhase.IDLE && meetingState.chatId == chatId) {
+                        Surface(
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier.fillMaxWidth().padding(8.dp).clickable {
+                                // 点击回到会议
+                                onNavigateToMeeting() // 加个回调去 navigate("meeting")
+                            }
+                        ) {
+                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Call, contentDescription = null)
+                                Spacer(Modifier.width(8.dp))
+                                Text("会议进行中 · ${meetingState.participants.size}人", modifier = Modifier.weight(1f))
+                                Text("返回", color = MaterialTheme.colorScheme.primary)
+                            }
+                        }
+                    }
                     LazyColumn(Modifier.fillMaxSize()) {
                         items(uiState.searchResults) { msg ->
                             ListItem(

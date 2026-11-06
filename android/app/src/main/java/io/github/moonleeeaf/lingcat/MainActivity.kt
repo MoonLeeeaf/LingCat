@@ -1,11 +1,15 @@
 package io.github.moonleeeaf.lingcat
 
+import android.app.PictureInPictureParams
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +18,8 @@ import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ServerStorage
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.LingCatApp
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
 import io.github.moonleeeaf.lingcat.ui.theme.LingCatTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -46,6 +52,31 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        // ★ 核心修复：如果会议正在进行，且用户按了 Home 键，进入画中画
+        val state = MeetingManager.uiState.value
+        if (state.phase == MeetingPhase.CONNECTED &&
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            try {
+                val builder = PictureInPictureParams.Builder()
+                    .setAspectRatio(Rational(16, 9))
+                enterPictureInPictureMode(builder.build())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: android.content.res.Configuration
+    ) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        // 可以在这里通过广播或全局状态隐藏 UI 元素（如底部导航栏）
     }
 
     override fun onNewIntent(intent: Intent) {

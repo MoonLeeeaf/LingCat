@@ -34,6 +34,7 @@ import io.github.moonleeeaf.lingcat.OAuthEvent
 import io.github.moonleeeaf.lingcat.ui.screens.auth.LoginScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
+import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.AccountListScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.ChatListScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.EditProfileScreen
@@ -48,6 +49,7 @@ object Routes {
     const val ACCOUNT_LIST = "account_list"
     const val CHAT_MEMBERS = "chat_members/{chatId}"
     const val EDIT_PROFILE = "edit_profile"
+    const val MEETING = "meeting"
 }
 
 // 动画时长，保持全局一致
@@ -205,6 +207,9 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
                                         },
                                         onNavigateToChat = { newChatId ->
                                             selectedChatId = newChatId // 右侧直接切聊天
+                                        },
+                                        onNavigateToMeeting = {
+                                            navController.navigate(Routes.MEETING)
                                         }
                                     )
                                 }
@@ -272,6 +277,9 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
                         popUpTo(Routes.CHAT) { inclusive = true }
                     }
                 },
+                onNavigateToMeeting = {
+                    navController.navigate(Routes.MEETING)
+                },
             )
         }
 
@@ -300,6 +308,10 @@ fun LingCatApp(deepLinkChatIdFlow: SharedFlow<String>, oauthEventFlow: SharedFlo
             EditProfileScreen(
                 onBack = { navController.popBackStack() }
             )
+        }
+
+        composable(Routes.MEETING) {
+            MeetingScreen(onBack = { navController.popBackStack() })
         }
     }
 }
