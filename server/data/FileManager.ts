@@ -5,6 +5,7 @@ import node_path from 'node:path'
 import fs from 'node:fs'
 import { db } from "./db.ts"
 import crypto from 'node:crypto'
+import { finished } from 'node:stream/promises'
 
 interface IServerFile extends IFile {
     key_id: number
@@ -41,14 +42,24 @@ export default class FileManager {
 
     static async uploadFile(hash: string, fileName: string, filePath: string, mime: string, chatId?: string): Promise<IServerFile> {
         const mFile = await this.queryFileByHash(hash)
-        if (mFile) return mFile
+        if (mFile) {
+            // 如果数据库有记录，且临时文件和最终文件不同，就把临时文件删掉
+            if (filePath !== this.getFilePath(hash) && fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath)
+            }
+            return mFile
+        }
 
         const folder = node_path.join(base_data_path, 'uploaded_files', hash.substring(0, 1), hash.substring(2, 3), hash.substring(3, 4))
         fs.mkdirSync(folder, { recursive: true })
         const finalPath = node_path.join(folder, hash)
 
-        // ★ 修复：使用 pipeline 等待流完成
-        fs.createReadStream(filePath).pipe(fs.createWriteStream(finalPath))
+        // ★ 核心修复：只有源文件和目标文件不同时，才进行拷贝
+        if (filePath !== finalPath) {
+            const copyStream = fs.createReadStream(filePath).pipe(fs.createWriteStream(finalPath))
+            await finished(copyStream)
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath) // 拷贝完删掉临时文件
+        }
 
         await db(tableName).insert({
             hash, first_upload_file_name: fileName, belong_to_chat_id: chatId || null, uploaded_at: Date.now(), mime,
