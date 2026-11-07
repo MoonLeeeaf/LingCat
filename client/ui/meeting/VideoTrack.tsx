@@ -1,5 +1,6 @@
 import React from 'react'
 import type { TrackPublication } from 'livekit-client'
+import { exitPipForElement } from '../../lib/pip.ts'
 
 export function VideoPublication({ publication, muted, style, videoRef }: {
     publication?: TrackPublication
@@ -22,6 +23,20 @@ export function VideoPublication({ publication, muted, style, videoRef }: {
     React.useEffect(() => {
         if (ref.current) ref.current.muted = !!muted
     }, [muted])
+
+    // 轨道结束/切换或组件卸载时主动退出 PiP; 仅依赖 detach 会有悬浮窗残留
+    React.useEffect(() => {
+        const el = ref.current
+        if (!el) return
+        const mediaTrack = publication?.track?.mediaStreamTrack
+        const onEnded = () => exitPipForElement(el)
+        mediaTrack?.addEventListener('ended', onEnded)
+        return () => {
+            mediaTrack?.removeEventListener('ended', onEnded)
+            exitPipForElement(el)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publication?.track?.sid])
 
     if (!publication?.track) return null
     return <video

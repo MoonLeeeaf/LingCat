@@ -348,6 +348,9 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
         room.on(RoomEvent.ParticipantDisconnected, refresh)
         room.on(RoomEvent.TrackSubscribed, refresh)
         room.on(RoomEvent.TrackUnsubscribed, refresh)
+        // 远端结束共享时 TrackUnpublished 不一定伴随 TrackUnsubscribed,
+        // 漏掉会导致焦点/PiP 停留在已结束的轨道上
+        room.on(RoomEvent.TrackUnpublished, refresh)
         room.on(RoomEvent.TrackMuted, refresh)
         room.on(RoomEvent.TrackUnmuted, refresh)
         room.on(RoomEvent.ParticipantNameChanged, refresh)

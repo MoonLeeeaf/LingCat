@@ -34,6 +34,26 @@ export async function exitPip(video?: HTMLVideoElement | null): Promise<void> {
     if (activeVideo === video) activeVideo = null
 }
 
+/**
+ * 元素卸载/换轨时的同步清理: 主动关闭系统留存的 PiP 窗口。
+ * 浏览器在 <video> 被移出 DOM 或 srcObject 置空时不保证自动关闭 PiP
+ * (iOS 的 webkitSetPresentationMode 尤其如此), 必须显式退出。
+ */
+export function exitPipForElement(video?: HTMLVideoElement | null): void {
+    if (!video) return
+    try {
+        if (typeof document !== 'undefined' && document.pictureInPictureElement === video) {
+            Promise.resolve(document.exitPictureInPicture()).catch(() => { })
+        } else {
+            const anyVideo = video as any
+            if (typeof anyVideo.webkitSetPresentationMode === 'function') {
+                anyVideo.webkitSetPresentationMode('inline')
+            }
+        }
+    } catch { /* ignore */ }
+    if (activeVideo === video) activeVideo = null
+}
+
 export async function enterPip(video: HTMLVideoElement): Promise<void> {
     if (isPipActive(video)) return
 
@@ -88,6 +108,8 @@ export function usePipActive(
             video.removeEventListener('enterpictureinpicture', update)
             video.removeEventListener('leavepictureinpicture', update)
             video.removeEventListener('webkitpresentationmodechanged', update as any)
+            // 组件卸载/换轨时主动退出, 避免遗留系统悬浮窗
+            exitPipForElement(video)
         }
     }, [videoRef, key])
 
