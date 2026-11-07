@@ -9,7 +9,7 @@ export interface UseChatFileUploadOptions {
 }
 
 export function useChatFileUpload({ onInsertText }: UseChatFileUploadOptions) {
-    const cachedFiles = React.useRef<{ [name: string]: ArrayBuffer }>({})
+    const cachedFiles = React.useRef<{ [name: string]: Blob | File }>({}) // ★ 直接存 Blob
     const cachedFileUrls = React.useRef<{ [name: string]: string }>({})
     const cachedFileMimes = React.useRef<{ [name: string]: string }>({})
     const cachedFileNamesCount = React.useRef<{ [name: string]: number }>({})
@@ -42,7 +42,7 @@ export function useChatFileUpload({ onInsertText }: UseChatFileUploadOptions) {
 
         const mime = blob.type || type || 'application/octet-stream'
 
-        cachedFiles.current[name] = await blob.arrayBuffer()
+        cachedFiles.current[name] = blob
         cachedFileUrls.current[name] = URL.createObjectURL(blob)
         cachedFileMimes.current[name] = mime
         cachedFileNamesCount.current[name] = 1
@@ -60,7 +60,10 @@ export function useChatFileUpload({ onInsertText }: UseChatFileUploadOptions) {
      * 遍历 text 里引用的附件，逐个上传，把 `(name)` 替换成 `(file:xxx)`。
      * 返回处理后的文本。
      */
-    const uploadAll = React.useCallback(async (text: string): Promise<string> => {
+    const uploadAll = React.useCallback(async (
+        text: string,
+        onProgress?: (name: string, percent: number) => void // ★ 新增进度回调
+    ): Promise<string> => {
         const client = ClientManager.getActiveClient()
         const session = ClientManager.getActiveSession()
         if (!client || !session) throw new Error('no active client/session')
@@ -75,12 +78,20 @@ export function useChatFileUpload({ onInsertText }: UseChatFileUploadOptions) {
 
         let result = text
         for (const name of namesInText) {
-            const hash = await FileApi.uploadFile(client, {
-                file_upload_token: token,
-                file_data: cachedFiles.current[name],
-                mime: cachedFileMimes.current[name],
-                file_name: name,
-            })
+            const blob = cachedFiles.current[name]
+
+            // ★ 替换为断点续传 API
+            const hash = await FileApi.uploadFileResumable(
+                client,
+                token,
+                blob,
+                name,
+                cachedFileMimes.current[name],
+                undefined,
+                (percent: number) => {
+                    if (onProgress) onProgress(name, percent)
+                }
+            )
             result = result.replaceAll('(' + name + ')', '(file:' + hash + ')')
         }
         return result

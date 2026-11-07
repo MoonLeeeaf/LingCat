@@ -415,13 +415,11 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
 
             const fileCount = countInText(textToSend)
             const snack = showSnackbar({ message: `发送到 [${chatTitle}]...`, autoCloseDelay: 0 })
+            
+            // ★ 移除旧的 tick 定时器，改用真实进度
+            // 保留一个计时器用来防止长时间不操作 snack 关掉
             let tick = 1
-            let uploaded = 0
-            const timer = setInterval(() => {
-                if (uploaded < fileCount) snack.textContent = `上传第 ${uploaded}/${fileCount} 个文件... (${tick}s)`
-                else snack.textContent = `发送到 [${chatTitle}]... (${tick}s)`
-                tick++
-            }, 1000)
+            const timer = setInterval(() => { tick++ }, 1000)
 
             const onClose = () => { clearInterval(timer); snack.open = false }
             client.client?.addEventListener('close', onClose)
@@ -431,8 +429,21 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
 
                 let finalText = textToSend
                 if (fileCount > 0) {
-                    finalText = await uploadAll(finalText)
-                    uploaded = fileCount
+                    let currentFile = 0
+                    let lastPercent = -1
+                    
+                    // ★ 接收回调并实时更新
+                    finalText = await uploadAll(finalText, (name, percent) => {
+                        if (lastPercent === -1) {
+                            currentFile++ // 当上一个文件传完开始下一个时
+                            lastPercent = 0
+                        }
+                        if (percent > lastPercent) {
+                            lastPercent = percent
+                            snack.textContent = `正在上传 ${currentFile}/${fileCount} (${percent}%)`
+                        }
+                    })
+                    snack.textContent = `处理中...`
                 }
 
                 const parsed = MessageParser.parseMessage(finalText)
