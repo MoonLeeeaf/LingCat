@@ -35,8 +35,8 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = context.getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(NotificationChannel(CHANNEL_PRIVATE, "私聊消息", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_AT, "群聊 @我", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_REPLY, "群聊回复我", NotificationManager.IMPORTANCE_HIGH))
+            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_AT, "群组 @我", NotificationManager.IMPORTANCE_HIGH))
+            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_REPLY, "群组回复我", NotificationManager.IMPORTANCE_HIGH))
         }
     }
 
