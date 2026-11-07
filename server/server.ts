@@ -25,6 +25,7 @@ import MeetingApi, { meetingParticipantPoller } from './api/MeetingApi.ts'
 import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 import E2EApi from './api/E2EApi.ts'
+import UploadSessionManager from './data/UploadSessionManager.ts'
 
 export default function createLingCatServer(base_data_path: string) {
     if (!fileExists(`${base_data_path}/key/`)) {
@@ -202,6 +203,117 @@ export default function createLingCatServer(base_data_path: string) {
         })
 
         req.pipe(bb)
+    })
+
+    // 1. 创建会话
+    app.post('/upload_file/session', express.json(), async (req, res) => {
+        const token = req.headers.token as string
+        if (!token) return res.status(401).send({ message: "Unauthorized" })
+
+        try {
+            const { user_id } = await TokenManager.verifyFileUploadToken(token)
+            const { size, file_name, mime, belong_to_chat_id, hash } = req.body
+
+            if (!size || size > (config.max_file_size || 1000 * 1024 * 1024)) {
+                return res.status(413).send({ message: "File too large" })
+            }
+
+            const session = await UploadSessionManager.createSession(user_id, size, file_name, mime, belong_to_chat_id, hash)
+            const sessionToken = TokenManager.signFileUploadSessionTokenForUser(user_id, session.upload_id)
+
+            res.json({
+                upload_id: session.upload_id,
+                offset: session.offset,
+                chunk_size: config.upload_chunk_size || 8 * 1024 * 1024,
+                upload_token: sessionToken
+            })
+        } catch (e) {
+            res.status(401).send({ message: e.message || "Invalid token" })
+        }
+    })
+
+    // 2. 查询 offset
+    app.head('/upload_file/session/:id', async (req, res) => {
+        const token = req.headers.token as string
+        try {
+            const { user_id } = await TokenManager.verifyFileUploadSessionToken(token, undefined, req.params.id)
+            const session = await UploadSessionManager.getSession(req.params.id, user_id)
+            if (!session) return res.status(404).send()
+
+            res.setHeader('Upload-Offset', session.offset)
+            res.setHeader('Upload-Length', session.total_size)
+            res.setHeader('Upload-Expires', session.expires_at)
+            res.status(200).send()
+        } catch (e) {
+            res.status(401).send()
+        }
+    })
+
+    // 3. 上传分块 (⚠️ 绝对不能挂 express.json)
+    app.patch('/upload_file/session/:id', async (req, res) => {
+        const token = req.headers.token as string
+        try {
+            const { user_id } = await TokenManager.verifyFileUploadSessionToken(token, undefined, req.params.id)
+            const range = req.headers['content-range'] as string // e.g. "bytes 0-8388607/123456789"
+            if (!range) return res.status(400).send({ message: "Missing Content-Range" })
+
+            const match = range.match(/bytes (\d+)-(\d+)\/(\d+)/)
+            if (!match) return res.status(400).send({ message: "Invalid Content-Range" })
+
+            const start = parseInt(match[1], 10)
+            const total = parseInt(match[3], 10)
+
+            const newOffset = await UploadSessionManager.appendChunk(req.params.id, req as any, start, total)
+            res.setHeader('Upload-Offset', newOffset)
+            res.status(204).send()
+        } catch (e: any) {
+            if (e.code === 409) {
+                res.setHeader('Upload-Offset', e.actualOffset)
+                return res.status(409).send({ message: "Offset mismatch" })
+            }
+            res.status(500).send({ message: e.message })
+        }
+    })
+
+    // 4. 完成上传
+    app.post('/upload_file/session/:id/complete', express.json(), async (req, res) => {
+        const token = req.headers.token as string
+        try {
+            const { user_id } = await TokenManager.verifyFileUploadSessionToken(token, undefined, req.params.id)
+            const session = await UploadSessionManager.getSession(req.params.id, user_id)
+            if (!session) return res.status(404).send({ message: "Session not found" })
+
+            // 校验实际大小
+            const actualSize = fs.statSync(session.temp_path).size
+            if (actualSize !== session.total_size) {
+                return res.status(400).send({ message: "File incomplete" })
+            }
+
+            // 落盘并校验 Hash
+            const fileHash = await FileManager.finalizeUploadFromTemp(session.temp_path, session.expected_hash)
+            
+            // 写入数据库
+            await FileManager.uploadFile(fileHash, session.file_name, FileManager.getFilePath(fileHash), session.mime, session.belong_to_chat_id)
+
+            // 清理会话
+            await UploadSessionManager.deleteSession(req.params.id)
+
+            res.json({ file_hash: fileHash })
+        } catch (e: any) {
+            res.status(500).send({ message: e.message })
+        }
+    })
+
+    // 5. 取消上传
+    app.delete('/upload_file/session/:id', async (req, res) => {
+        const token = req.headers.token as string
+        try {
+            await TokenManager.verifyFileUploadSessionToken(token, undefined, req.params.id)
+            await UploadSessionManager.deleteSession(req.params.id)
+            res.status(204).send()
+        } catch (e) {
+            res.status(401).send()
+        }
     })
 
     app.get('/{*splat}', (req, res, next) => {
