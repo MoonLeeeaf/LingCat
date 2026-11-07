@@ -62,10 +62,14 @@ export default class FileManager {
         const folder = node_path.join(base_data_path, 'uploaded_files', 'temp')
         fs.mkdirSync(folder, { recursive: true })
         
-        // 1. 计算真实 hash
-        const hasher = crypto.createHash('sha256')
-        fs.createReadStream(tempPath).pipe(hasher)
-        const realHash = hasher.digest('hex')
+        const realHash = await new Promise<string>((resolve, reject) => {
+            const hasher = crypto.createHash('sha256')
+            const stream = fs.createReadStream(tempPath)
+            
+            stream.on('data', (chunk) => hasher.update(chunk))
+            stream.on('end', () => resolve(hasher.digest('hex')))
+            stream.on('error', (err) => reject(err))
+        })
 
         if (expectedHash && expectedHash !== realHash) {
             throw new Error(`Hash mismatch. Expected: ${expectedHash}, Got: ${realHash}`)
