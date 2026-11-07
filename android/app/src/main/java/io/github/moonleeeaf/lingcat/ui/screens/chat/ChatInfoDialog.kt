@@ -112,7 +112,7 @@ fun ChatInfoDialog(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = if (chat.type == "group") "群聊" else "私聊",
+                        text = if (chat.type == "group") "群组" else "私聊",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
