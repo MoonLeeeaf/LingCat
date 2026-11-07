@@ -52,35 +52,6 @@ function setCaretOffset(div: HTMLDivElement, offset: number) {
     sel?.addRange(range)
 }
 
-/** 发送时把文本里命中的 @用户名/@昵称/@备注 补成 user_mention 实体 */
-function buildMentionEntities(text: string, existing: IMessageEntity[], members: IUser[]): IMessageEntity[] {
-    const occupied = [...existing]
-    const result: IMessageEntity[] = []
-    const overlaps = (s: number, e: number) => occupied.some((x) => s < x.offset + x.length && e > x.offset)
-    const isBoundary = (ch: string) => !ch || !/\w/.test(ch)
-
-    for (const m of members) {
-        const remark = RemarksCache.get(m.id) || ''
-        const names = Array.from(new Set([m.username || '', m.nickname || '', remark].filter(Boolean)))
-        for (const name of names) {
-            const token = '@' + name
-            let idx = text.indexOf(token)
-            while (idx >= 0) {
-                const end = idx + token.length
-                const before = idx === 0 ? '' : text[idx - 1]
-                const after = end >= text.length ? '' : text[end]
-                if (isBoundary(before) && isBoundary(after) && !overlaps(idx, end)) {
-                    const e: IMessageEntity = { type: 'user_mention', offset: idx, length: token.length, data: m.id }
-                    result.push(e)
-                    occupied.push(e)
-                }
-                idx = text.indexOf(token, idx + 1)
-            }
-        }
-    }
-    return [...existing, ...result]
-}
-
 export interface MessageInputHandle {
     insertText: (text: string) => void
     focus: () => void
@@ -304,14 +275,21 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
             if (!mentionQuery) return
             const field = inputRef.current
             if (!field) return
-            const name = (m.username || RemarksCache.get(m.id) || m.nickname || '').trim()
-            if (!name) return
-            const token = '@' + name + ' '
+            
+            // 获取用来显示的名称（优先使用备注，其次昵称，最后用户名）
+            const displayName = (RemarksCache.get(m.id) || m.nickname || m.username || m.id).trim()
+            if (!displayName) return
+            
+            // ★ 核心修改：直接插入 Markdown 风格的提及语法
+            const token = `[@${displayName}](user:${m.id}) `
+            
             const value = field.value ?? ''
             const from = mentionQuery.at
             const to = Math.min(value.length, mentionQuery.at + 1 + mentionQuery.query.length)
+            
             field.value = value.slice(0, from) + token + value.slice(to)
             closeMentions()
+            
             const caret = from + token.length
             requestAnimationFrame(() => {
                 const patched = getPatchedInput(inputRef)
@@ -449,15 +427,6 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                 const parsed = MessageParser.parseMessage(finalText)
                 let sendText = parsed.text
                 let sendEntities: IMessageEntity[] = parsed.entities ?? []
-
-                if (enableMentions) {
-                    if (!membersLoadedRef.current && parsed.text.includes('@')) {
-                        await ensureMembers()
-                    }
-                    if (membersRef.current.length > 0) {
-                        sendEntities = buildMentionEntities(parsed.text, sendEntities, membersRef.current)
-                    }
-                }
 
                 // E2E 加密
                 if (isEncryptMode && peerUserId) {
