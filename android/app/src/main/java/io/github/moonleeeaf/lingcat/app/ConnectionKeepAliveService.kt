@@ -93,7 +93,8 @@ class ConnectionKeepAliveService : Service() {
         // 3. 获取聊天信息判断是私聊还是群聊
         val chat = ProfileCache.fetchChat(msg.chatId) ?: return
         val sender = ProfileCache.fetchUser(msg.senderUserId)
-        val senderName = sender?.nickname?.ifEmpty { sender.username } ?: "未知用户"
+        val isSystem = msg.system
+        val senderName = sender?.nickname?.ifEmpty { sender.username } ?: (if (isSystem) "系统" else "未知")
         val title = chat.title.ifEmpty { senderName }
 
         var previewText = msg.text
