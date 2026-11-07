@@ -4,7 +4,7 @@ import crypto from 'node:crypto'
 import { config } from '../config.ts'
 import UserDataBase from '../data/UserDataBase.ts'
 
-export type TokenType = 'access' | 'file_upload' | 'file_access' | 'change_password'
+export type TokenType = 'access' | 'file_upload' | 'file_upload_session' | 'file_access' | 'change_password'
 
 const secret = config.token_secret ? Buffer.from(config.token_secret) : crypto.randomBytes(16)
 
@@ -23,6 +23,15 @@ export default class TokenManager {
             type: 'file_upload',
         }, secret, {
             expiresIn: '1h',
+        })
+    }
+    static signFileUploadSessionTokenForUser(user_id: string, upload_id: string) {
+        return jwt.sign({
+            user_id,
+            upload_id,
+            type: 'file_upload_session',
+        }, secret, {
+            expiresIn: '24h',
         })
     }
     static signFileAccessTokenForUser(user_id: string, file_hash?: string) {
@@ -47,6 +56,13 @@ export default class TokenManager {
         return await TokenManager.verifyToken(token, 'access', user_id) as { user_id: string, type: 'access' }
     }
 
+    static async verifyFileUploadSessionToken(token: string, user_id?: string, upload_id?: string) {
+        const t = await TokenManager.verifyToken(token, 'file_upload_session', user_id) as any
+        if (upload_id && t.upload_id !== upload_id) {
+            throw { message: 'Token upload_id mismatch', code: Code.UnAuthorized }
+        }
+        return t
+    }
     static async verifyFileUploadToken(token: string, user_id?: string) {
         return await TokenManager.verifyToken(token, 'file_upload', user_id) as { user_id: string, type: 'file_upload' }
     }

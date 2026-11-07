@@ -49,6 +49,9 @@ export interface LingCatServerConfig {
      * 只允许自定义 scheme，http(s) 一律拒绝（防开放重定向）。
      */
     oauth_redirect_allowlist?: string[]
+    
+    upload_chunk_size?: number // 默认 8MB
+    upload_session_ttl?: number // 默认 24h
 }
 
 export interface OAuth2ProviderConfig {
@@ -108,6 +111,9 @@ const default_config: LingCatServerConfig = {
 
     oauth2: [],
     oauth_redirect_allowlist: ['lingcat://oauth/callback'],
+
+    upload_chunk_size: 8 * 1024 * 1024,
+    upload_session_ttl: 24 * 60 * 60 * 1000,
 }
 
 if (!fileExists(base_data_path + '/config.json'))

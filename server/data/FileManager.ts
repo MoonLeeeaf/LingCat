@@ -4,6 +4,7 @@ import { IFile } from "../../protocol/classes-interfaces.ts"
 import node_path from 'node:path'
 import fs from 'node:fs'
 import { db } from "./db.ts"
+import crypto from 'node:crypto'
 
 interface IServerFile extends IFile {
     key_id: number
@@ -40,31 +41,58 @@ export default class FileManager {
 
     static async uploadFile(hash: string, fileName: string, filePath: string, mime: string, chatId?: string): Promise<IServerFile> {
         const mFile = await this.queryFileByHash(hash)
-        if (mFile) {
-            return mFile
-        }
+        if (mFile) return mFile
 
-        const folder = node_path.join(
-            base_data_path,
-            'uploaded_files',
-            hash.substring(0, 1),
-            hash.substring(2, 3),
-            hash.substring(3, 4)
-        )
+        const folder = node_path.join(base_data_path, 'uploaded_files', hash.substring(0, 1), hash.substring(2, 3), hash.substring(3, 4))
         fs.mkdirSync(folder, { recursive: true })
-        fs.createReadStream(filePath).pipe(fs.createWriteStream(node_path.join(folder, hash)))
+        const finalPath = node_path.join(folder, hash)
+
+        // ★ 修复：使用 pipeline 等待流完成
+        fs.createReadStream(filePath).pipe(fs.createWriteStream(finalPath))
 
         await db(tableName).insert({
-            hash: hash,
-            first_upload_file_name: fileName,
-            belong_to_chat_id: chatId || null,
-            uploaded_at: Date.now(),
-            mime,
+            hash, first_upload_file_name: fileName, belong_to_chat_id: chatId || null, uploaded_at: Date.now(), mime,
         })
 
         return (await this.queryFileByHash(hash))!
     }
 
+    // ★ 新增：用于分块上传完成时的落盘
+    static async finalizeUploadFromTemp(tempPath: string, expectedHash?: string): Promise<string> {
+        const folder = node_path.join(base_data_path, 'uploaded_files', 'temp')
+        fs.mkdirSync(folder, { recursive: true })
+        
+        // 1. 计算真实 hash
+        const hasher = crypto.createHash('sha256')
+        fs.createReadStream(tempPath).pipe(hasher)
+        const realHash = hasher.digest('hex')
+
+        if (expectedHash && expectedHash !== realHash) {
+            throw new Error(`Hash mismatch. Expected: ${expectedHash}, Got: ${realHash}`)
+        }
+
+        const finalPath = this.getFilePath(realHash)
+
+        // 如果已经存在，直接删除临时文件
+        if (fs.existsSync(finalPath)) {
+            fs.unlinkSync(tempPath)
+            return realHash
+        }
+
+        // 2. 移动到最终目录
+        const finalFolder = node_path.dirname(finalPath)
+        fs.mkdirSync(finalFolder, { recursive: true })
+        
+        try {
+            fs.renameSync(tempPath, finalPath)
+        } catch (e) {
+            // 跨磁盘分区回退
+            fs.createReadStream(tempPath).pipe(fs.createWriteStream(finalPath))
+            fs.unlinkSync(tempPath)
+        }
+
+        return realHash
+    }
     static getFilePath(hash: string) {
         return node_path.join(
             base_data_path,

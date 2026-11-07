@@ -799,6 +799,7 @@ class ChatViewModel : ViewModel() {
     /**
      * 发送时先上传所有附件，并替换文本中的占位符
      */
+    // ★ 修改 ChatViewModel.kt 的上传部分
     private suspend fun uploadAndReplaceAttachments(rawText: String, tempId: Int): String = withContext(Dispatchers.IO) {
         if (cachedFiles.isEmpty()) return@withContext rawText
 
@@ -806,6 +807,7 @@ class ChatViewModel : ViewModel() {
         val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
         val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
         val chatId = currentChatId ?: throw Exception("无聊天ID")
+        val resolver = LingCatClientManager.appContext.contentResolver
 
         // 找出文本里真正包含的文件
         val toUpload = cachedFiles.keys.filter { processedText.contains("($it)") }
@@ -817,16 +819,28 @@ class ChatViewModel : ViewModel() {
         for (fileName in toUpload) {
             val cf = cachedFiles[fileName] ?: continue
 
-            // 读取文件字节
-            val bytes = android.os.Build.VERSION.SDK_INT.let {
-                // 如果需要，这里可以通过 context 读取，由于我们拿不到 context，最好在 addFile 时一并读入内存，或者用全局 Context
-                LingCatClientManager.appContext.contentResolver.openInputStream(cf.uri)?.use { it.readBytes() }
-            } ?: throw Exception("读取文件失败: ${cf.name}")
+            // 获取文件大小 (用于分块计算)
+            var totalSize = 0L
+            resolver.query(cf.uri, null, null, null, null)?.use { cursor ->
+                val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+                if (cursor.moveToFirst() && sizeIndex >= 0) {
+                    totalSize = cursor.getLong(sizeIndex)
+                }
+            }
+            if (totalSize <= 0) throw Exception("无法获取文件大小")
 
-            // 上传
-            val hash = FileApi.uploadFile(
-                client, uploadToken, chatId, bytes, cf.mime, cf.name
-            ) { percent -> // 回到主线程更新 UI
+            // 调用断点续传（流式上传，告别 OOM！）
+            val hash = FileApi.uploadFileResumable(
+                client,
+                uploadToken,
+                chatId,
+                resolver,
+                cf.uri,
+                totalSize,
+                cf.mime,
+                cf.name
+            ) { percent ->
+                // 回调会自动在主线程更新 UI
                 viewModelScope.launch(Dispatchers.Main) {
                     val currentProgress = _uiState.value.uploadProgress.toMutableMap()
                     currentProgress[tempId] = percent

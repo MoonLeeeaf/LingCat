@@ -134,38 +134,43 @@ location /rtc {
 ```nginx
 # /etc/nginx/http.d/lingcat.conf
 
-server {
-    listen 443 ssl;
-    server_name lingcat.example.com;
+http {
+    client_max_body_size 16m; # 设置的 chunk_size
+    proxy_request_buffering off; # 关闭 Nginx 的请求体缓冲, 防止文件上传 PATCH 卡死或者内存暴涨
+    
+    server {
+        listen 443 ssl;
+        server_name lingcat.example.com;
 
-    ssl_certificate     /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
+        ssl_certificate     /path/to/cert.pem;
+        ssl_certificate_key /path/to/key.pem;
 
-    # 应用主入口
-    location / {
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Range $http_range;
-        proxy_set_header If-Range $http_if_range;
-        proxy_redirect off;
-        proxy_buffering off;
+        # 应用主入口
+        location / {
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Range $http_range;
+            proxy_set_header If-Range $http_if_range;
+            proxy_redirect off;
+            proxy_buffering off;
 
-        proxy_pass http://127.0.0.1:3601;
-    }
+            proxy_pass http://127.0.0.1:3601;
+        }
 
-    # LiveKit 信令 (仅 same-origin 模式需要)
-    location /rtc {
-        proxy_pass http://127.0.0.1:7880;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
+        # LiveKit 信令 (仅 same-origin 模式需要)
+        location /rtc {
+            proxy_pass http://127.0.0.1:7880;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
     }
 }
 ```
