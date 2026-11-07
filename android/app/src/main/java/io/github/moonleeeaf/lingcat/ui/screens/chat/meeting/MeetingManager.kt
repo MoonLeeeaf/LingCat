@@ -13,6 +13,7 @@ import io.livekit.android.room.Room
 import io.livekit.android.room.participant.Participant
 import io.livekit.android.room.track.Track
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -24,6 +25,8 @@ import kotlinx.coroutines.withContext
 import lingcat.client_protocol.HttpClientProvider
 import lingcat.client_protocol.MeetingApi
 import lingcat.client_protocol.ChatApi // ★ 新增导入
+import lingcat.methods.Methods.Meeting_Title_Changed_Event
+import lingcat.protocol.Methods
 import android.app.Activity
 import android.content.Intent
 
@@ -63,6 +66,11 @@ object MeetingManager {
     private var managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var room: Room? = null
     private var roomEventsJob: Job? = null
+    private var meetingEventsJob: Job? = null
+    private var joinJob: Job? = null
+
+    // 当前会议会话标识，用于丢弃旧会议异步任务的回写
+    private var sessionId = 0
 
     private val _uiState = MutableStateFlow(MeetingUiState())
     val uiState: StateFlow<MeetingUiState> = _uiState.asStateFlow()
@@ -100,7 +108,7 @@ object MeetingManager {
     fun joinMeeting(
         context: Context,
         chatId: String,
-        chatTitle: String,
+        chatTitle: String?,
         meetingId: String
     ) {
         if (_uiState.value.phase == MeetingPhase.CONNECTED && _uiState.value.meetingId == meetingId) {
@@ -108,30 +116,58 @@ object MeetingManager {
             return
         }
 
-        leaveMeeting(disconnectRoom = true)
+        // 取消上一次仍在进行的加入流程，避免旧流程回写状态
+        joinJob?.cancel()
 
-        _uiState.value = _uiState.value.copy(
-            phase = MeetingPhase.CONNECTING,
-            chatId = chatId,
-            chatTitle = chatTitle,
-            meetingId = meetingId,
-            errorMsg = null
-        )
+        // 开启新会话，旧会话的异步清理/连接结果将被丢弃
+        val session = ++sessionId
 
-        try {
-            MeetingService.start(context)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to start MeetingService", e)
-        }
-
-        managerScope.launch {
+        joinJob = managerScope.launch {
             try {
+                // 先等旧会议断开并释放资源，再初始化新会议
+                disconnectCurrentRoom()
+                if (session != sessionId) return@launch
+
+                _uiState.value = MeetingUiState(
+                    phase = MeetingPhase.CONNECTING,
+                    chatId = chatId,
+                    chatTitle = chatTitle,
+                    meetingId = meetingId
+                )
+
+                // 监听会议事件（如其他成员修改会议标题）
+                listenMeetingEvents()
+
+                try {
+                    MeetingService.start(context)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to start MeetingService", e)
+                }
+
                 val client = LingCatClientManager.currentClient ?: throw Exception("客户端未连接")
                 val token = LingCatClientManager.currentToken ?: throw Exception("登录失效")
 
                 // 1. 向服务端请求 LiveKit Token
                 val creds = withContext(Dispatchers.IO) {
                     MeetingApi.getMeetingToken(client, token, chatId, meetingId)
+                }
+                if (session != sessionId) return@launch
+
+                // 拉取会议的权威标题（调用方传入的可能是对话标题）
+                val active = withContext(Dispatchers.IO) {
+                    try {
+                        MeetingApi.getActiveMeeting(client, token, chatId)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "getActiveMeeting for title failed", e)
+                        null
+                    }
+                }
+                if (session != sessionId) return@launch
+                if (active?.hasMeeting == true && active.meetingId == meetingId) {
+                    val serverTitle = active.title?.trim().orEmpty()
+                    if (serverTitle.isNotEmpty()) {
+                        _uiState.value = _uiState.value.copy(chatTitle = serverTitle)
+                    }
                 }
 
                 // ★ 假设 creds 里有 starterUserId，如果没有需要向后端确认
@@ -152,6 +188,10 @@ object MeetingManager {
                         okHttpClient = HttpClientProvider.get(),
                     )
                 )
+                if (session != sessionId) {
+                    newRoom.disconnect()
+                    return@launch
+                }
                 room = newRoom
 
                 // 3. 监听 Room 事件
@@ -161,21 +201,30 @@ object MeetingManager {
                 val safeUrl = normalizeLiveKitUrl(creds.url)
                 Log.d(TAG, "Connecting to LiveKit URL: $safeUrl")
                 newRoom.connect(safeUrl, creds.token)
+                if (session != sessionId) {
+                    newRoom.disconnect()
+                    return@launch
+                }
 
                 updateLocalState()
 
                 _uiState.value = _uiState.value.copy(phase = MeetingPhase.CONNECTED)
                 refreshParticipants()
-                
+
                 // ★ 新增：拉取当前用户的群管权限
                 loadChatAdminFlag(chatId)
 
+            } catch (e: CancellationException) {
+                Log.d(TAG, "joinMeeting cancelled")
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "joinMeeting failed", e)
-                _uiState.value = _uiState.value.copy(
-                    phase = MeetingPhase.ERROR,
-                    errorMsg = e.message ?: "加入会议失败"
-                )
+                if (session == sessionId) {
+                    _uiState.value = _uiState.value.copy(
+                        phase = MeetingPhase.ERROR,
+                        errorMsg = e.message ?: "加入会议失败"
+                    )
+                }
             }
         }
     }
@@ -213,6 +262,28 @@ object MeetingManager {
                     myChatAdminRole = null,
                     myChatAdminPermissions = null
                 )
+            }
+        }
+    }
+
+    /**
+     * 监听会议相关事件（当前用于同步其他成员修改的会议标题）
+     */
+    private fun listenMeetingEvents() {
+        meetingEventsJob?.cancel()
+        meetingEventsJob = managerScope.launch {
+            LingCatClientManager.globalEvents.collect { pkg ->
+                if (pkg.method_id != Methods.Meeting_Title_Changed_Event) return@collect
+                try {
+                    val ev = Meeting_Title_Changed_Event.parseFrom(pkg.data)
+                    val state = _uiState.value
+                    if (state.chatId == ev.chatId && state.meetingId == ev.meetingId) {
+                        val title = ev.title.trim().ifEmpty { null }
+                        _uiState.value = state.copy(chatTitle = title)
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, "handle Meeting_Title_Changed_Event failed", e)
+                }
             }
         }
     }
@@ -344,11 +415,59 @@ object MeetingManager {
     }
 
     /**
+     * 修改当前会议标题（成功后同步更新本地状态）
+     */
+    suspend fun updateMeetingTitle(title: String): String {
+        val chatId = _uiState.value.chatId ?: throw IllegalStateException("未加入会议")
+        val meetingId = _uiState.value.meetingId ?: throw IllegalStateException("未加入会议")
+        val client = LingCatClientManager.currentClient ?: throw IllegalStateException("客户端未连接")
+        val token = LingCatClientManager.currentToken ?: throw IllegalStateException("登录失效")
+        val requestedTitle = title.trim()
+
+        val newTitle = withContext(Dispatchers.IO) {
+            MeetingApi.updateMeetingTitle(client, token, chatId, meetingId, requestedTitle)
+        }
+        val cleanTitle = newTitle.trim().ifEmpty { requestedTitle }
+
+        // 会议仍在进行且未切换到其他会议时，同步更新本地显示
+        if (_uiState.value.chatId == chatId && _uiState.value.meetingId == meetingId) {
+            _uiState.value = _uiState.value.copy(chatTitle = cleanTitle.ifEmpty { null })
+        }
+        return cleanTitle
+    }
+
+    /**
+     * 断开当前 room 并取消其事件监听（不清理 UI 状态，供切换会议时使用）
+     */
+    private suspend fun disconnectCurrentRoom() {
+        roomEventsJob?.cancel()
+        roomEventsJob = null
+        meetingEventsJob?.cancel()
+        meetingEventsJob = null
+
+        val currentRoom = room
+        room = null
+        if (currentRoom != null) {
+            try {
+                currentRoom.disconnect()
+            } catch (e: Exception) {
+                Log.w(TAG, "disconnect error", e)
+            }
+        }
+    }
+
+    /**
      * 离开会议 (只断开自己)
      */
     fun leaveMeeting(disconnectRoom: Boolean = true) {
+        // 取消加入流程，并开启新会话以丢弃旧的异步回写
+        joinJob?.cancel()
+        joinJob = null
+        val session = ++sessionId
+
         // ★ 1. 先抓住当前的 room 引用，防止被 clearState 置空
-        val currentRoom = room 
+        val currentRoom = room
+        room = null
 
         if (disconnectRoom && currentRoom != null) {
             managerScope.launch {
@@ -357,11 +476,12 @@ object MeetingManager {
                 } catch (e: Exception) {
                     Log.w(TAG, "disconnect error", e)
                 } finally {
-                    clearState() // ★ 2. 等断开动作结束了，再清理 UI 状态
+                    // 只有仍是当前会话时才清理，避免覆盖刚加入的新会议
+                    if (session == sessionId) clearState()
                 }
             }
         } else {
-            clearState()
+            if (session == sessionId) clearState()
         }
     }
 
@@ -395,6 +515,8 @@ object MeetingManager {
     private fun clearState() {
         roomEventsJob?.cancel()
         roomEventsJob = null
+        meetingEventsJob?.cancel()
+        meetingEventsJob = null
         room = null
         _uiState.value = MeetingUiState()
     }

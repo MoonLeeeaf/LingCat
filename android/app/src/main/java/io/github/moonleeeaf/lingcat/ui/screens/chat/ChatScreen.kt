@@ -269,6 +269,10 @@ fun ChatScreen(
 
     var activeMeeting by remember { mutableStateOf<MeetingApi.ActiveMeetingResult?>(null) }
 
+    // 发起会议时填写会议标题（默认使用对话标题）
+    var showStartMeetingDialog by remember { mutableStateOf(false) }
+    var meetingTitleInput by remember { mutableStateOf("") }
+
     // 2. 进聊天室时拉取一次
     LaunchedEffect(chatId) {
         val client = LingCatClientManager.currentClient
@@ -331,27 +335,18 @@ fun ChatScreen(
                     actions = {
                         IconButton(onClick = {
                             if (activeMeeting != null) {
-                                // 如果已有会议，直接加入
-                                MeetingManager.joinMeeting(context, chatId, uiState.chatTitle, activeMeeting!!.meetingId)
+                                // 如果已有会议，直接加入（优先使用会议标题）
+                                MeetingManager.joinMeeting(
+                                    context,
+                                    chatId,
+                                    activeMeeting!!.title ?: uiState.chatTitle,
+                                    activeMeeting!!.meetingId
+                                )
                                 onNavigateToMeeting()
                             } else {
-                                // 没有会议，发起
-                                coroutineScope.launch {
-                                    val client = LingCatClientManager.currentClient
-                                    val token = LingCatClientManager.currentToken
-                                    if (client != null && token != null) {
-                                        try {
-                                            val result = withContext(Dispatchers.IO) {
-                                                MeetingApi.startMeeting(client, token, chatId, "会议")
-                                            }
-                                            // 发起成功后，直接加入
-                                            MeetingManager.joinMeeting(context, chatId, uiState.chatTitle, result.meetingId)
-                                            onNavigateToMeeting()
-                                        } catch (e: Exception) {
-                                            Toast.makeText(context, "发起会议失败: ${e.message}", Toast.LENGTH_SHORT).show()
-                                        }
-                                    }
-                                }
+                                // 没有会议，发起前先填写会议标题（默认对话标题）
+                                meetingTitleInput = uiState.chatTitle
+                                showStartMeetingDialog = true
                             }
                         }) {
                             Icon(Icons.Default.Call, contentDescription = "会议")
@@ -667,6 +662,46 @@ fun ChatScreen(
         E2EInfoDialog(
             peerUserId = uiState.peerUserId,
             onDismiss = { showE2EInfo = false }
+        )
+    }
+
+    if (showStartMeetingDialog) {
+        AlertDialog(
+            onDismissRequest = { showStartMeetingDialog = false },
+            title = { Text("发起会议") },
+            text = {
+                OutlinedTextField(
+                    value = meetingTitleInput,
+                    onValueChange = { if (it.length <= 64) meetingTitleInput = it },
+                    label = { Text("会议标题") },
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showStartMeetingDialog = false
+                    val title = meetingTitleInput.trim().ifEmpty { null }
+                    coroutineScope.launch {
+                        val client = LingCatClientManager.currentClient
+                        val token = LingCatClientManager.currentToken
+                        if (client != null && token != null) {
+                            try {
+                                val result = withContext(Dispatchers.IO) {
+                                    MeetingApi.startMeeting(client, token, chatId, title)
+                                }
+                                // 发起成功后，直接加入
+                                MeetingManager.joinMeeting(context, chatId, title ?: uiState.chatTitle, result.meetingId)
+                                onNavigateToMeeting()
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "发起会议失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }) { Text("发起") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showStartMeetingDialog = false }) { Text("取消") }
+            }
         )
     }
 

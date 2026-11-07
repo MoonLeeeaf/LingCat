@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CallEnd
 import androidx.compose.material.icons.filled.CloseFullscreen
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.Videocam
@@ -35,6 +36,7 @@ import android.app.Activity
 import android.content.Context
 import android.media.projection.MediaProjectionManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import androidx.compose.material.icons.filled.ScreenShare 
 import androidx.compose.material.icons.filled.StopScreenShare 
@@ -119,6 +121,11 @@ fun MeetingScreen(
 
     var showEndMeetingDialog by remember { mutableStateOf(false) }
 
+    // 修改会议标题
+    val coroutineScope = rememberCoroutineScope()
+    var showEditTitleDialog by remember { mutableStateOf(false) }
+    var meetingTitleInput by remember { mutableStateOf("") }
+
     // ★ 获取是否有权限（请替换为你真实的判断逻辑）
     // 比如：是否是发起人，或者是否是群管理员
     // 假设你 uiState 里有一个 starterUserId，并且 LingCatClientManager.currentUserId 可用
@@ -157,6 +164,37 @@ fun MeetingScreen(
         )
     }
 
+    if (showEditTitleDialog) {
+        AlertDialog(
+            onDismissRequest = { showEditTitleDialog = false },
+            title = { Text("修改会议标题") },
+            text = {
+                OutlinedTextField(
+                    value = meetingTitleInput,
+                    onValueChange = { if (it.length <= 64) meetingTitleInput = it },
+                    label = { Text("会议标题") },
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showEditTitleDialog = false
+                    val title = meetingTitleInput.trim()
+                    coroutineScope.launch {
+                        try {
+                            MeetingManager.updateMeetingTitle(title)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "修改会议标题失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }) { Text("保存") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditTitleDialog = false }) { Text("取消") }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -178,7 +216,19 @@ fun MeetingScreen(
                     containerColor = Color.Black.copy(alpha = 0.8f),
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        meetingTitleInput = uiState.chatTitle ?: ""
+                        showEditTitleDialog = true
+                    }) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "修改会议标题",
+                            tint = Color.White
+                        )
+                    }
+                }
             )
         },
         bottomBar = {
