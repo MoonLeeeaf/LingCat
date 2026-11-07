@@ -77,7 +77,7 @@ object NotificationHelper {
         return bitmap
     }
 
-    private fun buildAndNotify(context: Context, channelId: String, chatTitle: String, chatId: String, myPerson: Person) {
+        private fun buildAndNotify(context: Context, channelId: String, chatTitle: String, chatId: String, myPerson: Person) {
         val manager = context.getSystemService(NotificationManager::class.java)
         val notificationId = chatId.hashCode()
 
@@ -96,9 +96,22 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // ★ 核心修复 1：根据聊天类型动态显示提示词
+        // ★ 核心修复：对齐 ChatViewModel 的 E2E 判断逻辑
+        // 必须同时满足以下三个条件才认为是 E2E 聊天：
+        // 1. 是私聊 (type == "private") 且能拿到对方 ID
+        // 2. 全局 E2E 状态不是 DISABLED (用户已经生成过密钥)
+        // 3. 对方有公钥缓存 (对方也开启了 E2E)
         val chat = ProfileCache.getCachedChat(chatId)
-        val isE2E = chat?.type == "private"
+        var isE2E = false
+        if (chat != null && chat.type == "private" && chat.hasPeerUserId()) {
+            val peerId = chat.peerUserId
+            val status = E2EStateManager.status.value
+            val hasPeerKey = E2EStateManager.getPeerPublicKey(peerId) != null
+
+            if (status != E2EStateManager.Status.DISABLED && hasPeerKey) {
+                isE2E = true
+            }
+        }
 
         val labelText = if (isE2E) {
             "输入回复... (端到端加密)"
