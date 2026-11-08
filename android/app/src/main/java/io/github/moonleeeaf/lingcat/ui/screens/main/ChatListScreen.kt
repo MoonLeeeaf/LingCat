@@ -4,6 +4,12 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +42,7 @@ import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.launch
 import lingcat.classes.Classes.IChat
+import lingcat.client_protocol.LingCatClient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +56,8 @@ fun ChatListScreen(
     val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
 
     val uiState by viewModel.uiState.collectAsState()
+    val connectionState by viewModel.connectionState.collectAsState()
+    val connectionError by viewModel.connectionError.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
 
     val pagerState = rememberPagerState(pageCount = { 3 })
@@ -128,6 +137,31 @@ fun ChatListScreen(
         }
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
+
+            // ★ 网络状态提示条：CONNECTING / RECONNECTING / DISCONNECTED 时显示
+            val showConnectionBanner = connectionState == LingCatClient.ConnectionState.CONNECTING ||
+                    connectionState == LingCatClient.ConnectionState.RECONNECTING ||
+                    connectionState == LingCatClient.ConnectionState.DISCONNECTED
+            AnimatedVisibility(
+                visible = showConnectionBanner,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                ConnectionStateBanner(
+                    state = connectionState,
+                    errorMessage = connectionError,
+                    onRetry = {
+                        val server = LingCatClientManager.currentServer
+                        if (server != null) {
+                            coroutineScope.launch {
+                                LingCatClientManager.connect(server)
+                            }
+                        } else {
+                            viewModel.initAndLoad()
+                        }
+                    }
+                )
+            }
 
             val tabs = listOf("最近", "收藏", "全部")
             TabRow(selectedTabIndex = pagerState.currentPage) {
@@ -215,6 +249,65 @@ fun ChatListScreen(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+/**
+ * 网络连接状态提示条。
+ * - CONNECTING / RECONNECTING：提示正在重连
+ * - DISCONNECTED：红色，提供“重试”按钮
+ * - 有具体错误时，在标题下方显示服务端返回的详细信息（如 HTTP 530）
+ */
+@Composable
+private fun ConnectionStateBanner(
+    state: LingCatClient.ConnectionState,
+    errorMessage: String?,
+    onRetry: () -> Unit,
+) {
+    val isDisconnected = state == LingCatClient.ConnectionState.DISCONNECTED
+    val background = if (isDisconnected) {
+        MaterialTheme.colorScheme.error
+    } else {
+        MaterialTheme.colorScheme.surface // Amber：网络异常，正在重连
+    }
+    val contentColor = if (isDisconnected) {
+        MaterialTheme.colorScheme.onError
+    } else {
+        MaterialTheme.colorScheme.onSurface // 深棕，保证黄色背景上的可读性
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(background)
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(10.dp)
+        ) {
+            Text(
+                text = if (isDisconnected) "网络已断开" else "网络异常，正在重连...",
+                color = contentColor,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            if (!errorMessage.isNullOrBlank()) {
+                Text(
+                    text = errorMessage,
+                    color = contentColor.copy(alpha = 0.85f),
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+        if (isDisconnected) {
+            TextButton(onClick = onRetry) {
+                Text("重试", color = contentColor)
             }
         }
     }

@@ -48,6 +48,12 @@ class ChatListViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ChatListUiState())
     val uiState: StateFlow<ChatListUiState> = _uiState.asStateFlow()
 
+    /** 全局 WebSocket 连接状态，供界面显示网络提示条 */
+    val connectionState: StateFlow<LingCatClient.ConnectionState> = LingCatClientManager.connectionState
+
+    /** 最近一次连接失败/断开的具体原因 */
+    val connectionError: StateFlow<String?> = LingCatClientManager.connectionError
+
     private var isFetching = false
 
     private val chatDao by lazy {

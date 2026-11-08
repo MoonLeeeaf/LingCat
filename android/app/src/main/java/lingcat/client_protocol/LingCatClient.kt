@@ -163,7 +163,15 @@ class LingCatClient(
 
             override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
                 Log.e(TAG, "onFailure: $t", t)
-                handleDisconnected(-1, t.message ?: "Unknown failure")
+                val reason = if (response != null) {
+                    buildString {
+                        append("HTTP ${response.code}")
+                        if (response.message.isNotBlank()) append(" ${response.message}")
+                    }
+                } else {
+                    t.message?.takeIf { it.isNotBlank() } ?: "Unknown failure"
+                }
+                handleDisconnected(-1, reason)
             }
         })
     }
@@ -376,7 +384,12 @@ class LingCatClient(
 
         // ★ 核心修复 3：如果还没握手成功就断开了，立刻通知外面报错，不要傻等！
         if (!isReady() && onHandshakeFailedListener != null) {
-            onHandshakeFailedListener?.onHandshakeFailed("连接断开 ($code)")
+            val detail = when {
+                code == -1 -> reason
+                reason.isNotBlank() -> "连接断开 ($code): $reason"
+                else -> "连接断开 ($code)"
+            }
+            onHandshakeFailedListener?.onHandshakeFailed(detail)
         }
 
         if (manualDisconnect || code == 1000 || code == 1008 || code == 4001) {

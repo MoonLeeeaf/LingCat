@@ -58,6 +58,10 @@ object LingCatClientManager {
     private val _connectionState = MutableStateFlow(LingCatClient.ConnectionState.IDLE)
     val connectionState: StateFlow<LingCatClient.ConnectionState> = _connectionState.asStateFlow()
 
+    /** 最近一次连接失败/断开的原因（如 HTTP 530），连接成功或重新发起连接时清空 */
+    private val _connectionError = MutableStateFlow<String?>(null)
+    val connectionError: StateFlow<String?> = _connectionError.asStateFlow()
+
     // ★ 全局持久化的事件流（唯一版本）
     private val _globalEvents = MutableSharedFlow<Package>(extraBufferCapacity = 100)
     val globalEvents: SharedFlow<Package> = _globalEvents.asSharedFlow()
@@ -193,6 +197,7 @@ object LingCatClientManager {
         // 3. 取消之前的连接任务
         connectingDeferred?.cancel()
 
+        _connectionError.value = null
         disconnect()
         currentServer = server
         isAuthorized = false // 重置授权标记
@@ -204,7 +209,12 @@ object LingCatClientManager {
                 val client = LingCatClient(server.wsUrl, server.httpUrl, publicKeyBytes)
 
                 client.addConnectionStateListener { state ->
-                    _connectionState.value = state
+                    if (client === _currentClient) {
+                        _connectionState.value = state
+                        if (state == LingCatClient.ConnectionState.CONNECTED) {
+                            _connectionError.value = null
+                        }
+                    }
                     if (state == LingCatClient.ConnectionState.DISCONNECTED ||
                         state == LingCatClient.ConnectionState.RECONNECTING) {
                         isAuthorized = false // ★ 断开时重置，允许重连后再次授权
@@ -240,6 +250,9 @@ object LingCatClientManager {
                             }
                         }
                         client.setOnHandshakeFailedListener { reason ->
+                            if (client === _currentClient) {
+                                _connectionError.value = reason
+                            }
                             if (cont.isActive) cont.resumeWithException(Exception(reason))
                         }
 
@@ -253,7 +266,9 @@ object LingCatClientManager {
                 _currentClient?.disconnect()
                 _currentClient = null
                 _connectionState.value = LingCatClient.ConnectionState.DISCONNECTED
-                Result.failure(Exception("网络连接失败: ${e.message}"))
+                val detail = e.message?.takeIf { it.isNotBlank() }
+                _connectionError.value = detail
+                Result.failure(Exception(if (detail != null) "网络连接失败: $detail" else "网络连接失败"))
             } finally {
                 if (connectingServerUrl == server.wsUrl) {
                     connectingServerUrl = null
