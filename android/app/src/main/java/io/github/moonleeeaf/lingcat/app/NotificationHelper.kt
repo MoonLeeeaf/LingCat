@@ -77,7 +77,7 @@ object NotificationHelper {
         return bitmap
     }
 
-        private fun buildAndNotify(context: Context, channelId: String, chatTitle: String, chatId: String, myPerson: Person) {
+    private fun buildAndNotify(context: Context, channelId: String, chatTitle: String, chatId: String, myPerson: Person) {
         val manager = context.getSystemService(NotificationManager::class.java)
         val notificationId = chatId.hashCode()
 
@@ -132,10 +132,24 @@ object NotificationHelper {
             android.R.drawable.ic_menu_send, "回复", replyPendingIntent
         ).addRemoteInput(remoteInput).build()
 
+        val lastSenderName = chatHistory[chatId]?.lastOrNull()?.person?.name
+
+        // 1. 安全地拿到发送者名字，如果拿不到就默认显示 "新消息"
+        val publicMessage = if (lastSenderName == null) "收到一条新消息" else "$lastSenderName: 发送了一条新消息"
+
+        // 2. 构建锁屏脱敏通知
+        val publicNotification = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_lingcat) // ★ 用你刚建的通知小图标
+            .setContentTitle(chatTitle) // 显示群名或对方名字
+            .setContentText(publicMessage)
+            .build()
+
         val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_lingcat)
             .setStyle(messagingStyle)
             .setContentIntent(pendingIntent)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setPublicVersion(publicNotification)
             .addAction(replyAction)
             .setAutoCancel(true)
             .build()

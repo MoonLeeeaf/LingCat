@@ -77,7 +77,8 @@ class ConnectionKeepAliveService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("LingCat 正在运行")
             .setContentText("保持与服务器的连接中...")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_lingcat)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
             .build()
     }
 
