@@ -1,8 +1,15 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
 import ChatInputBar
+import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,10 +54,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -65,13 +74,179 @@ import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lingcat.classes.Classes.IMessage
+import lingcat.client_protocol.HttpClientProvider
 import lingcat.client_protocol.MeetingApi
+import okhttp3.Request
+import java.io.File
 import java.util.Calendar
 import kotlin.math.roundToInt
+
+private fun openFileExternally(
+    context: Context,
+    scope: CoroutineScope,
+    url: String,
+    fileName: String,
+    hash: String // ★ 新增：直接传入 hash
+) {
+    scope.launch {
+        try {
+            // ★ 自动获取扩展名，如果没有就用 "bin" 兜底
+            val extension = fileName.substringAfterLast('.', "bin")
+            val cacheFileName = if (extension != "bin") "$hash.$extension" else hash
+
+            val tempFile = withContext(Dispatchers.IO) {
+                val cacheDir = File(context.cacheDir, "shared_files")
+                if (!cacheDir.exists()) cacheDir.mkdirs()
+
+                // 目标缓存文件
+                val cachedFile = File(cacheDir, cacheFileName)
+
+                // ★ 命中缓存：直接返回
+                if (cachedFile.exists() && cachedFile.length() > 0) {
+                    return@withContext cachedFile
+                }
+
+                // 没命中缓存，提示用户
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "正在下载文件...", Toast.LENGTH_SHORT).show()
+                }
+
+                // 清理策略：只保留最近 20 个文件
+                val files = cacheDir.listFiles()
+                if (files != null && files.size > 20) {
+                    files.sortBy { it.lastModified() }
+                    for (i in 0 until files.size - 20) {
+                        files[i].delete()
+                    }
+                }
+
+                // 开始下载
+                val client = HttpClientProvider.get()
+                val response = client.newCall(Request.Builder().url(url).build()).execute()
+                if (!response.isSuccessful) throw Exception("下载失败: ${response.code}")
+
+                // ★ 先写临时文件，防止下到一半断网变成坏文件
+                val downloadingFile = File(cacheDir, "$cacheFileName.downloading")
+
+                response.body?.byteStream()?.use { inputStream ->
+                    downloadingFile.outputStream().use { outputStream ->
+                        val buffer = ByteArray(8192)
+                        var bytesRead: Int
+                        while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                            outputStream.write(buffer, 0, bytesRead)
+                        }
+                        outputStream.flush()
+                    }
+                }
+
+                if (cachedFile.exists()) cachedFile.delete()
+                downloadingFile.renameTo(cachedFile)
+
+                cachedFile
+            }
+
+            // 调起外部应用
+            withContext(Dispatchers.Main) {
+                // 优先根据扩展名获取 MimeType，获取不到就通配 */*
+                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: "*/*"
+
+                val uri = FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    tempFile
+                )
+
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, mimeType)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+
+                try {
+                    context.startActivity(Intent.createChooser(intent, "打开..."))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "没有找到可以打开此文件的应用喵", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "打开失败: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
+
+/**
+* 下载文件并保存到公共下载目录
+*/
+private suspend fun saveFileToDownloads(context: Context, url: String, fileName: String): Boolean = withContext(Dispatchers.IO) {
+    try {
+        val client = HttpClientProvider.get()
+        val response = client.newCall(Request.Builder().url(url).build()).execute()
+        if (!response.isSuccessful) return@withContext false
+        val body = response.body ?: return@withContext false
+
+        val extension = fileName.substringAfterLast('.', "bin")
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: "*/*"
+        val finalFileName = if (fileName.contains(".")) fileName else "$fileName.$extension"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10+ 使用 MediaStore 保存到 Downloads，无需权限
+            val values = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, finalFileName)
+                put(MediaStore.Downloads.MIME_TYPE, mimeType)
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/LingCat")
+                put(MediaStore.Downloads.IS_PENDING, 1)
+            }
+            val resolver = context.contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values) ?: return@withContext false
+
+            resolver.openOutputStream(uri)?.use { outputStream ->
+                body.byteStream().use { inputStream ->
+                    val buffer = ByteArray(8192)
+                    var bytesRead: Int
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+                    outputStream.flush()
+                }
+            }
+
+            values.clear()
+            values.put(MediaStore.Downloads.IS_PENDING, 0)
+            resolver.update(uri, values, null, null)
+        } else {
+            // Android 9 及以下，由于没有 WRITE_EXTERNAL_STORAGE 权限容易崩溃，
+            // 我们保存到 App 专属的外部目录，不需要权限，且卸载 App 时自动清理
+            val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+            if (!dir?.exists()!!) dir.mkdirs()
+            val file = File(dir, finalFileName)
+            file.outputStream().use { outputStream ->
+                body.byteStream().use { inputStream ->
+                    val buffer = ByteArray(8192)
+                    var bytesRead: Int
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+                    outputStream.flush()
+                }
+            }
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "已保存至：${file.absolutePath}", Toast.LENGTH_LONG).show()
+            }
+        }
+        return@withContext true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return@withContext false
+    }
+}
 
 /**
  * 判断是否需要在 msg 上方显示时间分隔条
@@ -288,6 +463,8 @@ fun ChatScreen(
             } catch (e: Exception) { }
         }
     }
+
+    var selectedFile by remember { mutableStateOf<Triple<String, String, String>?>(null) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -522,25 +699,11 @@ fun ChatScreen(
 
                                         if (url != null) {
                                             if (isImage) {
-                                                // 弹出全屏预览
+                                                // 图片：直接弹全屏预览
                                                 previewImageUrl = url
                                             } else {
-                                                // 普通文件走外部应用
-                                                try {
-                                                    val intent =
-                                                        android.content.Intent(android.content.Intent.ACTION_VIEW)
-                                                            .apply {
-                                                                data = android.net.Uri.parse(url)
-                                                                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-                                                            }
-                                                    context.startActivity(intent)
-                                                } catch (e: Exception) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "无法打开文件",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+                                                // ★ 普通文件：走下载缓存 + FileProvider 打开的逻辑
+                                                selectedFile = Triple(hash, name, url)
                                             }
                                         } else {
                                             Toast.makeText(
@@ -555,12 +718,7 @@ fun ChatScreen(
                                     // ★ 补全提及点击逻辑
                                     onMentionClick = { mentionId, isChat ->
                                         if (isChat) {
-                                            // 群提及暂未做跳转，先给个提示
-                                            android.widget.Toast.makeText(
-                                                context,
-                                                "点击了群: $mentionId",
-                                                android.widget.Toast.LENGTH_SHORT
-                                            ).show()
+                                            showChatInfoId = mentionId
                                         } else {
                                             // 点击用户，打开资料面板
                                             showUserProfileId = mentionId
@@ -847,6 +1005,95 @@ fun ChatScreen(
                     modifier = Modifier.clickable {
                         showMessageInfo = selectedMessage
                         selectedMessage = null
+                    }
+                )
+            }
+        }
+    }
+
+    // ★ 文件操作 BottomSheet
+    if (selectedFile != null) {
+        val (hash, name, url) = selectedFile!!
+        val extension = name.substringAfterLast('.', "").uppercase()
+
+        // 简单根据后缀名给个图标
+        val fileIcon = when (extension) {
+            "ZIP", "RAR", "7Z" -> Icons.Default.FolderZip
+            "PDF" -> Icons.Default.PictureAsPdf
+            "DOC", "DOCX", "TXT" -> Icons.Default.Description
+            "MP4", "MKV", "AVI" -> Icons.Default.Movie
+            "MP3", "WAV" -> Icons.Default.AudioFile
+            else -> Icons.Default.InsertDriveFile
+        }
+
+        ModalBottomSheet(
+            onDismissRequest = { selectedFile = null }
+        ) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp)) {
+
+                // 文件头部信息
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = fileIcon,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        if (extension.isNotEmpty()) {
+                            Text(
+                                text = "$extension 文件",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                HorizontalDivider()
+
+                // 用其他应用打开
+                ListItem(
+                    headlineContent = { Text("用其他应用打开") },
+                    leadingContent = { Icon(Icons.Default.OpenInNew, contentDescription = null) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable {
+                        openFileExternally(context, coroutineScope, url, name, hash)
+                        selectedFile = null
+                    }
+                )
+
+                // 保存到下载目录
+                ListItem(
+                    headlineContent = { Text("保存到下载目录") },
+                    leadingContent = { Icon(Icons.Default.Download, contentDescription = null) },
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    modifier = Modifier.clickable {
+                        selectedFile = null
+                        coroutineScope.launch {
+                            val success = saveFileToDownloads(context, url, name)
+                            if (success) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    Toast.makeText(context, "已保存到 Download/LingCat", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                Toast.makeText(context, "保存失败，请重试", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 )
             }
