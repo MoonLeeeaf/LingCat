@@ -960,15 +960,14 @@ fun MessageBubble(
                 orientation = Orientation.Horizontal,
                 state = rememberDraggableState { delta ->
                     scope.launch {
-                        // 只能向右滑，限制最大位移防止飘出屏幕
-                        val newValue = (offsetX.value + delta).coerceIn(
-                            0f,
-                            threshold + with(density) { 20.dp.toPx() })
+                        // 只能向左滑，限制最大位移防止飘出屏幕
+                        val maxOffset = threshold + with(density) { 20.dp.toPx() }
+                        val newValue = (offsetX.value + delta).coerceIn(-maxOffset, 0f)
                         offsetX.snapTo(newValue)
                     }
                 },
                 onDragStopped = {
-                    if (offsetX.value > threshold) {
+                    if (offsetX.value < -threshold) {
                         onSwipeReply()
                         // 可选：加上触觉反馈（如震动）
                     }
@@ -991,10 +990,10 @@ fun MessageBubble(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .padding(start = 20.dp),
-            contentAlignment = if (isMine) Alignment.CenterEnd else Alignment.CenterStart
+                .padding(end = 20.dp),
+            contentAlignment = Alignment.CenterEnd
         ) {
-            val alpha = (offsetX.value / threshold).coerceIn(0f, 1f)
+            val alpha = (-offsetX.value / threshold).coerceIn(0f, 1f)
             if (alpha > 0f) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Reply,
