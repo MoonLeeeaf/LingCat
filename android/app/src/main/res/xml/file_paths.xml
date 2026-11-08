@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 将 cache 目录下的 shared_images 文件夹暴露出去 -->
+    <cache-path name="shared_images" path="shared_images/" />
+</paths>
