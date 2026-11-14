@@ -32,9 +32,15 @@ class ConnectionKeepAliveService : Service() {
         serviceScope.launch {
             LingCatClientManager.globalEvents.collect { pkg ->
                 if (pkg.method_id == Methods.Receive_Chat_Message_Event) {
-                    val ev = Receive_Chat_Message_Event.parseFrom(pkg.data)
-                    if (ev.hasMsg()) {
-                        processMessageForNotification(ev.msg)
+                    try {
+                        val ev = Receive_Chat_Message_Event.parseFrom(pkg.data)
+                        if (ev.hasMsg()) {
+                            processMessageForNotification(ev.msg)
+                        }
+                    } catch (e: Exception) {
+                        // 单条消息处理失败（例如旧账号残留事件、资料拉取失败）
+                        // 不能把整个通知收集协程拖死。
+                        Log.e("Notification", "process message event failed", e)
                     }
                 }
             }

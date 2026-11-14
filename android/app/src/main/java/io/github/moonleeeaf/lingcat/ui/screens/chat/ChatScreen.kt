@@ -429,10 +429,8 @@ fun ChatScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 AppState.activeChatId = chatId
-                // ★ 进入聊天时，清除该聊天的通知和历史
-                NotificationHelper.clearHistory(chatId)
-                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-                manager.cancel(chatId.hashCode())
+                // ★ 进入聊天时，清除该聊天的通知和历史（通知 id 按账号区分）
+                NotificationHelper.clearChat(context, chatId)
                 // 从「对话设定」等页面返回时，用缓存里的最新资料同步标题，
                 // 避免改了群名还要退出重进才看得到。
                 viewModel.refreshCachedChatInfo()

@@ -28,8 +28,31 @@ object NotificationHelper {
     const val CHANNEL_GROUP_AT = "channel_group_at"
     const val CHANNEL_GROUP_REPLY = "channel_group_reply"
 
-    // 缓存聊天历史记录
+    /** 通知所属账号的 userId，点击 / 回复时用来确认这条通知没有被切号。 */
+    const val EXTRA_ACCOUNT_USER_ID = "notification_account_user_id"
+    /** 通知本身的 id，回复失败或账号不匹配时可以精确取消。 */
+    const val EXTRA_NOTIFICATION_ID = "notification_id"
+
+    private val CHAT_CHANNELS = setOf(CHANNEL_PRIVATE, CHANNEL_GROUP_AT, CHANNEL_GROUP_REPLY)
+
+    // 前台服务的通知 id：清理聊天通知时必须保留，否则会让前台服务「掉通知」。
+    private const val KEEP_ALIVE_NOTIFICATION_ID = 1
+    private const val MEETING_NOTIFICATION_ID = 1001
+
+    // 缓存聊天历史记录。
+    // key 必须带账号：同一个 chatId 在不同账号下可能是完全不同的会话，
+    // 只按 chatId 存会让切换账号后的通知混进上一个账号的消息。
     private val chatHistory = mutableMapOf<String, MutableList<NotificationCompat.MessagingStyle.Message>>()
+
+    private fun accountKey(userId: String?): String =
+        userId?.trim()?.takeIf { it.isNotEmpty() } ?: "guest"
+
+    private fun historyKey(accountUserId: String, chatId: String): String =
+        "$accountUserId|$chatId"
+
+    /** 该会话通知使用的 id（按账号区分，避免旧账号的通知被新账号覆盖 / 复用）。 */
+    fun notificationId(chatId: String): Int =
+        historyKey(accountKey(LingCatClientManager.currentUserId), chatId).hashCode()
 
     fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -89,11 +112,19 @@ object NotificationHelper {
         return bitmap
     }
 
-    private fun buildAndNotify(context: Context, channelId: String, chatTitle: String, chatId: String, myPerson: Person) {
+    private fun buildAndNotify(
+        context: Context,
+        channelId: String,
+        chatTitle: String,
+        chatId: String,
+        accountUserId: String,
+        myPerson: Person,
+    ) {
         val manager = context.getSystemService(NotificationManager::class.java)
-        val notificationId = chatId.hashCode()
+        val key = historyKey(accountUserId, chatId)
+        val notificationId = key.hashCode()
 
-        val history = chatHistory[chatId] ?: mutableListOf()
+        val history = chatHistory[key] ?: mutableListOf()
 
         val messagingStyle = NotificationCompat.MessagingStyle(myPerson)
             .setConversationTitle(chatTitle)
@@ -102,6 +133,7 @@ object NotificationHelper {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("route_chat_id", chatId)
+            putExtra(EXTRA_ACCOUNT_USER_ID, accountUserId)
         }
         val pendingIntent = PendingIntent.getActivity(
             context, notificationId, intent,
@@ -135,6 +167,8 @@ object NotificationHelper {
 
         val replyIntent = Intent(context, ReplyReceiver::class.java).apply {
             putExtra("chat_id", chatId)
+            putExtra(EXTRA_ACCOUNT_USER_ID, accountUserId)
+            putExtra(EXTRA_NOTIFICATION_ID, notificationId)
         }
         val replyPendingIntent = PendingIntent.getBroadcast(
             context, notificationId, replyIntent,
@@ -144,7 +178,7 @@ object NotificationHelper {
             android.R.drawable.ic_menu_send, context.getString(R.string.notif_action_reply), replyPendingIntent
         ).addRemoteInput(remoteInput).build()
 
-        val lastSenderName = chatHistory[chatId]?.lastOrNull()?.person?.name
+        val lastSenderName = chatHistory[key]?.lastOrNull()?.person?.name
 
         // 1. 安全地拿到发送者名字，如果拿不到就默认显示 "新消息"
         val publicMessage = if (lastSenderName == null) {
@@ -170,11 +204,19 @@ object NotificationHelper {
             .setAutoCancel(true)
             .build()
 
+        // 构建过程中可能刚好切换了账号：旧账号的消息不能再弹到新账号的通知栏里。
+        if (accountKey(LingCatClientManager.currentUserId) != accountUserId) {
+            chatHistory.remove(key)
+            return
+        }
         manager.notify(notificationId, notification)
     }
 
     suspend fun showNotification(context: Context, channelId: String, chatTitle: String, senderName: String, content: String, chatId: String) {
-        val history = chatHistory.getOrPut(chatId) { mutableListOf() }
+        // 账号在 suspend 期间可能变化，先固定一次，保证历史 key 和通知 id 用的是同一个账号。
+        val accountUserId = accountKey(LingCatClientManager.currentUserId)
+        val key = historyKey(accountUserId, chatId)
+        val history = chatHistory.getOrPut(key) { mutableListOf() }
         val displayText = if (content.startsWith("🔒")) context.getString(R.string.encrypted_message_locked) else content
 
         // ★ 核心：防抖去重。只对比 Text。
@@ -189,11 +231,13 @@ object NotificationHelper {
         history.add(NotificationCompat.MessagingStyle.Message(displayText, System.currentTimeMillis(), senderName))
         if (history.size > 5) history.removeAt(0)
 
-        buildAndNotify(context, channelId, chatTitle, chatId, myPerson)
+        buildAndNotify(context, channelId, chatTitle, chatId, accountUserId, myPerson)
     }
 
     suspend fun addMyMessage(context: Context, channelId: String, chatTitle: String, content: String, chatId: String) {
-        val history = chatHistory.getOrPut(chatId) { mutableListOf() }
+        val accountUserId = accountKey(LingCatClientManager.currentUserId)
+        val key = historyKey(accountUserId, chatId)
+        val history = chatHistory.getOrPut(key) { mutableListOf() }
         val displayText = if (content.startsWith("🔒")) context.getString(R.string.encrypted_message_locked) else content
 
         val myPerson = buildPerson(context, LingCatClientManager.currentUserId, context.getString(R.string.notif_sender_me))
@@ -201,10 +245,42 @@ object NotificationHelper {
         history.add(NotificationCompat.MessagingStyle.Message(displayText, System.currentTimeMillis(), myPerson))
         if (history.size > 5) history.removeAt(0)
 
-        buildAndNotify(context, channelId, chatTitle, chatId, myPerson)
+        buildAndNotify(context, channelId, chatTitle, chatId, accountUserId, myPerson)
     }
 
+    /** 清除当前账号下某个会话的通知历史（不取消通知本身）。 */
     fun clearHistory(chatId: String) {
-        chatHistory.remove(chatId)
+        chatHistory.remove(historyKey(accountKey(LingCatClientManager.currentUserId), chatId))
+    }
+
+    /** 进入会话时同时清除历史和通知栏里的通知。 */
+    fun clearChat(context: Context, chatId: String) {
+        clearHistory(chatId)
+        val manager = context.getSystemService(NotificationManager::class.java)
+        manager.cancel(notificationId(chatId))
+    }
+
+    /**
+     * 切换 / 退出账号时清空通知栏里的聊天通知。
+     *
+     * 只清理私聊 / 群聊通道，保留前台保活服务和会议通知。
+     * 同时清空历史，防止新账号在同一个 chatId 下复用旧账号的消息。
+     */
+    fun clearAll(context: Context) {
+        chatHistory.clear()
+        val manager = context.getSystemService(NotificationManager::class.java)
+        try {
+            manager.activeNotifications.forEach { sbn ->
+                val isChatNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    sbn.notification.channelId in CHAT_CHANNELS
+                } else {
+                    // API 24/25 没有 channelId，按 id 排除两个前台服务通知
+                    sbn.id != KEEP_ALIVE_NOTIFICATION_ID && sbn.id != MEETING_NOTIFICATION_ID
+                }
+                if (isChatNotification) manager.cancel(sbn.id)
+            }
+        } catch (e: Exception) {
+            // 清理通知失败不应该影响切号本身
+        }
     }
 }

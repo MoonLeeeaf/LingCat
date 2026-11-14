@@ -25,6 +25,24 @@ class ReplyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val chatId = intent.getStringExtra("chat_id") ?: return
+        val notificationId = intent.getIntExtra(NotificationHelper.EXTRA_NOTIFICATION_ID, -1)
+        val notificationAccountId = intent.getStringExtra(NotificationHelper.EXTRA_ACCOUNT_USER_ID)
+        val currentAccountId = LingCatClientManager.currentUserId
+
+        // 通知属于已经切换掉的账号：不能再拿当前账号去回复旧账号的对话。
+        if (!notificationAccountId.isNullOrEmpty() && notificationAccountId != currentAccountId) {
+            Log.w(TAG, "notification belongs to $notificationAccountId, current is $currentAccountId")
+            cancelNotification(context, notificationId)
+            CoroutineScope(Dispatchers.Main).launch {
+                android.widget.Toast.makeText(
+                    context,
+                    context.getString(R.string.reply_err_account_switched),
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
+            return
+        }
+
         val remoteInput = RemoteInput.getResultsFromIntent(intent) ?: return
         val replyText = remoteInput.getCharSequence("reply_text")?.toString()?.trim() ?: return
         if (replyText.isEmpty()) return
@@ -141,9 +159,21 @@ class ReplyReceiver : BroadcastReceiver() {
 
             } catch (e: Exception) {
                 Log.e(TAG, "Notification reply failed", e)
+                // 403 表示当前账号不属于该对话，通常是切号后残留的旧通知，
+                // 撤掉通知而不是让用户反复点、反复失败。
+                if (e is lingcat.client_protocol.DecodeOrThrow.ApiException && e.code == 403) {
+                    cancelNotification(context, notificationId)
+                }
             } finally {
                 pendingResult.finish()
             }
         }
+    }
+
+    private fun cancelNotification(context: Context, notificationId: Int) {
+        if (notificationId == -1) return
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE)
+            as? android.app.NotificationManager ?: return
+        manager.cancel(notificationId)
     }
 }

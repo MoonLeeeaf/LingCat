@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.lifecycle.lifecycleScope
+import io.github.moonleeeaf.lingcat.app.NotificationHelper
 import io.github.moonleeeaf.lingcat.data.AccountInfo
 import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ServerStorage
@@ -108,8 +109,16 @@ class MainActivity : ComponentActivity() {
         // 2. 处理普通路由深链 (如通知点击)
         val chatId = intent?.getStringExtra("route_chat_id")
         if (!chatId.isNullOrEmpty()) {
-            deepLinkChatId.tryEmit(chatId)
+            // 旧账号遗留的通知不要在切号后打开，否则会进入不属于当前账号的对话
+            val notificationAccountId =
+                intent.getStringExtra(NotificationHelper.EXTRA_ACCOUNT_USER_ID)
+            val canOpen = notificationAccountId.isNullOrEmpty() ||
+                notificationAccountId == LingCatClientManager.currentUserId
+            if (canOpen) {
+                deepLinkChatId.tryEmit(chatId)
+            }
             intent.removeExtra("route_chat_id")
+            intent.removeExtra(NotificationHelper.EXTRA_ACCOUNT_USER_ID)
         }
 
         if (intent?.getBooleanExtra("open_meeting", false) == true) {
