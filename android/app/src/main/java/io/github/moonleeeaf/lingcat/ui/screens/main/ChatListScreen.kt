@@ -15,11 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -28,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,6 +61,10 @@ fun ChatListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
+    // 「+」菜单：打开对话 / 创建群组
+    var addMenuExpanded by remember { mutableStateOf(false) }
+    var showOpenChatDialog by rememberSaveable { mutableStateOf(false) }
+    var showCreateGroupDialog by rememberSaveable { mutableStateOf(false) }
 
     // 最近 / 全部 内容高度重合，不再用三个 Tab 占首屏；只保留“只看收藏”一个筛选。
     var showFavourites by rememberSaveable { mutableStateOf(false) }
@@ -83,6 +93,34 @@ fun ChatListScreen(
             TopAppBar(
                 title = { Text(LingCatClientManager.currentServer?.siteTitle ?: "LingCat") },
                 actions = {
+                    Box {
+                        IconButton(onClick = { addMenuExpanded = true }) {
+                            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.chat_list_add))
+                        }
+                        DropdownMenu(
+                            expanded = addMenuExpanded,
+                            onDismissRequest = { addMenuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.chat_list_open_chat)) },
+                                leadingIcon = { Icon(Icons.Default.OpenInNew, contentDescription = null) },
+                                onClick = {
+                                    addMenuExpanded = false
+                                    viewModel.resetOpenChatState()
+                                    showOpenChatDialog = true
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.chat_list_create_group)) },
+                                leadingIcon = { Icon(Icons.Default.Group, contentDescription = null) },
+                                onClick = {
+                                    addMenuExpanded = false
+                                    viewModel.resetCreateGroupState()
+                                    showCreateGroupDialog = true
+                                }
+                            )
+                        }
+                    }
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.chat_list_more))
@@ -212,6 +250,165 @@ fun ChatListScreen(
             }
         }
     }
+
+    // ==========================================
+    // 打开对话 / 创建群组
+    // ==========================================
+    if (showOpenChatDialog) {
+        OpenChatDialog(
+            state = uiState.openChat,
+            onDismiss = {
+                showOpenChatDialog = false
+                viewModel.resetOpenChatState()
+            },
+            onConfirm = viewModel::openChatByInput,
+        )
+    }
+
+    if (showCreateGroupDialog) {
+        CreateGroupDialog(
+            state = uiState.createGroup,
+            onDismiss = {
+                showCreateGroupDialog = false
+                viewModel.resetCreateGroupState()
+            },
+            onConfirm = { title, unique -> viewModel.createGroup(title, unique) },
+        )
+    }
+
+    // 解析 / 创建成功后跳转，并清空状态，避免返回列表时再次跳转。
+    LaunchedEffect(uiState.openChat.chatId) {
+        uiState.openChat.chatId?.let { chatId ->
+            showOpenChatDialog = false
+            viewModel.resetOpenChatState()
+            onChatClick(chatId)
+        }
+    }
+    LaunchedEffect(uiState.createGroup.chatId) {
+        uiState.createGroup.chatId?.let { chatId ->
+            showCreateGroupDialog = false
+            viewModel.resetCreateGroupState()
+            onChatClick(chatId)
+        }
+    }
+}
+
+/**
+ * 「打开对话」弹窗：输入对话 ID / 用户 ID / 用户名，解析成功后跳转。
+ */
+@Composable
+private fun OpenChatDialog(
+    state: OpenChatState,
+    onDismiss: () -> Unit,
+    onConfirm: (String) -> Unit,
+) {
+    var input by rememberSaveable { mutableStateOf("") }
+    val canSubmit = input.isNotBlank() && !state.isResolving
+
+    AlertDialog(
+        onDismissRequest = { if (!state.isResolving) onDismiss() },
+        title = { Text(stringResource(R.string.chat_list_open_chat)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = input,
+                    onValueChange = { input = it },
+                    singleLine = true,
+                    enabled = !state.isResolving,
+                    isError = state.errorMsg != null,
+                    label = { Text(stringResource(R.string.open_chat_input_label)) },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { if (canSubmit) onConfirm(input) }),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Text(
+                    text = state.errorMsg?.asString() ?: stringResource(R.string.open_chat_help),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (state.errorMsg != null) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(input) }, enabled = canSubmit) {
+                if (state.isResolving) {
+                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                } else {
+                    Text(stringResource(R.string.open_chat_action))
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, enabled = !state.isResolving) {
+                Text(stringResource(R.string.action_cancel))
+            }
+        },
+    )
+}
+
+/**
+ * 「创建群组」弹窗：群名称必填，唯一标识符可选。
+ */
+@Composable
+private fun CreateGroupDialog(
+    state: CreateGroupState,
+    onDismiss: () -> Unit,
+    onConfirm: (title: String, unique: String) -> Unit,
+) {
+    var title by rememberSaveable { mutableStateOf("") }
+    var unique by rememberSaveable { mutableStateOf("") }
+    val canSubmit = title.isNotBlank() && !state.isCreating
+
+    AlertDialog(
+        onDismissRequest = { if (!state.isCreating) onDismiss() },
+        title = { Text(stringResource(R.string.chat_list_create_group)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    singleLine = true,
+                    enabled = !state.isCreating,
+                    isError = state.errorMsg != null,
+                    label = { Text(stringResource(R.string.create_group_name_label)) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = unique,
+                    onValueChange = { unique = it },
+                    singleLine = true,
+                    enabled = !state.isCreating,
+                    label = { Text(stringResource(R.string.create_group_unique_label)) },
+                    supportingText = { Text(stringResource(R.string.create_group_unique_help)) },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                if (state.errorMsg != null) {
+                    Text(
+                        text = state.errorMsg.asString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(title, unique) }, enabled = canSubmit) {
+                if (state.isCreating) {
+                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                } else {
+                    Text(stringResource(R.string.create_group_action))
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, enabled = !state.isCreating) {
+                Text(stringResource(R.string.action_cancel))
+            }
+        },
+    )
 }
 
 @Composable

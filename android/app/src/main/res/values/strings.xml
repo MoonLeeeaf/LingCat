@@ -55,7 +55,9 @@
     <string name="chat_input_save_edit">保存编辑</string>
     <string name="chat_input_send">发送</string>
     <string name="chat_input_toggle_encrypt">切换加密</string>
+    <string name="chat_list_add">新建</string>
     <string name="chat_list_all">全部</string>
+    <string name="chat_list_create_group">创建群组</string>
     <string name="chat_list_disconnected">网络已断开</string>
     <string name="chat_list_edit_profile">编辑资料</string>
     <string name="chat_list_empty_desc">收到新消息后，会话会自动出现在这里。</string>
@@ -66,6 +68,7 @@
     <string name="chat_list_more">更多</string>
     <string name="chat_list_network_error">网络出错了喵</string>
     <string name="chat_list_no_title">无标题</string>
+    <string name="chat_list_open_chat">打开对话</string>
     <string name="chat_list_reconnecting">正在重连…</string>
     <string name="chat_list_syncing">正在同步会话…</string>
     <string name="chat_meeting">会议</string>
@@ -300,6 +303,12 @@
     <string name="oauth_cancelled">你取消了授权</string>
     <string name="oauth_failed">授权失败: %1$s</string>
     <string name="oauth_user_info_failed">获取用户信息失败: %1$s</string>
+    <string name="open_chat_action">打开</string>
+    <string name="open_chat_err_empty">请输入对话 ID、用户 ID 或用户名</string>
+    <string name="open_chat_err_failed">打开对话失败: %1$s</string>
+    <string name="open_chat_err_not_found">找不到对应的对话或用户</string>
+    <string name="open_chat_help">支持对话 ID、用户 ID 或用户名；用户会自动进入或创建私聊。</string>
+    <string name="open_chat_input_label">对话 ID / 用户 ID / 用户名</string>
     <string name="notif_channel_private">私聊消息</string>
     <string name="notif_channel_group_at">群组 @我</string>
     <string name="notif_channel_group_reply">群组回复我</string>
@@ -326,6 +335,12 @@
     <string name="reply_err_e2e_locked">端到端加密已锁定，请打开 App 输入密码后重试</string>
     <string name="reply_err_encrypt_failed">加密失败，请打开 App 重试</string>
     <string name="chat_fallback_title">会话</string>
+    <string name="create_group_action">创建</string>
+    <string name="create_group_err_empty">请输入群名称</string>
+    <string name="create_group_err_failed">创建群组失败: %1$s</string>
+    <string name="create_group_name_label">群名称</string>
+    <string name="create_group_unique_help">设置后其他人可以通过该标识符找到这个群。</string>
+    <string name="create_group_unique_label">唯一标识符 (可选)</string>
     <string name="account_unknown_server">未知服务器</string>
     <string name="account_err_switch">切换失败: %1$s</string>
     <string name="error_server_not_connected">服务器未连接</string>

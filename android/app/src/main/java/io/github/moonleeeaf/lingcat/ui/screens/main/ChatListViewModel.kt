@@ -12,6 +12,7 @@ import io.github.moonleeeaf.lingcat.ui.UiText
 import io.github.moonleeeaf.lingcat.ui.UiTextException
 import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
 import io.github.moonleeeaf.lingcat.ui.uiText
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.withContext
 import lingcat.classes.Classes
 import lingcat.classes.Classes.IChat
 import lingcat.client_protocol.ChatApi
+import lingcat.client_protocol.DecodeOrThrow
 import lingcat.client_protocol.LingCatClient
 import lingcat.client_protocol.UserApi
 import lingcat.protocol.Methods
@@ -37,7 +39,27 @@ data class ChatListUiState(
     val favouriteChats: List<IChat> = emptyList(),
     val allChats: List<IChat> = emptyList(),
     val unreadCounts: Map<String, Int> = emptyMap(), // ★ 新增：未读数记录
-    val errorMsg: UiText? = null
+    val errorMsg: UiText? = null,
+    /** 「打开对话」弹窗状态：输入 对话 ID / 用户 ID / 用户名 后解析出的 chatId。 */
+    val openChat: OpenChatState = OpenChatState(),
+    /** 「创建群组」弹窗状态：创建成功后返回的 chatId。 */
+    val createGroup: CreateGroupState = CreateGroupState(),
+)
+
+/** 「打开对话」的请求状态。 */
+data class OpenChatState(
+    val isResolving: Boolean = false,
+    val errorMsg: UiText? = null,
+    /** 解析成功后要跳转的对话；界面消费后需要调用 [ChatListViewModel.resetOpenChatState]。 */
+    val chatId: String? = null,
+)
+
+/** 「创建群组」的请求状态。 */
+data class CreateGroupState(
+    val isCreating: Boolean = false,
+    val errorMsg: UiText? = null,
+    /** 创建成功后要跳转的对话；界面消费后需要调用 [ChatListViewModel.resetCreateGroupState]。 */
+    val chatId: String? = null,
 )
 
 class ChatListViewModel : ViewModel() {
@@ -263,5 +285,178 @@ class ChatListViewModel : ViewModel() {
 
     fun selectTab(index: Int) {
         // 保留空实现以兼容旧调用；三个 Tab 已经合并为“全部 / 收藏”筛选。
+    }
+
+    // ==========================================
+    // 「打开对话 / 创建群组」
+    // ==========================================
+
+    /** 关闭「打开对话」弹窗时清空上次的输入结果与错误。 */
+    fun resetOpenChatState() {
+        _uiState.value = _uiState.value.copy(openChat = OpenChatState())
+    }
+
+    /** 关闭「创建群组」弹窗时清空上次的结果与错误。 */
+    fun resetCreateGroupState() {
+        _uiState.value = _uiState.value.copy(createGroup = CreateGroupState())
+    }
+
+    /**
+     * 通过「对话 ID / 用户 ID / 用户名」打开对话。
+     *
+     * 依次尝试：当作对话 ID 查询 → 当作用户 ID 查询 → 当作用户名反查用户 ID；
+     * 命中用户时复用（或创建）私聊，最终把 chatId 交给界面跳转。
+     */
+    fun openChatByInput(rawInput: String) {
+        val input = rawInput.trim()
+        if (input.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                openChat = OpenChatState(errorMsg = uiText(R.string.open_chat_err_empty))
+            )
+            return
+        }
+        if (_uiState.value.openChat.isResolving) return
+
+        _uiState.value = _uiState.value.copy(openChat = OpenChatState(isResolving = true))
+
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient
+                    ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken
+                    ?: throw UiTextException(uiText(R.string.error_not_signed_in))
+
+                val (chatId, apiError) = withContext(Dispatchers.IO) {
+                    resolveChatId(client, token, input)
+                }
+
+                if (chatId.isNullOrEmpty()) {
+                    _uiState.value = _uiState.value.copy(
+                        openChat = OpenChatState(
+                            // 服务器的错误文案更具体（例如“用户不存在”），优先展示。
+                            errorMsg = apiError?.let { UiText.Raw(it) }
+                                ?: uiText(R.string.open_chat_err_not_found)
+                        )
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(openChat = OpenChatState(chatId = chatId))
+                    // 新建的私聊可能还不在列表里，顺手刷新一次。
+                    initAndLoad(isRefresh = true)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "open chat by input failed", e)
+                _uiState.value = _uiState.value.copy(
+                    openChat = OpenChatState(
+                        errorMsg = e.toUiTextOrNull()
+                            ?: uiText(R.string.open_chat_err_failed, e.message ?: "")
+                    )
+                )
+            }
+        }
+    }
+
+    /**
+     * 创建群组。
+     *
+     * @param rawTitle 群名称，必填。
+     * @param rawUnique 群唯一标识符，可留空。
+     */
+    fun createGroup(rawTitle: String, rawUnique: String) {
+        val title = rawTitle.trim()
+        if (title.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                createGroup = CreateGroupState(errorMsg = uiText(R.string.create_group_err_empty))
+            )
+            return
+        }
+        if (_uiState.value.createGroup.isCreating) return
+
+        val unique = rawUnique.trim().takeIf { it.isNotEmpty() }
+        _uiState.value = _uiState.value.copy(createGroup = CreateGroupState(isCreating = true))
+
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient
+                    ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken
+                    ?: throw UiTextException(uiText(R.string.error_not_signed_in))
+
+                val chatId = withContext(Dispatchers.IO) {
+                    ChatApi.createGroup(client, token, title, unique)
+                }
+
+                if (chatId.isNullOrEmpty()) {
+                    _uiState.value = _uiState.value.copy(
+                        createGroup = CreateGroupState(
+                            errorMsg = uiText(R.string.create_group_err_failed, "")
+                        )
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        createGroup = CreateGroupState(chatId = chatId)
+                    )
+                    initAndLoad(isRefresh = true)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "create group failed", e)
+                _uiState.value = _uiState.value.copy(
+                    createGroup = CreateGroupState(
+                        errorMsg = e.toUiTextOrNull()
+                            ?: uiText(R.string.create_group_err_failed, e.message ?: "")
+                    )
+                )
+            }
+        }
+    }
+
+    /**
+     * 把用户输入的「对话 ID / 用户 ID / 用户名」解析成 chatId。
+     *
+     * @return first = chatId（失败为 null），second = 服务端最近一次返回的错误文案。
+     */
+    private suspend fun resolveChatId(
+        client: LingCatClient,
+        token: String,
+        input: String,
+    ): Pair<String?, String?> {
+        var apiError: String? = null
+
+        // 依次尝试三种解释；单个候选失败（找不到 / 类型不匹配）不算整体失败。
+        suspend fun <T> attempt(block: suspend () -> T): T? = try {
+            block()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: DecodeOrThrow.ApiException) {
+            apiError = e.message
+            null
+        } catch (e: Exception) {
+            Log.d(TAG, "resolve \"$input\" failed: ${e.message}", e)
+            null
+        }
+
+        // 1) 对话 ID
+        attempt { ChatApi.queryChatInfo(client, token, input) }
+            ?.id?.takeIf { it.isNotEmpty() }
+            ?.let { return it to null }
+
+        // 2) 用户 ID
+        attempt { UserApi.queryUserInfo(client, token, input) }
+            ?.id?.takeIf { it.isNotEmpty() }
+            ?.let { userId ->
+                val chatId = attempt { ChatApi.getOrCreatePrivateChat(client, token, userId) }
+                return chatId?.takeIf { it.isNotEmpty() } to apiError
+            }
+
+        // 3) 用户名
+        val userId = attempt { UserApi.getUserIdByUsername(client, token, input) }
+            ?.takeIf { it.isNotEmpty() }
+            ?: return null to apiError
+
+        val chatId = attempt { ChatApi.getOrCreatePrivateChat(client, token, userId) }
+        return chatId?.takeIf { it.isNotEmpty() } to apiError
     }
 }
