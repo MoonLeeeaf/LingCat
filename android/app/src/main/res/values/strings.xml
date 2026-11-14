@@ -66,7 +66,7 @@
     <string name="chat_list_more">更多</string>
     <string name="chat_list_network_error">网络出错了喵</string>
     <string name="chat_list_no_title">无标题</string>
-    <string name="chat_list_reconnecting">网络异常，正在重连…</string>
+    <string name="chat_list_reconnecting">正在重连…</string>
     <string name="chat_list_syncing">正在同步会话…</string>
     <string name="chat_meeting">会议</string>
     <string name="chat_meeting_active">会议进行中 · %1$d 人</string>
