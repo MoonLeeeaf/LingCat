@@ -158,48 +158,70 @@ export default function createLingCatServer(base_data_path: string) {
             }
         })
 
+        // 记录临时文件何时真正落盘完成。busboy 的 'close' 早于写入流的 'finish'，
+        // 不等这一步就可能读到内容不完整的临时文件。
+        let writeDone: Promise<void> = Promise.resolve()
+
         bb.on('file', (_name, file, info) => {
-            let size = 0
             const hasher = crypto.createHash('sha256')
             const writeStream = fs.createWriteStream(path)
 
             fileName = info.filename!
 
-            file.on('data', (data) => {
-                hasher.update(data)
-                writeStream.write(data)
-                size += data.length
-            }).on('close', () => {
-                writeStream.close()
+            file.on('data', (data) => hasher.update(data))
+            file.on('end', () => {
                 hash = hasher.digest().toString('hex')
             })
+
+            writeDone = new Promise<void>((resolve, reject) => {
+                writeStream.on('finish', () => resolve())
+                writeStream.on('error', reject)
+                file.on('error', reject)
+            })
+            // 避免在 bb.on('close') 之前就 reject 而被判定为 unhandledRejection
+            void writeDone.catch(() => {})
+
+            file.pipe(writeStream)
         })
 
         bb.on('close', async () => {
-            if (belong_to_chat_id) {
-                const allowed = await (permissionCheck ?? UserChatLinker.isUserChatLinked(user_id, belong_to_chat_id))
-                if (!allowed) {
-                    if (fs.existsSync(path)) fs.unlinkSync(path)
-                    return res.status(403).send({ message: "You are not a member of this chat" })
-                }
-            }
-
-            if (hash_from_client && hash != hash_from_client) {
-                if (fs.existsSync(path)) fs.unlinkSync(path)
-                return res.status(400).send({ message: "Hash mismatch" })
-            }
-
-            const mime = mime_from_client || (await fileTypeFromFile(path))?.mime || 'application/octet-stream'
             try {
-                await FileManager.uploadFile(hash!, fileName, path, mime, belong_to_chat_id)
-            } finally {
-                fs.unlinkSync(path)
-            }
+                await writeDone
 
-            res.status(200).send({
-                message: "success",
-                file_hash: hash,
-            })
+                if (!hash) {
+                    return res.status(400).send({ message: "No file uploaded" })
+                }
+
+                if (belong_to_chat_id) {
+                    const allowed = await (permissionCheck ?? UserChatLinker.isUserChatLinked(user_id, belong_to_chat_id))
+                    if (!allowed) {
+                        return res.status(403).send({ message: "You are not a member of this chat" })
+                    }
+                }
+
+                if (hash_from_client && hash != hash_from_client) {
+                    return res.status(400).send({ message: "Hash mismatch" })
+                }
+
+                const mime = mime_from_client || (await fileTypeFromFile(path))?.mime || 'application/octet-stream'
+                await FileManager.uploadFile(hash, fileName, path, mime, belong_to_chat_id)
+
+                res.status(200).send({
+                    message: "success",
+                    file_hash: hash,
+                })
+            } catch (e) {
+                // 异步回调里漏出去的异常会变成 unhandledRejection，直接终止整个进程。
+                // 这里兜住，单个上传失败不应该让服务掉线。
+                console.error('[Server] upload_file failed:', e)
+                if (!res.headersSent) {
+                    res.status(500).send({ message: "Upload failed" })
+                }
+            } finally {
+                // FileManager 在"文件已存在"和"拷贝完成"两种情况下都会自己删临时文件，
+                // 所以这里必须用 force 做幂等清理，不能假设文件还在。
+                fs.rmSync(path, { force: true })
+            }
         })
 
         req.pipe(bb)

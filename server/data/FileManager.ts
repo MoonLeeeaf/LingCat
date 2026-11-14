@@ -5,7 +5,7 @@ import node_path from 'node:path'
 import fs from 'node:fs'
 import { db } from "./db.ts"
 import crypto from 'node:crypto'
-import { finished } from 'node:stream/promises'
+import { pipeline } from 'node:stream/promises'
 
 interface IServerFile extends IFile {
     key_id: number
@@ -43,9 +43,10 @@ export default class FileManager {
     static async uploadFile(hash: string, fileName: string, filePath: string, mime: string, chatId?: string): Promise<IServerFile> {
         const mFile = await this.queryFileByHash(hash)
         if (mFile) {
-            // 如果数据库有记录，且临时文件和最终文件不同，就把临时文件删掉
-            if (filePath !== this.getFilePath(hash) && fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath)
+            // 如果数据库有记录，且临时文件和最终文件不同，就把临时文件删掉。
+            // force 让重复清理变成无害操作：调用方可能还会再清理一次。
+            if (filePath !== this.getFilePath(hash)) {
+                fs.rmSync(filePath, { force: true })
             }
             return mFile
         }
@@ -56,9 +57,9 @@ export default class FileManager {
 
         // ★ 核心修复：只有源文件和目标文件不同时，才进行拷贝
         if (filePath !== finalPath) {
-            const copyStream = fs.createReadStream(filePath).pipe(fs.createWriteStream(finalPath))
-            await finished(copyStream)
-            if (fs.existsSync(filePath)) fs.unlinkSync(filePath) // 拷贝完删掉临时文件
+            // 必须等拷贝真正结束，否则源文件可能还没读完就被删掉
+            await pipeline(fs.createReadStream(filePath), fs.createWriteStream(finalPath))
+            fs.rmSync(filePath, { force: true }) // 拷贝完删掉临时文件
         }
 
         await db(tableName).insert({
@@ -101,9 +102,9 @@ export default class FileManager {
         try {
             fs.renameSync(tempPath, finalPath)
         } catch (e) {
-            // 跨磁盘分区回退
-            fs.createReadStream(tempPath).pipe(fs.createWriteStream(finalPath))
-            fs.unlinkSync(tempPath)
+            // 跨磁盘分区回退：同样必须等拷贝完成，再删临时文件
+            await pipeline(fs.createReadStream(tempPath), fs.createWriteStream(finalPath))
+            fs.rmSync(tempPath, { force: true })
         }
 
         return realHash
@@ -125,10 +126,11 @@ export default class FileManager {
 
         const filePath = this.getFilePath(file.hash)
         try {
-            fs.unlinkSync(filePath)
-            await db(tableName).where('hash', hash).del()
+            // 文件可能已经被外部清理过，不要让 ENOENT 阻碍数据库记录删除
+            fs.rmSync(filePath, { force: true })
         } catch (err) {
             console.log(err)
         }
+        await db(tableName).where('hash', hash).del()
     }
 }
