@@ -4,6 +4,8 @@ import lingcat.classes.Classes.IMessageEntity;
 
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +22,8 @@ public class MessageParser {
     private static final Pattern SPOILER       = Pattern.compile("\\|\\|([^|]+)\\|\\|");
     private static final Pattern USER_MENTION  = Pattern.compile("\\[@([^\\]]+)\\]\\(user:([^)]+)\\)");
     private static final Pattern CHAT_MENTION  = Pattern.compile("\\[@([^\\]]+)\\]\\(chat:([^)]+)\\)");
+    private static final Pattern STICKER       = Pattern.compile(
+            "!\\[([^\\]]+)\\]\\(lingcat://sticker\\?([^)]+)\\)");
     private static final Pattern ATTACHMENT    = Pattern.compile(
             "!\\[([^\\]]+)\\]\\((?:lingcat://file\\?hash=|file:)([^)]+)\\)");
     private static final Pattern LINK = Pattern.compile("(?<!!)\\[([^\\]]+)\\]\\(([^)]+)\\)");
@@ -170,6 +174,38 @@ public class MessageParser {
                 continue;
             }
 
+            // ![贴纸](lingcat://sticker?hash=xxx&packId=yyy&emoji=zzz)
+            m = STICKER.matcher(input);
+            m.region(i, len);
+            if (m.lookingAt()) {
+                String name = m.group(1);
+                String query = m.group(2);
+                String hash = queryParam(query, "hash");
+                if (hash != null && !hash.isEmpty()) {
+                    int offset = text.length();
+                    text.append("[附件]");
+                    try {
+                        JSONObject obj = new JSONObject();
+                        obj.put("hash", hash);
+                        obj.put("name", name.isEmpty() ? "sticker" : name);
+                        obj.put("kind", "sticker");
+                        String packId = queryParam(query, "packId");
+                        if (packId != null && !packId.isEmpty()) obj.put("packId", packId);
+                        String emoji = queryParam(query, "emoji");
+                        if (emoji != null && !emoji.isEmpty()) obj.put("emoji", emoji);
+                        entities.add(IMessageEntity.newBuilder()
+                                .setType("attachment")
+                                .setOffset(offset)
+                                .setLength(4)
+                                .setData(obj.toString())
+                                .build());
+                    } catch (Exception ignored) {
+                    }
+                    i = m.end();
+                    continue;
+                }
+            }
+
             // ![文件](lingcat://file?hash=xxx)  或  ![文件](file:xxx)
             m = ATTACHMENT.matcher(input);
             m.region(i, len);
@@ -305,19 +341,34 @@ public class MessageParser {
                 case "attachment": {
                     String name = "Unnamed";
                     String hash = "";
+                    String kind = "";
+                    String packId = "";
+                    String emoji = "";
                     if (e.hasData()) {
                         try {
                             JSONObject obj = new JSONObject(e.getData());
                             name = obj.optString("name", "Unnamed");
                             hash = obj.optString("hash", "");
+                            kind = obj.optString("kind", "");
+                            packId = obj.optString("packId", "");
+                            emoji = obj.optString("emoji", "");
                         } catch (Exception ignored) {
                             out.append(seg);
                             cursor = off + length;
                             continue;
                         }
                     }
-                    out.append("![").append(name)
-                            .append("](file:").append(hash).append(')');
+                    if ("sticker".equals(kind)) {
+                        StringBuilder query = new StringBuilder();
+                        query.append("hash=").append(urlEncode(hash));
+                        if (!packId.isEmpty()) query.append("&packId=").append(urlEncode(packId));
+                        if (!emoji.isEmpty()) query.append("&emoji=").append(urlEncode(emoji));
+                        out.append("![").append(name)
+                                .append("](lingcat://sticker?").append(query).append(')');
+                    } else {
+                        out.append("![").append(name)
+                                .append("](file:").append(hash).append(')');
+                    }
                     break;
                 }
                 case "reply":
@@ -336,5 +387,34 @@ public class MessageParser {
         }
 
         return out.toString();
+    }
+
+    /** 与 JS 的 URLSearchParams 保持一致: 空格编码为 %20 而不是 + */
+    private static String urlEncode(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8").replace("+", "%20");
+        } catch (Exception e) {
+            return s;
+        }
+    }
+
+    private static String urlDecode(String s) {
+        try {
+            return URLDecoder.decode(s, "UTF-8");
+        } catch (Exception e) {
+            return s;
+        }
+    }
+
+    private static String queryParam(String query, String key) {
+        if (query == null || query.isEmpty()) return null;
+        for (String pair : query.split("&")) {
+            if (pair.isEmpty()) continue;
+            int eq = pair.indexOf('=');
+            String k = eq < 0 ? pair : pair.substring(0, eq);
+            if (!key.equals(k)) continue;
+            return urlDecode(eq < 0 ? "" : pair.substring(eq + 1));
+        }
+        return null;
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
+import androidx.compose.material.icons.filled.Mood
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
@@ -141,6 +142,30 @@ fun ChatInputBar(
 
         mentionQuery = null
         mentionStartIndex = -1
+    }
+
+    // ==========================================
+    // 贴纸
+    // ==========================================
+    var showStickerPicker by remember { mutableStateOf(false) }
+
+    val insertSticker = { hash: String, packId: String, emoji: String?, mime: String ->
+        val token = buildStickerText(hash, packId, emoji, mime)
+        val cursor = textState.selection.start
+        val textStr = textState.text
+        val newText = textStr.substring(0, cursor) + token + textStr.substring(cursor)
+        textState = TextFieldValue(newText, TextRange(cursor + token.length))
+        onTextChange(newText)
+    }
+
+    if (showStickerPicker) {
+        StickerPickerSheet(
+            onDismiss = { showStickerPicker = false },
+            onPick = { hash, packId, emoji, mime ->
+                insertSticker(hash, packId, emoji, mime)
+                showStickerPicker = false
+            },
+        )
     }
 
     // ==========================================
@@ -262,6 +287,18 @@ fun ChatInputBar(
                             Icon(
                                 imageVector = Icons.Default.AttachFile,
                                 contentDescription = stringResource(R.string.chat_input_attach),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                        // 贴纸按钮
+                        IconButton(
+                            onClick = { showStickerPicker = true },
+                            modifier = Modifier.size(48.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Mood,
+                                contentDescription = stringResource(R.string.sticker_input_action),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }

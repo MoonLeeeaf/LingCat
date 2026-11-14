@@ -107,6 +107,21 @@ export default class Methods {
     static Update_Meeting_Title_Response = 0xa1
     static Meeting_Title_Changed_Event = 0xa2
 
+    static Get_My_Sticker_Packs_Request = 0xa3
+    static Get_My_Sticker_Packs_Response = 0xa4
+    static Query_Sticker_Pack_Request = 0xa5
+    static Query_Sticker_Pack_Response = 0xa6
+    static Create_Sticker_Pack_Request = 0xa7
+    static Create_Sticker_Pack_Response = 0xa8
+    static Update_Sticker_Pack_Title_Request = 0xa9
+    static Update_Sticker_Pack_Title_Response = 0xaa
+    static Set_Sticker_Pack_Content_Request = 0xab
+    static Set_Sticker_Pack_Content_Response = 0xac
+    static Set_Sticker_Pack_Subscribed_Request = 0xad
+    static Set_Sticker_Pack_Subscribed_Response = 0xae
+    static Delete_Sticker_Pack_Request = 0xaf
+    static Delete_Sticker_Pack_Response = 0xb0
+
     static Receive_Chat_Message_Event = 0x31
     static Update_My_Chats_Event = 0x32
     static Message_Edited_Event = 0x73

@@ -19,6 +19,8 @@ export interface MessageProps {
     avatarMenus?: React.ReactNode
     time?: number
     edited_time?: number
+    /** 纯贴纸消息: 不显示头像/发送者/气泡, 直接居中展示内容 */
+    bare?: boolean
 }
 
 export default function Message({
@@ -34,6 +36,7 @@ export default function Message({
     messageMenus,
     avatarMenus,
     edited_time,
+    bare,
 }: MessageProps) {
     const isMobile = useIsMobile()
     // 自己/系统消息不显示在线点
@@ -150,29 +153,45 @@ export default function Message({
             </div>
 
             <mdui-dropdown ref={dropDownRef} open={isDropDownOpen} trigger="manual">
-                <mdui-card
-                    slot="trigger"
-                    variant="elevated"
-                    style={{
-                        maxWidth: isMobile ? '77%' : '50%',
-                        minWidth: '0%',
-                        [isAtRight ? 'marginRight' : 'marginLeft']: '55px',
-                        marginTop: hideSender ? '5px' : '-5px',
-                        alignSelf: isAtRight ? 'flex-end' : 'flex-start',
-                    }}
-                >
-                    <span
-                        id="msg"
+                {bare ? (
+                    // 纯贴纸: 不套气泡, 但保留与普通气泡相同的缩进/对齐
+                    <div
+                        slot="trigger"
                         style={{
-                            fontSize: '94%',
-                            wordBreak: 'break-word',
-                            display: 'flex',
-                            flexDirection: 'column',
+                            maxWidth: isMobile ? '77%' : '50%',
+                            minWidth: '0%',
+                            [isAtRight ? 'marginRight' : 'marginLeft']: '55px',
+                            marginTop: hideSender ? '5px' : '-5px',
+                            alignSelf: isAtRight ? 'flex-end' : 'flex-start',
                         }}
                     >
                         {children}
-                    </span>
-                </mdui-card>
+                    </div>
+                ) : (
+                    <mdui-card
+                        slot="trigger"
+                        variant="elevated"
+                        style={{
+                            maxWidth: isMobile ? '77%' : '50%',
+                            minWidth: '0%',
+                            [isAtRight ? 'marginRight' : 'marginLeft']: '55px',
+                            marginTop: hideSender ? '5px' : '-5px',
+                            alignSelf: isAtRight ? 'flex-end' : 'flex-start',
+                        }}
+                    >
+                        <span
+                            id="msg"
+                            style={{
+                                fontSize: '94%',
+                                wordBreak: 'break-word',
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            {children}
+                        </span>
+                    </mdui-card>
+                )}
                 <mdui-menu>{messageMenus}</mdui-menu>
             </mdui-dropdown>
 

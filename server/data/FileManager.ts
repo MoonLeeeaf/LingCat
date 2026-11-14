@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import { db } from "./db.ts"
 import crypto from 'node:crypto'
 import { pipeline } from 'node:stream/promises'
+import { fileTypeFromFile } from 'file-type'
 
 interface IServerFile extends IFile {
     key_id: number
@@ -15,15 +16,21 @@ interface IServerFile extends IFile {
 export type { IServerFile }
 
 const tableName = 'FilesMap';
-(!await db.schema.hasTable(tableName)) && await db.schema.createTable(tableName, (table) => {
-    table.increments('key_id').primary()
-    table.string('hash').unique().notNullable()
-    table.string('first_upload_file_name')
-    table.string('belong_to_chat_id')
-    table.integer('uploaded_at').notNullable()
-    table.string('mime').notNullable()
-    table.integer('last_used_time')
-})
+
+/** 初版只接受静态透明位图; 动图 WebP 会正常播放, 不做拦截 */
+const STICKER_MIME = new Set<string>(['image/png', 'image/webp'])
+const filesTableExists = await db.schema.hasTable(tableName)
+if (!filesTableExists) {
+    await db.schema.createTable(tableName, (table) => {
+        table.increments('key_id').primary()
+        table.string('hash').unique().notNullable()
+        table.string('first_upload_file_name')
+        table.string('belong_to_chat_id')
+        table.integer('uploaded_at').notNullable()
+        table.string('mime').notNullable()
+        table.integer('last_used_time')
+    })
+}
 
 export default class FileManager {
     static async queryFileByHash(hash: string) {
@@ -38,6 +45,29 @@ export default class FileManager {
 
     static async updateLastUsedTime(hash: string) {
         await db<IServerFile>(tableName).update({ last_used_time: Date.now() }).where('hash', hash)
+    }
+
+    /**
+     * 识别贴纸文件的真实类型, 校验不通过返回 null。
+     *
+     * 下载接口直接用 FilesMap.mime 作为 Content-Type, 而这个值历史上可能来自客户端,
+     * 所以识别结果与记录不一致时必须回写, 否则贴纸会以错误的 MIME 下发。
+     */
+    static async detectStickerMime(hash: string): Promise<string | null> {
+        const file = await this.queryFileByHash(hash)
+        if (!file) return null
+
+        const filePath = this.getFilePath(hash)
+        if (!fs.existsSync(filePath)) return null
+
+        const detected = await fileTypeFromFile(filePath)
+        const mime = detected?.mime
+        if (!mime || !STICKER_MIME.has(mime)) return null
+
+        if (file.mime !== mime) {
+            await db(tableName).where('hash', hash).update({ mime })
+        }
+        return mime
     }
 
     static async uploadFile(hash: string, fileName: string, filePath: string, mime: string, chatId?: string): Promise<IServerFile> {

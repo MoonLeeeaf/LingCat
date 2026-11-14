@@ -117,6 +117,22 @@ public class Methods {
     public static final int Update_Meeting_Title_Response = 0xa1;
     public static final int Meeting_Title_Changed_Event = 0xa2;
 
+    // 贴纸包
+    public static final int Get_My_Sticker_Packs_Request = 0xa3;
+    public static final int Get_My_Sticker_Packs_Response = 0xa4;
+    public static final int Query_Sticker_Pack_Request = 0xa5;
+    public static final int Query_Sticker_Pack_Response = 0xa6;
+    public static final int Create_Sticker_Pack_Request = 0xa7;
+    public static final int Create_Sticker_Pack_Response = 0xa8;
+    public static final int Update_Sticker_Pack_Title_Request = 0xa9;
+    public static final int Update_Sticker_Pack_Title_Response = 0xaa;
+    public static final int Set_Sticker_Pack_Content_Request = 0xab;
+    public static final int Set_Sticker_Pack_Content_Response = 0xac;
+    public static final int Set_Sticker_Pack_Subscribed_Request = 0xad;
+    public static final int Set_Sticker_Pack_Subscribed_Response = 0xae;
+    public static final int Delete_Sticker_Pack_Request = 0xaf;
+    public static final int Delete_Sticker_Pack_Response = 0xb0;
+
     // 事件
     public static final int Receive_Chat_Message_Event = 0x31;
     public static final int Update_My_Chats_Event = 0x32;
@@ -236,6 +252,21 @@ public class Methods {
             case Update_Meeting_Title_Request: return "Update_Meeting_Title_Request";
             case Update_Meeting_Title_Response: return "Update_Meeting_Title_Response";
             case Meeting_Title_Changed_Event: return "Meeting_Title_Changed_Event";
+
+            case Get_My_Sticker_Packs_Request: return "Get_My_Sticker_Packs_Request";
+            case Get_My_Sticker_Packs_Response: return "Get_My_Sticker_Packs_Response";
+            case Query_Sticker_Pack_Request: return "Query_Sticker_Pack_Request";
+            case Query_Sticker_Pack_Response: return "Query_Sticker_Pack_Response";
+            case Create_Sticker_Pack_Request: return "Create_Sticker_Pack_Request";
+            case Create_Sticker_Pack_Response: return "Create_Sticker_Pack_Response";
+            case Update_Sticker_Pack_Title_Request: return "Update_Sticker_Pack_Title_Request";
+            case Update_Sticker_Pack_Title_Response: return "Update_Sticker_Pack_Title_Response";
+            case Set_Sticker_Pack_Content_Request: return "Set_Sticker_Pack_Content_Request";
+            case Set_Sticker_Pack_Content_Response: return "Set_Sticker_Pack_Content_Response";
+            case Set_Sticker_Pack_Subscribed_Request: return "Set_Sticker_Pack_Subscribed_Request";
+            case Set_Sticker_Pack_Subscribed_Response: return "Set_Sticker_Pack_Subscribed_Response";
+            case Delete_Sticker_Pack_Request: return "Delete_Sticker_Pack_Request";
+            case Delete_Sticker_Pack_Response: return "Delete_Sticker_Pack_Response";
 
             case Receive_Chat_Message_Event: return "Receive_Chat_Message_Event";
             case Update_My_Chats_Event: return "Update_My_Chats_Event";

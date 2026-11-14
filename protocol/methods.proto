@@ -600,3 +600,79 @@ message Get_Online_Status_Request {
 message Get_Online_Status_Response {
     repeated lingcat.classes.IUserOnlineStatus statuses = 1;
 }
+
+/**
+ * =======================================================
+ *                       贴纸包
+ * =======================================================
+ */
+
+// 我订阅的全部贴纸包, 以及这些包的贴纸
+message Get_My_Sticker_Packs_Request {
+    string access_token = 1;
+}
+
+message Get_My_Sticker_Packs_Response {
+    repeated lingcat.classes.IStickerPack packs = 1;
+    repeated lingcat.classes.ISticker stickers = 2;
+}
+
+// 查询单个贴纸包 (点击消息里的贴纸时使用)
+message Query_Sticker_Pack_Request {
+    string access_token = 1;
+    string pack_id = 2;
+}
+
+message Query_Sticker_Pack_Response {
+    lingcat.classes.IStickerPack pack = 1;
+    repeated lingcat.classes.ISticker stickers = 2;
+}
+
+message Create_Sticker_Pack_Request {
+    string access_token = 1;
+    string title = 2;
+}
+
+message Create_Sticker_Pack_Response {
+    lingcat.classes.IStickerPack pack = 1;
+}
+
+// 修改包标题 (仅作者)
+message Update_Sticker_Pack_Title_Request {
+    string access_token = 1;
+    string pack_id = 2;
+    string title = 3;
+}
+
+message Update_Sticker_Pack_Title_Response {}
+
+// 覆盖式写入包内容 (仅作者). 空数组表示清空。
+message StickerInput {
+    string hash = 1;
+    optional string emoji = 2;
+}
+
+message Set_Sticker_Pack_Content_Request {
+    string access_token = 1;
+    string pack_id = 2;
+    repeated StickerInput stickers = 3;
+    // 不传则保留原封面
+    optional string cover_file_hash = 4;
+}
+
+message Set_Sticker_Pack_Content_Response {}
+
+message Set_Sticker_Pack_Subscribed_Request {
+    string access_token = 1;
+    string pack_id = 2;
+    bool subscribed = 3;
+}
+
+message Set_Sticker_Pack_Subscribed_Response {}
+
+message Delete_Sticker_Pack_Request {
+    string access_token = 1;
+    string pack_id = 2;
+}
+
+message Delete_Sticker_Pack_Response {}

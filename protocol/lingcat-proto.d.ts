@@ -956,6 +956,306 @@ export namespace lingcat {
         }
 
         /**
+         * Properties of a ISticker.
+         * @deprecated Use lingcat.classes.ISticker.$Properties instead.
+         */
+        interface IISticker extends lingcat.classes.ISticker.$Properties {
+        }
+
+        /** Represents a ISticker. */
+        class ISticker {
+
+            /**
+             * Constructs a new ISticker.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.ISticker.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** ISticker hash. */
+            hash: string;
+
+            /** ISticker packId. */
+            packId: string;
+
+            /** ISticker mime. */
+            mime: string;
+
+            /** ISticker emoji. */
+            emoji?: (string|null);
+
+            /** ISticker sort. */
+            sort: number;
+
+            /**
+             * Creates a new ISticker instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ISticker instance
+             */
+            static create(properties: lingcat.classes.ISticker.$Shape): lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape;
+            static create(properties?: lingcat.classes.ISticker.$Properties): lingcat.classes.ISticker;
+
+            /**
+             * Encodes the specified ISticker message. Does not implicitly {@link lingcat.classes.ISticker.verify|verify} messages.
+             * @param message ISticker message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.ISticker.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ISticker message, length delimited. Does not implicitly {@link lingcat.classes.ISticker.verify|verify} messages.
+             * @param message ISticker message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.ISticker.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ISticker message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape} ISticker
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape;
+
+            /**
+             * Decodes a ISticker message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape} ISticker
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape;
+
+            /**
+             * Verifies a ISticker message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ISticker message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ISticker
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.ISticker;
+
+            /**
+             * Creates a plain object from a ISticker message. Also converts values to other types if specified.
+             * @param message ISticker
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.ISticker, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ISticker to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for ISticker
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace ISticker {
+
+            /** Properties of a ISticker. */
+            interface $Properties {
+
+                /** ISticker hash */
+                hash?: (string|null);
+
+                /** ISticker packId */
+                packId?: (string|null);
+
+                /** ISticker mime */
+                mime?: (string|null);
+
+                /** ISticker emoji */
+                emoji?: (string|null);
+
+                /** ISticker sort */
+                sort?: (number|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a ISticker. */
+            type $Shape = lingcat.classes.ISticker.$Properties;
+        }
+
+        /**
+         * Properties of a IStickerPack.
+         * @deprecated Use lingcat.classes.IStickerPack.$Properties instead.
+         */
+        interface IIStickerPack extends lingcat.classes.IStickerPack.$Properties {
+        }
+
+        /** Represents a IStickerPack. */
+        class IStickerPack {
+
+            /**
+             * Constructs a new IStickerPack.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.classes.IStickerPack.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** IStickerPack id. */
+            id: string;
+
+            /** IStickerPack title. */
+            title: string;
+
+            /** IStickerPack authorUserId. */
+            authorUserId: string;
+
+            /** IStickerPack coverFileHash. */
+            coverFileHash?: (string|null);
+
+            /** IStickerPack createdAt. */
+            createdAt: (number|Long);
+
+            /** IStickerPack updatedAt. */
+            updatedAt: (number|Long);
+
+            /** IStickerPack subscribed. */
+            subscribed?: (boolean|null);
+
+            /** IStickerPack isAuthor. */
+            isAuthor?: (boolean|null);
+
+            /**
+             * Creates a new IStickerPack instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns IStickerPack instance
+             */
+            static create(properties: lingcat.classes.IStickerPack.$Shape): lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape;
+            static create(properties?: lingcat.classes.IStickerPack.$Properties): lingcat.classes.IStickerPack;
+
+            /**
+             * Encodes the specified IStickerPack message. Does not implicitly {@link lingcat.classes.IStickerPack.verify|verify} messages.
+             * @param message IStickerPack message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.classes.IStickerPack.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified IStickerPack message, length delimited. Does not implicitly {@link lingcat.classes.IStickerPack.verify|verify} messages.
+             * @param message IStickerPack message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.classes.IStickerPack.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a IStickerPack message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape} IStickerPack
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape;
+
+            /**
+             * Decodes a IStickerPack message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape} IStickerPack
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape;
+
+            /**
+             * Verifies a IStickerPack message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a IStickerPack message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns IStickerPack
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.classes.IStickerPack;
+
+            /**
+             * Creates a plain object from a IStickerPack message. Also converts values to other types if specified.
+             * @param message IStickerPack
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.classes.IStickerPack, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this IStickerPack to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for IStickerPack
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace IStickerPack {
+
+            /** Properties of a IStickerPack. */
+            interface $Properties {
+
+                /** IStickerPack id */
+                id?: (string|null);
+
+                /** IStickerPack title */
+                title?: (string|null);
+
+                /** IStickerPack authorUserId */
+                authorUserId?: (string|null);
+
+                /** IStickerPack coverFileHash */
+                coverFileHash?: (string|null);
+
+                /** IStickerPack createdAt */
+                createdAt?: (number|Long|null);
+
+                /** IStickerPack updatedAt */
+                updatedAt?: (number|Long|null);
+
+                /** IStickerPack subscribed */
+                subscribed?: (boolean|null);
+
+                /** IStickerPack isAuthor */
+                isAuthor?: (boolean|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a IStickerPack. */
+            type $Shape = lingcat.classes.IStickerPack.$Properties;
+        }
+
+        /**
          * Properties of a IMessageEntity.
          * @deprecated Use lingcat.classes.IMessageEntity.$Properties instead.
          */
@@ -15267,6 +15567,1815 @@ export namespace lingcat {
 
             /** Shape of a Get_Online_Status_Response. */
             type $Shape = lingcat.methods.Get_Online_Status_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_Sticker_Packs_Request.
+         * @deprecated Use lingcat.methods.Get_My_Sticker_Packs_Request.$Properties instead.
+         */
+        interface IGet_My_Sticker_Packs_Request extends lingcat.methods.Get_My_Sticker_Packs_Request.$Properties {
+        }
+
+        /** Represents a Get_My_Sticker_Packs_Request. */
+        class Get_My_Sticker_Packs_Request {
+
+            /**
+             * Constructs a new Get_My_Sticker_Packs_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_Sticker_Packs_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_Sticker_Packs_Request accessToken. */
+            accessToken: string;
+
+            /**
+             * Creates a new Get_My_Sticker_Packs_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_Sticker_Packs_Request instance
+             */
+            static create(properties: lingcat.methods.Get_My_Sticker_Packs_Request.$Shape): lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape;
+            static create(properties?: lingcat.methods.Get_My_Sticker_Packs_Request.$Properties): lingcat.methods.Get_My_Sticker_Packs_Request;
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Request message. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Request.verify|verify} messages.
+             * @param message Get_My_Sticker_Packs_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_Sticker_Packs_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Request.verify|verify} messages.
+             * @param message Get_My_Sticker_Packs_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_Sticker_Packs_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape} Get_My_Sticker_Packs_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape;
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape} Get_My_Sticker_Packs_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape;
+
+            /**
+             * Verifies a Get_My_Sticker_Packs_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_Sticker_Packs_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_Sticker_Packs_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_Sticker_Packs_Request;
+
+            /**
+             * Creates a plain object from a Get_My_Sticker_Packs_Request message. Also converts values to other types if specified.
+             * @param message Get_My_Sticker_Packs_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_Sticker_Packs_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_Sticker_Packs_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_Sticker_Packs_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_Sticker_Packs_Request {
+
+            /** Properties of a Get_My_Sticker_Packs_Request. */
+            interface $Properties {
+
+                /** Get_My_Sticker_Packs_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_Sticker_Packs_Request. */
+            type $Shape = lingcat.methods.Get_My_Sticker_Packs_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Get_My_Sticker_Packs_Response.
+         * @deprecated Use lingcat.methods.Get_My_Sticker_Packs_Response.$Properties instead.
+         */
+        interface IGet_My_Sticker_Packs_Response extends lingcat.methods.Get_My_Sticker_Packs_Response.$Properties {
+        }
+
+        /** Represents a Get_My_Sticker_Packs_Response. */
+        class Get_My_Sticker_Packs_Response {
+
+            /**
+             * Constructs a new Get_My_Sticker_Packs_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Get_My_Sticker_Packs_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Get_My_Sticker_Packs_Response packs. */
+            packs: lingcat.classes.IStickerPack.$Properties[];
+
+            /** Get_My_Sticker_Packs_Response stickers. */
+            stickers: lingcat.classes.ISticker.$Properties[];
+
+            /**
+             * Creates a new Get_My_Sticker_Packs_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Get_My_Sticker_Packs_Response instance
+             */
+            static create(properties: lingcat.methods.Get_My_Sticker_Packs_Response.$Shape): lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape;
+            static create(properties?: lingcat.methods.Get_My_Sticker_Packs_Response.$Properties): lingcat.methods.Get_My_Sticker_Packs_Response;
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Response message. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Response.verify|verify} messages.
+             * @param message Get_My_Sticker_Packs_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Get_My_Sticker_Packs_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Response.verify|verify} messages.
+             * @param message Get_My_Sticker_Packs_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Get_My_Sticker_Packs_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape} Get_My_Sticker_Packs_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape;
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape} Get_My_Sticker_Packs_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape;
+
+            /**
+             * Verifies a Get_My_Sticker_Packs_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Get_My_Sticker_Packs_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Get_My_Sticker_Packs_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Get_My_Sticker_Packs_Response;
+
+            /**
+             * Creates a plain object from a Get_My_Sticker_Packs_Response message. Also converts values to other types if specified.
+             * @param message Get_My_Sticker_Packs_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Get_My_Sticker_Packs_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Get_My_Sticker_Packs_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Get_My_Sticker_Packs_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Get_My_Sticker_Packs_Response {
+
+            /** Properties of a Get_My_Sticker_Packs_Response. */
+            interface $Properties {
+
+                /** Get_My_Sticker_Packs_Response packs */
+                packs?: (lingcat.classes.IStickerPack.$Properties[]|null);
+
+                /** Get_My_Sticker_Packs_Response stickers */
+                stickers?: (lingcat.classes.ISticker.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Get_My_Sticker_Packs_Response. */
+            type $Shape = lingcat.methods.Get_My_Sticker_Packs_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Query_Sticker_Pack_Request.
+         * @deprecated Use lingcat.methods.Query_Sticker_Pack_Request.$Properties instead.
+         */
+        interface IQuery_Sticker_Pack_Request extends lingcat.methods.Query_Sticker_Pack_Request.$Properties {
+        }
+
+        /** Represents a Query_Sticker_Pack_Request. */
+        class Query_Sticker_Pack_Request {
+
+            /**
+             * Constructs a new Query_Sticker_Pack_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Query_Sticker_Pack_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Query_Sticker_Pack_Request accessToken. */
+            accessToken: string;
+
+            /** Query_Sticker_Pack_Request packId. */
+            packId: string;
+
+            /**
+             * Creates a new Query_Sticker_Pack_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Query_Sticker_Pack_Request instance
+             */
+            static create(properties: lingcat.methods.Query_Sticker_Pack_Request.$Shape): lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape;
+            static create(properties?: lingcat.methods.Query_Sticker_Pack_Request.$Properties): lingcat.methods.Query_Sticker_Pack_Request;
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Query_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Query_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Query_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Query_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Query_Sticker_Pack_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape} Query_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Decodes a Query_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape} Query_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Verifies a Query_Sticker_Pack_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Query_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Query_Sticker_Pack_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Query_Sticker_Pack_Request;
+
+            /**
+             * Creates a plain object from a Query_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @param message Query_Sticker_Pack_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Query_Sticker_Pack_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Query_Sticker_Pack_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Query_Sticker_Pack_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Query_Sticker_Pack_Request {
+
+            /** Properties of a Query_Sticker_Pack_Request. */
+            interface $Properties {
+
+                /** Query_Sticker_Pack_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Query_Sticker_Pack_Request packId */
+                packId?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Query_Sticker_Pack_Request. */
+            type $Shape = lingcat.methods.Query_Sticker_Pack_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Query_Sticker_Pack_Response.
+         * @deprecated Use lingcat.methods.Query_Sticker_Pack_Response.$Properties instead.
+         */
+        interface IQuery_Sticker_Pack_Response extends lingcat.methods.Query_Sticker_Pack_Response.$Properties {
+        }
+
+        /** Represents a Query_Sticker_Pack_Response. */
+        class Query_Sticker_Pack_Response {
+
+            /**
+             * Constructs a new Query_Sticker_Pack_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Query_Sticker_Pack_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Query_Sticker_Pack_Response pack. */
+            pack?: (lingcat.classes.IStickerPack.$Properties|null);
+
+            /** Query_Sticker_Pack_Response stickers. */
+            stickers: lingcat.classes.ISticker.$Properties[];
+
+            /**
+             * Creates a new Query_Sticker_Pack_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Query_Sticker_Pack_Response instance
+             */
+            static create(properties: lingcat.methods.Query_Sticker_Pack_Response.$Shape): lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape;
+            static create(properties?: lingcat.methods.Query_Sticker_Pack_Response.$Properties): lingcat.methods.Query_Sticker_Pack_Response;
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Query_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Query_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Query_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Query_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Query_Sticker_Pack_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape} Query_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Decodes a Query_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape} Query_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Verifies a Query_Sticker_Pack_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Query_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Query_Sticker_Pack_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Query_Sticker_Pack_Response;
+
+            /**
+             * Creates a plain object from a Query_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @param message Query_Sticker_Pack_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Query_Sticker_Pack_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Query_Sticker_Pack_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Query_Sticker_Pack_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Query_Sticker_Pack_Response {
+
+            /** Properties of a Query_Sticker_Pack_Response. */
+            interface $Properties {
+
+                /** Query_Sticker_Pack_Response pack */
+                pack?: (lingcat.classes.IStickerPack.$Properties|null);
+
+                /** Query_Sticker_Pack_Response stickers */
+                stickers?: (lingcat.classes.ISticker.$Properties[]|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Query_Sticker_Pack_Response. */
+            type $Shape = lingcat.methods.Query_Sticker_Pack_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Create_Sticker_Pack_Request.
+         * @deprecated Use lingcat.methods.Create_Sticker_Pack_Request.$Properties instead.
+         */
+        interface ICreate_Sticker_Pack_Request extends lingcat.methods.Create_Sticker_Pack_Request.$Properties {
+        }
+
+        /** Represents a Create_Sticker_Pack_Request. */
+        class Create_Sticker_Pack_Request {
+
+            /**
+             * Constructs a new Create_Sticker_Pack_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Create_Sticker_Pack_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Create_Sticker_Pack_Request accessToken. */
+            accessToken: string;
+
+            /** Create_Sticker_Pack_Request title. */
+            title: string;
+
+            /**
+             * Creates a new Create_Sticker_Pack_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Create_Sticker_Pack_Request instance
+             */
+            static create(properties: lingcat.methods.Create_Sticker_Pack_Request.$Shape): lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape;
+            static create(properties?: lingcat.methods.Create_Sticker_Pack_Request.$Properties): lingcat.methods.Create_Sticker_Pack_Request;
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Create_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Create_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Create_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Create_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Create_Sticker_Pack_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape} Create_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Decodes a Create_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape} Create_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Verifies a Create_Sticker_Pack_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Create_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Create_Sticker_Pack_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Create_Sticker_Pack_Request;
+
+            /**
+             * Creates a plain object from a Create_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @param message Create_Sticker_Pack_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Create_Sticker_Pack_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Create_Sticker_Pack_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Create_Sticker_Pack_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Create_Sticker_Pack_Request {
+
+            /** Properties of a Create_Sticker_Pack_Request. */
+            interface $Properties {
+
+                /** Create_Sticker_Pack_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Create_Sticker_Pack_Request title */
+                title?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Create_Sticker_Pack_Request. */
+            type $Shape = lingcat.methods.Create_Sticker_Pack_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Create_Sticker_Pack_Response.
+         * @deprecated Use lingcat.methods.Create_Sticker_Pack_Response.$Properties instead.
+         */
+        interface ICreate_Sticker_Pack_Response extends lingcat.methods.Create_Sticker_Pack_Response.$Properties {
+        }
+
+        /** Represents a Create_Sticker_Pack_Response. */
+        class Create_Sticker_Pack_Response {
+
+            /**
+             * Constructs a new Create_Sticker_Pack_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Create_Sticker_Pack_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Create_Sticker_Pack_Response pack. */
+            pack?: (lingcat.classes.IStickerPack.$Properties|null);
+
+            /**
+             * Creates a new Create_Sticker_Pack_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Create_Sticker_Pack_Response instance
+             */
+            static create(properties: lingcat.methods.Create_Sticker_Pack_Response.$Shape): lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape;
+            static create(properties?: lingcat.methods.Create_Sticker_Pack_Response.$Properties): lingcat.methods.Create_Sticker_Pack_Response;
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Create_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Create_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Create_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Create_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Create_Sticker_Pack_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape} Create_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Decodes a Create_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape} Create_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Verifies a Create_Sticker_Pack_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Create_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Create_Sticker_Pack_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Create_Sticker_Pack_Response;
+
+            /**
+             * Creates a plain object from a Create_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @param message Create_Sticker_Pack_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Create_Sticker_Pack_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Create_Sticker_Pack_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Create_Sticker_Pack_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Create_Sticker_Pack_Response {
+
+            /** Properties of a Create_Sticker_Pack_Response. */
+            interface $Properties {
+
+                /** Create_Sticker_Pack_Response pack */
+                pack?: (lingcat.classes.IStickerPack.$Properties|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Create_Sticker_Pack_Response. */
+            type $Shape = lingcat.methods.Create_Sticker_Pack_Response.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Sticker_Pack_Title_Request.
+         * @deprecated Use lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties instead.
+         */
+        interface IUpdate_Sticker_Pack_Title_Request extends lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties {
+        }
+
+        /** Represents an Update_Sticker_Pack_Title_Request. */
+        class Update_Sticker_Pack_Title_Request {
+
+            /**
+             * Constructs a new Update_Sticker_Pack_Title_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Update_Sticker_Pack_Title_Request accessToken. */
+            accessToken: string;
+
+            /** Update_Sticker_Pack_Title_Request packId. */
+            packId: string;
+
+            /** Update_Sticker_Pack_Title_Request title. */
+            title: string;
+
+            /**
+             * Creates a new Update_Sticker_Pack_Title_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Sticker_Pack_Title_Request instance
+             */
+            static create(properties: lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape): lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape;
+            static create(properties?: lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties): lingcat.methods.Update_Sticker_Pack_Title_Request;
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Request message. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Request.verify|verify} messages.
+             * @param message Update_Sticker_Pack_Title_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Request.verify|verify} messages.
+             * @param message Update_Sticker_Pack_Title_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape} Update_Sticker_Pack_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape;
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape} Update_Sticker_Pack_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape;
+
+            /**
+             * Verifies an Update_Sticker_Pack_Title_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Sticker_Pack_Title_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Sticker_Pack_Title_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Sticker_Pack_Title_Request;
+
+            /**
+             * Creates a plain object from an Update_Sticker_Pack_Title_Request message. Also converts values to other types if specified.
+             * @param message Update_Sticker_Pack_Title_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Sticker_Pack_Title_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Sticker_Pack_Title_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Sticker_Pack_Title_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Sticker_Pack_Title_Request {
+
+            /** Properties of an Update_Sticker_Pack_Title_Request. */
+            interface $Properties {
+
+                /** Update_Sticker_Pack_Title_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Update_Sticker_Pack_Title_Request packId */
+                packId?: (string|null);
+
+                /** Update_Sticker_Pack_Title_Request title */
+                title?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Sticker_Pack_Title_Request. */
+            type $Shape = lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties;
+        }
+
+        /**
+         * Properties of an Update_Sticker_Pack_Title_Response.
+         * @deprecated Use lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties instead.
+         */
+        interface IUpdate_Sticker_Pack_Title_Response extends lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties {
+        }
+
+        /** Represents an Update_Sticker_Pack_Title_Response. */
+        class Update_Sticker_Pack_Title_Response {
+
+            /**
+             * Constructs a new Update_Sticker_Pack_Title_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Update_Sticker_Pack_Title_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Update_Sticker_Pack_Title_Response instance
+             */
+            static create(properties: lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape): lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape;
+            static create(properties?: lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties): lingcat.methods.Update_Sticker_Pack_Title_Response;
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Response message. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Response.verify|verify} messages.
+             * @param message Update_Sticker_Pack_Title_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Response.verify|verify} messages.
+             * @param message Update_Sticker_Pack_Title_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape} Update_Sticker_Pack_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape;
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape} Update_Sticker_Pack_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape;
+
+            /**
+             * Verifies an Update_Sticker_Pack_Title_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Update_Sticker_Pack_Title_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Update_Sticker_Pack_Title_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Update_Sticker_Pack_Title_Response;
+
+            /**
+             * Creates a plain object from an Update_Sticker_Pack_Title_Response message. Also converts values to other types if specified.
+             * @param message Update_Sticker_Pack_Title_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Update_Sticker_Pack_Title_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Update_Sticker_Pack_Title_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Update_Sticker_Pack_Title_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Update_Sticker_Pack_Title_Response {
+
+            /** Properties of an Update_Sticker_Pack_Title_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of an Update_Sticker_Pack_Title_Response. */
+            type $Shape = lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties;
+        }
+
+        /**
+         * Properties of a StickerInput.
+         * @deprecated Use lingcat.methods.StickerInput.$Properties instead.
+         */
+        interface IStickerInput extends lingcat.methods.StickerInput.$Properties {
+        }
+
+        /** Represents a StickerInput. */
+        class StickerInput {
+
+            /**
+             * Constructs a new StickerInput.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.StickerInput.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** StickerInput hash. */
+            hash: string;
+
+            /** StickerInput emoji. */
+            emoji?: (string|null);
+
+            /**
+             * Creates a new StickerInput instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns StickerInput instance
+             */
+            static create(properties: lingcat.methods.StickerInput.$Shape): lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape;
+            static create(properties?: lingcat.methods.StickerInput.$Properties): lingcat.methods.StickerInput;
+
+            /**
+             * Encodes the specified StickerInput message. Does not implicitly {@link lingcat.methods.StickerInput.verify|verify} messages.
+             * @param message StickerInput message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.StickerInput.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified StickerInput message, length delimited. Does not implicitly {@link lingcat.methods.StickerInput.verify|verify} messages.
+             * @param message StickerInput message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.StickerInput.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a StickerInput message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape} StickerInput
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape;
+
+            /**
+             * Decodes a StickerInput message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape} StickerInput
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape;
+
+            /**
+             * Verifies a StickerInput message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a StickerInput message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns StickerInput
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.StickerInput;
+
+            /**
+             * Creates a plain object from a StickerInput message. Also converts values to other types if specified.
+             * @param message StickerInput
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.StickerInput, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this StickerInput to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for StickerInput
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace StickerInput {
+
+            /** Properties of a StickerInput. */
+            interface $Properties {
+
+                /** StickerInput hash */
+                hash?: (string|null);
+
+                /** StickerInput emoji */
+                emoji?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a StickerInput. */
+            type $Shape = lingcat.methods.StickerInput.$Properties;
+        }
+
+        /**
+         * Properties of a Set_Sticker_Pack_Content_Request.
+         * @deprecated Use lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties instead.
+         */
+        interface ISet_Sticker_Pack_Content_Request extends lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties {
+        }
+
+        /** Represents a Set_Sticker_Pack_Content_Request. */
+        class Set_Sticker_Pack_Content_Request {
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Content_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Set_Sticker_Pack_Content_Request accessToken. */
+            accessToken: string;
+
+            /** Set_Sticker_Pack_Content_Request packId. */
+            packId: string;
+
+            /** Set_Sticker_Pack_Content_Request stickers. */
+            stickers: lingcat.methods.StickerInput.$Properties[];
+
+            /** Set_Sticker_Pack_Content_Request coverFileHash. */
+            coverFileHash?: (string|null);
+
+            /**
+             * Creates a new Set_Sticker_Pack_Content_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Sticker_Pack_Content_Request instance
+             */
+            static create(properties: lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape): lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape;
+            static create(properties?: lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties): lingcat.methods.Set_Sticker_Pack_Content_Request;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Request message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Request.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Content_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Request.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Content_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape} Set_Sticker_Pack_Content_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape} Set_Sticker_Pack_Content_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape;
+
+            /**
+             * Verifies a Set_Sticker_Pack_Content_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Sticker_Pack_Content_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Sticker_Pack_Content_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Sticker_Pack_Content_Request;
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Content_Request message. Also converts values to other types if specified.
+             * @param message Set_Sticker_Pack_Content_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Sticker_Pack_Content_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Sticker_Pack_Content_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Content_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Sticker_Pack_Content_Request {
+
+            /** Properties of a Set_Sticker_Pack_Content_Request. */
+            interface $Properties {
+
+                /** Set_Sticker_Pack_Content_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Set_Sticker_Pack_Content_Request packId */
+                packId?: (string|null);
+
+                /** Set_Sticker_Pack_Content_Request stickers */
+                stickers?: (lingcat.methods.StickerInput.$Properties[]|null);
+
+                /** Set_Sticker_Pack_Content_Request coverFileHash */
+                coverFileHash?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Sticker_Pack_Content_Request. */
+            type $Shape = lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Set_Sticker_Pack_Content_Response.
+         * @deprecated Use lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties instead.
+         */
+        interface ISet_Sticker_Pack_Content_Response extends lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties {
+        }
+
+        /** Represents a Set_Sticker_Pack_Content_Response. */
+        class Set_Sticker_Pack_Content_Response {
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Content_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Set_Sticker_Pack_Content_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Sticker_Pack_Content_Response instance
+             */
+            static create(properties: lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape): lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape;
+            static create(properties?: lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties): lingcat.methods.Set_Sticker_Pack_Content_Response;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Response message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Response.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Content_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Response.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Content_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape} Set_Sticker_Pack_Content_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape} Set_Sticker_Pack_Content_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape;
+
+            /**
+             * Verifies a Set_Sticker_Pack_Content_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Sticker_Pack_Content_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Sticker_Pack_Content_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Sticker_Pack_Content_Response;
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Content_Response message. Also converts values to other types if specified.
+             * @param message Set_Sticker_Pack_Content_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Sticker_Pack_Content_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Sticker_Pack_Content_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Content_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Sticker_Pack_Content_Response {
+
+            /** Properties of a Set_Sticker_Pack_Content_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Sticker_Pack_Content_Response. */
+            type $Shape = lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Set_Sticker_Pack_Subscribed_Request.
+         * @deprecated Use lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties instead.
+         */
+        interface ISet_Sticker_Pack_Subscribed_Request extends lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties {
+        }
+
+        /** Represents a Set_Sticker_Pack_Subscribed_Request. */
+        class Set_Sticker_Pack_Subscribed_Request {
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Subscribed_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Set_Sticker_Pack_Subscribed_Request accessToken. */
+            accessToken: string;
+
+            /** Set_Sticker_Pack_Subscribed_Request packId. */
+            packId: string;
+
+            /** Set_Sticker_Pack_Subscribed_Request subscribed. */
+            subscribed: boolean;
+
+            /**
+             * Creates a new Set_Sticker_Pack_Subscribed_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Sticker_Pack_Subscribed_Request instance
+             */
+            static create(properties: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape): lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape;
+            static create(properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties): lingcat.methods.Set_Sticker_Pack_Subscribed_Request;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Request message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Request.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Subscribed_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Request.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Subscribed_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape} Set_Sticker_Pack_Subscribed_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape} Set_Sticker_Pack_Subscribed_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape;
+
+            /**
+             * Verifies a Set_Sticker_Pack_Subscribed_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Sticker_Pack_Subscribed_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Sticker_Pack_Subscribed_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Sticker_Pack_Subscribed_Request;
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Subscribed_Request message. Also converts values to other types if specified.
+             * @param message Set_Sticker_Pack_Subscribed_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Sticker_Pack_Subscribed_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Subscribed_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Sticker_Pack_Subscribed_Request {
+
+            /** Properties of a Set_Sticker_Pack_Subscribed_Request. */
+            interface $Properties {
+
+                /** Set_Sticker_Pack_Subscribed_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Set_Sticker_Pack_Subscribed_Request packId */
+                packId?: (string|null);
+
+                /** Set_Sticker_Pack_Subscribed_Request subscribed */
+                subscribed?: (boolean|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Sticker_Pack_Subscribed_Request. */
+            type $Shape = lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Set_Sticker_Pack_Subscribed_Response.
+         * @deprecated Use lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties instead.
+         */
+        interface ISet_Sticker_Pack_Subscribed_Response extends lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties {
+        }
+
+        /** Represents a Set_Sticker_Pack_Subscribed_Response. */
+        class Set_Sticker_Pack_Subscribed_Response {
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Subscribed_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Set_Sticker_Pack_Subscribed_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Set_Sticker_Pack_Subscribed_Response instance
+             */
+            static create(properties: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape): lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape;
+            static create(properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties): lingcat.methods.Set_Sticker_Pack_Subscribed_Response;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Response message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Response.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Subscribed_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Response.verify|verify} messages.
+             * @param message Set_Sticker_Pack_Subscribed_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape} Set_Sticker_Pack_Subscribed_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape;
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape} Set_Sticker_Pack_Subscribed_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape;
+
+            /**
+             * Verifies a Set_Sticker_Pack_Subscribed_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Set_Sticker_Pack_Subscribed_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Set_Sticker_Pack_Subscribed_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Set_Sticker_Pack_Subscribed_Response;
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Subscribed_Response message. Also converts values to other types if specified.
+             * @param message Set_Sticker_Pack_Subscribed_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Set_Sticker_Pack_Subscribed_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Set_Sticker_Pack_Subscribed_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Subscribed_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Set_Sticker_Pack_Subscribed_Response {
+
+            /** Properties of a Set_Sticker_Pack_Subscribed_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Set_Sticker_Pack_Subscribed_Response. */
+            type $Shape = lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties;
+        }
+
+        /**
+         * Properties of a Delete_Sticker_Pack_Request.
+         * @deprecated Use lingcat.methods.Delete_Sticker_Pack_Request.$Properties instead.
+         */
+        interface IDelete_Sticker_Pack_Request extends lingcat.methods.Delete_Sticker_Pack_Request.$Properties {
+        }
+
+        /** Represents a Delete_Sticker_Pack_Request. */
+        class Delete_Sticker_Pack_Request {
+
+            /**
+             * Constructs a new Delete_Sticker_Pack_Request.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Delete_Sticker_Pack_Request.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /** Delete_Sticker_Pack_Request accessToken. */
+            accessToken: string;
+
+            /** Delete_Sticker_Pack_Request packId. */
+            packId: string;
+
+            /**
+             * Creates a new Delete_Sticker_Pack_Request instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Delete_Sticker_Pack_Request instance
+             */
+            static create(properties: lingcat.methods.Delete_Sticker_Pack_Request.$Shape): lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape;
+            static create(properties?: lingcat.methods.Delete_Sticker_Pack_Request.$Properties): lingcat.methods.Delete_Sticker_Pack_Request;
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Delete_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Delete_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Request.verify|verify} messages.
+             * @param message Delete_Sticker_Pack_Request message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Delete_Sticker_Pack_Request.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Request message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape} Delete_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape} Delete_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape;
+
+            /**
+             * Verifies a Delete_Sticker_Pack_Request message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Delete_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Delete_Sticker_Pack_Request
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Delete_Sticker_Pack_Request;
+
+            /**
+             * Creates a plain object from a Delete_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @param message Delete_Sticker_Pack_Request
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Delete_Sticker_Pack_Request, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Delete_Sticker_Pack_Request to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Delete_Sticker_Pack_Request
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Delete_Sticker_Pack_Request {
+
+            /** Properties of a Delete_Sticker_Pack_Request. */
+            interface $Properties {
+
+                /** Delete_Sticker_Pack_Request accessToken */
+                accessToken?: (string|null);
+
+                /** Delete_Sticker_Pack_Request packId */
+                packId?: (string|null);
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Delete_Sticker_Pack_Request. */
+            type $Shape = lingcat.methods.Delete_Sticker_Pack_Request.$Properties;
+        }
+
+        /**
+         * Properties of a Delete_Sticker_Pack_Response.
+         * @deprecated Use lingcat.methods.Delete_Sticker_Pack_Response.$Properties instead.
+         */
+        interface IDelete_Sticker_Pack_Response extends lingcat.methods.Delete_Sticker_Pack_Response.$Properties {
+        }
+
+        /** Represents a Delete_Sticker_Pack_Response. */
+        class Delete_Sticker_Pack_Response {
+
+            /**
+             * Constructs a new Delete_Sticker_Pack_Response.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: lingcat.methods.Delete_Sticker_Pack_Response.$Properties);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+
+            /**
+             * Creates a new Delete_Sticker_Pack_Response instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Delete_Sticker_Pack_Response instance
+             */
+            static create(properties: lingcat.methods.Delete_Sticker_Pack_Response.$Shape): lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape;
+            static create(properties?: lingcat.methods.Delete_Sticker_Pack_Response.$Properties): lingcat.methods.Delete_Sticker_Pack_Response;
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Delete_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encode(message: lingcat.methods.Delete_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Response.verify|verify} messages.
+             * @param message Delete_Sticker_Pack_Response message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            static encodeDelimited(message: lingcat.methods.Delete_Sticker_Pack_Response.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Response message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape} Delete_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape} Delete_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape;
+
+            /**
+             * Verifies a Delete_Sticker_Pack_Response message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Delete_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Delete_Sticker_Pack_Response
+             */
+            static fromObject(object: { [k: string]: any }): lingcat.methods.Delete_Sticker_Pack_Response;
+
+            /**
+             * Creates a plain object from a Delete_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @param message Delete_Sticker_Pack_Response
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            static toObject(message: lingcat.methods.Delete_Sticker_Pack_Response, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Delete_Sticker_Pack_Response to JSON.
+             * @returns JSON object
+             */
+            toJSON(): { [k: string]: any };
+
+            /**
+             * Gets the type url for Delete_Sticker_Pack_Response
+             * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns The type url
+             */
+            static getTypeUrl(prefix?: string): string;
+        }
+
+        namespace Delete_Sticker_Pack_Response {
+
+            /** Properties of a Delete_Sticker_Pack_Response. */
+            interface $Properties {
+
+                /** Unknown fields preserved while decoding when enabled */
+                $unknowns?: Uint8Array[];
+            }
+
+            /** Shape of a Delete_Sticker_Pack_Response. */
+            type $Shape = lingcat.methods.Delete_Sticker_Pack_Response.$Properties;
         }
     }
 }

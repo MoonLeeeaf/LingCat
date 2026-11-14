@@ -418,6 +418,7 @@ fun ChatScreen(
     val focusRequester = remember { FocusRequester() }
 
     var previewImageUrl by remember { mutableStateOf<String?>(null) }
+    var showStickerPackId by remember { mutableStateOf<String?>(null) }
     var showE2EInfo by remember { mutableStateOf(false) }
     var showChatInfoId by remember { mutableStateOf<String?>(null) }
     var showUserProfileId by remember { mutableStateOf<String?>(null) }
@@ -736,6 +737,7 @@ fun ChatScreen(
                                         }
                                     },
                                     onLongClick = { selectedMessage = msg },
+                                    onStickerClick = { packId -> showStickerPackId = packId },
                                     onAvatarClick = { userId -> showUserProfileId = userId },
                                     // ★ 补全提及点击逻辑
                                     onMentionClick = { mentionId, isChat ->
@@ -1166,6 +1168,13 @@ fun ChatScreen(
         imageUrl = previewImageUrl,
         onDismiss = { previewImageUrl = null }
     )
+
+    showStickerPackId?.let { packId ->
+        StickerPackDialog(
+            packId = packId,
+            onDismiss = { showStickerPackId = null },
+        )
+    }
 }
 
 /**
@@ -1239,6 +1248,7 @@ fun MessageBubble(
     onAvatarLongClick: (String) -> Unit,
     onMentionClick: (String, Boolean) -> Unit,
     onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
+    onStickerClick: (packId: String) -> Unit = {},
     uploadProgress: Int,
 ) {
     val scope = rememberCoroutineScope()
@@ -1261,11 +1271,20 @@ fun MessageBubble(
                 onReplyClick = {},
                 onMentionClick = onMentionClick,
                 onAttachmentClick = onAttachmentClick,
-                onLongClick = {}
+                onLongClick = {},
+                onStickerClick = onStickerClick,
             )
         }
         return
     }
+
+    // 纯贴纸消息: 去掉气泡背景, 但仍保留头像与普通消息一致的左右边距
+    val pureSticker = remember(message.text, message.entitiesList) {
+        if (message.entitiesList.any { it.type == "e2e" }) null
+        else pureStickerEntity(message.text ?: "", message.entitiesList ?: emptyList())
+    }
+    // 发送中的消息仍走普通气泡, 以便显示进度 / 重试
+    val isStickerOnly = pureSticker != null && sendStatus == null
 
     // 1. 获取发送者信息
     var userInfo by remember { mutableStateOf(ProfileCache.getCachedUser(message.senderUserId)) }
@@ -1442,52 +1461,64 @@ fun MessageBubble(
                     if (!hideSender) Spacer(modifier = Modifier.height(15.dp))
                 }
 
-                Surface(
-                    // 自己的气泡用 primary；对方用 surfaceContainerHigh，
-                    // 保证在浅色/深色下都和背景有明确层次（之前双方都是 surface，等于没有气泡）。
-                    color = if (isMine) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.surfaceContainerHigh
-                    },
-                    shape = RoundedCornerShape(
-                        bottomEnd = 16.dp,
-                        bottomStart = 16.dp,
-                        topStart = if (isMine) 16.dp else 4.dp,
-                        topEnd = if (isMine) 4.dp else 16.dp
-                    ),
-                    shadowElevation = 1.dp,
-                    modifier = Modifier.widthIn(max = maxBubbleWidth),
-                ) {
-                    // 气泡内部加上 Box 叠水印
-                    Box {
-                        CompositionLocalProvider(LocalMessageMaxWidth provides maxBubbleWidth) {
-                            MessageContent(
-                                message = message,
-                                isMine = isMine,
-                                onReplyClick = onReplyClick,
-                                onMentionClick = onMentionClick,
-                                onAttachmentClick = onAttachmentClick,
-                                onLongClick = onLongClick,
-                                // findMessage = { /* 如果之前加过，就传进去 */ }
-                            )
-                        }
-                        // 加密水印
-                        val isE2EMessage = message.entitiesList.any { it.type == "e2e" }
-                        if (isE2EMessage) {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = stringResource(R.string.chat_e2e),
-                                modifier = Modifier
-                                    .align(if (isMine) Alignment.BottomStart else Alignment.BottomEnd)
-                                    .padding(6.dp)
-                                    .size(12.dp),
-                                tint = if (isMine) {
-                                    MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-                                }
-                            )
+                if (isStickerOnly) {
+                    // 贴纸不套气泡, 但位置与普通气泡完全一致（同一 Column / 同样的头像占位）
+                    AttachmentBlock(
+                        entity = pureSticker!!,
+                        onClick = onAttachmentClick,
+                        onLongClick = onLongClick,
+                        onStickerClick = onStickerClick,
+                        stickerSize = 160.dp,
+                    )
+                } else {
+                    Surface(
+                        // 自己的气泡用 primary；对方用 surfaceContainerHigh，
+                        // 保证在浅色/深色下都和背景有明确层次（之前双方都是 surface，等于没有气泡）。
+                        color = if (isMine) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceContainerHigh
+                        },
+                        shape = RoundedCornerShape(
+                            bottomEnd = 16.dp,
+                            bottomStart = 16.dp,
+                            topStart = if (isMine) 16.dp else 4.dp,
+                            topEnd = if (isMine) 4.dp else 16.dp
+                        ),
+                        shadowElevation = 1.dp,
+                        modifier = Modifier.widthIn(max = maxBubbleWidth),
+                    ) {
+                        // 气泡内部加上 Box 叠水印
+                        Box {
+                            CompositionLocalProvider(LocalMessageMaxWidth provides maxBubbleWidth) {
+                                MessageContent(
+                                    message = message,
+                                    isMine = isMine,
+                                    onReplyClick = onReplyClick,
+                                    onMentionClick = onMentionClick,
+                                    onAttachmentClick = onAttachmentClick,
+                                    onLongClick = onLongClick,
+                                    onStickerClick = onStickerClick,
+                                    // findMessage = { /* 如果之前加过，就传进去 */ }
+                                )
+                            }
+                            // 加密水印
+                            val isE2EMessage = message.entitiesList.any { it.type == "e2e" }
+                            if (isE2EMessage) {
+                                Icon(
+                                    imageVector = Icons.Default.Lock,
+                                    contentDescription = stringResource(R.string.chat_e2e),
+                                    modifier = Modifier
+                                        .align(if (isMine) Alignment.BottomStart else Alignment.BottomEnd)
+                                        .padding(6.dp)
+                                        .size(12.dp),
+                                    tint = if (isMine) {
+                                        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                                    }
+                                )
+                            }
                         }
                     }
                 }

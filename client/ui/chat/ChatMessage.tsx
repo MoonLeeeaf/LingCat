@@ -8,6 +8,8 @@ import getFileUrl from '../../lib/getFileUrl.ts'
 import tipError from '../tipError.ts'
 import Message from './Message.tsx'
 import RichText from './RichText.tsx'
+import Attachment from './Attachment.tsx'
+import { getStickerEntityData, isPureStickerMessage } from '../../lib/sticker.ts'
 import RemarksCache from '../../RemarksCache.ts'
 import { UnlockPasswordDialog } from '../e2e/UnlockPasswordDialog.tsx'
 import { useE2EStore } from '../../lib/e2e/useE2EStore.ts'
@@ -183,6 +185,11 @@ export default function ChatMessage({
 
     const senderName = RemarksCache.get(msg.sender_user_id!) || profile?.nickname || ''
 
+    // 纯贴纸消息: 唯一 entity 且是贴纸, 区间外没有文本
+    const pureSticker = (!isLockedPlaceholder && !decryptError)
+        ? (isPureStickerMessage(renderText, renderEntities) ? getStickerEntityData(renderEntities[0]) : null)
+        : null
+
     return (
         <Message
             time={msg.time}
@@ -198,8 +205,20 @@ export default function ChatMessage({
             isAtRight={isMe}
             hideSender={hideSender}
             senderUserId={msg.sender_user_id ?? undefined}
+            bare={!!pureSticker}
         >
-            {isLockedPlaceholder || decryptError ? (
+            {pureSticker ? (
+                <Attachment
+                    data={{
+                        hash: pureSticker.hash,
+                        name: pureSticker.name || 'sticker',
+                        kind: 'sticker',
+                        packId: pureSticker.packId,
+                        emoji: pureSticker.emoji,
+                    }}
+                    stickerSize={160}
+                />
+            ) : isLockedPlaceholder || decryptError ? (
                 <div
                     onClick={handleUnlockClick}
                     style={{

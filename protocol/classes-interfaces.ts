@@ -81,6 +81,29 @@ export interface IFile {
     uploaded_at: number
 }
 
+export interface ISticker {
+    /** 文件 sha256, 同时是贴纸在包内的唯一标识 */
+    hash: string
+    pack_id: string
+    /** 服务端识别出的真实 MIME */
+    mime: string
+    emoji?: string | null
+    sort: number
+}
+
+export interface IStickerPack {
+    id: string
+    title: string
+    author_user_id: string
+    cover_file_hash?: string | null
+    created_at: number
+    updated_at: number
+    /** 当前用户是否已订阅 */
+    subscribed?: boolean
+    /** 当前用户是否为作者 */
+    is_author?: boolean
+}
+
 export interface IMessageEntity {
     type: "bold" | "italic" | 'strikethrough' | 'code' | 'spoiler' | 'attachment' | 'link' | 'chat_mention' | 'user_mention' | 'reply' | 'e2e'
     offset: number

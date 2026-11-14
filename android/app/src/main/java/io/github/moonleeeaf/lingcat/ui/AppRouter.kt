@@ -147,8 +147,10 @@ fun LingCatApp(
     }
 
     // 全局反馈总线：复制成功、保存失败之类的短提示统一走 Snackbar。
+    // 弹窗（Dialog / ModalBottomSheet）自带 FeedbackHost 时让位，否则提示会被弹窗遮罩挡住。
     LaunchedEffect(Unit) {
         Feedback.events.collect { message ->
+            if (Feedback.isModalHostActive) return@collect
             snackbarHostState.showSnackbar(message)
         }
     }

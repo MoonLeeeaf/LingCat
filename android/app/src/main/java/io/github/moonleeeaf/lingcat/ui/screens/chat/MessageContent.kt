@@ -66,6 +66,8 @@ fun MessageContent(
     onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
     onLongClick: () -> Unit,
     findMessage: suspend (Int) -> IMessage? = { null },
+    /** 点击消息里的贴纸时打开所属贴纸包 */
+    onStickerClick: (packId: String) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -349,7 +351,12 @@ fun MessageContent(
                 // ★ Block 级别（附件、引用）直接渲染，不包统一的 13dp padding
                 when (seg.entity!!.type) {
                     "reply" -> ReplyBlock(seg.entity, onReplyClick, isMine, findMessage = findMessage)
-                    "attachment" -> AttachmentBlock(seg.entity, onClick = { hash, name, isImage -> onAttachmentClick(hash, name, isImage) }, onLongClick = onLongClick)
+                    "attachment" -> AttachmentBlock(
+                        seg.entity,
+                        onClick = { hash, name, isImage -> onAttachmentClick(hash, name, isImage) },
+                        onLongClick = onLongClick,
+                        onStickerClick = onStickerClick,
+                    )
                 }
             } else {
                 // ★ 文字级别：根据是否为系统消息，套用不同的 padding 容器
@@ -586,14 +593,23 @@ val mimeCache = ConcurrentHashMap<String, String>()
 fun AttachmentBlock(
     entity: IMessageEntity,
     onClick: (String, String, Boolean) -> Unit,
-    onLongClick: () -> Unit // ★ 新增参数
+    onLongClick: () -> Unit, // ★ 新增参数
+    onStickerClick: (String) -> Unit = {},
+    /** 贴纸专用尺寸; null 时用默认大小 */
+    stickerSize: androidx.compose.ui.unit.Dp? = null,
 ) {
     var hash = ""
     var name = stringResource(R.string.attachment_default_name)
+    var kind = ""
+    var packId = ""
+    var emoji = ""
     try {
         val json = JSONObject(entity.data ?: "")
         hash = json.optString("hash")
         name = json.optString("name")
+        kind = json.optString("kind")
+        packId = json.optString("packId")
+        emoji = json.optString("emoji")
     } catch (_: Exception) {}
 
     if (hash.isEmpty()) {
@@ -603,6 +619,30 @@ fun AttachmentBlock(
 
     val fileToken = LingCatClientManager.fileAccessToken.collectAsState().value ?: ""
     val fileUrl = LingCatClientManager.currentClient?.getFileUrlByHashAndToken(hash, fileToken) ?: ""
+
+    // 贴纸: 类型由贴纸包保证, 不再发 HEAD 查询 MIME
+    if (kind == "sticker") {
+        coil.compose.AsyncImage(
+            model = coil.request.ImageRequest.Builder(LocalContext.current)
+                .data(fileUrl)
+                .memoryCacheKey(hash)
+                .diskCacheKey(hash)
+                .crossfade(true)
+                .build(),
+            contentDescription = emoji.ifEmpty { name },
+            modifier = Modifier
+                .size(stickerSize ?: 120.dp)
+                .combinedClickable(
+                    onClick = {
+                        if (packId.isNotEmpty()) onStickerClick(packId)
+                        else onClick(hash, name, true)
+                    },
+                    onLongClick = onLongClick,
+                ),
+            contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+        )
+        return
+    }
 
     var isImage by remember(hash, name) {
         mutableStateOf(

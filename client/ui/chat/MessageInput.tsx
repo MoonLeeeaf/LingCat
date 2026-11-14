@@ -17,6 +17,8 @@ import RemarksCache from '../../RemarksCache.ts'
 import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import default_avatar from '../../default_avatar.png'
+import StickerPanel, { type StickerPick } from './StickerPanel.tsx'
+import { buildStickerText } from '../../lib/sticker.ts'
 
 // ============================================================
 //                  contenteditable 光标 / @提及 工具
@@ -80,6 +82,7 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
         const [hasContent, setHasContent] = React.useState(false)
         const [sendVersion, setSendVersion] = React.useState(0)
         const sendPendingRef = React.useRef(false)
+        const [stickerPanelOpen, setStickerPanelOpen] = React.useState(false)
 
         // 同时覆盖键盘输入、粘贴、文件/引用插入和编辑回填。
         React.useEffect(() => {
@@ -136,6 +139,22 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
             insertText,
             focus: () => inputRef.current?.focus(),
         }), [insertText])
+
+        // ============================================================
+        //  贴纸
+        // ============================================================
+        const handlePickSticker = React.useCallback((pick: StickerPick) => {
+            insertText(buildStickerText({
+                hash: pick.sticker.hash,
+                packId: pick.packId,
+                emoji: pick.sticker.emoji,
+                mime: pick.sticker.mime,
+            }))
+        }, [insertText])
+
+        React.useEffect(() => {
+            setStickerPanelOpen(false)
+        }, [chatId])
 
         // ============================================================
         //  群聊 @ 成员补全
@@ -607,6 +626,12 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                 </AnimatePresence>
 
                 <div className="lingcat-composer-row">
+                    <StickerPanel
+                        open={stickerPanelOpen}
+                        onClose={() => setStickerPanelOpen(false)}
+                        onPick={handlePickSticker}
+                    />
+
                     <AnimatePresence>
                         {mentionQuery && mentionCandidates.length > 0 && (
                             <motion.div
@@ -722,6 +747,15 @@ export const MessageInput = React.forwardRef<MessageInputHandle, MessageInputPro
                                 title={isRecording ? '完成录音' : '录制语音'}
                                 onClick={handleToggleRecording}
                                 style={isRecording ? { color: 'rgb(var(--mdui-color-error))' } : undefined}
+                            />
+                        </motion.div>
+
+                        <motion.div slot="end-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            <mdui-button-icon
+                                icon="mood"
+                                title="贴纸"
+                                onClick={() => setStickerPanelOpen(open => !open)}
+                                style={stickerPanelOpen ? { color: 'rgb(var(--mdui-color-primary))' } : undefined}
                             />
                         </motion.div>
 

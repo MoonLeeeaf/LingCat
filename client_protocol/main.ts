@@ -5,6 +5,7 @@ import ChatApi from './ChatApi.ts'
 import MeetingApi from './MeetingApi.ts'
 import OAuthApi from './OAuthApi.ts'
 import E2EApi from './E2EApi.ts'
+import StickerApi from './StickerApi.ts'
 
 import MessageParser from './MessageParser.ts'
 
@@ -16,7 +17,9 @@ export {
     MeetingApi,
     OAuthApi,
     E2EApi,
+    StickerApi,
 
     MessageParser,
 }
 export type { IMeetingCredentials } from './MeetingApi.ts'
+export type { StickerInput, StickerPackDetail } from './StickerApi.ts'

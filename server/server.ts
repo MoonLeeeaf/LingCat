@@ -25,6 +25,7 @@ import MeetingApi, { meetingParticipantPoller } from './api/MeetingApi.ts'
 import OAuthApi from './api/OAuthApi.ts'
 import { registerOAuthRoutes, enabledProviders } from './oauth.ts'
 import E2EApi from './api/E2EApi.ts'
+import StickerApi from './api/StickerApi.ts'
 import UploadSessionManager from './data/UploadSessionManager.ts'
 
 export default function createLingCatServer(base_data_path: string) {
@@ -209,6 +210,7 @@ export default function createLingCatServer(base_data_path: string) {
                 res.status(200).send({
                     message: "success",
                     file_hash: hash,
+                    mime,
                 })
             } catch (e) {
                 // 异步回调里漏出去的异常会变成 unhandledRejection，直接终止整个进程。
@@ -487,7 +489,8 @@ export default function createLingCatServer(base_data_path: string) {
                         await MeetingApi.onCall(sendPackage, mPackage, clients_emiter) ||
                         await OAuthApi.onCall(sendPackage, mPackage) ||
                         await FileApi.onCall(sendPackage, mPackage) || 
-                        await E2EApi.onCall(sendPackage, mPackage)
+                        await E2EApi.onCall(sendPackage, mPackage) ||
+                        await StickerApi.onCall(sendPackage, mPackage)
                     )) {
                         console.log('[Server] Method not found:', mPackage.method_id)
                         sendError(sendPackage, mPackage.method_id, 'Method not found', Code.Not_Found)

@@ -6330,6 +6330,1821 @@ public final class Classes {
     }
   }
 
+  public interface IStickerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.ISticker)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @return The hash.
+     */
+    java.lang.String getHash();
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @return The bytes for hash.
+     */
+    com.google.protobuf.ByteString
+        getHashBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @return The mime.
+     */
+    java.lang.String getMime();
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @return The bytes for mime.
+     */
+    com.google.protobuf.ByteString
+        getMimeBytes();
+
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return Whether the emoji field is set.
+     */
+    boolean hasEmoji();
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return The emoji.
+     */
+    java.lang.String getEmoji();
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return The bytes for emoji.
+     */
+    com.google.protobuf.ByteString
+        getEmojiBytes();
+
+    /**
+     * <code>uint32 sort = 5;</code>
+     * @return The sort.
+     */
+    int getSort();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.ISticker}
+   */
+  public  static final class ISticker extends
+      com.google.protobuf.GeneratedMessageLite<
+          ISticker, ISticker.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.ISticker)
+      IStickerOrBuilder {
+    private ISticker() {
+      hash_ = "";
+      packId_ = "";
+      mime_ = "";
+      emoji_ = "";
+    }
+    private int bitField0_;
+    public static final int HASH_FIELD_NUMBER = 1;
+    private java.lang.String hash_;
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @return The hash.
+     */
+    @java.lang.Override
+    public java.lang.String getHash() {
+      return hash_;
+    }
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @return The bytes for hash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(hash_);
+    }
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @param value The hash to set.
+     */
+    private void setHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      hash_ = value;
+    }
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     */
+    private void clearHash() {
+      
+      hash_ = getDefaultInstance().getHash();
+    }
+    /**
+     * <pre>
+     * 文件 sha256, 同时也是贴纸在包内的唯一标识
+     * </pre>
+     *
+     * <code>string hash = 1;</code>
+     * @param value The bytes for hash to set.
+     */
+    private void setHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      hash_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int MIME_FIELD_NUMBER = 3;
+    private java.lang.String mime_;
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @return The mime.
+     */
+    @java.lang.Override
+    public java.lang.String getMime() {
+      return mime_;
+    }
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @return The bytes for mime.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getMimeBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(mime_);
+    }
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @param value The mime to set.
+     */
+    private void setMime(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      mime_ = value;
+    }
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     */
+    private void clearMime() {
+      
+      mime_ = getDefaultInstance().getMime();
+    }
+    /**
+     * <pre>
+     * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+     * </pre>
+     *
+     * <code>string mime = 3;</code>
+     * @param value The bytes for mime to set.
+     */
+    private void setMimeBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      mime_ = value.toStringUtf8();
+      
+    }
+
+    public static final int EMOJI_FIELD_NUMBER = 4;
+    private java.lang.String emoji_;
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return Whether the emoji field is set.
+     */
+    @java.lang.Override
+    public boolean hasEmoji() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return The emoji.
+     */
+    @java.lang.Override
+    public java.lang.String getEmoji() {
+      return emoji_;
+    }
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @return The bytes for emoji.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getEmojiBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(emoji_);
+    }
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @param value The emoji to set.
+     */
+    private void setEmoji(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      emoji_ = value;
+    }
+    /**
+     * <code>optional string emoji = 4;</code>
+     */
+    private void clearEmoji() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      emoji_ = getDefaultInstance().getEmoji();
+    }
+    /**
+     * <code>optional string emoji = 4;</code>
+     * @param value The bytes for emoji to set.
+     */
+    private void setEmojiBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      emoji_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static final int SORT_FIELD_NUMBER = 5;
+    private int sort_;
+    /**
+     * <code>uint32 sort = 5;</code>
+     * @return The sort.
+     */
+    @java.lang.Override
+    public int getSort() {
+      return sort_;
+    }
+    /**
+     * <code>uint32 sort = 5;</code>
+     * @param value The sort to set.
+     */
+    private void setSort(int value) {
+      
+      sort_ = value;
+    }
+    /**
+     * <code>uint32 sort = 5;</code>
+     */
+    private void clearSort() {
+      
+      sort_ = 0;
+    }
+
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.ISticker parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.ISticker parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.ISticker parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.ISticker prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.ISticker}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.ISticker, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.ISticker)
+        lingcat.classes.Classes.IStickerOrBuilder {
+      // Construct using lingcat.classes.Classes.ISticker.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <pre>
+       * 文件 sha256, 同时也是贴纸在包内的唯一标识
+       * </pre>
+       *
+       * <code>string hash = 1;</code>
+       * @return The hash.
+       */
+      @java.lang.Override
+      public java.lang.String getHash() {
+        return instance.getHash();
+      }
+      /**
+       * <pre>
+       * 文件 sha256, 同时也是贴纸在包内的唯一标识
+       * </pre>
+       *
+       * <code>string hash = 1;</code>
+       * @return The bytes for hash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getHashBytes() {
+        return instance.getHashBytes();
+      }
+      /**
+       * <pre>
+       * 文件 sha256, 同时也是贴纸在包内的唯一标识
+       * </pre>
+       *
+       * <code>string hash = 1;</code>
+       * @param value The hash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setHash(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 文件 sha256, 同时也是贴纸在包内的唯一标识
+       * </pre>
+       *
+       * <code>string hash = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHash() {
+        copyOnWrite();
+        instance.clearHash();
+        return this;
+      }
+      /**
+       * <pre>
+       * 文件 sha256, 同时也是贴纸在包内的唯一标识
+       * </pre>
+       *
+       * <code>string hash = 1;</code>
+       * @param value The bytes for hash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setHashBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+       * </pre>
+       *
+       * <code>string mime = 3;</code>
+       * @return The mime.
+       */
+      @java.lang.Override
+      public java.lang.String getMime() {
+        return instance.getMime();
+      }
+      /**
+       * <pre>
+       * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+       * </pre>
+       *
+       * <code>string mime = 3;</code>
+       * @return The bytes for mime.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getMimeBytes() {
+        return instance.getMimeBytes();
+      }
+      /**
+       * <pre>
+       * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+       * </pre>
+       *
+       * <code>string mime = 3;</code>
+       * @param value The mime to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMime(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setMime(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+       * </pre>
+       *
+       * <code>string mime = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMime() {
+        copyOnWrite();
+        instance.clearMime();
+        return this;
+      }
+      /**
+       * <pre>
+       * 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+       * </pre>
+       *
+       * <code>string mime = 3;</code>
+       * @param value The bytes for mime to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMimeBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setMimeBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @return Whether the emoji field is set.
+       */
+      @java.lang.Override
+      public boolean hasEmoji() {
+        return instance.hasEmoji();
+      }
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @return The emoji.
+       */
+      @java.lang.Override
+      public java.lang.String getEmoji() {
+        return instance.getEmoji();
+      }
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @return The bytes for emoji.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getEmojiBytes() {
+        return instance.getEmojiBytes();
+      }
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @param value The emoji to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmoji(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setEmoji(value);
+        return this;
+      }
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEmoji() {
+        copyOnWrite();
+        instance.clearEmoji();
+        return this;
+      }
+      /**
+       * <code>optional string emoji = 4;</code>
+       * @param value The bytes for emoji to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmojiBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setEmojiBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>uint32 sort = 5;</code>
+       * @return The sort.
+       */
+      @java.lang.Override
+      public int getSort() {
+        return instance.getSort();
+      }
+      /**
+       * <code>uint32 sort = 5;</code>
+       * @param value The sort to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSort(int value) {
+        copyOnWrite();
+        instance.setSort(value);
+        return this;
+      }
+      /**
+       * <code>uint32 sort = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSort() {
+        copyOnWrite();
+        instance.clearSort();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.ISticker)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.ISticker();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "hash_",
+              "packId_",
+              "mime_",
+              "emoji_",
+              "sort_",
+            };
+            java.lang.String info =
+                "\u0000\u0005\u0000\u0001\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208\u0004\u1208\u0000\u0005\u000b";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.ISticker> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.ISticker.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.ISticker>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.ISticker)
+    private static final lingcat.classes.Classes.ISticker DEFAULT_INSTANCE;
+    static {
+      ISticker defaultInstance = new ISticker();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        ISticker.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.ISticker getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<ISticker> PARSER;
+
+    public static com.google.protobuf.Parser<ISticker> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface IStickerPackOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.classes.IStickerPack)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string id = 1;</code>
+     * @return The id.
+     */
+    java.lang.String getId();
+    /**
+     * <code>string id = 1;</code>
+     * @return The bytes for id.
+     */
+    com.google.protobuf.ByteString
+        getIdBytes();
+
+    /**
+     * <code>string title = 2;</code>
+     * @return The title.
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>string title = 2;</code>
+     * @return The bytes for title.
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
+
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @return The authorUserId.
+     */
+    java.lang.String getAuthorUserId();
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @return The bytes for authorUserId.
+     */
+    com.google.protobuf.ByteString
+        getAuthorUserIdBytes();
+
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return Whether the coverFileHash field is set.
+     */
+    boolean hasCoverFileHash();
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The coverFileHash.
+     */
+    java.lang.String getCoverFileHash();
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The bytes for coverFileHash.
+     */
+    com.google.protobuf.ByteString
+        getCoverFileHashBytes();
+
+    /**
+     * <code>uint64 created_at = 5;</code>
+     * @return The createdAt.
+     */
+    long getCreatedAt();
+
+    /**
+     * <code>uint64 updated_at = 6;</code>
+     * @return The updatedAt.
+     */
+    long getUpdatedAt();
+
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     * @return Whether the subscribed field is set.
+     */
+    boolean hasSubscribed();
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     * @return The subscribed.
+     */
+    boolean getSubscribed();
+
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     * @return Whether the isAuthor field is set.
+     */
+    boolean hasIsAuthor();
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     * @return The isAuthor.
+     */
+    boolean getIsAuthor();
+  }
+  /**
+   * Protobuf type {@code lingcat.classes.IStickerPack}
+   */
+  public  static final class IStickerPack extends
+      com.google.protobuf.GeneratedMessageLite<
+          IStickerPack, IStickerPack.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.classes.IStickerPack)
+      IStickerPackOrBuilder {
+    private IStickerPack() {
+      id_ = "";
+      title_ = "";
+      authorUserId_ = "";
+      coverFileHash_ = "";
+    }
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private java.lang.String id_;
+    /**
+     * <code>string id = 1;</code>
+     * @return The id.
+     */
+    @java.lang.Override
+    public java.lang.String getId() {
+      return id_;
+    }
+    /**
+     * <code>string id = 1;</code>
+     * @return The bytes for id.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(id_);
+    }
+    /**
+     * <code>string id = 1;</code>
+     * @param value The id to set.
+     */
+    private void setId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      id_ = value;
+    }
+    /**
+     * <code>string id = 1;</code>
+     */
+    private void clearId() {
+      
+      id_ = getDefaultInstance().getId();
+    }
+    /**
+     * <code>string id = 1;</code>
+     * @param value The bytes for id to set.
+     */
+    private void setIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      id_ = value.toStringUtf8();
+      
+    }
+
+    public static final int TITLE_FIELD_NUMBER = 2;
+    private java.lang.String title_;
+    /**
+     * <code>string title = 2;</code>
+     * @return The title.
+     */
+    @java.lang.Override
+    public java.lang.String getTitle() {
+      return title_;
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @return The bytes for title.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(title_);
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @param value The title to set.
+     */
+    private void setTitle(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      title_ = value;
+    }
+    /**
+     * <code>string title = 2;</code>
+     */
+    private void clearTitle() {
+      
+      title_ = getDefaultInstance().getTitle();
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @param value The bytes for title to set.
+     */
+    private void setTitleBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      title_ = value.toStringUtf8();
+      
+    }
+
+    public static final int AUTHOR_USER_ID_FIELD_NUMBER = 3;
+    private java.lang.String authorUserId_;
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @return The authorUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getAuthorUserId() {
+      return authorUserId_;
+    }
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @return The bytes for authorUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAuthorUserIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(authorUserId_);
+    }
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @param value The authorUserId to set.
+     */
+    private void setAuthorUserId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      authorUserId_ = value;
+    }
+    /**
+     * <code>string author_user_id = 3;</code>
+     */
+    private void clearAuthorUserId() {
+      
+      authorUserId_ = getDefaultInstance().getAuthorUserId();
+    }
+    /**
+     * <code>string author_user_id = 3;</code>
+     * @param value The bytes for authorUserId to set.
+     */
+    private void setAuthorUserIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      authorUserId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int COVER_FILE_HASH_FIELD_NUMBER = 4;
+    private java.lang.String coverFileHash_;
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return Whether the coverFileHash field is set.
+     */
+    @java.lang.Override
+    public boolean hasCoverFileHash() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The coverFileHash.
+     */
+    @java.lang.Override
+    public java.lang.String getCoverFileHash() {
+      return coverFileHash_;
+    }
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The bytes for coverFileHash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCoverFileHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(coverFileHash_);
+    }
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @param value The coverFileHash to set.
+     */
+    private void setCoverFileHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      coverFileHash_ = value;
+    }
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     */
+    private void clearCoverFileHash() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      coverFileHash_ = getDefaultInstance().getCoverFileHash();
+    }
+    /**
+     * <code>optional string cover_file_hash = 4;</code>
+     * @param value The bytes for coverFileHash to set.
+     */
+    private void setCoverFileHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      coverFileHash_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static final int CREATED_AT_FIELD_NUMBER = 5;
+    private long createdAt_;
+    /**
+     * <code>uint64 created_at = 5;</code>
+     * @return The createdAt.
+     */
+    @java.lang.Override
+    public long getCreatedAt() {
+      return createdAt_;
+    }
+    /**
+     * <code>uint64 created_at = 5;</code>
+     * @param value The createdAt to set.
+     */
+    private void setCreatedAt(long value) {
+      
+      createdAt_ = value;
+    }
+    /**
+     * <code>uint64 created_at = 5;</code>
+     */
+    private void clearCreatedAt() {
+      
+      createdAt_ = 0L;
+    }
+
+    public static final int UPDATED_AT_FIELD_NUMBER = 6;
+    private long updatedAt_;
+    /**
+     * <code>uint64 updated_at = 6;</code>
+     * @return The updatedAt.
+     */
+    @java.lang.Override
+    public long getUpdatedAt() {
+      return updatedAt_;
+    }
+    /**
+     * <code>uint64 updated_at = 6;</code>
+     * @param value The updatedAt to set.
+     */
+    private void setUpdatedAt(long value) {
+      
+      updatedAt_ = value;
+    }
+    /**
+     * <code>uint64 updated_at = 6;</code>
+     */
+    private void clearUpdatedAt() {
+      
+      updatedAt_ = 0L;
+    }
+
+    public static final int SUBSCRIBED_FIELD_NUMBER = 7;
+    private boolean subscribed_;
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     * @return Whether the subscribed field is set.
+     */
+    @java.lang.Override
+    public boolean hasSubscribed() {
+      return ((bitField0_ & 0x00000002) != 0);
+    }
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     * @return The subscribed.
+     */
+    @java.lang.Override
+    public boolean getSubscribed() {
+      return subscribed_;
+    }
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     * @param value The subscribed to set.
+     */
+    private void setSubscribed(boolean value) {
+      bitField0_ |= 0x00000002;
+      subscribed_ = value;
+    }
+    /**
+     * <pre>
+     * 当前用户是否已订阅
+     * </pre>
+     *
+     * <code>optional bool subscribed = 7;</code>
+     */
+    private void clearSubscribed() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      subscribed_ = false;
+    }
+
+    public static final int IS_AUTHOR_FIELD_NUMBER = 8;
+    private boolean isAuthor_;
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     * @return Whether the isAuthor field is set.
+     */
+    @java.lang.Override
+    public boolean hasIsAuthor() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     * @return The isAuthor.
+     */
+    @java.lang.Override
+    public boolean getIsAuthor() {
+      return isAuthor_;
+    }
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     * @param value The isAuthor to set.
+     */
+    private void setIsAuthor(boolean value) {
+      bitField0_ |= 0x00000004;
+      isAuthor_ = value;
+    }
+    /**
+     * <pre>
+     * 当前用户是否为作者
+     * </pre>
+     *
+     * <code>optional bool is_author = 8;</code>
+     */
+    private void clearIsAuthor() {
+      bitField0_ = (bitField0_ & ~0x00000004);
+      isAuthor_ = false;
+    }
+
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.classes.Classes.IStickerPack parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.classes.Classes.IStickerPack prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.classes.IStickerPack}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.classes.Classes.IStickerPack, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.classes.IStickerPack)
+        lingcat.classes.Classes.IStickerPackOrBuilder {
+      // Construct using lingcat.classes.Classes.IStickerPack.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string id = 1;</code>
+       * @return The id.
+       */
+      @java.lang.Override
+      public java.lang.String getId() {
+        return instance.getId();
+      }
+      /**
+       * <code>string id = 1;</code>
+       * @return The bytes for id.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getIdBytes() {
+        return instance.getIdBytes();
+      }
+      /**
+       * <code>string id = 1;</code>
+       * @param value The id to set.
+       * @return This builder for chaining.
+       */
+      public Builder setId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setId(value);
+        return this;
+      }
+      /**
+       * <code>string id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearId() {
+        copyOnWrite();
+        instance.clearId();
+        return this;
+      }
+      /**
+       * <code>string id = 1;</code>
+       * @param value The bytes for id to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string title = 2;</code>
+       * @return The title.
+       */
+      @java.lang.Override
+      public java.lang.String getTitle() {
+        return instance.getTitle();
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @return The bytes for title.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        return instance.getTitleBytes();
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @param value The title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setTitle(value);
+        return this;
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTitle() {
+        copyOnWrite();
+        instance.clearTitle();
+        return this;
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @param value The bytes for title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setTitleBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string author_user_id = 3;</code>
+       * @return The authorUserId.
+       */
+      @java.lang.Override
+      public java.lang.String getAuthorUserId() {
+        return instance.getAuthorUserId();
+      }
+      /**
+       * <code>string author_user_id = 3;</code>
+       * @return The bytes for authorUserId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAuthorUserIdBytes() {
+        return instance.getAuthorUserIdBytes();
+      }
+      /**
+       * <code>string author_user_id = 3;</code>
+       * @param value The authorUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAuthorUserId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAuthorUserId(value);
+        return this;
+      }
+      /**
+       * <code>string author_user_id = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAuthorUserId() {
+        copyOnWrite();
+        instance.clearAuthorUserId();
+        return this;
+      }
+      /**
+       * <code>string author_user_id = 3;</code>
+       * @param value The bytes for authorUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAuthorUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAuthorUserIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return Whether the coverFileHash field is set.
+       */
+      @java.lang.Override
+      public boolean hasCoverFileHash() {
+        return instance.hasCoverFileHash();
+      }
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return The coverFileHash.
+       */
+      @java.lang.Override
+      public java.lang.String getCoverFileHash() {
+        return instance.getCoverFileHash();
+      }
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return The bytes for coverFileHash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getCoverFileHashBytes() {
+        return instance.getCoverFileHashBytes();
+      }
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @param value The coverFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCoverFileHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setCoverFileHash(value);
+        return this;
+      }
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCoverFileHash() {
+        copyOnWrite();
+        instance.clearCoverFileHash();
+        return this;
+      }
+      /**
+       * <code>optional string cover_file_hash = 4;</code>
+       * @param value The bytes for coverFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCoverFileHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setCoverFileHashBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>uint64 created_at = 5;</code>
+       * @return The createdAt.
+       */
+      @java.lang.Override
+      public long getCreatedAt() {
+        return instance.getCreatedAt();
+      }
+      /**
+       * <code>uint64 created_at = 5;</code>
+       * @param value The createdAt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCreatedAt(long value) {
+        copyOnWrite();
+        instance.setCreatedAt(value);
+        return this;
+      }
+      /**
+       * <code>uint64 created_at = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCreatedAt() {
+        copyOnWrite();
+        instance.clearCreatedAt();
+        return this;
+      }
+
+      /**
+       * <code>uint64 updated_at = 6;</code>
+       * @return The updatedAt.
+       */
+      @java.lang.Override
+      public long getUpdatedAt() {
+        return instance.getUpdatedAt();
+      }
+      /**
+       * <code>uint64 updated_at = 6;</code>
+       * @param value The updatedAt to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUpdatedAt(long value) {
+        copyOnWrite();
+        instance.setUpdatedAt(value);
+        return this;
+      }
+      /**
+       * <code>uint64 updated_at = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUpdatedAt() {
+        copyOnWrite();
+        instance.clearUpdatedAt();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 当前用户是否已订阅
+       * </pre>
+       *
+       * <code>optional bool subscribed = 7;</code>
+       * @return Whether the subscribed field is set.
+       */
+      @java.lang.Override
+      public boolean hasSubscribed() {
+        return instance.hasSubscribed();
+      }
+      /**
+       * <pre>
+       * 当前用户是否已订阅
+       * </pre>
+       *
+       * <code>optional bool subscribed = 7;</code>
+       * @return The subscribed.
+       */
+      @java.lang.Override
+      public boolean getSubscribed() {
+        return instance.getSubscribed();
+      }
+      /**
+       * <pre>
+       * 当前用户是否已订阅
+       * </pre>
+       *
+       * <code>optional bool subscribed = 7;</code>
+       * @param value The subscribed to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSubscribed(boolean value) {
+        copyOnWrite();
+        instance.setSubscribed(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前用户是否已订阅
+       * </pre>
+       *
+       * <code>optional bool subscribed = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSubscribed() {
+        copyOnWrite();
+        instance.clearSubscribed();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 当前用户是否为作者
+       * </pre>
+       *
+       * <code>optional bool is_author = 8;</code>
+       * @return Whether the isAuthor field is set.
+       */
+      @java.lang.Override
+      public boolean hasIsAuthor() {
+        return instance.hasIsAuthor();
+      }
+      /**
+       * <pre>
+       * 当前用户是否为作者
+       * </pre>
+       *
+       * <code>optional bool is_author = 8;</code>
+       * @return The isAuthor.
+       */
+      @java.lang.Override
+      public boolean getIsAuthor() {
+        return instance.getIsAuthor();
+      }
+      /**
+       * <pre>
+       * 当前用户是否为作者
+       * </pre>
+       *
+       * <code>optional bool is_author = 8;</code>
+       * @param value The isAuthor to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIsAuthor(boolean value) {
+        copyOnWrite();
+        instance.setIsAuthor(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前用户是否为作者
+       * </pre>
+       *
+       * <code>optional bool is_author = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIsAuthor() {
+        copyOnWrite();
+        instance.clearIsAuthor();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.classes.IStickerPack)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.classes.Classes.IStickerPack();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "id_",
+              "title_",
+              "authorUserId_",
+              "coverFileHash_",
+              "createdAt_",
+              "updatedAt_",
+              "subscribed_",
+              "isAuthor_",
+            };
+            java.lang.String info =
+                "\u0000\b\u0000\u0001\u0001\b\b\u0000\u0000\u0000\u0001\u0208\u0002\u0208\u0003\u0208" +
+                "\u0004\u1208\u0000\u0005\u0003\u0006\u0003\u0007\u1007\u0001\b\u1007\u0002";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.classes.Classes.IStickerPack> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.classes.Classes.IStickerPack.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.classes.Classes.IStickerPack>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.classes.IStickerPack)
+    private static final lingcat.classes.Classes.IStickerPack DEFAULT_INSTANCE;
+    static {
+      IStickerPack defaultInstance = new IStickerPack();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        IStickerPack.class, defaultInstance);
+    }
+
+    public static lingcat.classes.Classes.IStickerPack getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<IStickerPack> PARSER;
+
+    public static com.google.protobuf.Parser<IStickerPack> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
   public interface IMessageEntityOrBuilder extends
       // @@protoc_insertion_point(interface_extends:lingcat.classes.IMessageEntity)
       com.google.protobuf.MessageLiteOrBuilder {

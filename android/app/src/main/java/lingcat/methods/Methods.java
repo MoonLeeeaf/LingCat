@@ -44511,6 +44511,5868 @@ public final class Methods {
     }
   }
 
+  public interface Get_My_Sticker_Packs_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_Sticker_Packs_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+  }
+  /**
+   * <pre>
+   * 我订阅的全部贴纸包, 以及这些包的贴纸
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Get_My_Sticker_Packs_Request}
+   */
+  public  static final class Get_My_Sticker_Packs_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_Sticker_Packs_Request, Get_My_Sticker_Packs_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_Sticker_Packs_Request)
+      Get_My_Sticker_Packs_RequestOrBuilder {
+    private Get_My_Sticker_Packs_Request() {
+      accessToken_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_Sticker_Packs_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 我订阅的全部贴纸包, 以及这些包的贴纸
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Get_My_Sticker_Packs_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_Sticker_Packs_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_Sticker_Packs_Request)
+        lingcat.methods.Methods.Get_My_Sticker_Packs_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_Sticker_Packs_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_Sticker_Packs_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_Sticker_Packs_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+            };
+            java.lang.String info =
+                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\u0208";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_Sticker_Packs_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_Sticker_Packs_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_Sticker_Packs_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_Sticker_Packs_Request)
+    private static final lingcat.methods.Methods.Get_My_Sticker_Packs_Request DEFAULT_INSTANCE;
+    static {
+      Get_My_Sticker_Packs_Request defaultInstance = new Get_My_Sticker_Packs_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_Sticker_Packs_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_Sticker_Packs_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_Sticker_Packs_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Get_My_Sticker_Packs_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_Sticker_Packs_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    java.util.List<lingcat.classes.Classes.IStickerPack> 
+        getPacksList();
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    lingcat.classes.Classes.IStickerPack getPacks(int index);
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    int getPacksCount();
+
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    java.util.List<lingcat.classes.Classes.ISticker> 
+        getStickersList();
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    lingcat.classes.Classes.ISticker getStickers(int index);
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    int getStickersCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Get_My_Sticker_Packs_Response}
+   */
+  public  static final class Get_My_Sticker_Packs_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Get_My_Sticker_Packs_Response, Get_My_Sticker_Packs_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_Sticker_Packs_Response)
+      Get_My_Sticker_Packs_ResponseOrBuilder {
+    private Get_My_Sticker_Packs_Response() {
+      packs_ = emptyProtobufList();
+      stickers_ = emptyProtobufList();
+    }
+    public static final int PACKS_FIELD_NUMBER = 1;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IStickerPack> packs_;
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.IStickerPack> getPacksList() {
+      return packs_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.IStickerPackOrBuilder> 
+        getPacksOrBuilderList() {
+      return packs_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    @java.lang.Override
+    public int getPacksCount() {
+      return packs_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IStickerPack getPacks(int index) {
+      return packs_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    public lingcat.classes.Classes.IStickerPackOrBuilder getPacksOrBuilder(
+        int index) {
+      return packs_.get(index);
+    }
+    private void ensurePacksIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.IStickerPack> tmp = packs_;
+      if (!tmp.isModifiable()) {
+        packs_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void setPacks(
+        int index, lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  ensurePacksIsMutable();
+      packs_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void addPacks(lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  ensurePacksIsMutable();
+      packs_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void addPacks(
+        int index, lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  ensurePacksIsMutable();
+      packs_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void addAllPacks(
+        java.lang.Iterable<? extends lingcat.classes.Classes.IStickerPack> values) {
+      ensurePacksIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, packs_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void clearPacks() {
+      packs_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+     */
+    private void removePacks(int index) {
+      ensurePacksIsMutable();
+      packs_.remove(index);
+    }
+
+    public static final int STICKERS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.ISticker> stickers_;
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.ISticker> getStickersList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.IStickerOrBuilder> 
+        getStickersOrBuilderList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public int getStickersCount() {
+      return stickers_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.ISticker getStickers(int index) {
+      return stickers_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    public lingcat.classes.Classes.IStickerOrBuilder getStickersOrBuilder(
+        int index) {
+      return stickers_.get(index);
+    }
+    private void ensureStickersIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.ISticker> tmp = stickers_;
+      if (!tmp.isModifiable()) {
+        stickers_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void setStickers(
+        int index, lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addStickers(lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addStickers(
+        int index, lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addAllStickers(
+        java.lang.Iterable<? extends lingcat.classes.Classes.ISticker> values) {
+      ensureStickersIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, stickers_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void clearStickers() {
+      stickers_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void removeStickers(int index) {
+      ensureStickersIsMutable();
+      stickers_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Get_My_Sticker_Packs_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Get_My_Sticker_Packs_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Get_My_Sticker_Packs_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Get_My_Sticker_Packs_Response)
+        lingcat.methods.Methods.Get_My_Sticker_Packs_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Get_My_Sticker_Packs_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.IStickerPack> getPacksList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getPacksList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      @java.lang.Override
+      public int getPacksCount() {
+        return instance.getPacksCount();
+      }/**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IStickerPack getPacks(int index) {
+        return instance.getPacks(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder setPacks(
+          int index, lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.setPacks(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder setPacks(
+          int index, lingcat.classes.Classes.IStickerPack.Builder builderForValue) {
+        copyOnWrite();
+        instance.setPacks(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder addPacks(lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.addPacks(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder addPacks(
+          int index, lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.addPacks(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder addPacks(
+          lingcat.classes.Classes.IStickerPack.Builder builderForValue) {
+        copyOnWrite();
+        instance.addPacks(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder addPacks(
+          int index, lingcat.classes.Classes.IStickerPack.Builder builderForValue) {
+        copyOnWrite();
+        instance.addPacks(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder addAllPacks(
+          java.lang.Iterable<? extends lingcat.classes.Classes.IStickerPack> values) {
+        copyOnWrite();
+        instance.addAllPacks(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder clearPacks() {
+        copyOnWrite();
+        instance.clearPacks();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.IStickerPack packs = 1;</code>
+       */
+      public Builder removePacks(int index) {
+        copyOnWrite();
+        instance.removePacks(index);
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.ISticker> getStickersList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getStickersList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public int getStickersCount() {
+        return instance.getStickersCount();
+      }/**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.ISticker getStickers(int index) {
+        return instance.getStickers(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.setStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.setStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.addStickers(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.addStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addAllStickers(
+          java.lang.Iterable<? extends lingcat.classes.Classes.ISticker> values) {
+        copyOnWrite();
+        instance.addAllStickers(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder clearStickers() {
+        copyOnWrite();
+        instance.clearStickers();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder removeStickers(int index) {
+        copyOnWrite();
+        instance.removeStickers(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Get_My_Sticker_Packs_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Get_My_Sticker_Packs_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "packs_",
+              lingcat.classes.Classes.IStickerPack.class,
+              "stickers_",
+              lingcat.classes.Classes.ISticker.class,
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0002\u0000\u0001\u001b\u0002\u001b" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Get_My_Sticker_Packs_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Get_My_Sticker_Packs_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Get_My_Sticker_Packs_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Get_My_Sticker_Packs_Response)
+    private static final lingcat.methods.Methods.Get_My_Sticker_Packs_Response DEFAULT_INSTANCE;
+    static {
+      Get_My_Sticker_Packs_Response defaultInstance = new Get_My_Sticker_Packs_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Get_My_Sticker_Packs_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Get_My_Sticker_Packs_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Get_My_Sticker_Packs_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Get_My_Sticker_Packs_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Query_Sticker_Pack_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Query_Sticker_Pack_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+  }
+  /**
+   * <pre>
+   * 查询单个贴纸包 (点击消息里的贴纸时使用)
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Query_Sticker_Pack_Request}
+   */
+  public  static final class Query_Sticker_Pack_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Query_Sticker_Pack_Request, Query_Sticker_Pack_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Query_Sticker_Pack_Request)
+      Query_Sticker_Pack_RequestOrBuilder {
+    private Query_Sticker_Pack_Request() {
+      accessToken_ = "";
+      packId_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Query_Sticker_Pack_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 查询单个贴纸包 (点击消息里的贴纸时使用)
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Query_Sticker_Pack_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Query_Sticker_Pack_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Query_Sticker_Pack_Request)
+        lingcat.methods.Methods.Query_Sticker_Pack_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Query_Sticker_Pack_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Query_Sticker_Pack_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Query_Sticker_Pack_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "packId_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Query_Sticker_Pack_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Query_Sticker_Pack_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Query_Sticker_Pack_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Query_Sticker_Pack_Request)
+    private static final lingcat.methods.Methods.Query_Sticker_Pack_Request DEFAULT_INSTANCE;
+    static {
+      Query_Sticker_Pack_Request defaultInstance = new Query_Sticker_Pack_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Query_Sticker_Pack_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Query_Sticker_Pack_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Query_Sticker_Pack_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Query_Sticker_Pack_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Query_Sticker_Pack_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     * @return Whether the pack field is set.
+     */
+    boolean hasPack();
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     * @return The pack.
+     */
+    lingcat.classes.Classes.IStickerPack getPack();
+
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    java.util.List<lingcat.classes.Classes.ISticker> 
+        getStickersList();
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    lingcat.classes.Classes.ISticker getStickers(int index);
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    int getStickersCount();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Query_Sticker_Pack_Response}
+   */
+  public  static final class Query_Sticker_Pack_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Query_Sticker_Pack_Response, Query_Sticker_Pack_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Query_Sticker_Pack_Response)
+      Query_Sticker_Pack_ResponseOrBuilder {
+    private Query_Sticker_Pack_Response() {
+      stickers_ = emptyProtobufList();
+    }
+    public static final int PACK_FIELD_NUMBER = 1;
+    private lingcat.classes.Classes.IStickerPack pack_;
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.Override
+    public boolean hasPack() {
+      return pack_ != null;
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IStickerPack getPack() {
+      return pack_ == null ? lingcat.classes.Classes.IStickerPack.getDefaultInstance() : pack_;
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    private void setPack(lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  pack_ = value;
+      
+      }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.SuppressWarnings({"ReferenceEquality"})
+    private void mergePack(lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  if (pack_ != null &&
+          pack_ != lingcat.classes.Classes.IStickerPack.getDefaultInstance()) {
+        pack_ =
+          lingcat.classes.Classes.IStickerPack.newBuilder(pack_).mergeFrom(value).buildPartial();
+      } else {
+        pack_ = value;
+      }
+      
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    private void clearPack() {  pack_ = null;
+      
+    }
+
+    public static final int STICKERS_FIELD_NUMBER = 2;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.ISticker> stickers_;
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.classes.Classes.ISticker> getStickersList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    public java.util.List<? extends lingcat.classes.Classes.IStickerOrBuilder> 
+        getStickersOrBuilderList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public int getStickersCount() {
+      return stickers_.size();
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.ISticker getStickers(int index) {
+      return stickers_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    public lingcat.classes.Classes.IStickerOrBuilder getStickersOrBuilder(
+        int index) {
+      return stickers_.get(index);
+    }
+    private void ensureStickersIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.classes.Classes.ISticker> tmp = stickers_;
+      if (!tmp.isModifiable()) {
+        stickers_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void setStickers(
+        int index, lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addStickers(lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addStickers(
+        int index, lingcat.classes.Classes.ISticker value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void addAllStickers(
+        java.lang.Iterable<? extends lingcat.classes.Classes.ISticker> values) {
+      ensureStickersIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, stickers_);
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void clearStickers() {
+      stickers_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+     */
+    private void removeStickers(int index) {
+      ensureStickersIsMutable();
+      stickers_.remove(index);
+    }
+
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Query_Sticker_Pack_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Query_Sticker_Pack_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Query_Sticker_Pack_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Query_Sticker_Pack_Response)
+        lingcat.methods.Methods.Query_Sticker_Pack_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Query_Sticker_Pack_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      @java.lang.Override
+      public boolean hasPack() {
+        return instance.hasPack();
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IStickerPack getPack() {
+        return instance.getPack();
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder setPack(lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.setPack(value);
+        return this;
+        }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder setPack(
+          lingcat.classes.Classes.IStickerPack.Builder builderForValue) {
+        copyOnWrite();
+        instance.setPack(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder mergePack(lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.mergePack(value);
+        return this;
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder clearPack() {  copyOnWrite();
+        instance.clearPack();
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.classes.Classes.ISticker> getStickersList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getStickersList());
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public int getStickersCount() {
+        return instance.getStickersCount();
+      }/**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.ISticker getStickers(int index) {
+        return instance.getStickers(index);
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.setStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.setStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.addStickers(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.classes.Classes.ISticker value) {
+        copyOnWrite();
+        instance.addStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.classes.Classes.ISticker.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder addAllStickers(
+          java.lang.Iterable<? extends lingcat.classes.Classes.ISticker> values) {
+        copyOnWrite();
+        instance.addAllStickers(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder clearStickers() {
+        copyOnWrite();
+        instance.clearStickers();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.classes.ISticker stickers = 2;</code>
+       */
+      public Builder removeStickers(int index) {
+        copyOnWrite();
+        instance.removeStickers(index);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Query_Sticker_Pack_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Query_Sticker_Pack_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "pack_",
+              "stickers_",
+              lingcat.classes.Classes.ISticker.class,
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0001\u0000\u0001\t\u0002\u001b" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Query_Sticker_Pack_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Query_Sticker_Pack_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Query_Sticker_Pack_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Query_Sticker_Pack_Response)
+    private static final lingcat.methods.Methods.Query_Sticker_Pack_Response DEFAULT_INSTANCE;
+    static {
+      Query_Sticker_Pack_Response defaultInstance = new Query_Sticker_Pack_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Query_Sticker_Pack_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Query_Sticker_Pack_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Query_Sticker_Pack_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Query_Sticker_Pack_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Create_Sticker_Pack_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Create_Sticker_Pack_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string title = 2;</code>
+     * @return The title.
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>string title = 2;</code>
+     * @return The bytes for title.
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Create_Sticker_Pack_Request}
+   */
+  public  static final class Create_Sticker_Pack_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Create_Sticker_Pack_Request, Create_Sticker_Pack_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Create_Sticker_Pack_Request)
+      Create_Sticker_Pack_RequestOrBuilder {
+    private Create_Sticker_Pack_Request() {
+      accessToken_ = "";
+      title_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int TITLE_FIELD_NUMBER = 2;
+    private java.lang.String title_;
+    /**
+     * <code>string title = 2;</code>
+     * @return The title.
+     */
+    @java.lang.Override
+    public java.lang.String getTitle() {
+      return title_;
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @return The bytes for title.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(title_);
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @param value The title to set.
+     */
+    private void setTitle(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      title_ = value;
+    }
+    /**
+     * <code>string title = 2;</code>
+     */
+    private void clearTitle() {
+      
+      title_ = getDefaultInstance().getTitle();
+    }
+    /**
+     * <code>string title = 2;</code>
+     * @param value The bytes for title to set.
+     */
+    private void setTitleBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      title_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Create_Sticker_Pack_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Create_Sticker_Pack_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Create_Sticker_Pack_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Create_Sticker_Pack_Request)
+        lingcat.methods.Methods.Create_Sticker_Pack_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Create_Sticker_Pack_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string title = 2;</code>
+       * @return The title.
+       */
+      @java.lang.Override
+      public java.lang.String getTitle() {
+        return instance.getTitle();
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @return The bytes for title.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        return instance.getTitleBytes();
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @param value The title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setTitle(value);
+        return this;
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTitle() {
+        copyOnWrite();
+        instance.clearTitle();
+        return this;
+      }
+      /**
+       * <code>string title = 2;</code>
+       * @param value The bytes for title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setTitleBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Create_Sticker_Pack_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Create_Sticker_Pack_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "title_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Create_Sticker_Pack_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Create_Sticker_Pack_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Create_Sticker_Pack_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Create_Sticker_Pack_Request)
+    private static final lingcat.methods.Methods.Create_Sticker_Pack_Request DEFAULT_INSTANCE;
+    static {
+      Create_Sticker_Pack_Request defaultInstance = new Create_Sticker_Pack_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Create_Sticker_Pack_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Create_Sticker_Pack_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Create_Sticker_Pack_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Create_Sticker_Pack_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Create_Sticker_Pack_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     * @return Whether the pack field is set.
+     */
+    boolean hasPack();
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     * @return The pack.
+     */
+    lingcat.classes.Classes.IStickerPack getPack();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Create_Sticker_Pack_Response}
+   */
+  public  static final class Create_Sticker_Pack_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Create_Sticker_Pack_Response, Create_Sticker_Pack_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Create_Sticker_Pack_Response)
+      Create_Sticker_Pack_ResponseOrBuilder {
+    private Create_Sticker_Pack_Response() {
+    }
+    public static final int PACK_FIELD_NUMBER = 1;
+    private lingcat.classes.Classes.IStickerPack pack_;
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.Override
+    public boolean hasPack() {
+      return pack_ != null;
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.Override
+    public lingcat.classes.Classes.IStickerPack getPack() {
+      return pack_ == null ? lingcat.classes.Classes.IStickerPack.getDefaultInstance() : pack_;
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    private void setPack(lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  pack_ = value;
+      
+      }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    @java.lang.SuppressWarnings({"ReferenceEquality"})
+    private void mergePack(lingcat.classes.Classes.IStickerPack value) {
+      value.getClass();
+  if (pack_ != null &&
+          pack_ != lingcat.classes.Classes.IStickerPack.getDefaultInstance()) {
+        pack_ =
+          lingcat.classes.Classes.IStickerPack.newBuilder(pack_).mergeFrom(value).buildPartial();
+      } else {
+        pack_ = value;
+      }
+      
+    }
+    /**
+     * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+     */
+    private void clearPack() {  pack_ = null;
+      
+    }
+
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Create_Sticker_Pack_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Create_Sticker_Pack_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Create_Sticker_Pack_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Create_Sticker_Pack_Response)
+        lingcat.methods.Methods.Create_Sticker_Pack_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Create_Sticker_Pack_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      @java.lang.Override
+      public boolean hasPack() {
+        return instance.hasPack();
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      @java.lang.Override
+      public lingcat.classes.Classes.IStickerPack getPack() {
+        return instance.getPack();
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder setPack(lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.setPack(value);
+        return this;
+        }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder setPack(
+          lingcat.classes.Classes.IStickerPack.Builder builderForValue) {
+        copyOnWrite();
+        instance.setPack(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder mergePack(lingcat.classes.Classes.IStickerPack value) {
+        copyOnWrite();
+        instance.mergePack(value);
+        return this;
+      }
+      /**
+       * <code>.lingcat.classes.IStickerPack pack = 1;</code>
+       */
+      public Builder clearPack() {  copyOnWrite();
+        instance.clearPack();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Create_Sticker_Pack_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Create_Sticker_Pack_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "pack_",
+            };
+            java.lang.String info =
+                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\t";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Create_Sticker_Pack_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Create_Sticker_Pack_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Create_Sticker_Pack_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Create_Sticker_Pack_Response)
+    private static final lingcat.methods.Methods.Create_Sticker_Pack_Response DEFAULT_INSTANCE;
+    static {
+      Create_Sticker_Pack_Response defaultInstance = new Create_Sticker_Pack_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Create_Sticker_Pack_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Create_Sticker_Pack_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Create_Sticker_Pack_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Create_Sticker_Pack_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Update_Sticker_Pack_Title_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Update_Sticker_Pack_Title_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+
+    /**
+     * <code>string title = 3;</code>
+     * @return The title.
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>string title = 3;</code>
+     * @return The bytes for title.
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
+  }
+  /**
+   * <pre>
+   * 修改包标题 (仅作者)
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.Update_Sticker_Pack_Title_Request}
+   */
+  public  static final class Update_Sticker_Pack_Title_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Update_Sticker_Pack_Title_Request, Update_Sticker_Pack_Title_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Update_Sticker_Pack_Title_Request)
+      Update_Sticker_Pack_Title_RequestOrBuilder {
+    private Update_Sticker_Pack_Title_Request() {
+      accessToken_ = "";
+      packId_ = "";
+      title_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int TITLE_FIELD_NUMBER = 3;
+    private java.lang.String title_;
+    /**
+     * <code>string title = 3;</code>
+     * @return The title.
+     */
+    @java.lang.Override
+    public java.lang.String getTitle() {
+      return title_;
+    }
+    /**
+     * <code>string title = 3;</code>
+     * @return The bytes for title.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(title_);
+    }
+    /**
+     * <code>string title = 3;</code>
+     * @param value The title to set.
+     */
+    private void setTitle(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      title_ = value;
+    }
+    /**
+     * <code>string title = 3;</code>
+     */
+    private void clearTitle() {
+      
+      title_ = getDefaultInstance().getTitle();
+    }
+    /**
+     * <code>string title = 3;</code>
+     * @param value The bytes for title to set.
+     */
+    private void setTitleBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      title_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Update_Sticker_Pack_Title_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 修改包标题 (仅作者)
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.Update_Sticker_Pack_Title_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Update_Sticker_Pack_Title_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Update_Sticker_Pack_Title_Request)
+        lingcat.methods.Methods.Update_Sticker_Pack_Title_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Update_Sticker_Pack_Title_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string title = 3;</code>
+       * @return The title.
+       */
+      @java.lang.Override
+      public java.lang.String getTitle() {
+        return instance.getTitle();
+      }
+      /**
+       * <code>string title = 3;</code>
+       * @return The bytes for title.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        return instance.getTitleBytes();
+      }
+      /**
+       * <code>string title = 3;</code>
+       * @param value The title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setTitle(value);
+        return this;
+      }
+      /**
+       * <code>string title = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTitle() {
+        copyOnWrite();
+        instance.clearTitle();
+        return this;
+      }
+      /**
+       * <code>string title = 3;</code>
+       * @param value The bytes for title to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setTitleBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Update_Sticker_Pack_Title_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Update_Sticker_Pack_Title_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "packId_",
+              "title_",
+            };
+            java.lang.String info =
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0208";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Update_Sticker_Pack_Title_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Update_Sticker_Pack_Title_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Update_Sticker_Pack_Title_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Update_Sticker_Pack_Title_Request)
+    private static final lingcat.methods.Methods.Update_Sticker_Pack_Title_Request DEFAULT_INSTANCE;
+    static {
+      Update_Sticker_Pack_Title_Request defaultInstance = new Update_Sticker_Pack_Title_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Update_Sticker_Pack_Title_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Update_Sticker_Pack_Title_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Update_Sticker_Pack_Title_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Update_Sticker_Pack_Title_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Update_Sticker_Pack_Title_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Update_Sticker_Pack_Title_Response}
+   */
+  public  static final class Update_Sticker_Pack_Title_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Update_Sticker_Pack_Title_Response, Update_Sticker_Pack_Title_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Update_Sticker_Pack_Title_Response)
+      Update_Sticker_Pack_Title_ResponseOrBuilder {
+    private Update_Sticker_Pack_Title_Response() {
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Update_Sticker_Pack_Title_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Update_Sticker_Pack_Title_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Update_Sticker_Pack_Title_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Update_Sticker_Pack_Title_Response)
+        lingcat.methods.Methods.Update_Sticker_Pack_Title_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Update_Sticker_Pack_Title_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Update_Sticker_Pack_Title_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Update_Sticker_Pack_Title_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Update_Sticker_Pack_Title_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Update_Sticker_Pack_Title_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Update_Sticker_Pack_Title_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Update_Sticker_Pack_Title_Response)
+    private static final lingcat.methods.Methods.Update_Sticker_Pack_Title_Response DEFAULT_INSTANCE;
+    static {
+      Update_Sticker_Pack_Title_Response defaultInstance = new Update_Sticker_Pack_Title_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Update_Sticker_Pack_Title_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Update_Sticker_Pack_Title_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Update_Sticker_Pack_Title_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Update_Sticker_Pack_Title_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface StickerInputOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.StickerInput)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string hash = 1;</code>
+     * @return The hash.
+     */
+    java.lang.String getHash();
+    /**
+     * <code>string hash = 1;</code>
+     * @return The bytes for hash.
+     */
+    com.google.protobuf.ByteString
+        getHashBytes();
+
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return Whether the emoji field is set.
+     */
+    boolean hasEmoji();
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return The emoji.
+     */
+    java.lang.String getEmoji();
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return The bytes for emoji.
+     */
+    com.google.protobuf.ByteString
+        getEmojiBytes();
+  }
+  /**
+   * <pre>
+   * 覆盖式写入包内容 (仅作者). 空数组表示清空。
+   * </pre>
+   *
+   * Protobuf type {@code lingcat.methods.StickerInput}
+   */
+  public  static final class StickerInput extends
+      com.google.protobuf.GeneratedMessageLite<
+          StickerInput, StickerInput.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.StickerInput)
+      StickerInputOrBuilder {
+    private StickerInput() {
+      hash_ = "";
+      emoji_ = "";
+    }
+    private int bitField0_;
+    public static final int HASH_FIELD_NUMBER = 1;
+    private java.lang.String hash_;
+    /**
+     * <code>string hash = 1;</code>
+     * @return The hash.
+     */
+    @java.lang.Override
+    public java.lang.String getHash() {
+      return hash_;
+    }
+    /**
+     * <code>string hash = 1;</code>
+     * @return The bytes for hash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(hash_);
+    }
+    /**
+     * <code>string hash = 1;</code>
+     * @param value The hash to set.
+     */
+    private void setHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      hash_ = value;
+    }
+    /**
+     * <code>string hash = 1;</code>
+     */
+    private void clearHash() {
+      
+      hash_ = getDefaultInstance().getHash();
+    }
+    /**
+     * <code>string hash = 1;</code>
+     * @param value The bytes for hash to set.
+     */
+    private void setHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      hash_ = value.toStringUtf8();
+      
+    }
+
+    public static final int EMOJI_FIELD_NUMBER = 2;
+    private java.lang.String emoji_;
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return Whether the emoji field is set.
+     */
+    @java.lang.Override
+    public boolean hasEmoji() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return The emoji.
+     */
+    @java.lang.Override
+    public java.lang.String getEmoji() {
+      return emoji_;
+    }
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @return The bytes for emoji.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getEmojiBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(emoji_);
+    }
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @param value The emoji to set.
+     */
+    private void setEmoji(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      emoji_ = value;
+    }
+    /**
+     * <code>optional string emoji = 2;</code>
+     */
+    private void clearEmoji() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      emoji_ = getDefaultInstance().getEmoji();
+    }
+    /**
+     * <code>optional string emoji = 2;</code>
+     * @param value The bytes for emoji to set.
+     */
+    private void setEmojiBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      emoji_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.StickerInput parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.StickerInput parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.StickerInput parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.StickerInput prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * <pre>
+     * 覆盖式写入包内容 (仅作者). 空数组表示清空。
+     * </pre>
+     *
+     * Protobuf type {@code lingcat.methods.StickerInput}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.StickerInput, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.StickerInput)
+        lingcat.methods.Methods.StickerInputOrBuilder {
+      // Construct using lingcat.methods.Methods.StickerInput.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string hash = 1;</code>
+       * @return The hash.
+       */
+      @java.lang.Override
+      public java.lang.String getHash() {
+        return instance.getHash();
+      }
+      /**
+       * <code>string hash = 1;</code>
+       * @return The bytes for hash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getHashBytes() {
+        return instance.getHashBytes();
+      }
+      /**
+       * <code>string hash = 1;</code>
+       * @param value The hash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setHash(value);
+        return this;
+      }
+      /**
+       * <code>string hash = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHash() {
+        copyOnWrite();
+        instance.clearHash();
+        return this;
+      }
+      /**
+       * <code>string hash = 1;</code>
+       * @param value The bytes for hash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setHashBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @return Whether the emoji field is set.
+       */
+      @java.lang.Override
+      public boolean hasEmoji() {
+        return instance.hasEmoji();
+      }
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @return The emoji.
+       */
+      @java.lang.Override
+      public java.lang.String getEmoji() {
+        return instance.getEmoji();
+      }
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @return The bytes for emoji.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getEmojiBytes() {
+        return instance.getEmojiBytes();
+      }
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @param value The emoji to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmoji(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setEmoji(value);
+        return this;
+      }
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEmoji() {
+        copyOnWrite();
+        instance.clearEmoji();
+        return this;
+      }
+      /**
+       * <code>optional string emoji = 2;</code>
+       * @param value The bytes for emoji to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmojiBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setEmojiBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.StickerInput)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.StickerInput();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "hash_",
+              "emoji_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0001\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u1208" +
+                "\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.StickerInput> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.StickerInput.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.StickerInput>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.StickerInput)
+    private static final lingcat.methods.Methods.StickerInput DEFAULT_INSTANCE;
+    static {
+      StickerInput defaultInstance = new StickerInput();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        StickerInput.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.StickerInput getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<StickerInput> PARSER;
+
+    public static com.google.protobuf.Parser<StickerInput> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Set_Sticker_Pack_Content_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_Sticker_Pack_Content_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    java.util.List<lingcat.methods.Methods.StickerInput> 
+        getStickersList();
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    lingcat.methods.Methods.StickerInput getStickers(int index);
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    int getStickersCount();
+
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return Whether the coverFileHash field is set.
+     */
+    boolean hasCoverFileHash();
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The coverFileHash.
+     */
+    java.lang.String getCoverFileHash();
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The bytes for coverFileHash.
+     */
+    com.google.protobuf.ByteString
+        getCoverFileHashBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Content_Request}
+   */
+  public  static final class Set_Sticker_Pack_Content_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_Sticker_Pack_Content_Request, Set_Sticker_Pack_Content_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_Sticker_Pack_Content_Request)
+      Set_Sticker_Pack_Content_RequestOrBuilder {
+    private Set_Sticker_Pack_Content_Request() {
+      accessToken_ = "";
+      packId_ = "";
+      stickers_ = emptyProtobufList();
+      coverFileHash_ = "";
+    }
+    private int bitField0_;
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int STICKERS_FIELD_NUMBER = 3;
+    private com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.StickerInput> stickers_;
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    @java.lang.Override
+    public java.util.List<lingcat.methods.Methods.StickerInput> getStickersList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    public java.util.List<? extends lingcat.methods.Methods.StickerInputOrBuilder> 
+        getStickersOrBuilderList() {
+      return stickers_;
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    @java.lang.Override
+    public int getStickersCount() {
+      return stickers_.size();
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    @java.lang.Override
+    public lingcat.methods.Methods.StickerInput getStickers(int index) {
+      return stickers_.get(index);
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    public lingcat.methods.Methods.StickerInputOrBuilder getStickersOrBuilder(
+        int index) {
+      return stickers_.get(index);
+    }
+    private void ensureStickersIsMutable() {
+      com.google.protobuf.Internal.ProtobufList<lingcat.methods.Methods.StickerInput> tmp = stickers_;
+      if (!tmp.isModifiable()) {
+        stickers_ =
+            com.google.protobuf.GeneratedMessageLite.mutableCopy(tmp);
+       }
+    }
+
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void setStickers(
+        int index, lingcat.methods.Methods.StickerInput value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.set(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void addStickers(lingcat.methods.Methods.StickerInput value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void addStickers(
+        int index, lingcat.methods.Methods.StickerInput value) {
+      value.getClass();
+  ensureStickersIsMutable();
+      stickers_.add(index, value);
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void addAllStickers(
+        java.lang.Iterable<? extends lingcat.methods.Methods.StickerInput> values) {
+      ensureStickersIsMutable();
+      com.google.protobuf.AbstractMessageLite.addAll(
+          values, stickers_);
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void clearStickers() {
+      stickers_ = emptyProtobufList();
+    }
+    /**
+     * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+     */
+    private void removeStickers(int index) {
+      ensureStickersIsMutable();
+      stickers_.remove(index);
+    }
+
+    public static final int COVER_FILE_HASH_FIELD_NUMBER = 4;
+    private java.lang.String coverFileHash_;
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return Whether the coverFileHash field is set.
+     */
+    @java.lang.Override
+    public boolean hasCoverFileHash() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The coverFileHash.
+     */
+    @java.lang.Override
+    public java.lang.String getCoverFileHash() {
+      return coverFileHash_;
+    }
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @return The bytes for coverFileHash.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCoverFileHashBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(coverFileHash_);
+    }
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @param value The coverFileHash to set.
+     */
+    private void setCoverFileHash(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  bitField0_ |= 0x00000001;
+      coverFileHash_ = value;
+    }
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     */
+    private void clearCoverFileHash() {
+      bitField0_ = (bitField0_ & ~0x00000001);
+      coverFileHash_ = getDefaultInstance().getCoverFileHash();
+    }
+    /**
+     * <pre>
+     * 不传则保留原封面
+     * </pre>
+     *
+     * <code>optional string cover_file_hash = 4;</code>
+     * @param value The bytes for coverFileHash to set.
+     */
+    private void setCoverFileHashBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      coverFileHash_ = value.toStringUtf8();
+      bitField0_ |= 0x00000001;
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_Sticker_Pack_Content_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Content_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_Sticker_Pack_Content_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_Sticker_Pack_Content_Request)
+        lingcat.methods.Methods.Set_Sticker_Pack_Content_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_Sticker_Pack_Content_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      @java.lang.Override
+      public java.util.List<lingcat.methods.Methods.StickerInput> getStickersList() {
+        return java.util.Collections.unmodifiableList(
+            instance.getStickersList());
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      @java.lang.Override
+      public int getStickersCount() {
+        return instance.getStickersCount();
+      }/**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      @java.lang.Override
+      public lingcat.methods.Methods.StickerInput getStickers(int index) {
+        return instance.getStickers(index);
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.methods.Methods.StickerInput value) {
+        copyOnWrite();
+        instance.setStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder setStickers(
+          int index, lingcat.methods.Methods.StickerInput.Builder builderForValue) {
+        copyOnWrite();
+        instance.setStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder addStickers(lingcat.methods.Methods.StickerInput value) {
+        copyOnWrite();
+        instance.addStickers(value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.methods.Methods.StickerInput value) {
+        copyOnWrite();
+        instance.addStickers(index, value);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder addStickers(
+          lingcat.methods.Methods.StickerInput.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder addStickers(
+          int index, lingcat.methods.Methods.StickerInput.Builder builderForValue) {
+        copyOnWrite();
+        instance.addStickers(index,
+            builderForValue.build());
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder addAllStickers(
+          java.lang.Iterable<? extends lingcat.methods.Methods.StickerInput> values) {
+        copyOnWrite();
+        instance.addAllStickers(values);
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder clearStickers() {
+        copyOnWrite();
+        instance.clearStickers();
+        return this;
+      }
+      /**
+       * <code>repeated .lingcat.methods.StickerInput stickers = 3;</code>
+       */
+      public Builder removeStickers(int index) {
+        copyOnWrite();
+        instance.removeStickers(index);
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return Whether the coverFileHash field is set.
+       */
+      @java.lang.Override
+      public boolean hasCoverFileHash() {
+        return instance.hasCoverFileHash();
+      }
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return The coverFileHash.
+       */
+      @java.lang.Override
+      public java.lang.String getCoverFileHash() {
+        return instance.getCoverFileHash();
+      }
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return The bytes for coverFileHash.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getCoverFileHashBytes() {
+        return instance.getCoverFileHashBytes();
+      }
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @param value The coverFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCoverFileHash(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setCoverFileHash(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCoverFileHash() {
+        copyOnWrite();
+        instance.clearCoverFileHash();
+        return this;
+      }
+      /**
+       * <pre>
+       * 不传则保留原封面
+       * </pre>
+       *
+       * <code>optional string cover_file_hash = 4;</code>
+       * @param value The bytes for coverFileHash to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCoverFileHashBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setCoverFileHashBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_Sticker_Pack_Content_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_Sticker_Pack_Content_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "bitField0_",
+              "accessToken_",
+              "packId_",
+              "stickers_",
+              lingcat.methods.Methods.StickerInput.class,
+              "coverFileHash_",
+            };
+            java.lang.String info =
+                "\u0000\u0004\u0000\u0001\u0001\u0004\u0004\u0000\u0001\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u001b\u0004\u1208\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_Sticker_Pack_Content_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_Sticker_Pack_Content_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_Sticker_Pack_Content_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_Sticker_Pack_Content_Request)
+    private static final lingcat.methods.Methods.Set_Sticker_Pack_Content_Request DEFAULT_INSTANCE;
+    static {
+      Set_Sticker_Pack_Content_Request defaultInstance = new Set_Sticker_Pack_Content_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_Sticker_Pack_Content_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_Sticker_Pack_Content_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Set_Sticker_Pack_Content_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Set_Sticker_Pack_Content_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_Sticker_Pack_Content_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Content_Response}
+   */
+  public  static final class Set_Sticker_Pack_Content_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_Sticker_Pack_Content_Response, Set_Sticker_Pack_Content_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_Sticker_Pack_Content_Response)
+      Set_Sticker_Pack_Content_ResponseOrBuilder {
+    private Set_Sticker_Pack_Content_Response() {
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_Sticker_Pack_Content_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Content_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_Sticker_Pack_Content_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_Sticker_Pack_Content_Response)
+        lingcat.methods.Methods.Set_Sticker_Pack_Content_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_Sticker_Pack_Content_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_Sticker_Pack_Content_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_Sticker_Pack_Content_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_Sticker_Pack_Content_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_Sticker_Pack_Content_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_Sticker_Pack_Content_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_Sticker_Pack_Content_Response)
+    private static final lingcat.methods.Methods.Set_Sticker_Pack_Content_Response DEFAULT_INSTANCE;
+    static {
+      Set_Sticker_Pack_Content_Response defaultInstance = new Set_Sticker_Pack_Content_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_Sticker_Pack_Content_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Content_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_Sticker_Pack_Content_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Set_Sticker_Pack_Content_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Set_Sticker_Pack_Subscribed_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+
+    /**
+     * <code>bool subscribed = 3;</code>
+     * @return The subscribed.
+     */
+    boolean getSubscribed();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Subscribed_Request}
+   */
+  public  static final class Set_Sticker_Pack_Subscribed_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_Sticker_Pack_Subscribed_Request, Set_Sticker_Pack_Subscribed_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+      Set_Sticker_Pack_Subscribed_RequestOrBuilder {
+    private Set_Sticker_Pack_Subscribed_Request() {
+      accessToken_ = "";
+      packId_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static final int SUBSCRIBED_FIELD_NUMBER = 3;
+    private boolean subscribed_;
+    /**
+     * <code>bool subscribed = 3;</code>
+     * @return The subscribed.
+     */
+    @java.lang.Override
+    public boolean getSubscribed() {
+      return subscribed_;
+    }
+    /**
+     * <code>bool subscribed = 3;</code>
+     * @param value The subscribed to set.
+     */
+    private void setSubscribed(boolean value) {
+      
+      subscribed_ = value;
+    }
+    /**
+     * <code>bool subscribed = 3;</code>
+     */
+    private void clearSubscribed() {
+      
+      subscribed_ = false;
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Subscribed_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+        lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>bool subscribed = 3;</code>
+       * @return The subscribed.
+       */
+      @java.lang.Override
+      public boolean getSubscribed() {
+        return instance.getSubscribed();
+      }
+      /**
+       * <code>bool subscribed = 3;</code>
+       * @param value The subscribed to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSubscribed(boolean value) {
+        copyOnWrite();
+        instance.setSubscribed(value);
+        return this;
+      }
+      /**
+       * <code>bool subscribed = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSubscribed() {
+        copyOnWrite();
+        instance.clearSubscribed();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "packId_",
+              "subscribed_",
+            };
+            java.lang.String info =
+                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "\u0003\u0007";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+    private static final lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request DEFAULT_INSTANCE;
+    static {
+      Set_Sticker_Pack_Subscribed_Request defaultInstance = new Set_Sticker_Pack_Subscribed_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_Sticker_Pack_Subscribed_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_Sticker_Pack_Subscribed_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Set_Sticker_Pack_Subscribed_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Set_Sticker_Pack_Subscribed_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Subscribed_Response}
+   */
+  public  static final class Set_Sticker_Pack_Subscribed_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Set_Sticker_Pack_Subscribed_Response, Set_Sticker_Pack_Subscribed_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+      Set_Sticker_Pack_Subscribed_ResponseOrBuilder {
+    private Set_Sticker_Pack_Subscribed_Response() {
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Set_Sticker_Pack_Subscribed_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+        lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+    private static final lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response DEFAULT_INSTANCE;
+    static {
+      Set_Sticker_Pack_Subscribed_Response defaultInstance = new Set_Sticker_Pack_Subscribed_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Set_Sticker_Pack_Subscribed_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Set_Sticker_Pack_Subscribed_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Set_Sticker_Pack_Subscribed_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Set_Sticker_Pack_Subscribed_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Delete_Sticker_Pack_RequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Delete_Sticker_Pack_Request)
+      com.google.protobuf.MessageLiteOrBuilder {
+
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    java.lang.String getAccessToken();
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    com.google.protobuf.ByteString
+        getAccessTokenBytes();
+
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    java.lang.String getPackId();
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    com.google.protobuf.ByteString
+        getPackIdBytes();
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Delete_Sticker_Pack_Request}
+   */
+  public  static final class Delete_Sticker_Pack_Request extends
+      com.google.protobuf.GeneratedMessageLite<
+          Delete_Sticker_Pack_Request, Delete_Sticker_Pack_Request.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Delete_Sticker_Pack_Request)
+      Delete_Sticker_Pack_RequestOrBuilder {
+    private Delete_Sticker_Pack_Request() {
+      accessToken_ = "";
+      packId_ = "";
+    }
+    public static final int ACCESS_TOKEN_FIELD_NUMBER = 1;
+    private java.lang.String accessToken_;
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The accessToken.
+     */
+    @java.lang.Override
+    public java.lang.String getAccessToken() {
+      return accessToken_;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @return The bytes for accessToken.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAccessTokenBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(accessToken_);
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The accessToken to set.
+     */
+    private void setAccessToken(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      accessToken_ = value;
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     */
+    private void clearAccessToken() {
+      
+      accessToken_ = getDefaultInstance().getAccessToken();
+    }
+    /**
+     * <code>string access_token = 1;</code>
+     * @param value The bytes for accessToken to set.
+     */
+    private void setAccessTokenBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      accessToken_ = value.toStringUtf8();
+      
+    }
+
+    public static final int PACK_ID_FIELD_NUMBER = 2;
+    private java.lang.String packId_;
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The packId.
+     */
+    @java.lang.Override
+    public java.lang.String getPackId() {
+      return packId_;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @return The bytes for packId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPackIdBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(packId_);
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The packId to set.
+     */
+    private void setPackId(
+        java.lang.String value) {
+      java.lang.Class<?> valueClass = value.getClass();
+  
+      packId_ = value;
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     */
+    private void clearPackId() {
+      
+      packId_ = getDefaultInstance().getPackId();
+    }
+    /**
+     * <code>string pack_id = 2;</code>
+     * @param value The bytes for packId to set.
+     */
+    private void setPackIdBytes(
+        com.google.protobuf.ByteString value) {
+      checkByteStringIsUtf8(value);
+      packId_ = value.toStringUtf8();
+      
+    }
+
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Delete_Sticker_Pack_Request prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Delete_Sticker_Pack_Request}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Delete_Sticker_Pack_Request, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Delete_Sticker_Pack_Request)
+        lingcat.methods.Methods.Delete_Sticker_Pack_RequestOrBuilder {
+      // Construct using lingcat.methods.Methods.Delete_Sticker_Pack_Request.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The accessToken.
+       */
+      @java.lang.Override
+      public java.lang.String getAccessToken() {
+        return instance.getAccessToken();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return The bytes for accessToken.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAccessTokenBytes() {
+        return instance.getAccessTokenBytes();
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessToken(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAccessToken(value);
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAccessToken() {
+        copyOnWrite();
+        instance.clearAccessToken();
+        return this;
+      }
+      /**
+       * <code>string access_token = 1;</code>
+       * @param value The bytes for accessToken to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAccessTokenBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAccessTokenBytes(value);
+        return this;
+      }
+
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The packId.
+       */
+      @java.lang.Override
+      public java.lang.String getPackId() {
+        return instance.getPackId();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return The bytes for packId.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getPackIdBytes() {
+        return instance.getPackIdBytes();
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackId(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setPackId(value);
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPackId() {
+        copyOnWrite();
+        instance.clearPackId();
+        return this;
+      }
+      /**
+       * <code>string pack_id = 2;</code>
+       * @param value The bytes for packId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPackIdBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setPackIdBytes(value);
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Delete_Sticker_Pack_Request)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Delete_Sticker_Pack_Request();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = new java.lang.Object[] {
+              "accessToken_",
+              "packId_",
+            };
+            java.lang.String info =
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\u0208\u0002\u0208" +
+                "";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Delete_Sticker_Pack_Request> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Delete_Sticker_Pack_Request.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Delete_Sticker_Pack_Request>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Delete_Sticker_Pack_Request)
+    private static final lingcat.methods.Methods.Delete_Sticker_Pack_Request DEFAULT_INSTANCE;
+    static {
+      Delete_Sticker_Pack_Request defaultInstance = new Delete_Sticker_Pack_Request();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Delete_Sticker_Pack_Request.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Request getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Delete_Sticker_Pack_Request> PARSER;
+
+    public static com.google.protobuf.Parser<Delete_Sticker_Pack_Request> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
+  public interface Delete_Sticker_Pack_ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:lingcat.methods.Delete_Sticker_Pack_Response)
+      com.google.protobuf.MessageLiteOrBuilder {
+  }
+  /**
+   * Protobuf type {@code lingcat.methods.Delete_Sticker_Pack_Response}
+   */
+  public  static final class Delete_Sticker_Pack_Response extends
+      com.google.protobuf.GeneratedMessageLite<
+          Delete_Sticker_Pack_Response, Delete_Sticker_Pack_Response.Builder> implements
+      // @@protoc_insertion_point(message_implements:lingcat.methods.Delete_Sticker_Pack_Response)
+      Delete_Sticker_Pack_ResponseOrBuilder {
+    private Delete_Sticker_Pack_Response() {
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input);
+    }
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() {
+      return (Builder) DEFAULT_INSTANCE.createBuilder();
+    }
+    public static Builder newBuilder(lingcat.methods.Methods.Delete_Sticker_Pack_Response prototype) {
+      return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+    }
+
+    /**
+     * Protobuf type {@code lingcat.methods.Delete_Sticker_Pack_Response}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageLite.Builder<
+          lingcat.methods.Methods.Delete_Sticker_Pack_Response, Builder> implements
+        // @@protoc_insertion_point(builder_implements:lingcat.methods.Delete_Sticker_Pack_Response)
+        lingcat.methods.Methods.Delete_Sticker_Pack_ResponseOrBuilder {
+      // Construct using lingcat.methods.Methods.Delete_Sticker_Pack_Response.newBuilder()
+      private Builder() {
+        super(DEFAULT_INSTANCE);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:lingcat.methods.Delete_Sticker_Pack_Response)
+    }
+    @java.lang.Override
+    @java.lang.SuppressWarnings({"unchecked", "fallthrough"})
+    protected final java.lang.Object dynamicMethod(
+        com.google.protobuf.GeneratedMessageLite.MethodToInvoke method,
+        java.lang.Object arg0, java.lang.Object arg1) {
+      switch (method) {
+        case NEW_MUTABLE_INSTANCE: {
+          return new lingcat.methods.Methods.Delete_Sticker_Pack_Response();
+        }
+        case NEW_BUILDER: {
+          return new Builder();
+        }
+        case BUILD_MESSAGE_INFO: {
+            java.lang.Object[] objects = null;java.lang.String info =
+                "\u0000\u0000";
+            return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+        }
+        // fall through
+        case GET_DEFAULT_INSTANCE: {
+          return DEFAULT_INSTANCE;
+        }
+        case GET_PARSER: {
+          com.google.protobuf.Parser<lingcat.methods.Methods.Delete_Sticker_Pack_Response> parser = PARSER;
+          if (parser == null) {
+            synchronized (lingcat.methods.Methods.Delete_Sticker_Pack_Response.class) {
+              parser = PARSER;
+              if (parser == null) {
+                parser =
+                    new DefaultInstanceBasedParser<lingcat.methods.Methods.Delete_Sticker_Pack_Response>(
+                        DEFAULT_INSTANCE);
+                PARSER = parser;
+              }
+            }
+          }
+          return parser;
+      }
+      case GET_MEMOIZED_IS_INITIALIZED: {
+        return (byte) 1;
+      }
+      case SET_MEMOIZED_IS_INITIALIZED: {
+        return null;
+      }
+      }
+      throw new UnsupportedOperationException();
+    }
+
+
+    // @@protoc_insertion_point(class_scope:lingcat.methods.Delete_Sticker_Pack_Response)
+    private static final lingcat.methods.Methods.Delete_Sticker_Pack_Response DEFAULT_INSTANCE;
+    static {
+      Delete_Sticker_Pack_Response defaultInstance = new Delete_Sticker_Pack_Response();
+      // New instances are implicitly immutable so no need to make
+      // immutable.
+      DEFAULT_INSTANCE = defaultInstance;
+      com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+        Delete_Sticker_Pack_Response.class, defaultInstance);
+    }
+
+    public static lingcat.methods.Methods.Delete_Sticker_Pack_Response getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static volatile com.google.protobuf.Parser<Delete_Sticker_Pack_Response> PARSER;
+
+    public static com.google.protobuf.Parser<Delete_Sticker_Pack_Response> parser() {
+      return DEFAULT_INSTANCE.getParserForType();
+    }
+  }
+
 
   static {
   }

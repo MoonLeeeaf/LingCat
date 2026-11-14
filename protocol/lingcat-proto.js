@@ -3077,6 +3077,933 @@ export const lingcat = $root.lingcat = (() => {
             return IFile;
         })();
 
+        classes.ISticker = (function() {
+
+            /**
+             * Properties of a ISticker.
+             * @typedef {Object} lingcat.classes.ISticker.$Properties
+             * @property {string|null} [hash] ISticker hash
+             * @property {string|null} [packId] ISticker packId
+             * @property {string|null} [mime] ISticker mime
+             * @property {string|null} [emoji] ISticker emoji
+             * @property {number|null} [sort] ISticker sort
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a ISticker.
+             * @memberof lingcat.classes
+             * @interface IISticker
+             * @augments lingcat.classes.ISticker.$Properties
+             * @deprecated Use lingcat.classes.ISticker.$Properties instead.
+             */
+
+            /**
+             * Shape of a ISticker.
+             * @typedef {lingcat.classes.ISticker.$Properties} lingcat.classes.ISticker.$Shape
+             */
+
+            /**
+             * Constructs a new ISticker.
+             * @memberof lingcat.classes
+             * @classdesc Represents a ISticker.
+             * @constructor
+             * @param {lingcat.classes.ISticker.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const ISticker = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * ISticker hash.
+             * @member {string} hash
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             */
+            ISticker.prototype.hash = "";
+
+            /**
+             * ISticker packId.
+             * @member {string} packId
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             */
+            ISticker.prototype.packId = "";
+
+            /**
+             * ISticker mime.
+             * @member {string} mime
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             */
+            ISticker.prototype.mime = "";
+
+            /**
+             * ISticker emoji.
+             * @member {string|null|undefined} emoji
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             */
+            ISticker.prototype.emoji = null;
+
+            /**
+             * ISticker sort.
+             * @member {number} sort
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             */
+            ISticker.prototype.sort = 0;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(ISticker.prototype, "_emoji", {
+                get: $util.oneOfGetter($oneOfFields = ["emoji"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new ISticker instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {lingcat.classes.ISticker.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.ISticker} ISticker instance
+             * @type {{
+             *   (properties: lingcat.classes.ISticker.$Shape): lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape;
+             *   (properties?: lingcat.classes.ISticker.$Properties): lingcat.classes.ISticker;
+             * }}
+             */
+            ISticker.create = function(properties) {
+                return new ISticker(properties);
+            };
+
+            /**
+             * Encodes the specified ISticker message. Does not implicitly {@link lingcat.classes.ISticker.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {lingcat.classes.ISticker.$Properties} message ISticker message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ISticker.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash") && message.hash !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.hash);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.mime != null && $Object.hasOwnProperty.call(message, "mime") && message.mime !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.mime);
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.emoji);
+                if (message.sort != null && $Object.hasOwnProperty.call(message, "sort") && message.sort !== 0)
+                    writer.uint32(/* id 5, wireType 0 =*/40).uint32(message.sort);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified ISticker message, length delimited. Does not implicitly {@link lingcat.classes.ISticker.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {lingcat.classes.ISticker.$Properties} message ISticker message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            ISticker.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a ISticker message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape} ISticker
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ISticker.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.classes.ISticker();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.hash = value;
+                            else
+                                delete message.hash;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.mime = value;
+                            else
+                                delete message.mime;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.emoji = reader.stringVerify();
+                            message._emoji = "emoji";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.uint32())
+                                message.sort = value;
+                            else
+                                delete message.sort;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a ISticker message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.ISticker & lingcat.classes.ISticker.$Shape} ISticker
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ISticker.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a ISticker message.
+             * @function verify
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ISticker.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                    if (!$util.isString(message.hash))
+                        return "hash: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                if (message.mime != null && $Object.hasOwnProperty.call(message, "mime"))
+                    if (!$util.isString(message.mime))
+                        return "mime: string expected";
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji")) {
+                    properties._emoji = 1;
+                    if (!$util.isString(message.emoji))
+                        return "emoji: string expected";
+                }
+                if (message.sort != null && $Object.hasOwnProperty.call(message, "sort"))
+                    if (!$util.isInteger(message.sort))
+                        return "sort: integer expected";
+                return null;
+            };
+
+            /**
+             * Creates a ISticker message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.ISticker} ISticker
+             */
+            ISticker.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.ISticker)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.ISticker: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.ISticker();
+                if (object.hash != null)
+                    if (typeof object.hash !== "string" || object.hash.length)
+                        message.hash = $String(object.hash);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                if (object.mime != null)
+                    if (typeof object.mime !== "string" || object.mime.length)
+                        message.mime = $String(object.mime);
+                if (object.emoji != null)
+                    message.emoji = $String(object.emoji);
+                if (object.sort != null)
+                    if ($Number(object.sort) !== 0)
+                        message.sort = object.sort >>> 0;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a ISticker message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {lingcat.classes.ISticker} message ISticker
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ISticker.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.hash = "";
+                    object.packId = "";
+                    object.mime = "";
+                    object.sort = 0;
+                }
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                    object.hash = message.hash;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                if (message.mime != null && $Object.hasOwnProperty.call(message, "mime"))
+                    object.mime = message.mime;
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji"))
+                    object.emoji = message.emoji;
+                if (message.sort != null && $Object.hasOwnProperty.call(message, "sort"))
+                    object.sort = message.sort;
+                return object;
+            };
+
+            /**
+             * Converts this ISticker to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.ISticker
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ISticker.prototype.toJSON = function() {
+                return ISticker.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for ISticker
+             * @function getTypeUrl
+             * @memberof lingcat.classes.ISticker
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            ISticker.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.ISticker";
+            };
+
+            return ISticker;
+        })();
+
+        classes.IStickerPack = (function() {
+
+            /**
+             * Properties of a IStickerPack.
+             * @typedef {Object} lingcat.classes.IStickerPack.$Properties
+             * @property {string|null} [id] IStickerPack id
+             * @property {string|null} [title] IStickerPack title
+             * @property {string|null} [authorUserId] IStickerPack authorUserId
+             * @property {string|null} [coverFileHash] IStickerPack coverFileHash
+             * @property {number|Long|null} [createdAt] IStickerPack createdAt
+             * @property {number|Long|null} [updatedAt] IStickerPack updatedAt
+             * @property {boolean|null} [subscribed] IStickerPack subscribed
+             * @property {boolean|null} [isAuthor] IStickerPack isAuthor
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a IStickerPack.
+             * @memberof lingcat.classes
+             * @interface IIStickerPack
+             * @augments lingcat.classes.IStickerPack.$Properties
+             * @deprecated Use lingcat.classes.IStickerPack.$Properties instead.
+             */
+
+            /**
+             * Shape of a IStickerPack.
+             * @typedef {lingcat.classes.IStickerPack.$Properties} lingcat.classes.IStickerPack.$Shape
+             */
+
+            /**
+             * Constructs a new IStickerPack.
+             * @memberof lingcat.classes
+             * @classdesc Represents a IStickerPack.
+             * @constructor
+             * @param {lingcat.classes.IStickerPack.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const IStickerPack = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * IStickerPack id.
+             * @member {string} id
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.id = "";
+
+            /**
+             * IStickerPack title.
+             * @member {string} title
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.title = "";
+
+            /**
+             * IStickerPack authorUserId.
+             * @member {string} authorUserId
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.authorUserId = "";
+
+            /**
+             * IStickerPack coverFileHash.
+             * @member {string|null|undefined} coverFileHash
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.coverFileHash = null;
+
+            /**
+             * IStickerPack createdAt.
+             * @member {number|Long} createdAt
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.createdAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * IStickerPack updatedAt.
+             * @member {number|Long} updatedAt
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.updatedAt = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * IStickerPack subscribed.
+             * @member {boolean|null|undefined} subscribed
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.subscribed = null;
+
+            /**
+             * IStickerPack isAuthor.
+             * @member {boolean|null|undefined} isAuthor
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             */
+            IStickerPack.prototype.isAuthor = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IStickerPack.prototype, "_coverFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["coverFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IStickerPack.prototype, "_subscribed", {
+                get: $util.oneOfGetter($oneOfFields = ["subscribed"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IStickerPack.prototype, "_isAuthor", {
+                get: $util.oneOfGetter($oneOfFields = ["isAuthor"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new IStickerPack instance using the specified properties.
+             * @function create
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {lingcat.classes.IStickerPack.$Properties=} [properties] Properties to set
+             * @returns {lingcat.classes.IStickerPack} IStickerPack instance
+             * @type {{
+             *   (properties: lingcat.classes.IStickerPack.$Shape): lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape;
+             *   (properties?: lingcat.classes.IStickerPack.$Properties): lingcat.classes.IStickerPack;
+             * }}
+             */
+            IStickerPack.create = function(properties) {
+                return new IStickerPack(properties);
+            };
+
+            /**
+             * Encodes the specified IStickerPack message. Does not implicitly {@link lingcat.classes.IStickerPack.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {lingcat.classes.IStickerPack.$Properties} message IStickerPack message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IStickerPack.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id") && message.id !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title") && message.title !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.title);
+                if (message.authorUserId != null && $Object.hasOwnProperty.call(message, "authorUserId") && message.authorUserId !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.authorUserId);
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.coverFileHash);
+                if (message.createdAt != null && $Object.hasOwnProperty.call(message, "createdAt") && (typeof message.createdAt === "object" ? message.createdAt.low || message.createdAt.high : message.createdAt !== 0))
+                    writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.createdAt);
+                if (message.updatedAt != null && $Object.hasOwnProperty.call(message, "updatedAt") && (typeof message.updatedAt === "object" ? message.updatedAt.low || message.updatedAt.high : message.updatedAt !== 0))
+                    writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.updatedAt);
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed"))
+                    writer.uint32(/* id 7, wireType 0 =*/56).bool(message.subscribed);
+                if (message.isAuthor != null && $Object.hasOwnProperty.call(message, "isAuthor"))
+                    writer.uint32(/* id 8, wireType 0 =*/64).bool(message.isAuthor);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified IStickerPack message, length delimited. Does not implicitly {@link lingcat.classes.IStickerPack.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {lingcat.classes.IStickerPack.$Properties} message IStickerPack message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            IStickerPack.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a IStickerPack message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape} IStickerPack
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IStickerPack.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.classes.IStickerPack();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.id = value;
+                            else
+                                delete message.id;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.title = value;
+                            else
+                                delete message.title;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.authorUserId = value;
+                            else
+                                delete message.authorUserId;
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.coverFileHash = reader.stringVerify();
+                            message._coverFileHash = "coverFileHash";
+                            continue;
+                        }
+                    case 5: {
+                            if (wireType !== 0)
+                                break;
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                                message.createdAt = value;
+                            else
+                                delete message.createdAt;
+                            continue;
+                        }
+                    case 6: {
+                            if (wireType !== 0)
+                                break;
+                            if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                                message.updatedAt = value;
+                            else
+                                delete message.updatedAt;
+                            continue;
+                        }
+                    case 7: {
+                            if (wireType !== 0)
+                                break;
+                            message.subscribed = reader.bool();
+                            message._subscribed = "subscribed";
+                            continue;
+                        }
+                    case 8: {
+                            if (wireType !== 0)
+                                break;
+                            message.isAuthor = reader.bool();
+                            message._isAuthor = "isAuthor";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a IStickerPack message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.classes.IStickerPack & lingcat.classes.IStickerPack.$Shape} IStickerPack
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            IStickerPack.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a IStickerPack message.
+             * @function verify
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            IStickerPack.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    if (!$util.isString(message.id))
+                        return "id: string expected";
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    if (!$util.isString(message.title))
+                        return "title: string expected";
+                if (message.authorUserId != null && $Object.hasOwnProperty.call(message, "authorUserId"))
+                    if (!$util.isString(message.authorUserId))
+                        return "authorUserId: string expected";
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash")) {
+                    properties._coverFileHash = 1;
+                    if (!$util.isString(message.coverFileHash))
+                        return "coverFileHash: string expected";
+                }
+                if (message.createdAt != null && $Object.hasOwnProperty.call(message, "createdAt"))
+                    if (!$util.isInteger(message.createdAt) && !(message.createdAt && $util.isInteger(message.createdAt.low) && $util.isInteger(message.createdAt.high)))
+                        return "createdAt: integer|Long expected";
+                if (message.updatedAt != null && $Object.hasOwnProperty.call(message, "updatedAt"))
+                    if (!$util.isInteger(message.updatedAt) && !(message.updatedAt && $util.isInteger(message.updatedAt.low) && $util.isInteger(message.updatedAt.high)))
+                        return "updatedAt: integer|Long expected";
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed")) {
+                    properties._subscribed = 1;
+                    if (typeof message.subscribed !== "boolean")
+                        return "subscribed: boolean expected";
+                }
+                if (message.isAuthor != null && $Object.hasOwnProperty.call(message, "isAuthor")) {
+                    properties._isAuthor = 1;
+                    if (typeof message.isAuthor !== "boolean")
+                        return "isAuthor: boolean expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a IStickerPack message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.classes.IStickerPack} IStickerPack
+             */
+            IStickerPack.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.classes.IStickerPack)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.classes.IStickerPack: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.classes.IStickerPack();
+                if (object.id != null)
+                    if (typeof object.id !== "string" || object.id.length)
+                        message.id = $String(object.id);
+                if (object.title != null)
+                    if (typeof object.title !== "string" || object.title.length)
+                        message.title = $String(object.title);
+                if (object.authorUserId != null)
+                    if (typeof object.authorUserId !== "string" || object.authorUserId.length)
+                        message.authorUserId = $String(object.authorUserId);
+                if (object.coverFileHash != null)
+                    message.coverFileHash = $String(object.coverFileHash);
+                if (object.createdAt != null)
+                    if (typeof object.createdAt === "object" ? object.createdAt.low || object.createdAt.high : $Number(object.createdAt) !== 0)
+                        if ($util.Long)
+                            message.createdAt = $util.Long.fromValue(object.createdAt, true);
+                        else if (typeof object.createdAt === "string")
+                            message.createdAt = $parseInt(object.createdAt, 10);
+                        else if (typeof object.createdAt === "number")
+                            message.createdAt = object.createdAt;
+                        else if (typeof object.createdAt === "object")
+                            message.createdAt = new $util.LongBits(object.createdAt.low >>> 0, object.createdAt.high >>> 0).toNumber(true);
+                if (object.updatedAt != null)
+                    if (typeof object.updatedAt === "object" ? object.updatedAt.low || object.updatedAt.high : $Number(object.updatedAt) !== 0)
+                        if ($util.Long)
+                            message.updatedAt = $util.Long.fromValue(object.updatedAt, true);
+                        else if (typeof object.updatedAt === "string")
+                            message.updatedAt = $parseInt(object.updatedAt, 10);
+                        else if (typeof object.updatedAt === "number")
+                            message.updatedAt = object.updatedAt;
+                        else if (typeof object.updatedAt === "object")
+                            message.updatedAt = new $util.LongBits(object.updatedAt.low >>> 0, object.updatedAt.high >>> 0).toNumber(true);
+                if (object.subscribed != null)
+                    message.subscribed = $Boolean(object.subscribed);
+                if (object.isAuthor != null)
+                    message.isAuthor = $Boolean(object.isAuthor);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a IStickerPack message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {lingcat.classes.IStickerPack} message IStickerPack
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            IStickerPack.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.id = "";
+                    object.title = "";
+                    object.authorUserId = "";
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, true);
+                        object.createdAt = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                    } else
+                        object.createdAt = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, true);
+                        object.updatedAt = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                    } else
+                        object.updatedAt = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                }
+                if (message.id != null && $Object.hasOwnProperty.call(message, "id"))
+                    object.id = message.id;
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    object.title = message.title;
+                if (message.authorUserId != null && $Object.hasOwnProperty.call(message, "authorUserId"))
+                    object.authorUserId = message.authorUserId;
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash"))
+                    object.coverFileHash = message.coverFileHash;
+                if (message.createdAt != null && $Object.hasOwnProperty.call(message, "createdAt"))
+                    if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                        object.createdAt = typeof message.createdAt === "number" ? $BigInt(message.createdAt) : $util.Long.fromBits(message.createdAt.low >>> 0, message.createdAt.high >>> 0, true).toBigInt();
+                    else if (typeof message.createdAt === "number")
+                        object.createdAt = options.longs === $String ? $String(message.createdAt) : message.createdAt;
+                    else
+                        object.createdAt = options.longs === $String ? $util.Long.prototype.toString.call(message.createdAt) : options.longs === $Number ? new $util.LongBits(message.createdAt.low >>> 0, message.createdAt.high >>> 0).toNumber(true) : message.createdAt;
+                if (message.updatedAt != null && $Object.hasOwnProperty.call(message, "updatedAt"))
+                    if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                        object.updatedAt = typeof message.updatedAt === "number" ? $BigInt(message.updatedAt) : $util.Long.fromBits(message.updatedAt.low >>> 0, message.updatedAt.high >>> 0, true).toBigInt();
+                    else if (typeof message.updatedAt === "number")
+                        object.updatedAt = options.longs === $String ? $String(message.updatedAt) : message.updatedAt;
+                    else
+                        object.updatedAt = options.longs === $String ? $util.Long.prototype.toString.call(message.updatedAt) : options.longs === $Number ? new $util.LongBits(message.updatedAt.low >>> 0, message.updatedAt.high >>> 0).toNumber(true) : message.updatedAt;
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed"))
+                    object.subscribed = message.subscribed;
+                if (message.isAuthor != null && $Object.hasOwnProperty.call(message, "isAuthor"))
+                    object.isAuthor = message.isAuthor;
+                return object;
+            };
+
+            /**
+             * Converts this IStickerPack to JSON.
+             * @function toJSON
+             * @memberof lingcat.classes.IStickerPack
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            IStickerPack.prototype.toJSON = function() {
+                return IStickerPack.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for IStickerPack
+             * @function getTypeUrl
+             * @memberof lingcat.classes.IStickerPack
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            IStickerPack.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.classes.IStickerPack";
+            };
+
+            return IStickerPack;
+        })();
+
         classes.IMessageEntity = (function() {
 
             /**
@@ -39080,6 +40007,4439 @@ export const lingcat = $root.lingcat = (() => {
             };
 
             return Get_Online_Status_Response;
+        })();
+
+        methods.Get_My_Sticker_Packs_Request = (function() {
+
+            /**
+             * Properties of a Get_My_Sticker_Packs_Request.
+             * @typedef {Object} lingcat.methods.Get_My_Sticker_Packs_Request.$Properties
+             * @property {string|null} [accessToken] Get_My_Sticker_Packs_Request accessToken
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_My_Sticker_Packs_Request.
+             * @memberof lingcat.methods
+             * @interface IGet_My_Sticker_Packs_Request
+             * @augments lingcat.methods.Get_My_Sticker_Packs_Request.$Properties
+             * @deprecated Use lingcat.methods.Get_My_Sticker_Packs_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_My_Sticker_Packs_Request.
+             * @typedef {lingcat.methods.Get_My_Sticker_Packs_Request.$Properties} lingcat.methods.Get_My_Sticker_Packs_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Get_My_Sticker_Packs_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_My_Sticker_Packs_Request.
+             * @constructor
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_My_Sticker_Packs_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_My_Sticker_Packs_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @instance
+             */
+            Get_My_Sticker_Packs_Request.prototype.accessToken = "";
+
+            /**
+             * Creates a new Get_My_Sticker_Packs_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request} Get_My_Sticker_Packs_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_My_Sticker_Packs_Request.$Shape): lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape;
+             *   (properties?: lingcat.methods.Get_My_Sticker_Packs_Request.$Properties): lingcat.methods.Get_My_Sticker_Packs_Request;
+             * }}
+             */
+            Get_My_Sticker_Packs_Request.create = function(properties) {
+                return new Get_My_Sticker_Packs_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Request message. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Request.$Properties} message Get_My_Sticker_Packs_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_Sticker_Packs_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Request message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Request.$Properties} message Get_My_Sticker_Packs_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_Sticker_Packs_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape} Get_My_Sticker_Packs_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_Sticker_Packs_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_My_Sticker_Packs_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request & lingcat.methods.Get_My_Sticker_Packs_Request.$Shape} Get_My_Sticker_Packs_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_Sticker_Packs_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_My_Sticker_Packs_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_My_Sticker_Packs_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Get_My_Sticker_Packs_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Request} Get_My_Sticker_Packs_Request
+             */
+            Get_My_Sticker_Packs_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_My_Sticker_Packs_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_My_Sticker_Packs_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_My_Sticker_Packs_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Request} message Get_My_Sticker_Packs_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_My_Sticker_Packs_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.accessToken = "";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                return object;
+            };
+
+            /**
+             * Converts this Get_My_Sticker_Packs_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_My_Sticker_Packs_Request.prototype.toJSON = function() {
+                return Get_My_Sticker_Packs_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_My_Sticker_Packs_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_My_Sticker_Packs_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_My_Sticker_Packs_Request";
+            };
+
+            return Get_My_Sticker_Packs_Request;
+        })();
+
+        methods.Get_My_Sticker_Packs_Response = (function() {
+
+            /**
+             * Properties of a Get_My_Sticker_Packs_Response.
+             * @typedef {Object} lingcat.methods.Get_My_Sticker_Packs_Response.$Properties
+             * @property {Array.<lingcat.classes.IStickerPack.$Properties>|null} [packs] Get_My_Sticker_Packs_Response packs
+             * @property {Array.<lingcat.classes.ISticker.$Properties>|null} [stickers] Get_My_Sticker_Packs_Response stickers
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Get_My_Sticker_Packs_Response.
+             * @memberof lingcat.methods
+             * @interface IGet_My_Sticker_Packs_Response
+             * @augments lingcat.methods.Get_My_Sticker_Packs_Response.$Properties
+             * @deprecated Use lingcat.methods.Get_My_Sticker_Packs_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Get_My_Sticker_Packs_Response.
+             * @typedef {lingcat.methods.Get_My_Sticker_Packs_Response.$Properties} lingcat.methods.Get_My_Sticker_Packs_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Get_My_Sticker_Packs_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Get_My_Sticker_Packs_Response.
+             * @constructor
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Get_My_Sticker_Packs_Response = function (properties) {
+                this.packs = [];
+                this.stickers = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Get_My_Sticker_Packs_Response packs.
+             * @member {Array.<lingcat.classes.IStickerPack.$Properties>} packs
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @instance
+             */
+            Get_My_Sticker_Packs_Response.prototype.packs = $util.emptyArray;
+
+            /**
+             * Get_My_Sticker_Packs_Response stickers.
+             * @member {Array.<lingcat.classes.ISticker.$Properties>} stickers
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @instance
+             */
+            Get_My_Sticker_Packs_Response.prototype.stickers = $util.emptyArray;
+
+            /**
+             * Creates a new Get_My_Sticker_Packs_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response} Get_My_Sticker_Packs_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Get_My_Sticker_Packs_Response.$Shape): lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape;
+             *   (properties?: lingcat.methods.Get_My_Sticker_Packs_Response.$Properties): lingcat.methods.Get_My_Sticker_Packs_Response;
+             * }}
+             */
+            Get_My_Sticker_Packs_Response.create = function(properties) {
+                return new Get_My_Sticker_Packs_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Response message. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Response.$Properties} message Get_My_Sticker_Packs_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_Sticker_Packs_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.packs != null && message.packs.length)
+                    for (let i = 0; i < message.packs.length; ++i)
+                        $root.lingcat.classes.IStickerPack.encode(message.packs[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.stickers != null && message.stickers.length)
+                    for (let i = 0; i < message.stickers.length; ++i)
+                        $root.lingcat.classes.ISticker.encode(message.stickers[i], writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Get_My_Sticker_Packs_Response message, length delimited. Does not implicitly {@link lingcat.methods.Get_My_Sticker_Packs_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Response.$Properties} message Get_My_Sticker_Packs_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Get_My_Sticker_Packs_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape} Get_My_Sticker_Packs_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_Sticker_Packs_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Get_My_Sticker_Packs_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.packs && message.packs.length))
+                                message.packs = [];
+                            message.packs.push($root.lingcat.classes.IStickerPack.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.stickers && message.stickers.length))
+                                message.stickers = [];
+                            message.stickers.push($root.lingcat.classes.ISticker.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Get_My_Sticker_Packs_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response & lingcat.methods.Get_My_Sticker_Packs_Response.$Shape} Get_My_Sticker_Packs_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Get_My_Sticker_Packs_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Get_My_Sticker_Packs_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Get_My_Sticker_Packs_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.packs != null && $Object.hasOwnProperty.call(message, "packs")) {
+                    if (!$Array.isArray(message.packs))
+                        return "packs: array expected";
+                    for (let i = 0; i < message.packs.length; ++i) {
+                        let error = $root.lingcat.classes.IStickerPack.verify(message.packs[i], _depth + 1);
+                        if (error)
+                            return "packs." + error;
+                    }
+                }
+                if (message.stickers != null && $Object.hasOwnProperty.call(message, "stickers")) {
+                    if (!$Array.isArray(message.stickers))
+                        return "stickers: array expected";
+                    for (let i = 0; i < message.stickers.length; ++i) {
+                        let error = $root.lingcat.classes.ISticker.verify(message.stickers[i], _depth + 1);
+                        if (error)
+                            return "stickers." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Get_My_Sticker_Packs_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Get_My_Sticker_Packs_Response} Get_My_Sticker_Packs_Response
+             */
+            Get_My_Sticker_Packs_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Get_My_Sticker_Packs_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Get_My_Sticker_Packs_Response();
+                if (object.packs) {
+                    if (!$Array.isArray(object.packs))
+                        throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Response.packs: array expected");
+                    message.packs = $Array(object.packs.length);
+                    for (let i = 0; i < object.packs.length; ++i) {
+                        if (!$util.isObject(object.packs[i]))
+                            throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Response.packs: object expected");
+                        message.packs[i] = $root.lingcat.classes.IStickerPack.fromObject(object.packs[i], _depth + 1);
+                    }
+                }
+                if (object.stickers) {
+                    if (!$Array.isArray(object.stickers))
+                        throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Response.stickers: array expected");
+                    message.stickers = $Array(object.stickers.length);
+                    for (let i = 0; i < object.stickers.length; ++i) {
+                        if (!$util.isObject(object.stickers[i]))
+                            throw $TypeError(".lingcat.methods.Get_My_Sticker_Packs_Response.stickers: object expected");
+                        message.stickers[i] = $root.lingcat.classes.ISticker.fromObject(object.stickers[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Get_My_Sticker_Packs_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {lingcat.methods.Get_My_Sticker_Packs_Response} message Get_My_Sticker_Packs_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Get_My_Sticker_Packs_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults) {
+                    object.packs = [];
+                    object.stickers = [];
+                }
+                if (message.packs && message.packs.length) {
+                    object.packs = $Array(message.packs.length);
+                    for (let j = 0; j < message.packs.length; ++j)
+                        object.packs[j] = $root.lingcat.classes.IStickerPack.toObject(message.packs[j], options, _depth + 1);
+                }
+                if (message.stickers && message.stickers.length) {
+                    object.stickers = $Array(message.stickers.length);
+                    for (let j = 0; j < message.stickers.length; ++j)
+                        object.stickers[j] = $root.lingcat.classes.ISticker.toObject(message.stickers[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Get_My_Sticker_Packs_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Get_My_Sticker_Packs_Response.prototype.toJSON = function() {
+                return Get_My_Sticker_Packs_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Get_My_Sticker_Packs_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Get_My_Sticker_Packs_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Get_My_Sticker_Packs_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Get_My_Sticker_Packs_Response";
+            };
+
+            return Get_My_Sticker_Packs_Response;
+        })();
+
+        methods.Query_Sticker_Pack_Request = (function() {
+
+            /**
+             * Properties of a Query_Sticker_Pack_Request.
+             * @typedef {Object} lingcat.methods.Query_Sticker_Pack_Request.$Properties
+             * @property {string|null} [accessToken] Query_Sticker_Pack_Request accessToken
+             * @property {string|null} [packId] Query_Sticker_Pack_Request packId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Query_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @interface IQuery_Sticker_Pack_Request
+             * @augments lingcat.methods.Query_Sticker_Pack_Request.$Properties
+             * @deprecated Use lingcat.methods.Query_Sticker_Pack_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Query_Sticker_Pack_Request.
+             * @typedef {lingcat.methods.Query_Sticker_Pack_Request.$Properties} lingcat.methods.Query_Sticker_Pack_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Query_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Query_Sticker_Pack_Request.
+             * @constructor
+             * @param {lingcat.methods.Query_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Query_Sticker_Pack_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Query_Sticker_Pack_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @instance
+             */
+            Query_Sticker_Pack_Request.prototype.accessToken = "";
+
+            /**
+             * Query_Sticker_Pack_Request packId.
+             * @member {string} packId
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @instance
+             */
+            Query_Sticker_Pack_Request.prototype.packId = "";
+
+            /**
+             * Creates a new Query_Sticker_Pack_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request} Query_Sticker_Pack_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Query_Sticker_Pack_Request.$Shape): lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape;
+             *   (properties?: lingcat.methods.Query_Sticker_Pack_Request.$Properties): lingcat.methods.Query_Sticker_Pack_Request;
+             * }}
+             */
+            Query_Sticker_Pack_Request.create = function(properties) {
+                return new Query_Sticker_Pack_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Request.$Properties} message Query_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_Sticker_Pack_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Request.$Properties} message Query_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_Sticker_Pack_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Query_Sticker_Pack_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape} Query_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_Sticker_Pack_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Query_Sticker_Pack_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Query_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request & lingcat.methods.Query_Sticker_Pack_Request.$Shape} Query_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_Sticker_Pack_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Query_Sticker_Pack_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Query_Sticker_Pack_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Query_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Query_Sticker_Pack_Request} Query_Sticker_Pack_Request
+             */
+            Query_Sticker_Pack_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Query_Sticker_Pack_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Query_Sticker_Pack_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Query_Sticker_Pack_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Query_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Request} message Query_Sticker_Pack_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Query_Sticker_Pack_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.packId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                return object;
+            };
+
+            /**
+             * Converts this Query_Sticker_Pack_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Query_Sticker_Pack_Request.prototype.toJSON = function() {
+                return Query_Sticker_Pack_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Query_Sticker_Pack_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Query_Sticker_Pack_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Query_Sticker_Pack_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Query_Sticker_Pack_Request";
+            };
+
+            return Query_Sticker_Pack_Request;
+        })();
+
+        methods.Query_Sticker_Pack_Response = (function() {
+
+            /**
+             * Properties of a Query_Sticker_Pack_Response.
+             * @typedef {Object} lingcat.methods.Query_Sticker_Pack_Response.$Properties
+             * @property {lingcat.classes.IStickerPack.$Properties|null} [pack] Query_Sticker_Pack_Response pack
+             * @property {Array.<lingcat.classes.ISticker.$Properties>|null} [stickers] Query_Sticker_Pack_Response stickers
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Query_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @interface IQuery_Sticker_Pack_Response
+             * @augments lingcat.methods.Query_Sticker_Pack_Response.$Properties
+             * @deprecated Use lingcat.methods.Query_Sticker_Pack_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Query_Sticker_Pack_Response.
+             * @typedef {lingcat.methods.Query_Sticker_Pack_Response.$Properties} lingcat.methods.Query_Sticker_Pack_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Query_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Query_Sticker_Pack_Response.
+             * @constructor
+             * @param {lingcat.methods.Query_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Query_Sticker_Pack_Response = function (properties) {
+                this.stickers = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Query_Sticker_Pack_Response pack.
+             * @member {lingcat.classes.IStickerPack.$Properties|null|undefined} pack
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @instance
+             */
+            Query_Sticker_Pack_Response.prototype.pack = null;
+
+            /**
+             * Query_Sticker_Pack_Response stickers.
+             * @member {Array.<lingcat.classes.ISticker.$Properties>} stickers
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @instance
+             */
+            Query_Sticker_Pack_Response.prototype.stickers = $util.emptyArray;
+
+            /**
+             * Creates a new Query_Sticker_Pack_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response} Query_Sticker_Pack_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Query_Sticker_Pack_Response.$Shape): lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape;
+             *   (properties?: lingcat.methods.Query_Sticker_Pack_Response.$Properties): lingcat.methods.Query_Sticker_Pack_Response;
+             * }}
+             */
+            Query_Sticker_Pack_Response.create = function(properties) {
+                return new Query_Sticker_Pack_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Response.$Properties} message Query_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_Sticker_Pack_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack"))
+                    $root.lingcat.classes.IStickerPack.encode(message.pack, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.stickers != null && message.stickers.length)
+                    for (let i = 0; i < message.stickers.length; ++i)
+                        $root.lingcat.classes.ISticker.encode(message.stickers[i], writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Query_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Query_Sticker_Pack_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Response.$Properties} message Query_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Query_Sticker_Pack_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Query_Sticker_Pack_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape} Query_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_Sticker_Pack_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Query_Sticker_Pack_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            message.pack = $root.lingcat.classes.IStickerPack.decode(reader, reader.size(), $undefined, _depth + 1, message.pack);
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.stickers && message.stickers.length))
+                                message.stickers = [];
+                            message.stickers.push($root.lingcat.classes.ISticker.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Query_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response & lingcat.methods.Query_Sticker_Pack_Response.$Shape} Query_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Query_Sticker_Pack_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Query_Sticker_Pack_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Query_Sticker_Pack_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack")) {
+                    let error = $root.lingcat.classes.IStickerPack.verify(message.pack, _depth + 1);
+                    if (error)
+                        return "pack." + error;
+                }
+                if (message.stickers != null && $Object.hasOwnProperty.call(message, "stickers")) {
+                    if (!$Array.isArray(message.stickers))
+                        return "stickers: array expected";
+                    for (let i = 0; i < message.stickers.length; ++i) {
+                        let error = $root.lingcat.classes.ISticker.verify(message.stickers[i], _depth + 1);
+                        if (error)
+                            return "stickers." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Query_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Query_Sticker_Pack_Response} Query_Sticker_Pack_Response
+             */
+            Query_Sticker_Pack_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Query_Sticker_Pack_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Query_Sticker_Pack_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Query_Sticker_Pack_Response();
+                if (object.pack != null) {
+                    if (!$util.isObject(object.pack))
+                        throw $TypeError(".lingcat.methods.Query_Sticker_Pack_Response.pack: object expected");
+                    message.pack = $root.lingcat.classes.IStickerPack.fromObject(object.pack, _depth + 1);
+                }
+                if (object.stickers) {
+                    if (!$Array.isArray(object.stickers))
+                        throw $TypeError(".lingcat.methods.Query_Sticker_Pack_Response.stickers: array expected");
+                    message.stickers = $Array(object.stickers.length);
+                    for (let i = 0; i < object.stickers.length; ++i) {
+                        if (!$util.isObject(object.stickers[i]))
+                            throw $TypeError(".lingcat.methods.Query_Sticker_Pack_Response.stickers: object expected");
+                        message.stickers[i] = $root.lingcat.classes.ISticker.fromObject(object.stickers[i], _depth + 1);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Query_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Query_Sticker_Pack_Response} message Query_Sticker_Pack_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Query_Sticker_Pack_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.stickers = [];
+                if (options.defaults)
+                    object.pack = null;
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack"))
+                    object.pack = $root.lingcat.classes.IStickerPack.toObject(message.pack, options, _depth + 1);
+                if (message.stickers && message.stickers.length) {
+                    object.stickers = $Array(message.stickers.length);
+                    for (let j = 0; j < message.stickers.length; ++j)
+                        object.stickers[j] = $root.lingcat.classes.ISticker.toObject(message.stickers[j], options, _depth + 1);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Query_Sticker_Pack_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Query_Sticker_Pack_Response.prototype.toJSON = function() {
+                return Query_Sticker_Pack_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Query_Sticker_Pack_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Query_Sticker_Pack_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Query_Sticker_Pack_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Query_Sticker_Pack_Response";
+            };
+
+            return Query_Sticker_Pack_Response;
+        })();
+
+        methods.Create_Sticker_Pack_Request = (function() {
+
+            /**
+             * Properties of a Create_Sticker_Pack_Request.
+             * @typedef {Object} lingcat.methods.Create_Sticker_Pack_Request.$Properties
+             * @property {string|null} [accessToken] Create_Sticker_Pack_Request accessToken
+             * @property {string|null} [title] Create_Sticker_Pack_Request title
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Create_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @interface ICreate_Sticker_Pack_Request
+             * @augments lingcat.methods.Create_Sticker_Pack_Request.$Properties
+             * @deprecated Use lingcat.methods.Create_Sticker_Pack_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Create_Sticker_Pack_Request.
+             * @typedef {lingcat.methods.Create_Sticker_Pack_Request.$Properties} lingcat.methods.Create_Sticker_Pack_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Create_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Create_Sticker_Pack_Request.
+             * @constructor
+             * @param {lingcat.methods.Create_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Create_Sticker_Pack_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Create_Sticker_Pack_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @instance
+             */
+            Create_Sticker_Pack_Request.prototype.accessToken = "";
+
+            /**
+             * Create_Sticker_Pack_Request title.
+             * @member {string} title
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @instance
+             */
+            Create_Sticker_Pack_Request.prototype.title = "";
+
+            /**
+             * Creates a new Create_Sticker_Pack_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request} Create_Sticker_Pack_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Create_Sticker_Pack_Request.$Shape): lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape;
+             *   (properties?: lingcat.methods.Create_Sticker_Pack_Request.$Properties): lingcat.methods.Create_Sticker_Pack_Request;
+             * }}
+             */
+            Create_Sticker_Pack_Request.create = function(properties) {
+                return new Create_Sticker_Pack_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Request.$Properties} message Create_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Create_Sticker_Pack_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title") && message.title !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.title);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Request.$Properties} message Create_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Create_Sticker_Pack_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Create_Sticker_Pack_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape} Create_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Create_Sticker_Pack_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Create_Sticker_Pack_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.title = value;
+                            else
+                                delete message.title;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Create_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request & lingcat.methods.Create_Sticker_Pack_Request.$Shape} Create_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Create_Sticker_Pack_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Create_Sticker_Pack_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Create_Sticker_Pack_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    if (!$util.isString(message.title))
+                        return "title: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Create_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Create_Sticker_Pack_Request} Create_Sticker_Pack_Request
+             */
+            Create_Sticker_Pack_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Create_Sticker_Pack_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Create_Sticker_Pack_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Create_Sticker_Pack_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.title != null)
+                    if (typeof object.title !== "string" || object.title.length)
+                        message.title = $String(object.title);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Create_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Request} message Create_Sticker_Pack_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Create_Sticker_Pack_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.title = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    object.title = message.title;
+                return object;
+            };
+
+            /**
+             * Converts this Create_Sticker_Pack_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Create_Sticker_Pack_Request.prototype.toJSON = function() {
+                return Create_Sticker_Pack_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Create_Sticker_Pack_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Create_Sticker_Pack_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Create_Sticker_Pack_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Create_Sticker_Pack_Request";
+            };
+
+            return Create_Sticker_Pack_Request;
+        })();
+
+        methods.Create_Sticker_Pack_Response = (function() {
+
+            /**
+             * Properties of a Create_Sticker_Pack_Response.
+             * @typedef {Object} lingcat.methods.Create_Sticker_Pack_Response.$Properties
+             * @property {lingcat.classes.IStickerPack.$Properties|null} [pack] Create_Sticker_Pack_Response pack
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Create_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @interface ICreate_Sticker_Pack_Response
+             * @augments lingcat.methods.Create_Sticker_Pack_Response.$Properties
+             * @deprecated Use lingcat.methods.Create_Sticker_Pack_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Create_Sticker_Pack_Response.
+             * @typedef {lingcat.methods.Create_Sticker_Pack_Response.$Properties} lingcat.methods.Create_Sticker_Pack_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Create_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Create_Sticker_Pack_Response.
+             * @constructor
+             * @param {lingcat.methods.Create_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Create_Sticker_Pack_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Create_Sticker_Pack_Response pack.
+             * @member {lingcat.classes.IStickerPack.$Properties|null|undefined} pack
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @instance
+             */
+            Create_Sticker_Pack_Response.prototype.pack = null;
+
+            /**
+             * Creates a new Create_Sticker_Pack_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response} Create_Sticker_Pack_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Create_Sticker_Pack_Response.$Shape): lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape;
+             *   (properties?: lingcat.methods.Create_Sticker_Pack_Response.$Properties): lingcat.methods.Create_Sticker_Pack_Response;
+             * }}
+             */
+            Create_Sticker_Pack_Response.create = function(properties) {
+                return new Create_Sticker_Pack_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Response.$Properties} message Create_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Create_Sticker_Pack_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack"))
+                    $root.lingcat.classes.IStickerPack.encode(message.pack, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Create_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Create_Sticker_Pack_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Response.$Properties} message Create_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Create_Sticker_Pack_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Create_Sticker_Pack_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape} Create_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Create_Sticker_Pack_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Create_Sticker_Pack_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            message.pack = $root.lingcat.classes.IStickerPack.decode(reader, reader.size(), $undefined, _depth + 1, message.pack);
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Create_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response & lingcat.methods.Create_Sticker_Pack_Response.$Shape} Create_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Create_Sticker_Pack_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Create_Sticker_Pack_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Create_Sticker_Pack_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack")) {
+                    let error = $root.lingcat.classes.IStickerPack.verify(message.pack, _depth + 1);
+                    if (error)
+                        return "pack." + error;
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Create_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Create_Sticker_Pack_Response} Create_Sticker_Pack_Response
+             */
+            Create_Sticker_Pack_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Create_Sticker_Pack_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Create_Sticker_Pack_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Create_Sticker_Pack_Response();
+                if (object.pack != null) {
+                    if (!$util.isObject(object.pack))
+                        throw $TypeError(".lingcat.methods.Create_Sticker_Pack_Response.pack: object expected");
+                    message.pack = $root.lingcat.classes.IStickerPack.fromObject(object.pack, _depth + 1);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Create_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Create_Sticker_Pack_Response} message Create_Sticker_Pack_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Create_Sticker_Pack_Response.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.pack = null;
+                if (message.pack != null && $Object.hasOwnProperty.call(message, "pack"))
+                    object.pack = $root.lingcat.classes.IStickerPack.toObject(message.pack, options, _depth + 1);
+                return object;
+            };
+
+            /**
+             * Converts this Create_Sticker_Pack_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Create_Sticker_Pack_Response.prototype.toJSON = function() {
+                return Create_Sticker_Pack_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Create_Sticker_Pack_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Create_Sticker_Pack_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Create_Sticker_Pack_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Create_Sticker_Pack_Response";
+            };
+
+            return Create_Sticker_Pack_Response;
+        })();
+
+        methods.Update_Sticker_Pack_Title_Request = (function() {
+
+            /**
+             * Properties of an Update_Sticker_Pack_Title_Request.
+             * @typedef {Object} lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties
+             * @property {string|null} [accessToken] Update_Sticker_Pack_Title_Request accessToken
+             * @property {string|null} [packId] Update_Sticker_Pack_Title_Request packId
+             * @property {string|null} [title] Update_Sticker_Pack_Title_Request title
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Update_Sticker_Pack_Title_Request.
+             * @memberof lingcat.methods
+             * @interface IUpdate_Sticker_Pack_Title_Request
+             * @augments lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties
+             * @deprecated Use lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of an Update_Sticker_Pack_Title_Request.
+             * @typedef {lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties} lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Update_Sticker_Pack_Title_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Update_Sticker_Pack_Title_Request.
+             * @constructor
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Update_Sticker_Pack_Title_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Update_Sticker_Pack_Title_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @instance
+             */
+            Update_Sticker_Pack_Title_Request.prototype.accessToken = "";
+
+            /**
+             * Update_Sticker_Pack_Title_Request packId.
+             * @member {string} packId
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @instance
+             */
+            Update_Sticker_Pack_Title_Request.prototype.packId = "";
+
+            /**
+             * Update_Sticker_Pack_Title_Request title.
+             * @member {string} title
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @instance
+             */
+            Update_Sticker_Pack_Title_Request.prototype.title = "";
+
+            /**
+             * Creates a new Update_Sticker_Pack_Title_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request} Update_Sticker_Pack_Title_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape): lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape;
+             *   (properties?: lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties): lingcat.methods.Update_Sticker_Pack_Title_Request;
+             * }}
+             */
+            Update_Sticker_Pack_Title_Request.create = function(properties) {
+                return new Update_Sticker_Pack_Title_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Request message. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties} message Update_Sticker_Pack_Title_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Sticker_Pack_Title_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title") && message.title !== "")
+                    writer.uint32(/* id 3, wireType 2 =*/26).string(message.title);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Request message, length delimited. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Request.$Properties} message Update_Sticker_Pack_Title_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Sticker_Pack_Title_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape} Update_Sticker_Pack_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Sticker_Pack_Title_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Update_Sticker_Pack_Title_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.title = value;
+                            else
+                                delete message.title;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request & lingcat.methods.Update_Sticker_Pack_Title_Request.$Shape} Update_Sticker_Pack_Title_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Sticker_Pack_Title_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies an Update_Sticker_Pack_Title_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Update_Sticker_Pack_Title_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    if (!$util.isString(message.title))
+                        return "title: string expected";
+                return null;
+            };
+
+            /**
+             * Creates an Update_Sticker_Pack_Title_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Request} Update_Sticker_Pack_Title_Request
+             */
+            Update_Sticker_Pack_Title_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Sticker_Pack_Title_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Update_Sticker_Pack_Title_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Update_Sticker_Pack_Title_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                if (object.title != null)
+                    if (typeof object.title !== "string" || object.title.length)
+                        message.title = $String(object.title);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Update_Sticker_Pack_Title_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Request} message Update_Sticker_Pack_Title_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Update_Sticker_Pack_Title_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.packId = "";
+                    object.title = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                if (message.title != null && $Object.hasOwnProperty.call(message, "title"))
+                    object.title = message.title;
+                return object;
+            };
+
+            /**
+             * Converts this Update_Sticker_Pack_Title_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Update_Sticker_Pack_Title_Request.prototype.toJSON = function() {
+                return Update_Sticker_Pack_Title_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Update_Sticker_Pack_Title_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Update_Sticker_Pack_Title_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Update_Sticker_Pack_Title_Request";
+            };
+
+            return Update_Sticker_Pack_Title_Request;
+        })();
+
+        methods.Update_Sticker_Pack_Title_Response = (function() {
+
+            /**
+             * Properties of an Update_Sticker_Pack_Title_Response.
+             * @typedef {Object} lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of an Update_Sticker_Pack_Title_Response.
+             * @memberof lingcat.methods
+             * @interface IUpdate_Sticker_Pack_Title_Response
+             * @augments lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties
+             * @deprecated Use lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of an Update_Sticker_Pack_Title_Response.
+             * @typedef {lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties} lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Update_Sticker_Pack_Title_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents an Update_Sticker_Pack_Title_Response.
+             * @constructor
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Update_Sticker_Pack_Title_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Update_Sticker_Pack_Title_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response} Update_Sticker_Pack_Title_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape): lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape;
+             *   (properties?: lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties): lingcat.methods.Update_Sticker_Pack_Title_Response;
+             * }}
+             */
+            Update_Sticker_Pack_Title_Response.create = function(properties) {
+                return new Update_Sticker_Pack_Title_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Response message. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties} message Update_Sticker_Pack_Title_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Sticker_Pack_Title_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Update_Sticker_Pack_Title_Response message, length delimited. Does not implicitly {@link lingcat.methods.Update_Sticker_Pack_Title_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Response.$Properties} message Update_Sticker_Pack_Title_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Update_Sticker_Pack_Title_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape} Update_Sticker_Pack_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Sticker_Pack_Title_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Update_Sticker_Pack_Title_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes an Update_Sticker_Pack_Title_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response & lingcat.methods.Update_Sticker_Pack_Title_Response.$Shape} Update_Sticker_Pack_Title_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Update_Sticker_Pack_Title_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies an Update_Sticker_Pack_Title_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Update_Sticker_Pack_Title_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates an Update_Sticker_Pack_Title_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Update_Sticker_Pack_Title_Response} Update_Sticker_Pack_Title_Response
+             */
+            Update_Sticker_Pack_Title_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Update_Sticker_Pack_Title_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Update_Sticker_Pack_Title_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Update_Sticker_Pack_Title_Response();
+            };
+
+            /**
+             * Creates a plain object from an Update_Sticker_Pack_Title_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {lingcat.methods.Update_Sticker_Pack_Title_Response} message Update_Sticker_Pack_Title_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Update_Sticker_Pack_Title_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Update_Sticker_Pack_Title_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Update_Sticker_Pack_Title_Response.prototype.toJSON = function() {
+                return Update_Sticker_Pack_Title_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Update_Sticker_Pack_Title_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Update_Sticker_Pack_Title_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Update_Sticker_Pack_Title_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Update_Sticker_Pack_Title_Response";
+            };
+
+            return Update_Sticker_Pack_Title_Response;
+        })();
+
+        methods.StickerInput = (function() {
+
+            /**
+             * Properties of a StickerInput.
+             * @typedef {Object} lingcat.methods.StickerInput.$Properties
+             * @property {string|null} [hash] StickerInput hash
+             * @property {string|null} [emoji] StickerInput emoji
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a StickerInput.
+             * @memberof lingcat.methods
+             * @interface IStickerInput
+             * @augments lingcat.methods.StickerInput.$Properties
+             * @deprecated Use lingcat.methods.StickerInput.$Properties instead.
+             */
+
+            /**
+             * Shape of a StickerInput.
+             * @typedef {lingcat.methods.StickerInput.$Properties} lingcat.methods.StickerInput.$Shape
+             */
+
+            /**
+             * Constructs a new StickerInput.
+             * @memberof lingcat.methods
+             * @classdesc Represents a StickerInput.
+             * @constructor
+             * @param {lingcat.methods.StickerInput.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const StickerInput = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * StickerInput hash.
+             * @member {string} hash
+             * @memberof lingcat.methods.StickerInput
+             * @instance
+             */
+            StickerInput.prototype.hash = "";
+
+            /**
+             * StickerInput emoji.
+             * @member {string|null|undefined} emoji
+             * @memberof lingcat.methods.StickerInput
+             * @instance
+             */
+            StickerInput.prototype.emoji = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(StickerInput.prototype, "_emoji", {
+                get: $util.oneOfGetter($oneOfFields = ["emoji"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new StickerInput instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {lingcat.methods.StickerInput.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.StickerInput} StickerInput instance
+             * @type {{
+             *   (properties: lingcat.methods.StickerInput.$Shape): lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape;
+             *   (properties?: lingcat.methods.StickerInput.$Properties): lingcat.methods.StickerInput;
+             * }}
+             */
+            StickerInput.create = function(properties) {
+                return new StickerInput(properties);
+            };
+
+            /**
+             * Encodes the specified StickerInput message. Does not implicitly {@link lingcat.methods.StickerInput.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {lingcat.methods.StickerInput.$Properties} message StickerInput message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            StickerInput.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash") && message.hash !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.hash);
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji"))
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.emoji);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified StickerInput message, length delimited. Does not implicitly {@link lingcat.methods.StickerInput.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {lingcat.methods.StickerInput.$Properties} message StickerInput message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            StickerInput.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a StickerInput message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape} StickerInput
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            StickerInput.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.StickerInput();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.hash = value;
+                            else
+                                delete message.hash;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            message.emoji = reader.stringVerify();
+                            message._emoji = "emoji";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a StickerInput message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.StickerInput & lingcat.methods.StickerInput.$Shape} StickerInput
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            StickerInput.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a StickerInput message.
+             * @function verify
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            StickerInput.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                    if (!$util.isString(message.hash))
+                        return "hash: string expected";
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji")) {
+                    properties._emoji = 1;
+                    if (!$util.isString(message.emoji))
+                        return "emoji: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a StickerInput message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.StickerInput} StickerInput
+             */
+            StickerInput.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.StickerInput)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.StickerInput: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.StickerInput();
+                if (object.hash != null)
+                    if (typeof object.hash !== "string" || object.hash.length)
+                        message.hash = $String(object.hash);
+                if (object.emoji != null)
+                    message.emoji = $String(object.emoji);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a StickerInput message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {lingcat.methods.StickerInput} message StickerInput
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            StickerInput.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults)
+                    object.hash = "";
+                if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                    object.hash = message.hash;
+                if (message.emoji != null && $Object.hasOwnProperty.call(message, "emoji"))
+                    object.emoji = message.emoji;
+                return object;
+            };
+
+            /**
+             * Converts this StickerInput to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.StickerInput
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            StickerInput.prototype.toJSON = function() {
+                return StickerInput.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for StickerInput
+             * @function getTypeUrl
+             * @memberof lingcat.methods.StickerInput
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            StickerInput.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.StickerInput";
+            };
+
+            return StickerInput;
+        })();
+
+        methods.Set_Sticker_Pack_Content_Request = (function() {
+
+            /**
+             * Properties of a Set_Sticker_Pack_Content_Request.
+             * @typedef {Object} lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties
+             * @property {string|null} [accessToken] Set_Sticker_Pack_Content_Request accessToken
+             * @property {string|null} [packId] Set_Sticker_Pack_Content_Request packId
+             * @property {Array.<lingcat.methods.StickerInput.$Properties>|null} [stickers] Set_Sticker_Pack_Content_Request stickers
+             * @property {string|null} [coverFileHash] Set_Sticker_Pack_Content_Request coverFileHash
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Sticker_Pack_Content_Request.
+             * @memberof lingcat.methods
+             * @interface ISet_Sticker_Pack_Content_Request
+             * @augments lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties
+             * @deprecated Use lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Sticker_Pack_Content_Request.
+             * @typedef {lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties} lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Content_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Sticker_Pack_Content_Request.
+             * @constructor
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Sticker_Pack_Content_Request = function (properties) {
+                this.stickers = [];
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Set_Sticker_Pack_Content_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Content_Request.prototype.accessToken = "";
+
+            /**
+             * Set_Sticker_Pack_Content_Request packId.
+             * @member {string} packId
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Content_Request.prototype.packId = "";
+
+            /**
+             * Set_Sticker_Pack_Content_Request stickers.
+             * @member {Array.<lingcat.methods.StickerInput.$Properties>} stickers
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Content_Request.prototype.stickers = $util.emptyArray;
+
+            /**
+             * Set_Sticker_Pack_Content_Request coverFileHash.
+             * @member {string|null|undefined} coverFileHash
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Content_Request.prototype.coverFileHash = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(Set_Sticker_Pack_Content_Request.prototype, "_coverFileHash", {
+                get: $util.oneOfGetter($oneOfFields = ["coverFileHash"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Creates a new Set_Sticker_Pack_Content_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request} Set_Sticker_Pack_Content_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape): lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape;
+             *   (properties?: lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties): lingcat.methods.Set_Sticker_Pack_Content_Request;
+             * }}
+             */
+            Set_Sticker_Pack_Content_Request.create = function(properties) {
+                return new Set_Sticker_Pack_Content_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Request message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties} message Set_Sticker_Pack_Content_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Content_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.stickers != null && message.stickers.length)
+                    for (let i = 0; i < message.stickers.length; ++i)
+                        $root.lingcat.methods.StickerInput.encode(message.stickers[i], writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash"))
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.coverFileHash);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Request.$Properties} message Set_Sticker_Pack_Content_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Content_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape} Set_Sticker_Pack_Content_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Content_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Set_Sticker_Pack_Content_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 2)
+                                break;
+                            if (!(message.stickers && message.stickers.length))
+                                message.stickers = [];
+                            message.stickers.push($root.lingcat.methods.StickerInput.decode(reader, reader.size(), $undefined, _depth + 1));
+                            continue;
+                        }
+                    case 4: {
+                            if (wireType !== 2)
+                                break;
+                            message.coverFileHash = reader.stringVerify();
+                            message._coverFileHash = "coverFileHash";
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request & lingcat.methods.Set_Sticker_Pack_Content_Request.$Shape} Set_Sticker_Pack_Content_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Content_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Set_Sticker_Pack_Content_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Sticker_Pack_Content_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                let properties = {};
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                if (message.stickers != null && $Object.hasOwnProperty.call(message, "stickers")) {
+                    if (!$Array.isArray(message.stickers))
+                        return "stickers: array expected";
+                    for (let i = 0; i < message.stickers.length; ++i) {
+                        let error = $root.lingcat.methods.StickerInput.verify(message.stickers[i], _depth + 1);
+                        if (error)
+                            return "stickers." + error;
+                    }
+                }
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash")) {
+                    properties._coverFileHash = 1;
+                    if (!$util.isString(message.coverFileHash))
+                        return "coverFileHash: string expected";
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Set_Sticker_Pack_Content_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Request} Set_Sticker_Pack_Content_Request
+             */
+            Set_Sticker_Pack_Content_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Sticker_Pack_Content_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Content_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Set_Sticker_Pack_Content_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                if (object.stickers) {
+                    if (!$Array.isArray(object.stickers))
+                        throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Content_Request.stickers: array expected");
+                    message.stickers = $Array(object.stickers.length);
+                    for (let i = 0; i < object.stickers.length; ++i) {
+                        if (!$util.isObject(object.stickers[i]))
+                            throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Content_Request.stickers: object expected");
+                        message.stickers[i] = $root.lingcat.methods.StickerInput.fromObject(object.stickers[i], _depth + 1);
+                    }
+                }
+                if (object.coverFileHash != null)
+                    message.coverFileHash = $String(object.coverFileHash);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Content_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Request} message Set_Sticker_Pack_Content_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Sticker_Pack_Content_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.stickers = [];
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.packId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                if (message.stickers && message.stickers.length) {
+                    object.stickers = $Array(message.stickers.length);
+                    for (let j = 0; j < message.stickers.length; ++j)
+                        object.stickers[j] = $root.lingcat.methods.StickerInput.toObject(message.stickers[j], options, _depth + 1);
+                }
+                if (message.coverFileHash != null && $Object.hasOwnProperty.call(message, "coverFileHash"))
+                    object.coverFileHash = message.coverFileHash;
+                return object;
+            };
+
+            /**
+             * Converts this Set_Sticker_Pack_Content_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Sticker_Pack_Content_Request.prototype.toJSON = function() {
+                return Set_Sticker_Pack_Content_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Content_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Sticker_Pack_Content_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Sticker_Pack_Content_Request";
+            };
+
+            return Set_Sticker_Pack_Content_Request;
+        })();
+
+        methods.Set_Sticker_Pack_Content_Response = (function() {
+
+            /**
+             * Properties of a Set_Sticker_Pack_Content_Response.
+             * @typedef {Object} lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Sticker_Pack_Content_Response.
+             * @memberof lingcat.methods
+             * @interface ISet_Sticker_Pack_Content_Response
+             * @augments lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties
+             * @deprecated Use lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Sticker_Pack_Content_Response.
+             * @typedef {lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties} lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Content_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Sticker_Pack_Content_Response.
+             * @constructor
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Sticker_Pack_Content_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Set_Sticker_Pack_Content_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response} Set_Sticker_Pack_Content_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape): lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape;
+             *   (properties?: lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties): lingcat.methods.Set_Sticker_Pack_Content_Response;
+             * }}
+             */
+            Set_Sticker_Pack_Content_Response.create = function(properties) {
+                return new Set_Sticker_Pack_Content_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Response message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties} message Set_Sticker_Pack_Content_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Content_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Content_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Content_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Response.$Properties} message Set_Sticker_Pack_Content_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Content_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape} Set_Sticker_Pack_Content_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Content_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Set_Sticker_Pack_Content_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Content_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response & lingcat.methods.Set_Sticker_Pack_Content_Response.$Shape} Set_Sticker_Pack_Content_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Content_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Set_Sticker_Pack_Content_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Sticker_Pack_Content_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Set_Sticker_Pack_Content_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Sticker_Pack_Content_Response} Set_Sticker_Pack_Content_Response
+             */
+            Set_Sticker_Pack_Content_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Sticker_Pack_Content_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Content_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Set_Sticker_Pack_Content_Response();
+            };
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Content_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Content_Response} message Set_Sticker_Pack_Content_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Sticker_Pack_Content_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Set_Sticker_Pack_Content_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Sticker_Pack_Content_Response.prototype.toJSON = function() {
+                return Set_Sticker_Pack_Content_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Content_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Sticker_Pack_Content_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Sticker_Pack_Content_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Sticker_Pack_Content_Response";
+            };
+
+            return Set_Sticker_Pack_Content_Response;
+        })();
+
+        methods.Set_Sticker_Pack_Subscribed_Request = (function() {
+
+            /**
+             * Properties of a Set_Sticker_Pack_Subscribed_Request.
+             * @typedef {Object} lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties
+             * @property {string|null} [accessToken] Set_Sticker_Pack_Subscribed_Request accessToken
+             * @property {string|null} [packId] Set_Sticker_Pack_Subscribed_Request packId
+             * @property {boolean|null} [subscribed] Set_Sticker_Pack_Subscribed_Request subscribed
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Sticker_Pack_Subscribed_Request.
+             * @memberof lingcat.methods
+             * @interface ISet_Sticker_Pack_Subscribed_Request
+             * @augments lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties
+             * @deprecated Use lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Sticker_Pack_Subscribed_Request.
+             * @typedef {lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties} lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Subscribed_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Sticker_Pack_Subscribed_Request.
+             * @constructor
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Sticker_Pack_Subscribed_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Set_Sticker_Pack_Subscribed_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Subscribed_Request.prototype.accessToken = "";
+
+            /**
+             * Set_Sticker_Pack_Subscribed_Request packId.
+             * @member {string} packId
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Subscribed_Request.prototype.packId = "";
+
+            /**
+             * Set_Sticker_Pack_Subscribed_Request subscribed.
+             * @member {boolean} subscribed
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @instance
+             */
+            Set_Sticker_Pack_Subscribed_Request.prototype.subscribed = false;
+
+            /**
+             * Creates a new Set_Sticker_Pack_Subscribed_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request} Set_Sticker_Pack_Subscribed_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape): lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape;
+             *   (properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties): lingcat.methods.Set_Sticker_Pack_Subscribed_Request;
+             * }}
+             */
+            Set_Sticker_Pack_Subscribed_Request.create = function(properties) {
+                return new Set_Sticker_Pack_Subscribed_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Request message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties} message Set_Sticker_Pack_Subscribed_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Subscribed_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed") && message.subscribed !== false)
+                    writer.uint32(/* id 3, wireType 0 =*/24).bool(message.subscribed);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Request message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Properties} message Set_Sticker_Pack_Subscribed_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Subscribed_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape} Set_Sticker_Pack_Subscribed_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Subscribed_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    case 3: {
+                            if (wireType !== 0)
+                                break;
+                            if (value = reader.bool())
+                                message.subscribed = value;
+                            else
+                                delete message.subscribed;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request & lingcat.methods.Set_Sticker_Pack_Subscribed_Request.$Shape} Set_Sticker_Pack_Subscribed_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Subscribed_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Set_Sticker_Pack_Subscribed_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Sticker_Pack_Subscribed_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed"))
+                    if (typeof message.subscribed !== "boolean")
+                        return "subscribed: boolean expected";
+                return null;
+            };
+
+            /**
+             * Creates a Set_Sticker_Pack_Subscribed_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Request} Set_Sticker_Pack_Subscribed_Request
+             */
+            Set_Sticker_Pack_Subscribed_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Subscribed_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                if (object.subscribed != null)
+                    if (object.subscribed)
+                        message.subscribed = $Boolean(object.subscribed);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Subscribed_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Request} message Set_Sticker_Pack_Subscribed_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Sticker_Pack_Subscribed_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.packId = "";
+                    object.subscribed = false;
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                if (message.subscribed != null && $Object.hasOwnProperty.call(message, "subscribed"))
+                    object.subscribed = message.subscribed;
+                return object;
+            };
+
+            /**
+             * Converts this Set_Sticker_Pack_Subscribed_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Sticker_Pack_Subscribed_Request.prototype.toJSON = function() {
+                return Set_Sticker_Pack_Subscribed_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Subscribed_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Sticker_Pack_Subscribed_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Sticker_Pack_Subscribed_Request";
+            };
+
+            return Set_Sticker_Pack_Subscribed_Request;
+        })();
+
+        methods.Set_Sticker_Pack_Subscribed_Response = (function() {
+
+            /**
+             * Properties of a Set_Sticker_Pack_Subscribed_Response.
+             * @typedef {Object} lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Set_Sticker_Pack_Subscribed_Response.
+             * @memberof lingcat.methods
+             * @interface ISet_Sticker_Pack_Subscribed_Response
+             * @augments lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties
+             * @deprecated Use lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Set_Sticker_Pack_Subscribed_Response.
+             * @typedef {lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties} lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Set_Sticker_Pack_Subscribed_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Set_Sticker_Pack_Subscribed_Response.
+             * @constructor
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Set_Sticker_Pack_Subscribed_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Set_Sticker_Pack_Subscribed_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response} Set_Sticker_Pack_Subscribed_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape): lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape;
+             *   (properties?: lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties): lingcat.methods.Set_Sticker_Pack_Subscribed_Response;
+             * }}
+             */
+            Set_Sticker_Pack_Subscribed_Response.create = function(properties) {
+                return new Set_Sticker_Pack_Subscribed_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Response message. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties} message Set_Sticker_Pack_Subscribed_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Subscribed_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Set_Sticker_Pack_Subscribed_Response message, length delimited. Does not implicitly {@link lingcat.methods.Set_Sticker_Pack_Subscribed_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Properties} message Set_Sticker_Pack_Subscribed_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Set_Sticker_Pack_Subscribed_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape} Set_Sticker_Pack_Subscribed_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Subscribed_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Set_Sticker_Pack_Subscribed_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response & lingcat.methods.Set_Sticker_Pack_Subscribed_Response.$Shape} Set_Sticker_Pack_Subscribed_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Set_Sticker_Pack_Subscribed_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Set_Sticker_Pack_Subscribed_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Set_Sticker_Pack_Subscribed_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Set_Sticker_Pack_Subscribed_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Set_Sticker_Pack_Subscribed_Response} Set_Sticker_Pack_Subscribed_Response
+             */
+            Set_Sticker_Pack_Subscribed_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Set_Sticker_Pack_Subscribed_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Set_Sticker_Pack_Subscribed_Response();
+            };
+
+            /**
+             * Creates a plain object from a Set_Sticker_Pack_Subscribed_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {lingcat.methods.Set_Sticker_Pack_Subscribed_Response} message Set_Sticker_Pack_Subscribed_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Set_Sticker_Pack_Subscribed_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Set_Sticker_Pack_Subscribed_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Set_Sticker_Pack_Subscribed_Response.prototype.toJSON = function() {
+                return Set_Sticker_Pack_Subscribed_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Set_Sticker_Pack_Subscribed_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Set_Sticker_Pack_Subscribed_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Set_Sticker_Pack_Subscribed_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Set_Sticker_Pack_Subscribed_Response";
+            };
+
+            return Set_Sticker_Pack_Subscribed_Response;
+        })();
+
+        methods.Delete_Sticker_Pack_Request = (function() {
+
+            /**
+             * Properties of a Delete_Sticker_Pack_Request.
+             * @typedef {Object} lingcat.methods.Delete_Sticker_Pack_Request.$Properties
+             * @property {string|null} [accessToken] Delete_Sticker_Pack_Request accessToken
+             * @property {string|null} [packId] Delete_Sticker_Pack_Request packId
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Delete_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @interface IDelete_Sticker_Pack_Request
+             * @augments lingcat.methods.Delete_Sticker_Pack_Request.$Properties
+             * @deprecated Use lingcat.methods.Delete_Sticker_Pack_Request.$Properties instead.
+             */
+
+            /**
+             * Shape of a Delete_Sticker_Pack_Request.
+             * @typedef {lingcat.methods.Delete_Sticker_Pack_Request.$Properties} lingcat.methods.Delete_Sticker_Pack_Request.$Shape
+             */
+
+            /**
+             * Constructs a new Delete_Sticker_Pack_Request.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Delete_Sticker_Pack_Request.
+             * @constructor
+             * @param {lingcat.methods.Delete_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Delete_Sticker_Pack_Request = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Delete_Sticker_Pack_Request accessToken.
+             * @member {string} accessToken
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @instance
+             */
+            Delete_Sticker_Pack_Request.prototype.accessToken = "";
+
+            /**
+             * Delete_Sticker_Pack_Request packId.
+             * @member {string} packId
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @instance
+             */
+            Delete_Sticker_Pack_Request.prototype.packId = "";
+
+            /**
+             * Creates a new Delete_Sticker_Pack_Request instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Request.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request} Delete_Sticker_Pack_Request instance
+             * @type {{
+             *   (properties: lingcat.methods.Delete_Sticker_Pack_Request.$Shape): lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape;
+             *   (properties?: lingcat.methods.Delete_Sticker_Pack_Request.$Properties): lingcat.methods.Delete_Sticker_Pack_Request;
+             * }}
+             */
+            Delete_Sticker_Pack_Request.create = function(properties) {
+                return new Delete_Sticker_Pack_Request(properties);
+            };
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Request message. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Request.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Request.$Properties} message Delete_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Delete_Sticker_Pack_Request.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken") && message.accessToken !== "")
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.accessToken);
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId") && message.packId !== "")
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.packId);
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Request message, length delimited. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Request.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Request.$Properties} message Delete_Sticker_Pack_Request message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Delete_Sticker_Pack_Request.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Request message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape} Delete_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Delete_Sticker_Pack_Request.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message, value;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Delete_Sticker_Pack_Request();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    let wireType = tag & 7;
+                    switch (tag >>>= 3) {
+                    case 1: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.accessToken = value;
+                            else
+                                delete message.accessToken;
+                            continue;
+                        }
+                    case 2: {
+                            if (wireType !== 2)
+                                break;
+                            if ((value = reader.stringVerify()).length)
+                                message.packId = value;
+                            else
+                                delete message.packId;
+                            continue;
+                        }
+                    }
+                    reader.skipType(wireType, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Request message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request & lingcat.methods.Delete_Sticker_Pack_Request.$Shape} Delete_Sticker_Pack_Request
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Delete_Sticker_Pack_Request.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Delete_Sticker_Pack_Request message.
+             * @function verify
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Delete_Sticker_Pack_Request.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    if (!$util.isString(message.accessToken))
+                        return "accessToken: string expected";
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    if (!$util.isString(message.packId))
+                        return "packId: string expected";
+                return null;
+            };
+
+            /**
+             * Creates a Delete_Sticker_Pack_Request message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Request} Delete_Sticker_Pack_Request
+             */
+            Delete_Sticker_Pack_Request.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Delete_Sticker_Pack_Request)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Delete_Sticker_Pack_Request: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let message = new $root.lingcat.methods.Delete_Sticker_Pack_Request();
+                if (object.accessToken != null)
+                    if (typeof object.accessToken !== "string" || object.accessToken.length)
+                        message.accessToken = $String(object.accessToken);
+                if (object.packId != null)
+                    if (typeof object.packId !== "string" || object.packId.length)
+                        message.packId = $String(object.packId);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Delete_Sticker_Pack_Request message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Request} message Delete_Sticker_Pack_Request
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Delete_Sticker_Pack_Request.toObject = function (message, options, _depth) {
+                if (!options)
+                    options = {};
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let object = {};
+                if (options.defaults) {
+                    object.accessToken = "";
+                    object.packId = "";
+                }
+                if (message.accessToken != null && $Object.hasOwnProperty.call(message, "accessToken"))
+                    object.accessToken = message.accessToken;
+                if (message.packId != null && $Object.hasOwnProperty.call(message, "packId"))
+                    object.packId = message.packId;
+                return object;
+            };
+
+            /**
+             * Converts this Delete_Sticker_Pack_Request to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Delete_Sticker_Pack_Request.prototype.toJSON = function() {
+                return Delete_Sticker_Pack_Request.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Delete_Sticker_Pack_Request
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Request
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Delete_Sticker_Pack_Request.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Delete_Sticker_Pack_Request";
+            };
+
+            return Delete_Sticker_Pack_Request;
+        })();
+
+        methods.Delete_Sticker_Pack_Response = (function() {
+
+            /**
+             * Properties of a Delete_Sticker_Pack_Response.
+             * @typedef {Object} lingcat.methods.Delete_Sticker_Pack_Response.$Properties
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+
+            /**
+             * Properties of a Delete_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @interface IDelete_Sticker_Pack_Response
+             * @augments lingcat.methods.Delete_Sticker_Pack_Response.$Properties
+             * @deprecated Use lingcat.methods.Delete_Sticker_Pack_Response.$Properties instead.
+             */
+
+            /**
+             * Shape of a Delete_Sticker_Pack_Response.
+             * @typedef {lingcat.methods.Delete_Sticker_Pack_Response.$Properties} lingcat.methods.Delete_Sticker_Pack_Response.$Shape
+             */
+
+            /**
+             * Constructs a new Delete_Sticker_Pack_Response.
+             * @memberof lingcat.methods
+             * @classdesc Represents a Delete_Sticker_Pack_Response.
+             * @constructor
+             * @param {lingcat.methods.Delete_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+             */
+            const Delete_Sticker_Pack_Response = function (properties) {
+                if (properties)
+                    for (let keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                            this[keys[i]] = properties[keys[i]];
+            };
+
+            /**
+             * Creates a new Delete_Sticker_Pack_Response instance using the specified properties.
+             * @function create
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Response.$Properties=} [properties] Properties to set
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response} Delete_Sticker_Pack_Response instance
+             * @type {{
+             *   (properties: lingcat.methods.Delete_Sticker_Pack_Response.$Shape): lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape;
+             *   (properties?: lingcat.methods.Delete_Sticker_Pack_Response.$Properties): lingcat.methods.Delete_Sticker_Pack_Response;
+             * }}
+             */
+            Delete_Sticker_Pack_Response.create = function(properties) {
+                return new Delete_Sticker_Pack_Response(properties);
+            };
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Response message. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Response.verify|verify} messages.
+             * @function encode
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Response.$Properties} message Delete_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Delete_Sticker_Pack_Response.encode = function (message, writer, _depth) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                    for (let i = 0; i < message.$unknowns.length; ++i)
+                        writer.raw(message.$unknowns[i]);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified Delete_Sticker_Pack_Response message, length delimited. Does not implicitly {@link lingcat.methods.Delete_Sticker_Pack_Response.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Response.$Properties} message Delete_Sticker_Pack_Response message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            Delete_Sticker_Pack_Response.encodeDelimited = function(message, writer) {
+                return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+            };
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Response message from the specified reader or buffer.
+             * @function decode
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape} Delete_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Delete_Sticker_Pack_Response.decode = function (reader, length, _end, _depth, _target) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $Reader.recursionLimit)
+                    throw $Error("max depth exceeded");
+                let end, message;
+                if (length === $undefined)
+                    end = reader.len;
+                else {
+                    end = reader.pos + length;
+                    if (end > reader.len)
+                        throw $RangeError("index out of range");
+                    length = reader.len;
+                    reader.len = end;
+                }
+                message = _target || new $root.lingcat.methods.Delete_Sticker_Pack_Response();
+                while (reader.pos < end) {
+                    let start = reader.pos;
+                    let tag = reader.tag();
+                    if (tag === _end) {
+                        _end = $undefined;
+                        break;
+                    }
+                    reader.skipType(tag & 7, _depth, tag);
+                    if (!reader.discardUnknown) {
+                        $util.makeProp(message, "$unknowns", false);
+                        (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                    }
+                }
+                if (length !== $undefined) {
+                    if (reader.pos !== end)
+                        throw $RangeError("index out of range");
+                    reader.len = length;
+                }
+                if (_end !== $undefined)
+                    throw $Error("missing end group");
+                return message;
+            };
+
+            /**
+             * Decodes a Delete_Sticker_Pack_Response message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response & lingcat.methods.Delete_Sticker_Pack_Response.$Shape} Delete_Sticker_Pack_Response
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Delete_Sticker_Pack_Response.decodeDelimited = function(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.size());
+            };
+
+            /**
+             * Verifies a Delete_Sticker_Pack_Response message.
+             * @function verify
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Delete_Sticker_Pack_Response.verify = function (message, _depth) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    return "max depth exceeded";
+                return null;
+            };
+
+            /**
+             * Creates a Delete_Sticker_Pack_Response message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {lingcat.methods.Delete_Sticker_Pack_Response} Delete_Sticker_Pack_Response
+             */
+            Delete_Sticker_Pack_Response.fromObject = function (object, _depth) {
+                if (object instanceof $root.lingcat.methods.Delete_Sticker_Pack_Response)
+                    return object;
+                if (!$util.isObject(object))
+                    throw $TypeError(".lingcat.methods.Delete_Sticker_Pack_Response: object expected");
+                if (_depth === $undefined)
+                    _depth = 0;
+                if (_depth > $util.recursionLimit)
+                    throw $Error("max depth exceeded");
+                return new $root.lingcat.methods.Delete_Sticker_Pack_Response();
+            };
+
+            /**
+             * Creates a plain object from a Delete_Sticker_Pack_Response message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {lingcat.methods.Delete_Sticker_Pack_Response} message Delete_Sticker_Pack_Response
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Delete_Sticker_Pack_Response.toObject = function () {
+                return {};
+            };
+
+            /**
+             * Converts this Delete_Sticker_Pack_Response to JSON.
+             * @function toJSON
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Delete_Sticker_Pack_Response.prototype.toJSON = function() {
+                return Delete_Sticker_Pack_Response.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the type url for Delete_Sticker_Pack_Response
+             * @function getTypeUrl
+             * @memberof lingcat.methods.Delete_Sticker_Pack_Response
+             * @static
+             * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+             * @returns {string} The type url
+             */
+            Delete_Sticker_Pack_Response.getTypeUrl = function(prefix) {
+                if (prefix === $undefined)
+                    prefix = "type.googleapis.com";
+                return prefix + "/lingcat.methods.Delete_Sticker_Pack_Response";
+            };
+
+            return Delete_Sticker_Pack_Response;
         })();
 
         return methods;

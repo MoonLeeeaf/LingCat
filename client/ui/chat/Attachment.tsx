@@ -7,10 +7,15 @@ import SessionEnv from '../../SessionEnv.ts'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import { queryAttachmentMime } from '../../AttachmentMimeCache.ts'
 import AudioAttachment from './AudioAttachment.tsx'
+import StickerPackDialog from '../viewer/StickerPackDialog.tsx'
 
 export interface IAttachmentData {
     hash: string
     name: string
+    /** 'sticker' 时走贴纸专用渲染, 不再 HEAD 查询 MIME */
+    kind?: string
+    packId?: string
+    emoji?: string
 }
 
 export interface AttachmentContext {
@@ -34,11 +39,14 @@ function looksLikeAudioName(name?: string): boolean {
     return !!ext && AUDIO_EXTENSIONS.has(ext)
 }
 
-export default function Attachment({ data, context }: { data: IAttachmentData; context?: AttachmentContext }) {
+export default function Attachment({ data, context, stickerSize }: { data: IAttachmentData; context?: AttachmentContext; stickerSize?: number }) {
     const url = getFileUrl(data.hash, SessionEnv.myFileAccessToken)!
     const [mime, setMime] = React.useState<string | null>(null)
+    const isSticker = data.kind === 'sticker'
 
     React.useEffect(() => {
+        // 贴纸的类型由包内容保证, 不再发 HEAD 请求
+        if (isSticker) return
         let alive = true
         queryAttachmentMime(url, data.hash).then((m) => {
             if (!alive) return
@@ -47,7 +55,29 @@ export default function Attachment({ data, context }: { data: IAttachmentData; c
             else setMime(m)
         })
         return () => { alive = false }
-    }, [url, data.hash, data.name])
+    }, [url, data.hash, data.name, isSticker])
+
+    if (isSticker) {
+        const openSticker = (ev: React.MouseEvent) => {
+            ev.stopPropagation()
+            if (data.packId) StickerPackDialog.show(data.packId)
+            else ImageViewerDialog.show(url)
+        }
+        return <ReloadableImage
+            src={url}
+            alt={data.emoji || data.name || 'sticker'}
+            title={data.emoji || undefined}
+            onClick={openSticker}
+            style={{
+                width: `${stickerSize ?? 120}px`,
+                height: `${stickerSize ?? 120}px`,
+                objectFit: 'contain',
+                display: 'block',
+                cursor: 'pointer',
+                userSelect: 'none',
+            }}
+        />
+    }
 
     if (!mime) {
         if (looksLikeAudioName(data.name)) {

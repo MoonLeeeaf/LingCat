@@ -94,6 +94,29 @@ message IFile {
     uint64 uploaded_at = 5;
 }
 
+message ISticker {
+    // 文件 sha256, 同时也是贴纸在包内的唯一标识
+    string hash = 1;
+    string pack_id = 2;
+    // 服务端识别出的真实 MIME, 客户端据此生成显示文件名
+    string mime = 3;
+    optional string emoji = 4;
+    uint32 sort = 5;
+}
+
+message IStickerPack {
+    string id = 1;
+    string title = 2;
+    string author_user_id = 3;
+    optional string cover_file_hash = 4;
+    uint64 created_at = 5;
+    uint64 updated_at = 6;
+    // 当前用户是否已订阅
+    optional bool subscribed = 7;
+    // 当前用户是否为作者
+    optional bool is_author = 8;
+}
+
 message IMessageEntity {
     // 类型: bold, italic, code, strikethrough, spoiler,
     //       attachment, link, chat_mention, user_mention

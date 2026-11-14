@@ -3,6 +3,7 @@ import { IMessageEntity } from 'lingcat-protocol'
 /**
  * 把用户输入的轻量语法解析为 text + entities
  * 支持: **bold** *italic* `code` [文字](url) [显示名](user:id) [群名](chat:id) ![文件名称](file:id)
+ * 贴纸: ![sticker.png](lingcat://sticker?hash=...&packId=...&emoji=...)
  */
 export default class MessageParser {
     static parseMessage(input: string) {
@@ -83,6 +84,34 @@ export default class MessageParser {
                 continue
             }
 
+            // ![贴纸](lingcat://sticker?hash=xxx&packId=yyy&emoji=zzz)
+            m = rest.match(/^!\[([^\]]+)\]\(lingcat:\/\/sticker\?([^)]+)\)/)
+            if (m) {
+                const query = new URLSearchParams(m[2])
+                const hash = query.get('hash')
+                if (hash) {
+                    const payload: Record<string, string> = {
+                        hash,
+                        name: m[1] || 'sticker',
+                        kind: 'sticker',
+                    }
+                    const packId = query.get('packId')
+                    if (packId) payload.packId = packId
+                    const emoji = query.get('emoji')
+                    if (emoji) payload.emoji = emoji
+
+                    entities.push({
+                        type: 'attachment',
+                        offset: text.length,
+                        length: 4,
+                        data: JSON.stringify(payload),
+                    })
+                    text += '[附件]'
+                    i += m[0].length
+                    continue
+                }
+            }
+
             // ![文件](lingcat://file?hash=xxx)  或  ![文件](file:xxx)
             m = rest.match(/^!\[([^\]]+)\]\((?:lingcat:\/\/file\?hash=|file:)([^)]+)\)/)
             if (m) {
@@ -153,7 +182,16 @@ export default class MessageParser {
                 case 'attachment': {
                     try {
                         const a = JSON.parse(e.data!)
-                        out += `![${a.name}](file:${a.hash})`
+                        if (a.kind === 'sticker') {
+                            const params = new URLSearchParams()
+                            params.set('hash', a.hash)
+                            if (a.packId) params.set('packId', a.packId)
+                            if (a.emoji) params.set('emoji', a.emoji)
+                            const query = params.toString()
+                            out += `![${a.name || 'sticker'}](lingcat://sticker?${query})`
+                        } else {
+                            out += `![${a.name}](file:${a.hash})`
+                        }
                     } catch { out += seg }
                     break
                 }
