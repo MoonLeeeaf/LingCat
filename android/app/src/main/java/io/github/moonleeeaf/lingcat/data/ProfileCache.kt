@@ -4,6 +4,8 @@ import android.util.Log
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.data.db.UserEntity
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -15,8 +17,29 @@ import lingcat.client_protocol.ChatApi
 import lingcat.client_protocol.UserApi
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * 拉取资料失败（未连接 / 网络异常）。
+ *
+ * 与「服务器明确告知该用户/对话不存在」区分开：后者返回 null，
+ * 调用方据此决定是重试还是展示空态。
+ */
+class ProfileFetchException(message: String, cause: Throwable? = null) : Exception(message, cause)
+
+/**
+ * 用户 / 对话资料的共享缓存。
+ *
+ * 这一层只做三件事：
+ * 1. 失败时抛 [ProfileFetchException]，绝不把失败伪装成「不存在」；
+ * 2. 对「服务器确认不存在」做 30s 负缓存，避免连续打服务器；
+ * 3. single-flight：并发请求同一 key 时只发一次网络请求。
+ *
+ * 重试策略（次数、退避、是否提示用户）由调用方决定，不放在这里。
+ */
 object ProfileCache {
     private const val TAG = "ProfileCache"
+
+    /** 「服务器确认不存在」的负缓存时长。 */
+    private const val MISS_TTL_MS = 30_000L
 
     // 内存缓存 (第一级)
     private val userCache = ConcurrentHashMap<String, IUser>()
@@ -25,12 +48,23 @@ object ProfileCache {
     private val chatCache = ConcurrentHashMap<String, IChat>()
     private val chatFetchMutex = Mutex()
 
+    // 负缓存：只记录“服务器确认不存在”的结果，失败不写入
+    private val userMissCache = ConcurrentHashMap<String, Long>()
+    private val chatMissCache = ConcurrentHashMap<String, Long>()
+
     // 懒加载数据库 (避免依赖注入的麻烦)
     private val userDao by lazy {
         AppDatabase.getDatabase(LingCatClientManager.appContext).userDao()
     }
     private val chatDao by lazy {
         AppDatabase.getDatabase(LingCatClientManager.appContext).chatDao()
+    }
+
+    private fun isFreshMiss(cache: ConcurrentHashMap<String, Long>, id: String): Boolean {
+        val cachedAt = cache[id] ?: return false
+        if (System.currentTimeMillis() - cachedAt < MISS_TTL_MS) return true
+        cache.remove(id)
+        return false
     }
 
     // ==========================================
@@ -42,61 +76,93 @@ object ProfileCache {
         return userCache[userId]
     }
 
-    suspend fun fetchUser(userId: String): IUser? = withContext(Dispatchers.IO) {
+    /**
+     * 拉取用户资料。
+     *
+     * @return 用户资料；仅当服务器确认该用户不存在时返回 null。
+     * @throws ProfileFetchException 未连接或网络/请求失败。
+     */
+    suspend fun requireUser(userId: String): IUser? = withContext(Dispatchers.IO) {
         if (userId.isEmpty()) return@withContext null
 
         // 1. 查内存
         userCache[userId]?.let { return@withContext it }
+        if (isFreshMiss(userMissCache, userId)) return@withContext null
 
-        // 2. 加锁防并发
+        // 2. 加锁防并发（single-flight）
         userFetchMutex.withLock {
+            // 等锁期间可能已经有别的协程拉到了
             userCache[userId]?.let { return@withContext it }
+            if (isFreshMiss(userMissCache, userId)) return@withContext null
 
-            // 3. 查本地数据库 (如果本地有，立刻返回并塞进内存，同时后台静默刷新)
+            // 3. 查本地数据库：有就先返回，同时后台静默刷新
             val localEntity = userDao.getUserById(userId)
             if (localEntity != null) {
                 val localUser = localEntity.toIUser()
                 if (localUser != null) {
                     userCache[userId] = localUser
-
-                    // ★ 核心体验优化：查到本地后，后台静默去刷新一次网络，保证资料是最新的
-                    kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
-                        val client = LingCatClientManager.currentClient
-                        val token = LingCatClientManager.currentToken
-                        // 如果没连上，直接返回，别报错
-                        if (client == null || token == null || !client.isReady()) return@launch
-
-                        try {
-                            val freshUser = UserApi.queryUserInfo(client, token, userId)
-                            if (freshUser != null) {
-                                userCache[userId] = freshUser
-                                userDao.insertUser(UserEntity.from(freshUser))
-                            }
-                        } catch (e: Exception) {
-                            Log.w(TAG, "background refresh user failed", e)
-                        }
-                    }
+                    refreshUserInBackground(userId)
                     return@withContext localUser
                 }
             }
 
-            // 4. 如果本地没有，只能请求网络了
-            try {
-                val client = LingCatClientManager.currentClient ?: return@withContext null
-                val token = LingCatClientManager.currentToken ?: return@withContext null
+            // 4. 本地没有，只能请求网络
+            val client = LingCatClientManager.currentClient
+            val token = LingCatClientManager.currentToken
+            if (client == null || token == null || !client.isReady()) {
+                throw ProfileFetchException("client not ready")
+            }
 
+            try {
                 val user = UserApi.queryUserInfo(client, token, userId)
-                if (user != null) {
-                    userCache[userId] = user
-                    // 写入数据库
-                    userDao.insertUser(UserEntity.from(user))
-                    return@withContext user
-                } else {}
+                if (user == null) {
+                    // 服务器确认不存在：写负缓存，避免界面疯狂重试
+                    userMissCache[userId] = System.currentTimeMillis()
+                    return@withContext null
+                }
+                userCache[userId] = user
+                userDao.insertUser(UserEntity.from(user))
+                userMissCache.remove(userId)
+                user
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                Log.e(TAG, "fetchUser failed for $userId", e)
+                throw ProfileFetchException("query user failed: ${e.message}", e)
             }
         }
-        return@withContext null
+    }
+
+    /**
+     * 兼容旧调用方（通知、保活服务等）：失败时返回 null，不抛异常。
+     * 需要区分「失败」与「不存在」、或者需要重试的 UI 调用方请用 [requireUser]。
+     */
+    suspend fun fetchUser(userId: String): IUser? = try {
+        requireUser(userId)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: ProfileFetchException) {
+        Log.w(TAG, "fetchUser failed for $userId", e)
+        null
+    }
+
+    private fun refreshUserInBackground(userId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val client = LingCatClientManager.currentClient
+            val token = LingCatClientManager.currentToken
+            if (client == null || token == null || !client.isReady()) return@launch
+
+            try {
+                val freshUser = UserApi.queryUserInfo(client, token, userId)
+                if (freshUser != null) {
+                    userCache[userId] = freshUser
+                    userDao.insertUser(UserEntity.from(freshUser))
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w(TAG, "background refresh user failed", e)
+            }
+        }
     }
 
     suspend fun fetchUsers(userIds: List<String>) = withContext(Dispatchers.IO) {
@@ -116,33 +182,63 @@ object ProfileCache {
         return chatCache[chatId]
     }
 
-    suspend fun fetchChat(chatId: String): IChat? = withContext(Dispatchers.IO) {
+    /**
+     * 拉取对话信息。
+     *
+     * @return 对话信息；仅当服务器确认该对话不存在时返回 null。
+     * @throws ProfileFetchException 未连接或网络/请求失败。
+     */
+    suspend fun requireChat(chatId: String): IChat? = withContext(Dispatchers.IO) {
         if (chatId.isEmpty()) return@withContext null
 
-        chatFetchMutex.withLock {
-            // 之前是通过网络拉取，现在我们可以先看看内存或者数据库
-            // （不过聊天信息通常 ChatList 那边已经存过了，这里为了保险再查一次）
-            try {
-                val client = LingCatClientManager.currentClient ?: return@withContext null
-                val token = LingCatClientManager.currentToken ?: return@withContext null
+        chatCache[chatId]?.let { return@withContext it }
+        if (isFreshMiss(chatMissCache, chatId)) return@withContext null
 
+        chatFetchMutex.withLock {
+            chatCache[chatId]?.let { return@withContext it }
+            if (isFreshMiss(chatMissCache, chatId)) return@withContext null
+
+            val client = LingCatClientManager.currentClient
+            val token = LingCatClientManager.currentToken
+            if (client == null || token == null || !client.isReady()) {
+                throw ProfileFetchException("client not ready")
+            }
+
+            try {
                 val chat = ChatApi.queryChatInfo(client, token, chatId)
-                if (chat != null) {
-                    chatCache[chatId] = chat
-                    return@withContext chat
-                } else {}
+                if (chat == null) {
+                    chatMissCache[chatId] = System.currentTimeMillis()
+                    return@withContext null
+                }
+                chatCache[chatId] = chat
+                chatMissCache.remove(chatId)
+                chat
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                Log.e(TAG, "fetchChat failed for $chatId", e)
+                throw ProfileFetchException("query chat failed: ${e.message}", e)
             }
         }
-        return@withContext null
+    }
+
+    /**
+     * 兼容旧调用方：失败时返回 null，不抛异常。
+     * 需要区分「失败」与「不存在」、或者需要重试的 UI 调用方请用 [requireChat]。
+     */
+    suspend fun fetchChat(chatId: String): IChat? = try {
+        requireChat(chatId)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: ProfileFetchException) {
+        Log.w(TAG, "fetchChat failed for $chatId", e)
+        null
     }
 
     fun cacheChats(chats: List<IChat>) {
         for (chat in chats) {
-            if (chat.id != null) {
-                chatCache[chat.id] = chat
-            }
+            val id = chat.id ?: continue
+            chatCache[id] = chat
+            chatMissCache.remove(id)
         }
     }
 
@@ -152,6 +248,8 @@ object ProfileCache {
     suspend fun clearAll() {
         userCache.clear()
         chatCache.clear()
+        userMissCache.clear()
+        chatMissCache.clear()
         withContext(Dispatchers.IO) {
             try {
                 userDao.clearUsers()
