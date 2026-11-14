@@ -70,6 +70,7 @@ import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatarMinTouchTarget
 import io.github.moonleeeaf.lingcat.ui.components.rememberAvatarUrl
 import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
@@ -1238,6 +1239,11 @@ fun MessageBubble(
         // 既不会出现一条消息占满整块屏幕，也不会在宽屏上被拉成一行超长文本。
         val maxBubbleWidth = (maxWidth * 0.76f).coerceAtMost(560.dp)
 
+        // 头像视觉尺寸 40dp，但可点击时触控区会扩到 48dp；隐藏头像时要用「同样的总宽度」占位，
+        // 否则有头像和没头像两种行的气泡左边距会差 8dp。
+        val avatarSize = 40.dp
+        val avatarSlotWidth = maxOf(avatarSize, LingCatAvatarMinTouchTarget) + 4.dp
+
         // ==========================================
         // 底层：回复图标（随滑动距离淡入）
         // ==========================================
@@ -1280,12 +1286,12 @@ fun MessageBubble(
         ) {
             if (!isMine) {
                 if (hideSender) {
-                    // 同一个人连续发消息：不重复显示头像，但要占住宽度，气泡不能左右跳动。
-                    Spacer(modifier = Modifier.width(44.dp))
+                    // 同一个人连续发消息：不重复显示头像，但要占住同样的宽度，气泡不能左右跳动。
+                    Spacer(modifier = Modifier.width(avatarSlotWidth))
                 } else {
                     LingCatAvatar(
                         avatarHash = avatarHash,
-                        size = 40.dp,
+                        size = avatarSize,
                         contentDescription = stringResource(R.string.label_avatar),
                         onClick = { onAvatarClick(message.senderUserId) },
                         onLongClick = { onAvatarLongClick(message.senderUserId) },
@@ -1415,12 +1421,12 @@ fun MessageBubble(
             if (isMine) {
                 if (hideSender) {
                     // 自己连续发消息时同样不重复头像，但保留占位
-                    Spacer(modifier = Modifier.width(44.dp))
+                    Spacer(modifier = Modifier.width(avatarSlotWidth))
                 } else {
                     Spacer(modifier = Modifier.width(4.dp))
                     LingCatAvatar(
                         avatarHash = avatarHash,
-                        size = 40.dp,
+                        size = avatarSize,
                         contentDescription = stringResource(R.string.label_avatar),
                         onClick = { onAvatarClick(message.senderUserId) },
                         onLongClick = { onAvatarLongClick(message.senderUserId) },

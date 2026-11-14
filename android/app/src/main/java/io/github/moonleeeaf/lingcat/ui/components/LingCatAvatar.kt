@@ -42,10 +42,18 @@ fun rememberAvatarUrl(avatarHash: String?): String? {
 }
 
 /**
+ * 可点击头像的最小触控尺寸（低于 48dp 不符合无障碍下限）。
+ *
+ * 外部需要在「头像不显示但位置要占住」时用它来计算占位宽度，
+ * 否则有头像 / 无头像的行会差出几 dp。
+ */
+val LingCatAvatarMinTouchTarget: Dp = 48.dp
+
+/**
  * 全局统一的头像组件。
  *
  * - 视觉尺寸由 [size] 决定；
- * - 如果头像可点击，会自动把触控区域扩展到至少 48dp；
+ * - 如果头像可点击，会自动把触控区域扩展到至少 [LingCatAvatarMinTouchTarget]；
  * - 所有页面共用同一套 Coil 缓存策略和默认头像。
  */
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,7 +70,7 @@ fun LingCatAvatar(
     val avatarUrl = rememberAvatarUrl(avatarHash)
 
     val hasAction = onClick != null || onLongClick != null
-    val touchSize = if (hasAction) maxOf(size, 48.dp) else size
+    val touchSize = if (hasAction) maxOf(size, LingCatAvatarMinTouchTarget) else size
     val actionModifier = if (hasAction) {
         Modifier.combinedClickable(
             onClick = { onClick?.invoke() },
