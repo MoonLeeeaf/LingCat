@@ -17,6 +17,10 @@ import io.github.moonleeeaf.lingcat.data.AccountInfo
 import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ServerStorage
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import io.github.moonleeeaf.lingcat.ui.LingCatApp
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
@@ -40,6 +44,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        Feedback.init(applicationContext)
 
         handleIntent(intent)
 
@@ -121,9 +126,9 @@ class MainActivity : ComponentActivity() {
 
         if (!error.isNullOrEmpty()) {
             if ("access_denied" == error) {
-                oauthEvents.tryEmit(OAuthEvent.Error("你取消了授权"))
+                oauthEvents.tryEmit(OAuthEvent.Error(uiText(R.string.oauth_cancelled)))
             } else {
-                oauthEvents.tryEmit(OAuthEvent.Error("授权失败: $error"))
+                oauthEvents.tryEmit(OAuthEvent.Error(uiText(R.string.oauth_failed, error)))
             }
             return
         }
@@ -138,8 +143,8 @@ class MainActivity : ComponentActivity() {
             // 这是【登录/注册】的回调
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val client = LingCatClientManager.currentClient ?: throw Exception("客户端未连接")
-                    val server = LingCatClientManager.currentServer ?: throw Exception("服务器未连接")
+                    val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_client_not_connected))
+                    val server = LingCatClientManager.currentServer ?: throw UiTextException(uiText(R.string.error_server_not_connected))
 
                     // 1. 换取 Token
                     val token = OAuthApi.exchangeOAuthCode(client, ticket, 15000L)
@@ -168,7 +173,12 @@ class MainActivity : ComponentActivity() {
                     oauthEvents.tryEmit(OAuthEvent.LoginSuccess(acc))
                 } catch (e: Exception) {
                     android.util.Log.e("OAuth", "exchange failed", e)
-                    oauthEvents.tryEmit(OAuthEvent.Error("获取用户信息失败: ${e.message}"))
+                    oauthEvents.tryEmit(
+                        OAuthEvent.Error(
+                            e.toUiTextOrNull()
+                                ?: uiText(R.string.oauth_user_info_failed, e.message ?: "")
+                        )
+                    )
                 }
             }
         }

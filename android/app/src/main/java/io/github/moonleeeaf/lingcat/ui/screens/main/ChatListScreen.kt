@@ -11,36 +11,46 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.*
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox // ★ 引入下拉刷新
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import io.github.moonleeeaf.lingcat.R
-import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
-import kotlinx.coroutines.launch
+import io.github.moonleeeaf.lingcat.ui.Feedback
+import io.github.moonleeeaf.lingcat.ui.asString
+import io.github.moonleeeaf.lingcat.ui.components.EmptyState
+import io.github.moonleeeaf.lingcat.ui.components.ErrorState
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
+import io.github.moonleeeaf.lingcat.ui.components.LoadingState
+import io.github.moonleeeaf.lingcat.data.ProfileCache
 import lingcat.classes.Classes.IChat
 import lingcat.client_protocol.LingCatClient
 
@@ -52,35 +62,23 @@ fun ChatListScreen(
     onChatClick: (String) -> Unit,
     viewModel: ChatListViewModel = viewModel(),
     onEditProfile: () -> Unit,
+    selectedChatId: String? = null,
 ) {
-    val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
-
     val uiState by viewModel.uiState.collectAsState()
     val connectionState by viewModel.connectionState.collectAsState()
     val connectionError by viewModel.connectionError.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
 
-    val pagerState = rememberPagerState(pageCount = { 3 })
-    val coroutineScope = rememberCoroutineScope()
+    // 最近 / 全部 内容高度重合，不再用三个 Tab 占首屏；只保留“只看收藏”一个筛选。
+    var showFavourites by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(pagerState.currentPage) {
-        viewModel.selectTab(pagerState.currentPage)
-    }
-
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    // 注意：只有列表已经展示过（SUCCESS）或者是纯刷新时才显示下拉圈，全屏转圈时不需要
     LaunchedEffect(uiState.errorMsg) {
-        uiState.errorMsg?.let {
-            if (uiState.loadState == ListLoadState.SUCCESS) { // 只有在列表已经显示的情况下，刷新报错才弹 Snackbar
-                snackbarHostState.showSnackbar(it)
-            }
-        }
+        uiState.errorMsg?.let { Feedback.show(it) }
     }
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { isGranted -> }
+    ) { }
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -91,54 +89,50 @@ fun ChatListScreen(
             uiState.loadState == ListLoadState.CONNECTING ||
             uiState.loadState == ListLoadState.LOADING_DATA
 
+    val currentChats = if (showFavourites) uiState.favouriteChats else uiState.allChats
+
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text(LingCatClientManager.currentServer?.siteTitle.toString()) },
+                title = { Text(LingCatClientManager.currentServer?.siteTitle ?: "LingCat") },
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "更多")
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.chat_list_more))
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("编辑资料") },
+                                text = { Text(stringResource(R.string.chat_list_edit_profile)) },
                                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                                 onClick = {
                                     menuExpanded = false
-                                    onEditProfile() // ★ 传入回调
+                                    onEditProfile()
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("账号管理") },
+                                text = { Text(stringResource(R.string.account_management)) },
                                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                                 onClick = {
                                     menuExpanded = false
                                     onManageAccounts()
                                 }
                             )
-                            /*DropdownMenuItem(
-                                text = { Text("退出登录") },
-                                leadingIcon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null) },
-                                onClick = {
-                                    menuExpanded = false
-                                    LingCatClientManager.logout()
-                                    onLogout()
-                                }
-                            )*/
                         }
                     }
                 }
             )
         }
     ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
 
-            // ★ 网络状态提示条：CONNECTING / RECONNECTING / DISCONNECTED 时显示
+            // ★ 网络状态提示条
             val showConnectionBanner = connectionState == LingCatClient.ConnectionState.CONNECTING ||
                     connectionState == LingCatClient.ConnectionState.RECONNECTING ||
                     connectionState == LingCatClient.ConnectionState.DISCONNECTED
@@ -153,9 +147,7 @@ fun ChatListScreen(
                     onRetry = {
                         val server = LingCatClientManager.currentServer
                         if (server != null) {
-                            coroutineScope.launch {
-                                LingCatClientManager.connect(server)
-                            }
+                            viewModel.reconnect(server)
                         } else {
                             viewModel.initAndLoad()
                         }
@@ -163,88 +155,92 @@ fun ChatListScreen(
                 )
             }
 
-            val tabs = listOf("最近", "收藏", "全部")
-            TabRow(selectedTabIndex = pagerState.currentPage) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
-                        },
-                        text = { Text(title) }
-                    )
-                }
+            // ★ 轻量筛选：全部 / 收藏
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                FilterChip(
+                    selected = !showFavourites,
+                    onClick = { showFavourites = false },
+                    label = { Text(stringResource(R.string.chat_list_all)) },
+                )
+                FilterChip(
+                    selected = showFavourites,
+                    onClick = { showFavourites = true },
+                    label = { Text(stringResource(R.string.chat_list_favorites)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = if (showFavourites) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    },
+                )
             }
 
             PullToRefreshBox(
-                isRefreshing = showRefreshing, // ★ 绑定综合状态
+                isRefreshing = showRefreshing,
                 onRefresh = { viewModel.initAndLoad(isRefresh = true) },
                 modifier = Modifier.fillMaxSize()
             ) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxSize()
-                ) { pageIndex ->
-                    val currentChats = when(pageIndex) {
-                        0 -> uiState.recentChats
-                        1 -> uiState.favouriteChats
-                        else -> uiState.allChats
-                    }
-
-                    Box(Modifier.fillMaxSize()) {
-                        when (uiState.loadState) {
-                            // ★ 删掉原先的 CircularProgressIndicator，直接留空或显示透明的 Box
-                            ListLoadState.IDLE, ListLoadState.CONNECTING, ListLoadState.LOADING_DATA -> {
-                                // 如果列表里有旧数据，就展示旧数据；如果彻底没数据，显示个轻量提示
-                                if (currentChats.isEmpty()) {
-                                    Text(
-                                        "正在拉取会话列表...",
-                                        Modifier.align(Alignment.Center),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                } else {
-                                    // 有缓存数据的情况下，静默刷新，什么都不用管，直接渲染下面的列表
-                                    LazyColumn(Modifier.fillMaxSize()) {
-                                        items(currentChats, key = { it.id }) { chat ->
-                                            ChatListItem(chat = chat, fileToken = fileToken, onClick = { onChatClick(chat.id) })
-                                            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                                        }
-                                    }
-                                }
-                            }
-
-                            ListLoadState.ERROR -> {
-                                Column(
+                Box(Modifier.fillMaxSize()) {
+                    when (uiState.loadState) {
+                        ListLoadState.IDLE,
+                        ListLoadState.CONNECTING,
+                        ListLoadState.LOADING_DATA -> {
+                            if (currentChats.isEmpty()) {
+                                LoadingState(
                                     modifier = Modifier.align(Alignment.Center),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(text = uiState.errorMsg ?: "网络出错了喵", color = MaterialTheme.colorScheme.error)
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Button(onClick = { viewModel.initAndLoad() }) {
-                                        Text("点击重试")
-                                    }
-                                }
+                                    label = stringResource(R.string.chat_list_syncing),
+                                )
+                            } else {
+                                ChatList(
+                                    chats = currentChats,
+                                    selectedChatId = selectedChatId,
+                                    onChatClick = onChatClick,
+                                )
                             }
+                        }
 
-                            ListLoadState.SUCCESS -> {
-                                if (currentChats.isEmpty()) {
-                                    Column(
-                                        Modifier.align(Alignment.Center),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text("这里空空如也喵~", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    }
-                                } else {
-                                    LazyColumn(Modifier.fillMaxSize()) {
-                                        items(currentChats, key = { it.id }) { chat ->
-                                            ChatListItem(chat = chat, fileToken = fileToken, onClick = { onChatClick(chat.id) })
-                                            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                                        }
-                                    }
-                                }
+                        ListLoadState.ERROR -> {
+                            if (currentChats.isEmpty()) {
+                                ErrorState(
+                                    message = uiState.errorMsg?.asString() ?: stringResource(R.string.chat_list_network_error),
+                                    onRetry = { viewModel.initAndLoad() },
+                                    modifier = Modifier.align(Alignment.Center),
+                                )
+                            } else {
+                                // 有缓存时静默保留列表，错误通过 Snackbar 提示。
+                                ChatList(
+                                    chats = currentChats,
+                                    selectedChatId = selectedChatId,
+                                    onChatClick = onChatClick,
+                                )
+                            }
+                        }
+
+                        ListLoadState.SUCCESS -> {
+                            if (currentChats.isEmpty()) {
+                                EmptyState(
+                                    title = if (showFavourites) stringResource(R.string.chat_list_empty_fav_title) else stringResource(R.string.chat_list_empty_title),
+                                    description = if (showFavourites) {
+                                        stringResource(R.string.chat_list_empty_fav_desc)
+                                    } else {
+                                        stringResource(R.string.chat_list_empty_desc)
+                                    },
+                                    icon = if (showFavourites) Icons.Default.FavoriteBorder else Icons.Default.Person,
+                                    modifier = Modifier.align(Alignment.Center),
+                                )
+                            } else {
+                                ChatList(
+                                    chats = currentChats,
+                                    selectedChatId = selectedChatId,
+                                    onChatClick = onChatClick,
+                                )
                             }
                         }
                     }
@@ -254,11 +250,31 @@ fun ChatListScreen(
     }
 }
 
+@Composable
+private fun ChatList(
+    chats: List<IChat>,
+    selectedChatId: String?,
+    onChatClick: (String) -> Unit,
+) {
+    LazyColumn(Modifier.fillMaxSize()) {
+        items(chats, key = { it.id }) { chat ->
+            ChatListItem(
+                chat = chat,
+                selected = chat.id == selectedChatId,
+                onClick = { onChatClick(chat.id) },
+            )
+            HorizontalDivider(
+                modifier = Modifier.padding(start = 72.dp),
+                color = MaterialTheme.colorScheme.outlineVariant,
+            )
+        }
+    }
+}
+
 /**
  * 网络连接状态提示条。
- * - CONNECTING / RECONNECTING：提示正在重连
- * - DISCONNECTED：红色，提供“重试”按钮
- * - 有具体错误时，在标题下方显示服务端返回的详细信息（如 HTTP 530）
+ * - CONNECTING / RECONNECTING：使用 secondaryContainer，明确是“进行中”而不是普通文字
+ * - DISCONNECTED：使用 error，并提供“重试”按钮
  */
 @Composable
 private fun ConnectionStateBanner(
@@ -270,30 +286,37 @@ private fun ConnectionStateBanner(
     val background = if (isDisconnected) {
         MaterialTheme.colorScheme.error
     } else {
-        MaterialTheme.colorScheme.surface // Amber：网络异常，正在重连
+        MaterialTheme.colorScheme.secondaryContainer
     }
     val contentColor = if (isDisconnected) {
         MaterialTheme.colorScheme.onError
     } else {
-        MaterialTheme.colorScheme.onSurface // 深棕，保证黄色背景上的可读性
+        MaterialTheme.colorScheme.onSecondaryContainer
     }
+    val icon: ImageVector = if (isDisconnected) Icons.Default.CloudOff else Icons.Default.Sync
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(background)
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = contentColor,
+            modifier = Modifier.size(20.dp),
+        )
+        Spacer(Modifier.width(12.dp))
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(10.dp)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                text = if (isDisconnected) "网络已断开" else "网络异常，正在重连...",
+                text = if (isDisconnected) stringResource(R.string.chat_list_disconnected) else stringResource(R.string.chat_list_reconnecting),
                 color = contentColor,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
             if (!errorMessage.isNullOrBlank()) {
                 Text(
@@ -307,14 +330,18 @@ private fun ConnectionStateBanner(
         }
         if (isDisconnected) {
             TextButton(onClick = onRetry) {
-                Text("重试", color = contentColor)
+                Text(stringResource(R.string.action_retry), color = contentColor)
             }
         }
     }
 }
 
 @Composable
-fun ChatListItem(chat: IChat, fileToken: String?, onClick: () -> Unit) {
+fun ChatListItem(
+    chat: IChat,
+    selected: Boolean = false,
+    onClick: () -> Unit,
+) {
     // 1. 获取对方的 ID（如果是私聊）
     val peerUserId = if (chat.type == "private") chat.peerUserId else null
 
@@ -340,49 +367,36 @@ fun ChatListItem(chat: IChat, fileToken: String?, onClick: () -> Unit) {
     val displayTitle = if (chat.title.isNotEmpty()) {
         chat.title
     } else if (chat.type == "private" && peerUser != null) {
-        peerUser?.nickname?.ifEmpty { peerUser?.username } ?: "私聊"
+        peerUser?.nickname?.ifEmpty { peerUser?.username } ?: stringResource(R.string.label_private_chat)
     } else {
-        "无标题"
+        stringResource(R.string.chat_list_no_title)
     }
 
-    // 5. 拼接头像 URL
-    val avatarUrl = if (!finalAvatarHash.isNullOrEmpty() && !fileToken.isNullOrEmpty()) {
-        LingCatClientManager.currentClient?.getFileUrlByHashAndToken(finalAvatarHash, fileToken)
-    } else null
+    val containerColor = if (selected) {
+        MaterialTheme.colorScheme.secondaryContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
 
     ListItem(
         leadingContent = {
-            if (avatarUrl != null) {
-                AsyncImage(
-                    model = coil.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
-                        .data(avatarUrl) // 网络请求的地址（带动态 Token）
-                        .memoryCacheKey(finalAvatarHash) // ★ 核心：内存缓存只认 Hash！
-                        .diskCacheKey(finalAvatarHash)   // ★ 核心：磁盘缓存也只认 Hash！
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "头像",
-                    modifier = Modifier.size(48.dp).clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(id = R.drawable.ic_default_avatar),
-                    error = painterResource(id = R.drawable.ic_default_avatar)
-                )
-            } else {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.ic_default_avatar),
-                    contentDescription = "默认头像",
-                    modifier = Modifier.size(48.dp).clip(CircleShape),
-                    contentScale = ContentScale.Crop
+            LingCatAvatar(
+                avatarHash = finalAvatarHash,
+                size = 48.dp,
+                contentDescription = stringResource(R.string.label_avatar),
+            )
+        },
+        headlineContent = { Text(displayTitle) },
+        supportingContent = chat.lastMessageText?.takeIf { it.isNotBlank() }?.let {
+            {
+                Text(
+                    text = it,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         },
-        headlineContent = { Text(displayTitle) },
-        supportingContent = {
-            Text(
-                text = chat.lastMessageText ?: "",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
+        colors = ListItemDefaults.colors(containerColor = containerColor),
         modifier = Modifier.clickable { onClick() }
     )
 }

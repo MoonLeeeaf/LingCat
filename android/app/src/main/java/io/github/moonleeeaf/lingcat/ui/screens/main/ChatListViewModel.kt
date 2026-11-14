@@ -6,7 +6,12 @@ import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.data.db.ChatEntity
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,20 +33,12 @@ enum class ListLoadState { IDLE, CONNECTING, LOADING_DATA, SUCCESS, ERROR }
 data class ChatListUiState(
     val loadState: ListLoadState = ListLoadState.IDLE,
     val isRefreshing: Boolean = false,
-    val currentTab: Int = 0,
     val recentChats: List<IChat> = emptyList(),
     val favouriteChats: List<IChat> = emptyList(),
     val allChats: List<IChat> = emptyList(),
     val unreadCounts: Map<String, Int> = emptyMap(), // ★ 新增：未读数记录
-    val errorMsg: String? = null
-) {
-    val currentChats: List<IChat>
-        get() = when(currentTab) {
-            0 -> recentChats
-            1 -> favouriteChats
-            else -> allChats
-        }
-}
+    val errorMsg: UiText? = null
+)
 
 class ChatListViewModel : ViewModel() {
     private val TAG = "ChatListVM"
@@ -138,16 +135,20 @@ class ChatListViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val server = LingCatClientManager.currentServer ?: throw Exception("服务器配置丢失")
-                val token = LingCatClientManager.currentToken ?: throw Exception("登录失效，请重新登录")
+                val server = LingCatClientManager.currentServer ?: throw UiTextException(uiText(R.string.chat_list_err_server_missing))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.chat_list_err_session_expired))
 
                 var client = LingCatClientManager.currentClient
                 if (client == null || !client.isReady()) {
                     val result = LingCatClientManager.connect(server)
-                    if (result.isFailure) throw Exception("网络连接失败: ${result.exceptionOrNull()?.message}")
+                    if (result.isFailure) {
+                        // 真实原因通常已经是 UiTextException，直接透传，不要再套一层前缀。
+                        throw result.exceptionOrNull()
+                            ?: UiTextException(uiText(R.string.chat_list_err_connect))
+                    }
                     client = LingCatClientManager.currentClient
                 }
-                if (client == null) throw Exception("客户端未就绪")
+                if (client == null) throw UiTextException(uiText(R.string.error_client_not_ready))
 
                 LingCatClientManager.authorize(client, token)
 
@@ -185,7 +186,8 @@ class ChatListViewModel : ViewModel() {
                     _uiState.value = _uiState.value.copy(
                         loadState = ListLoadState.ERROR,
                         isRefreshing = false,
-                        errorMsg = "失败: ${cause.message}"
+                        errorMsg = cause.toUiTextOrNull()
+                            ?: uiText(R.string.chat_list_err_load, cause.message ?: "")
                     )
                 }
             } finally {
@@ -247,7 +249,30 @@ class ChatListViewModel : ViewModel() {
     }
 
     fun selectTab(index: Int) {
-        _uiState.value = _uiState.value.copy(currentTab = index)
+        // 保留空实现以兼容旧调用；三个 Tab 已经合并为“全部 / 收藏”筛选。
     }
 
+    /**
+     * 断线后手动重连。
+     */
+    fun reconnect(server: io.github.moonleeeaf.lingcat.data.ServerConfig) {
+        if (isFetching) return
+        _uiState.value = _uiState.value.copy(loadState = ListLoadState.CONNECTING)
+        viewModelScope.launch {
+            val result = LingCatClientManager.connect(server)
+            if (result.isFailure) {
+                _uiState.value = _uiState.value.copy(
+                    loadState = if (_uiState.value.allChats.isEmpty()) {
+                        ListLoadState.ERROR
+                    } else {
+                        ListLoadState.SUCCESS
+                    },
+                    errorMsg = result.exceptionOrNull()?.toUiTextOrNull()
+                        ?: uiText(R.string.chat_list_err_reconnect, result.exceptionOrNull()?.message ?: ""),
+                )
+            } else {
+                initAndLoad(isRefresh = true)
+            }
+        }
+    }
 }

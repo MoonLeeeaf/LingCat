@@ -1,6 +1,8 @@
 package io.github.moonleeeaf.lingcat.ui.theme
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,7 +12,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -21,9 +22,28 @@ private val DarkColorScheme = darkColorScheme(
     primaryContainer = PrimaryContainerDark,
     onPrimaryContainer = OnPrimaryContainerDark,
     secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    secondaryContainer = SecondaryContainerDark,
+    onSecondaryContainer = OnSecondaryContainerDark,
+    tertiary = TertiaryDark,
+    onTertiary = OnTertiaryDark,
     background = BackgroundDark,
+    onBackground = OnBackgroundDark,
     surface = SurfaceDark,
-    onSurface = OnSurfaceDark
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+    surfaceContainerLowest = SurfaceContainerLowestDark,
+    surfaceContainerLow = SurfaceContainerLowDark,
+    surfaceContainer = SurfaceContainerDark,
+    surfaceContainerHigh = SurfaceContainerHighDark,
+    surfaceContainerHighest = SurfaceContainerHighestDark,
+    outline = OutlineDark,
+    outlineVariant = OutlineVariantDark,
+    error = ErrorDark,
+    onError = OnErrorDark,
+    errorContainer = ErrorContainerDark,
+    onErrorContainer = OnErrorContainerDark,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -32,10 +52,35 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = PrimaryContainerLight,
     onPrimaryContainer = OnPrimaryContainerLight,
     secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    secondaryContainer = SecondaryContainerLight,
+    onSecondaryContainer = OnSecondaryContainerLight,
+    tertiary = TertiaryLight,
+    onTertiary = OnTertiaryLight,
     background = BackgroundLight,
+    onBackground = OnBackgroundLight,
     surface = SurfaceLight,
-    onSurface = OnSurfaceLight
+    onSurface = OnSurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+    surfaceContainerLowest = SurfaceContainerLowestLight,
+    surfaceContainerLow = SurfaceContainerLowLight,
+    surfaceContainer = SurfaceContainerLight,
+    surfaceContainerHigh = SurfaceContainerHighLight,
+    surfaceContainerHighest = SurfaceContainerHighestLight,
+    outline = OutlineLight,
+    outlineVariant = OutlineVariantLight,
+    error = ErrorLight,
+    onError = OnErrorLight,
+    errorContainer = ErrorContainerLight,
+    onErrorContainer = OnErrorContainerLight,
 )
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 @Composable
 fun LingCatTheme(
@@ -57,32 +102,17 @@ fun LingCatTheme(
     }
 
     // ==========================================
-    // 沉浸式状态栏与导航栏处理
+    // 系统栏图标明暗
     // ==========================================
+    // 注意：edge-to-edge 由 MainActivity 的 enableEdgeToEdge() 统一开启，
+    // 这里只负责图标明暗，避免重复设置窗口标志导致 insets 计算混乱。
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-
-            // 关键点 1：让内容延伸到状态栏和导航栏下方 (Edge-to-Edge)
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-
-            // 关键点 2：把状态栏和导航栏的背景设为透明
-            window.statusBarColor = android.graphics.Color.TRANSPARENT
-            @Suppress("DEPRECATION")
-            window.navigationBarColor = android.graphics.Color.TRANSPARENT
-
-            // 关键点 3：根据当前主题，自动切换状态栏图标为深色/浅色
+            val window = view.context.findActivity()?.window ?: return@SideEffect
             val insetsController = WindowCompat.getInsetsController(window, view)
             insetsController.isAppearanceLightStatusBars = !darkTheme
-            // 如果你的底栏也是浅色，把导航栏图标也设为深色（适配全面屏手势条）
             insetsController.isAppearanceLightNavigationBars = !darkTheme
-
-            // 处理旧版 Android 的导航栏遮罩（避免白底白条）
-            if (Build.VERSION.SDK_INT >= 28) {
-                @Suppress("DEPRECATION")
-                window.navigationBarDividerColor = android.graphics.Color.TRANSPARENT
-            }
         }
     }
 

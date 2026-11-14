@@ -1,16 +1,25 @@
 package io.github.moonleeeaf.lingcat.ui
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -19,18 +28,20 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.moonleeeaf.lingcat.OAuthEvent
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.ui.screens.auth.LoginScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
@@ -52,21 +63,48 @@ object Routes {
     const val MEETING = "meeting"
 }
 
-// 动画时长，保持全局一致
 private const val DURATION = 300
+private const val TABLET_LIST_WIDTH_DP = 360
+
+// ==========================================
+// 统一的页面转场
+// ==========================================
+// 详情页一律从右侧推入、向右退出；返回时反向。
+// 之前聊天页、账号页、设置页、会议页各用一套动画（或默认淡入淡出），
+// 会让“进入下一层”的空间关系变得不可预测。
+private val detailEnter: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+    slideInHorizontally(animationSpec = tween(DURATION)) { it / 4 } + fadeIn(tween(DURATION))
+}
+private val detailExit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+    slideOutHorizontally(animationSpec = tween(DURATION)) { -it / 4 } + fadeOut(tween(DURATION))
+}
+private val detailPopEnter: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
+    slideInHorizontally(animationSpec = tween(DURATION)) { -it / 4 } + fadeIn(tween(DURATION))
+}
+private val detailPopExit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition = {
+    slideOutHorizontally(animationSpec = tween(DURATION)) { it } + fadeOut(tween(DURATION))
+}
 
 @Composable
 fun LingCatApp(
-    deepLinkChatIdFlow: SharedFlow<String>, 
+    deepLinkChatIdFlow: SharedFlow<String>,
     oauthEventFlow: SharedFlow<OAuthEvent>,
     windowSizeClass: WindowSizeClass,
     openMeetingEventFlow: SharedFlow<Unit>,
 ) {
     val navController = rememberNavController()
-    val isExpanded = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded ||
-            windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium
+    // 只有真正的 Expanded（>= 840dp）才分栏。
+    // Medium（600dp 左右）分栏后右侧只剩 280dp，连消息气泡都放不下。
+    val isExpanded = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // 全局反馈总线：复制成功、保存失败之类的短提示统一走 Snackbar。
+    LaunchedEffect(Unit) {
+        Feedback.events.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     // ★ 监听通知点击事件
     LaunchedEffect(Unit) {
@@ -97,8 +135,6 @@ fun LingCatApp(
             // 如果当前不在会议页，才进行跳转
             if (currentRoute != Routes.MEETING) {
                 navController.navigate(Routes.MEETING) {
-                    // 如果你希望点返回能回到之前的列表页，不要用 popUpTo(0)
-                    // 如果希望确保会议页在最上面，可以加 launchSingleTop
                     launchSingleTop = true
                 }
             }
@@ -110,18 +146,18 @@ fun LingCatApp(
             when (event) {
                 is OAuthEvent.Bound -> {
                     // 资料页绑定时，弹个提示
-                    snackbarHostState.showSnackbar("已成功绑定 ${event.provider}")
+                    Feedback.show(R.string.oauth_bound, event.provider)
                     // 此时 EditProfileViewModel 会自己调 loadBindings() 刷新
                 }
                 is OAuthEvent.LoginSuccess -> {
                     // OAuth 登录成功，跳到主界面
-                    snackbarHostState.showSnackbar("登录成功")
+                    Feedback.show(R.string.login_success)
                     navController.navigate(Routes.CHAT_LIST) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 }
                 is OAuthEvent.Error -> {
-                    snackbarHostState.showSnackbar(event.message)
+                    Feedback.show(event.message)
                 }
             }
         }
@@ -129,208 +165,242 @@ fun LingCatApp(
 
     var selectedChatId by rememberSaveable { mutableStateOf<String?>(null) }
 
-    NavHost(
-        navController = navController,
-        startDestination = Routes.SPLASH,
-        // 默认切换动画（淡入淡出），用于兜底
-        enterTransition = { fadeIn(tween(DURATION)) },
-        exitTransition = { fadeOut(tween(DURATION)) },
-        popEnterTransition = { fadeIn(tween(DURATION)) },
-        popExitTransition = { fadeOut(tween(DURATION)) }
-    ) {
-        // 1. 启动页 (Splash)
-        composable(
-            route = Routes.SPLASH,
-            // ★ 纯淡出，不缩放，显得更平静优雅
-            exitTransition = {
-                fadeOut(animationSpec = tween(400))
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        NavHost(
+            navController = navController,
+            startDestination = Routes.SPLASH,
+            // 默认切换动画（淡入淡出），用于兜底
+            enterTransition = { fadeIn(tween(DURATION)) },
+            exitTransition = { fadeOut(tween(DURATION)) },
+            popEnterTransition = { fadeIn(tween(DURATION)) },
+            popExitTransition = { fadeOut(tween(DURATION)) }
         ) {
-            SplashScreen(
-                onNeedLogin = {
-                    navController.navigate(Routes.LOGIN) { popUpTo(Routes.SPLASH) { inclusive = true } }
-                },
-                onLoggedIn = {
-                    navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.SPLASH) { inclusive = true } }
+            // 1. 启动页 (Splash)
+            composable(
+                route = Routes.SPLASH,
+                // ★ 纯淡出，不缩放，显得更平静优雅
+                exitTransition = {
+                    fadeOut(animationSpec = tween(400))
                 }
-            )
-        }
-
-        // 2. 登录页 (Login)
-        composable(
-            route = Routes.LOGIN,
-            // 从底部向上滑入，表示进入 App
-            enterTransition = { slideInVertically(initialOffsetY = { it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) },
-            // 登录成功后向上滑出/淡出
-            exitTransition = { slideOutVertically(targetOffsetY = { -it / 4 }, animationSpec = tween(DURATION)) + fadeOut(tween(DURATION)) },
-            // 从其他页面退回登录页时，从底部滑入
-            popEnterTransition = { slideInVertically(initialOffsetY = { it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) }
-        ) {
-            LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.LOGIN) { inclusive = true } }
-                },
-                onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) }
-            )
-        }
-
-        // 3. 对话列表 (ChatList)
-        composable(Routes.CHAT_LIST) {
-            if (isExpanded) {
-                // ★ 平板分栏模式
-                Row(modifier = Modifier.fillMaxSize()) {
-                    // 左侧：固定宽度的聊天列表
-                    Box(modifier = Modifier
-                        .width(320.dp)
-                        .fillMaxHeight()) {
-                        ChatListScreen(
-                            onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) },
-                            onLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } },
-                            onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
-                            onChatClick = { chatId -> selectedChatId = chatId } // 只更新选中状态
-                        )
+            ) {
+                SplashScreen(
+                    onNeedLogin = {
+                        navController.navigate(Routes.LOGIN) { popUpTo(Routes.SPLASH) { inclusive = true } }
+                    },
+                    onLoggedIn = {
+                        navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.SPLASH) { inclusive = true } }
                     }
+                )
+            }
 
-                    VerticalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            // 2. 登录页 (Login)
+            composable(
+                route = Routes.LOGIN,
+                // 从底部向上滑入，表示进入 App
+                enterTransition = { slideInVertically(initialOffsetY = { it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) },
+                // 登录成功后向上滑出/淡出
+                exitTransition = { slideOutVertically(targetOffsetY = { -it / 4 }, animationSpec = tween(DURATION)) + fadeOut(tween(DURATION)) },
+                // 从其他页面退回登录页时，从底部滑入
+                popEnterTransition = { slideInVertically(initialOffsetY = { it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) }
+            ) {
+                LoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.LOGIN) { inclusive = true } }
+                    },
+                    onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) }
+                )
+            }
 
-                    // 右侧：独立的嵌套 NavHost
-                    Box(modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()) {
-                        if (selectedChatId == null) {
-                            Scaffold {padding ->
-                                Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                                    Text(
-                                        "选择一个对话开始聊天喵",
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+            // 3. 对话列表 (ChatList)
+            composable(Routes.CHAT_LIST) {
+                if (isExpanded) {
+                    // ★ 平板分栏模式
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        // 左侧：固定宽度的聊天列表
+                        Box(
+                            modifier = Modifier
+                                .width(TABLET_LIST_WIDTH_DP.dp)
+                                .fillMaxHeight()
+                        ) {
+                            ChatListScreen(
+                                onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) },
+                                onLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } },
+                                onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
+                                onChatClick = { chatId -> selectedChatId = chatId },
+                                selectedChatId = selectedChatId,
+                            )
+                        }
+
+                        VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+                        // 右侧：独立的嵌套 NavHost
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        ) {
+                            if (selectedChatId == null) {
+                                Scaffold { padding ->
+                                    Box(
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(padding),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.nav_pick_chat),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
-                            }
-                        } else {
-                            // 为右侧创建一个局部的 NavController
-                            val rightNavController = rememberNavController()
+                            } else {
+                                // 为右侧创建一个局部的 NavController
+                                val rightNavController = rememberNavController()
 
-                            NavHost(
-                                navController = rightNavController,
-                                startDestination = Routes.CHAT,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                // 嵌套路由 1：聊天详情
-                                composable(Routes.CHAT) {
-                                    ChatScreen(
-                                        chatId = selectedChatId!!,
-                                        onBack = { selectedChatId = null }, // 点返回回到未选中
-                                        // ★ 重点：这里不再用外层的 navController，而是用局部的 rightNavController
-                                        onNavigateToMembers = { chatId ->
-                                            rightNavController.navigate("chat_members_2/$chatId")
-                                        },
-                                        onNavigateToChat = { newChatId ->
-                                            selectedChatId = newChatId // 右侧直接切聊天
-                                        },
-                                        onNavigateToMeeting = {
-                                            navController.navigate(Routes.MEETING)
-                                        }
-                                    )
-                                }
-                                // 嵌套路由 2：群成员列表
-                                composable("chat_members_2/{chatId}") { backStack ->
-                                    val cid = backStack.arguments?.getString("chatId") ?: ""
-                                    ChatMembersScreen(
-                                        chatId = cid,
-                                        onBack = { rightNavController.popBackStack() }, // ★ 这里的返回只影响右侧
-                                        onNavigateToChatFromMember = { newChatId ->
-                                            selectedChatId = newChatId
-                                            // 如果切换到了新聊天，清空右栏的返回栈
-                                            rightNavController.popBackStack(Routes.CHAT, inclusive = false)
-                                        }
-                                    )
+                                NavHost(
+                                    navController = rightNavController,
+                                    startDestination = Routes.CHAT,
+                                    modifier = Modifier.fillMaxSize(),
+                                    enterTransition = detailEnter,
+                                    exitTransition = detailExit,
+                                    popEnterTransition = detailPopEnter,
+                                    popExitTransition = detailPopExit,
+                                ) {
+                                    // 嵌套路由 1：聊天详情
+                                    composable(Routes.CHAT) {
+                                        ChatScreen(
+                                            chatId = selectedChatId!!,
+                                            onBack = { selectedChatId = null }, // 点返回回到未选中
+                                            onNavigateToMembers = { chatId ->
+                                                rightNavController.navigate("chat_members_2/$chatId")
+                                            },
+                                            onNavigateToChat = { newChatId ->
+                                                selectedChatId = newChatId // 右侧直接切聊天
+                                            },
+                                            onNavigateToMeeting = {
+                                                navController.navigate(Routes.MEETING)
+                                            }
+                                        )
+                                    }
+                                    // 嵌套路由 2：群成员列表
+                                    composable("chat_members_2/{chatId}") { backStack ->
+                                        val cid = backStack.arguments?.getString("chatId") ?: ""
+                                        ChatMembersScreen(
+                                            chatId = cid,
+                                            onBack = { rightNavController.popBackStack() }, // ★ 这里的返回只影响右侧
+                                            onNavigateToChatFromMember = { newChatId ->
+                                                selectedChatId = newChatId
+                                                // 如果切换到了新聊天，清空右栏的返回栈
+                                                rightNavController.popBackStack(Routes.CHAT, inclusive = false)
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
+                } else {
+                    // 手机模式
+                    ChatListScreen(
+                        onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) },
+                        onLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } },
+                        onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
+                        onChatClick = { chatId -> navController.navigate("chat/$chatId") }
+                    )
                 }
-            } else {
-                // 手机模式：保持原有逻辑
-                ChatListScreen(
-                    onManageAccounts = { navController.navigate(Routes.ACCOUNT_LIST) },
-                    onLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } },
-                    onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
-                    onChatClick = { chatId -> navController.navigate("chat/$chatId") }
+            }
+
+            // 4. 账号管理 (AccountList)
+            composable(
+                route = Routes.ACCOUNT_LIST,
+                enterTransition = detailEnter,
+                exitTransition = detailExit,
+                popEnterTransition = detailPopEnter,
+                popExitTransition = detailPopExit,
+            ) {
+                AccountListScreen(
+                    onBack = { navController.popBackStack() },
+                    onAddAccount = { navController.navigate(Routes.LOGIN) },
+                    onSwitchSuccess = { navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.CHAT_LIST) { inclusive = true } } },
+                    onForceLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } }
                 )
+            }
+
+            // 5. 聊天详情 (Chat)
+            composable(
+                route = Routes.CHAT,
+                enterTransition = detailEnter,
+                exitTransition = detailExit,
+                popEnterTransition = detailPopEnter,
+                popExitTransition = detailPopExit,
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+                ChatScreen(
+                    chatId = chatId,
+                    onBack = { navController.popBackStack() },
+                    onNavigateToMembers = { chatId -> navController.navigate("chat_members/$chatId") },
+                    onNavigateToChat = { newChatId ->
+                        // ★ 核心修复：跳转到新生成的私聊 ID
+                        navController.navigate("chat/$newChatId") {
+                            popUpTo(Routes.CHAT) { inclusive = true }
+                        }
+                    },
+                    onNavigateToMeeting = {
+                        navController.navigate(Routes.MEETING)
+                    },
+                )
+            }
+
+            composable(
+                route = Routes.CHAT_MEMBERS,
+                enterTransition = detailEnter,
+                exitTransition = detailExit,
+                popEnterTransition = detailPopEnter,
+                popExitTransition = detailPopExit,
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+                ChatMembersScreen(
+                    chatId = chatId,
+                    onBack = { navController.popBackStack() },
+                    onNavigateToChatFromMember = { newChatId ->
+                        // ★ 核心修复：跳转到新生成的私聊 ID
+                        navController.navigate("chat/$newChatId") {
+                            popUpTo(Routes.CHAT) { inclusive = true }
+                        }
+                    },
+                )
+            }
+
+            composable(
+                route = Routes.EDIT_PROFILE,
+                enterTransition = detailEnter,
+                exitTransition = detailExit,
+                popEnterTransition = detailPopEnter,
+                popExitTransition = detailPopExit,
+            ) {
+                EditProfileScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = Routes.MEETING,
+                enterTransition = detailEnter,
+                exitTransition = detailExit,
+                popEnterTransition = detailPopEnter,
+                popExitTransition = detailPopExit,
+            ) {
+                MeetingScreen(onBack = { navController.popBackStack() })
             }
         }
 
-        // 4. 账号管理 (AccountList) - 作为一个子页面从右侧进入
-        composable(
-            route = Routes.ACCOUNT_LIST,
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(DURATION)) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(DURATION)) },
-            popEnterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(DURATION)) },
-            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(DURATION)) }
-        ) {
-            AccountListScreen(
-                onBack = { navController.popBackStack() },
-                onAddAccount = { navController.navigate(Routes.LOGIN) },
-                onSwitchSuccess = { navController.navigate(Routes.CHAT_LIST) { popUpTo(Routes.CHAT_LIST) { inclusive = true } } },
-                onForceLogout = { navController.navigate(Routes.LOGIN) { popUpTo(0) } }
-            )
-        }
-
-        // 5. 聊天详情 (Chat)
-        composable(
-            route = Routes.CHAT,
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 4 }, animationSpec = tween(DURATION)) + fadeOut(tween(DURATION)) },
-            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }, animationSpec = tween(DURATION)) + fadeIn(tween(DURATION)) },
-            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(DURATION)) + fadeOut(tween(DURATION)) }
-        ) { backStackEntry ->
-            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
-            ChatScreen(
-                chatId = chatId,
-                onBack = { navController.popBackStack() },
-                onNavigateToMembers = { chatId -> navController.navigate("chat_members/$chatId") },
-                onNavigateToChat = { newChatId ->
-                    // ★ 核心修复：跳转到新生成的私聊 ID
-                    navController.navigate("chat/$newChatId") {
-                        // 可选：如果你希望从当前聊天直接替换到新聊天，而不是叠加在返回栈里，可以加上：
-                        popUpTo(Routes.CHAT) { inclusive = true }
-                    }
-                },
-                onNavigateToMeeting = {
-                    navController.navigate(Routes.MEETING)
-                },
-            )
-        }
-
-        composable(
-            route = Routes.CHAT_MEMBERS,
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
-            popEnterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
-        ) { backStackEntry ->
-            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
-            ChatMembersScreen(
-                chatId = chatId,
-                onBack = { navController.popBackStack() },
-                onNavigateToChatFromMember = { newChatId ->
-                    // ★ 核心修复：跳转到新生成的私聊 ID
-                    navController.navigate("chat/$newChatId") {
-                        // 可选：如果你希望从当前聊天直接替换到新聊天，而不是叠加在返回栈里，可以加上：
-                        popUpTo(Routes.CHAT) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable(Routes.EDIT_PROFILE) {
-            EditProfileScreen(
-                onBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(Routes.MEETING) {
-            MeetingScreen(onBack = { navController.popBackStack() })
-        }
+        // 全局 Snackbar：挂在 NavHost 之上，避免每个页面各建一套导致反馈丢失。
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(16.dp),
+        )
     }
 }

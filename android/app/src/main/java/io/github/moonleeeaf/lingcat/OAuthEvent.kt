@@ -1,6 +1,7 @@
 package io.github.moonleeeaf.lingcat
 
 import io.github.moonleeeaf.lingcat.data.AccountInfo
+import io.github.moonleeeaf.lingcat.ui.UiText
 
 sealed class OAuthEvent {
     // 绑定成功（用于资料页刷新）
@@ -8,5 +9,5 @@ sealed class OAuthEvent {
     // 登录/注册成功（用于跳转聊天列表）
     data class LoginSuccess(val account: AccountInfo) : OAuthEvent()
     // 发生错误
-    data class Error(val message: String) : OAuthEvent()
+    data class Error(val message: UiText) : OAuthEvent()
 }
