@@ -263,10 +263,6 @@ private fun ChatList(
                 selected = chat.id == selectedChatId,
                 onClick = { onChatClick(chat.id) },
             )
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 72.dp),
-                color = MaterialTheme.colorScheme.outlineVariant,
-            )
         }
     }
 }
