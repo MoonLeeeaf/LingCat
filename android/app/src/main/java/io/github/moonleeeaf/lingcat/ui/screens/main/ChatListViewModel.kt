@@ -35,7 +35,6 @@ enum class ListLoadState { IDLE, CONNECTING, LOADING_DATA, SUCCESS, ERROR }
 data class ChatListUiState(
     val loadState: ListLoadState = ListLoadState.IDLE,
     val isRefreshing: Boolean = false,
-    val recentChats: List<IChat> = emptyList(),
     val favouriteChats: List<IChat> = emptyList(),
     val allChats: List<IChat> = emptyList(),
     val unreadCounts: Map<String, Int> = emptyMap(), // ★ 新增：未读数记录
@@ -127,13 +126,9 @@ class ChatListViewModel : ViewModel() {
                 val localEntities = withContext(Dispatchers.IO) { chatDao.getAllChats() }
                 if (localEntities.isNotEmpty()) {
                     val all = localEntities.map { it.toIChat() }
-                    val fav = localEntities.filter { it.isFavourite }.map { it.toIChat() }
-
-                    // 简单粗暴：把本地所有数据当成“全部”展示，最近就取前 50 个
-                    val recent = all.take(50)
+                    val fav = all.filter { it.favourited }
 
                     _uiState.value = _uiState.value.copy(
-                        recentChats = recent,
                         favouriteChats = fav,
                         allChats = all,
                         loadState = ListLoadState.SUCCESS // 既然有缓存，先变成功状态
@@ -146,13 +141,11 @@ class ChatListViewModel : ViewModel() {
     }
 
     // ★ 新增：保存到本地缓存（全量覆盖）
-    private suspend fun saveChatsToDb(recent: List<IChat>, fav: List<IChat>, all: List<IChat>) {
+    private suspend fun saveChatsToDb(all: List<IChat>) {
         withContext(Dispatchers.IO) {
             try {
-                val favIds = fav.map { it.id }.toSet()
-                // 把最近、收藏、全部的标志统一算进 all 里存起来
                 val entities = all.map { chat ->
-                    ChatEntity.from(chat, isFavourite = favIds.contains(chat.id))
+                    ChatEntity.from(chat, isFavourite = chat.favourited)
                 }
                 chatDao.clearChats()
                 chatDao.insertChats(entities)
@@ -201,19 +194,17 @@ class ChatListViewModel : ViewModel() {
                     _uiState.value = _uiState.value.copy(loadState = ListLoadState.LOADING_DATA)
                 }
 
-                val recent = withContext(Dispatchers.IO) { ChatApi.getMyChats(client, token, 50, 0) }
-                val fav = withContext(Dispatchers.IO) { ChatApi.getMyFavouriteChats(client, token, 100, 0) }
                 val all = withContext(Dispatchers.IO) { ChatApi.getMyChats(client, token, 1000, 0) }
+                val fav = all.filter { it.favourited }
 
                 ProfileCache.cacheChats(all)
 
                 // ★ 网络拉取成功，更新内存 & 保存到数据库
-                saveChatsToDb(recent, fav, all)
+                saveChatsToDb(all)
 
                 _uiState.value = _uiState.value.copy(
                     loadState = ListLoadState.SUCCESS,
                     isRefreshing = false,
-                    recentChats = recent,
                     favouriteChats = fav,
                     allChats = all
                 )
@@ -252,12 +243,10 @@ class ChatListViewModel : ViewModel() {
             newUnreadMap[msg.chatId] = currentUnread + 1
         }
 
-        val newRecent = updateList(_uiState.value.recentChats, msg)
-        val newFav = updateList(_uiState.value.favouriteChats, msg)
         val newAll = updateList(_uiState.value.allChats, msg)
+        val newFav = newAll.filter { it.favourited }
 
         _uiState.value = _uiState.value.copy(
-            recentChats = newRecent,
             favouriteChats = newFav,
             allChats = newAll,
             unreadCounts = newUnreadMap
@@ -265,7 +254,7 @@ class ChatListViewModel : ViewModel() {
 
         // ★ 把更新后的列表静默存库
         viewModelScope.launch {
-            saveChatsToDb(newRecent, newFav, newAll)
+            saveChatsToDb(newAll)
         }
     }
 

@@ -65,11 +65,8 @@ class ChatInfoViewModel : ViewModel() {
                     ChatApi.queryChatInfo(client, token, chatId)
                 }
 
-                // 3. 检查收藏状态
-                val favChats = withContext(Dispatchers.IO) {
-                    ChatApi.getMyFavouriteChats(client, token, 100, 0)
-                }
-                val isFav = favChats.any { it.id == chatId }
+                // 收藏状态由 Query_Chat_Info 一并返回，无需再单独拉收藏列表。
+                val isFav = chat?.favourited == true
 
                 // 写回缓存：对话设定页 / 聊天页都从 ProfileCache 取最新资料。
                 if (chat != null) {

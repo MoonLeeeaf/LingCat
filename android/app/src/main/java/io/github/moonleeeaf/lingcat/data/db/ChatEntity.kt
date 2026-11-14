@@ -14,6 +14,9 @@ data class ChatEntity(
     fun toIChat(): IChat {
         return try {
             IChat.parseFrom(rawBytes)
+                .toBuilder()
+                .setFavourited(isFavourite)
+                .build()
         } catch (e: Exception) {
             IChat.getDefaultInstance()
         }

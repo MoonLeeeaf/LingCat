@@ -66,7 +66,7 @@ fun ChatListScreen(
     var showOpenChatDialog by rememberSaveable { mutableStateOf(false) }
     var showCreateGroupDialog by rememberSaveable { mutableStateOf(false) }
 
-    // 最近 / 全部 内容高度重合，不再用三个 Tab 占首屏；只保留“只看收藏”一个筛选。
+    // 全部对话与收藏对话共用同一份数据，只保留“只看收藏”一个筛选。
     var showFavourites by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(uiState.errorMsg) {
