@@ -241,7 +241,6 @@
     <string name="chat_list_err_session_expired">登录失效，请重新登录</string>
     <string name="chat_list_err_connect">网络连接失败: %1$s</string>
     <string name="chat_list_err_load">失败: %1$s</string>
-    <string name="chat_list_err_reconnect">重连失败: %1$s</string>
     <string name="login_err_add_server">添加服务器失败: %1$s</string>
     <string name="login_err_connect_server">连接服务器失败: %1$s</string>
     <string name="login_err_no_server">请先选择或添加一个服务器喵</string>
@@ -330,4 +329,6 @@
     <string name="account_unknown_server">未知服务器</string>
     <string name="account_err_switch">切换失败: %1$s</string>
     <string name="error_server_not_connected">服务器未连接</string>
+    <string name="profile_load_failed">资料加载失败，请检查网络后重试</string>
+    <string name="chat_list_err_reconnect">重连失败: %1$s</string>
 </resources>

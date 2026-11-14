@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.Feedback
+import io.github.moonleeeaf.lingcat.ui.components.ErrorState
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import io.github.moonleeeaf.lingcat.ui.components.LingCatActionItem
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
@@ -49,11 +50,7 @@ fun UserProfileDialog(
         onDismissRequest = onDismiss,
         dragHandle = { BottomSheetDefaults.DragHandle() }
     ) {
-        if (uiState.isLoading && user == null) {
-            Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else if (user != null) {
+        if (user != null) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,6 +155,22 @@ fun UserProfileDialog(
                     )
                 }
             }
+        } else if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            // 拿不到资料时（网络异常 / 用户不存在）必须给明确的「重试」入口。
+            ErrorState(
+                message = stringResource(R.string.profile_load_failed),
+                onRetry = viewModel::retry,
+                modifier = Modifier.padding(bottom = 24.dp),
+            )
         }
     }
 

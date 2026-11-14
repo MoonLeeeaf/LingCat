@@ -15,7 +15,17 @@
 - 缓存层保留三个职责即可：失败不伪装成空结果、短 TTL 负缓存（避免连续打服务器）、single-flight 合并并发请求。
 - 调用方（ViewModel）用 `viewModelScope` 重试，并把 `isLoading / error / retry` 暴露给界面；抽一个 `retryWithBackoff` 小工具避免每个调用点复制循环。
 
-状态：**未开始**，等当前 UI 修复这一轮合并后再单独处理。
+状态：**已完成**。实现方式：
+
+- `ProfileCache` 新增 `ProfileFetchException`、`requireChat()` / `requireUser()`：
+  - 失败（未连接 / 网络异常）抛异常，不再伪装成 null；
+  - 只有服务器确认不存在才返回 null，并写入 30s 负缓存；
+  - 锁内二次查缓存，合并并发请求（single-flight）。
+- 旧的 `fetchChat()` / `fetchUser()` 保留为吞异常的包装，通知、保活服务等非 UI 调用方不受影响。
+- 新增 `ui/utils/Retry.kt` 的 `retryWithBackoff()`（1s / 3s / 9s，正确传播取消）。
+- 聊天页标题：`ChatViewModel.fetchChatInfo()` 静默重试，失败保持「对话」占位，不打扰用户。
+- 资料弹窗：`UserProfileViewModel` 暴露 `loadFailed`，`UserProfileDialog` 显示失败态 + 「重试」按钮；
+  不在后台静默等待多次退避，否则用户会对着转圈等十几秒。
 
 ---
 

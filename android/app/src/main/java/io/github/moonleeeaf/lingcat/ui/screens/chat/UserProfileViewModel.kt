@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,9 @@ import lingcat.client_protocol.ChatApi
 data class UserProfileUiState(
     val user: IUser? = null,
     val remark: String? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true,
+    /** 完全拿不到资料（且没有缓存兜底）时为 true，界面显示重试入口。 */
+    val loadFailed: Boolean = false,
 )
 
 class UserProfileViewModel : ViewModel() {
@@ -39,19 +42,37 @@ class UserProfileViewModel : ViewModel() {
         fetchUserInfo(userId)
     }
 
+    /** 资料加载失败后由界面「重试」按钮调用。 */
+    fun retry() {
+        val userId = currentUserId ?: return
+        fetchUserInfo(userId)
+    }
+
     private fun fetchUserInfo(userId: String) {
-        _uiState.value = _uiState.value.copy(isLoading = _uiState.value.user == null)
+        _uiState.value = _uiState.value.copy(
+            isLoading = _uiState.value.user == null,
+            loadFailed = false,
+        )
         viewModelScope.launch {
             try {
-                val latestUser = ProfileCache.fetchUser(userId)
-                if (latestUser != null) {
-                    _uiState.value = _uiState.value.copy(user = latestUser, isLoading = false)
-                } else {
-                    _uiState.value = _uiState.value.copy(isLoading = false)
-                }
+                // 资料弹窗是用户主动打开的：失败要尽快暴露并给「重试」按钮，
+                // 不在后台悄悄重试（否则用户会对着转圈等十几秒）。
+                val latestUser = ProfileCache.requireUser(userId)
+                _uiState.value = _uiState.value.copy(
+                    user = latestUser ?: _uiState.value.user,
+                    isLoading = false,
+                    // 服务器确认不存在（null）也算拿不到资料
+                    loadFailed = latestUser == null && _uiState.value.user == null,
+                )
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "fetch user failed", e)
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    // 有缓存就先展示缓存，不拿错误盖掉已有内容
+                    loadFailed = _uiState.value.user == null,
+                )
             }
         }
     }

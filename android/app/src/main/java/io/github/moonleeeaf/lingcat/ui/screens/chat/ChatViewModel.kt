@@ -19,6 +19,8 @@ import io.github.moonleeeaf.lingcat.ui.UiText
 import io.github.moonleeeaf.lingcat.ui.UiTextException
 import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
 import io.github.moonleeeaf.lingcat.ui.uiText
+import io.github.moonleeeaf.lingcat.ui.utils.retryWithBackoff
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lingcat.classes.Classes.IMessage
+import lingcat.classes.Classes.IUser
 import lingcat.client_protocol.ChatApi
 import lingcat.client_protocol.FileApi
 import lingcat.client_protocol.LingCatClient
@@ -275,42 +278,75 @@ class ChatViewModel : ViewModel() {
     private fun fetchChatInfo(chatId: String) {
         viewModelScope.launch {
             try {
-                val chat = ProfileCache.fetchChat(chatId)
+                // 标题静默重试：失败就保持占位文案，不打扰用户。
+                val chat = retryWithBackoff { ProfileCache.requireChat(chatId) }
                 if (chat == null) {
                     // 拉不到时保持 chatTitle == null，界面会显示「对话」占位；
                     // 不再用 "加载中..." 这种魔法字符串做状态标记。
                     return@launch
                 }
 
-                var displayTitle = chat.title
-                var titleRes: Int? = null
                 var peerId: String? = null
 
                 if (chat.type == "private" && chat.hasPeerUserId()) {
                     peerId = chat.peerUserId
-                    // ★ 优化：先查本地缓存，缓存没有再去拉
-                    val peer = ProfileCache.getCachedUser(peerId) ?: ProfileCache.fetchUser(peerId)
-                    if (peer != null) {
-                        displayTitle = peer.nickname.ifEmpty { peer.username }
-                    }
-                    if (displayTitle.isBlank()) {
-                        titleRes = R.string.label_private_chat
-                    }
-                } else if (displayTitle.isBlank()) {
-                    titleRes = R.string.label_group_chat
                 }
 
-                _uiState.value = _uiState.value.copy(
-                    chatTitle = displayTitle.ifBlank { null },
-                    chatTitleRes = titleRes,
-                    peerUserId = peerId,
-                    isGroup = chat.type == "group"
+                // 先用对话自带的信息把界面点亮（私聊标题为空时先显示「私聊」占位），
+                // 不要让用户盯着「加载中」等对方资料重试。
+                applyChatInfo(
+                    title = chat.title,
+                    peerId = peerId,
+                    isGroup = chat.type == "group",
                 )
                 updateE2EState()
+
+                // 私聊标题通常用对方昵称：静默重试，成功后只更新一次标题。
+                if (peerId != null) {
+                    val peer = fetchPeerOrNull(peerId)
+                    if (peer != null) {
+                        val name = peer.nickname.ifEmpty { peer.username }
+                        if (name.isNotBlank()) {
+                            applyChatInfo(
+                                title = name,
+                                peerId = peerId,
+                                isGroup = chat.type == "group",
+                            )
+                        }
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "fetch chat info failed", e)
                 // 标题保持 null，界面显示「对话」占位，不会卡在“加载中”。
             }
+        }
+    }
+
+    private fun applyChatInfo(title: String?, peerId: String?, isGroup: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            chatTitle = title?.ifBlank { null },
+            chatTitleRes = when {
+                !title.isNullOrBlank() -> null
+                isGroup -> R.string.label_group_chat
+                else -> R.string.label_private_chat
+            },
+            peerUserId = peerId,
+            isGroup = isGroup,
+        )
+    }
+
+    /** 私聊标题用的对方昵称：失败时静默退回对话标题，不阻塞会话页。 */
+    private suspend fun fetchPeerOrNull(peerId: String): IUser? {
+        ProfileCache.getCachedUser(peerId)?.let { return it }
+        return try {
+            retryWithBackoff { ProfileCache.requireUser(peerId) }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.w(TAG, "fetch peer profile failed", e)
+            null
         }
     }
 
