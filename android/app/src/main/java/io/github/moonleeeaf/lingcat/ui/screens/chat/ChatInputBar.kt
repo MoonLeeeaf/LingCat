@@ -1,9 +1,24 @@
+package io.github.moonleeeaf.lingcat.ui.screens.chat
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -11,26 +26,23 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.data.RemarksCache
-import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 import lingcat.classes.Classes
 
 @Composable
@@ -44,14 +56,11 @@ fun ChatInputBar(
     onSend: () -> Unit,
     onAttachClick: () -> Unit,
     focusRequester: FocusRequester,
-    editingMessage: lingcat.classes.Classes.IMessage? = null,
+    editingMessage: Classes.IMessage? = null,
     onCancelEdit: () -> Unit = {},
     chatMembers: List<Classes.IUser> = emptyList(),
     onRequestMembers: () -> Unit = {},
 ) {
-    val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
-    val context = LocalContext.current
-
     // ★ 使用 TextFieldValue 跟踪光标
     var textState by remember { mutableStateOf(TextFieldValue(text)) }
 
@@ -101,7 +110,6 @@ fun ChatInputBar(
                 Pair(m, display to score)
             }.filter { it.second.second > 0 }
                 .sortedWith(compareByDescending<Pair<Classes.IUser, Pair<String, Int>>> { it.second.second }.thenBy { it.second.first })
-                // ★ 核心修复：删除了 .take(8)，只要匹配的统统返回
                 .map { it.first }
         } else {
             mentionQuery = null
@@ -147,35 +155,39 @@ fun ChatInputBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        imageVector = Icons.Default.Edit,
                         contentDescription = null,
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        text = "正在编辑消息...",
+                        text = stringResource(R.string.chat_input_editing),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.weight(1f)
                     )
-                    IconButton(onClick = onCancelEdit, modifier = Modifier.size(24.dp)) {
-                        Icon(Icons.Default.Close, contentDescription = "取消编辑", modifier = Modifier.size(16.dp))
+                    IconButton(onClick = onCancelEdit) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.chat_input_cancel_edit),
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
                 }
             }
 
-            // ★ 核心修复 1：将 @ 候选列表放在输入框的上方，使用普通的 Column 布局
+            // ★ @ 候选列表放在输入框的上方
             if (mentionQuery != null && mentionCandidates.isNotEmpty()) {
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp) // 左右留点边距对齐输入框
-                        .heightIn(max = 240.dp), // 限制最大高度，超出内部滚动
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .heightIn(max = 240.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     LazyColumn {
@@ -183,43 +195,36 @@ fun ChatInputBar(
                             val isActive = index == activeMentionIndex
                             val remark = RemarksCache.getRemark(user.id) ?: ""
                             val displayName = remark.ifEmpty { user.nickname.ifEmpty { user.username } }
-                            val avatarHash = user.avatarFileHash
-                            val avatarUrl = if (!avatarHash.isNullOrEmpty() && !fileToken.isNullOrEmpty()) {
-                                LingCatClientManager.currentClient?.getFileUrlByHashAndToken(avatarHash, fileToken!!)
-                            } else null
 
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else Color.Transparent)
+                                    .background(
+                                        if (isActive) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                        } else {
+                                            Color.Transparent
+                                        }
+                                    )
                                     .clickable { insertMention(user) }
-                                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                                    .heightIn(min = 48.dp)
+                                    .padding(horizontal = 12.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                if (avatarUrl != null) {
-                                    AsyncImage(
-                                        model = coil.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
-                                            .data(avatarUrl)
-                                            .memoryCacheKey(avatarHash)
-                                            .diskCacheKey(avatarHash)
-                                            .build(),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(28.dp).clip(CircleShape),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                } else {
-                                    androidx.compose.foundation.Image(
-                                        painter = painterResource(id = R.drawable.ic_default_avatar),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(28.dp).clip(CircleShape)
-                                    )
-                                }
+                                LingCatAvatar(
+                                    avatarHash = user.avatarFileHash,
+                                    size = 28.dp,
+                                )
                                 Spacer(Modifier.width(8.dp))
 
                                 Column {
                                     Text(displayName, style = MaterialTheme.typography.bodyMedium)
                                     if (user.username.isNotEmpty() && user.username != displayName) {
-                                        Text("@${user.username}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        Text(
+                                            "@${user.username}",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
                                     }
                                 }
                             }
@@ -228,20 +233,20 @@ fun ChatInputBar(
                 }
             }
 
-            // 3. 输入行（去掉了外层乱糟糟的 Box）
+            // 3. 输入行
             Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .navigationBarsPadding()
-                    .imePadding()
+                    // IME 和导航栏取“并集”，避免 navigationBarsPadding + imePadding 叠加出双倍留白
+                    .windowInsetsPadding(WindowInsets.ime.union(WindowInsets.navigationBars))
             ) {
                 // 输入框胶囊背景
                 Surface(
                     shape = RoundedCornerShape(24.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.weight(1f) // 占满剩余宽度
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    modifier = Modifier.weight(1f)
                 ) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
@@ -250,11 +255,11 @@ fun ChatInputBar(
                         // 附件按钮
                         IconButton(
                             onClick = onAttachClick,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(48.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.AttachFile,
-                                contentDescription = "附件",
+                                contentDescription = stringResource(R.string.chat_input_attach),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -268,14 +273,18 @@ fun ChatInputBar(
                             },
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(vertical = 10.dp)
+                                .padding(vertical = 12.dp)
                                 .focusRequester(focusRequester),
                             textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
                             maxLines = 4,
                             decorationBox = { innerTextField ->
                                 Box {
                                     if (textState.text.isEmpty()) {
-                                        Text("输入...", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
+                                        Text(
+                                            stringResource(R.string.chat_input_hint),
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
                                     }
                                     innerTextField()
                                 }
@@ -286,38 +295,42 @@ fun ChatInputBar(
                         if (isE2EActive) {
                             IconButton(
                                 onClick = onToggleEncrypt,
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(48.dp)
                             ) {
                                 Icon(
                                     imageVector = if (encryptThisMessage) Icons.Default.Lock else Icons.Default.LockOpen,
-                                    contentDescription = "切换加密",
-                                    tint = if (encryptThisMessage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    contentDescription = stringResource(R.string.chat_input_toggle_encrypt),
+                                    tint = if (encryptThisMessage) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    }
                                 )
                             }
                         }
 
-                        // 发送按钮
+                        // 发送按钮：视觉 40dp，触控区域 48dp
                         FilledIconButton(
                             onClick = onSend,
                             enabled = !isSending && text.isNotBlank(),
                             modifier = Modifier
                                 .padding(end = 4.dp)
-                                .size(36.dp),
+                                .size(48.dp),
                             colors = IconButtonDefaults.filledIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.primary
                             )
                         ) {
                             if (isSending) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.size(18.dp),
+                                    modifier = Modifier.size(20.dp),
                                     strokeWidth = 2.dp,
                                     color = MaterialTheme.colorScheme.onPrimary
                                 )
                             } else {
                                 Icon(
                                     imageVector = if (editingMessage != null) Icons.Default.Check else Icons.AutoMirrored.Filled.Send,
-                                    contentDescription = if (editingMessage != null) "保存编辑" else "发送",
-                                    modifier = Modifier.size(18.dp)
+                                    contentDescription = if (editingMessage != null) stringResource(R.string.chat_input_save_edit) else stringResource(R.string.chat_input_send),
+                                    modifier = Modifier.size(20.dp)
                                 )
                             }
                         }

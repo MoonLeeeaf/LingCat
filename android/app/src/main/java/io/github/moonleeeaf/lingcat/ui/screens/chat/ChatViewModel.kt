@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,12 @@ import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.data.db.MessageEntity
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -39,11 +45,14 @@ data class ChatUiState(
     val messages: List<IMessage> = emptyList(),
     val inputText: String = "",
     val isSending: Boolean = false,
-    val errorMsg: String? = null,
+    val errorMsg: UiText? = null,
     val isLoadingMore: Boolean = false, // ★ 是否正在加载更多
     val hasMore: Boolean = true,        // ★ 是否还有更多历史消息
 
-    val chatTitle: String = "加载中...",
+    /** 已拿到的对话标题；为 null 表示还没拿到，界面自行显示占位文案。 */
+    val chatTitle: String? = null,
+    /** 拿不到标题时的兜底文案（私聊 / 群聊），由界面本地化。 */
+    @StringRes val chatTitleRes: Int? = null,
     val peerUserId: String? = null,
     val isGroup: Boolean = false,
 
@@ -268,14 +277,13 @@ class ChatViewModel : ViewModel() {
             try {
                 val chat = ProfileCache.fetchChat(chatId)
                 if (chat == null) {
-                    // ★ 核心修复：拉取不到时，如果还停留在“加载中”，就兜底替换
-                    if (_uiState.value.chatTitle == "加载中...") {
-                        _uiState.value = _uiState.value.copy(chatTitle = "对话")
-                    }
+                    // 拉不到时保持 chatTitle == null，界面会显示「对话」占位；
+                    // 不再用 "加载中..." 这种魔法字符串做状态标记。
                     return@launch
                 }
 
                 var displayTitle = chat.title
+                var titleRes: Int? = null
                 var peerId: String? = null
 
                 if (chat.type == "private" && chat.hasPeerUserId()) {
@@ -286,24 +294,22 @@ class ChatViewModel : ViewModel() {
                         displayTitle = peer.nickname.ifEmpty { peer.username }
                     }
                     if (displayTitle.isBlank()) {
-                        displayTitle = "私聊"
+                        titleRes = R.string.label_private_chat
                     }
                 } else if (displayTitle.isBlank()) {
-                    displayTitle = "群聊"
+                    titleRes = R.string.label_group_chat
                 }
 
                 _uiState.value = _uiState.value.copy(
-                    chatTitle = displayTitle,
+                    chatTitle = displayTitle.ifBlank { null },
+                    chatTitleRes = titleRes,
                     peerUserId = peerId,
                     isGroup = chat.type == "group"
                 )
                 updateE2EState()
             } catch (e: Exception) {
                 Log.e(TAG, "fetch chat info failed", e)
-                // ★ 异常发生时，防止卡死
-                if (_uiState.value.chatTitle == "加载中...") {
-                    _uiState.value = _uiState.value.copy(chatTitle = "对话")
-                }
+                // 标题保持 null，界面显示「对话」占位，不会卡在“加载中”。
             }
         }
     }
@@ -319,7 +325,7 @@ class ChatViewModel : ViewModel() {
 
             if (e2eEntity != null) {
                 if (E2EStateManager.status.value != E2EStateManager.Status.UNLOCKED) {
-                    _uiState.value = _uiState.value.copy(errorMsg = "请先解锁端到端加密再编辑该消息")
+                    _uiState.value = _uiState.value.copy(errorMsg = uiText(R.string.chat_err_unlock_before_edit))
                     return@launch
                 }
                 val plainJson = E2EStateManager.decryptFromPeer(e2eEntity.data, message.senderUserId)
@@ -425,7 +431,7 @@ class ChatViewModel : ViewModel() {
                 // 如果客户端没连上或者 token 为空，说明断网，直接返回，保留本地数据
                 if (client == null || token == null || !client.isReady()) {
                     if (localEntities.isEmpty()) {
-                        _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "网络断开，无本地记录")
+                        _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = uiText(R.string.chat_err_offline_no_local))
                     }
                     return@launch
                 }
@@ -462,7 +468,7 @@ class ChatViewModel : ViewModel() {
                 Log.e(TAG, "load remote history failed", e)
                 // ★ 核心改动 3：网络炸了，如果本地有数据，千万别弹“加载失败”
                 if (_uiState.value.messages.isEmpty()) {
-                    _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "加载失败")
+                    _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = uiText(R.string.chat_err_load_failed))
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false)
                 }
@@ -576,8 +582,8 @@ class ChatViewModel : ViewModel() {
 
                 // 查网络
                 if (shouldFetchNetwork) {
-                    val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                    val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                    val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+                    val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
 
                     val remoteNewer = withContext(Dispatchers.IO) {
                         ChatApi.getChatMessages(client, token, chatId, null, newestMsgInList.id, 50)
@@ -615,8 +621,8 @@ class ChatViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
                 val chatId = currentChatId ?: return@launch
 
                 val oldestMsg = state.messages.last()
@@ -697,8 +703,8 @@ class ChatViewModel : ViewModel() {
 
         _uiState.value = _uiState.value.copy(isLoading = true)
         try {
-            val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-            val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+            val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+            val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
             val chatId = currentChatId ?: return false
 
             val contextMessages = withContext(Dispatchers.IO) {
@@ -753,7 +759,7 @@ class ChatViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val (name, mime) = withContext(Dispatchers.IO) {
-                    var fileName = "文件_${System.currentTimeMillis()}"
+                    var fileName = context.getString(R.string.chat_default_file_name, System.currentTimeMillis())
                     var mimeType = context.contentResolver.getType(uri) ?: "application/octet-stream"
 
                     context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
@@ -777,10 +783,10 @@ class ChatViewModel : ViewModel() {
 
                 // 判断类型前缀，对齐 Web 端
                 val prefix = when {
-                    mime.startsWith("image/") -> "图片"
-                    mime.startsWith("video/") -> "视频"
-                    mime.startsWith("audio/") -> "音频"
-                    else -> "文件"
+                    mime.startsWith("image/") -> context.getString(R.string.chat_attach_kind_image)
+                    mime.startsWith("video/") -> context.getString(R.string.chat_attach_kind_video)
+                    mime.startsWith("audio/") -> context.getString(R.string.chat_attach_kind_audio)
+                    else -> context.getString(R.string.chat_attach_kind_file)
                 }
 
                 // 插入到输入框
@@ -791,7 +797,7 @@ class ChatViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 Log.e(TAG, "addFile failed", e)
-                _uiState.value = _uiState.value.copy(errorMsg = "读取文件失败")
+                _uiState.value = _uiState.value.copy(errorMsg = uiText(R.string.chat_err_read_file))
             }
         }
     }
@@ -804,9 +810,9 @@ class ChatViewModel : ViewModel() {
         if (cachedFiles.isEmpty()) return@withContext rawText
 
         var processedText = rawText
-        val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-        val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
-        val chatId = currentChatId ?: throw Exception("无聊天ID")
+        val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+        val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
+        val chatId = currentChatId ?: throw UiTextException(uiText(R.string.chat_err_no_chat_id))
         val resolver = LingCatClientManager.appContext.contentResolver
 
         // 找出文本里真正包含的文件
@@ -827,7 +833,7 @@ class ChatViewModel : ViewModel() {
                     totalSize = cursor.getLong(sizeIndex)
                 }
             }
-            if (totalSize <= 0) throw Exception("无法获取文件大小")
+            if (totalSize <= 0) throw UiTextException(uiText(R.string.chat_err_file_size))
 
             // 调用断点续传（流式上传，告别 OOM！）
             val hash = FileApi.uploadFileResumable(
@@ -917,8 +923,8 @@ class ChatViewModel : ViewModel() {
     private fun performSend(chatId: String, rawText: String, tempId: Int?, editingMsgId: Int?) {
         viewModelScope.launch {
             try {
-                val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
 
                 // 1. 解析文本
                 var parsed = withContext(Dispatchers.Default) { MessageParser.parseMessage(rawText) }
@@ -951,7 +957,7 @@ class ChatViewModel : ViewModel() {
                 val isE2E = _uiState.value.isE2EActive && _uiState.value.encryptThisMessage && peerId != null
                 if (isE2E) {
                     if (E2EStateManager.status.value != E2EStateManager.Status.UNLOCKED) {
-                        throw Exception("端到端加密未解锁")
+                        throw UiTextException(uiText(R.string.chat_err_e2e_locked))
                     }
                     withContext(Dispatchers.IO) { E2EStateManager.fetchPeerKey(peerId!!, force = true) }
 
@@ -981,7 +987,7 @@ class ChatViewModel : ViewModel() {
                                 .build()
                         )
                     } else {
-                        throw Exception("端到端加密失败，请重试")
+                        throw UiTextException(uiText(R.string.chat_err_e2e_failed))
                     }
                 }
 
@@ -1040,7 +1046,8 @@ class ChatViewModel : ViewModel() {
                         // 编辑失败，弹错误，保留编辑状态
                         _uiState.value = _uiState.value.copy(
                             isSending = false,
-                            errorMsg = "编辑失败: ${e.message}"
+                            errorMsg = e.toUiTextOrNull()
+                                ?: uiText(R.string.chat_err_edit_failed, e.message ?: "")
                         )
                     } else if (tempId != null) {
                         // 发送失败，标红感叹号
@@ -1049,7 +1056,8 @@ class ChatViewModel : ViewModel() {
                         _uiState.value = _uiState.value.copy(
                             sendStatusMap = newStatusMap,
                             isSending = false,
-                            errorMsg = "发送失败: ${e.message}"
+                            errorMsg = e.toUiTextOrNull()
+                                ?: uiText(R.string.chat_err_send_failed, e.message ?: "")
                         )
                     }
                 }

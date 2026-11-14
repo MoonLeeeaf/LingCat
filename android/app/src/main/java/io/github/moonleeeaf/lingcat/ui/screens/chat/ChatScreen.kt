@@ -1,6 +1,5 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
-import ChatInputBar
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
@@ -10,7 +9,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
@@ -29,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -38,17 +35,16 @@ import androidx.compose.material.icons.automirrored.filled.Reply
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -63,7 +59,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.app.AppState
 import io.github.moonleeeaf.lingcat.app.NotificationHelper
@@ -71,7 +66,10 @@ import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.e2e.E2EInfoDialog
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
+import io.github.moonleeeaf.lingcat.ui.components.rememberAvatarUrl
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
 import kotlinx.coroutines.CoroutineScope
@@ -113,7 +111,7 @@ private fun openFileExternally(
 
                 // 没命中缓存，提示用户
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "正在下载文件...", Toast.LENGTH_SHORT).show()
+                    Feedback.show(R.string.chat_downloading)
                 }
 
                 // 清理策略：只保留最近 20 个文件
@@ -128,7 +126,7 @@ private fun openFileExternally(
                 // 开始下载
                 val client = HttpClientProvider.get()
                 val response = client.newCall(Request.Builder().url(url).build()).execute()
-                if (!response.isSuccessful) throw Exception("下载失败: ${response.code}")
+                if (!response.isSuccessful) throw Exception(context.getString(R.string.chat_download_failed, response.code))
 
                 // ★ 先写临时文件，防止下到一半断网变成坏文件
                 val downloadingFile = File(cacheDir, "$cacheFileName.downloading")
@@ -168,15 +166,15 @@ private fun openFileExternally(
                 }
 
                 try {
-                    context.startActivity(Intent.createChooser(intent, "打开..."))
+                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.chat_opening)))
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context, "没有找到可以打开此文件的应用喵", Toast.LENGTH_SHORT).show()
+                    Feedback.show(R.string.chat_no_app_to_open)
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "打开失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Feedback.show(R.string.chat_open_failed, e.message ?: "")
             }
         }
     }
@@ -238,7 +236,7 @@ private suspend fun saveFileToDownloads(context: Context, url: String, fileName:
                 }
             }
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "已保存至：${file.absolutePath}", Toast.LENGTH_LONG).show()
+                Feedback.show(R.string.chat_saved_to, file.absolutePath)
             }
         }
         return@withContext true
@@ -268,7 +266,7 @@ fun shouldShowTime(msg: IMessage, prevMsg: IMessage?): Boolean {
 /**
  * 格式化分隔条文本
  */
-fun formatTimeDivider(time: Long): String {
+fun formatTimeDivider(context: Context, time: Long): String {
     val d = Calendar.getInstance().apply { timeInMillis = time }
     val now = Calendar.getInstance()
 
@@ -284,11 +282,11 @@ fun formatTimeDivider(time: Long): String {
         }
         // 今年
         d.get(Calendar.YEAR) == now.get(Calendar.YEAR) -> {
-            "${d.get(Calendar.MONTH) + 1}月${d.get(Calendar.DAY_OF_MONTH)}日 $hm"
+            context.getString(R.string.date_month_day, d.get(Calendar.MONTH) + 1, d.get(Calendar.DAY_OF_MONTH), hm)
         }
         // 往年
         else -> {
-            "${d.get(Calendar.YEAR)}年${d.get(Calendar.MONTH) + 1}月${d.get(Calendar.DAY_OF_MONTH)}日 $hm"
+            context.getString(R.string.date_year_month_day, d.get(Calendar.YEAR), d.get(Calendar.MONTH) + 1, d.get(Calendar.DAY_OF_MONTH), hm)
         }
     }
 }
@@ -305,11 +303,12 @@ fun ChatScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    // 标题可能还没拉到（chatTitle == null），此时退回「私聊 / 群聊 / 对话」占位文案。
+    val chatTitleText = uiState.chatTitle
+        ?: uiState.chatTitleRes?.let { stringResource(it) }
+        ?: stringResource(R.string.label_chat)
     val listState = rememberLazyListState()
-    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-
-    val cachedChat = remember(chatId) { ProfileCache.getCachedChat(chatId) }
 
     LaunchedEffect(chatId) {
         // 尝试拿一次标题
@@ -317,11 +316,9 @@ fun ChatScreen(
         viewModel.initChat(chatId, initialTitle = cachedTitle)
     }
 
-    // 监听错误
+    // 监听错误：统一走全局 Snackbar
     LaunchedEffect(uiState.errorMsg) {
-        uiState.errorMsg?.let {
-            snackbarHostState.showSnackbar(it)
-        }
+        uiState.errorMsg?.let { Feedback.show(it) }
     }
 
     // 记录上一条最新消息的 ID
@@ -467,7 +464,6 @@ fun ChatScreen(
     var selectedFile by remember { mutableStateOf<Triple<String, String, String>?>(null) }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             if (isSearchMode) {
                 // ★ 搜索模式下的顶栏
@@ -476,7 +472,7 @@ fun ChatScreen(
                         TextField(
                             value = uiState.searchKeyword,
                             onValueChange = viewModel::onSearchKeywordChange,
-                            placeholder = { Text("搜索聊天记录...") },
+                            placeholder = { Text(stringResource(R.string.chat_search_hint)) },
                             modifier = Modifier.fillMaxWidth(),
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
@@ -492,7 +488,7 @@ fun ChatScreen(
                             isSearchMode = false
                             viewModel.closeSearch()
                         }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "退出搜索")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.chat_exit_search))
                         }
                     }
                 )
@@ -501,12 +497,12 @@ fun ChatScreen(
                     modifier = Modifier.clickable { showChatInfoId = chatId },
                     title = {
                         Column {
-                            Text(uiState.chatTitle)
+                            Text(chatTitleText)
                         }
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                         }
                     },
                     actions = {
@@ -516,26 +512,26 @@ fun ChatScreen(
                                 MeetingManager.joinMeeting(
                                     context,
                                     chatId,
-                                    activeMeeting!!.title ?: uiState.chatTitle,
+                                    activeMeeting!!.title ?: chatTitleText,
                                     activeMeeting!!.meetingId
                                 )
                                 onNavigateToMeeting()
                             } else {
                                 // 没有会议，发起前先填写会议标题（默认对话标题）
-                                meetingTitleInput = uiState.chatTitle
+                                meetingTitleInput = chatTitleText
                                 showStartMeetingDialog = true
                             }
                         }) {
-                            Icon(Icons.Default.Call, contentDescription = "会议")
+                            Icon(Icons.Default.Call, contentDescription = stringResource(R.string.chat_meeting))
                         }
                         IconButton(onClick = { isSearchMode = true }) {
-                            Icon(Icons.Default.Search, contentDescription = "搜索")
+                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.action_search))
                         }
                         if (uiState.isE2EActive) {
                             IconButton(onClick = { showE2EInfo = true }) {
                                 Icon(
                                     imageVector = Icons.Default.Lock,
-                                    contentDescription = "E2E 信息",
+                                    contentDescription = stringResource(R.string.chat_e2e_info),
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }
@@ -572,7 +568,7 @@ fun ChatScreen(
                 if (uiState.isSearching) {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 } else if (uiState.searchResults.isEmpty() && uiState.searchKeyword.isNotBlank()) {
-                    Text("没有找到相关消息", Modifier.align(Alignment.Center))
+                    Text(stringResource(R.string.chat_search_empty), Modifier.align(Alignment.Center))
                 } else {
                     val meetingState by MeetingManager.uiState.collectAsState()
                     if (meetingState.phase != MeetingPhase.IDLE && meetingState.chatId == chatId) {
@@ -586,8 +582,8 @@ fun ChatScreen(
                             Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Default.Call, contentDescription = null)
                                 Spacer(Modifier.width(8.dp))
-                                Text("会议进行中 · ${meetingState.participants.size}人", modifier = Modifier.weight(1f))
-                                Text("返回", color = MaterialTheme.colorScheme.primary)
+                                Text(stringResource(R.string.chat_meeting_active, meetingState.participants.size), modifier = Modifier.weight(1f))
+                                Text(stringResource(R.string.action_back), color = MaterialTheme.colorScheme.primary)
                             }
                         }
                     }
@@ -613,7 +609,7 @@ fun ChatScreen(
                                 },
                                 supportingContent = {
                                     // 发送者名字和时间
-                                    Text("${ProfileCache.getCachedUser(msg.senderUserId)?.nickname ?: ""} · ${formatTimeDivider(msg.time)}")
+                                    Text("${ProfileCache.getCachedUser(msg.senderUserId)?.nickname ?: ""} · ${formatTimeDivider(context, msg.time)}")
                                 },
                                 modifier = Modifier.clickable {
                                     // ★ 点击结果，跳转定位
@@ -645,7 +641,7 @@ fun ChatScreen(
                             val prevMsg = safeMessages.getOrNull(index + 1)
 
                             val showTime = shouldShowTime(msg, prevMsg)
-                            val timeText = if (showTime) formatTimeDivider(msg.time) else null
+                            val timeText = if (showTime) formatTimeDivider(context, msg.time) else null
 
                             // 如果当前没显示时间，且和上一条是同一个人（非系统消息），就隐藏头像/昵称
                             val hideSender = !showTime &&
@@ -706,11 +702,7 @@ fun ChatScreen(
                                                 selectedFile = Triple(hash, name, url)
                                             }
                                         } else {
-                                            Toast.makeText(
-                                                context,
-                                                "文件地址无效",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Feedback.show(R.string.chat_file_url_invalid)
                                         }
                                     },
                                     onLongClick = { selectedMessage = msg },
@@ -754,7 +746,7 @@ fun ChatScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        "到底啦喵~",
+                                        stringResource(R.string.chat_end_of_messages),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -763,17 +755,17 @@ fun ChatScreen(
                         }
                     }
                     if (!isAtBottom) {
+                        // 标准 FAB（56dp）；原来的 SmallFloatingActionButton 只有 40dp，低于 48dp 触控下限。
                         FloatingActionButton(
                             onClick = {
                                 coroutineScope.launch { listState.animateScrollToItem(0) }
                             },
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(16.dp)
-                                .size(40.dp),
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                .padding(16.dp),
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         ) {
-                            Icon(Icons.Default.ArrowDownward, contentDescription = "回到底部")
+                            Icon(Icons.Default.ArrowDownward, contentDescription = stringResource(R.string.chat_back_to_bottom))
                         }
                     }
                 }
@@ -826,12 +818,12 @@ fun ChatScreen(
     if (showStartMeetingDialog) {
         AlertDialog(
             onDismissRequest = { showStartMeetingDialog = false },
-            title = { Text("发起会议") },
+            title = { Text(stringResource(R.string.chat_start_meeting)) },
             text = {
                 OutlinedTextField(
                     value = meetingTitleInput,
                     onValueChange = { if (it.length <= 64) meetingTitleInput = it },
-                    label = { Text("会议标题") },
+                    label = { Text(stringResource(R.string.meeting_title_label)) },
                     singleLine = true
                 )
             },
@@ -848,17 +840,17 @@ fun ChatScreen(
                                     MeetingApi.startMeeting(client, token, chatId, title)
                                 }
                                 // 发起成功后，直接加入
-                                MeetingManager.joinMeeting(context, chatId, title ?: uiState.chatTitle, result.meetingId)
+                                MeetingManager.joinMeeting(context, chatId, title ?: chatTitleText, result.meetingId)
                                 onNavigateToMeeting()
                             } catch (e: Exception) {
-                                Toast.makeText(context, "发起会议失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                                Feedback.show(R.string.chat_start_meeting_failed, e.message ?: "")
                             }
                         }
                     }
-                }) { Text("发起") }
+                }) { Text(stringResource(R.string.chat_start)) }
             },
             dismissButton = {
-                TextButton(onClick = { showStartMeetingDialog = false }) { Text("取消") }
+                TextButton(onClick = { showStartMeetingDialog = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -867,7 +859,7 @@ fun ChatScreen(
         val msg = showMessageInfo!!
         AlertDialog(
             onDismissRequest = { showMessageInfo = null },
-            title = { Text("消息元素信息 #${msg.id}") },
+            title = { Text(stringResource(R.string.chat_message_elements, msg.id)) },
             text = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -898,7 +890,7 @@ fun ChatScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showMessageInfo = null }) { Text("关闭") }
+                TextButton(onClick = { showMessageInfo = null }) { Text(stringResource(R.string.action_close)) }
             }
         )
     }
@@ -906,7 +898,7 @@ fun ChatScreen(
     if (selectedAvatarUserId != null) {
         val userId = selectedAvatarUserId!!
         val userInfo = ProfileCache.getCachedUser(userId)
-        val displayName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: "该用户"
+        val displayName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: stringResource(R.string.chat_this_user)
 
         ModalBottomSheet(
             onDismissRequest = { selectedAvatarUserId = null }
@@ -922,7 +914,7 @@ fun ChatScreen(
 
                 // 查看资料
                 ListItem(
-                    headlineContent = { Text("查看资料") },
+                    headlineContent = { Text(stringResource(R.string.chat_view_profile)) },
                     leadingContent = { Icon(Icons.Default.Person, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
@@ -934,7 +926,7 @@ fun ChatScreen(
                 // 提及用户
                 if (userId != LingCatClientManager.currentUserId) {
                     ListItem(
-                        headlineContent = { Text("提及用户") },
+                        headlineContent = { Text(stringResource(R.string.chat_mention_user)) },
                         leadingContent = { Icon(Icons.Default.AlternateEmail, contentDescription = null) },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                         modifier = Modifier.clickable {
@@ -958,24 +950,25 @@ fun ChatScreen(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)) {
                 Text(
-                    text = "消息 #${selectedMessage?.id}",
+                    text = stringResource(R.string.chat_message_id, selectedMessage?.id ?: 0),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
 
                 ListItem(
-                    headlineContent = { Text("复制") },
+                    headlineContent = { Text(stringResource(R.string.action_copy)) },
                     leadingContent = { Icon(Icons.Default.ContentCopy, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
                         clipboardManager.setText(AnnotatedString(selectedMessage?.text ?: ""))
+                        Feedback.show(R.string.chat_copied)
                         selectedMessage = null
                     }
                 )
 
                 if (selectedMessage?.senderUserId == LingCatClientManager.currentUserId && selectedMessage?.system != true) {
                     ListItem(
-                        headlineContent = { Text("编辑") },
+                        headlineContent = { Text(stringResource(R.string.action_edit)) },
                         leadingContent = { Icon(Icons.Default.Edit, contentDescription = null) },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                         modifier = Modifier.clickable {
@@ -986,7 +979,7 @@ fun ChatScreen(
                 }
 
                 ListItem(
-                    headlineContent = { Text("回复") },
+                    headlineContent = { Text(stringResource(R.string.action_reply)) },
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.Reply, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
@@ -999,7 +992,7 @@ fun ChatScreen(
                 )
 
                 ListItem(
-                    headlineContent = { Text("查看元素") },
+                    headlineContent = { Text(stringResource(R.string.chat_view_elements)) },
                     leadingContent = { Icon(Icons.Default.Info, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
@@ -1056,7 +1049,7 @@ fun ChatScreen(
                         )
                         if (extension.isNotEmpty()) {
                             Text(
-                                text = "$extension 文件",
+                                text = stringResource(R.string.chat_file_type, extension),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -1068,7 +1061,7 @@ fun ChatScreen(
 
                 // 用其他应用打开
                 ListItem(
-                    headlineContent = { Text("用其他应用打开") },
+                    headlineContent = { Text(stringResource(R.string.chat_open_with_other)) },
                     leadingContent = { Icon(Icons.Default.OpenInNew, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
@@ -1079,7 +1072,7 @@ fun ChatScreen(
 
                 // 保存到下载目录
                 ListItem(
-                    headlineContent = { Text("保存到下载目录") },
+                    headlineContent = { Text(stringResource(R.string.chat_save_to_downloads)) },
                     leadingContent = { Icon(Icons.Default.Download, contentDescription = null) },
                     colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                     modifier = Modifier.clickable {
@@ -1088,10 +1081,10 @@ fun ChatScreen(
                             val success = saveFileToDownloads(context, url, name)
                             if (success) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                    Toast.makeText(context, "已保存到 Download/LingCat", Toast.LENGTH_SHORT).show()
+                                    Feedback.show(R.string.chat_saved_to_downloads)
                                 }
                             } else {
-                                Toast.makeText(context, "保存失败，请重试", Toast.LENGTH_SHORT).show()
+                                Feedback.show(R.string.save_failed_retry)
                             }
                         }
                     }
@@ -1105,10 +1098,10 @@ fun ChatScreen(
 
         AlertDialog(
             onDismissRequest = { viewModel.clearNeedUnlock() },
-            title = { Text("端到端加密") },
+            title = { Text(stringResource(R.string.chat_e2e)) },
             text = {
                 Column {
-                    Text("请输入安全密码解锁")
+                    Text(stringResource(R.string.chat_unlock_hint))
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
                         value = password,
@@ -1127,10 +1120,10 @@ fun ChatScreen(
                             viewModel.sendMessage()
                         }
                     }
-                }) { Text("解锁") }
+                }) { Text(stringResource(R.string.action_unlock)) }
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.clearNeedUnlock() }) { Text("取消") }
+                TextButton(onClick = { viewModel.clearNeedUnlock() }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -1158,7 +1151,6 @@ fun MessageBubble(
     onAttachmentClick: (hash: String, name: String, isImage: Boolean) -> Unit,
     uploadProgress: Int,
 ) {
-    val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
     val scope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
     val density = LocalDensity.current
@@ -1193,14 +1185,11 @@ fun MessageBubble(
         }
     }
 
-    val senderName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: "未知用户"
+    val senderName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: stringResource(R.string.label_unknown_user)
     val avatarHash = userInfo?.avatarFileHash
-    val avatarUrl = if (!avatarHash.isNullOrEmpty() && !fileToken.isNullOrEmpty()) {
-        LingCatClientManager.currentClient?.getFileUrlByHashAndToken(avatarHash ?: "", fileToken ?: "")
-    } else null
 
     // ★ 核心包裹层：处理手势和滑动图标
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
             .draggable(
@@ -1231,6 +1220,10 @@ fun MessageBubble(
                 }
             )
     ) {
+        // 气泡最大宽度：手机上是 76% 的行宽，平板上再收紧到 560dp，
+        // 既不会出现一条消息占满整块屏幕，也不会在宽屏上被拉成一行超长文本。
+        val maxBubbleWidth = (maxWidth * 0.76f).coerceAtMost(560.dp)
+
         // ==========================================
         // 底层：回复图标（随滑动距离淡入）
         // ==========================================
@@ -1244,7 +1237,7 @@ fun MessageBubble(
             if (alpha > 0f) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Reply,
-                    contentDescription = "滑动回复",
+                    contentDescription = stringResource(R.string.chat_swipe_reply),
                     modifier = Modifier
                         .size(28.dp)
                         .graphicsLayer { this.alpha = alpha },
@@ -1271,13 +1264,14 @@ fun MessageBubble(
             verticalAlignment = Alignment.Top,
         ) {
             if (!isMine) {
-                ChatAvatar(
-                    avatarUrl,
-                    avatarHash,
+                LingCatAvatar(
+                    avatarHash = avatarHash,
+                    size = 40.dp,
+                    contentDescription = stringResource(R.string.label_avatar),
                     onClick = { onAvatarClick(message.senderUserId) },
-                    onLongClick = { onAvatarLongClick(message.senderUserId) }
+                    onLongClick = { onAvatarLongClick(message.senderUserId) },
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             } else {
                 // 左侧发送状态 (转圈/红叹号)
                 if (sendStatus != null) {
@@ -1315,7 +1309,7 @@ fun MessageBubble(
                             }
                             SendStatus.FAILED -> Icon(
                                 imageVector = Icons.Default.Error,
-                                contentDescription = "发送失败，点击重试",
+                                contentDescription = stringResource(R.string.chat_send_failed_retry),
                                 tint = MaterialTheme.colorScheme.error,
                                 modifier = Modifier
                                     .size(24.dp)
@@ -1344,7 +1338,13 @@ fun MessageBubble(
                 }
 
                 Surface(
-                    color = if (isMine) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                    // 自己的气泡用 primary；对方用 surfaceContainerHigh，
+                    // 保证在浅色/深色下都和背景有明确层次（之前双方都是 surface，等于没有气泡）。
+                    color = if (isMine) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.surfaceContainerHigh
+                    },
                     shape = RoundedCornerShape(
                         bottomEnd = 16.dp,
                         bottomStart = 16.dp,
@@ -1352,25 +1352,27 @@ fun MessageBubble(
                         topEnd = if (isMine) 4.dp else 16.dp
                     ),
                     shadowElevation = 1.dp,
-                    modifier = Modifier.widthIn(max = 280.dp)
+                    modifier = Modifier.widthIn(max = maxBubbleWidth),
                 ) {
                     // 气泡内部加上 Box 叠水印
                     Box {
-                        MessageContent(
-                            message = message,
-                            isMine = isMine,
-                            onReplyClick = onReplyClick,
-                            onMentionClick = onMentionClick,
-                            onAttachmentClick = onAttachmentClick,
-                            onLongClick = onLongClick,
-                            // findMessage = { /* 如果之前加过，就传进去 */ }
-                        )
+                        CompositionLocalProvider(LocalMessageMaxWidth provides maxBubbleWidth) {
+                            MessageContent(
+                                message = message,
+                                isMine = isMine,
+                                onReplyClick = onReplyClick,
+                                onMentionClick = onMentionClick,
+                                onAttachmentClick = onAttachmentClick,
+                                onLongClick = onLongClick,
+                                // findMessage = { /* 如果之前加过，就传进去 */ }
+                            )
+                        }
                         // 加密水印
                         val isE2EMessage = message.entitiesList.any { it.type == "e2e" }
                         if (isE2EMessage) {
                             Icon(
                                 imageVector = Icons.Default.Lock,
-                                contentDescription = "端到端加密",
+                                contentDescription = stringResource(R.string.chat_e2e),
                                 modifier = Modifier
                                     .align(if (isMine) Alignment.BottomStart else Alignment.BottomEnd)
                                     .padding(6.dp)
@@ -1387,53 +1389,15 @@ fun MessageBubble(
             }
 
             if (isMine) {
-                Spacer(modifier = Modifier.width(8.dp))
-                ChatAvatar(
-                    avatarUrl,
-                    avatarHash,
+                Spacer(modifier = Modifier.width(4.dp))
+                LingCatAvatar(
+                    avatarHash = avatarHash,
+                    size = 40.dp,
+                    contentDescription = stringResource(R.string.label_avatar),
                     onClick = { onAvatarClick(message.senderUserId) },
-                    onLongClick = { onAvatarLongClick(message.senderUserId) }
+                    onLongClick = { onAvatarLongClick(message.senderUserId) },
                 )
             }
         }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ChatAvatar(
-    avatarUrl: String?,
-    avatarHash: String?,
-    onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {}
-) {
-    val modifier = Modifier
-        .size(36.dp)
-        .clip(CircleShape)
-        .combinedClickable(
-            onClick = onClick,
-            onLongClick = onLongClick
-        )
-
-    if (avatarUrl != null && avatarHash != null) {
-        AsyncImage(
-            model = coil.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
-                .data(avatarUrl)
-                .memoryCacheKey(avatarHash)
-                .diskCacheKey(avatarHash)
-                .build(),
-            contentDescription = "头像",
-            modifier = modifier,
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.ic_default_avatar),
-            error = painterResource(id = R.drawable.ic_default_avatar)
-        )
-    } else {
-        androidx.compose.foundation.Image(
-            painter = painterResource(id = R.drawable.ic_default_avatar),
-            contentDescription = "默认头像",
-            modifier = modifier,
-            contentScale = ContentScale.Crop
-        )
     }
 }

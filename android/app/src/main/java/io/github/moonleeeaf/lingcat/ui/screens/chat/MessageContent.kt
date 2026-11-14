@@ -1,6 +1,5 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +12,7 @@ import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +43,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
+
+/**
+ * 当前气泡内部可用的最大宽度。
+ *
+ * 气泡宽度由外层根据屏幕宽度自适应计算（见 ChatScreen.MessageBubble），
+ * 文本和图片都读这个值，避免过去写死 240dp 导致宽屏浪费空间、窄屏溢出。
+ */
+val LocalMessageMaxWidth = staticCompositionLocalOf { 280.dp }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -145,7 +154,7 @@ fun MessageContent(
                     ) {
                         Icon(Icons.Default.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("使用了旧密钥 (可能是 v$needVersion)，点击解锁", color = MaterialTheme.colorScheme.error)
+                        Text(stringResource(R.string.legacy_key_unlock, needVersion ?: 0), color = MaterialTheme.colorScheme.error)
                     }
 
                     // 弹窗让用户输入该版本的旧密码
@@ -156,13 +165,13 @@ fun MessageContent(
 
                         AlertDialog(
                             onDismissRequest = { if (!isWorking) showVersionUnlockDialog = false },
-                            title = { Text("解锁历史消息 (v$needVersion)") },
+                            title = { Text(stringResource(R.string.unlock_history_title, needVersion ?: 0)) },
                             text = {
                                 Column {
                                     OutlinedTextField(
                                         value = pwd,
                                         onValueChange = { pwd = it; errorMsg = null },
-                                        label = { Text("请输入该版本的密码") },
+                                        label = { Text(stringResource(R.string.enter_version_password)) },
                                         visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation()
                                     )
                                     if (errorMsg != null) {
@@ -182,12 +191,12 @@ fun MessageContent(
                                                 // ★ 核心修复：强行让这个组件重组并重新尝试解密
                                                 forceRefresh++
                                             } else {
-                                                errorMsg = "密码错误"
+                                                errorMsg = context.getString(R.string.password_incorrect)
                                             }
                                         }
                                     },
                                     enabled = pwd.isNotBlank() && !isWorking
-                                ) { Text(if (isWorking) "解锁中..." else "解锁") }
+                                ) { Text(if (isWorking) stringResource(R.string.unlocking) else stringResource(R.string.action_unlock)) }
                             }
                         )
                     }
@@ -198,7 +207,7 @@ fun MessageContent(
                         tint = MaterialTheme.colorScheme.error
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("加密消息，点击解锁", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.encrypted_message_unlock), color = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -210,10 +219,10 @@ fun MessageContent(
 
             AlertDialog(
                 onDismissRequest = { if (!isUnlocking) showUnlockDialog = false },
-                title = { Text("解锁端到端加密") },
+                title = { Text(stringResource(R.string.unlock_e2e_title)) },
                 text = {
                     Column {
-                        Text("请输入安全密码来解锁此消息")
+                        Text(stringResource(R.string.unlock_e2e_message))
                         Spacer(Modifier.height(8.dp))
                         OutlinedTextField(
                             value = password,
@@ -221,7 +230,7 @@ fun MessageContent(
                                 password = it
                                 unlockError = null
                             },
-                            label = { Text("安全密码") },
+                            label = { Text(stringResource(R.string.security_password)) },
                             singleLine = true,
                             visualTransformation = PasswordVisualTransformation(),
                             enabled = !isUnlocking
@@ -246,7 +255,7 @@ fun MessageContent(
                                     showUnlockDialog = false
                                     // 解锁成功后，LaunchedEffect 会自动监听到状态变化并自动解密
                                 } else {
-                                    unlockError = "密码错误，请重试"
+                                    unlockError = context.getString(R.string.password_incorrect_retry)
                                 }
                             }
                         },
@@ -255,7 +264,7 @@ fun MessageContent(
                         if (isUnlocking) {
                             CircularProgressIndicator(Modifier.size(16.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                         } else {
-                            Text("确认")
+                            Text(stringResource(R.string.action_ok))
                         }
                     }
                 },
@@ -264,7 +273,7 @@ fun MessageContent(
                         onClick = { showUnlockDialog = false },
                         enabled = !isUnlocking
                     ) {
-                        Text("取消")
+                        Text(stringResource(R.string.action_cancel))
                     }
                 }
             )
@@ -407,7 +416,7 @@ fun InlineTextBlock(
     Text(
         text = annotatedString,
         onTextLayout = { textLayoutResult = it },
-        modifier = Modifier.widthIn(max = 240.dp).pointerInput(annotatedString) {
+        modifier = Modifier.widthIn(max = LocalMessageMaxWidth.current).pointerInput(annotatedString) {
             detectTapGestures(
                 onTap = { offset ->
                     val charOffset = textLayoutResult?.getOffsetForPosition(offset) ?: -1
@@ -428,7 +437,7 @@ fun InlineTextBlock(
                                                 )
                                                 context.startActivity(intent)
                                             } catch (e: Exception) {
-                                                android.widget.Toast.makeText(context, "无法打开链接: ${e.message}", android.widget.Toast.LENGTH_SHORT).show()
+                                                io.github.moonleeeaf.lingcat.ui.Feedback.show(R.string.link_open_failed, e.message ?: "")
                                             }
                                         }
                                     }
@@ -479,9 +488,11 @@ fun ReplyBlock(
     val seq = entity.data?.toIntOrNull() ?: -1
     if (seq == -1) return
 
+    val context = androidx.compose.ui.platform.LocalContext.current
+
     // 异步拉取目标消息
     var targetMsg by remember { mutableStateOf<IMessage?>(null) }
-    var senderName by remember { mutableStateOf("加载中...") }
+    var senderName by remember { mutableStateOf(context.getString(R.string.reply_loading)) }
     var previewText by remember { mutableStateOf("") }
 
     LaunchedEffect(seq) {
@@ -491,7 +502,7 @@ fun ReplyBlock(
 
             // 1. 获取发送者昵称
             val user = io.github.moonleeeaf.lingcat.data.ProfileCache.fetchUser(msg.senderUserId)
-            senderName = user?.nickname?.ifEmpty { user.username } ?: "未知用户"
+            senderName = user?.nickname?.ifEmpty { user.username } ?: context.getString(R.string.label_unknown_user)
 
             // 2. 解析内容预览 (处理 E2E)
             val e2eEntity = msg.entitiesList.find { it.type == "e2e" }
@@ -502,23 +513,23 @@ fun ReplyBlock(
                     if (plainJson != null) {
                         try {
                             val obj = JSONObject(plainJson)
-                            previewText = obj.optString("text", "[加密消息]")
+                            previewText = obj.optString("text", context.getString(R.string.encrypted_message_placeholder))
                         } catch (e: Exception) {
-                            previewText = "[加密消息]"
+                            previewText = context.getString(R.string.encrypted_message_placeholder)
                         }
                     } else {
-                        previewText = "🔒 [加密消息]"
+                        previewText = context.getString(R.string.encrypted_message_locked)
                     }
                 } else {
-                    previewText = "🔒 [加密消息]"
+                    previewText = context.getString(R.string.encrypted_message_locked)
                 }
             } else {
                 // 普通文本
-                previewText = msg.text.ifEmpty { "[附件]" }
+                previewText = msg.text.ifEmpty { context.getString(R.string.attachment_label) }
             }
         } else {
-            senderName = "未知消息"
-            previewText = "无法加载原消息"
+            senderName = context.getString(R.string.unknown_message)
+            previewText = context.getString(R.string.original_message_unavailable)
         }
     }
 
@@ -566,7 +577,7 @@ fun AttachmentBlock(
     onLongClick: () -> Unit // ★ 新增参数
 ) {
     var hash = ""
-    var name = "附件"
+    var name = stringResource(R.string.attachment_default_name)
     try {
         val json = JSONObject(entity.data ?: "")
         hash = json.optString("hash")
@@ -574,7 +585,7 @@ fun AttachmentBlock(
     } catch (_: Exception) {}
 
     if (hash.isEmpty()) {
-        Text("[无效附件]", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(12.dp))
+        Text(stringResource(R.string.attachment_invalid), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(12.dp))
         return
     }
 
@@ -631,7 +642,7 @@ fun AttachmentBlock(
                 .build(),
             contentDescription = name,
             modifier = Modifier
-                .widthIn(max = 240.dp)
+                .widthIn(max = LocalMessageMaxWidth.current)
                 .defaultMinSize(minWidth = 100.dp, minHeight = 100.dp)
                 // ★ 核心修复：图片用 combinedClickable
                 .combinedClickable(
