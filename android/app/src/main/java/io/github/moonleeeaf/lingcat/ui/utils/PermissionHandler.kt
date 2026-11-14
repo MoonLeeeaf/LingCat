@@ -15,6 +15,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
+import io.github.moonleeeaf.lingcat.R
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
@@ -35,10 +37,11 @@ fun Context.findActivity(): Activity? {
  */
 data class PermissionConfig(
     val permission: String,
-    val rationaleTitle: String = "需要权限",
+    // 下面三项留空时使用内置文案；需要场景化说明时再传。
+    val rationaleTitle: String? = null,
     val rationaleMessage: String, // 必须要求传入，因为不同场景解释不同
-    val settingsTitle: String = "权限被禁用",
-    val settingsMessage: String = "您已经禁用了该权限，请前往系统设置手动开启喵"
+    val settingsTitle: String? = null,
+    val settingsMessage: String? = null,
 )
 
 /**
@@ -106,18 +109,18 @@ fun rememberPermissionRequestHandler(
     if (showRationaleDialog) {
         AlertDialog(
             onDismissRequest = { showRationaleDialog = false },
-            title = { Text(config.rationaleTitle) },
+            title = { Text(config.rationaleTitle ?: stringResource(R.string.permission_required)) },
             text = { Text(config.rationaleMessage) },
             confirmButton = {
                 TextButton(onClick = {
                     showRationaleDialog = false
                     launcher.launch(config.permission)
                 }) {
-                    Text("去授权")
+                    Text(stringResource(R.string.permission_grant))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showRationaleDialog = false }) { Text("取消") }
+                TextButton(onClick = { showRationaleDialog = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -126,8 +129,10 @@ fun rememberPermissionRequestHandler(
     if (showSettingsDialog) {
         AlertDialog(
             onDismissRequest = { showSettingsDialog = false },
-            title = { Text(config.settingsTitle) },
-            text = { Text(config.settingsMessage) },
+            title = { Text(config.settingsTitle ?: stringResource(R.string.permission_disabled)) },
+            text = {
+                Text(config.settingsMessage ?: stringResource(R.string.permission_disabled_message))
+            },
             confirmButton = {
                 TextButton(onClick = {
                     showSettingsDialog = false
@@ -136,11 +141,11 @@ fun rememberPermissionRequestHandler(
                     }
                     context.startActivity(intent)
                 }) {
-                    Text("去设置")
+                    Text(stringResource(R.string.permission_open_settings))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showSettingsDialog = false }) { Text("取消") }
+                TextButton(onClick = { showSettingsDialog = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }

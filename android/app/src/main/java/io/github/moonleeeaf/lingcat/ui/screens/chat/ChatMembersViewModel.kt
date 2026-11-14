@@ -1,9 +1,15 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,12 +23,12 @@ import lingcat.client_protocol.ChatApi
 data class MemberUiModel(
     val user: IUser,
     val role: String, // "owner", "admin", "member"
-    val roleDisplayName: String // "群主", "管理员", "成员"
+    @StringRes val roleLabelRes: Int // 展示用的角色名，交给界面本地化
 )
 
 data class ChatMembersUiState(
     val isLoading: Boolean = true,
-    val errorMsg: String? = null,
+    val errorMsg: UiText? = null,
     val searchQuery: String = "",
     val owner: List<MemberUiModel> = emptyList(),
     val admins: List<MemberUiModel> = emptyList(),
@@ -80,8 +86,8 @@ class ChatMembersViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(isLoading = true, errorMsg = null)
         viewModelScope.launch {
             try {
-                val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
 
                 // 1. 拉取成员列表
                 val rawMembers = withContext(Dispatchers.IO) {
@@ -110,9 +116,9 @@ class ChatMembersViewModel : ViewModel() {
                 for (user in rawMembers) {
                     val adminInfo = adminMap[user.id]
                     when (adminInfo?.role) {
-                        "owner" -> ownerList.add(MemberUiModel(user, "owner", "所有者"))
-                        "admin" -> adminList.add(MemberUiModel(user, "admin", "管理员"))
-                        else -> memberList.add(MemberUiModel(user, "member", "成员"))
+                        "owner" -> ownerList.add(MemberUiModel(user, "owner", R.string.label_owner))
+                        "admin" -> adminList.add(MemberUiModel(user, "admin", R.string.chat_members_group_admin))
+                        else -> memberList.add(MemberUiModel(user, "member", R.string.chat_members_role_member))
                     }
                 }
 
@@ -131,7 +137,8 @@ class ChatMembersViewModel : ViewModel() {
                 Log.e(TAG, "load members failed", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMsg = "加载对话成员失败: ${e.message}"
+                    errorMsg = e.toUiTextOrNull()
+                        ?: uiText(R.string.chat_members_err_load, e.message ?: "")
                 )
             }
         }

@@ -8,7 +8,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,8 +38,10 @@ data class EditProfileUiState(
     val oauthProviders: List<OAuthProvider> = emptyList(),
     // ★ 注意：bindings 依然保存的是 id 的字符串列表，用来判断是否已绑定
     val bindings: List<String> = emptyList(),
-    val errorMsg: String? = null,
-    val successMsg: String? = null
+    val errorMsg: UiText? = null,
+    val successMsg: UiText? = null,
+    /** 一次完整的“保存资料”是否刚刚成功，用于页面决定是否自动返回。 */
+    val justSaved: Boolean = false,
 )
 
 class EditProfileViewModel : ViewModel() {
@@ -92,7 +98,7 @@ class EditProfileViewModel : ViewModel() {
                     loadBindings()
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "加载资料失败: ${e.message}")
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = uiText(R.string.edit_profile_err_load, e.message ?: ""))
             }
         }
     }
@@ -110,7 +116,7 @@ class EditProfileViewModel : ViewModel() {
 
     fun saveProfile(nickname: String, username: String, description: String) {
         if (client == null || token == null) return
-        _uiState.value = _uiState.value.copy(isSaving = true, errorMsg = null)
+        _uiState.value = _uiState.value.copy(isSaving = true, errorMsg = null, justSaved = false)
 
         viewModelScope.launch {
             try {
@@ -124,10 +130,10 @@ class EditProfileViewModel : ViewModel() {
                     )
                 }
                 ProfileCache.clearAll() // 清理缓存让界面用新数据刷新
-                _uiState.value = _uiState.value.copy(isSaving = false, successMsg = "保存成功")
+                _uiState.value = _uiState.value.copy(isSaving = false, successMsg = uiText(R.string.edit_profile_saved), justSaved = true)
                 loadProfile()
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isSaving = false, errorMsg = "保存失败: ${e.message}")
+                _uiState.value = _uiState.value.copy(isSaving = false, errorMsg = uiText(R.string.edit_profile_err_save, e.message ?: ""))
             }
         }
     }
@@ -139,14 +145,14 @@ class EditProfileViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val pngBytes = withContext(Dispatchers.IO) { cropToSquare(context, uri, 512) }
-                    ?: throw Exception("图片处理失败")
+                    ?: throw UiTextException(uiText(R.string.edit_profile_err_image_process))
 
                 val uploadToken = withContext(Dispatchers.IO) {
                     FileApi.requestUploadFileToken(client, token!!, 15000L)
                 }
                 val hash = withContext(Dispatchers.IO) {
                     FileApi.uploadFile(client, uploadToken, null, pngBytes, "image/png", "avatar.png")
-                } ?: throw Exception("上传失败")
+                } ?: throw UiTextException(uiText(R.string.edit_profile_err_upload))
 
                 withContext(Dispatchers.IO) {
                     UserApi.updateMyProfile(client, token!!, null, null, null, hash)
@@ -154,10 +160,11 @@ class EditProfileViewModel : ViewModel() {
 
                 // ★ 修复：去掉了 AppDataStore 的更新，依靠 ProfileCache.clearAll() 即可
                 ProfileCache.clearAll()
-                _uiState.value = _uiState.value.copy(isSaving = false, successMsg = "头像已更新")
+                _uiState.value = _uiState.value.copy(isSaving = false, successMsg = uiText(R.string.edit_profile_avatar_updated))
                 loadProfile()
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isSaving = false, errorMsg = "头像上传失败: ${e.message}")
+                _uiState.value = _uiState.value.copy(isSaving = false, errorMsg = (e as? UiTextException)?.uiText
+                    ?: uiText(R.string.edit_profile_err_avatar, e.message ?: ""))
             }
         }
     }
@@ -170,9 +177,9 @@ class EditProfileViewModel : ViewModel() {
                     OAuthApi.unbindOAuth(client, token!!, providerId, 15000L)
                 }
                 loadBindings()
-                _uiState.value = _uiState.value.copy(successMsg = "已解绑")
+                _uiState.value = _uiState.value.copy(successMsg = uiText(R.string.edit_profile_unbound))
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(errorMsg = "解绑失败: ${e.message}")
+                _uiState.value = _uiState.value.copy(errorMsg = uiText(R.string.edit_profile_err_unbind, e.message ?: ""))
             }
         }
     }
@@ -191,7 +198,7 @@ class EditProfileViewModel : ViewModel() {
     }
 
     fun clearMessages() {
-        _uiState.value = _uiState.value.copy(errorMsg = null, successMsg = null)
+        _uiState.value = _uiState.value.copy(errorMsg = null, successMsg = null, justSaved = false)
     }
 
     // 裁剪方形逻辑 (从旧版搬过来)

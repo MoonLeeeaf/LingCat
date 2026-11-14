@@ -5,7 +5,12 @@ import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.AccountInfo
 import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ServerConfig
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +35,7 @@ data class LoginUiState(
 
     // 状态
     val isLoading: Boolean = false,
-    val errorMsg: String? = null,
+    val errorMsg: UiText? = null,
     val isSuccess: Boolean = false
 )
 
@@ -63,7 +68,7 @@ class LoginViewModel : ViewModel() {
                 } else {
                     _uiState.value = _uiState.value.copy(
                         serverLoading = false,
-                        errorMsg = "添加服务器失败: ${e?.message}"
+                        errorMsg = e?.toUiTextOrNull() ?: uiText(R.string.login_err_add_server, e?.message ?: "")
                     )
                 }
             }
@@ -122,7 +127,8 @@ class LoginViewModel : ViewModel() {
             } else {
                 _uiState.value = _uiState.value.copy(
                     serverLoading = false,
-                    errorMsg = "连接服务器失败: ${result.exceptionOrNull()?.message}"
+                    errorMsg = result.exceptionOrNull()?.toUiTextOrNull()
+                        ?: uiText(R.string.login_err_connect_server, result.exceptionOrNull()?.message ?: "")
                 )
             }
         }
@@ -156,7 +162,7 @@ class LoginViewModel : ViewModel() {
     fun submit() {
         val state = _uiState.value
         val server = state.currentServer ?: run {
-            _uiState.value = state.copy(errorMsg = "请先选择或添加一个服务器喵")
+            _uiState.value = state.copy(errorMsg = uiText(R.string.login_err_no_server))
             return
         }
 
@@ -167,11 +173,11 @@ class LoginViewModel : ViewModel() {
         if (state.isRegisterMode) {
             // ★ 注册模式：严格校验昵称
             if (nickname.isEmpty()) {
-                _uiState.value = state.copy(errorMsg = "昵称不能为空喵")
+                _uiState.value = state.copy(errorMsg = uiText(R.string.login_err_nickname_empty))
                 return
             }
             if (password != state.confirmPassword) {
-                _uiState.value = state.copy(errorMsg = "两次输入的密码不一致喵")
+                _uiState.value = state.copy(errorMsg = uiText(R.string.login_err_password_mismatch))
                 return
             }
             // 如果用户没填用户名，我们可以用随机字符串或者留空，让服务端生成
@@ -179,7 +185,7 @@ class LoginViewModel : ViewModel() {
         } else {
             // 登录模式：严格校验账号
             if (username.isEmpty() || password.isEmpty()) {
-                _uiState.value = state.copy(errorMsg = "账号和密码不能为空")
+                _uiState.value = state.copy(errorMsg = uiText(R.string.login_err_credentials_empty))
                 return
             }
         }
@@ -191,7 +197,7 @@ class LoginViewModel : ViewModel() {
                 var client = LingCatClientManager.currentClient
                 if (client == null || !client.isReady()) {
                     val result = withContext(Dispatchers.IO) { LingCatClientManager.connect(server) }
-                    if (result.isFailure) throw Exception("网络连接失败")
+                    if (result.isFailure) throw UiTextException(uiText(R.string.login_err_network))
                     client = LingCatClientManager.currentClient!!
                 }
 
@@ -217,7 +223,7 @@ class LoginViewModel : ViewModel() {
                     }
                 }
 
-                if (token.isNullOrEmpty()) throw Exception("获取 Token 失败")
+                if (token.isNullOrEmpty()) throw UiTextException(uiText(R.string.login_err_token))
                 val me = withContext(Dispatchers.IO) { UserApi.queryMyUserInfo(client, token) }
 
                 LingCatClientManager.setAuthSession(token, me.id)
@@ -233,7 +239,11 @@ class LoginViewModel : ViewModel() {
                 val cause = e.cause ?: e
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMsg = "${if (state.isRegisterMode) "注册" else "登录"}失败: ${cause.message}"
+                    errorMsg = e.toUiTextOrNull()
+                        ?: uiText(
+                            if (state.isRegisterMode) R.string.login_err_register else R.string.login_err_login,
+                            cause.message ?: "",
+                        )
                 )
             }
         }
@@ -242,7 +252,7 @@ class LoginViewModel : ViewModel() {
     fun deleteServer(server: ServerConfig) {
         // ★ 核心修复：如果是当前正在使用的服务器，直接拒绝
         if (_uiState.value.currentServer?.wsUrl == server.wsUrl) {
-            _uiState.value = _uiState.value.copy(errorMsg = "无法删除正在使用的服务器喵！")
+            _uiState.value = _uiState.value.copy(errorMsg = uiText(R.string.login_err_delete_current_server))
             return
         }
 
@@ -259,11 +269,11 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val server = LingCatClientManager.getSavedServers().find { it.wsUrl == account.serverWsUrl }
-                    ?: throw Exception("找不到服务器配置")
+                    ?: throw UiTextException(uiText(R.string.login_err_server_config_missing))
 
                 if (LingCatClientManager.currentServer?.wsUrl != server.wsUrl || LingCatClientManager.currentClient?.isReady() != true) {
                     val result = withContext(Dispatchers.IO) { LingCatClientManager.connect(server) }
-                    if (result.isFailure) throw Exception("网络连接失败")
+                    if (result.isFailure) throw UiTextException(uiText(R.string.login_err_network))
                 }
 
                 val client = LingCatClientManager.currentClient!!
@@ -275,7 +285,7 @@ class LoginViewModel : ViewModel() {
                 _uiState.value = _uiState.value.copy(isLoading = false, isSuccess = true)
             } catch (e: Exception) {
                 onUsernameChange(account.username)
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = "登录已过期，请重新输入密码喵")
+                _uiState.value = _uiState.value.copy(isLoading = false, errorMsg = uiText(R.string.login_err_session_expired))
             }
         }
     }

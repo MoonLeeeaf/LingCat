@@ -11,12 +11,16 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
+import io.github.moonleeeaf.lingcat.ui.components.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +32,6 @@ fun AccountListScreen(
     viewModel: AccountListViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     var accountToDelete by remember { mutableStateOf<AccountItem?>(null) }
 
@@ -37,28 +40,22 @@ fun AccountListScreen(
         viewModel.onForceLogout = onForceLogout
     }
 
-    // 绑定切换成功的回调
-    LaunchedEffect(Unit) {
-        viewModel.onSwitchSuccess = onSwitchSuccess
-    }
-
     LaunchedEffect(uiState.errorMsg) {
-        uiState.errorMsg?.let { snackbarHostState.showSnackbar(it) }
+        uiState.errorMsg?.let { Feedback.show(it) }
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("账号管理") },
+                title = { Text(stringResource(R.string.account_management)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 actions = {
                     IconButton(onClick = onAddAccount) {
-                        Icon(Icons.Default.Add, contentDescription = "添加新账号")
+                        Icon(Icons.Default.Add, contentDescription = stringResource(R.string.account_add))
                     }
                 }
             )
@@ -66,7 +63,11 @@ fun AccountListScreen(
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding)) {
             if (uiState.accounts.isEmpty()) {
-                Text("还没有保存的账号喵", Modifier.align(Alignment.Center))
+                EmptyState(
+                    title = stringResource(R.string.account_empty),
+                    icon = Icons.Default.Person,
+                    modifier = Modifier.align(Alignment.Center),
+                )
             } else {
                 LazyColumn(Modifier.fillMaxSize()) {
                     items(uiState.accounts) { item ->
@@ -77,13 +78,18 @@ fun AccountListScreen(
 
                         ListItem(
                             headlineContent = { Text(item.account.username) },
-                            supportingContent = { Text(item.serverTitle + " " + item.account.serverWsUrl) },
+                            supportingContent = {
+                                Text(
+                                    (item.serverTitle ?: stringResource(R.string.account_unknown_server)) +
+                                        " " + item.account.serverWsUrl
+                                )
+                            },
                             trailingContent = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     if (isSwitching) {
                                         CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                                     } else if (isCurrent) {
-                                        Text("当前", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelMedium)
+                                        Text(stringResource(R.string.account_current), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelMedium)
                                     }
 
                                     // ★ 删除按钮
@@ -93,7 +99,7 @@ fun AccountListScreen(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Delete,
-                                            contentDescription = "删除",
+                                            contentDescription = stringResource(R.string.action_delete),
                                             tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
                                         )
                                     }
@@ -114,11 +120,14 @@ fun AccountListScreen(
     if (accountToDelete != null) {
         AlertDialog(
             onDismissRequest = { accountToDelete = null },
-            title = { Text("删除登录状态") },
+            title = { Text(stringResource(R.string.account_delete_title)) },
             text = {
-                val isCurrent = accountToDelete?.account?.token == LingCatClientManager.currentToken
-                Text("确定要删除账号 ${accountToDelete?.account?.username} 的登录状态吗？\n" +
-                        if (isCurrent) "这会导致你立即退出当前账号！" else "下次登录需要重新输入密码。")
+                Text(
+                    stringResource(
+                        R.string.account_delete_message,
+                        accountToDelete?.account?.username ?: "",
+                    )
+                )
             },
             confirmButton = {
                 TextButton(
@@ -128,12 +137,12 @@ fun AccountListScreen(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("删除")
+                    Text(stringResource(R.string.action_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { accountToDelete = null }) {
-                    Text("取消")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         )

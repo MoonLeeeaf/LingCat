@@ -1,6 +1,8 @@
 package io.github.moonleeeaf.lingcat.e2e
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -20,8 +22,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.e2e.E2EManager
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,25 +82,28 @@ fun E2EInfoDialog(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.width(8.dp))
-                Text("端到端加密")
+                Text(stringResource(R.string.chat_e2e))
             }
         },
         text = {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp) // ★ 统一控制列表项之间的间距
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // 内容较多（安全码 + 三组操作 + 提示），小屏/横屏时必须可滚动。
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 when (e2eStatus) {
                     // ==========================================
                     // 状态 1: 尚未开启
                     // ==========================================
                     E2EStateManager.Status.DISABLED -> {
-                        Text("你尚未生成加密密钥，设置一个安全密码即可开启端到端加密。")
+                        Text(stringResource(R.string.e2e_disabled_desc))
                         Spacer(Modifier.height(16.dp))
                         OutlinedTextField(
                             value = inputPwd,
                             onValueChange = { inputPwd = it; errorMsg = null },
-                            label = { Text("设置安全密码") },
+                            label = { Text(stringResource(R.string.e2e_set_password)) },
                             singleLine = true,
                             visualTransformation = PasswordVisualTransformation(),
                             enabled = !isWorking,
@@ -108,12 +116,12 @@ fun E2EInfoDialog(
                     // 状态 2: 已生成但锁定
                     // ==========================================
                     E2EStateManager.Status.LOCKED -> {
-                        Text("你的加密密钥已锁定，请输入密码解锁以查看安全码和收发消息。")
+                        Text(stringResource(R.string.e2e_locked_desc))
                         Spacer(Modifier.height(16.dp))
                         OutlinedTextField(
                             value = inputPwd,
                             onValueChange = { inputPwd = it; errorMsg = null },
-                            label = { Text("安全密码") },
+                            label = { Text(stringResource(R.string.security_password)) },
                             singleLine = true,
                             visualTransformation = PasswordVisualTransformation(),
                             enabled = !isWorking,
@@ -129,7 +137,7 @@ fun E2EInfoDialog(
                         if (safetyNumber != null) {
                             // ★ 优化 1：把安全码改成 ListItem 风格，带圆角
                             ListItem(
-                                headlineContent = { Text("安全码 (点击复制)") },
+                                headlineContent = { Text(stringResource(R.string.e2e_safety_number)) },
                                 supportingContent = {
                                     Text(
                                         text = safetyNumber,
@@ -145,13 +153,13 @@ fun E2EInfoDialog(
                                     .clip(RoundedCornerShape(12.dp)) // ★ 核心：圆角涟漪
                                     .clickable {
                                         clipboardManager.setText(AnnotatedString(safetyNumber))
-                                        // 最好在这里弹个 Toast 或者轻微震动提示
+                                        Feedback.show(R.string.e2e_copied)
                                     }
                             )
                         } else if (peerUserId != null) {
                             ListItem(
-                                headlineContent = { Text("无法验证") },
-                                supportingContent = { Text("对方尚未开启端到端加密") },
+                                headlineContent = { Text(stringResource(R.string.e2e_cannot_verify)) },
+                                supportingContent = { Text(stringResource(R.string.e2e_peer_disabled)) },
                                 leadingContent = { Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
                                 colors = ListItemDefaults.colors(containerColor = Color.Transparent)
                             )
@@ -161,8 +169,8 @@ fun E2EInfoDialog(
                             when (currentVerifyStatus) {
                                 "mismatch" -> {
                                     ListItem(
-                                        headlineContent = { Text("安全码已变更！", color = MaterialTheme.colorScheme.error) },
-                                        supportingContent = { Text("对方可能更新了密钥，或者正遭受中间人攻击，请核实！", color = MaterialTheme.colorScheme.error) },
+                                        headlineContent = { Text(stringResource(R.string.e2e_mismatch_title), color = MaterialTheme.colorScheme.error) },
+                                        supportingContent = { Text(stringResource(R.string.e2e_mismatch_desc), color = MaterialTheme.colorScheme.error) },
                                         leadingContent = { Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
                                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)),
                                         modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable {
@@ -172,8 +180,8 @@ fun E2EInfoDialog(
                                 }
                                 "verified" -> {
                                     ListItem(
-                                        headlineContent = { Text("已标记为安全") },
-                                        supportingContent = { Text("你已确认此人的安全码") },
+                                        headlineContent = { Text(stringResource(R.string.e2e_verified_title)) },
+                                        supportingContent = { Text(stringResource(R.string.e2e_verified_desc)) },
                                         leadingContent = { Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                         modifier = Modifier.clip(RoundedCornerShape(12.dp))
@@ -181,8 +189,8 @@ fun E2EInfoDialog(
                                 }
                                 else -> {
                                     ListItem(
-                                        headlineContent = { Text("标记为已验证") },
-                                        supportingContent = { Text("对比上方安全码，确认无误后点击") },
+                                        headlineContent = { Text(stringResource(R.string.e2e_mark_verified)) },
+                                        supportingContent = { Text(stringResource(R.string.e2e_mark_verified_desc)) },
                                         leadingContent = { Icon(Icons.Default.CheckCircleOutline, contentDescription = null) },
                                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                         modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable {
@@ -195,8 +203,8 @@ fun E2EInfoDialog(
 
                         // ★ 优化 3：给操作按钮加圆角
                         ListItem(
-                            headlineContent = { Text("修改主密码") },
-                            supportingContent = { Text("重新加密所有历史版本密钥") },
+                            headlineContent = { Text(stringResource(R.string.e2e_change_password)) },
+                            supportingContent = { Text(stringResource(R.string.e2e_change_password_desc)) },
                             leadingContent = { Icon(Icons.Default.VpnKey, contentDescription = null) },
                             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                             modifier = Modifier
@@ -205,8 +213,8 @@ fun E2EInfoDialog(
                         )
 
                         ListItem(
-                            headlineContent = { Text("生成新密钥") },
-                            supportingContent = { Text("当前 v${E2EStateManager.getMyKeyVersion()}，重置后安全码会变更") },
+                            headlineContent = { Text(stringResource(R.string.e2e_generate_key)) },
+                            supportingContent = { Text(stringResource(R.string.e2e_generate_key_desc, E2EStateManager.getMyKeyVersion())) },
                             leadingContent = { Icon(Icons.Default.Refresh, contentDescription = null) },
                             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                             modifier = Modifier
@@ -227,13 +235,13 @@ fun E2EInfoDialog(
                                 isWorking = true
                                 val ok = E2EStateManager.setupNewKey(inputPwd)
                                 isWorking = false
-                                if (!ok) errorMsg = "生成失败，请重试"
+                                if (!ok) errorMsg = context.getString(R.string.e2e_generate_failed)
                                 else inputPwd = ""
                             }
                         },
                         enabled = inputPwd.isNotBlank() && !isWorking
                     ) {
-                        if (isWorking) CircularProgressIndicator(Modifier.size(16.dp)) else Text("生成并开启")
+                        if (isWorking) CircularProgressIndicator(Modifier.size(16.dp)) else Text(stringResource(R.string.e2e_generate_and_enable))
                     }
                 }
                 E2EStateManager.Status.LOCKED -> {
@@ -244,23 +252,23 @@ fun E2EInfoDialog(
                                 isWorking = true
                                 val ok = E2EStateManager.unlock(inputPwd)
                                 isWorking = false
-                                if (!ok) errorMsg = "密码错误"
+                                if (!ok) errorMsg = context.getString(R.string.password_incorrect)
                                 else inputPwd = ""
                             }
                         },
                         enabled = inputPwd.isNotBlank() && !isWorking
                     ) {
-                        if (isWorking) CircularProgressIndicator(Modifier.size(16.dp)) else Text("解锁")
+                        if (isWorking) CircularProgressIndicator(Modifier.size(16.dp)) else Text(stringResource(R.string.action_unlock))
                     }
                 }
                 E2EStateManager.Status.UNLOCKED -> {
-                    TextButton(onClick = onDismiss) { Text("完成") }
+                    TextButton(onClick = onDismiss) { Text(stringResource(R.string.e2e_done)) }
                 }
             }
         },
         dismissButton = {
             if (e2eStatus != E2EStateManager.Status.UNLOCKED) {
-                TextButton(onClick = onDismiss, enabled = !isWorking) { Text("取消") }
+                TextButton(onClick = onDismiss, enabled = !isWorking) { Text(stringResource(R.string.action_cancel)) }
             }
         }
     )
@@ -273,12 +281,12 @@ fun E2EInfoDialog(
 
         AlertDialog(
             onDismissRequest = { if (!isWorking) showChangePwdDialog = false },
-            title = { Text("修改主密码") },
+            title = { Text(stringResource(R.string.e2e_change_password)) },
             text = {
                 Column {
-                    OutlinedTextField(value = oldPwd, onValueChange = { oldPwd = it; errorMsg = null }, label = { Text("当前密码") }, visualTransformation = PasswordVisualTransformation())
+                    OutlinedTextField(value = oldPwd, onValueChange = { oldPwd = it; errorMsg = null }, label = { Text(stringResource(R.string.e2e_current_password)) }, visualTransformation = PasswordVisualTransformation())
                     Spacer(Modifier.height(8.dp))
-                    OutlinedTextField(value = newPwd, onValueChange = { newPwd = it; errorMsg = null }, label = { Text("新密码") }, visualTransformation = PasswordVisualTransformation())
+                    OutlinedTextField(value = newPwd, onValueChange = { newPwd = it; errorMsg = null }, label = { Text(stringResource(R.string.e2e_new_password)) }, visualTransformation = PasswordVisualTransformation())
                     if (errorMsg != null) Text(errorMsg!!, color = MaterialTheme.colorScheme.error)
                 }
             },
@@ -293,12 +301,12 @@ fun E2EInfoDialog(
                                 showChangePwdDialog = false
                                 onDismiss() // 密码改完会锁定，退出面板要求用新密码解锁
                             } else {
-                                errorMsg = "旧密码错误或网络异常"
+                                errorMsg = context.getString(R.string.e2e_old_password_wrong)
                             }
                         }
                     },
                     enabled = oldPwd.isNotBlank() && newPwd.isNotBlank() && !isWorking
-                ) { Text("确认修改") }
+                ) { Text(stringResource(R.string.e2e_confirm_change)) }
             }
         )
     }
@@ -311,12 +319,12 @@ fun E2EInfoDialog(
 
         AlertDialog(
             onDismissRequest = { if (!isWorking) showRotateKeyDialog = false },
-            title = { Text("生成新密钥") },
+            title = { Text(stringResource(R.string.e2e_generate_key)) },
             text = {
                 Column {
-                    Text("警告：对方的安全码将会变更，需要重新验证。", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.e2e_rotate_warning), color = MaterialTheme.colorScheme.error)
                     Spacer(Modifier.height(16.dp))
-                    OutlinedTextField(value = pwd, onValueChange = { pwd = it; errorMsg = null }, label = { Text("输入当前密码") }, visualTransformation = PasswordVisualTransformation())
+                    OutlinedTextField(value = pwd, onValueChange = { pwd = it; errorMsg = null }, label = { Text(stringResource(R.string.e2e_enter_current_password)) }, visualTransformation = PasswordVisualTransformation())
                     if (errorMsg != null) Text(errorMsg!!, color = MaterialTheme.colorScheme.error)
                 }
             },
@@ -332,12 +340,12 @@ fun E2EInfoDialog(
                             if (ok) {
                                 showRotateKeyDialog = false
                             } else {
-                                errorMsg = "密码错误或网络异常"
+                                errorMsg = context.getString(R.string.e2e_password_network_error)
                             }
                         }
                     },
                     enabled = pwd.isNotBlank() && !isWorking
-                ) { Text("确认重置") }
+                ) { Text(stringResource(R.string.e2e_confirm_reset)) }
             }
         )
     }

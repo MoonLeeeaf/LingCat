@@ -5,10 +5,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ServerConfig
 import io.github.moonleeeaf.lingcat.data.ServerStorage
@@ -101,17 +103,19 @@ fun SplashScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                         Spacer(Modifier.width(8.dp))
-                        Text("服务器公钥已变更")
+                        Text(stringResource(R.string.tofu_title))
                     }
                 },
                 text = {
                     Text(
-                        text = "检测到服务器 ${originalServer?.siteTitle} 的安全指纹与本地记录不一致。\n\n" +
-                                "旧 Hex 16 位: ${originalServer?.publicKeyHex?.take(16)}...\n" +
-                                "新 Hex 16 位: ${tofuConflictConfig?.publicKeyHex?.take(16)}...\n\n" +
-                                "这可能是因为服务器丢失了密钥，也可能是中间人攻击！",
+                        text = stringResource(
+                            R.string.tofu_fingerprint_message,
+                            originalServer?.siteTitle ?: "",
+                            originalServer?.publicKeyHex?.take(16) ?: "",
+                            tofuConflictConfig?.publicKeyHex?.take(16) ?: "",
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center
                     )
                 },
@@ -134,7 +138,7 @@ fun SplashScreen(
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                     ) {
-                        Text("信任并登录")
+                        Text(stringResource(R.string.tofu_trust_login))
                     }
                 },
                 dismissButton = {
@@ -142,7 +146,7 @@ fun SplashScreen(
                         AuthStorage.clear(LingCatClientManager.appContext)
                         onNeedLogin()
                     }) {
-                        Text("清除登录态")
+                        Text(stringResource(R.string.tofu_clear_session))
                     }
                 }
             )

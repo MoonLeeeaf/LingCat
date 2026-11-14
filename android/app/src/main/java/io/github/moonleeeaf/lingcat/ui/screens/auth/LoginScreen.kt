@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,7 +18,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.data.ServerConfig
+import io.github.moonleeeaf.lingcat.ui.Feedback
 
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
@@ -27,7 +30,6 @@ fun LoginScreen(
     viewModel: LoginViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     var passwordVisible by remember { mutableStateOf(false) }
     var serverMenuExpanded by remember { mutableStateOf(false) }
     var showAddServerDialog by remember { mutableStateOf(false) }
@@ -36,7 +38,7 @@ fun LoginScreen(
         if (uiState.isSuccess) onLoginSuccess()
     }
     LaunchedEffect(uiState.errorMsg) {
-        uiState.errorMsg?.let { snackbarHostState.showSnackbar(it); viewModel.clearError() }
+        uiState.errorMsg?.let { Feedback.show(it); viewModel.clearError() }
     }
 
     var serverToDelete by remember { mutableStateOf<ServerConfig?>(null) }
@@ -44,16 +46,15 @@ fun LoginScreen(
     val pendingTofuOld by viewModel.pendingTofuOldConfig.collectAsState()
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
             title = {
-                Text(if (uiState.isRegisterMode) "注册" else "登录")
+                Text(if (uiState.isRegisterMode) stringResource(R.string.login_register) else stringResource(R.string.login_login))
             },
             actions = {
                 // ★ 账号管理入口
                 IconButton(onClick = onManageAccounts) {
-                    Icon(Icons.Default.ManageAccounts, contentDescription = "账号管理")
+                    Icon(Icons.Default.ManageAccounts, contentDescription = stringResource(R.string.account_management))
                 }
             }
         )
@@ -82,9 +83,9 @@ fun LoginScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text("当前服务器", style = MaterialTheme.typography.labelMedium)
+                                Text(stringResource(R.string.login_current_server), style = MaterialTheme.typography.labelMedium)
                                 Text(
-                                    text = uiState.currentServer?.siteTitle ?: "未选择服务器",
+                                    text = uiState.currentServer?.siteTitle ?: stringResource(R.string.login_no_server),
                                     style = MaterialTheme.typography.bodyLarge
                                 )
                                 // ★ 显示 host:port
@@ -148,7 +149,7 @@ fun LoginScreen(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Delete,
-                                            contentDescription = "删除服务器",
+                                            contentDescription = stringResource(R.string.login_delete_server),
                                             tint = if (isCurrent) {
                                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
                                             } else {
@@ -160,7 +161,7 @@ fun LoginScreen(
                             )
                         }
                         DropdownMenuItem(
-                            text = { Text("添加新服务器...") },
+                            text = { Text(stringResource(R.string.login_add_server)) },
                             leadingIcon = { Icon(Icons.Default.Add, contentDescription = null) },
                             onClick = {
                                 serverMenuExpanded = false
@@ -174,7 +175,7 @@ fun LoginScreen(
 
                 // 历史账号
                 if (uiState.historyAccounts.isNotEmpty()) {
-                    Text("最近登录：", style = MaterialTheme.typography.labelMedium, modifier = Modifier.fillMaxWidth())
+                    Text(stringResource(R.string.login_recent), style = MaterialTheme.typography.labelMedium, modifier = Modifier.fillMaxWidth())
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
@@ -195,7 +196,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.nickname,
                         onValueChange = viewModel::onNicknameChange,
-                        label = { Text("昵称") },
+                        label = { Text(stringResource(R.string.label_nickname)) },
                         leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null) },
                         singleLine = true,
                         enabled = !uiState.isLoading,
@@ -207,7 +208,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.username,
                         onValueChange = viewModel::onUsernameChange,
-                        label = { Text("用户名 (可选)") },
+                        label = { Text(stringResource(R.string.login_username_optional)) },
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                         singleLine = true,
                         enabled = !uiState.isLoading,
@@ -218,7 +219,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.username,
                         onValueChange = viewModel::onUsernameChange,
-                        label = { Text("账号") },
+                        label = { Text(stringResource(R.string.login_account)) },
                         leadingIcon = { Icon(Icons.Default.Person, null) },
                         singleLine = true,
                         enabled = !uiState.isLoading,
@@ -231,7 +232,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.password,
                     onValueChange = viewModel::onPasswordChange,
-                    label = { Text("密码") },
+                    label = { Text(stringResource(R.string.label_password)) },
                     leadingIcon = { Icon(Icons.Default.Lock, null) },
                     trailingIcon = {
                         val image = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
@@ -249,7 +250,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.confirmPassword,
                         onValueChange = viewModel::onConfirmPasswordChange,
-                        label = { Text("确认密码") },
+                        label = { Text(stringResource(R.string.label_confirm_password)) },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         singleLine = true,
                         enabled = !uiState.isLoading,
@@ -273,12 +274,12 @@ fun LoginScreen(
                     if (uiState.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                     } else {
-                        Text(if (uiState.isRegisterMode) "注册并登录" else "登录", style = MaterialTheme.typography.titleMedium)
+                        Text(if (uiState.isRegisterMode) stringResource(R.string.login_register_and_login) else stringResource(R.string.login_login), style = MaterialTheme.typography.titleMedium)
                     }
                 }
 
                 TextButton(onClick = viewModel::toggleMode, modifier = Modifier.padding(top = 16.dp), enabled = !uiState.isLoading) {
-                    Text(if (uiState.isRegisterMode) "已有账号？去登录喵" else "没有账号？去注册一个喵")
+                    Text(if (uiState.isRegisterMode) stringResource(R.string.login_switch_to_login) else stringResource(R.string.login_switch_to_register))
                 }
             }
         }
@@ -288,8 +289,8 @@ fun LoginScreen(
     if (serverToDelete != null) {
         AlertDialog(
             onDismissRequest = { serverToDelete = null },
-            title = { Text("删除服务器") },
-            text = { Text("确定要删除服务器 ${serverToDelete?.siteTitle} (${serverToDelete?.rawUrl}) 吗？\n这不会删除你的聊天记录。") },
+            title = { Text(stringResource(R.string.login_delete_server)) },
+            text = { Text(stringResource(R.string.login_delete_server_message, serverToDelete?.siteTitle ?: "", serverToDelete?.rawUrl ?: "")) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -298,12 +299,12 @@ fun LoginScreen(
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("删除")
+                    Text(stringResource(R.string.action_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { serverToDelete = null }) {
-                    Text("取消")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         )
@@ -316,18 +317,19 @@ fun LoginScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                     Spacer(Modifier.width(8.dp))
-                    Text("服务器公钥已变更")
+                    Text(stringResource(R.string.tofu_title))
                 }
             },
             text = {
                 Text(
-                    text = "检测到服务器 ${pendingTofu?.siteTitle} 的安全指纹与本地记录不一致。\n\n" +
-                            // en.....
-                            "旧 Hex 16 位: ${pendingTofuOld?.publicKeyHex?.take(16)}...\n" +
-                            "新 Hex 16 位: ${pendingTofu?.publicKeyHex?.take(16)}...\n\n" +
-                            "这可能是因为服务器丢失了密钥，也可能是中间人攻击！",
+                    text = stringResource(
+                        R.string.tofu_fingerprint_message,
+                        pendingTofu?.siteTitle ?: "",
+                        pendingTofuOld?.publicKeyHex?.take(16) ?: "",
+                        pendingTofu?.publicKeyHex?.take(16) ?: "",
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center
                 )
             },
@@ -336,12 +338,12 @@ fun LoginScreen(
                     onClick = { viewModel.confirmTofuUpdate() },
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("信任并登录")
+                    Text(stringResource(R.string.tofu_trust_login))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.cancelTofuUpdate() }) {
-                    Text("取消")
+                    Text(stringResource(R.string.action_cancel))
                 }
             }
         )
@@ -351,12 +353,12 @@ fun LoginScreen(
         var urlText by remember { mutableStateOf("") }
         AlertDialog(
             onDismissRequest = { showAddServerDialog = false },
-            title = { Text("添加服务器") },
+            title = { Text(stringResource(R.string.login_add_server_title)) },
             text = {
                 OutlinedTextField(
                     value = urlText,
                     onValueChange = { urlText = it },
-                    label = { Text("服务器地址 (如 http://...)") },
+                    label = { Text(stringResource(R.string.login_server_address)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -368,9 +370,9 @@ fun LoginScreen(
                         showAddServerDialog = false
                     },
                     enabled = urlText.isNotBlank()
-                ) { Text("保存") }
+                ) { Text(stringResource(R.string.action_save)) }
             },
-            dismissButton = { TextButton(onClick = { showAddServerDialog = false }) { Text("取消") } }
+            dismissButton = { TextButton(onClick = { showAddServerDialog = false }) { Text(stringResource(R.string.action_cancel)) } }
         )
     }
 }

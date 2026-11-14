@@ -4,7 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.AccountInfo
 import io.github.moonleeeaf.lingcat.data.AuthStorage
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,14 +16,15 @@ import kotlinx.coroutines.launch
 
 data class AccountItem(
     val account: AccountInfo,
-    val serverTitle: String
+    /** 服务器显示名；为 null 表示配置已丢失，界面显示「未知服务器」。 */
+    val serverTitle: String?,
 )
 
 data class AccountListUiState(
     val accounts: List<AccountItem> = emptyList(),
     val isLoading: Boolean = false,
     val switchingAccount: String? = null, // 正在切换的账号 username
-    val errorMsg: String? = null
+    val errorMsg: UiText? = null
 )
 
 class AccountListViewModel : ViewModel() {
@@ -37,7 +42,7 @@ class AccountListViewModel : ViewModel() {
 
         // 把账号和服务器名称映射起来
         val items = rawAccounts.map { acc ->
-            val serverTitle = servers.find { it.wsUrl == acc.serverWsUrl }?.siteTitle ?: "未知服务器"
+            val serverTitle = servers.find { it.wsUrl == acc.serverWsUrl }?.siteTitle 
             AccountItem(acc, serverTitle)
         }
 
@@ -66,7 +71,11 @@ class AccountListViewModel : ViewModel() {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     switchingAccount = null,
-                    errorMsg = "切换失败: ${result.exceptionOrNull()?.message}"
+                    errorMsg = result.exceptionOrNull()?.toUiTextOrNull()
+                        ?: uiText(
+                            R.string.account_err_switch,
+                            result.exceptionOrNull()?.message ?: "",
+                        )
                 )
             }
         }

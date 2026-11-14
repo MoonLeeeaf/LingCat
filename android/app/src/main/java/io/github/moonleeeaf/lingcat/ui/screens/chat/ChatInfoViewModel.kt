@@ -4,7 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +24,7 @@ data class ChatInfoUiState(
     val chat: IChat? = null,
     val isFavourite: Boolean = false,
     val isLoading: Boolean = true,
-    val errorMsg: String? = null
+    val errorMsg: UiText? = null
 )
 
 class ChatInfoViewModel : ViewModel() {
@@ -45,8 +50,8 @@ class ChatInfoViewModel : ViewModel() {
     private fun loadChatInfo(chatId: String) {
         viewModelScope.launch {
             try {
-                val client = LingCatClientManager.currentClient ?: throw Exception("未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("未登录")
+                val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_not_signed_in))
 
                 // 1. 拉取最新 Chat Info
                 val chat = withContext(Dispatchers.IO) {
@@ -68,7 +73,7 @@ class ChatInfoViewModel : ViewModel() {
                 Log.e(TAG, "load chat info failed", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMsg = "加载失败: ${e.message}"
+                    errorMsg = e.toUiTextOrNull() ?: uiText(R.string.error_load_failed, e.message ?: "")
                 )
             }
         }

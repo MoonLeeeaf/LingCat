@@ -1,30 +1,25 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
+import io.github.moonleeeaf.lingcat.ui.components.LingCatActionItem
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,8 +33,6 @@ fun UserProfileDialog(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
-    val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
 
     var showRemarkDialog by remember { mutableStateOf(false) }
 
@@ -68,31 +61,16 @@ fun UserProfileDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // 1. 头部资料区
-                val avatarHash = user.avatarFileHash
-                val avatarUrl = if (!avatarHash.isNullOrEmpty() && !fileToken.isNullOrEmpty()) {
-                    LingCatClientManager.currentClient?.getFileUrlByHashAndToken(avatarHash, fileToken ?: "")
-                } else null
-
                 // 显示优先级：备注 > 昵称 > 用户名 > ID
                 val displayName = uiState.remark ?: user.nickname.ifEmpty { user.username.ifEmpty { user.id } }
+                val avatarUrl = io.github.moonleeeaf.lingcat.ui.components.rememberAvatarUrl(user.avatarFileHash)
 
-                if (avatarUrl != null) {
-                    AsyncImage(
-                        model = coil.request.ImageRequest.Builder(context)
-                            .data(avatarUrl)
-                            .memoryCacheKey(avatarHash)
-                            .build(),
-                        contentDescription = "头像",
-                        modifier = Modifier.size(80.dp).clip(CircleShape).clickable { previewImageUrl = avatarUrl },
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    androidx.compose.foundation.Image(
-                        painter = painterResource(id = R.drawable.ic_default_avatar),
-                        contentDescription = "默认头像",
-                        modifier = Modifier.size(80.dp).clip(CircleShape)
-                    )
-                }
+                LingCatAvatar(
+                    avatarHash = user.avatarFileHash,
+                    size = 80.dp,
+                    contentDescription = stringResource(R.string.label_avatar),
+                    onClick = { previewImageUrl = avatarUrl },
+                )
 
                 Spacer(Modifier.height(12.dp))
                 Text(
@@ -103,7 +81,7 @@ fun UserProfileDialog(
 
                 if (uiState.remark != null && user.nickname.isNotEmpty()) {
                     Text(
-                        text = "原昵称: ${user.nickname}",
+                        text = stringResource(R.string.profile_original_nickname, user.nickname),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -119,52 +97,58 @@ fun UserProfileDialog(
 
                 // 2. 操作列表
                 // ID 复制
-                ProfileActionItem(
+                LingCatActionItem(
                     icon = Icons.Default.Info,
                     title = user.id,
-                    subtitle = "用户 ID",
-                    onClick = { clipboardManager.setText(AnnotatedString(user.id)) }
+                    subtitle = stringResource(R.string.label_user_id),
+                    onClick = {
+                        clipboardManager.setText(AnnotatedString(user.id))
+                        Feedback.show(R.string.profile_copied_id)
+                    }
                 )
 
                 if (user.hasDescription() && user.description.isNotEmpty()) {
-                    ChatInfoItem(
+                    LingCatActionItem(
                         icon = Icons.Default.Description,
                         title = user.description,
-                        subtitle = "简介",
+                        subtitle = stringResource(R.string.label_description),
                         onClick = {
                             clipboardManager.setText(AnnotatedString(user.description))
+                            Feedback.show(R.string.chat_info_copied_description)
                         }
                     )
                 }
 
                 // 修改备注 (只能给别人改)
                 if (!isMyself) {
-                    ProfileActionItem(
+                    LingCatActionItem(
                         icon = Icons.Default.Edit,
-                        title = if (uiState.remark != null) "修改备注" else "添加备注",
-                        subtitle = "仅自己可见",
+                        title = if (uiState.remark != null) stringResource(R.string.profile_edit_remark) else stringResource(R.string.profile_add_remark),
+                        subtitle = stringResource(R.string.profile_remark_private),
                         onClick = { showRemarkDialog = true }
                     )
                 }
 
-                // 发起私聊 (如果不在当前聊天，且不是自己)
-                ProfileActionItem(
-                    icon = Icons.AutoMirrored.Filled.Chat,
-                    title = "打开对话",
-                    subtitle = null,
-                    onClick = {
-                        viewModel.startPrivateChat { newChatId ->
-                            onDismiss()
-                            onNavigateToChat(newChatId)
+                // 发起私聊（不能对自己发起私聊）
+                if (!isMyself) {
+                    LingCatActionItem(
+                        icon = Icons.AutoMirrored.Filled.Chat,
+                        title = stringResource(R.string.profile_open_chat),
+                        subtitle = null,
+                        onClick = {
+                            viewModel.startPrivateChat { newChatId ->
+                                onDismiss()
+                                onNavigateToChat(newChatId)
+                            }
                         }
-                    }
-                )
+                    )
+                }
 
                 // 提及 (如果是从聊天界面打开，且不是自己)
                 if (!isMyself && chatId != null) {
-                    ProfileActionItem(
+                    LingCatActionItem(
                         icon = Icons.Default.AlternateEmail,
-                        title = "提及",
+                        title = stringResource(R.string.profile_mention),
                         subtitle = null,
                         onClick = {
                             val name = uiState.remark ?: user.username.ifEmpty { user.nickname }
@@ -182,12 +166,12 @@ fun UserProfileDialog(
         var inputRemark by remember { mutableStateOf(uiState.remark ?: "") }
         AlertDialog(
             onDismissRequest = { showRemarkDialog = false },
-            title = { Text("设置备注") },
+            title = { Text(stringResource(R.string.profile_remark_title)) },
             text = {
                 OutlinedTextField(
                     value = inputRemark,
                     onValueChange = { inputRemark = it },
-                    label = { Text("备注名") },
+                    label = { Text(stringResource(R.string.profile_remark_label)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -196,10 +180,10 @@ fun UserProfileDialog(
                 TextButton(onClick = {
                     viewModel.saveRemark(inputRemark)
                     showRemarkDialog = false
-                }) { Text("保存") }
+                }) { Text(stringResource(R.string.action_save)) }
             },
             dismissButton = {
-                TextButton(onClick = { showRemarkDialog = false }) { Text("取消") }
+                TextButton(onClick = { showRemarkDialog = false }) { Text(stringResource(R.string.action_cancel)) }
             }
         )
     }
@@ -207,26 +191,5 @@ fun UserProfileDialog(
     ImageViewerDialog(
         imageUrl = previewImageUrl,
         onDismiss = { previewImageUrl = null }
-    )
-}
-
-@Composable
-fun ProfileActionItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    title: String,
-    subtitle: String?,
-    onClick: () -> Unit
-) {
-    ListItem(
-        headlineContent = { Text(title) },
-        supportingContent = if (subtitle != null) {
-            { Text(subtitle, style = MaterialTheme.typography.labelSmall) }
-        } else null,
-        leadingContent = { Icon(icon, contentDescription = null) },
-        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp)
     )
 }

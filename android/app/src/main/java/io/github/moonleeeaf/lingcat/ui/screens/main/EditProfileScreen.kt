@@ -1,30 +1,24 @@
 package io.github.moonleeeaf.lingcat.ui.screens.main
 
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import io.github.moonleeeaf.lingcat.R
-import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.Feedback
+import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
+import io.github.moonleeeaf.lingcat.ui.components.LoadingState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,9 +28,6 @@ fun EditProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    val fileToken by LingCatClientManager.fileAccessToken.collectAsState()
 
     // 初始化输入框状态
     var nickname by remember { mutableStateOf("") }
@@ -55,10 +46,21 @@ fun EditProfileScreen(
         }
     }
 
-    // 监听错误和成功提示
-    LaunchedEffect(uiState.errorMsg, uiState.successMsg) {
-        uiState.errorMsg?.let { snackbarHostState.showSnackbar(it); viewModel.clearMessages() }
-        uiState.successMsg?.let { snackbarHostState.showSnackbar(it); viewModel.clearMessages() }
+    // 统一走全局 Snackbar 反馈：之前这里自己建了一套 SnackbarHost，
+    // 又有几处 Toast，同一个页面出现三种反馈样式。
+    LaunchedEffect(uiState.errorMsg) {
+        uiState.errorMsg?.let {
+            Feedback.show(it)
+            viewModel.clearMessages()
+        }
+    }
+    LaunchedEffect(uiState.successMsg) {
+        uiState.successMsg?.let { message ->
+            Feedback.show(message)
+            val justSaved = uiState.justSaved
+            viewModel.clearMessages()
+            if (justSaved) onBack()
+        }
     }
 
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
@@ -81,36 +83,34 @@ fun EditProfileScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("编辑资料") },
+                title = { Text(stringResource(R.string.chat_list_edit_profile)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
                 },
                 actions = {
                     TextButton(
                         onClick = {
                             viewModel.saveProfile(nickname, username, description)
-                            onBack() // 保存后直接返回
                         },
                         enabled = !uiState.isSaving && !uiState.isLoading
                     ) {
-                        Text("保存")
+                        Text(stringResource(R.string.action_save))
                     }
                 }
             )
         }
     ) { padding ->
         if (uiState.isLoading && uiState.profile == null) {
-            Box(
-                Modifier
+            LoadingState(
+                modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+                    .padding(padding),
+                label = stringResource(R.string.edit_profile_loading),
+            )
         } else {
             Column(
                 modifier = Modifier
@@ -121,47 +121,26 @@ fun EditProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // 头像
-                val avatarHash = uiState.profile?.avatarFileHash
-                val avatarUrl = if (!avatarHash.isNullOrEmpty() && !fileToken.isNullOrEmpty()) {
-                    LingCatClientManager.currentClient?.getFileUrlByHashAndToken(avatarHash, fileToken ?: "")
-                } else null
-
-                Box(contentAlignment = Alignment.BottomEnd) {
-                    if (avatarUrl != null) {
-                        AsyncImage(
-                            model = coil.request.ImageRequest.Builder(androidx.compose.ui.platform.LocalContext.current)
-                                .data(avatarUrl)
-                                .memoryCacheKey(avatarHash)
-                                .diskCacheKey(avatarHash)
-                                .build(),
-                            contentDescription = "头像",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    if (!uiState.isSaving) imagePickerLauncher.launch("image/*")
-                                },
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        androidx.compose.foundation.Image(
-                            painter = painterResource(id = R.drawable.ic_default_avatar),
-                            contentDescription = "默认头像",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(CircleShape)
-                                .clickable {
-                                    if (!uiState.isSaving) imagePickerLauncher.launch("image/*")
-                                }
-                        )
-                    }
+                Box(contentAlignment = Alignment.Center) {
+                    LingCatAvatar(
+                        avatarHash = uiState.profile?.avatarFileHash,
+                        size = 100.dp,
+                        contentDescription = stringResource(R.string.label_avatar),
+                        onClick = {
+                            if (!uiState.isSaving) imagePickerLauncher.launch("image/*")
+                        },
+                    )
 
                     if (uiState.isSaving) {
-                        CircularProgressIndicator(modifier = Modifier
-                            .size(32.dp)
-                            .align(Alignment.Center))
+                        CircularProgressIndicator(modifier = Modifier.size(32.dp))
                     }
                 }
+                Text(
+                    text = stringResource(R.string.edit_profile_tap_avatar),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
 
                 Spacer(Modifier.height(32.dp))
 
@@ -169,7 +148,7 @@ fun EditProfileScreen(
                 OutlinedTextField(
                     value = nickname,
                     onValueChange = { nickname = it },
-                    label = { Text("昵称") },
+                    label = { Text(stringResource(R.string.label_nickname)) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isSaving
                 )
@@ -178,7 +157,7 @@ fun EditProfileScreen(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("用户名") },
+                    label = { Text(stringResource(R.string.label_username)) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isSaving
                 )
@@ -187,7 +166,7 @@ fun EditProfileScreen(
                 OutlinedTextField(
                     value = userId,
                     onValueChange = {},
-                    label = { Text("用户 ID") },
+                    label = { Text(stringResource(R.string.label_user_id)) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = false
                 )
@@ -196,7 +175,7 @@ fun EditProfileScreen(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("简介") },
+                    label = { Text(stringResource(R.string.label_description)) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isSaving,
                 )
@@ -204,7 +183,7 @@ fun EditProfileScreen(
                 // OAuth 绑定区域
                 if (uiState.oauthProviders.isNotEmpty()) {
                     Spacer(Modifier.height(32.dp))
-                    Text("OAuth 绑定", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth())
+                    Text(stringResource(R.string.edit_profile_oauth_bindings), style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(16.dp))
 
                     uiState.oauthProviders.forEach { provider -> // ★ provider 现在是对象了
@@ -219,7 +198,7 @@ fun EditProfileScreen(
                                         try {
                                             context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)))
                                         } catch (e: Exception) {
-                                            Toast.makeText(context, "无法打开浏览器", Toast.LENGTH_SHORT).show()
+                                            Feedback.show(R.string.browser_open_failed)
                                         }
                                     }
                                 }
@@ -227,7 +206,7 @@ fun EditProfileScreen(
                             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                         ) {
                             // ★ 使用 provider.displayName 展示
-                            Text(if (isBound) "解绑 ${provider.displayName}" else "绑定 ${provider.displayName}")
+                            Text(if (isBound) stringResource(R.string.unbind_provider, provider.displayName) else stringResource(R.string.bind_provider, provider.displayName))
                         }
                     }
 
@@ -235,16 +214,16 @@ fun EditProfileScreen(
                     if (providerToUnbind != null) {
                         androidx.compose.material3.AlertDialog(
                             onDismissRequest = { providerToUnbind = null },
-                            title = { Text("解绑 ${providerToUnbind?.displayName}") },
-                            text = { Text("解绑后将无法使用该账号登录。如果忘记密码，解绑后将无法再进入此账号。确定继续？") },
+                            title = { Text(stringResource(R.string.unbind_provider_title, providerToUnbind?.displayName ?: "")) },
+                            text = { Text(stringResource(R.string.unbind_confirm_message)) },
                             confirmButton = {
                                 androidx.compose.material3.TextButton(onClick = {
                                     viewModel.unbindOAuth(providerToUnbind!!.id) // ★ 传 id
                                     providerToUnbind = null
-                                }) { Text("解绑") }
+                                }) { Text(stringResource(R.string.action_unbind)) }
                             },
                             dismissButton = {
-                                androidx.compose.material3.TextButton(onClick = { providerToUnbind = null }) { Text("取消") }
+                                androidx.compose.material3.TextButton(onClick = { providerToUnbind = null }) { Text(stringResource(R.string.action_cancel)) }
                             }
                         )
                     }

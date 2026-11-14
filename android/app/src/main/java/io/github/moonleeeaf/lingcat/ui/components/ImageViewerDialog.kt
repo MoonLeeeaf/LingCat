@@ -7,11 +7,11 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
@@ -20,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -34,6 +35,8 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.ui.Feedback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -100,7 +103,7 @@ fun ImageViewerDialog(
         ) {
             AsyncImage(
                 model = imageUrl,
-                contentDescription = "查看大图",
+                contentDescription = stringResource(R.string.image_viewer_desc),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxSize()
@@ -123,14 +126,19 @@ fun ImageViewerDialog(
             }
 
             // 右上角按钮区
+            // 之前按钮直接压在图片上、也没有状态栏留白：浅色图片上白色图标完全看不清。
+            // 现在每个按钮加一层半透明黑色底，并让出状态栏高度。
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 32.dp, end = 16.dp),
+                    .statusBarsPadding()
+                    .padding(top = 8.dp, end = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // ★ 新增：分享按钮
                 IconButton(
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.45f), CircleShape),
                     onClick = {
                         if (isSharing) return@IconButton
                         isSharing = true
@@ -138,7 +146,7 @@ fun ImageViewerDialog(
                             val success = shareImage(context, imageUrl)
                             isSharing = false
                             if (!success) {
-                                Toast.makeText(context, "准备分享失败，请重试", Toast.LENGTH_SHORT).show()
+                                Feedback.show(R.string.share_failed_prepare)
                             }
                         }
                     }
@@ -152,7 +160,7 @@ fun ImageViewerDialog(
                     } else {
                         Icon(
                             imageVector = Icons.Default.Share,
-                            contentDescription = "分享",
+                            contentDescription = stringResource(R.string.action_share),
                             tint = Color.White
                         )
                     }
@@ -160,6 +168,8 @@ fun ImageViewerDialog(
 
                 // 下载按钮
                 IconButton(
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.45f), CircleShape),
                     onClick = {
                         if (isDownloading) return@IconButton
                         isDownloading = true
@@ -167,9 +177,9 @@ fun ImageViewerDialog(
                             val success = downloadImage(context, imageUrl)
                             isDownloading = false
                             if (success) {
-                                Toast.makeText(context, "图片已保存到相册喵~", Toast.LENGTH_SHORT).show()
+                                Feedback.show(R.string.image_saved)
                             } else {
-                                Toast.makeText(context, "保存失败，请重试", Toast.LENGTH_SHORT).show()
+                                Feedback.show(R.string.save_failed_retry)
                             }
                         }
                     }
@@ -183,17 +193,21 @@ fun ImageViewerDialog(
                     } else {
                         Icon(
                             imageVector = Icons.Default.Download,
-                            contentDescription = "下载",
+                            contentDescription = stringResource(R.string.action_download),
                             tint = Color.White
                         )
                     }
                 }
 
                 // 关闭按钮
-                IconButton(onClick = onDismiss) {
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.45f), CircleShape),
+                ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "关闭",
+                        contentDescription = stringResource(R.string.action_close),
                         tint = Color.White
                     )
                 }
@@ -268,7 +282,7 @@ private suspend fun shareImage(context: Context, url: String): Boolean = withCon
 
         // 5. 回到主线程调起系统分享面板
         withContext(Dispatchers.Main) {
-            context.startActivity(Intent.createChooser(shareIntent, "分享图片"))
+            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_image_title)))
         }
         return@withContext true
     } catch (e: Exception) {
