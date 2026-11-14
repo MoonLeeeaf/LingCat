@@ -2,6 +2,7 @@ package io.github.moonleeeaf.lingcat.e2e
 
 import android.content.Context
 import android.util.Log
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -416,7 +417,13 @@ object E2EStateManager {
             }
 
             return JSONObject().apply {
-                put("text", "🔒 [使用了旧密钥 ($keyVersion), 但无法解密此消息]")
+                put(
+                    "text",
+                    LingCatClientManager.appContext.getString(
+                        R.string.chat_e2e_legacy_undecryptable,
+                        keyVersion,
+                    )
+                )
                 put("entities", JSONArray())
                 put("needVersion", keyVersion)
             }.toString()

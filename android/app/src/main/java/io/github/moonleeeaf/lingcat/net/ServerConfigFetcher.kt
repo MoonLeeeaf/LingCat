@@ -1,6 +1,9 @@
 package io.github.moonleeeaf.lingcat.net
 
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.data.ServerConfig
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.uiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -58,10 +61,10 @@ object ServerConfigFetcher {
 
         val response = httpClient.newCall(request).execute()
         if (!response.isSuccessful) {
-            throw Exception("获取配置失败 (HTTP ${response.code})")
+            throw UiTextException(uiText(R.string.login_err_fetch_config, response.code))
         }
 
-        val body = response.body?.string() ?: throw Exception("配置文件为空")
+        val body = response.body?.string() ?: throw UiTextException(uiText(R.string.login_err_config_empty))
         // 3. 解析 JSON
         val json = JSONObject(body)
 
@@ -87,7 +90,7 @@ object ServerConfigFetcher {
         }
 
         if (publicKeyHex.isEmpty()) {
-            throw Exception("配置文件缺少 public_key，返回内容: $body")
+            throw UiTextException(uiText(R.string.login_err_config_no_key))
         }
 
         // ★ 核心修复：解析服务端的 OAuth 配置

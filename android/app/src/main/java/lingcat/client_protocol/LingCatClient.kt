@@ -384,10 +384,11 @@ class LingCatClient(
 
         // ★ 核心修复 3：如果还没握手成功就断开了，立刻通知外面报错，不要傻等！
         if (!isReady() && onHandshakeFailedListener != null) {
+            // 这里只是给界面看的技术细节，不做本地化，具体的「已断开 / 重连中」由界面文案负责。
             val detail = when {
                 code == -1 -> reason
-                reason.isNotBlank() -> "连接断开 ($code): $reason"
-                else -> "连接断开 ($code)"
+                reason.isNotBlank() -> "code $code: $reason"
+                else -> "code $code"
             }
             onHandshakeFailedListener?.onHandshakeFailed(detail)
         }

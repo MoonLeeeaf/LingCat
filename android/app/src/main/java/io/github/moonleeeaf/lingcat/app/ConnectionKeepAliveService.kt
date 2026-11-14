@@ -66,7 +66,7 @@ class ConnectionKeepAliveService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID, "后台保活服务",
+                CHANNEL_ID, getString(R.string.keepalive_notif_channel),
                 NotificationManager.IMPORTANCE_LOW
             ).apply { setShowBadge(false) }
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
@@ -75,8 +75,8 @@ class ConnectionKeepAliveService : Service() {
 
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("LingCat 正在运行")
-            .setContentText("保持与服务器的连接中...")
+            .setContentTitle(getString(R.string.keepalive_notif_running))
+            .setContentText(getString(R.string.keepalive_notif_content))
             .setSmallIcon(R.drawable.ic_lingcat)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .build()
@@ -95,14 +95,14 @@ class ConnectionKeepAliveService : Service() {
         val chat = ProfileCache.fetchChat(msg.chatId) ?: return
         val sender = ProfileCache.fetchUser(msg.senderUserId)
         val isSystem = msg.system
-        val senderName = sender?.nickname?.ifEmpty { sender.username } ?: (if (isSystem) "系统" else "未知")
+        val senderName = sender?.nickname?.ifEmpty { sender.username } ?: (if (isSystem) getString(R.string.keepalive_sender_system) else getString(R.string.keepalive_sender_unknown))
         val title = chat.title.ifEmpty { senderName }
 
         var previewText = msg.text
         if (msg.entitiesList.any { it.type == "e2e" }) {
-            previewText = "🔒 [加密消息]"
+            previewText = getString(R.string.encrypted_message_locked)
         } else if (msg.entitiesList.any { it.type == "attachment" }) {
-            previewText = "[附件] $previewText"
+            previewText = getString(R.string.notif_attachment_prefix, previewText)
         }
 
         if (chat.type == "private") {
@@ -124,7 +124,7 @@ class ConnectionKeepAliveService : Service() {
             NotificationHelper.showNotification(
                 context = this,
                 channelId = NotificationHelper.CHANNEL_GROUP_AT,
-                chatTitle = "$title (有人@你)",
+                chatTitle = getString(R.string.notif_chat_title_at, title),
                 senderName = senderName,
                 content = previewText,
                 chatId = msg.chatId
@@ -150,7 +150,7 @@ class ConnectionKeepAliveService : Service() {
                             NotificationHelper.showNotification(
                                 context = this,
                                 channelId = NotificationHelper.CHANNEL_GROUP_REPLY,
-                                chatTitle = "$title (有人回复你)",
+                                chatTitle = getString(R.string.notif_chat_title_reply, title),
                                 senderName = senderName,
                                 content = previewText,
                                 chatId = msg.chatId

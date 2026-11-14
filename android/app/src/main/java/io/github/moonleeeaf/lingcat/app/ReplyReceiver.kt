@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +35,7 @@ class ReplyReceiver : BroadcastReceiver() {
             CoroutineScope(Dispatchers.Main).launch {
                 android.widget.Toast.makeText(
                     context, 
-                    "网络未连接，请打开 App 重试", 
+                    context.getString(R.string.reply_err_offline), 
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
             }
@@ -69,7 +70,7 @@ class ReplyReceiver : BroadcastReceiver() {
                         // 开启了 E2E，那就必须处于 UNLOCKED 状态才能发
                         if (e2eStatus != E2EStateManager.Status.UNLOCKED) {
                             withContext(Dispatchers.Main) {
-                                android.widget.Toast.makeText(context, "端到端加密已锁定，请打开 App 输入密码后重试", android.widget.Toast.LENGTH_LONG).show()
+                                android.widget.Toast.makeText(context, context.getString(R.string.reply_err_e2e_locked), android.widget.Toast.LENGTH_LONG).show()
                             }
                             return@launch // ★ 绝杀 2：未解锁绝对不降级发明文！
                         }
@@ -106,7 +107,7 @@ class ReplyReceiver : BroadcastReceiver() {
                             )
                         } else {
                             withContext(Dispatchers.Main) {
-                                android.widget.Toast.makeText(context, "加密失败，请打开 App 重试", android.widget.Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, context.getString(R.string.reply_err_encrypt_failed), android.widget.Toast.LENGTH_SHORT).show()
                             }
                             return@launch // ★ 绝杀 3：加密失败绝对不发明文！
                         }
@@ -118,9 +119,9 @@ class ReplyReceiver : BroadcastReceiver() {
                 Log.d(TAG, "Notification reply sent successfully")
 
                 // 4. 更新通知栏
-                val chatTitle = chat.title.ifEmpty { "会话" }
+                val chatTitle = chat.title.ifEmpty { context.getString(R.string.chat_fallback_title) }
                 // 如果 finalEntities 不为空，说明走了 E2E 加密
-                val displayContent = if (finalEntities != null) "🔒 [加密消息]" else replyText
+                val displayContent = if (finalEntities != null) context.getString(R.string.encrypted_message_locked) else replyText
                 NotificationHelper.addMyMessage(
                     context = context,
                     channelId = if (chat.type == "private") NotificationHelper.CHANNEL_PRIVATE else NotificationHelper.CHANNEL_GROUP_AT,

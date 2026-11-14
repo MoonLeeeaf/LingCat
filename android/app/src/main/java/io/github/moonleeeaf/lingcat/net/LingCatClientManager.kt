@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.data.ServerConfig
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.uiText
 import io.github.moonleeeaf.lingcat.data.ServerStorage
 import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ProfileCache
@@ -131,12 +134,12 @@ object LingCatClientManager {
     suspend fun switchAccount(account: AccountInfo): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val targetServer = getSavedServers().find { it.wsUrl == account.serverWsUrl }
-                ?: return@withContext Result.failure(Exception("找不到目标服务器"))
+                ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_server_not_found)))
             disconnect()
             isAuthorized = false
             val connectRes = connect(targetServer)
             if (connectRes.isFailure) return@withContext connectRes
-            val client = currentClient ?: return@withContext Result.failure(Exception("客户端未就绪"))
+            val client = currentClient ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_client_not_ready)))
             setAuthSession(account.token, account.userId)
             authorize(client, account.token)
             Result.success(Unit)
@@ -268,7 +271,11 @@ object LingCatClientManager {
                 _connectionState.value = LingCatClient.ConnectionState.DISCONNECTED
                 val detail = e.message?.takeIf { it.isNotBlank() }
                 _connectionError.value = detail
-                Result.failure(Exception(if (detail != null) "网络连接失败: $detail" else "网络连接失败"))
+                Result.failure(
+                    UiTextException(
+                        if (detail != null) uiText(R.string.error_network_detail, detail) else uiText(R.string.error_network)
+                    )
+                )
             } finally {
                 if (connectingServerUrl == server.wsUrl) {
                     connectingServerUrl = null

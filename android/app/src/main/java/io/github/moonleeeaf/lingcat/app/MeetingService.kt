@@ -48,7 +48,7 @@ class MeetingService : Service() {
         // 正常启动流程
         try {
             currentServiceType = calculateServiceType()
-            val initialNotification = buildNotification("会议准备中...")
+            val initialNotification = buildNotification(getString(R.string.meeting_notif_preparing))
             
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 startForeground(NOTIFICATION_ID, initialNotification, currentServiceType)
@@ -68,7 +68,7 @@ class MeetingService : Service() {
                         stopSelf()
                     } else {
                         val manager = getSystemService(NotificationManager::class.java)
-                        manager.notify(NOTIFICATION_ID, buildNotification(state.chatTitle ?: "会议进行中"))
+                        manager.notify(NOTIFICATION_ID, buildNotification(state.chatTitle ?: getString(R.string.meeting_notif_in_progress)))
                     }
                 }
             }
@@ -107,7 +107,9 @@ class MeetingService : Service() {
             val newType = calculateServiceType()
             if (newType != currentServiceType) {
                 currentServiceType = newType
-                val notification = buildNotification(MeetingManager.uiState.value.chatTitle ?: "会议进行中")
+                val notification = buildNotification(
+                    MeetingManager.uiState.value.chatTitle ?: getString(R.string.meeting_notif_in_progress)
+                )
                 // 重新调用 startForeground 更新类型
                 startForeground(NOTIFICATION_ID, notification, currentServiceType)
             }
@@ -142,9 +144,9 @@ class MeetingService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_call) // 确保你有这个图标
             .setContentTitle(title)
-            .setContentText("会议进行中，点击返回")
+            .setContentText(getString(R.string.meeting_notif_content))
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_call_end, "挂断", hangupPending) // 确保你有这个图标
+            .addAction(R.drawable.ic_call_end, getString(R.string.meeting_hang_up), hangupPending) // 确保你有这个图标
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_CALL)
@@ -155,11 +157,11 @@ class MeetingService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID, "会议状态",
+                CHANNEL_ID, getString(R.string.meeting_notif_channel),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 setShowBadge(false)
-                description = "保持会议在后台运行"
+                description = getString(R.string.meeting_notif_channel_desc)
             }
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         }

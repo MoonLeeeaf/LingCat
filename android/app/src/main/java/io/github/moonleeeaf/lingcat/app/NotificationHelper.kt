@@ -34,9 +34,21 @@ object NotificationHelper {
     fun createChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = context.getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(NotificationChannel(CHANNEL_PRIVATE, "私聊消息", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_AT, "群组 @我", NotificationManager.IMPORTANCE_HIGH))
-            manager.createNotificationChannel(NotificationChannel(CHANNEL_GROUP_REPLY, "群组回复我", NotificationManager.IMPORTANCE_HIGH))
+            manager.createNotificationChannel(NotificationChannel(
+                CHANNEL_PRIVATE,
+                context.getString(R.string.notif_channel_private),
+                NotificationManager.IMPORTANCE_HIGH,
+            ))
+            manager.createNotificationChannel(NotificationChannel(
+                CHANNEL_GROUP_AT,
+                context.getString(R.string.notif_channel_group_at),
+                NotificationManager.IMPORTANCE_HIGH,
+            ))
+            manager.createNotificationChannel(NotificationChannel(
+                CHANNEL_GROUP_REPLY,
+                context.getString(R.string.notif_channel_group_reply),
+                NotificationManager.IMPORTANCE_HIGH,
+            ))
         }
     }
 
@@ -114,9 +126,9 @@ object NotificationHelper {
         }
 
         val labelText = if (isE2E) {
-            "输入回复... (端到端加密)"
+            context.getString(R.string.notif_reply_hint_e2e)
         } else {
-            "输入回复..."
+            context.getString(R.string.notif_reply_hint)
         }
 
         val remoteInput = RemoteInput.Builder("reply_text").setLabel(labelText).build()
@@ -129,13 +141,17 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
         val replyAction = NotificationCompat.Action.Builder(
-            android.R.drawable.ic_menu_send, "回复", replyPendingIntent
+            android.R.drawable.ic_menu_send, context.getString(R.string.notif_action_reply), replyPendingIntent
         ).addRemoteInput(remoteInput).build()
 
         val lastSenderName = chatHistory[chatId]?.lastOrNull()?.person?.name
 
         // 1. 安全地拿到发送者名字，如果拿不到就默认显示 "新消息"
-        val publicMessage = if (lastSenderName == null) "收到一条新消息" else "$lastSenderName: 发送了一条新消息"
+        val publicMessage = if (lastSenderName == null) {
+            context.getString(R.string.notif_new_message)
+        } else {
+            context.getString(R.string.notif_new_message_from, lastSenderName)
+        }
 
         // 2. 构建锁屏脱敏通知
         val publicNotification = NotificationCompat.Builder(context, channelId)
@@ -159,7 +175,7 @@ object NotificationHelper {
 
     suspend fun showNotification(context: Context, channelId: String, chatTitle: String, senderName: String, content: String, chatId: String) {
         val history = chatHistory.getOrPut(chatId) { mutableListOf() }
-        val displayText = if (content.startsWith("🔒")) "🔒 [加密消息]" else content
+        val displayText = if (content.startsWith("🔒")) context.getString(R.string.encrypted_message_locked) else content
 
         // ★ 核心：防抖去重。只对比 Text。
         // 如果上一句完全一样，说明是重复推送，直接 return
@@ -168,7 +184,7 @@ object NotificationHelper {
             return
         }
 
-        val myPerson = buildPerson(context, LingCatClientManager.currentUserId, "我")
+        val myPerson = buildPerson(context, LingCatClientManager.currentUserId, context.getString(R.string.notif_sender_me))
 
         history.add(NotificationCompat.MessagingStyle.Message(displayText, System.currentTimeMillis(), senderName))
         if (history.size > 5) history.removeAt(0)
@@ -178,9 +194,9 @@ object NotificationHelper {
 
     suspend fun addMyMessage(context: Context, channelId: String, chatTitle: String, content: String, chatId: String) {
         val history = chatHistory.getOrPut(chatId) { mutableListOf() }
-        val displayText = if (content.startsWith("🔒")) "🔒 [加密消息]" else content
+        val displayText = if (content.startsWith("🔒")) context.getString(R.string.encrypted_message_locked) else content
 
-        val myPerson = buildPerson(context, LingCatClientManager.currentUserId, "我")
+        val myPerson = buildPerson(context, LingCatClientManager.currentUserId, context.getString(R.string.notif_sender_me))
 
         history.add(NotificationCompat.MessagingStyle.Message(displayText, System.currentTimeMillis(), myPerson))
         if (history.size > 5) history.removeAt(0)
