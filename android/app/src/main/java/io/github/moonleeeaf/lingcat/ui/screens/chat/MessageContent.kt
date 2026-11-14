@@ -396,7 +396,13 @@ fun InlineTextBlock(
     onMentionClick: (String, Boolean) -> Unit,
     onLongClick: () -> Unit,
 ) {
-    val primaryColor = MaterialTheme.colorScheme.primary
+    // 自己的气泡背景就是 primary, 再用 primary 画提及/链接会完全看不见,
+    // 所以自己发的消息改用 inversePrimary (与 primary 背景有足够对比度)。
+    val accentColor = if (isMine) {
+        MaterialTheme.colorScheme.inversePrimary
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
     val context = androidx.compose.ui.platform.LocalContext.current // ★ 获取 Context
 
     var textLayoutResult by remember { mutableStateOf<androidx.compose.ui.text.TextLayoutResult?>(null) }
@@ -413,7 +419,7 @@ fun InlineTextBlock(
             else if (e.type == "chat_mention") pushStringAnnotation(tag = "CHAT", annotation = e.data)
             else if (e.type == "link") pushStringAnnotation(tag = "LINK", annotation = e.data)
 
-            withStyle(style = getSpanStyle(e.type, primaryColor)) {
+            withStyle(style = getSpanStyle(e.type, accentColor)) {
                 append(seg.text)
             }
 
@@ -468,7 +474,7 @@ fun InlineTextBlock(
     )
 }
 
-private fun getSpanStyle(type: String, primaryColor: Color): SpanStyle {
+private fun getSpanStyle(type: String, accentColor: Color): SpanStyle {
     return when (type) {
         "bold" -> SpanStyle(fontWeight = FontWeight.Bold)
         "italic" -> SpanStyle(fontStyle = FontStyle.Italic)
@@ -479,8 +485,8 @@ private fun getSpanStyle(type: String, primaryColor: Color): SpanStyle {
             fontSize = 14.sp
         )
         "spoiler" -> SpanStyle(background = Color.Gray, color = Color.Transparent) // 简易版打码
-        "user_mention", "chat_mention" -> SpanStyle(color = primaryColor, fontWeight = FontWeight.Medium)
-        "link" -> SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)
+        "user_mention", "chat_mention" -> SpanStyle(color = accentColor, fontWeight = FontWeight.Medium)
+        "link" -> SpanStyle(color = accentColor, textDecoration = TextDecoration.Underline)
         else -> SpanStyle()
     }
 }
