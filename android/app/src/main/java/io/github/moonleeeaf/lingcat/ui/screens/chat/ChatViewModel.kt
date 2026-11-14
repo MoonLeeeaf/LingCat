@@ -75,6 +75,13 @@ data class ChatUiState(
     val searchResults: List<IMessage> = emptyList(),
 
     val uploadProgress: Map<Int, Int> = emptyMap(),
+
+    /** 是否属于该对话。非成员时界面只显示「加入对话」，不展示历史消息、也不能输入。 */
+    val isMember: Boolean = true,
+    /** 正在提交加入申请。 */
+    val isJoining: Boolean = false,
+    /** 已提交加入申请，等待管理员审批（服务器目前直接入群，这里为后续审批制预留）。 */
+    val joinPending: Boolean = false,
 )
 
 class ChatViewModel : ViewModel() {
@@ -85,6 +92,9 @@ class ChatViewModel : ViewModel() {
 
     private var currentChatId: String? = null
     private var receiveListener: LingCatClient.OnReceiveListener? = null
+
+    /** 已发起过历史消息请求的 chatId，避免「确认成员身份」和「进入页面」各拉一次。 */
+    private var historyRequestedFor: String? = null
 
     private var encryptStateBeforeEdit = false
 
@@ -265,25 +275,43 @@ class ChatViewModel : ViewModel() {
             receiveListener = LingCatClient.OnReceiveListener { /* 这是个假对象，只为了标记收集过了 */ }
         }
 
-        _uiState.value = _uiState.value.copy(messages = emptyList(), isLoading = true)
+        _uiState.value = _uiState.value.copy(
+            messages = emptyList(),
+            isLoading = true,
+        )
+
+        // 切换对话时，成员身份要从头确认；历史消息是否请求过也要重置。
+        historyRequestedFor = null
+        val cachedIsMember = ProfileCache.getCachedChat(chatId)?.isMember ?: true
+        _uiState.value = _uiState.value.copy(
+            isMember = cachedIsMember,
+            isJoining = false,
+            joinPending = false,
+        )
 
         // ★ 核心修复 2：每次进聊天室，强制刷新 E2E 状态
         viewModelScope.launch {
             E2EStateManager.loadKeyState()
         }
 
-        loadHistoryMessages(chatId)
+        if (cachedIsMember) {
+            loadHistoryMessages(chatId)
+        } else {
+            // 已知不是成员：不读本地记录，直接显示「加入对话」。
+            _uiState.value = _uiState.value.copy(isLoading = false)
+        }
         fetchChatInfo(chatId)
     }
 
     private fun fetchChatInfo(chatId: String) {
         viewModelScope.launch {
             try {
-                // 标题静默重试：失败就保持占位文案，不打扰用户。
-                val chat = retryWithBackoff { ProfileCache.requireChat(chatId) }
+                // 成员身份必须以服务器为准，不能只看缓存：
+                // 被移出群聊后旧缓存里的 is_member 仍然是 true。
+                val chat = retryWithBackoff { ProfileCache.refreshChat(chatId) }
                 if (chat == null) {
-                    // 拉不到时保持 chatTitle == null，界面会显示「对话」占位；
-                    // 不再用 "加载中..." 这种魔法字符串做状态标记。
+                    // 服务器确认对话不存在：保持占位，不再读本地记录。
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                     return@launch
                 }
 
@@ -299,8 +327,22 @@ class ChatViewModel : ViewModel() {
                     title = chat.title,
                     peerId = peerId,
                     isGroup = chat.type == "group",
+                    isMember = chat.isMember,
                 )
                 updateE2EState()
+
+                if (!chat.isMember) {
+                    // 非成员：本地缓存里可能有被移出前的历史（甚至其他账号的），
+                    // 一律不展示，改成「加入对话」入口。
+                    _uiState.value = _uiState.value.copy(
+                        messages = emptyList(),
+                        isLoading = false,
+                        isMember = false,
+                    )
+                    return@launch
+                }
+
+                ensureHistoryLoaded(chatId)
 
                 // 私聊标题通常用对方昵称：静默重试，成功后只更新一次标题。
                 if (peerId != null) {
@@ -312,6 +354,7 @@ class ChatViewModel : ViewModel() {
                                 title = name,
                                 peerId = peerId,
                                 isGroup = chat.type == "group",
+                                isMember = true,
                             )
                         }
                     }
@@ -320,12 +363,95 @@ class ChatViewModel : ViewModel() {
                 throw e
             } catch (e: Exception) {
                 Log.e(TAG, "fetch chat info failed", e)
-                // 标题保持 null，界面显示「对话」占位，不会卡在“加载中”。
+                // 拉不到最新信息时退回缓存：离线状态仍然要让用户看到本地记录。
+                val cached = ProfileCache.getCachedChat(chatId)
+                when {
+                    cached == null -> Unit
+                    cached.isMember -> {
+                        applyChatInfo(
+                            title = cached.title,
+                            peerId = cached.peerUserId.takeIf { cached.type == "private" && cached.hasPeerUserId() },
+                            isGroup = cached.type == "group",
+                            isMember = true,
+                        )
+                        ensureHistoryLoaded(chatId)
+                    }
+                    else -> {
+                        applyChatInfo(
+                            title = cached.title,
+                            peerId = cached.peerUserId.takeIf { cached.type == "private" && cached.hasPeerUserId() },
+                            isGroup = cached.type == "group",
+                            isMember = false,
+                        )
+                        _uiState.value = _uiState.value.copy(messages = emptyList(), isLoading = false)
+                    }
+                }
             }
         }
     }
 
-    private fun applyChatInfo(title: String?, peerId: String?, isGroup: Boolean) {
+    private fun ensureHistoryLoaded(chatId: String) {
+        if (historyRequestedFor != chatId) {
+            loadHistoryMessages(chatId)
+        }
+    }
+
+    /**
+     * 尝试加入当前对话。
+     *
+     * 服务器当前只支持「允许直接加入 / 不允许加入」两种，后续如果做验证问题或是审批制，
+     * 只要把 [ChatApi.joinChat] 的 answer 参数与 pendingApproval 分支补上即可。
+     */
+    fun joinChat() {
+        val chatId = currentChatId ?: return
+        val state = _uiState.value
+        if (state.isMember || state.isJoining || state.joinPending) return
+
+        _uiState.value = state.copy(isJoining = true)
+
+        viewModelScope.launch {
+            try {
+                val client = LingCatClientManager.currentClient
+                    ?: throw UiTextException(uiText(R.string.error_not_connected))
+                val token = LingCatClientManager.currentToken
+                    ?: throw UiTextException(uiText(R.string.error_not_signed_in))
+
+                val result = withContext(Dispatchers.IO) {
+                    ChatApi.joinChat(client, token, chatId, null)
+                }
+
+                if (result.pendingApproval) {
+                    _uiState.value = _uiState.value.copy(
+                        isJoining = false,
+                        joinPending = true,
+                    )
+                    return@launch
+                }
+
+                // 加入成功：切回成员态，重新拉取历史消息。
+                _uiState.value = _uiState.value.copy(
+                    isJoining = false,
+                    isMember = true,
+                    joinPending = false,
+                    messages = emptyList(),
+                    isLoading = true,
+                )
+                historyRequestedFor = null
+                ensureHistoryLoaded(chatId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "join chat failed", e)
+                _uiState.value = _uiState.value.copy(
+                    isJoining = false,
+                    errorMsg = e.toUiTextOrNull()
+                        ?: uiText(R.string.chat_join_failed, e.message ?: ""),
+                )
+            }
+        }
+    }
+
+    private fun applyChatInfo(title: String?, peerId: String?, isGroup: Boolean, isMember: Boolean) {
         _uiState.value = _uiState.value.copy(
             chatTitle = title?.ifBlank { null },
             chatTitleRes = when {
@@ -335,6 +461,7 @@ class ChatViewModel : ViewModel() {
             },
             peerUserId = peerId,
             isGroup = isGroup,
+            isMember = isMember,
         )
     }
 
@@ -445,6 +572,10 @@ class ChatViewModel : ViewModel() {
 
     // ★ 改造：加载历史消息
     fun loadHistoryMessages(chatId: String) {
+        // 非成员不读本地记录：那里可能残留被移出前的消息，甚至其他账号的数据。
+        if (!_uiState.value.isMember) return
+        historyRequestedFor = chatId
+
         // 1. 一进来，先置为加载中
         _uiState.value = _uiState.value.copy(isLoading = true, errorMsg = null)
 

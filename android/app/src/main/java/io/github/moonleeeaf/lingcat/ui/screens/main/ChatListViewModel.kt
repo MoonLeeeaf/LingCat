@@ -91,6 +91,9 @@ class ChatListViewModel : ViewModel() {
                     } catch (e: Exception) {
                         Log.e(TAG, "parse message event failed", e)
                     }
+                } else if (pkg.method_id == Methods.Update_My_Chats_Event) {
+                    // 加入群组 / 被拉进新对话时服务器会广播这个事件，刷新一下列表。
+                    initAndLoad(isRefresh = true)
                 }
             }
         }

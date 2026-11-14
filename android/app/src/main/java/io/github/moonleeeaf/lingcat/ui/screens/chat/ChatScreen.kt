@@ -50,6 +50,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
@@ -519,26 +520,29 @@ fun ChatScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = {
-                            if (activeMeeting != null) {
-                                // 如果已有会议，直接加入（优先使用会议标题）
-                                MeetingManager.joinMeeting(
-                                    context,
-                                    chatId,
-                                    activeMeeting!!.title ?: chatTitleText,
-                                    activeMeeting!!.meetingId
-                                )
-                                onNavigateToMeeting()
-                            } else {
-                                // 没有会议，发起前先填写会议标题（默认对话标题）
-                                meetingTitleInput = chatTitleText
-                                showStartMeetingDialog = true
+                        // 非成员不能开会 / 搜索历史，先只保留返回入口。
+                        if (uiState.isMember) {
+                            IconButton(onClick = {
+                                if (activeMeeting != null) {
+                                    // 如果已有会议，直接加入（优先使用会议标题）
+                                    MeetingManager.joinMeeting(
+                                        context,
+                                        chatId,
+                                        activeMeeting!!.title ?: chatTitleText,
+                                        activeMeeting!!.meetingId
+                                    )
+                                    onNavigateToMeeting()
+                                } else {
+                                    // 没有会议，发起前先填写会议标题（默认对话标题）
+                                    meetingTitleInput = chatTitleText
+                                    showStartMeetingDialog = true
+                                }
+                            }) {
+                                Icon(Icons.Default.Call, contentDescription = stringResource(R.string.chat_meeting))
                             }
-                        }) {
-                            Icon(Icons.Default.Call, contentDescription = stringResource(R.string.chat_meeting))
-                        }
-                        IconButton(onClick = { isSearchMode = true }) {
-                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.action_search))
+                            IconButton(onClick = { isSearchMode = true }) {
+                                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.action_search))
+                            }
                         }
                         if (uiState.isE2EActive) {
                             IconButton(onClick = { showE2EInfo = true }) {
@@ -554,21 +558,23 @@ fun ChatScreen(
             }
         },
         bottomBar = {
-            ChatInputBar(
-                text = uiState.inputText,
-                isSending = uiState.isSending,
-                isE2EActive = uiState.isE2EActive,
-                encryptThisMessage = uiState.encryptThisMessage,
-                onToggleEncrypt = viewModel::toggleEncryptThisMessage,
-                onTextChange = viewModel::onInputChange,
-                onSend = viewModel::sendMessage,
-                onAttachClick = { filePickerLauncher.launch("*/*") },
-                focusRequester = focusRequester,
-                editingMessage = uiState.editingMessage,
-                onCancelEdit = viewModel::cancelEditing,
-                chatMembers = uiState.chatMembers,
-                onRequestMembers = { viewModel.fetchChatMembersIfNeeded() },
-            )
+            if (uiState.isMember) {
+                ChatInputBar(
+                    text = uiState.inputText,
+                    isSending = uiState.isSending,
+                    isE2EActive = uiState.isE2EActive,
+                    encryptThisMessage = uiState.encryptThisMessage,
+                    onToggleEncrypt = viewModel::toggleEncryptThisMessage,
+                    onTextChange = viewModel::onInputChange,
+                    onSend = viewModel::sendMessage,
+                    onAttachClick = { filePickerLauncher.launch("*/*") },
+                    focusRequester = focusRequester,
+                    editingMessage = uiState.editingMessage,
+                    onCancelEdit = viewModel::cancelEditing,
+                    chatMembers = uiState.chatMembers,
+                    onRequestMembers = { viewModel.fetchChatMembersIfNeeded() },
+                )
+            }
         }
     ) { padding ->
         Box(
@@ -638,7 +644,14 @@ fun ChatScreen(
                     }
                 }
             } else {
-                if (uiState.isLoading) {
+                if (!uiState.isMember) {
+                    ChatJoinPrompt(
+                        isJoining = uiState.isJoining,
+                        joinPending = uiState.joinPending,
+                        onJoin = viewModel::joinChat,
+                        modifier = Modifier.align(Alignment.Center),
+                    )
+                } else if (uiState.isLoading) {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 } else {
                     LazyColumn(
@@ -1147,6 +1160,62 @@ fun ChatScreen(
         imageUrl = previewImageUrl,
         onDismiss = { previewImageUrl = null }
     )
+}
+
+/**
+ * 非成员提示：加入对话后才会显示历史消息与输入框。
+ */
+@Composable
+private fun ChatJoinPrompt(
+    isJoining: Boolean,
+    joinPending: Boolean,
+    onJoin: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = Icons.Default.Group,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.chat_not_member_title),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(
+                if (joinPending) R.string.chat_join_pending else R.string.chat_not_member_desc
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        if (!joinPending) {
+            Spacer(Modifier.height(20.dp))
+            Button(onClick = onJoin, enabled = !isJoining) {
+                if (isJoining) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(
+                    stringResource(
+                        if (isJoining) R.string.chat_joining else R.string.chat_join_action
+                    )
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

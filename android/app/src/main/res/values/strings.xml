@@ -56,6 +56,12 @@
     <string name="chat_input_send">发送</string>
     <string name="chat_input_toggle_encrypt">切换加密</string>
     <string name="chat_list_add">新建</string>
+    <string name="chat_join_action">加入对话</string>
+    <string name="chat_join_failed">加入对话失败: %1$s</string>
+    <string name="chat_join_pending">已提交加入申请，等待管理员批准。</string>
+    <string name="chat_joining">正在加入…</string>
+    <string name="chat_not_member_desc">加入后即可查看历史消息并参与聊天。</string>
+    <string name="chat_not_member_title">你还不是该对话的成员</string>
     <string name="chat_list_all">全部</string>
     <string name="chat_list_create_group">创建群组</string>
     <string name="chat_list_disconnected">网络已断开</string>
