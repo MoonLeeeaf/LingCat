@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.UiText
 import io.github.moonleeeaf.lingcat.ui.UiTextException
@@ -70,9 +71,11 @@ class ChatMembersViewModel : ViewModel() {
 
         fun match(model: MemberUiModel): Boolean {
             val u = model.user
+            val remark = RemarksCache.getRemark(u.id).orEmpty()
             return u.id.lowercase().contains(q) ||
                     u.username.lowercase().contains(q) ||
-                    u.nickname.lowercase().contains(q)
+                    u.nickname.lowercase().contains(q) ||
+                    remark.lowercase().contains(q)
         }
 
         _uiState.value = _uiState.value.copy(

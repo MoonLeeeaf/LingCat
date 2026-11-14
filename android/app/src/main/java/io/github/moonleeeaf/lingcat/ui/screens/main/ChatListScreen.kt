@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.asString
@@ -39,7 +40,7 @@ import io.github.moonleeeaf.lingcat.ui.components.EmptyState
 import io.github.moonleeeaf.lingcat.ui.components.ErrorState
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 import io.github.moonleeeaf.lingcat.ui.components.LoadingState
-import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 import lingcat.classes.Classes.IChat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -260,13 +261,14 @@ fun ChatListItem(
         chat.avatarFileHash
     }
 
-    // 如果是私聊，且没有设置备注/标题，就显示对方的昵称
-    val displayTitle = if (chat.title.isNotEmpty()) {
-        chat.title
-    } else if (chat.type == "private" && peerUser != null) {
-        peerUser?.nickname?.ifEmpty { peerUser?.username } ?: stringResource(R.string.label_private_chat)
-    } else {
-        stringResource(R.string.chat_list_no_title)
+    // 私聊优先显示备注，其次是昵称 / 用户名；群聊仍然用群名。
+    val peerDisplayName = rememberUserDisplayName(peerUser)
+    val displayTitle = when {
+        chat.type == "private" -> peerDisplayName
+            .ifEmpty { chat.title }
+            .ifEmpty { stringResource(R.string.label_private_chat) }
+        chat.title.isNotEmpty() -> chat.title
+        else -> stringResource(R.string.chat_list_no_title)
     }
 
     val containerColor = if (selected) {

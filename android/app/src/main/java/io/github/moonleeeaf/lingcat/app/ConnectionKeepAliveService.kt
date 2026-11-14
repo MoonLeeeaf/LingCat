@@ -11,6 +11,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.*
@@ -95,7 +96,10 @@ class ConnectionKeepAliveService : Service() {
         val chat = ProfileCache.fetchChat(msg.chatId) ?: return
         val sender = ProfileCache.fetchUser(msg.senderUserId)
         val isSystem = msg.system
-        val senderName = sender?.nickname?.ifEmpty { sender.username } ?: (if (isSystem) getString(R.string.keepalive_sender_system) else getString(R.string.keepalive_sender_unknown))
+        val senderName = RemarksCache.displayName(sender).ifEmpty {
+            if (isSystem) getString(R.string.keepalive_sender_system)
+            else getString(R.string.keepalive_sender_unknown)
+        }
         val title = chat.title.ifEmpty { senderName }
 
         var previewText = msg.text

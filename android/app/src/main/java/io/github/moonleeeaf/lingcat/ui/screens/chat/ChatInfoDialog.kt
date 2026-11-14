@@ -22,6 +22,7 @@ import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import io.github.moonleeeaf.lingcat.ui.components.LingCatActionItem
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
+import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +66,14 @@ fun ChatInfoDialog(
                 // 如果是私聊且群头像为空，尝试用对方头像
                 val peerUser = if (chat.type == "private" && chat.hasPeerUserId()) ProfileCache.getCachedUser(chat.peerUserId) else null
                 val finalAvatarHash = chat.avatarFileHash?.takeIf { it.isNotEmpty() } ?: peerUser?.avatarFileHash
-                val finalTitle = if (chat.title.isNotEmpty()) chat.title else (peerUser?.nickname ?: peerUser?.username ?: stringResource(R.string.label_chat))
+                val peerDisplayName = rememberUserDisplayName(peerUser)
+                val finalTitle = when {
+                    chat.type == "private" -> peerDisplayName
+                        .ifEmpty { chat.title }
+                        .ifEmpty { stringResource(R.string.label_chat) }
+                    chat.title.isNotEmpty() -> chat.title
+                    else -> stringResource(R.string.label_chat)
+                }
                 val finalAvatarUrl = io.github.moonleeeaf.lingcat.ui.components.rememberAvatarUrl(finalAvatarHash)
 
                 Column(

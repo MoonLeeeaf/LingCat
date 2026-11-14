@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.moonleeeaf.lingcat.data.DraftCache
 import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
 import io.github.moonleeeaf.lingcat.data.db.MessageEntity
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
@@ -305,7 +306,7 @@ class ChatViewModel : ViewModel() {
                 if (peerId != null) {
                     val peer = fetchPeerOrNull(peerId)
                     if (peer != null) {
-                        val name = peer.nickname.ifEmpty { peer.username }
+                        val name = RemarksCache.displayName(peer)
                         if (name.isNotBlank()) {
                             applyChatInfo(
                                 title = name,

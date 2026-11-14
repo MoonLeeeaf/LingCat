@@ -63,6 +63,8 @@ fun ChatInputBar(
 ) {
     // ★ 使用 TextFieldValue 跟踪光标
     var textState by remember { mutableStateOf(TextFieldValue(text)) }
+    // 备注变化时让 @ 候选列表重新排序 / 刷新显示
+    val remarks by RemarksCache.remarks.collectAsState()
 
     // 同步外部传入的 text（比如发送后清空、插入引用等）
     LaunchedEffect(text) {
@@ -79,7 +81,7 @@ fun ChatInputBar(
     var activeMentionIndex by remember { mutableIntStateOf(0) }
 
     // 监听文本和光标变化，计算候选列表
-    val mentionCandidates = remember(textState, chatMembers) {
+    val mentionCandidates = remember(textState, chatMembers, remarks) {
         val cursor = textState.selection.start
         val textStr = textState.text
         if (cursor == 0) return@remember emptyList()
@@ -98,7 +100,7 @@ fun ChatInputBar(
             }
 
             chatMembers.map { m ->
-                val remark = RemarksCache.getRemark(m.id) ?: ""
+                val remark = remarks[m.id] ?: ""
                 val display = remark.ifEmpty { m.nickname.ifEmpty { m.username } }
                 val hay = listOf(m.username, m.nickname, remark).filter { it.isNotEmpty() }.map { it.lowercase() }
                 var score = 0
@@ -120,7 +122,7 @@ fun ChatInputBar(
 
     // 插入提及
     val insertMention = { user: Classes.IUser ->
-        val name = RemarksCache.getRemark(user.id).takeIf { !it.isNullOrEmpty() }
+        val name = remarks[user.id].takeIf { !it.isNullOrEmpty() }
             ?: user.nickname.takeIf { it.isNotEmpty() }
             ?: user.username
             ?: user.id
@@ -193,7 +195,7 @@ fun ChatInputBar(
                     LazyColumn {
                         itemsIndexed(mentionCandidates) { index, user ->
                             val isActive = index == activeMentionIndex
-                            val remark = RemarksCache.getRemark(user.id) ?: ""
+                            val remark = remarks[user.id] ?: ""
                             val displayName = remark.ifEmpty { user.nickname.ifEmpty { user.username } }
 
                             Row(

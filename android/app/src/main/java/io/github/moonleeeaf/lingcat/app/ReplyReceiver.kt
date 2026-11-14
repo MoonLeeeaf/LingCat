@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import kotlinx.coroutines.CoroutineScope
@@ -119,7 +121,14 @@ class ReplyReceiver : BroadcastReceiver() {
                 Log.d(TAG, "Notification reply sent successfully")
 
                 // 4. 更新通知栏
-                val chatTitle = chat.title.ifEmpty { context.getString(R.string.chat_fallback_title) }
+                val peer = if (chat.type == "private" && chat.hasPeerUserId()) {
+                    ProfileCache.getCachedUser(chat.peerUserId)
+                } else {
+                    null
+                }
+                val chatTitle = chat.title
+                    .ifEmpty { RemarksCache.displayName(peer) }
+                    .ifEmpty { context.getString(R.string.chat_fallback_title) }
                 // 如果 finalEntities 不为空，说明走了 E2E 加密
                 val displayContent = if (finalEntities != null) context.getString(R.string.encrypted_message_locked) else replyText
                 NotificationHelper.addMyMessage(

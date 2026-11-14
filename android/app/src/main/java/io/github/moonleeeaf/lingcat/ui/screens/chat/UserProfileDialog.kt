@@ -148,7 +148,7 @@ fun UserProfileDialog(
                         title = stringResource(R.string.profile_mention),
                         subtitle = null,
                         onClick = {
-                            val name = uiState.remark ?: user.username.ifEmpty { user.nickname }
+                            val name = uiState.remark ?: user.nickname.ifEmpty { user.username }
                             onMention(name)
                             onDismiss()
                         }

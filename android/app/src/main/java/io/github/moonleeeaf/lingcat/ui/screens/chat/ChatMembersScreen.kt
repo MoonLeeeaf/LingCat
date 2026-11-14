@@ -28,6 +28,7 @@ import io.github.moonleeeaf.lingcat.ui.components.ErrorState
 import io.github.moonleeeaf.lingcat.ui.components.LingCatActionItem
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 import io.github.moonleeeaf.lingcat.ui.components.LoadingState
+import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -157,10 +158,11 @@ fun ChatMembersScreen(
 
     if (userToConfirmRemoveMember != null) {
         val user = userToConfirmRemoveMember!!
+        val displayName = rememberUserDisplayName(user)
         AlertDialog(
             onDismissRequest = { userToConfirmRemoveMember = null },
             title = { Text(stringResource(R.string.chat_members_remove_title)) },
-            text = { Text(stringResource(R.string.chat_members_remove_message, user.nickname.ifEmpty { user.username })) },
+            text = { Text(stringResource(R.string.chat_members_remove_message, displayName)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -178,10 +180,11 @@ fun ChatMembersScreen(
 
     if (userToConfirmAddAdmin != null) {
         val user = userToConfirmAddAdmin!!
+        val displayName = rememberUserDisplayName(user)
         AlertDialog(
             onDismissRequest = { userToConfirmAddAdmin = null },
             title = { Text(stringResource(R.string.chat_members_set_admin)) },
-            text = { Text(stringResource(R.string.chat_members_set_admin_message, user.nickname.ifEmpty { user.username })) },
+            text = { Text(stringResource(R.string.chat_members_set_admin_message, displayName)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -198,10 +201,11 @@ fun ChatMembersScreen(
 
     if (userToConfirmRemoveAdmin != null) {
         val user = userToConfirmRemoveAdmin!!
+        val displayName = rememberUserDisplayName(user)
         AlertDialog(
             onDismissRequest = { userToConfirmRemoveAdmin = null },
             title = { Text(stringResource(R.string.chat_members_remove_admin)) },
-            text = { Text(stringResource(R.string.chat_members_remove_admin_message, user.nickname.ifEmpty { user.username })) },
+            text = { Text(stringResource(R.string.chat_members_remove_admin_message, displayName)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -225,13 +229,14 @@ fun ChatMembersScreen(
         val canRemoveMember = myRole == "owner" || (myRole == "admin" && targetRole == "member")
         val canAddAdmin = myRole == "owner" && targetRole == "member"
         val canRemoveAdmin = myRole == "owner" && targetRole == "admin"
+        val targetDisplayName = rememberUserDisplayName(targetUser)
 
         ModalBottomSheet(
             onDismissRequest = { selectedUserForAction = null }
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
                 Text(
-                    text = targetUser.nickname.ifEmpty { targetUser.username },
+                    text = targetDisplayName,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(16.dp)
                 )
@@ -303,11 +308,14 @@ fun MemberItem(
 ) {
     val user = model.user
 
+    val displayName = rememberUserDisplayName(user)
+
     ListItem(
         headlineContent = {
-            Text(user.nickname.ifEmpty { user.username })
+            Text(displayName)
         },
-        supportingContent = if (user.nickname.isNotEmpty() && user.username.isNotEmpty()) {
+        // 标题已经用了备注 / 昵称时，再用 @username 补齐真实账号，避免两人备注相同分不清。
+        supportingContent = if (user.username.isNotEmpty() && displayName != user.username) {
             { Text("@${user.username}", style = MaterialTheme.typography.bodySmall) }
         } else null,
         leadingContent = {

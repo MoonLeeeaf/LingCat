@@ -63,6 +63,7 @@ import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.app.AppState
 import io.github.moonleeeaf.lingcat.app.NotificationHelper
 import io.github.moonleeeaf.lingcat.data.ProfileCache
+import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.e2e.E2EInfoDialog
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
@@ -70,6 +71,7 @@ import io.github.moonleeeaf.lingcat.ui.Feedback
 import io.github.moonleeeaf.lingcat.ui.components.ImageViewerDialog
 import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 import io.github.moonleeeaf.lingcat.ui.components.rememberAvatarUrl
+import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingManager
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingPhase
 import kotlinx.coroutines.CoroutineScope
@@ -304,15 +306,25 @@ fun ChatScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     // 标题可能还没拉到（chatTitle == null），此时退回「私聊 / 群聊 / 对话」占位文案。
-    val chatTitleText = uiState.chatTitle
+    // 私聊再优先套一层备注：资料页改完备注后标题会立即更新。
+    val fallbackChatTitle = uiState.chatTitle
         ?: uiState.chatTitleRes?.let { stringResource(it) }
         ?: stringResource(R.string.label_chat)
+    val chatTitleText = rememberUserDisplayName(uiState.peerUserId).ifEmpty { fallbackChatTitle }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(chatId) {
-        // 尝试拿一次标题
-        val cachedTitle = ProfileCache.getCachedChat(chatId)?.title
+        // 尝试拿一次标题：私聊优先用备注，避免先闪一下服务端昵称。
+        val cachedChat = ProfileCache.getCachedChat(chatId)
+        val cachedTitle = when {
+            cachedChat == null -> null
+            cachedChat.type == "private" && cachedChat.hasPeerUserId() ->
+                RemarksCache.getRemark(cachedChat.peerUserId)
+                    ?.takeIf { it.isNotBlank() }
+                    ?: cachedChat.title.takeIf { it.isNotBlank() }
+            else -> cachedChat.title.takeIf { it.isNotBlank() }
+        }
         viewModel.initChat(chatId, initialTitle = cachedTitle)
     }
 
@@ -609,7 +621,7 @@ fun ChatScreen(
                                 },
                                 supportingContent = {
                                     // 发送者名字和时间
-                                    Text("${ProfileCache.getCachedUser(msg.senderUserId)?.nickname ?: ""} · ${formatTimeDivider(context, msg.time)}")
+                                    Text("${rememberUserDisplayName(msg.senderUserId)} · ${formatTimeDivider(context, msg.time)}")
                                 },
                                 modifier = Modifier.clickable {
                                     // ★ 点击结果，跳转定位
@@ -898,7 +910,7 @@ fun ChatScreen(
     if (selectedAvatarUserId != null) {
         val userId = selectedAvatarUserId!!
         val userInfo = ProfileCache.getCachedUser(userId)
-        val displayName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: stringResource(R.string.chat_this_user)
+        val displayName = rememberUserDisplayName(userId, fallback = stringResource(R.string.chat_this_user))
 
         ModalBottomSheet(
             onDismissRequest = { selectedAvatarUserId = null }
@@ -1185,7 +1197,7 @@ fun MessageBubble(
         }
     }
 
-    val senderName = userInfo?.nickname?.ifEmpty { userInfo?.username } ?: stringResource(R.string.label_unknown_user)
+    val senderName = rememberUserDisplayName(userInfo, fallback = stringResource(R.string.label_unknown_user))
     val avatarHash = userInfo?.avatarFileHash
 
     // ★ 核心包裹层：处理手势和滑动图标

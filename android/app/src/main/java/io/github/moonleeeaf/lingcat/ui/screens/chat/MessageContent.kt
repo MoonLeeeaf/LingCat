@@ -31,13 +31,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.moonleeeaf.lingcat.R
+import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.rememberUserDisplayName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lingcat.classes.Classes.IMessage
 import lingcat.classes.Classes.IMessageEntity
+import lingcat.classes.Classes.IUser
 import lingcat.client_protocol.HttpClientProvider
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -492,7 +495,8 @@ fun ReplyBlock(
 
     // 异步拉取目标消息
     var targetMsg by remember { mutableStateOf<IMessage?>(null) }
-    var senderName by remember { mutableStateOf(context.getString(R.string.reply_loading)) }
+    var senderUser by remember { mutableStateOf<IUser?>(null) }
+    var loaded by remember { mutableStateOf(false) }
     var previewText by remember { mutableStateOf("") }
 
     LaunchedEffect(seq) {
@@ -500,9 +504,8 @@ fun ReplyBlock(
         if (msg != null) {
             targetMsg = msg
 
-            // 1. 获取发送者昵称
-            val user = io.github.moonleeeaf.lingcat.data.ProfileCache.fetchUser(msg.senderUserId)
-            senderName = user?.nickname?.ifEmpty { user.username } ?: context.getString(R.string.label_unknown_user)
+            // 1. 获取发送者资料；显示名在组合阶段解析，备注变化后会自动刷新
+            senderUser = ProfileCache.fetchUser(msg.senderUserId)
 
             // 2. 解析内容预览 (处理 E2E)
             val e2eEntity = msg.entitiesList.find { it.type == "e2e" }
@@ -528,9 +531,18 @@ fun ReplyBlock(
                 previewText = msg.text.ifEmpty { context.getString(R.string.attachment_label) }
             }
         } else {
-            senderName = context.getString(R.string.unknown_message)
             previewText = context.getString(R.string.original_message_unavailable)
         }
+        loaded = true
+    }
+
+    val senderName = when {
+        !loaded -> context.getString(R.string.reply_loading)
+        targetMsg == null -> context.getString(R.string.unknown_message)
+        else -> rememberUserDisplayName(
+            senderUser,
+            fallback = context.getString(R.string.label_unknown_user),
+        )
     }
 
     Surface(
