@@ -301,6 +301,7 @@ fun ChatScreen(
     chatId: String,
     onBack: () -> Unit,
     onNavigateToMembers: (String) -> Unit,
+    onNavigateToSettings: (String) -> Unit,
     viewModel: ChatViewModel = viewModel(),
     onNavigateToChat: (String) -> Unit,
     onNavigateToMeeting: () -> Unit,
@@ -432,6 +433,9 @@ fun ChatScreen(
                 NotificationHelper.clearHistory(chatId)
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
                 manager.cancel(chatId.hashCode())
+                // 从「对话设定」等页面返回时，用缓存里的最新资料同步标题，
+                // 避免改了群名还要退出重进才看得到。
+                viewModel.refreshCachedChatInfo()
             } else if (event == Lifecycle.Event.ON_PAUSE || event == Lifecycle.Event.ON_STOP) {
                 if (AppState.activeChatId == chatId) {
                     AppState.activeChatId = null
@@ -827,6 +831,10 @@ fun ChatScreen(
                 onOpenMembers = {
                     showChatInfoId = null
                     onNavigateToMembers(chatId)
+                },
+                onOpenSettings = {
+                    showChatInfoId = null
+                    onNavigateToSettings(chatId)
                 },
                 onOpenUserProfile = { peerId -> // ★ 修复 2：接上用户资料回调
                     showChatInfoId = null

@@ -451,6 +451,35 @@ class ChatViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 从本地缓存同步标题与对方 ID。
+     *
+     * 用于从「对话设定」修改了群名 / 从资料页改了备注后返回聊天页的场景：
+     * 这些页面会更新 [ProfileCache]，这里只读缓存，不重新发网络请求。
+     */
+    fun refreshCachedChatInfo() {
+        val chatId = currentChatId ?: return
+        val chat = ProfileCache.getCachedChat(chatId) ?: return
+        val peerId = if (chat.type == "private" && chat.hasPeerUserId()) chat.peerUserId else null
+        val title = if (peerId != null) {
+            val peer = ProfileCache.getCachedUser(peerId)
+            val name = if (peer != null) RemarksCache.displayName(peer) else ""
+            name.ifBlank { chat.title }
+        } else {
+            chat.title
+        }
+
+        _uiState.value = _uiState.value.copy(
+            chatTitle = title.ifBlank { null },
+            chatTitleRes = when {
+                title.isNotBlank() -> null
+                _uiState.value.isGroup -> R.string.label_group_chat
+                else -> R.string.label_private_chat
+            },
+            peerUserId = peerId,
+        )
+    }
+
     private fun applyChatInfo(title: String?, peerId: String?, isGroup: Boolean, isMember: Boolean) {
         _uiState.value = _uiState.value.copy(
             chatTitle = title?.ifBlank { null },

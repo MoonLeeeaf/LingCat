@@ -35,7 +35,14 @@ class ChatInfoViewModel : ViewModel() {
     private var currentChatId: String? = null
 
     fun init(chatId: String) {
-        if (currentChatId == chatId && _uiState.value.chat != null) return
+        if (currentChatId == chatId && _uiState.value.chat != null) {
+            // 已经加载过：对话设定页可能刚改了标题 / 头像，重新打开信息面板时
+            // 先用内存缓存同步一次，避免显示旧资料。
+            ProfileCache.getCachedChat(chatId)?.let { cached ->
+                _uiState.value = _uiState.value.copy(chat = cached)
+            }
+            return
+        }
         currentChatId = chatId
 
         // 先从缓存极速渲染
@@ -63,6 +70,11 @@ class ChatInfoViewModel : ViewModel() {
                     ChatApi.getMyFavouriteChats(client, token, 100, 0)
                 }
                 val isFav = favChats.any { it.id == chatId }
+
+                // 写回缓存：对话设定页 / 聊天页都从 ProfileCache 取最新资料。
+                if (chat != null) {
+                    ProfileCache.cacheChats(listOf(chat))
+                }
 
                 _uiState.value = _uiState.value.copy(
                     chat = chat,

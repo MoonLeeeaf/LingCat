@@ -30,6 +30,7 @@ fun ChatInfoDialog(
     chatId: String,
     onDismiss: () -> Unit,
     onOpenMembers: () -> Unit,
+    onOpenSettings: () -> Unit,
     onOpenUserProfile: (String) -> Unit, // ★ 新增：打开用户资料的回调
     viewModel: ChatInfoViewModel = viewModel()
 ) {
@@ -151,6 +152,17 @@ fun ChatInfoDialog(
                             onOpenMembers() // 触发跳转
                         }
                     )
+                    if (chat.isMember) {
+                        LingCatActionItem(
+                            icon = Icons.Default.Settings,
+                            title = stringResource(R.string.chat_settings_title),
+                            subtitle = null,
+                            onClick = {
+                                onDismiss()
+                                onOpenSettings()
+                            }
+                        )
+                    }
                 }
 
                 // 用户信息 (私聊)

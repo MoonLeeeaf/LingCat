@@ -98,6 +98,13 @@ class ChatListViewModel : ViewModel() {
             }
         }
 
+        // 本地修改了对话资料（群名 / 群头像）后，对话列表里的预览也需要更新。
+        viewModelScope.launch {
+            LingCatClientManager.chatListRefresh.collect {
+                initAndLoad(isRefresh = true)
+            }
+        }
+
         // 从断线恢复为已连接后自动刷新列表：
         // 无论是全局状态条的「重试」还是底层自动重连，都能把断线期间的消息补回来。
         viewModelScope.launch {

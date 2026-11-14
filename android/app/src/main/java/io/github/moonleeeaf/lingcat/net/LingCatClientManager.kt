@@ -69,6 +69,19 @@ object LingCatClientManager {
     private val _globalEvents = MutableSharedFlow<Package>(extraBufferCapacity = 100)
     val globalEvents: SharedFlow<Package> = _globalEvents.asSharedFlow()
 
+    /**
+     * 本地数据变化（例如改了群名 / 群头像）时通知对话列表刷新。
+     *
+     * 服务端的 Update_My_Chats_Event 只在收发消息、创建群、加入群时下发，
+     * 修改对话资料不会广播，所以这里补一个只在进程内传播的刷新信号。
+     */
+    private val _chatListRefresh = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val chatListRefresh: SharedFlow<Unit> = _chatListRefresh.asSharedFlow()
+
+    fun notifyChatListChanged() {
+        _chatListRefresh.tryEmit(Unit)
+    }
+
     fun init(context: Context) {
         appContext = context.applicationContext
     }

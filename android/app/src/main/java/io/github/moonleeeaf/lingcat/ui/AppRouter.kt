@@ -59,6 +59,7 @@ import io.github.moonleeeaf.lingcat.ui.components.ConnectionStateBanner
 import io.github.moonleeeaf.lingcat.ui.screens.auth.LoginScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
+import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatSettingsScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.meeting.MeetingScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.AccountListScreen
 import io.github.moonleeeaf.lingcat.ui.screens.main.ChatListScreen
@@ -75,6 +76,7 @@ object Routes {
     const val CHAT = "chat/{chatId}"
     const val ACCOUNT_LIST = "account_list"
     const val CHAT_MEMBERS = "chat_members/{chatId}"
+    const val CHAT_SETTINGS = "chat_settings/{chatId}"
     const val EDIT_PROFILE = "edit_profile"
     const val MEETING = "meeting"
 }
@@ -345,6 +347,9 @@ fun LingCatApp(
                                                     onNavigateToMembers = { chatId ->
                                                         rightNavController.navigate("chat_members_2/$chatId")
                                                     },
+                                                    onNavigateToSettings = { chatId ->
+                                                        rightNavController.navigate("chat_settings_2/$chatId")
+                                                    },
                                                     onNavigateToChat = { newChatId ->
                                                         selectedChatId = newChatId // 右侧直接切聊天
                                                     },
@@ -364,6 +369,14 @@ fun LingCatApp(
                                                         // 如果切换到了新聊天，清空右栏的返回栈
                                                         rightNavController.popBackStack(Routes.CHAT, inclusive = false)
                                                     }
+                                                )
+                                            }
+                                            // 嵌套路由 3：对话设定
+                                            composable("chat_settings_2/{chatId}") { backStack ->
+                                                val cid = backStack.arguments?.getString("chatId") ?: ""
+                                                ChatSettingsScreen(
+                                                    chatId = cid,
+                                                    onBack = { rightNavController.popBackStack() },
                                                 )
                                             }
                                         }
@@ -410,6 +423,7 @@ fun LingCatApp(
                             chatId = chatId,
                             onBack = { navController.popBackStack() },
                             onNavigateToMembers = { chatId -> navController.navigate("chat_members/$chatId") },
+                            onNavigateToSettings = { chatId -> navController.navigate("chat_settings/$chatId") },
                             onNavigateToChat = { newChatId ->
                                 // ★ 核心修复：跳转到新生成的私聊 ID
                                 navController.navigate("chat/$newChatId") {
@@ -439,6 +453,20 @@ fun LingCatApp(
                                     popUpTo(Routes.CHAT) { inclusive = true }
                                 }
                             },
+                        )
+                    }
+
+                    composable(
+                        route = Routes.CHAT_SETTINGS,
+                        enterTransition = detailEnter,
+                        exitTransition = detailExit,
+                        popEnterTransition = detailPopEnter,
+                        popExitTransition = detailPopExit,
+                    ) { backStackEntry ->
+                        val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+                        ChatSettingsScreen(
+                            chatId = chatId,
+                            onBack = { navController.popBackStack() },
                         )
                     }
 
