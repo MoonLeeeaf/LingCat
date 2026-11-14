@@ -125,7 +125,7 @@ export default function StickerPanel({ open, onClose, onPick }: StickerPanelProp
                     style={{
                         position: 'absolute',
                         bottom: 'calc(100% + 8px)',
-                        left: 0,
+                        right: 0,
                         width: 'min(420px, 100%)',
                         maxHeight: '46vh',
                         display: 'flex',
@@ -133,7 +133,6 @@ export default function StickerPanel({ open, onClose, onPick }: StickerPanelProp
                         zIndex: 40,
                         background: 'rgb(var(--mdui-color-surface-container))',
                         borderRadius: '12px',
-                        boxShadow: '0 8px 28px rgba(0,0,0,.18)',
                         overflow: 'hidden',
                     }}
                 >
