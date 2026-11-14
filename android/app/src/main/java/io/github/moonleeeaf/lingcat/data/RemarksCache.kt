@@ -16,12 +16,16 @@ object RemarksCache {
     private const val PREFS_NAME = "lingcat_remarks"
     private lateinit var appContext: Context
 
+    /** 冷启动时 currentUserId 还没恢复，用上次登录的账号先加载备注，避免昵称先闪一下。 */
+    private var bootAccountId: String? = null
+
     // 内存缓存，方便 UI 监听
     private val _remarks = MutableStateFlow<Map<String, String>>(emptyMap())
     val remarks: StateFlow<Map<String, String>> = _remarks.asStateFlow()
 
     fun init(context: Context) {
         appContext = context.applicationContext
+        bootAccountId = AuthStorage.getLastAccount(appContext)?.userId
         loadFromLocal()
     }
 
@@ -30,7 +34,8 @@ object RemarksCache {
      * 与 [io.github.moonleeeaf.lingcat.data.db.AppDatabase] 使用同一套 key 规则。
      */
     private fun prefsName(): String {
-        val userId = LingCatClientManager.currentUserId?.trim()?.takeIf { it.isNotEmpty() }
+        val userId = (LingCatClientManager.currentUserId ?: bootAccountId)
+            ?.trim()?.takeIf { it.isNotEmpty() }
             ?: return "${PREFS_NAME}_guest"
         val safe = userId.filter { it.isLetterOrDigit() || it == '-' || it == '_' }
         return "${PREFS_NAME}_" + if (safe.isNotEmpty()) safe else Integer.toHexString(userId.hashCode())
