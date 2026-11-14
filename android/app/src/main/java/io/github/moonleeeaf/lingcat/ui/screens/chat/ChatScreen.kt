@@ -645,7 +645,9 @@ fun ChatScreen(
                         reverseLayout = true, // index 0 是最新的（在底部）
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
+                        // 间距交给 MessageBubble 自己控制：连续同一个人时收紧，换人时留白，
+                        // 这里只保留一个很小的基准值。
+                        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Bottom)
                     ) {
                         // ★ 核心修改：使用 itemsIndexed
                         itemsIndexed(safeMessages, key = { _, msg -> msg.id }) { index, msg ->
@@ -1271,19 +1273,25 @@ fun MessageBubble(
                     onClick = {},
                     onLongClick = onLongClick
                 )
-                .padding(vertical = 4.dp),
+                // 换人 / 新时间段时上下各留一点呼吸感；同一个人连发时只留最小间距。
+                .padding(top = if (hideSender) 1.dp else 7.dp, bottom = 2.dp),
             horizontalArrangement = if (isMine) Arrangement.End else Arrangement.Start,
             verticalAlignment = Alignment.Top,
         ) {
             if (!isMine) {
-                LingCatAvatar(
-                    avatarHash = avatarHash,
-                    size = 40.dp,
-                    contentDescription = stringResource(R.string.label_avatar),
-                    onClick = { onAvatarClick(message.senderUserId) },
-                    onLongClick = { onAvatarLongClick(message.senderUserId) },
-                )
-                Spacer(modifier = Modifier.width(4.dp))
+                if (hideSender) {
+                    // 同一个人连续发消息：不重复显示头像，但要占住宽度，气泡不能左右跳动。
+                    Spacer(modifier = Modifier.width(44.dp))
+                } else {
+                    LingCatAvatar(
+                        avatarHash = avatarHash,
+                        size = 40.dp,
+                        contentDescription = stringResource(R.string.label_avatar),
+                        onClick = { onAvatarClick(message.senderUserId) },
+                        onLongClick = { onAvatarLongClick(message.senderUserId) },
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
             } else {
                 // 左侧发送状态 (转圈/红叹号)
                 if (sendStatus != null) {
@@ -1335,18 +1343,22 @@ fun MessageBubble(
             Column(
                 horizontalAlignment = if (isMine) Alignment.End else Alignment.Start
             ) {
-                // 昵称
-                if (!isMine && !hideSender) {
-                    Text(
-                        text = senderName,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
-                    )
-                } else if (!isMine && hideSender) {
-                    Spacer(modifier = Modifier.height(4.dp))
+                // 昵称：同一个人连续发消息时只在第一条显示
+                if (!isMine) {
+                    if (!hideSender) {
+                        Text(
+                            text = senderName,
+                            // labelSmall（11sp）在群聊里偏小，提到 12sp 并稍加字重，和气泡文字拉开层级。
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(start = 4.dp, bottom = 3.dp)
+                        )
+                    }
                 } else {
-                    Spacer(modifier = Modifier.height(15.dp))
+                    // 自己的气泡没有昵称行；换人时补一段空白保持和对方气泡的节奏一致，
+                    // 连续发送时不再补，避免同一个人连发看起来被拉开。
+                    if (!hideSender) Spacer(modifier = Modifier.height(15.dp))
                 }
 
                 Surface(
@@ -1401,14 +1413,19 @@ fun MessageBubble(
             }
 
             if (isMine) {
-                Spacer(modifier = Modifier.width(4.dp))
-                LingCatAvatar(
-                    avatarHash = avatarHash,
-                    size = 40.dp,
-                    contentDescription = stringResource(R.string.label_avatar),
-                    onClick = { onAvatarClick(message.senderUserId) },
-                    onLongClick = { onAvatarLongClick(message.senderUserId) },
-                )
+                if (hideSender) {
+                    // 自己连续发消息时同样不重复头像，但保留占位
+                    Spacer(modifier = Modifier.width(44.dp))
+                } else {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    LingCatAvatar(
+                        avatarHash = avatarHash,
+                        size = 40.dp,
+                        contentDescription = stringResource(R.string.label_avatar),
+                        onClick = { onAvatarClick(message.senderUserId) },
+                        onLongClick = { onAvatarLongClick(message.senderUserId) },
+                    )
+                }
             }
         }
     }
