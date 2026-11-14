@@ -310,15 +310,12 @@ fun ChatInputBar(
                         }
 
                         // 发送按钮：视觉 40dp，触控区域 48dp
-                        FilledIconButton(
+                        IconButton(
                             onClick = onSend,
                             enabled = !isSending && text.isNotBlank(),
                             modifier = Modifier
                                 .padding(end = 4.dp)
                                 .size(48.dp),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
                         ) {
                             if (isSending) {
                                 CircularProgressIndicator(
