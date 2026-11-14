@@ -1,8 +1,6 @@
 package io.github.moonleeeaf.lingcat.ui.screens.main
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -13,6 +11,7 @@ import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.UiText
 import io.github.moonleeeaf.lingcat.ui.UiTextException
 import io.github.moonleeeaf.lingcat.ui.uiText
+import io.github.moonleeeaf.lingcat.ui.utils.cropImageToSquare
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -144,7 +143,7 @@ class EditProfileViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val pngBytes = withContext(Dispatchers.IO) { cropToSquare(context, uri, 512) }
+                val pngBytes = withContext(Dispatchers.IO) { cropImageToSquare(context, uri, 512) }
                     ?: throw UiTextException(uiText(R.string.edit_profile_err_image_process))
 
                 val uploadToken = withContext(Dispatchers.IO) {
@@ -199,36 +198,5 @@ class EditProfileViewModel : ViewModel() {
 
     fun clearMessages() {
         _uiState.value = _uiState.value.copy(errorMsg = null, successMsg = null, justSaved = false)
-    }
-
-    // 裁剪方形逻辑 (从旧版搬过来)
-    private fun cropToSquare(context: Context, uri: Uri, targetSize: Int): ByteArray? {
-        val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) }
-        if (opts.outWidth <= 0 || opts.outHeight <= 0) return null
-
-        var sample = 1
-        val minSide = minOf(opts.outWidth, opts.outHeight)
-        while (minSide / sample > targetSize * 2) sample *= 2
-
-        opts.inSampleSize = sample
-        opts.inJustDecodeBounds = false
-        val bmp = context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) } ?: return null
-
-        try {
-            val w = bmp.width; val h = bmp.height
-            val side = minOf(w, h)
-            val x = (w - side) / 2; val y = (h - side) / 2
-            val square = Bitmap.createBitmap(bmp, x, y, side, side)
-            val scaled = Bitmap.createScaledBitmap(square, targetSize, targetSize, true)
-
-            val bos = ByteArrayOutputStream()
-            scaled.compress(Bitmap.CompressFormat.PNG, 100, bos)
-            if (square != bmp && !square.isRecycled) square.recycle()
-            if (scaled != square && !scaled.isRecycled) scaled.recycle()
-            return bos.toByteArray()
-        } finally {
-            if (!bmp.isRecycled) bmp.recycle()
-        }
     }
 }
