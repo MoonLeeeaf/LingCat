@@ -2,7 +2,12 @@ package io.github.moonleeeaf.lingcat.ui.screens.chat.meeting
 
 import android.content.Context
 import android.util.Log
+import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import io.github.moonleeeaf.lingcat.ui.UiText
+import io.github.moonleeeaf.lingcat.ui.UiTextException
+import io.github.moonleeeaf.lingcat.ui.toUiTextOrNull
+import io.github.moonleeeaf.lingcat.ui.uiText
 import io.github.moonleeeaf.lingcat.app.MeetingService
 import io.livekit.android.LiveKit
 import io.livekit.android.LiveKitOverrides
@@ -34,7 +39,7 @@ enum class MeetingPhase { IDLE, CONNECTING, CONNECTED, ERROR }
 
 data class MeetingUiState(
     val phase: MeetingPhase = MeetingPhase.IDLE,
-    val errorMsg: String? = null,
+    val errorMsg: UiText? = null,
 
     // 基础信息
     val chatId: String? = null,
@@ -81,7 +86,7 @@ object MeetingManager {
         // ... (保持不变) ...
         if (rawUrl.isNullOrBlank() || rawUrl == "same-origin") {
             val httpUrl = LingCatClientManager.currentServer?.httpUrl
-                ?: throw IllegalStateException("无法获取当前服务器地址且后端未提供有效的 LiveKit URL")
+                ?: throw UiTextException(uiText(R.string.meeting_err_no_livekit_url))
             val isSecure = httpUrl.startsWith("https", ignoreCase = true)
             val scheme = if (isSecure) "wss://" else "ws://"
             val host = httpUrl
@@ -94,7 +99,7 @@ object MeetingManager {
         if (rawUrl.startsWith("http://")) return rawUrl.replace("http://", "ws://", ignoreCase = true)
         if (rawUrl.startsWith("https://")) return rawUrl.replace("https://", "wss://", ignoreCase = true)
         val baseUrl = LingCatClientManager.currentServer?.httpUrl
-            ?: throw IllegalStateException("无法解析 LiveKit URL: $rawUrl")
+            ?: throw UiTextException(uiText(R.string.meeting_err_parse_livekit_url, rawUrl))
         val isSecure = baseUrl.startsWith("https", ignoreCase = true)
         val scheme = if (isSecure) "wss://" else "ws://"
         val host = baseUrl
@@ -144,8 +149,8 @@ object MeetingManager {
                     Log.e(TAG, "Failed to start MeetingService", e)
                 }
 
-                val client = LingCatClientManager.currentClient ?: throw Exception("客户端未连接")
-                val token = LingCatClientManager.currentToken ?: throw Exception("登录失效")
+                val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_client_not_connected))
+                val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_session_expired))
 
                 // 1. 向服务端请求 LiveKit Token
                 val creds = withContext(Dispatchers.IO) {
@@ -222,7 +227,9 @@ object MeetingManager {
                 if (session == sessionId) {
                     _uiState.value = _uiState.value.copy(
                         phase = MeetingPhase.ERROR,
-                        errorMsg = e.message ?: "加入会议失败"
+                        errorMsg = e.toUiTextOrNull()
+                            ?: e.message?.let { UiText.Raw(it) }
+                            ?: uiText(R.string.meeting_err_join)
                     )
                 }
             }
@@ -418,10 +425,10 @@ object MeetingManager {
      * 修改当前会议标题（成功后同步更新本地状态）
      */
     suspend fun updateMeetingTitle(title: String): String {
-        val chatId = _uiState.value.chatId ?: throw IllegalStateException("未加入会议")
-        val meetingId = _uiState.value.meetingId ?: throw IllegalStateException("未加入会议")
-        val client = LingCatClientManager.currentClient ?: throw IllegalStateException("客户端未连接")
-        val token = LingCatClientManager.currentToken ?: throw IllegalStateException("登录失效")
+        val chatId = _uiState.value.chatId ?: throw UiTextException(uiText(R.string.meeting_err_not_in_meeting))
+        val meetingId = _uiState.value.meetingId ?: throw UiTextException(uiText(R.string.meeting_err_not_in_meeting))
+        val client = LingCatClientManager.currentClient ?: throw UiTextException(uiText(R.string.error_client_not_connected))
+        val token = LingCatClientManager.currentToken ?: throw UiTextException(uiText(R.string.error_session_expired))
         val requestedTitle = title.trim()
 
         val newTitle = withContext(Dispatchers.IO) {

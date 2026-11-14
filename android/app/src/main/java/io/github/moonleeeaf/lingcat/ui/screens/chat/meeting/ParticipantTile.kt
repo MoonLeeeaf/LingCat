@@ -1,6 +1,7 @@
 package io.github.moonleeeaf.lingcat.ui.screens.chat.meeting
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.livekit.android.room.participant.Participant
 import io.livekit.android.room.track.Track
 import io.livekit.android.room.track.VideoTrack
+import io.github.moonleeeaf.lingcat.R
 
 @Composable
 fun ParticipantTile(
@@ -66,11 +70,21 @@ fun ParticipantTile(
 
     val isScreenShare = activePublication?.source == Track.Source.SCREEN_SHARE
 
+    val shape = RoundedCornerShape(8.dp)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFF222222))
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            // 焦点状态用主题色描边表示，替代过去完全不生效的 isFocused 参数。
+            .then(
+                if (isFocused) {
+                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, shape)
+                } else {
+                    Modifier
+                }
+            )
             .then(clickableModifier)
     ) {
         if (videoTrack != null && !isVideoMuted) {
@@ -97,7 +111,7 @@ fun ParticipantTile(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.Center).size(48.dp),
-                tint = Color.Gray
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -111,7 +125,7 @@ fun ParticipantTile(
                     .width(100.dp) // 小窗宽度
                     .aspectRatio(3f / 4f) // 竖屏比例 (如果想横屏改为 4f/3f)
                     .clip(RoundedCornerShape(6.dp))
-                    .background(Color.Black)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             ) {
                 VideoTrackView(
                     videoTrack = cameraTrack,
@@ -125,22 +139,22 @@ fun ParticipantTile(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
-                .background(Color(0x80000000))
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.55f))
                 .padding(horizontal = 6.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (isMicMuted) {
                 Icon(
                     imageVector = Icons.Default.MicOff,
-                    contentDescription = "已静音",
-                    tint = Color.Red,
+                    contentDescription = stringResource(R.string.meeting_muted),
+                    tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Text(
-                text = if (isScreenActive) "$name (共享中)" else name,
-                color = Color.White,
+                text = if (isScreenActive) stringResource(R.string.participant_sharing, name) else name,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 12.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
