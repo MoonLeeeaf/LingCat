@@ -1,7 +1,6 @@
 package io.github.moonleeeaf.lingcat.ui.components
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -41,7 +40,7 @@ fun FeedbackHost(modifier: Modifier = Modifier) {
         Feedback.events.collect { hostState.showSnackbar(it) }
     }
 
-    SnackbarHost(
+    SwipeDismissSnackbarHost(
         hostState = hostState,
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
     )

@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -56,6 +55,7 @@ import io.github.moonleeeaf.lingcat.OAuthEvent
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
 import io.github.moonleeeaf.lingcat.ui.components.ConnectionStateBanner
+import io.github.moonleeeaf.lingcat.ui.components.SwipeDismissSnackbarHost
 import io.github.moonleeeaf.lingcat.ui.screens.auth.LoginScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatMembersScreen
 import io.github.moonleeeaf.lingcat.ui.screens.chat.ChatScreen
@@ -496,7 +496,8 @@ fun LingCatApp(
                 }
 
                 // 全局 Snackbar：挂在 NavHost 之上，避免每个页面各建一套导致反馈丢失。
-                SnackbarHost(
+                // 支持左右滑动关闭。
+                SwipeDismissSnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
