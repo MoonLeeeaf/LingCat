@@ -57,14 +57,8 @@ object ServerConfigFetcher {
         }
 
         val configUrl = "$cleanUrl/config.json"
-        val request = Request.Builder().url(configUrl).build()
+        val body = fetchConfigBody(configUrl)
 
-        val response = httpClient.newCall(request).execute()
-        if (!response.isSuccessful) {
-            throw UiTextException(uiText(R.string.login_err_fetch_config, response.code))
-        }
-
-        val body = response.body?.string() ?: throw UiTextException(uiText(R.string.login_err_config_empty))
         // 3. 解析 JSON
         val json = JSONObject(body)
 
@@ -107,5 +101,40 @@ object ServerConfigFetcher {
             siteTitle = siteTitle,
             oauth = oauthJson // ★ 补上这一行
         )
+    }
+
+    /**
+     * 拉取 config.json 正文。
+     *
+     * config.json 是客户端启动时的第一个请求，最容易撞上服务重启或反向代理的连接复用竞态
+     * （典型表现是偶发 502）。因此网络错误和 5xx 重试一次；4xx 说明地址或权限有问题，直接失败。
+     */
+    private fun fetchConfigBody(url: String): String {
+        var lastError: Exception? = null
+
+        repeat(2) { attempt ->
+            try {
+                val request = Request.Builder().url(url).build()
+                httpClient.newCall(request).execute().use { response ->
+                    if (response.isSuccessful) {
+                        return response.body?.string()
+                            ?: throw UiTextException(uiText(R.string.login_err_config_empty))
+                    }
+
+                    lastError = UiTextException(uiText(R.string.login_err_fetch_config, response.code))
+                    // 4xx：地址或权限问题，重试没有意义
+                    if (response.code < 500) throw lastError!!
+                }
+            } catch (e: UiTextException) {
+                throw e
+            } catch (e: Exception) {
+                // 连接被拒、超时、TLS 失败等：服务可能正在重启，值得再试一次
+                lastError = e
+            }
+
+            if (attempt == 0) Thread.sleep(300)
+        }
+
+        throw lastError ?: UiTextException(uiText(R.string.login_err_config_empty))
     }
 }

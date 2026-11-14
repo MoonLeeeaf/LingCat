@@ -97,9 +97,27 @@ class ClientManagerImpl {
      */
     async fetchServerConfig(addr: string): Promise<IClientConfig> {
         const url = toHttpUrl(addr).replace(/\/$/, '') + '/config.json'
-        const r = await fetch(url, { method: 'GET' })   // GET，因为要读 body
-        if (!r.ok) throw new Error(`config.json 返回 ${r.status}`)
-        return await r.json()
+
+        const request = async (): Promise<IClientConfig> => {
+            const r = await fetch(url, { method: 'GET' })   // GET，因为要读 body
+            if (!r.ok) {
+                const err = new Error(`config.json 返回 ${r.status}`) as Error & { status?: number }
+                err.status = r.status
+                throw err
+            }
+            return await r.json()
+        }
+
+        try {
+            return await request()
+        } catch (e) {
+            // config.json 是启动时的第一个请求，最容易撞上服务重启或代理连接复用竞态。
+            // 4xx 说明地址/权限有问题，重试没有意义；网络错误和 5xx 重试一次。
+            const status = (e as { status?: number }).status
+            if (status !== undefined && status < 500) throw e
+            await new Promise((resolve) => setTimeout(resolve, 300))
+            return await request()
+        }
     }
 
     /**
