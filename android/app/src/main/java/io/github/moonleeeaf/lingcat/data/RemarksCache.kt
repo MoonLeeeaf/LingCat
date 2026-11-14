@@ -70,6 +70,32 @@ object RemarksCache {
     }
 
     /**
+     * 用户显示名：备注 > 昵称 > 用户名 > userId。
+     *
+     * @param remarks 备注表；默认读当前内存缓存，Compose 里会传入最新的快照。
+     */
+    fun displayName(
+        userId: String?,
+        nickname: String?,
+        username: String?,
+        remarks: Map<String, String> = _remarks.value,
+        fallback: String = "",
+    ): String {
+        if (!userId.isNullOrEmpty()) {
+            remarks[userId]?.takeIf { it.isNotBlank() }?.let { return it }
+        }
+        return nickname?.takeIf { it.isNotBlank() }
+            ?: username?.takeIf { it.isNotBlank() }
+            ?: fallback.ifEmpty { userId.orEmpty() }
+    }
+
+    /** 用户显示名：备注 > 昵称 > 用户名 > userId。 */
+    fun displayName(user: lingcat.classes.Classes.IUser?): String {
+        if (user == null) return ""
+        return displayName(user.id, user.nickname, user.username)
+    }
+
+    /**
      * 设置备注（先本地乐观更新，后发网络请求）
      */
     fun setRemark(userId: String, remark: String) {
