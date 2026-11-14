@@ -35,32 +35,21 @@ import ClientConfig from "../../ClientConfig.ts"
 import RemarksCache from "../../RemarksCache.ts"
 import OpenChatDialog from "../main/OpenChatDialog.tsx"
 import CreateGroupDialog from "../main/CreateGroupDialog.tsx"
+import ChatSearchDialog from "../main/ChatSearchDialog.tsx"
 import { useChatMessageStore } from "../chat/useChatMessageStore.ts"
 
 const navItems = [
     {
-        value: "recents",
-        icon: "watch_later--outlined",
-        activeIcon: 'watch_later',
-        label: '最近',
+        value: "all",
+        icon: "chat--outlined",
+        activeIcon: 'chat',
+        label: '全部对话',
     },
     {
         value: "favourites",
         icon: "favorite_border",
         activeIcon: 'favorite',
-        label: '收藏',
-    },
-    {
-        value: "chats",
-        icon: "chat--outlined",
-        activeIcon: 'chat',
-        label: '全部',
-    },
-    {
-        value: "search",
-        icon: "search",
-        activeIcon: 'search',
-        label: '搜索',
+        label: '收藏对话',
     },
 ]
 
@@ -388,7 +377,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
 
     const isMobile = useIsMobile()
 
-    const [navValue, setNavValue] = React.useState<ChatListShow>('recents')
+    const [navValue, setNavValue] = React.useState<ChatListShow>('all')
 
     // ============================================================
     //  会议分栏 (桌面端: 会议在左, 聊天在右)
@@ -438,6 +427,14 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 <mdui-menu-item icon="edit" onClick={() => ChangePasswordDialog.show()}>修改密码</mdui-menu-item>
             </mdui-menu>
         </mdui-dropdown>
+    ) : null
+
+    const searchButton = loaded ? (
+        <mdui-button-icon
+            slot={isMobile ? undefined : 'top'}
+            icon="search"
+            onClick={() => ChatSearchDialog.show()}
+        />
     ) : null
 
     const addMenu = loaded ? (
@@ -491,6 +488,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                             <div style={{ width: '3px' }}></div>
                             <mdui-top-app-bar-title>灵猫</mdui-top-app-bar-title>
                             <div style={{ flexGrow: 1 }}></div>
+                            {searchButton}
                             {addMenu}
                             <mdui-button-icon icon="settings" onClick={() => ClientSettingsDialog.show()}></mdui-button-icon>
                             {avatarIconMenuItem}
@@ -510,6 +508,7 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                 <DesktopRootLayout
                     navTop={[
                         avatarIconMenuItem,
+                        searchButton,
                         addMenu,
                     ]}
                     navBottom={

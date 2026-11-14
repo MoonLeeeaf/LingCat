@@ -1,11 +1,10 @@
 import React from 'react'
 import { motion } from 'motion/react'
 import { TextField } from 'mdui'
-import { useNavigate, useParams } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import type { IChat } from 'lingcat-protocol'
 import type LingCatClient from 'lingcat-client-protocol'
 import ClientManager from '../../ClientManager.ts'
-import ProfileCache from '../../ProfileCache.ts'
 import default_avatar from '../../default_avatar.png'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import SessionEnv from '../../SessionEnv.ts'
@@ -22,7 +21,7 @@ import RemarksCache from '../../RemarksCache.ts'
 import SearchFeedback from './SearchFeedback.tsx'
 import { BuildInfoFooter } from '../BuildInfo.tsx'
 
-export type ChatListShow = 'recents' | 'search' | 'favourites' | 'all'
+export type ChatListShow = 'all' | 'favourites'
 
 export interface ChatListFragmentProps {
     /** 显示哪个列表 */
@@ -34,10 +33,6 @@ export interface ChatListFragmentProps {
     /** 当前已授权的 client；由 UserMainLayout 传入，避免子组件在就绪前读到 null */
     client?: LingCatClient | null
 }
-
-// ============================================================
-//                      工具函数
-// ============================================================
 
 // ============================================================
 //                      列表项
@@ -154,56 +149,24 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
         ].some(field => field?.toLowerCase().includes(filter))
     }
 
-    // chats 数据
-    const [recentChats, setRecentChats] = React.useState<IChat[]>([])
-    const [favouritedChats, setFavouritedChats] = React.useState<IChat[]>([])
+    // 一次拉取全部对话，收藏列表由 favourited 字段在本地筛选。
     const [allChats, setAllChats] = React.useState<IChat[]>([])
-    const [loading, setLoading] = React.useState({ recent: false, fav: false, all: false })
+    const [loading, setLoading] = React.useState(false)
+    const favouritedChats = React.useMemo(
+        () => allChats.filter(chat => chat.favourited),
+        [allChats],
+    )
 
     // 首次加载/切换列表时先只做淡入，稳定后再启用 layout 重排动画，避免首屏生硬
     const [layoutReady, setLayoutReady] = React.useState(false)
     React.useEffect(() => {
-        const currentLoading = show === 'recents'
-            ? loading.recent
-            : show === 'favourites'
-                ? loading.fav
-                : loading.all
-        if (currentLoading) {
+        if (loading) {
             setLayoutReady(false)
             return
         }
         const timer = window.setTimeout(() => setLayoutReady(true), 500)
         return () => window.clearTimeout(timer)
-    }, [show, loading.recent, loading.fav, loading.all])
-
-    // search
-    const [searchKeyword, setSearchKeyword] = React.useState('')
-    const [searchResults, setSearchResults] = React.useState<IChat[]>([])
-    const [searching, setSearching] = React.useState(false)
-
-    React.useEffect(() => {
-        if (show !== 'search') return
-        const keyword = searchKeyword.trim()
-        if (!keyword) { setSearchResults([]); setSearching(false); return }
-        let cancelled = false
-        setSearching(true)
-        const timer = window.setTimeout(async () => {
-            try {
-                const client = ClientManager.getActiveClient()
-                const session = ClientManager.getActiveSession()
-                if (!client || !session) return
-                const chats = await ChatApi.searchMyChats(client, {
-                    access_token: session.token, keyword,
-                })
-                if (!cancelled) setSearchResults(chats)
-            } catch (e) {
-                if (!cancelled) { tipError(e, '搜索失败'); setSearchResults([]) }
-            } finally {
-                if (!cancelled) setSearching(false)
-            }
-        }, 300)
-        return () => { cancelled = true; window.clearTimeout(timer) }
-    }, [searchKeyword, show])
+    }, [show, loading])
 
     // 拉取 chats + 监听 Update_My_Chats_Event
     React.useEffect(() => {
@@ -214,7 +177,7 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
         let cancelled = false
 
         const refresh = async () => {
-            setLoading({ recent: true, fav: true, all: true })
+            setLoading(true)
             try {
                 const all = await ChatApi.getMyChats(client, {
                     access_token: session.token,
@@ -222,21 +185,15 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
                 })
                 if (cancelled) return
                 setAllChats(all)
-                setRecentChats(all.slice(0, 50))
-
-                const fav = await ChatApi.getMyFavouriteChats(client, {
-                    access_token: session.token,
-                })
-                if (cancelled) return
-                setFavouritedChats(fav)
-                SessionEnv.favouritedChats = fav
+                // 对话信息弹窗仍从这里读取收藏状态。
+                SessionEnv.favouritedChats = all.filter(chat => chat.favourited)
             } catch (e) {
                 if (!cancelled) {
                     console.error('[ChatList] refresh failed', e)
                     tipError(e, '刷新对话列表失败')
                 }
             } finally {
-                if (!cancelled) setLoading({ recent: false, fav: false, all: false })
+                if (!cancelled) setLoading(false)
             }
         }
 
@@ -257,59 +214,7 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
     //                      渲染
     // ============================================================
 
-    if (show === 'search') {
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <mdui-text-field
-                    variant="outlined"
-                    placeholder="查找我的对话..."
-                    value={searchKeyword}
-                    onInput={(e: any) => {
-                        const val = e.target.value
-                        setSearchKeyword(val)
-                    }}
-                    style={{ width: '100%', paddingBottom: '10px', flexShrink: 0 }}
-                    clearable
-                />
-
-                {/* 搜索列表区域，允许内部滚动 */}
-                <div style={{ flexGrow: 1, overflowY: 'auto', minHeight: 0 }}>
-                    <SearchFeedback busy={searching} count={searchResults.length} hasQuery={!!searchKeyword.trim()}
-                        emptyText="输入关键词查找对话" />
-                    {!searching && searchKeyword.trim() && searchResults.map(chat => (
-                        <mdui-list-item
-                            key={chat.id}
-                            active={activeChatId === chat.id}
-                            rounded
-                            onClick={() => ChatProfileDialog.show(chat.id)}
-                            headline={chat.title || '私聊'}
-                        >
-                            <Avatar
-                                slot="icon"
-                                src={chat.avatar_file_hash
-                                    ? getFileUrl(chat.avatar_file_hash, SessionEnv.myFileAccessToken)
-                                    : default_avatar}
-                            />
-                        </mdui-list-item>
-                    ))}
-                </div>
-
-                {showBuildInfoFooter && <BuildInfoFooter />}
-            </div>
-        )
-    }
-
-    // 其余三种：recents / favourites / all —— 共用 filter field
-    const dataSource: IChat[] =
-        show === 'recents' ? recentChats :
-            show === 'favourites' ? favouritedChats :
-                allChats
-
-    const isLoading =
-        show === 'recents' ? loading.recent :
-            show === 'favourites' ? loading.fav :
-                loading.all
-
+    const dataSource = show === 'favourites' ? favouritedChats : allChats
     const filteredChats = dataSource.filter(chatFilter)
 
     return (
@@ -320,7 +225,12 @@ export function ChatListFragment({ show, activeChatId, showBuildInfoFooter = tru
 
             {/* 聊天列表区域，允许内部滚动 */}
             <div style={{ flexGrow: 1, overflowY: 'auto', minHeight: 0 }}>
-                <SearchFeedback busy={isLoading} count={filteredChats.length} hasQuery={!!filterText.trim()} />
+                <SearchFeedback
+                    busy={loading}
+                    count={filteredChats.length}
+                    hasQuery={!!filterText.trim()}
+                    emptyText={show === 'favourites' ? '暂无收藏对话' : '暂无对话'}
+                />
                 {filteredChats.map((chat, index) => (
                     <ChatListItem
                         key={chat.id}

@@ -52,7 +52,7 @@ export default function ChatProfileDialog({ ref, chatId, onClose }: ChatProfileD
                     const chat = await ProfileCache.queryChatInfo(chatId)
                     if (cancelled) return
                     setProfile(chat ?? undefined)
-                    setFavourited(findFavourited(chatId) !== -1)
+                    setFavourited(chat?.favourited ?? (findFavourited(chatId) !== -1))
                 } catch (e) {
                     if (!cancelled) tipError(e, '加载失败')
                 }
