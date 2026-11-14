@@ -4096,6 +4096,27 @@ public final class Classes {
      */
     com.google.protobuf.ByteString
         getPeerUserIdBytes();
+
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     * @return Whether the favourited field is set.
+     */
+    boolean hasFavourited();
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     * @return The favourited.
+     */
+    boolean getFavourited();
   }
   /**
    * Protobuf type {@code lingcat.classes.IChat}
@@ -4688,6 +4709,60 @@ public final class Classes {
       checkByteStringIsUtf8(value);
       peerUserId_ = value.toStringUtf8();
       bitField0_ |= 0x00000020;
+    }
+
+    public static final int FAVOURITED_FIELD_NUMBER = 13;
+    private boolean favourited_;
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     * @return Whether the favourited field is set.
+     */
+    @java.lang.Override
+    public boolean hasFavourited() {
+      return ((bitField0_ & 0x00000040) != 0);
+    }
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     * @return The favourited.
+     */
+    @java.lang.Override
+    public boolean getFavourited() {
+      return favourited_;
+    }
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     * @param value The favourited to set.
+     */
+    private void setFavourited(boolean value) {
+      bitField0_ |= 0x00000040;
+      favourited_ = value;
+    }
+    /**
+     * <pre>
+     * (客户端状态) 是否为已收藏对话
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     * </pre>
+     *
+     * <code>optional bool favourited = 13;</code>
+     */
+    private void clearFavourited() {
+      bitField0_ = (bitField0_ & ~0x00000040);
+      favourited_ = false;
     }
 
     public static lingcat.classes.Classes.IChat parseFrom(
@@ -5382,6 +5457,62 @@ public final class Classes {
         return this;
       }
 
+      /**
+       * <pre>
+       * (客户端状态) 是否为已收藏对话
+       * 该字段只存在于客户端, 由服务端在运行时映射
+       * </pre>
+       *
+       * <code>optional bool favourited = 13;</code>
+       * @return Whether the favourited field is set.
+       */
+      @java.lang.Override
+      public boolean hasFavourited() {
+        return instance.hasFavourited();
+      }
+      /**
+       * <pre>
+       * (客户端状态) 是否为已收藏对话
+       * 该字段只存在于客户端, 由服务端在运行时映射
+       * </pre>
+       *
+       * <code>optional bool favourited = 13;</code>
+       * @return The favourited.
+       */
+      @java.lang.Override
+      public boolean getFavourited() {
+        return instance.getFavourited();
+      }
+      /**
+       * <pre>
+       * (客户端状态) 是否为已收藏对话
+       * 该字段只存在于客户端, 由服务端在运行时映射
+       * </pre>
+       *
+       * <code>optional bool favourited = 13;</code>
+       * @param value The favourited to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFavourited(boolean value) {
+        copyOnWrite();
+        instance.setFavourited(value);
+        return this;
+      }
+      /**
+       * <pre>
+       * (客户端状态) 是否为已收藏对话
+       * 该字段只存在于客户端, 由服务端在运行时映射
+       * </pre>
+       *
+       * <code>optional bool favourited = 13;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFavourited() {
+        copyOnWrite();
+        instance.clearFavourited();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:lingcat.classes.IChat)
     }
     @java.lang.Override
@@ -5411,11 +5542,12 @@ public final class Classes {
               "lastMessageText_",
               "isMember_",
               "peerUserId_",
+              "favourited_",
             };
             java.lang.String info =
-                "\u0000\f\u0000\u0001\u0001\f\f\u0000\u0000\u0000\u0001\u0208\u0002\u1208\u0000\u0003" +
+                "\u0000\r\u0000\u0001\u0001\r\r\u0000\u0000\u0000\u0001\u0208\u0002\u1208\u0000\u0003" +
                 "\u1208\u0001\u0004\u0208\u0005\u1208\u0002\u0006\u0208\u0007\u000b\b\u0003\t\u1208" +
-                "\u0003\n\u1208\u0004\u000b\u0007\f\u1208\u0005";
+                "\u0003\n\u1208\u0004\u000b\u0007\f\u1208\u0005\r\u1007\u0006";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

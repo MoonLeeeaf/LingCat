@@ -58,12 +58,13 @@ export default class UserChatLinker {
             .where('ucl.user_id', user_id)
             // 按时间从新到旧排列
             .orderBy('c.last_message_time', 'desc')
-            .select('c.*', 'm.text as last_message_text', 'm.entities as last_message_entities')
+            .select('c.*', 'm.text as last_message_text', 'm.entities as last_message_entities', 'ucl.favorited_by_user as favourited')
             .limit(limit)
             .offset(offset)
         // console.log(query)
         return (query.map(r => ({
             ...r,
+            favourited: !!r.favourited,
             last_message_text: maskSpoilerForPreview(r.last_message_text || '', r.last_message_entities || '[]'),
         })) as IChat[])
     }
@@ -82,11 +83,11 @@ export default class UserChatLinker {
             .andWhere('ucl.favorited_by_user', true)
             // 按时间从新到旧排列
             .orderBy('c.last_message_time', 'desc')
-            .select('c.*', 'm.text as last_message_text')
+            .select('c.*', 'm.text as last_message_text', 'ucl.favorited_by_user as favourited')
             .limit(limit)
             .offset(offset)
         // console.log(query)
-        return query as IChat[]
+        return query.map(r => ({ ...r, favourited: true })) as IChat[]
     }
     // DeepSeek
     static async searchChatsOfUser(user_id: string, keyword: string) {
@@ -107,7 +108,7 @@ export default class UserChatLinker {
                     .orWhere('c.chat_unique', 'like', kw)
                     .orWhere('c.id', 'like', kw)
             })
-            .select('c.*', 'm.text as last_message_text')
+            .select('c.*', 'm.text as last_message_text', 'ucl.favorited_by_user as favourited')
 
         // 2. 搜索私聊（通过 UserChatLinker 找到对方，再匹配对方昵称/用户名）
         const privateChats = await db('Chats as c')
@@ -130,7 +131,7 @@ export default class UserChatLinker {
                     .orWhere('u.username', 'like', kw)
                     .orWhere('u.id', 'like', kw)
             })
-            .select('c.*', 'm.text as last_message_text')
+            .select('c.*', 'm.text as last_message_text', 'ucl1.favorited_by_user as favourited')
 
         const currentUser = await UserDataBase.queryUserById(user_id)!
         let selfChat: IChat | undefined
@@ -149,11 +150,12 @@ export default class UserChatLinker {
                 selfChat!.avatar_file_hash = currentUser?.avatar_file_hash
                 selfChat!.title = currentUser?.nickname
                 selfChat!.last_message_text = (await MessageDataBase.getMessages(selfChatId, { limit: 1 }))[0].text
+                selfChat!.favourited = await this.isUserChatFavourited(user_id, selfChatId)
             }
         }
 
         // 3. 合并结果，按最新消息时间降序
-        const all = [...groupChats, ...privateChats] as IChat[]
+        const all = [...groupChats, ...privateChats].map(r => ({ ...r, favourited: !!r.favourited })) as IChat[]
         selfChat && all.push(selfChat)
         all.sort((a, b) => (b.last_message_time || 0) - (a.last_message_time || 0))
         return all
@@ -163,8 +165,16 @@ export default class UserChatLinker {
         return (await db<IUserChatLink>(tableName).where('chat_id', chat_id)).map((v) => v.user_id)
     }
 
+    static async queryUserChatLink(user_id: string, chat_id: string) {
+        return await db<IUserChatLink>(tableName).where({ chat_id, user_id }).first()
+    }
+
     static async isUserChatLinked(user_id: string, chat_id: string) {
-        return !!await db<IUserChatLink>(tableName).where({ chat_id, user_id }).first()
+        return !!await this.queryUserChatLink(user_id, chat_id)
+    }
+
+    static async isUserChatFavourited(user_id: string, chat_id: string) {
+        return !!(await this.queryUserChatLink(user_id, chat_id))?.favorited_by_user
     }
 
     static async getAnotherUserInPrivateChat(chat_id: string, my_user_id: string) {

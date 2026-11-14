@@ -2002,6 +2002,7 @@ export const lingcat = $root.lingcat = (() => {
              * @property {string|null} [lastMessageText] IChat lastMessageText
              * @property {boolean|null} [isMember] IChat isMember
              * @property {string|null} [peerUserId] IChat peerUserId
+             * @property {boolean|null} [favourited] IChat favourited
              * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
              */
 
@@ -2129,6 +2130,14 @@ export const lingcat = $root.lingcat = (() => {
              */
             IChat.prototype.peerUserId = null;
 
+            /**
+             * IChat favourited.
+             * @member {boolean|null|undefined} favourited
+             * @memberof lingcat.classes.IChat
+             * @instance
+             */
+            IChat.prototype.favourited = null;
+
             // OneOf field names bound to virtual getters and setters
             let $oneOfFields;
 
@@ -2165,6 +2174,12 @@ export const lingcat = $root.lingcat = (() => {
             // Virtual OneOf for proto3 optional field
             $Object.defineProperty(IChat.prototype, "_peerUserId", {
                 get: $util.oneOfGetter($oneOfFields = ["peerUserId"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            // Virtual OneOf for proto3 optional field
+            $Object.defineProperty(IChat.prototype, "_favourited", {
+                get: $util.oneOfGetter($oneOfFields = ["favourited"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -2224,6 +2239,8 @@ export const lingcat = $root.lingcat = (() => {
                     writer.uint32(/* id 11, wireType 0 =*/88).bool(message.isMember);
                 if (message.peerUserId != null && $Object.hasOwnProperty.call(message, "peerUserId"))
                     writer.uint32(/* id 12, wireType 2 =*/98).string(message.peerUserId);
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited"))
+                    writer.uint32(/* id 13, wireType 0 =*/104).bool(message.favourited);
                 if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                     for (let i = 0; i < message.$unknowns.length; ++i)
                         writer.raw(message.$unknowns[i]);
@@ -2377,6 +2394,13 @@ export const lingcat = $root.lingcat = (() => {
                             message._peerUserId = "peerUserId";
                             continue;
                         }
+                    case 13: {
+                            if (wireType !== 0)
+                                break;
+                            message.favourited = reader.bool();
+                            message._favourited = "favourited";
+                            continue;
+                        }
                     }
                     reader.skipType(wireType, _depth, tag);
                     if (!reader.discardUnknown) {
@@ -2474,6 +2498,11 @@ export const lingcat = $root.lingcat = (() => {
                     if (!$util.isString(message.peerUserId))
                         return "peerUserId: string expected";
                 }
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited")) {
+                    properties._favourited = 1;
+                    if (typeof message.favourited !== "boolean")
+                        return "favourited: boolean expected";
+                }
                 return null;
             };
 
@@ -2532,6 +2561,8 @@ export const lingcat = $root.lingcat = (() => {
                         message.isMember = $Boolean(object.isMember);
                 if (object.peerUserId != null)
                     message.peerUserId = $String(object.peerUserId);
+                if (object.favourited != null)
+                    message.favourited = $Boolean(object.favourited);
                 return message;
             };
 
@@ -2593,6 +2624,8 @@ export const lingcat = $root.lingcat = (() => {
                     object.isMember = message.isMember;
                 if (message.peerUserId != null && $Object.hasOwnProperty.call(message, "peerUserId"))
                     object.peerUserId = message.peerUserId;
+                if (message.favourited != null && $Object.hasOwnProperty.call(message, "favourited"))
+                    object.favourited = message.favourited;
                 return object;
             };
 

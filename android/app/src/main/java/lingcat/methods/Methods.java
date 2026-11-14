@@ -12912,7 +12912,7 @@ public final class Methods {
     }
   }
 
-  public interface Get_My_Favourite_Chats_RequestOrBuilder extends
+  @java.lang.Deprecated public interface Get_My_Favourite_Chats_RequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_Favourite_Chats_Request)
       com.google.protobuf.MessageLiteOrBuilder {
 
@@ -12952,12 +12952,13 @@ public final class Methods {
   }
   /**
    * <pre>
-   * 获取我的收藏对话（分页）
+   * Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
+   * 保留此接口仅用于兼容旧客户端。
    * </pre>
    *
    * Protobuf type {@code lingcat.methods.Get_My_Favourite_Chats_Request}
    */
-  public  static final class Get_My_Favourite_Chats_Request extends
+  @java.lang.Deprecated public  static final class Get_My_Favourite_Chats_Request extends
       com.google.protobuf.GeneratedMessageLite<
           Get_My_Favourite_Chats_Request, Get_My_Favourite_Chats_Request.Builder> implements
       // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_Favourite_Chats_Request)
@@ -13164,7 +13165,8 @@ public final class Methods {
 
     /**
      * <pre>
-     * 获取我的收藏对话（分页）
+     * Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
+     * 保留此接口仅用于兼容旧客户端。
      * </pre>
      *
      * Protobuf type {@code lingcat.methods.Get_My_Favourite_Chats_Request}
@@ -13379,7 +13381,7 @@ public final class Methods {
     }
   }
 
-  public interface Get_My_Favourite_Chats_ResponseOrBuilder extends
+  @java.lang.Deprecated public interface Get_My_Favourite_Chats_ResponseOrBuilder extends
       // @@protoc_insertion_point(interface_extends:lingcat.methods.Get_My_Favourite_Chats_Response)
       com.google.protobuf.MessageLiteOrBuilder {
 
@@ -13398,9 +13400,13 @@ public final class Methods {
     int getChatsCount();
   }
   /**
+   * <pre>
+   * Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
+   * </pre>
+   *
    * Protobuf type {@code lingcat.methods.Get_My_Favourite_Chats_Response}
    */
-  public  static final class Get_My_Favourite_Chats_Response extends
+  @java.lang.Deprecated public  static final class Get_My_Favourite_Chats_Response extends
       com.google.protobuf.GeneratedMessageLite<
           Get_My_Favourite_Chats_Response, Get_My_Favourite_Chats_Response.Builder> implements
       // @@protoc_insertion_point(message_implements:lingcat.methods.Get_My_Favourite_Chats_Response)
@@ -13584,6 +13590,10 @@ public final class Methods {
     }
 
     /**
+     * <pre>
+     * Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
+     * </pre>
+     *
      * Protobuf type {@code lingcat.methods.Get_My_Favourite_Chats_Response}
      */
     public static final class Builder extends

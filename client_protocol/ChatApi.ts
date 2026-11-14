@@ -16,6 +16,7 @@ function protoChatToIChat(chat: LingCatProto.classes.IChat.$Properties) {
         description: chat.description,
         is_member: chat.isMember,
         peer_user_id: chat.peerUserId,
+        favourited: chat.favourited ?? undefined,
     } as IChat
 }
 
@@ -531,7 +532,11 @@ export default class ChatApi {
             timeout,
         })).data)
     }
-    // 获取我的收藏对话
+    /**
+     * 获取我的收藏对话
+     * @deprecated 使用 getMyChats 返回的 IChat.favourited 在客户端本地筛选。
+     *             该接口仅用于兼容旧客户端。
+     */
     static async getMyFavouriteChats(client: LingCatClient, {
         access_token,
         limit,

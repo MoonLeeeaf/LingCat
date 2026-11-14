@@ -174,14 +174,18 @@ message Get_My_Chats_Response {
     repeated lingcat.classes.IChat chats = 1;
 }
 
-// 获取我的收藏对话（分页）
+// Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
+// 保留此接口仅用于兼容旧客户端。
 message Get_My_Favourite_Chats_Request {
+    option deprecated = true;
     string access_token = 1;
     optional uint32 limit = 2;
     optional uint32 offset = 3;
 }
 
+// Deprecated: 使用 Get_My_Chats 返回的 IChat.favourited 在客户端本地筛选。
 message Get_My_Favourite_Chats_Response {
+    option deprecated = true;
     repeated lingcat.classes.IChat chats = 1;
 }
 

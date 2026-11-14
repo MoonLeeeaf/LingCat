@@ -25,6 +25,7 @@ async function IChatToProtoChat(c: IChat, user_id?: string, isMember?: boolean) 
         description: c.description,
         lastMessageText: c.last_message_text,
         isMember: isMember == undefined ? c.is_member : isMember,
+        favourited: c.favourited,
     }
     if (c.type == 'private' && user_id) {
         const anotherUserId = await UserChatLinker.getAnotherUserInPrivateChat(c.id, user_id)
@@ -150,7 +151,9 @@ export default class ChatApi {
                 if (chat == null)
                     return sendError(sendPackage, mPackage.method_id, 'Chat doesn\'t exists', Code.Not_Found)
 
-                const isMember = await UserChatLinker.isUserChatLinked(user_id, data.chatId)
+                const link = await UserChatLinker.queryUserChatLink(user_id, data.chatId)
+                const isMember = !!link
+                chat.favourited = !!link?.favorited_by_user
 
                 const settings = JSON.parse(chat.settings)
                 if (!isMember) {
@@ -288,6 +291,8 @@ export default class ChatApi {
                 break
             }
             // 获取我的收藏对话
+            // Deprecated: 客户端改为从 Get_My_Chats 的 IChat.favourited 本地筛选；
+            // 这里保留处理逻辑用于兼容旧客户端。
             case Methods.Get_My_Favourite_Chats_Request: {
                 const data = LingCatProto.methods.Get_My_Favourite_Chats_Request.decode(mPackage.data)
                 const user_id = (await TokenManager.verifyAccessToken(data.accessToken)).user_id
@@ -317,6 +322,13 @@ export default class ChatApi {
                 }
 
                 await UserChatLinker.setUserChatFavourited(user_id, data.chatId, data.favourited)
+
+                // 收藏状态变化后刷新该用户的所有客户端，让「全部 / 收藏」列表即时同步。
+                broadcastToUserClients(clients_emiter, user_id, (func) => func(Package.encode({
+                    method_id: Methods.Update_My_Chats_Event,
+                    flags: 0,
+                    data: LingCatProto.methods.Update_My_Chats_Event.encode({}).finish()
+                })))
 
                 sendPackage(Package.encode({
                     method_id: Methods.Set_Chat_Favourited_Response,

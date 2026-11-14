@@ -65,6 +65,12 @@ export interface IChat {
      * 该字段在服务端不应该存在, 因为是返回给客户端时映射出来的
      */
     peer_user_id?: string
+    /**
+     * (客户端状态) 是否为已收藏对话
+     *
+     * 该字段只存在于客户端, 由服务端在运行时映射
+     */
+    favourited?: boolean
 }
 
 export interface IFile {

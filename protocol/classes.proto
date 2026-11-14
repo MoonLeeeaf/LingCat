@@ -81,6 +81,9 @@ message IChat {
     optional string last_message_text = 10; 
     bool is_member = 11;
     optional string peer_user_id = 12;   // 私聊时是对方 userId, 群聊为 null
+    // (客户端状态) 是否为已收藏对话
+    // 该字段只存在于客户端, 由服务端在运行时映射
+    optional bool favourited = 13;
 }
 
 message IFile {
