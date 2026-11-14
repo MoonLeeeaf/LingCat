@@ -3,6 +3,7 @@ package io.github.moonleeeaf.lingcat.net
 import android.content.Context
 import android.util.Log
 import io.github.moonleeeaf.lingcat.app.ConnectionKeepAliveService
+import io.github.moonleeeaf.lingcat.app.NotificationHelper
 import io.github.moonleeeaf.lingcat.data.AccountInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,24 +92,40 @@ object LingCatClientManager {
     }
 
     private var isAuthorized = false
+    /** 当前连接实际授权使用的 token，用来识别「连接被旧账号授权过」的情况。 */
+    private var authorizedToken: String? = null
     private val authMutex = Mutex() // ★ 新增防并发锁
 
-    suspend fun authorize(client: LingCatClient, token: String) = withContext(Dispatchers.IO) {
+    /**
+     * 用 [token] 给 [client] 授权。
+     *
+     * @return 是否授权成功。切换账号等场景必须检查返回值：
+     *   授权失败却继续使用旧会话，会继续收到旧账号的消息。
+     */
+    suspend fun authorize(client: LingCatClient, token: String): Boolean = withContext(Dispatchers.IO) {
         // ★ 核心修复：锁住，保证同一时间只有一个授权在执行
         authMutex.withLock {
-            if (isAuthorized && client == _currentClient) return@withContext
+            if (client !== _currentClient) return@withLock false
+            // 同一连接、同一个 token 才可以直接复用授权结果。
+            // 只判断 isAuthorized 会让「旧 token 抢先授权」后新 token 被跳过。
+            if (isAuthorized && authorizedToken == token) return@withLock true
 
             try {
                 // 1. 主 WS 授权
                 UserApi.authorize(client, token, UUID.randomUUID().toString())
+
+                // 授权期间可能已经切到别的连接，不要把这个结果写到新连接上
+                if (client !== _currentClient) return@withLock false
                 isAuthorized = true
+                authorizedToken = token
+                Log.d(TAG, "authorize success, userId=$currentUserId")
 
                 // 2. 同步等待首次获取 fileAccessToken
                 try {
                     val newToken = FileApi.requestAccessUploadFileToken(client, token, null, 30_000L)
-                    _fileAccessToken.value = newToken
+                    if (client === _currentClient) _fileAccessToken.value = newToken
                 } catch (e: Exception) {
-                    _fileAccessToken.value = token
+                    if (client === _currentClient) _fileAccessToken.value = token
                 }
 
                 // 3. 拉取备注
@@ -117,8 +134,14 @@ object LingCatClientManager {
 
                 // 4. 开启后台定时任务
                 startFileTokenRefresh(client, token)
+                true
             } catch (e: Exception) {
                 Log.e(TAG, "Authorize failed", e)
+                if (client === _currentClient) {
+                    isAuthorized = false
+                    authorizedToken = null
+                }
+                false
             }
         }
     }
@@ -146,25 +169,63 @@ object LingCatClientManager {
     }
 
     suspend fun switchAccount(account: AccountInfo): Result<Unit> = withContext(Dispatchers.IO) {
+        val previousToken = currentToken
+        val previousUserId = currentUserId
+        val previousServer = currentServer
         try {
             val targetServer = getSavedServers().find { it.wsUrl == account.serverWsUrl }
                 ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_server_not_found)))
+            Log.d(TAG, "switchAccount -> ${account.username} (${account.userId})")
             disconnect()
             isAuthorized = false
+            authorizedToken = null
+            // 先把旧账号的聊天通知从通知栏撤掉，避免切换过程中被误点
+            NotificationHelper.clearAll(appContext)
             // 上一个账号的资料 / 对话 / 备注都是内存缓存，切换时立刻丢弃，
             // 避免新账号的界面在服务器数据回来之前先闪一下旧账号的信息。
             ProfileCache.clearMemory()
             RemarksCache.clearMemory()
-            val connectRes = connect(targetServer)
-            if (connectRes.isFailure) return@withContext connectRes
-            val client = currentClient ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_client_not_ready)))
+
+            // ★ 必须先切换到新账号的会话，再建立连接。
+            // connect() 握手成功后的自动授权会读取 currentToken；
+            // 如果这里还留着上一个账号的 token，新连接就会被授权成旧账号，
+            // 表现为「切到叶叶后仍然收到月月的消息和通知」。
             setAuthSession(account.token, account.userId)
-            authorize(client, account.token)
+
+            val connectRes = connect(targetServer)
+            if (connectRes.isFailure) {
+                restoreSession(previousToken, previousUserId, previousServer)
+                return@withContext connectRes
+            }
+            val client = currentClient ?: run {
+                restoreSession(previousToken, previousUserId, previousServer)
+                return@withContext Result.failure(UiTextException(uiText(R.string.error_client_not_ready)))
+            }
+            if (!authorize(client, account.token)) {
+                // 授权失败说明新账号并没有真正登录成功，不能假装切换完成
+                disconnect()
+                restoreSession(previousToken, previousUserId, previousServer)
+                return@withContext Result.failure(UiTextException(uiText(R.string.error_session_expired)))
+            }
+
+            // 通知栏里可能还留着上一个账号的会话，切号成功后统一清掉，
+            // 避免用户看到旧账号的通知、甚至从通知栏回复到旧账号的对话。
+            NotificationHelper.clearAll(appContext)
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "switchAccount failed", e)
+            disconnect()
+            restoreSession(previousToken, previousUserId, previousServer)
             Result.failure(e)
         }
+    }
+
+    private fun restoreSession(token: String?, userId: String?, server: ServerConfig?) {
+        currentToken = token
+        currentUserId = userId
+        currentServer = server
+        // 切换失败时内存缓存已经被清空，这里把上一个账号的备注重新读回来
+        RemarksCache.reloadForCurrentAccount()
     }
 
     class TofuMismatchException(val oldConfig: ServerConfig, val newConfig: ServerConfig) : Exception("服务器公钥已变更")
@@ -222,6 +283,7 @@ object LingCatClientManager {
         disconnect()
         currentServer = server
         isAuthorized = false // 重置授权标记
+        authorizedToken = null
         connectingServerUrl = server.wsUrl
 
         val deferred = async(Dispatchers.IO) {
@@ -239,6 +301,7 @@ object LingCatClientManager {
                     if (state == LingCatClient.ConnectionState.DISCONNECTED ||
                         state == LingCatClient.ConnectionState.RECONNECTING) {
                         isAuthorized = false // ★ 断开时重置，允许重连后再次授权
+                        authorizedToken = null
                     }
                 }
                 _currentClient = client
@@ -246,7 +309,11 @@ object LingCatClientManager {
                 bridgeJob?.cancel()
                 bridgeJob = CoroutineScope(Dispatchers.IO).launch {
                     client.events.collect { pkg ->
-                        _globalEvents.emit(pkg)
+                        // 切换账号 / 重连时旧 client 可能还有少量缓冲事件，
+                        // 不能再转发到当前账号的全局流里。
+                        if (client === _currentClient) {
+                            _globalEvents.emit(pkg)
+                        }
                     }
                 }
 
@@ -312,6 +379,7 @@ object LingCatClientManager {
         _currentClient = null
         _connectionState.value = LingCatClient.ConnectionState.DISCONNECTED
         isAuthorized = false // ★ 断开时重置授权标记
+        authorizedToken = null
         bridgeJob?.cancel() // ★ 断开时也取消
         bridgeJob = null
     }
@@ -321,6 +389,7 @@ object LingCatClientManager {
         val accountDb = AppDatabase.getDatabase(appContext)
         stopKeepAliveService()
         disconnect()
+        NotificationHelper.clearAll(appContext)
         currentServer = null
         currentToken = null
         currentUserId = null
