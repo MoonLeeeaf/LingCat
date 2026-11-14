@@ -287,7 +287,7 @@ object ProfileCache {
     }
 
     /**
-     * 清理所有缓存（登出时调用）
+     * 清理内存缓存，并把当前账号的用户表清空（编辑资料后强制重新拉取时使用）。
      */
     suspend fun clearAll() {
         clearMemory()

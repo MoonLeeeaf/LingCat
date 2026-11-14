@@ -27,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase {
             val name = databaseName(LingCatClientManager.currentUserId)
-            return instances.getOrPut(name) {
+            return instances.computeIfAbsent(name) {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
