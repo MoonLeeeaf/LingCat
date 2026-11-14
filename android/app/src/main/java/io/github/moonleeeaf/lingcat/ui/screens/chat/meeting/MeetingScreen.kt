@@ -243,7 +243,16 @@ fun MeetingScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showLeaveMeetingDialog = false }) {
+                TextButton(
+                    onClick = {
+                        showLeaveMeetingDialog = false
+                        if (canEndMeeting) {
+                            // 有结束权限时，“仅离开”只把自己移出会议，不结束整个会议。
+                            // leaveMeeting 会把 phase 置为 IDLE，LaunchedEffect 自动返回。
+                            MeetingManager.leaveMeeting()
+                        }
+                    }
+                ) {
                     Text(if (canEndMeeting) stringResource(R.string.meeting_leave_only) else stringResource(R.string.action_cancel))
                 }
             }
