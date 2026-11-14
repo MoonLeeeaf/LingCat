@@ -48,9 +48,6 @@ class ChatListViewModel : ViewModel() {
     /** 全局 WebSocket 连接状态，供界面显示网络提示条 */
     val connectionState: StateFlow<LingCatClient.ConnectionState> = LingCatClientManager.connectionState
 
-    /** 最近一次连接失败/断开的具体原因 */
-    val connectionError: StateFlow<String?> = LingCatClientManager.connectionError
-
     private var isFetching = false
 
     private val chatDao by lazy {
@@ -72,6 +69,22 @@ class ChatListViewModel : ViewModel() {
                     } catch (e: Exception) {
                         Log.e(TAG, "parse message event failed", e)
                     }
+                }
+            }
+        }
+
+        // 从断线恢复为已连接后自动刷新列表：
+        // 无论是全局状态条的「重试」还是底层自动重连，都能把断线期间的消息补回来。
+        viewModelScope.launch {
+            var previous: LingCatClient.ConnectionState? = null
+            LingCatClientManager.connectionState.collect { state ->
+                val last = previous
+                previous = state
+                if (state == LingCatClient.ConnectionState.CONNECTED &&
+                    last != null &&
+                    last != LingCatClient.ConnectionState.CONNECTED
+                ) {
+                    initAndLoad(isRefresh = true)
                 }
             }
         }
@@ -250,29 +263,5 @@ class ChatListViewModel : ViewModel() {
 
     fun selectTab(index: Int) {
         // 保留空实现以兼容旧调用；三个 Tab 已经合并为“全部 / 收藏”筛选。
-    }
-
-    /**
-     * 断线后手动重连。
-     */
-    fun reconnect(server: io.github.moonleeeaf.lingcat.data.ServerConfig) {
-        if (isFetching) return
-        _uiState.value = _uiState.value.copy(loadState = ListLoadState.CONNECTING)
-        viewModelScope.launch {
-            val result = LingCatClientManager.connect(server)
-            if (result.isFailure) {
-                _uiState.value = _uiState.value.copy(
-                    loadState = if (_uiState.value.allChats.isEmpty()) {
-                        ListLoadState.ERROR
-                    } else {
-                        ListLoadState.SUCCESS
-                    },
-                    errorMsg = result.exceptionOrNull()?.toUiTextOrNull()
-                        ?: uiText(R.string.chat_list_err_reconnect, result.exceptionOrNull()?.message ?: ""),
-                )
-            } else {
-                initAndLoad(isRefresh = true)
-            }
-        }
     }
 }

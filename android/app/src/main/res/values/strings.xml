@@ -330,5 +330,4 @@
     <string name="account_err_switch">切换失败: %1$s</string>
     <string name="error_server_not_connected">服务器未连接</string>
     <string name="profile_load_failed">资料加载失败，请检查网络后重试</string>
-    <string name="chat_list_err_reconnect">重连失败: %1$s</string>
 </resources>

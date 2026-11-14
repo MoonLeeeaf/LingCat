@@ -4,33 +4,23 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
@@ -38,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,7 +41,6 @@ import io.github.moonleeeaf.lingcat.ui.components.LingCatAvatar
 import io.github.moonleeeaf.lingcat.ui.components.LoadingState
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import lingcat.classes.Classes.IChat
-import lingcat.client_protocol.LingCatClient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,8 +53,6 @@ fun ChatListScreen(
     selectedChatId: String? = null,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val connectionState by viewModel.connectionState.collectAsState()
-    val connectionError by viewModel.connectionError.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
 
     // 最近 / 全部 内容高度重合，不再用三个 Tab 占首屏；只保留“只看收藏”一个筛选。
@@ -131,29 +117,6 @@ fun ChatListScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-
-            // ★ 网络状态提示条
-            val showConnectionBanner = connectionState == LingCatClient.ConnectionState.CONNECTING ||
-                    connectionState == LingCatClient.ConnectionState.RECONNECTING ||
-                    connectionState == LingCatClient.ConnectionState.DISCONNECTED
-            AnimatedVisibility(
-                visible = showConnectionBanner,
-                enter = expandVertically() + fadeIn(),
-                exit = shrinkVertically() + fadeOut()
-            ) {
-                ConnectionStateBanner(
-                    state = connectionState,
-                    errorMessage = connectionError,
-                    onRetry = {
-                        val server = LingCatClientManager.currentServer
-                        if (server != null) {
-                            viewModel.reconnect(server)
-                        } else {
-                            viewModel.initAndLoad()
-                        }
-                    }
-                )
-            }
 
             // ★ 轻量筛选：全部 / 收藏
             Row(
@@ -268,70 +231,8 @@ private fun ChatList(
 }
 
 /**
- * 网络连接状态提示条。
- * - CONNECTING / RECONNECTING：使用 secondaryContainer，明确是“进行中”而不是普通文字
- * - DISCONNECTED：使用 error，并提供“重试”按钮
+ * 对话列表项。
  */
-@Composable
-private fun ConnectionStateBanner(
-    state: LingCatClient.ConnectionState,
-    errorMessage: String?,
-    onRetry: () -> Unit,
-) {
-    val isDisconnected = state == LingCatClient.ConnectionState.DISCONNECTED
-    val background = if (isDisconnected) {
-        MaterialTheme.colorScheme.error
-    } else {
-        MaterialTheme.colorScheme.secondaryContainer
-    }
-    val contentColor = if (isDisconnected) {
-        MaterialTheme.colorScheme.onError
-    } else {
-        MaterialTheme.colorScheme.onSecondaryContainer
-    }
-    val icon: ImageVector = if (isDisconnected) Icons.Default.CloudOff else Icons.Default.Sync
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(background)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = contentColor,
-            modifier = Modifier.size(20.dp),
-        )
-        Spacer(Modifier.width(12.dp))
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                text = if (isDisconnected) stringResource(R.string.chat_list_disconnected) else stringResource(R.string.chat_list_reconnecting),
-                color = contentColor,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            if (!errorMessage.isNullOrBlank()) {
-                Text(
-                    text = errorMessage,
-                    color = contentColor.copy(alpha = 0.85f),
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-        if (isDisconnected) {
-            TextButton(onClick = onRetry) {
-                Text(stringResource(R.string.action_retry), color = contentColor)
-            }
-        }
-    }
-}
-
 @Composable
 fun ChatListItem(
     chat: IChat,
