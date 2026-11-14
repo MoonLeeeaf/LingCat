@@ -99,6 +99,7 @@ object LingCatClientManager {
                 }
 
                 // 3. 拉取备注
+                RemarksCache.reloadForCurrentAccount()
                 RemarksCache.fetchFromServer()
 
                 // 4. 开启后台定时任务
@@ -137,6 +138,10 @@ object LingCatClientManager {
                 ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_server_not_found)))
             disconnect()
             isAuthorized = false
+            // 上一个账号的资料 / 对话 / 备注都是内存缓存，切换时立刻丢弃，
+            // 避免新账号的界面在服务器数据回来之前先闪一下旧账号的信息。
+            ProfileCache.clearMemory()
+            RemarksCache.clearMemory()
             val connectRes = connect(targetServer)
             if (connectRes.isFailure) return@withContext connectRes
             val client = currentClient ?: return@withContext Result.failure(UiTextException(uiText(R.string.error_client_not_ready)))
@@ -299,6 +304,8 @@ object LingCatClientManager {
     }
 
     fun logout() {
+        // getDatabase 依赖 currentUserId，必须在清空登录态之前拿到当前账号的库。
+        val accountDb = AppDatabase.getDatabase(appContext)
         stopKeepAliveService()
         disconnect()
         currentServer = null
@@ -308,13 +315,14 @@ object LingCatClientManager {
 
         // ★ 核心修复：用后台协程异步清理数据库和缓存
         CoroutineScope(Dispatchers.IO).launch {
-            ProfileCache.clearAll()
+            ProfileCache.clearMemory()
+            RemarksCache.clearMemory()
 
-            // 顺便把本地的聊天记录和会话列表也一并清空，防止切账号后数据串台
+            // 把当前账号本地的消息、会话列表、用户资料也一并清空，防止多人共用设备时数据残留
             try {
-                val db = AppDatabase.getDatabase(appContext)
-                db.messageDao().let { /* 这里需要给 MessageDao 加个清空方法，或者执行 SQL */ }
-                db.chatDao().clearChats()
+                accountDb.messageDao().clearMessages()
+                accountDb.chatDao().clearChats()
+                accountDb.userDao().clearUsers()
             } catch (e: Exception) {
                 Log.e(TAG, "clear db on logout failed", e)
             }

@@ -34,6 +34,9 @@ interface MessageDao {
     @Query("DELETE FROM messages WHERE chat_id = :chatId")
     suspend fun clearChat(chatId: String)
 
+    @Query("DELETE FROM messages")
+    suspend fun clearMessages()
+
     @Query("SELECT * FROM messages WHERE chat_id = :chatId AND text LIKE '%' || :keyword || '%' ORDER BY time DESC")
     suspend fun searchMessages(chatId: String, keyword: String): List<MessageEntity>
 }

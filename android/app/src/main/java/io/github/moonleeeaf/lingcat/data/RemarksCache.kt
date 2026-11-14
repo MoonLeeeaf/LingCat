@@ -26,12 +26,35 @@ object RemarksCache {
     }
 
     /**
+     * 备注也按账号隔离：不同账号的备注不能互相看到。
+     * 与 [io.github.moonleeeaf.lingcat.data.db.AppDatabase] 使用同一套 key 规则。
+     */
+    private fun prefsName(): String {
+        val userId = LingCatClientManager.currentUserId?.trim()?.takeIf { it.isNotEmpty() }
+            ?: return "${PREFS_NAME}_guest"
+        val safe = userId.filter { it.isLetterOrDigit() || it == '-' || it == '_' }
+        return "${PREFS_NAME}_" + if (safe.isNotEmpty()) safe else Integer.toHexString(userId.hashCode())
+    }
+
+    private fun prefs() = appContext.getSharedPreferences(prefsName(), Context.MODE_PRIVATE)
+
+    /**
      * 从本地 SharedPreferences 初始化内存缓存
      */
     private fun loadFromLocal() {
-        val sp = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val sp = prefs()
         val map = sp.all.mapValues { it.value as? String ?: "" }
         _remarks.value = map
+    }
+
+    /** 切换账号时先清空内存，避免在新账号里看到上一个账号的备注。 */
+    fun clearMemory() {
+        _remarks.value = emptyMap()
+    }
+
+    /** 登录 / 切换账号后重新加载当前账号的本地备注。 */
+    fun reloadForCurrentAccount() {
+        loadFromLocal()
     }
 
     /**
@@ -46,7 +69,7 @@ object RemarksCache {
             val map = list.associate { it.userId to it.remark }
 
             // 更新本地 SharedPreferences
-            val sp = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val sp = prefs()
             sp.edit().clear().apply() // 先清空旧的
             val editor = sp.edit()
             for ((k, v) in map) {

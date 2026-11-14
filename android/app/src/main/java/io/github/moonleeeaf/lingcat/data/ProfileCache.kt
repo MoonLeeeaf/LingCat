@@ -52,13 +52,12 @@ object ProfileCache {
     private val userMissCache = ConcurrentHashMap<String, Long>()
     private val chatMissCache = ConcurrentHashMap<String, Long>()
 
-    // 懒加载数据库 (避免依赖注入的麻烦)
-    private val userDao by lazy {
+    // 懒加载数据库 (避免依赖注入的麻烦)。
+    // 注意用 getter 而不是 lazy：切换账号后必须拿到新账号的数据库实例。
+    private val userDao get() =
         AppDatabase.getDatabase(LingCatClientManager.appContext).userDao()
-    }
-    private val chatDao by lazy {
+    private val chatDao get() =
         AppDatabase.getDatabase(LingCatClientManager.appContext).chatDao()
-    }
 
     private fun isFreshMiss(cache: ConcurrentHashMap<String, Long>, id: String): Boolean {
         val cachedAt = cache[id] ?: return false
@@ -222,6 +221,43 @@ object ProfileCache {
     }
 
     /**
+     * 强制从服务器刷新对话信息，忽略内存缓存。
+     *
+     * 用于「是否仍属于该对话」这类不能凭旧缓存判断的场景：
+     * 对话信息里的 `is_member` 会随被移出群聊而改变，缓存里的值可能已经过期。
+     *
+     * @return 对话信息；仅当服务器确认该对话不存在时返回 null。
+     * @throws ProfileFetchException 未连接或网络/请求失败。
+     */
+    suspend fun refreshChat(chatId: String): IChat? = withContext(Dispatchers.IO) {
+        if (chatId.isEmpty()) return@withContext null
+
+        chatFetchMutex.withLock {
+            val client = LingCatClientManager.currentClient
+            val token = LingCatClientManager.currentToken
+            if (client == null || token == null || !client.isReady()) {
+                throw ProfileFetchException("client not ready")
+            }
+
+            try {
+                val chat = ChatApi.queryChatInfo(client, token, chatId)
+                if (chat == null) {
+                    chatCache.remove(chatId)
+                    chatMissCache[chatId] = System.currentTimeMillis()
+                    return@withContext null
+                }
+                chatCache[chatId] = chat
+                chatMissCache.remove(chatId)
+                chat
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                throw ProfileFetchException("query chat failed: ${e.message}", e)
+            }
+        }
+    }
+
+    /**
      * 兼容旧调用方：失败时返回 null，不抛异常。
      * 需要区分「失败」与「不存在」、或者需要重试的 UI 调用方请用 [requireChat]。
      */
@@ -242,14 +278,19 @@ object ProfileCache {
         }
     }
 
-    /**
-     * 清理所有缓存（登出时调用）
-     */
-    suspend fun clearAll() {
+    /** 只清空内存缓存（切换账号时调用），不碰数据库。 */
+    fun clearMemory() {
         userCache.clear()
         chatCache.clear()
         userMissCache.clear()
         chatMissCache.clear()
+    }
+
+    /**
+     * 清理所有缓存（登出时调用）
+     */
+    suspend fun clearAll() {
+        clearMemory()
         withContext(Dispatchers.IO) {
             try {
                 userDao.clearUsers()
