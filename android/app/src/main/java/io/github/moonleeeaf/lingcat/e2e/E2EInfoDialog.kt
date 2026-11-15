@@ -63,6 +63,21 @@ fun E2EInfoDialog(
     var isWorking by remember { mutableStateOf(false) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
 
+    // 网络失败时状态会停在 UNKNOWN，打开面板时自动补拉一次。
+    LaunchedEffect(Unit) {
+        if (E2EStateManager.status.value == E2EStateManager.Status.UNKNOWN) {
+            isWorking = true
+            val ok = E2EStateManager.loadKeyState()
+            isWorking = false
+            if (!ok) errorMsg = context.getString(R.string.e2e_state_unknown_failed)
+        }
+    }
+
+    // 状态确认后清掉「获取失败」提示，避免串到后面的启用 / 解锁界面。
+    LaunchedEffect(e2eStatus) {
+        if (e2eStatus != E2EStateManager.Status.UNKNOWN) errorMsg = null
+    }
+
     // 计算安全码
     val safetyNumber = remember(myPub, peerPub) {
         if (myPub != null && peerPub != null) E2EManager.getSafetyNumber(myPub, peerPub ?: "") else null
@@ -88,6 +103,16 @@ fun E2EInfoDialog(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 when (e2eStatus) {
+                    // ==========================================
+                    // 状态 0: 尚未确认（网络失败 / 加载中）
+                    // ==========================================
+                    E2EStateManager.Status.UNKNOWN -> {
+                        Text(stringResource(R.string.e2e_state_unknown_desc))
+                        if (errorMsg != null) {
+                            Text(errorMsg!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+
                     // ==========================================
                     // 状态 1: 尚未开启
                     // ==========================================
@@ -221,6 +246,21 @@ fun E2EInfoDialog(
         },
         confirmButton = {
             when (e2eStatus) {
+                E2EStateManager.Status.UNKNOWN -> {
+                    TextButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                isWorking = true
+                                val ok = E2EStateManager.loadKeyState()
+                                isWorking = false
+                                errorMsg = if (ok) null else context.getString(R.string.e2e_state_unknown_failed)
+                            }
+                        },
+                        enabled = !isWorking
+                    ) {
+                        if (isWorking) CircularProgressIndicator(Modifier.size(16.dp)) else Text(stringResource(R.string.action_retry))
+                    }
+                }
                 E2EStateManager.Status.DISABLED -> {
                     TextButton(
                         onClick = {

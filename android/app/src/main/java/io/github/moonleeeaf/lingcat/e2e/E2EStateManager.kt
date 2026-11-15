@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import io.github.moonleeeaf.lingcat.R
 import io.github.moonleeeaf.lingcat.net.LingCatClientManager
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +20,10 @@ object E2EStateManager {
     private const val PREFS_VERIFY = "lingcat_e2e_verify"
     private const val PREFS_PUBS = "lingcat_e2e_pubs"
 
-    enum class Status { DISABLED, LOCKED, UNLOCKED }
+    enum class Status { UNKNOWN, DISABLED, LOCKED, UNLOCKED }
 
-    private val _status = MutableStateFlow(Status.DISABLED)
+    // 初始为 UNKNOWN：还没向服务器确认过，不能当成「未开启」。
+    private val _status = MutableStateFlow(Status.UNKNOWN)
     val status: StateFlow<Status> = _status.asStateFlow()
 
     // 缓存当前登录用户的私钥 (keyVersion -> privateKey)
@@ -133,9 +135,15 @@ object E2EStateManager {
     }
 
     /**
-     * 初始化拉取自身状态
+     * 初始化拉取自身状态。
+     *
+     * @return true 表示已经拿到服务器的明确答复（包括「尚未生成密钥」）；
+     *         false 表示连接 / 网络失败。失败时不会修改 [status]，
+     *         避免把「暂时不知道」误判成「未开启 E2E」而退化成明文发送。
      */
-    suspend fun loadKeyState() = withContext(Dispatchers.IO) {
+    suspend fun loadKeyState(): Boolean = withContext(Dispatchers.IO) {
+        val accountId = LingCatClientManager.currentUserId ?: return@withContext false
+
         // ★ 核心修复 1：最多等 5 秒，直到 Client 握手完成
         var waitTime = 0
         while (LingCatClientManager.currentClient?.isReady() != true && waitTime < 50) {
@@ -143,11 +151,16 @@ object E2EStateManager {
             waitTime++
         }
 
-        val client = LingCatClientManager.currentClient ?: return@withContext
-        val token = LingCatClientManager.currentToken ?: return@withContext
+        val client = LingCatClientManager.currentClient ?: return@withContext false
+        val token = LingCatClientManager.currentToken ?: return@withContext false
 
         try {
-            val bundle = E2EApi.getMyKey(client, token)
+            // 这里只是状态检查，失败可以重试，不必等满默认的 30 秒。
+            val bundle = E2EApi.getMyKey(client, token, null, 10_000L)
+
+            // 请求期间可能已经切换账号，旧账号的结果不能写进新会话。
+            if (LingCatClientManager.currentUserId != accountId) return@withContext false
+
             if (bundle != null) {
                 myPublicKey = bundle.publicKey
                 myKeyVersion = bundle.keyVersion
@@ -162,9 +175,28 @@ object E2EStateManager {
             } else {
                 _status.value = Status.DISABLED
             }
+            return@withContext true
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Log.e(TAG, "loadKeyState failed", e)
+            return@withContext false
         }
+    }
+
+    /**
+     * 注销 / 切换账号时清空当前账号的 E2E 内存状态。
+     *
+     * 不删除 SharedPreferences：私钥按账号隔离保存，切回原账号仍可免密解锁；
+     * 对方验证状态也继续从本地持久化恢复。
+     */
+    fun reset() {
+        myPrivateKeys.clear()
+        myPublicKey = null
+        myKeyVersion = 1
+        _peerKeys.value = emptyMap()
+        _status.value = Status.UNKNOWN
+        if (::appContext.isInitialized) initVerifyState()
     }
 
     /**
@@ -341,6 +373,8 @@ object E2EStateManager {
      * 拉取对方公钥
      */
     suspend fun fetchPeerKey(userId: String, force: Boolean = false) = withContext(Dispatchers.IO) {
+        val accountId = LingCatClientManager.currentUserId ?: return@withContext
+
         // 如果不强制刷新，且本地有缓存，才直接返回
         if (!force && _peerKeys.value.containsKey(userId)) return@withContext
 
@@ -350,6 +384,9 @@ object E2EStateManager {
         try {
             val res = E2EApi.getPublicKeys(client, token, listOf(userId))
             res?.firstOrNull()?.let { item ->
+                // 请求期间切换了账号，旧账号的缓存不能写到新账号上。
+                if (LingCatClientManager.currentUserId != accountId) return@withContext
+
                 val newPubKey = item.publicKey
                 _peerKeys.value = _peerKeys.value + (userId to newPubKey)
 

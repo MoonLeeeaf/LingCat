@@ -84,6 +84,15 @@ class ReplyReceiver : BroadcastReceiver() {
 
                     val e2eStatus = E2EStateManager.status.value
 
+                    if (e2eStatus == E2EStateManager.Status.UNKNOWN) {
+                        // 拉取失败时 status 会保持 UNKNOWN。此时不能猜成「未开启」
+                        // 然后发明文，宁可让用户联网后重试。
+                        withContext(Dispatchers.Main) {
+                            android.widget.Toast.makeText(context, context.getString(R.string.reply_err_e2e_state_unknown), android.widget.Toast.LENGTH_LONG).show()
+                        }
+                        return@launch
+                    }
+
                     if (e2eStatus == E2EStateManager.Status.DISABLED) {
                         // 对方或自己确实没开 E2E，允许发明文
                     } else {

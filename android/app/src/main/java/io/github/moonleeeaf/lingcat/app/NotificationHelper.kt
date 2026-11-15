@@ -152,7 +152,7 @@ object NotificationHelper {
             val status = E2EStateManager.status.value
             val hasPeerKey = E2EStateManager.getPeerPublicKey(peerId) != null
 
-            if (status != E2EStateManager.Status.DISABLED && hasPeerKey) {
+            if ((status == E2EStateManager.Status.LOCKED || status == E2EStateManager.Status.UNLOCKED) && hasPeerKey) {
                 isE2E = true
             }
         }

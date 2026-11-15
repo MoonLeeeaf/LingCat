@@ -20,6 +20,7 @@ import io.github.moonleeeaf.lingcat.data.AuthStorage
 import io.github.moonleeeaf.lingcat.data.ProfileCache
 import io.github.moonleeeaf.lingcat.data.RemarksCache
 import io.github.moonleeeaf.lingcat.data.db.AppDatabase
+import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -134,6 +135,12 @@ object LingCatClientManager {
 
                 // 4. 开启后台定时任务
                 startFileTokenRefresh(client, token)
+
+                // 5. 提前拉取 E2E 密钥状态：进入聊天页前就能判断锁图标 / 通知回复提示，
+                //    不必等到打开某个私聊。这里不阻塞授权流程。
+                CoroutineScope(Dispatchers.IO).launch {
+                    E2EStateManager.loadKeyState()
+                }
                 true
             } catch (e: Exception) {
                 Log.e(TAG, "Authorize failed", e)
@@ -191,6 +198,9 @@ object LingCatClientManager {
             // 如果这里还留着上一个账号的 token，新连接就会被授权成旧账号，
             // 表现为「切到叶叶后仍然收到月月的消息和通知」。
             setAuthSession(account.token, account.userId)
+            // 切换账号后再清空 E2E 内存状态：此前发出的旧账号请求会在写入前
+            // 比对 currentUserId，从而被丢弃，不会把旧私钥 / 公钥带到新账号。
+            E2EStateManager.reset()
 
             val connectRes = connect(targetServer)
             if (connectRes.isFailure) {
@@ -394,6 +404,8 @@ object LingCatClientManager {
         currentToken = null
         currentUserId = null
         AuthStorage.clear(appContext)
+        // 注销后清空 E2E 内存状态，避免残留的私钥 / 对方公钥被下一个登录账号看到。
+        E2EStateManager.reset()
 
         // ★ 核心修复：用后台协程异步清理数据库和缓存
         CoroutineScope(Dispatchers.IO).launch {

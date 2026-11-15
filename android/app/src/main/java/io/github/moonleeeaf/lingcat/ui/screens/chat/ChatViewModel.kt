@@ -103,10 +103,22 @@ class ChatViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            // 自己的密钥状态（DISABLED / LOCKED / UNLOCKED）和对方公钥缓存
+            // 自己的密钥状态（UNKNOWN / DISABLED / LOCKED / UNLOCKED）和对方公钥缓存
             // 都可能变化，统一交给 updateE2EState() 计算，避免两套判断逻辑不一致。
-            combine(E2EStateManager.status, E2EStateManager.peerKeys) { _, _ -> }
+            combine(E2EStateManager.status, E2EStateManager.peerKeys) { _, _ -> Unit }
                 .collect { updateE2EState() }
+        }
+
+        viewModelScope.launch {
+            // 进入页面时可能还没连上服务器；重连成功后补拉一次，
+            // 避免状态一直停在 UNKNOWN。
+            LingCatClientManager.connectionState.collect { state ->
+                if (state == LingCatClient.ConnectionState.CONNECTED &&
+                    E2EStateManager.status.value == E2EStateManager.Status.UNKNOWN
+                ) {
+                    ensureE2EStateLoaded()
+                }
+            }
         }
 
         viewModelScope.launch {
@@ -228,7 +240,12 @@ class ChatViewModel : ViewModel() {
 
         // ★ 核心修复 1：读取完整草稿
         val draft = DraftCache.getDraft(chatId)
-        _uiState.value = _uiState.value.copy(inputText = draft?.text ?: "")
+        _uiState.value = _uiState.value.copy(
+            inputText = draft?.text ?: "",
+            // 切换对话时先重置 E2E 状态，等拿到对话资料和对方公钥后重新计算。
+            isE2EActive = false,
+            encryptThisMessage = true,
+        )
 
         // 如果草稿里有编辑 ID，异步去数据库找回原消息
         if (draft?.editingMsgId != null) {
@@ -281,10 +298,8 @@ class ChatViewModel : ViewModel() {
             joinPending = false,
         )
 
-        // ★ 核心修复 2：每次进聊天室，强制刷新 E2E 状态
-        viewModelScope.launch {
-            E2EStateManager.loadKeyState()
-        }
+        // ★ 核心修复 2：每次进聊天室，刷新 E2E 状态（失败会自动重试）
+        ensureE2EStateLoaded()
 
         if (cachedIsMember) {
             loadHistoryMessages(chatId)
@@ -586,13 +601,49 @@ class ChatViewModel : ViewModel() {
         // ★ 必须确保对方也有公钥，才认为是激活了 E2E
         val hasPeerKey = peerId != null && E2EStateManager.getPeerPublicKey(peerId) != null
 
-        // 只有私聊 + 自己已开启 E2E + 对方有公钥，才算这条私聊启用了 E2E
-        val active = hasPeerKey && !isGroup && e2eStatus != E2EStateManager.Status.DISABLED
+        // 只有私聊 + 自己已开启 E2E + 对方有公钥，才算这条私聊启用了 E2E。
+        // UNKNOWN 表示还没确认成功，不能当成已启用。
+        val active = hasPeerKey && !isGroup &&
+                (e2eStatus == E2EStateManager.Status.LOCKED || e2eStatus == E2EStateManager.Status.UNLOCKED)
+
+        // E2E 从不可用变为可用时默认开启加密；用户手动关掉后则保留他的选择。
+        val encryptThisMessage = when {
+            !active -> false
+            !_uiState.value.isE2EActive -> true
+            else -> _uiState.value.encryptThisMessage
+        }
 
         _uiState.value = _uiState.value.copy(
             isE2EActive = active,
-            encryptThisMessage = if (active) _uiState.value.encryptThisMessage else false
+            encryptThisMessage = encryptThisMessage
         )
+    }
+
+    private var e2eStateJob: Job? = null
+
+    /**
+     * 拉取自己的 E2E 密钥状态。
+     *
+     * 网络失败时 [E2EStateManager.status] 会保持原值（初始为 UNKNOWN），
+     * 这里做一次短暂重试，避免把临时断网误判成「未开启 E2E」。
+     */
+    private fun ensureE2EStateLoaded() {
+        if (e2eStateJob?.isActive == true) return
+        if (LingCatClientManager.currentToken == null) return
+
+        e2eStateJob = viewModelScope.launch {
+            try {
+                retryWithBackoff(delaysMs = listOf(2_000L)) {
+                    if (!E2EStateManager.loadKeyState()) {
+                        throw IllegalStateException("load E2E key state failed")
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w(TAG, "load E2E key state failed", e)
+            }
+        }
     }
 
     private var peerKeyJob: Job? = null
