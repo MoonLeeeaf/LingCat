@@ -45,3 +45,6 @@ build*/
 
 # Android Studio
 .idea/*
+
+# Kotlin build output
+.kotlin/
