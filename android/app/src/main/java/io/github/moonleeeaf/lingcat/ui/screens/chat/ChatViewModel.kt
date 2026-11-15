@@ -28,6 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lingcat.classes.Classes.IMessage
@@ -102,19 +103,10 @@ class ChatViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            E2EStateManager.status.collect { status ->
-                val peerId = _uiState.value.peerUserId
-                val isGroup = _uiState.value.isGroup
-
-                // 如果是私聊，并且不是 DISABLED 状态，就认为开启了 E2E
-                val active = peerId != null && !isGroup && status != E2EStateManager.Status.DISABLED
-
-                _uiState.value = _uiState.value.copy(
-                    isE2EActive = active,
-                    // 如果不可用，顺便把单次加密开关也关掉
-                    encryptThisMessage = if (active) _uiState.value.encryptThisMessage else false
-                )
-            }
+            // 自己的密钥状态（DISABLED / LOCKED / UNLOCKED）和对方公钥缓存
+            // 都可能变化，统一交给 updateE2EState() 计算，避免两套判断逻辑不一致。
+            combine(E2EStateManager.status, E2EStateManager.peerKeys) { _, _ -> }
+                .collect { updateE2EState() }
         }
 
         viewModelScope.launch {
@@ -478,6 +470,8 @@ class ChatViewModel : ViewModel() {
             },
             peerUserId = peerId,
         )
+        updateE2EState()
+        peerId?.let { ensurePeerKeyLoaded(it) }
     }
 
     private fun applyChatInfo(title: String?, peerId: String?, isGroup: Boolean, isMember: Boolean) {
@@ -492,6 +486,12 @@ class ChatViewModel : ViewModel() {
             isGroup = isGroup,
             isMember = isMember,
         )
+        updateE2EState()
+        if (!isGroup) {
+            // 进入私聊时对方公钥通常还没拉过。不主动拉的话，
+            // E2E 状态会一直是「未启用」，直到用户点开端到端加密信息。
+            peerId?.let { ensurePeerKeyLoaded(it) }
+        }
     }
 
     /** 私聊标题用的对方昵称：失败时静默退回对话标题，不阻塞会话页。 */
@@ -586,13 +586,40 @@ class ChatViewModel : ViewModel() {
         // ★ 必须确保对方也有公钥，才认为是激活了 E2E
         val hasPeerKey = peerId != null && E2EStateManager.getPeerPublicKey(peerId) != null
 
-        // 只有私聊 + 不是禁用状态 + 对方有公钥，才认为开启了 E2E
+        // 只有私聊 + 自己已开启 E2E + 对方有公钥，才算这条私聊启用了 E2E
         val active = hasPeerKey && !isGroup && e2eStatus != E2EStateManager.Status.DISABLED
 
         _uiState.value = _uiState.value.copy(
             isE2EActive = active,
             encryptThisMessage = if (active) _uiState.value.encryptThisMessage else false
         )
+    }
+
+    private var peerKeyJob: Job? = null
+    private var peerKeyJobUserId: String? = null
+
+    /**
+     * 确保已经拉过 [peerId] 的公钥。
+     *
+     * 锁图标依赖「对方也有公钥」这个条件；如果只在打开端到端加密信息时才拉取，
+     * 用户首次进入私聊就会看不到挂锁。这里在进入对话时主动补拉，并按需重算状态。
+     */
+    private fun ensurePeerKeyLoaded(peerId: String) {
+        if (E2EStateManager.getPeerPublicKey(peerId) != null) {
+            updateE2EState()
+            return
+        }
+        if (peerKeyJob?.isActive == true && peerKeyJobUserId == peerId) return
+
+        peerKeyJob?.cancel()
+        peerKeyJobUserId = peerId
+        peerKeyJob = viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) { E2EStateManager.fetchPeerKey(peerId) }
+            } finally {
+                updateE2EState()
+            }
+        }
     }
     // ★ 获取数据库 DAO
     private val messageDao by lazy {

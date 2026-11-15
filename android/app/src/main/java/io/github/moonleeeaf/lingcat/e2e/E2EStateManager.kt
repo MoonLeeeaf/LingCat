@@ -30,7 +30,16 @@ object E2EStateManager {
     private var myKeyVersion: Int = 1
 
     // 缓存对方的公钥 (userId -> publicKey)
-    private val peerKeys = mutableMapOf<String, String>()
+    private val _peerKeys = MutableStateFlow<Map<String, String>>(emptyMap())
+
+    /**
+     * 对方公钥缓存。
+     *
+     * 界面需要根据「对方是否也有公钥」判断当前私聊是否启用了 E2E，
+     * 所以公钥拉取完成后必须通知观察者。否则像 ChatViewModel 这种在进入
+     * 页面时就算过一次状态的界面，会一直保持「E2E 未启用」，直到下次重进。
+     */
+    val peerKeys: StateFlow<Map<String, String>> = _peerKeys.asStateFlow()
 
     // 记录每个 peer 的验证状态: "verified" | "unverified" | "mismatch"
     private val _peerVerifyStatus = MutableStateFlow<Map<String, String>>(emptyMap())
@@ -333,7 +342,7 @@ object E2EStateManager {
      */
     suspend fun fetchPeerKey(userId: String, force: Boolean = false) = withContext(Dispatchers.IO) {
         // 如果不强制刷新，且本地有缓存，才直接返回
-        if (!force && peerKeys.containsKey(userId)) return@withContext
+        if (!force && _peerKeys.value.containsKey(userId)) return@withContext
 
         val client = LingCatClientManager.currentClient ?: return@withContext
         val token = LingCatClientManager.currentToken ?: return@withContext
@@ -342,7 +351,7 @@ object E2EStateManager {
             val res = E2EApi.getPublicKeys(client, token, listOf(userId))
             res?.firstOrNull()?.let { item ->
                 val newPubKey = item.publicKey
-                peerKeys[userId] = newPubKey
+                _peerKeys.value = _peerKeys.value + (userId to newPubKey)
 
                 val spPubs = appContext.getSharedPreferences(PREFS_PUBS, Context.MODE_PRIVATE)
                 val knownPub = spPubs.getString(userId, null)
@@ -372,7 +381,7 @@ object E2EStateManager {
     }
 
     fun getMyPublicKey(): String? = myPublicKey
-    fun getPeerPublicKey(userId: String): String? = peerKeys[userId]
+    fun getPeerPublicKey(userId: String): String? = _peerKeys.value[userId]
     fun getMyKeyVersion(): Int = myKeyVersion
     fun getMyPrivateKeys(): Map<Int, String> = myPrivateKeys
     fun getPeerVerifyStatus(userId: String): String = _peerVerifyStatus.value[userId] ?: "unverified"
@@ -384,7 +393,7 @@ object E2EStateManager {
         if (_status.value != Status.UNLOCKED) return null
         val myPriv = myPrivateKeys[myKeyVersion] ?: return null
         val myPub = myPublicKey ?: return null
-        val peerPub = peerKeys[peerUserId] ?: return null
+        val peerPub = _peerKeys.value[peerUserId] ?: return null
 
         return try {
             val sharedKey = E2EManager.deriveSharedKey(myPriv, peerPub)
