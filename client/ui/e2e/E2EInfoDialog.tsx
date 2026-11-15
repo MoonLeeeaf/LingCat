@@ -86,7 +86,7 @@ export default function E2EInfoDialog({ ref, chatId, peerUserId, onClose }: E2EI
                                 headline: '输入安全密码',
                                 body: `
                                     <div style="margin-bottom: 12px; font-size: 14px; opacity: 0.8;">
-                                        请输入当前的安全密码以加密新的私钥。
+                                        请输入新的安全密码以加密新的私钥。
                                     </div>
                                     <mdui-text-field id="rotate-pwd" label="安全密码" type="password" variant="outlined" style="width: 100%"></mdui-text-field>
                                 `,

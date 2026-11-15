@@ -16,16 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import io.github.moonleeeaf.lingcat.R
-import io.github.moonleeeaf.lingcat.e2e.E2EManager
-import io.github.moonleeeaf.lingcat.e2e.E2EStateManager
 import io.github.moonleeeaf.lingcat.ui.Feedback
 import kotlinx.coroutines.launch
 
@@ -324,7 +318,7 @@ fun E2EInfoDialog(
                 Column {
                     Text(stringResource(R.string.e2e_rotate_warning), color = MaterialTheme.colorScheme.error)
                     Spacer(Modifier.height(16.dp))
-                    OutlinedTextField(value = pwd, onValueChange = { pwd = it; errorMsg = null }, label = { Text(stringResource(R.string.e2e_enter_current_password)) }, visualTransformation = PasswordVisualTransformation())
+                    OutlinedTextField(value = pwd, onValueChange = { pwd = it; errorMsg = null }, label = { Text(stringResource(R.string.e2e_enter_new_password)) }, visualTransformation = PasswordVisualTransformation())
                     if (errorMsg != null) Text(errorMsg!!, color = MaterialTheme.colorScheme.error)
                 }
             },

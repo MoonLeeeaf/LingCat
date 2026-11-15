@@ -263,7 +263,7 @@
     <string name="e2e_old_password_wrong">旧密码错误或网络异常</string>
     <string name="e2e_confirm_change">确认修改</string>
     <string name="e2e_rotate_warning">警告：对方的安全码将会变更，需要重新验证。</string>
-    <string name="e2e_enter_current_password">输入当前密码</string>
+    <string name="e2e_enter_new_password">输入新的密码</string>
     <string name="e2e_password_network_error">密码错误或网络异常</string>
     <string name="e2e_confirm_reset">确认重置</string>
     <string name="date_month_day">%1$d月%2$d日 %3$s</string>
