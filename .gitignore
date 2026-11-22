@@ -1,6 +1,2 @@
 node_modules/
 lingcat_data/
-desktop_client_protocol/bin/
-desktop_client_protocol/obj/
-desktop_core_tests/bin/
-desktop_core_tests/obj/
