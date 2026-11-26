@@ -13,11 +13,16 @@
 
   <ItemGroup>
     <EmbeddedResource Include="icon.ico" />
+    <EmbeddedResource Include="icon.png" />
 
     <PackageReference Include="Aprillz.MewUI" Version="0.22.1" />
     <PackageReference Include="Aprillz.MewUI.Linux" Version="0.22.1" />
     <PackageReference Include="Aprillz.MewUI.MacOS" Version="0.22.1" />
     <PackageReference Include="Aprillz.MewUI.Windows" Version="0.22.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\desktop_client_protocol\LingCat.ClientProtocol.csproj" />
   </ItemGroup>
 
 </Project>
