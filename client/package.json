@@ -4,6 +4,7 @@
     "version": "2.0.0",
     "scripts": {
         "build": "npx vite build",
+        "build-for-electron": "BUILD_FOR_DESKTOP=true npx vite build --outDir ../desktop_electron/frontend",
         "build-watch": "npx vite --watch build"
     },
     "devDependencies": {

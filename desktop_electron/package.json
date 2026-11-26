@@ -1,0 +1,12 @@
+{
+    "name": "lingcat-desktop-electron",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./main.ts",
+    "scripts": {
+        "start": "electron ."
+    },
+    "devDependencies": {
+        "electron": "^45.5.0"
+    }
+}

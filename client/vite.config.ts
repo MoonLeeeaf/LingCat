@@ -7,9 +7,12 @@ import { execSync } from "node:child_process"
 
 const path = base_data_path + "/page"
 
-try {
-  fs.rmSync(path, { recursive: true, force: true })
-} catch (e) {}
+// 只为 Web 构建清理输出目录；桌面构建输出到 desktop_electron/frontend, 不应清掉服务端页面
+if (process.env.BUILD_FOR_DESKTOP != 'true') {
+  try {
+    fs.rmSync(path, { recursive: true, force: true })
+  } catch (e) {}
+}
 
 function gitOutput(args: string): string {
   try {
@@ -47,7 +50,10 @@ const protocolVersion = readVersion('../protocol/package.json')
 //   '/lingcat'  → '/lingcat/'
 //   '/lingcat/' → '/lingcat/'
 const basePath = (config.base_path || '').replace(/\/+$/, '')
-const viteBase = basePath + '/'
+
+const isDesktopBuild = process.env.BUILD_FOR_DESKTOP == 'true'
+
+const viteBase = isDesktopBuild ? './' : (basePath + '/')
 
 export default defineConfig({
   base: viteBase,
@@ -73,6 +79,7 @@ export default defineConfig({
   ],
   build: {
     sourcemap: true,
+    emptyOutDir: true,
     outDir: path,
     rolldownOptions: {
       // 不变
