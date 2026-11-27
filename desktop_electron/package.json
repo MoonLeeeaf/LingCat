@@ -1,5 +1,6 @@
 {
     "name": "lingcat-desktop-electron",
+    "productName": "LingCat",
     "version": "1.0.0",
     "type": "module",
     "main": "./main.ts",
