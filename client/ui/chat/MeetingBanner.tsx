@@ -10,6 +10,7 @@ import default_avatar from '../../default_avatar.png'
 import getFileUrl from '../../lib/getFileUrl.ts'
 import Avatar from '../Avatar.tsx'
 import tipError from '../tipError.ts'
+import { isNativeMeetingDesktop, openNativeMeeting } from '../../lib/desktopMeeting.ts'
 
 export function MeetingBanner({ chatId, translucent }: { chatId: string, translucent?: boolean }) {
     // 本对话是否有会议
@@ -41,6 +42,15 @@ export function MeetingBanner({ chatId, translucent }: { chatId: string, translu
     }, [chatId])
 
     const joinOrOpen = async () => {
+        if (isNativeMeetingDesktop()) {
+            if (!activeMeeting) return
+            try {
+                await openNativeMeeting(chatId, activeMeeting.meetingId, activeMeeting.title)
+            } catch (e) {
+                tipError(e, '加入会议失败')
+            }
+            return
+        }
         if (isInThisMeeting) {
             // 已在该会议: 恢复被最小化/关闭的窗口
             useMeetingUIStore.getState().setMinimized(false)

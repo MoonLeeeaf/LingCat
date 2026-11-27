@@ -4,6 +4,26 @@ import { ChatApi, MeetingApi } from 'lingcat-client-protocol'
 import { Methods, LingCatProto, type IChat, type IMessageEntity, type Package } from 'lingcat-protocol'
 import ClientManager from '../../ClientManager.ts'
 
+/**
+ * 解析服务端下发的 LiveKit 地址。
+ * - 普通地址直接返回；
+ * - `same-origin` 表示与当前 LingCat 连接同源：用已连接客户端的 `server_ws`
+ *   推导 origin。桌面端是 `file://`，`location.host` 为空，不能再靠 location。
+ */
+function resolveLivekitUrl(raw: string): string {
+    if (raw && raw !== 'same-origin') return raw
+    const client = ClientManager.getActiveClient()
+    if (client?.server_ws) {
+        try {
+            return new URL(client.server_ws).origin
+        } catch { /* fall through */ }
+    }
+    if (location.host) {
+        return (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host
+    }
+    throw new Error('无法确定会议服务器地址（same-origin 但没有可用的服务器连接）')
+}
+
 // ============================================================
 //                      类型
 // ============================================================
@@ -465,9 +485,7 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 })
                 set({ roomName: creds.room })
 
-                const serverUrl = creds.url === 'same-origin'
-                    ? (location.protocol === 'https:' ? 'wss://' + location.host : 'ws://' + location.host)
-                    : creds.url
+                const serverUrl = resolveLivekitUrl(creds.url)
 
                 const room = new Room({ adaptiveStream: true, dynacast: true })
                 set({ room })

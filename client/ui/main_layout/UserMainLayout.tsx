@@ -26,6 +26,7 @@ import { MeetingView } from "../meeting/MeetingView.tsx"
 import { MeetingBall } from "../meeting/MeetingBall.tsx"
 import { useMeetingUIStore } from "../meeting/MeetingUIStore.ts"
 import { useMeetingStore } from "../meeting/MeetingManager.ts"
+import { isNativeMeetingDesktop } from '../../lib/desktopMeeting.ts'
 import { checkServer, acceptServerPublicKey } from '../../lib/trustServer.ts'
 import { confirmTrust } from '../../lib/confirmTrust.tsx'
 import { bytesToHex } from 'lingcat-shared'
@@ -389,7 +390,9 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
     const setMeetingSplitWidth = useMeetingUIStore(s => s.setSplitWidthPercent)
     const closeMeetingUI = useMeetingUIStore(s => s.close)
     const meetingActive = useMeetingStore(s => s.phase !== 'idle' || !!s.room)
-    const showSplit = !isMobile && meetingSplit && meetingUIOpen && meetingActive
+    // 桌面端: 会议在独立原生窗口中进行, 主窗口不再渲染内置会议浮层/分栏/悬浮球
+    const nativeMeeting = isNativeMeetingDesktop()
+    const showSplit = !isMobile && !nativeMeeting && meetingSplit && meetingUIOpen && meetingActive
 
     const splitPanel = showSplit ? (
         <MeetingView
@@ -524,8 +527,8 @@ export function UserMainLayout({ children }: { children: React.ReactNode }) {
                     dockedPanelHidden={meetingMinimized}
                     dockPercent={meetingSplitWidth}
                     onDockPercentChange={setMeetingSplitWidth} />
-                <DesktopMeetingWindow />
-                <AnimatePresence>{meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall key="meeting-ball" />}</AnimatePresence>
+                {!nativeMeeting && <DesktopMeetingWindow />}
+                <AnimatePresence>{!nativeMeeting && meetingUIOpen && meetingActive && meetingMinimized && <MeetingBall key="meeting-ball" />}</AnimatePresence>
             </>
         )
         : <div style={{

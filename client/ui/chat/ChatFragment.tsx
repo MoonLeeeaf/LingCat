@@ -18,6 +18,7 @@ import ChatMembersAndAdminsDialog from './ChatMembersAndAdminsDialog.tsx'
 import ChatSettingsDialog from './ChatSettingsDialog.tsx'
 import { useMeetingStore } from '../meeting/MeetingManager.ts'
 import { useMeetingUIStore } from '../meeting/MeetingUIStore.ts'
+import { isNativeMeetingDesktop, openNativeMeeting, startNativeMeeting } from '../../lib/desktopMeeting.ts'
 import showSnackbar from '../showSnackbar.ts'
 import { MeetingBanner } from './MeetingBanner.tsx'
 import ChatAudioBanner from './ChatAudioBanner.tsx'
@@ -100,6 +101,49 @@ export function ChatFragment() {
 
     const onCall = async () => {
         if (!chat) return
+
+        // 桌面端: 会议在独立原生窗口中进行, 主窗口不加入 LiveKit
+        if (isNativeMeetingDesktop()) {
+            try {
+                if (hasActiveMeeting) {
+                    const active = useMeetingStore.getState().activeMeetings[chatId]
+                    await openNativeMeeting(chatId, active.meetingId, active.title ?? chat.title ?? undefined)
+                } else {
+                    const dlg = dialog({
+                        headline: '发起会议',
+                        body: '<div style="padding-top: 12px"><mdui-text-field id="meeting-title" label="会议标题" variant="outlined" maxlength="64"></mdui-text-field></div>',
+                        closeOnEsc: true,
+                        closeOnOverlayClick: true,
+                        actions: [
+                            { text: '取消', onClick: () => true },
+                            {
+                                text: '发起',
+                                onClick: async () => {
+                                    const input = dlg.querySelector('#meeting-title') as any
+                                    const title = String(input?.value ?? '').trim()
+                                    dlg.open = false
+                                    try {
+                                        await startNativeMeeting(chat, title || undefined)
+                                    } catch (e) {
+                                        tipError(e, '发起会议失败')
+                                    }
+                                },
+                            },
+                        ],
+                    })
+                    setTimeout(() => {
+                        const input = dlg.querySelector('#meeting-title') as any
+                        if (input) {
+                            input.value = chat.title ?? ''
+                            input.focus?.()
+                        }
+                    }, 10)
+                }
+            } catch (e) {
+                tipError(e, '发起会议失败')
+            }
+            return
+        }
 
         // 我已在会议中
         if (isInThisMeeting) {

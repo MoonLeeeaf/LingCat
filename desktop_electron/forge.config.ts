@@ -7,6 +7,11 @@ const config: ForgeConfig = {
     asar: true,
     name: 'LingCat',
     executableName: 'lingcat-desktop-electron',
+    extendInfo: {
+      NSCameraUsageDescription: '用于语音、视频通话与会议',
+      NSMicrophoneUsageDescription: '用于语音通话、会议与语音消息',
+      NSLocalNetworkUsageDescription: '用于连接你所在的灵猫服务器',
+    },
   },
   rebuildConfig: {},
   makers: [
