@@ -18,6 +18,7 @@
         "build-client": "cd client && npm run build",
         "build-web-for-electron": "cd client && npm run build-for-electron",
         "start-electron": "npm run build-web-for-electron && cd desktop_electron && npm run start",
+        "build-electron": "npm run build-web-for-electron && cd desktop_electron && npm run make",
         "build-android-client": "cd android_client && sh gradlew assembleDebug",
         "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js -d ./protocol/classes.proto ./protocol/methods.proto",
         "generate-proto-android": "protoc -I=./protocol --java_out=lite:./android/app/src/main/java/ ./protocol/*.proto",
