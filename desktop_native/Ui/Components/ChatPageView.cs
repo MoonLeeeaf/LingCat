@@ -20,8 +20,10 @@ internal sealed class ChatPageView
     private readonly MaterialProgressBar _progress = new() { IsVisible = false, Height = 4 };
     private readonly Button _send;
     private readonly Button _latest;
+    private readonly Button _older;
     private readonly Button _info;
     private readonly AuthSession _auth;
+    private readonly ChatService _chatService;
     private readonly List<(SimpleSvgSource Source, Button Button)> _icons = [];
     private ChatSummary? _chat;
     private ChatMessage[] _rendered = [];
@@ -30,17 +32,24 @@ internal sealed class ChatPageView
     private bool _hadHistoryError;
     private bool _scrollQueued;
     private double? _requestedOffset;
+    private (uint Id, double ViewportY)? _prependAnchor;
+    private uint? _requestedMessage;
+    private readonly Dictionary<uint, UIElement> _messageRows = [];
+    private double _lastScrollOffset;
 
-    public ChatPageView(AuthSession auth)
+    public ChatPageView(AuthSession auth, ChatService chatService)
     {
         _auth = auth;
+        _chatService = chatService;
         _scroll = new ScrollViewer().VerticalScroll(ScrollMode.Auto).HorizontalScroll(ScrollMode.Disabled).Content(_messages);
-        _scroll.ScrollChanged += UpdateLatestButton;
+        _scroll.ScrollChanged += OnScrollChanged;
         _messages.Arranged = QueueRequestedScroll;
         _latest = Icon("ic_arrow_downward.svg", "回到最新消息", filled: true)
             .HorizontalAlignment(HorizontalAlignment.Right).VerticalAlignment(VerticalAlignment.Bottom)
             .Margin(0, 0, 22, 10).OnClick(ScrollToLatest);
         _latest.IsVisible = false;
+        _older = new TextButton().Content("加载更早消息").HorizontalAlignment(HorizontalAlignment.Center);
+        _older.Click += RequestOlder;
 
         _editor = new MultiLineTextBox().Placeholder("输入...").Wrap(true)
             .MinHeight(48).MaxHeight(168).Padding(4, 12);
@@ -81,10 +90,19 @@ internal sealed class ChatPageView
     public event Action<ChatSummary, string>? SendRequested;
     public event Action<ChatSummary>? ChatProfileRequested;
     public event Action<string>? UserProfileRequested;
+    public event Action<string>? ChatMentionRequested;
+    public event Action<ChatSummary>? LoadOlderRequested;
+    public event Action<ChatSummary>? LoadLatestRequested;
+    public event Action<ChatSummary, uint>? JumpToMessageRequested;
 
     public void SetChat(ChatSummary? chat)
     {
         bool switched = !ReferenceEquals(_chat, chat);
+        if (switched)
+        {
+            _prependAnchor = null;
+            _requestedMessage = null;
+        }
         bool follow = switched || _requestedOffset == double.MaxValue || DistanceFromBottom <= FollowThreshold;
         double offset = _requestedOffset ?? _scroll.VerticalOffset;
         _chat = chat;
@@ -98,6 +116,14 @@ internal sealed class ChatPageView
         if (switched || chat?.AvatarFileHash != _renderedPeerAvatar || _messages.Children.Count == 0 || loading != _wasLoading || historyError != _hadHistoryError ||
             (messages is not null && !messages.SequenceEqual(_rendered)))
         {
+            if (!switched && _rendered.Length > 0 && messages is { Count: > 0 } &&
+                messages[0].Id < _rendered[0].Id && messages.Any(message => message.Id == _rendered[0].Id))
+            {
+                var firstVisible = _rendered.FirstOrDefault(message => _messageRows.TryGetValue(message.Id, out var row) &&
+                    row.Bounds.Bottom > _messages.Bounds.Y + _scroll.VerticalOffset);
+                if (firstVisible is not null && _messageRows.TryGetValue(firstVisible.Id, out var row))
+                    _prependAnchor = (firstVisible.Id, row.Bounds.Y - _messages.Bounds.Y - _scroll.VerticalOffset);
+            }
             _rendered = messages?.ToArray() ?? [];
             _renderedPeerAvatar = chat?.AvatarFileHash;
             _wasLoading = loading;
@@ -171,6 +197,10 @@ internal sealed class ChatPageView
         _status.IsVisible = _status.Text.Length != 0;
         _status.Foreground = error is null ? UiTheme.TextSecondary : UiTheme.Danger;
         _progress.IsVisible = _progress.IsIndeterminate = _chat?.Sending == true;
+        _older.IsVisible = _chat?.HasOlderMessages == true;
+        _older.IsEnabled = _chat?.HistoryLoading != true;
+        _latest.IsEnabled = _chat?.HistoryLoading != true;
+        UpdateLatestButton();
         UpdateSendButton();
     }
 
@@ -192,6 +222,8 @@ internal sealed class ChatPageView
     {
         _requestedOffset = offset;
         _messages.Clear();
+        _messageRows.Clear();
+        _messages.Add(_older);
         if (_rendered.Length == 0)
         {
             if (_wasLoading)
@@ -201,6 +233,12 @@ internal sealed class ChatPageView
                     .Foreground(UiTheme.TextMuted).Margin(0, 28, 0, 0).HorizontalAlignment(HorizontalAlignment.Center));
         }
 
+        var renderedChat = _chat;
+        var richContent = new RichMessageContent(_auth, _chatService, renderedChat,
+            id => UserProfileRequested?.Invoke(id), id => ChatMentionRequested?.Invoke(id), id =>
+            {
+                if (renderedChat is not null && ReferenceEquals(_chat, renderedChat)) JumpToMessageRequested?.Invoke(renderedChat, id);
+            });
         ChatMessage? previous = null;
         foreach (var message in _rendered)
         {
@@ -209,19 +247,19 @@ internal sealed class ChatPageView
                 _messages.Add(new Label().Text(message.Time).FontSize(UiTheme.Type.BodySmall.FontSize)
                     .Foreground(UiTheme.TextMuted).Margin(0, 12, 0, 6).HorizontalAlignment(HorizontalAlignment.Center));
 
-            if (message.IsSystem)
-                _messages.Add(new Label().Text(message.Text.Replace("_", "__")).FontSize(UiTheme.Type.BodySmall.FontSize)
-                    .TextWrapping(TextWrapping.Wrap).Foreground(UiTheme.TextSecondary)
+            UIElement row = message.IsSystem
+                ? new Border().Child(richContent.Build(message))
                     .Padding(10, 4).CornerRadius(10).Background(UiTheme.BubbleSystem)
-                    .HorizontalAlignment(HorizontalAlignment.Center));
-            else
-                _messages.Add(BuildMessage(message, showTime || previous is not { IsSystem: false } ||
-                    previous.IsMine != message.IsMine || previous.Sender != message.Sender));
+                    .HorizontalAlignment(HorizontalAlignment.Center)
+                : BuildMessage(message, richContent, showTime || previous is not { IsSystem: false } ||
+                    previous.IsMine != message.IsMine || previous.Sender != message.Sender);
+            _messageRows[message.Id] = row;
+            _messages.Add(row);
             previous = message;
         }
     }
 
-    private Grid BuildMessage(ChatMessage message, bool showSender)
+    private Grid BuildMessage(ChatMessage message, RichMessageContent richContent, bool showSender)
     {
         int column = message.IsMine ? 1 : 0;
         var side = message.IsMine ? HorizontalAlignment.Right : HorizontalAlignment.Left;
@@ -251,20 +289,25 @@ internal sealed class ChatPageView
             row.Add(author.Margin(0, 4, 0, 0).GridPosition(0, column));
         }
 
-        var body = new TextBlock
-        {
-            Text = message.Text,
-            TextWrapping = TextWrapping.Wrap,
-            FontSize = UiTheme.Type.BodyMedium.FontSize,
-            Foreground = UiTheme.Text,
-        };
+        var body = richContent.Build(message);
         var bubble = new MaterialSurface { Variant = MaterialSurfaceVariant.ElevatedCard, Content = body }
             .Padding(12, 8).HorizontalAlignment(side)
             .Margin(message.IsMine ? 0 : 48, 0, message.IsMine ? 48 : 0, 0)
             .ToolTip(message.Time);
         var copy = new Command("chat.copy-message", "复制消息");
-        bubble.Commands.Register(copy, () => { Application.Current.PlatformServices.Clipboard?.TrySetText(message.Text); });
-        bubble.ContextMenu(new ContextMenu().Item(copy));
+        bubble.Commands.Register(copy, () => { Application.Current.PlatformServices.Clipboard?.TrySetText(
+            message.Entities.Any(entity => entity.Type == "e2e") ? "[加密消息]" : message.Text); });
+        var reply = new Command("chat.reply-message", "回复消息");
+        var chatAtRender = _chat;
+        bubble.Commands.Register(reply, () =>
+        {
+            if (chatAtRender is null || !ReferenceEquals(_chat, chatAtRender)) return;
+            var prefix = FormattableString.Invariant($"[reply:{message.Id}]");
+            _editor.Text = prefix + _editor.Text;
+            _editor.Focus();
+            _editor.CaretPosition = _editor.Text.Length;
+        });
+        bubble.ContextMenu(new ContextMenu().Item(reply).Item(copy));
         row.Add(bubble.GridPosition(showSender ? 1 : 0, column));
         return row;
     }
@@ -284,29 +327,79 @@ internal sealed class ChatPageView
 
     private double DistanceFromBottom => Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight - _scroll.VerticalOffset);
 
-    private void UpdateLatestButton() => _latest.IsVisible = _rendered.Length != 0 && DistanceFromBottom > FollowThreshold;
+    private void UpdateLatestButton() => _latest.IsVisible = _chat?.InHistoryWindow == true ||
+        (_rendered.Length != 0 && DistanceFromBottom > FollowThreshold);
+
+    private void RequestOlder()
+    {
+        if (_chat is { HasOlderMessages: true, HistoryLoading: false } chat) LoadOlderRequested?.Invoke(chat);
+    }
+
+    private void OnScrollChanged()
+    {
+        var offset = _scroll.VerticalOffset;
+        bool reachedTop = offset < _lastScrollOffset && offset <= FollowThreshold;
+        _lastScrollOffset = offset;
+        UpdateLatestButton();
+        if (!reachedTop || _scrollQueued || _requestedOffset is not null || _requestedMessage is not null ||
+            !Application.IsRunning || Application.Current?.Dispatcher is not { } dispatcher) return;
+        var chat = _chat;
+        dispatcher.BeginInvoke(() =>
+        {
+            if (ReferenceEquals(_chat, chat) && _scroll.VerticalOffset <= FollowThreshold) RequestOlder();
+        });
+    }
 
     private void ScrollToLatest()
     {
+        if (_chat is { InHistoryWindow: true } chat) { LoadLatestRequested?.Invoke(chat); return; }
         _scroll.SetScrollOffsets(0, Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight));
         UpdateLatestButton();
+    }
+
+    public void RequestLatestScroll()
+    {
+        _prependAnchor = null;
+        _requestedMessage = null;
+        _requestedOffset = double.MaxValue;
+        _messages.InvalidateArrange();
+    }
+
+    public void RequestMessageScroll(uint id)
+    {
+        _prependAnchor = null;
+        _requestedMessage = id;
+        _messages.InvalidateArrange();
     }
 
     private void QueueRequestedScroll()
     {
         // ScrollViewer clamps offsets to the measured extent, so wait until the new rows are arranged.
-        if (_requestedOffset is null || _scrollQueued || !Application.IsRunning ||
+        if ((_requestedOffset is null && _requestedMessage is null) || _scrollQueued || !Application.IsRunning ||
             Application.Current?.Dispatcher is not { } dispatcher) return;
         _scrollQueued = true;
         dispatcher.BeginInvoke(() =>
         {
-            _scrollQueued = false;
-            if (_requestedOffset is not { } offset) return;
+            var offset = _requestedOffset;
+            var target = _requestedMessage;
+            var anchor = _prependAnchor;
             _requestedOffset = null;
-            if (Root.FindVisualRoot() is not Window) return;
-            if (offset == double.MaxValue) ScrollToLatest();
-            else _scroll.SetScrollOffsets(0, offset);
-            UpdateLatestButton();
+            _requestedMessage = null;
+            _prependAnchor = null;
+            try
+            {
+                if (Root.FindVisualRoot() is not Window) return;
+                if (target is { } id && _messageRows.TryGetValue(id, out var row))
+                    _scroll.SetScrollOffsets(0, Math.Max(0, row.Bounds.Y - _messages.Bounds.Y -
+                        Math.Max(0, (_scroll.ViewportHeight - row.Bounds.Height) / 2)));
+                else if (anchor is { } position && _messageRows.TryGetValue(position.Id, out var anchored))
+                    _scroll.SetScrollOffsets(0, Math.Max(0, anchored.Bounds.Y - _messages.Bounds.Y - position.ViewportY));
+                else if (offset == double.MaxValue)
+                    _scroll.SetScrollOffsets(0, Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight));
+                else if (offset is { } value) _scroll.SetScrollOffsets(0, value);
+                UpdateLatestButton();
+            }
+            finally { _scrollQueued = false; }
         });
     }
 

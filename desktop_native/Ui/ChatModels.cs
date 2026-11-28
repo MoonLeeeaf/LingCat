@@ -28,6 +28,9 @@ internal sealed class ChatSummary
     public int MemberCount { get; init; }
     public string Draft { get; set; } = string.Empty;
     public bool HistoryLoading { get; set; }
+    public bool HistoryInitialized { get; set; }
+    public bool HasOlderMessages { get; set; }
+    public bool InHistoryWindow { get; set; }
     public bool Sending { get; set; }
     public string? HistoryError { get; set; }
     public string? SendError { get; set; }
@@ -36,6 +39,7 @@ internal sealed class ChatSummary
 
 internal sealed record ChatMessage
 {
+    public IReadOnlyList<LingCat.ClientProtocol.Client.MessageEntity> Entities { get; init; } = [];
     public uint Id { get; init; }
     public required string Text { get; init; }
     public required string Time { get; init; }

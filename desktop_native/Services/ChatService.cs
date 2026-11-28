@@ -7,6 +7,7 @@ namespace LingCat_Desktop.Services;
 
 internal sealed class ChatService(AuthSession session)
 {
+    public const int HistoryPageSize = 50;
     public async Task<IReadOnlyList<ChatSummary>> GetChatsAsync(CancellationToken cancellationToken)
     {
         const uint pageSize = 100;
@@ -43,23 +44,53 @@ internal sealed class ChatService(AuthSession session)
         };
     }
 
-    public async Task<IReadOnlyList<ChatMessage>> GetMessagesAsync(string chatId)
+    public async Task<IReadOnlyList<ChatMessage>> GetMessagesAsync(string chatId, uint? before = null, uint? after = null,
+        uint limit = HistoryPageSize)
     {
-        var messages = await ChatApi.GetChatMessagesAsync(session.Client, new(session.Stored.Token, chatId, Limit: 50)).ConfigureAwait(false);
+        var messages = await ChatApi.GetChatMessagesAsync(session.Client,
+            new(session.Stored.Token, chatId, Before: before, After: after, Limit: limit)).ConfigureAwait(false);
         return messages.OrderBy(message => message.Id).Select(message => ToMessage(
-            message.Id, message.Text, message.Time, message.SenderUserId, message.System == true)).ToArray();
+            message.Id, message.Text, message.Time, message.SenderUserId, message.System == true, message.Entities)).ToArray();
     }
 
-    public ChatMessage ToMessage(uint id, string text, ulong time, string? sender, bool system) => new()
+    public async Task<ChatMessage?> GetMessageAsync(string chatId, uint id)
+    {
+        var messages = await ChatApi.GetChatMessagesAsync(session.Client,
+            new(session.Stored.Token, chatId, Before: id == uint.MaxValue ? null : id + 1, Limit: 1)).ConfigureAwait(false);
+        var message = messages.FirstOrDefault(item => item.Id == id);
+        return message is null ? null : ToMessage(message.Id, message.Text, message.Time,
+            message.SenderUserId, message.System == true, message.Entities);
+    }
+
+    public async Task<(IReadOnlyList<ChatMessage> Messages, bool HasOlder, bool HasNewer)> GetMessagesAroundAsync(string chatId, uint id)
+    {
+        const uint halfPage = HistoryPageSize / 2;
+        var earlier = GetMessagesAsync(chatId, before: id == uint.MaxValue ? null : id + 1, limit: halfPage);
+        var later = GetMessagesAsync(chatId, after: id, limit: halfPage);
+        await Task.WhenAll(earlier, later).ConfigureAwait(false);
+        var before = await earlier.ConfigureAwait(false);
+        var after = await later.ConfigureAwait(false);
+        return (before.Concat(after).ToArray(), before.Count == halfPage, after.Count == halfPage);
+    }
+
+    public ChatMessage ToMessage(uint id, string text, ulong time, string? sender, bool system, IReadOnlyList<MessageEntity>? entities = null) => new()
     {
         Id = id, Text = text, Time = FormatTime(time), IsSystem = system,
         Sender = sender ?? string.Empty, IsMine = sender == session.User.Id,
+        Entities = entities ?? [],
+    };
+
+    public static MessageEntity ToEntity(Lingcat.Classes.IMessageEntity entity) => new()
+    {
+        Type = entity.Type, Offset = entity.Offset, Length = entity.Length, Data = entity.HasData ? entity.Data : null,
     };
 
     public async Task<ChatMessage> SendAsync(string chatId, string text)
     {
-        uint id = await ChatApi.SendChatMessageAsync(session.Client, new(session.Stored.Token, chatId, text)).ConfigureAwait(false);
-        return ToMessage(id, text, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), session.User.Id, false);
+        var parsed = MessageParser.ParseMessage(text);
+        uint id = await ChatApi.SendChatMessageAsync(session.Client,
+            new(session.Stored.Token, chatId, parsed.Text, parsed.Entities)).ConfigureAwait(false);
+        return ToMessage(id, parsed.Text, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), session.User.Id, false, parsed.Entities);
     }
 
     private static string FormatTime(ulong time)

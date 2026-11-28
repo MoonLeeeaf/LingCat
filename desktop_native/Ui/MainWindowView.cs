@@ -142,7 +142,8 @@ internal sealed class MainWindowView : Grid
             case Methods.Receive_Chat_Message_Event:
                 var msg = Proto.Receive_Chat_Message_Event.Parser.ParseFrom(package.Data).Msg;
                 if (msg is null || msg.ChatId.Length == 0) return;
-                var message = _chatService.ToMessage(msg.Id, msg.Text, msg.Time, msg.SenderUserId, msg.System);
+                var message = _chatService.ToMessage(msg.Id, msg.Text, msg.Time, msg.SenderUserId, msg.System,
+                    msg.Entities.Select(ChatService.ToEntity).ToArray());
                 UiThread.Post(() =>
                 {
                     if (_lifetime.IsCancellationRequested) return;
@@ -157,7 +158,7 @@ internal sealed class MainWindowView : Grid
                     if (_lifetime.IsCancellationRequested || _chats.Find(chat => chat.Id == edit.ChatId) is not { } chat) return;
                     if (chat.LastMessageId == edit.Id) chat.LastMessageEdited = true;
                     if (chat.Messages.Find(message => message.Id == edit.Id) is { } existing)
-                        ReceiveMessage(chat, existing with { Text = edit.Text }, replace: true);
+                        ReceiveMessage(chat, existing with { Text = edit.Text, Entities = edit.Entities.Select(ChatService.ToEntity).ToArray() }, replace: true);
                     else if (chat.LastMessageId == edit.Id)
                     {
                         chat.Snippet = edit.Text;
@@ -251,8 +252,8 @@ internal sealed class MainWindowView : Grid
                     else
                     {
                         if (changed) UpdatePage(target);
-                        if (target.LastMessageId > (target.Messages.LastOrDefault()?.Id ?? 0) || target.HistoryError is not null)
-                            _ = LoadHistoryAsync(target);
+                        if (!target.InHistoryWindow && (!target.HistoryInitialized || target.LastMessageId > (target.Messages.LastOrDefault()?.Id ?? 0)))
+                             _ = LoadHistoryAsync(target);
                     }
                 }
                 else { _selectedChatId = null; _chatPage?.SetChat(null); }
@@ -271,9 +272,9 @@ internal sealed class MainWindowView : Grid
         }
     }
 
-    private async Task LoadHistoryAsync(ChatSummary chat)
+    private async Task LoadHistoryAsync(ChatSummary chat, bool returnToLatest = false)
     {
-        if (chat.HistoryLoading || _lifetime.IsCancellationRequested) return;
+        if (chat.HistoryLoading || _lifetime.IsCancellationRequested || (chat.InHistoryWindow && !returnToLatest)) return;
         chat.HistoryLoading = true;
         chat.HistoryError = null;
         var beforeRequest = chat.Messages.ToDictionary(message => message.Id);
@@ -286,13 +287,20 @@ internal sealed class MainWindowView : Grid
                 if (_lifetime.IsCancellationRequested) return;
                 // Keep pushes that arrived while this history request was in flight.
                 var merged = messages.ToDictionary(message => message.Id);
+                bool keepHistory = !returnToLatest && messages.Any(message => beforeRequest.ContainsKey(message.Id));
                 foreach (var message in chat.Messages)
-                    if (!beforeRequest.TryGetValue(message.Id, out var previous) || !ReferenceEquals(previous, message))
+                    if (!beforeRequest.TryGetValue(message.Id, out var previous) ||
+                        (merged.ContainsKey(message.Id) && !ReferenceEquals(previous, message)) ||
+                        (keepHistory && messages.Count > 0 && message.Id < messages[0].Id))
                         merged[message.Id] = message;
                 chat.Messages.Clear();
-                chat.Messages.AddRange(merged.Values.OrderBy(message => message.Id).TakeLast(50));
+                chat.Messages.AddRange(merged.Values.OrderBy(message => message.Id));
+                if (!keepHistory) chat.HasOlderMessages = messages.Count == ChatService.HistoryPageSize;
+                chat.HistoryInitialized = true;
+                chat.InHistoryWindow = false;
                 chat.HistoryLoading = false;
                 UpdatePage(chat);
+                if (returnToLatest && _selectedChatId == chat.Id) _chatPage?.RequestLatestScroll();
             });
         }
         catch (Exception ex)
@@ -302,6 +310,86 @@ internal sealed class MainWindowView : Grid
                 if (_lifetime.IsCancellationRequested) return;
                 chat.HistoryLoading = false;
                 chat.HistoryError = $"加载消息失败：{ex.Message}";
+                UpdatePage(chat);
+            });
+        }
+    }
+
+    private async Task LoadOlderAsync(ChatSummary chat)
+    {
+        if (_lifetime.IsCancellationRequested || chat.HistoryLoading || !chat.HasOlderMessages || chat.Messages.Count == 0) return;
+        uint before = chat.Messages[0].Id;
+        chat.HistoryLoading = true;
+        chat.HistoryError = null;
+        UpdatePage(chat);
+        try
+        {
+            var page = await _chatService.GetMessagesAsync(chat.Id, before: before).ConfigureAwait(false);
+            UiThread.Post(() =>
+            {
+                if (_lifetime.IsCancellationRequested) return;
+                var loaded = chat.Messages.Select(message => message.Id).ToHashSet();
+                var older = page.Where(message => message.Id < before && loaded.Add(message.Id)).ToArray();
+                chat.Messages.InsertRange(0, older);
+                chat.HasOlderMessages = page.Count == ChatService.HistoryPageSize && older.Length > 0;
+                chat.HistoryLoading = false;
+                UpdatePage(chat);
+            });
+        }
+        catch (Exception)
+        {
+            UiThread.Post(() =>
+            {
+                if (_lifetime.IsCancellationRequested) return;
+                chat.HistoryLoading = false;
+                chat.HistoryError = "加载更早消息失败，请重试。";
+                UpdatePage(chat);
+            });
+        }
+    }
+
+    private async Task JumpToMessageAsync(ChatSummary chat, uint id)
+    {
+        if (_lifetime.IsCancellationRequested || _selectedChatId != chat.Id) return;
+        if (chat.Messages.Any(message => message.Id == id)) { _chatPage?.RequestMessageScroll(id); return; }
+        if (chat.HistoryLoading) return;
+        chat.HistoryLoading = true;
+        chat.HistoryError = null;
+        UpdatePage(chat);
+        try
+        {
+            var page = await _chatService.GetMessagesAroundAsync(chat.Id, id).ConfigureAwait(false);
+            UiThread.Post(() =>
+            {
+                if (_lifetime.IsCancellationRequested) return;
+                chat.HistoryLoading = false;
+                if (_selectedChatId != chat.Id) return;
+                if (!page.Messages.Any(message => message.Id == id))
+                {
+                    chat.HistoryError = "找不到引用的消息，可能已被删除。";
+                    UpdatePage(chat);
+                    return;
+                }
+                var current = chat.Messages.ToDictionary(message => message.Id);
+                var window = page.Messages.Select(message => current.GetValueOrDefault(message.Id, message)).ToList();
+                if (!page.HasNewer)
+                    window.AddRange(chat.Messages.Where(message => message.Id > page.Messages[^1].Id));
+                chat.Messages.Clear();
+                chat.Messages.AddRange(window);
+                chat.HistoryInitialized = true;
+                chat.HasOlderMessages = page.HasOlder;
+                chat.InHistoryWindow = page.HasNewer;
+                UpdatePage(chat);
+                _chatPage?.RequestMessageScroll(id);
+            });
+        }
+        catch (Exception)
+        {
+            UiThread.Post(() =>
+            {
+                if (_lifetime.IsCancellationRequested) return;
+                chat.HistoryLoading = false;
+                chat.HistoryError = "无法加载引用的消息，请重试。";
                 UpdatePage(chat);
             });
         }
@@ -340,20 +428,28 @@ internal sealed class MainWindowView : Grid
     private void ReceiveMessage(ChatSummary chat, ChatMessage message, bool replace)
     {
         int index = chat.Messages.FindIndex(existing => existing.Id >= message.Id);
-        if (index < 0) chat.Messages.Add(message);
-        else if (chat.Messages[index].Id != message.Id) chat.Messages.Insert(index, message);
-        else if (replace && chat.Messages[index] != message) chat.Messages[index] = message;
-
-        if (_selectedChatId != chat.Id && !chat.HistoryLoading && chat.Messages.Count > 50)
-            chat.Messages.RemoveRange(0, chat.Messages.Count - 50);
+        if (index >= 0 && chat.Messages[index].Id == message.Id)
+        {
+            if (replace && chat.Messages[index] != message) chat.Messages[index] = message;
+            else message = chat.Messages[index];
+        }
+        else if (!chat.InHistoryWindow)
+        {
+            if (index < 0) chat.Messages.Add(message);
+            else chat.Messages.Insert(index, message);
+            if (_selectedChatId != chat.Id && !chat.HistoryLoading && chat.Messages.Count > ChatService.HistoryPageSize)
+            {
+                chat.Messages.RemoveRange(0, chat.Messages.Count - ChatService.HistoryPageSize);
+                chat.HasOlderMessages = true;
+            }
+        }
 
         if (message.Id >= chat.LastMessageId)
         {
-            var latest = chat.Messages[^1];
-            if (latest.Id != chat.LastMessageId) chat.LastMessageEdited = false;
-            chat.LastMessageId = latest.Id;
-            chat.Snippet = latest.Text;
-            chat.Time = latest.Time;
+            if (message.Id != chat.LastMessageId) chat.LastMessageEdited = false;
+            chat.LastMessageId = message.Id;
+            chat.Snippet = message.Text;
+            chat.Time = message.Time;
             _chatList?.Refresh();
         }
         UpdatePage(chat);
@@ -383,7 +479,7 @@ internal sealed class MainWindowView : Grid
 
         var sidebar = new SidebarView(_auth);
         var chatList = new ChatListPane(_auth);
-        var chatPage = new ChatPageView(_auth);
+        var chatPage = new ChatPageView(_auth, _chatService);
 
         _sidebar = sidebar;
         _chatList = chatList;
@@ -400,19 +496,22 @@ internal sealed class MainWindowView : Grid
         {
             _selectedChatId = chat.Id;
             chatPage.SetChat(chat);
-            _ = LoadHistoryAsync(chat);
+            if (!chat.HistoryInitialized || (!chat.InHistoryWindow && chat.LastMessageId > (chat.Messages.LastOrDefault()?.Id ?? 0)))
+                _ = LoadHistoryAsync(chat);
         };
+        chatPage.LoadOlderRequested += chat => _ = LoadOlderAsync(chat);
+        chatPage.LoadLatestRequested += chat => _ = LoadHistoryAsync(chat, returnToLatest: true);
+        chatPage.JumpToMessageRequested += (chat, id) => _ = JumpToMessageAsync(chat, id);
         chatPage.SendRequested += (chat, text) => _ = SendAsync(chat, text);
         chatPage.UserProfileRequested += ShowUserProfile;
-        chatPage.ChatProfileRequested += chat =>
+        chatPage.ChatProfileRequested += ShowChatProfile;
+        chatPage.ChatMentionRequested += id =>
         {
-            if (FindVisualRoot() is not Window owner) return;
-            ChatProfileDialog.Show(owner, _auth, chat, OpenProfileChat, favourited =>
+            var chat = _chats.Find(item => item.Id == id) ?? new ChatSummary
             {
-                chat.IsFavourite = favourited;
-                if (_chats.Find(item => item.Id == chat.Id) is { } listed) listed.IsFavourite = favourited;
-                _chatList?.Refresh();
-            }, ApplyUserProfile);
+                Id = id, Title = id, AvatarText = "灵", AvatarColor = UiTheme.Accent,
+            };
+            ShowChatProfile(chat);
         };
 
         Clear();
@@ -462,6 +561,17 @@ internal sealed class MainWindowView : Grid
             dialog.ShowDialog(owner);
         }
         finally { _appearanceOpen = false; }
+    }
+
+    private void ShowChatProfile(ChatSummary chat)
+    {
+        if (_lifetime.IsCancellationRequested || FindVisualRoot() is not Window owner) return;
+        ChatProfileDialog.Show(owner, _auth, chat, OpenProfileChat, favourited =>
+        {
+            chat.IsFavourite = favourited;
+            if (_chats.Find(item => item.Id == chat.Id) is { } listed) listed.IsFavourite = favourited;
+            _chatList?.Refresh();
+        }, ApplyUserProfile);
     }
 
     private void ShowUserProfile(string userId)
