@@ -58,13 +58,23 @@ MaterialThemeManager.SetMotionEnabled(!commandArgs.Contains("--reduce-motion"));
 
 var assembly = Assembly.GetExecutingAssembly();
 var root = new AppShellView();
+var icon = IconSource.FromResource(assembly, "LingCat_Desktop.Assets.icon.ico");
 
 var window = new Window()
-    .Icon(IconSource.FromResource(assembly, "LingCat_Desktop.Assets.icon.ico"))
     .Title("LingCat")
     .Background(UiTheme.WindowBackground)
     .Resizable(1180, 760, 900, 600, 1800, 1200)
     .Content(root);
+
+if (OperatingSystem.IsLinux())
+{
+    // MewUI 0.22.1 first tries to set _NET_WM_ICON before initializing its CARDINAL atom.
+    window.Loaded += () => window.Icon = icon;
+}
+else
+{
+    window.Icon = icon;
+}
 
 void ApplyMaterialTheme(MaterialTheme theme)
 {
