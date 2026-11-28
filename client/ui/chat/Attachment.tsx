@@ -171,7 +171,7 @@ export default function Attachment({ data, context, stickerSize }: { data: IAtta
                     boxShadow: 'inherit',
                     borderRadius: 'inherit',
                 }}>
-                    <mdui-icon name="insert_drive_file" style={{ margin: '13px', fontSize: '34px' }} />
+                    <mdui-icon name="attachment" style={{ margin: '13px', fontSize: '24px', flexShrink: 0 }} />
                     <span style={{
                         marginRight: '13px',
                         wordWrap: 'break-word',
