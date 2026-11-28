@@ -134,6 +134,7 @@ internal sealed class ChatListPane
             .Where(chat => _scope == ChatListScope.All || chat.IsFavourite)
             .Where(chat => string.IsNullOrEmpty(query)
                 || chat.Title.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || chat.Id.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || chat.Snippet.Contains(query, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
