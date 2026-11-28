@@ -89,6 +89,7 @@ export function MeetingView({
 
     // actions
     const toggleMic = useMeetingStore(s => s.toggleMic)
+    const setMicTransmitting = useMeetingStore(s => s.setMicTransmitting)
     const toggleCamera = useMeetingStore(s => s.toggleCamera)
     const toggleScreenShare = useMeetingStore(s => s.toggleScreenShare)
     const stopScreenShare = useMeetingStore(s => s.stopScreenShare)
@@ -222,6 +223,49 @@ export function MeetingView({
             tipError(e, '屏幕共享失败')
         }
     }
+    // ============================================================
+    //  对讲机 (按住麦克风说话)
+    // ============================================================
+    const [pttHolding, setPttHolding] = React.useState(false)
+    const pttHoldingRef = React.useRef(false)
+
+    const releasePtt = React.useCallback(() => {
+        if (!pttHoldingRef.current) return
+        pttHoldingRef.current = false
+        setPttHolding(false)
+        void setMicTransmitting(false).catch(() => { })
+    }, [setMicTransmitting])
+
+    const startPtt = React.useCallback((e: React.PointerEvent<HTMLElement>) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return
+        e.preventDefault()
+        e.stopPropagation()
+        if (pttHoldingRef.current) return
+        pttHoldingRef.current = true
+        setPttHolding(true)
+        try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* ignore */ }
+        void setMicTransmitting(true).catch((err) => {
+            pttHoldingRef.current = false
+            setPttHolding(false)
+            tipError(err, '麦克风开启失败')
+        })
+    }, [setMicTransmitting])
+
+    // 开启对讲机时先静音; 窗口失焦/隐藏/退出会议时强制松开, 避免一直开麦
+    React.useEffect(() => {
+        if (!settings.pushToTalk) return
+        void setMicTransmitting(false).catch(() => { })
+        const onBlur = () => releasePtt()
+        const onVisibility = () => { if (document.visibilityState === 'hidden') releasePtt() }
+        window.addEventListener('blur', onBlur)
+        document.addEventListener('visibilitychange', onVisibility)
+        return () => {
+            window.removeEventListener('blur', onBlur)
+            document.removeEventListener('visibilitychange', onVisibility)
+            releasePtt()
+        }
+    }, [settings.pushToTalk, setMicTransmitting, releasePtt])
+
     const maximize = (id: string, source: 'screen' | 'camera') => setFocused(id, source)
     const maximizeAndFullscreen = (id: string, source: 'screen' | 'camera') => {
         if (isMobile && source === 'screen') {
@@ -419,9 +463,22 @@ export function MeetingView({
 
                 <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                     <mdui-button-icon
-                        aria-label={isMicOn ? '关闭麦克风' : '开启麦克风'}
-                        onClick={() => toggleMic().catch(e => tipError(e, '切换麦克风失败'))}
-                    ><AnimatedIcon name={isMicOn ? 'mic' : 'mic_off'} /></mdui-button-icon>
+                        aria-label={settings.pushToTalk
+                            ? (pttHolding ? '正在说话，松开静音' : '按住说话')
+                            : (isMicOn ? '关闭麦克风' : '开启麦克风')}
+                        title={settings.pushToTalk ? (pttHolding ? '正在说话' : '按住说话') : undefined}
+                        onClick={settings.pushToTalk ? undefined : () => toggleMic().catch(e => tipError(e, '切换麦克风失败'))}
+                        onPointerDown={settings.pushToTalk ? startPtt : undefined}
+                        onPointerUp={settings.pushToTalk ? releasePtt : undefined}
+                        onPointerCancel={settings.pushToTalk ? releasePtt : undefined}
+                        onLostPointerCapture={settings.pushToTalk ? releasePtt : undefined}
+                        onContextMenu={settings.pushToTalk ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                        style={settings.pushToTalk ? {
+                            touchAction: 'none',
+                            userSelect: 'none',
+                            color: pttHolding ? 'rgb(var(--mdui-color-primary))' : undefined,
+                        } : undefined}
+                    ><AnimatedIcon name={settings.pushToTalk ? (pttHolding ? 'mic' : 'mic_off') : (isMicOn ? 'mic' : 'mic_off')} /></mdui-button-icon>
                     <mdui-dropdown trigger='click'>
                         <mdui-icon
                             slot="trigger"
@@ -508,7 +565,26 @@ export function MeetingView({
                     挂断
                 </mdui-button>
             </div>
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '4px' }}>
+                {!isMobile && (
+                    <mdui-tooltip content={settings.pushToTalk ? '对讲机模式：按住麦克风按钮说话' : '开启对讲机模式'}>
+                        <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '12px',
+                            opacity: settings.pushToTalk ? 1 : 0.7,
+                        }}>
+                            <mdui-icon name="radio" style={{ fontSize: '18px' }} />
+                            <span>对讲机</span>
+                            <mdui-switch
+                                checked={settings.pushToTalk}
+                                checked-icon=""
+                                onChange={(e: any) => setMeetingSetting('pushToTalk', !!e.target.checked)}
+                            />
+                        </div>
+                    </mdui-tooltip>
+                )}
                 <mdui-tooltip content="会议设置">
                     <mdui-button-icon
                         icon="settings"
@@ -567,6 +643,7 @@ export function MeetingView({
                     </div>
                 </mdui-list-item>
                 {([
+                    { key: 'pushToTalk', label: '对讲机模式 (按住麦克风说话)' },
                     { key: 'showBubble', label: '消息气泡' },
                     { key: 'showLocalMute', label: '本地静音按钮' },
                     { key: 'showCameraButton', label: '摄像头按钮' },

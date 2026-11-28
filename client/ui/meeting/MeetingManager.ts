@@ -51,6 +51,8 @@ export interface MeetingSettings {
     showMediaStats: boolean
     /** 其他人入会提示音 */
     joinSound: boolean
+    /** 对讲机模式: 默认静音, 按住麦克风按钮才开麦 */
+    pushToTalk: boolean
 }
 
 const DEFAULT_SETTINGS: MeetingSettings = {
@@ -60,6 +62,7 @@ const DEFAULT_SETTINGS: MeetingSettings = {
     autoMuteStreams: true,
     showMediaStats: false,
     joinSound: true,
+    pushToTalk: false,
 }
 
 function loadMeetingSettings(): MeetingSettings {
@@ -219,6 +222,8 @@ interface MeetingActions {
     updateMeetingTitle(title: string): Promise<void>
 
     toggleMic(): Promise<void>
+    /** 对讲机模式: true=开麦, false=静音; 快速切换时后一次请求生效 */
+    setMicTransmitting(active: boolean): Promise<void>
     toggleCamera(): Promise<void>
     toggleScreenShare(): Promise<void>
     stopScreenShare(): Promise<void>
@@ -279,6 +284,36 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
             isSharingScreen: !!screen?.track,
             isSharingAudio: !!screenAudio?.track,
         })
+    }
+
+    // 对讲机: 串行处理开/关麦, 后一次请求覆盖前一次, 避免快速按住/松开时状态错乱
+    let micTransmitPending: boolean | null = null
+    let micTransmitWorker: Promise<void> | null = null
+    const setMicTransmitting = (active: boolean): Promise<void> => {
+        micTransmitPending = active
+        if (micTransmitWorker) return micTransmitWorker
+        const worker = (async () => {
+            try {
+                while (micTransmitPending !== null) {
+                    const target = micTransmitPending
+                    micTransmitPending = null
+                    const lp = get().room?.localParticipant
+                    if (!lp) break
+                    await lp.setMicrophoneEnabled(target, target ? micCaptureOptions() : undefined)
+                    syncLocalFlags()
+                }
+            } catch (e) {
+                // 权限被拒/设备不可用时让调用方感知, 避免 UI 以为正在说话
+                micTransmitPending = null
+                console.warn('[Meeting] 对讲机切换麦克风失败', e)
+                throw e
+            } finally {
+                micTransmitWorker = null
+                if (micTransmitPending !== null) void setMicTransmitting(micTransmitPending)
+            }
+        })()
+        micTransmitWorker = worker
+        return worker
     }
 
     const stopChatBubbles = () => {
@@ -495,7 +530,9 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
                 suppressJoinSoundUntil = Date.now() + 1_500
 
                 try {
-                    await room.localParticipant.setMicrophoneEnabled(true, micCaptureOptions())
+                    // 对讲机模式下不自动开麦, 等用户按住麦克风按钮
+                    if (get().settings.pushToTalk) await room.localParticipant.setMicrophoneEnabled(false)
+                    else await room.localParticipant.setMicrophoneEnabled(true, micCaptureOptions())
                 } catch (e) {
                     console.warn('[Meeting] 麦克风开启失败', e)
                 }
@@ -623,11 +660,15 @@ export const useMeetingStore = create<MeetingStore>((set, get) => {
         },
 
         toggleMic: async () => {
+            // 对讲机模式下麦克风由按住/松开控制, 点击不切换
+            if (get().settings.pushToTalk) return
             const lp = get().room?.localParticipant
             if (!lp) return
             await lp.setMicrophoneEnabled(!get().isMicOn, micCaptureOptions())
             syncLocalFlags()
         },
+
+        setMicTransmitting,
 
         toggleCamera: async () => {
             const room = get().room
