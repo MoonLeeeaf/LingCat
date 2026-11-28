@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
+using Aprillz.MewUI.Resources;
 using LingCat.ClientProtocol.Client;
 
 namespace LingCat_Desktop.Ui.Components;
@@ -77,7 +78,12 @@ internal sealed class UserAvatar
             {
                 var fileToken = await FileApi.RequestAccessUploadFileTokenAsync(client, new(accessToken)).ConfigureAwait(false);
                 var url = client.GetFileUrlByHashAndToken(avatarHash, fileToken);
-                return ImageSource.FromBytes(await Http.GetByteArrayAsync(url).ConfigureAwait(false));
+                var bytes = await Http.GetByteArrayAsync(url).ConfigureAwait(false);
+                if (!ImageDecoders.TryDecode(bytes, out var pixels, out var orientation))
+                    throw new InvalidDataException("无法显示此头像格式。");
+                return orientation == ImageOrientation.Identity
+                    ? ImageSource.FromBgraPixels(pixels)
+                    : ImageSource.FromBytes(bytes);
             }).ConfigureAwait(false);
 
             UiThread.Post(() =>

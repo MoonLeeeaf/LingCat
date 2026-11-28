@@ -111,40 +111,47 @@ public static class FileApi
         CancellationToken CancellationToken = default);
 
     /// <summary>上传文件，返回文件 hash。</summary>
-    public static async Task<string> UploadFileAsync(LingCatClient client, UploadFileOptions options)
-    {
-        var mime = string.IsNullOrEmpty(options.Mime) ? "application/octet-stream" : options.Mime;
-        var fileName = string.IsNullOrEmpty(options.FileName) ? "File" : options.FileName;
+    public static Task<string> UploadFileAsync(LingCatClient client, UploadFileOptions options) =>
+        UploadFileCoreAsync(client, options.FileUploadToken, new ByteArrayContent(options.FileData),
+            options.Mime, options.FileName, options.BelongToChatId, options.CancellationToken);
 
+    /// <summary>Uploads a file without buffering it in memory. The upload disposes the supplied stream.</summary>
+    public static Task<string> UploadFileAsync(LingCatClient client, string uploadToken, Stream fileData,
+        string? mime = null, string? fileName = null, CancellationToken cancellationToken = default) =>
+        UploadFileCoreAsync(client, uploadToken, new StreamContent(fileData), mime, fileName, null, cancellationToken);
+
+    private static async Task<string> UploadFileCoreAsync(LingCatClient client, string uploadToken, HttpContent fileContent,
+        string? mime, string? fileName, string? belongToChatId, CancellationToken cancellationToken)
+    {
+        using var content = fileContent;
         using var form = new MultipartFormDataContent();
 
-        var fileContent = new ByteArrayContent(options.FileData);
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue(mime);
-        form.Add(fileContent, "file", fileName);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(string.IsNullOrEmpty(mime) ? "application/octet-stream" : mime);
+        form.Add(fileContent, "file", string.IsNullOrEmpty(fileName) ? "File" : fileName);
 
-        if (!string.IsNullOrEmpty(options.BelongToChatId))
+        if (!string.IsNullOrEmpty(belongToChatId))
         {
-            form.Add(new StringContent(options.BelongToChatId), "belong_to_chat_id");
+            form.Add(new StringContent(belongToChatId), "belong_to_chat_id");
         }
 
-        if (!string.IsNullOrEmpty(options.Mime))
+        if (!string.IsNullOrEmpty(mime))
         {
-            form.Add(new StringContent(options.Mime), "mime");
+            form.Add(new StringContent(mime), "mime");
         }
 
-        if (!string.IsNullOrEmpty(options.FileName))
+        if (!string.IsNullOrEmpty(fileName))
         {
-            form.Add(new StringContent(options.FileName), "file_name");
+            form.Add(new StringContent(fileName), "file_name");
         }
 
         using var request = new HttpRequestMessage(HttpMethod.Post, BuildUrl(client, "upload_file"))
         {
             Content = form,
         };
-        request.Headers.TryAddWithoutValidation("Token", options.FileUploadToken);
+        request.Headers.TryAddWithoutValidation("Token", uploadToken);
 
-        using var response = await Http.SendAsync(request, options.CancellationToken).ConfigureAwait(false);
-        var text = await response.Content.ReadAsStringAsync(options.CancellationToken).ConfigureAwait(false);
+        using var response = await Http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        var text = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {

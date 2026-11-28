@@ -31,7 +31,7 @@ internal static class UserProfileDialog
                     var path = FileDialog.OpenFile(new OpenFileDialogOptions
                     {
                         Owner = dialog.Window, Title = "选择头像",
-                        Filters = [new FileFilter("图片（PNG、JPEG）", "*.png", "*.jpg", "*.jpeg")],
+                        Filters = [new FileFilter("图片", AvatarUpload.FilePatterns)],
                     });
                     if (path is null) return;
                     dialog.Run("正在上传头像…", "更换头像失败", () => AvatarUpload.UpdateAsync(auth, path), updated =>
