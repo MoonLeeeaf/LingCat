@@ -1,5 +1,7 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
+using Aprillz.MewUI.Rendering;
+using Aprillz.MewUI.Text;
 using MewUI.Material.Controls;
 
 namespace LingCat_Desktop.Ui.Components;
@@ -192,10 +194,7 @@ internal sealed class ChatListPane
         var time = new Label().Text(chat.Time).FontSize(UiTheme.Type.LabelSmall.FontSize)
             .HorizontalAlignment(HorizontalAlignment.Right);
 
-        var snippet = new Label()
-            .Text(chat.Snippet)
-            .FontSize(UiTheme.Type.BodySmall.FontSize)
-            .TextTrimming(TextTrimming.CharacterEllipsis);
+        var snippet = new ChatPreview(chat.Snippet) { FontSize = UiTheme.Type.BodySmall.FontSize };
 
         var grid = new Grid()
             .Columns("Auto,*,Auto")
@@ -225,5 +224,56 @@ internal sealed class ChatListPane
         _rows[chat.Id] = item;
 
         return item;
+    }
+
+    private sealed class ChatPreview(string text) : TextElement
+    {
+        private const int MaxLines = 2;
+        private readonly string _text = text.ReplaceLineEndings(" ");
+        private (double Width, double LineHeight, uint Dpi, TextRunStyle Style) _layoutKey;
+        private ITextLayout? _layout;
+
+        protected override Size MeasureContent(Size availableSize) =>
+            _text.Length == 0 || availableSize.Width <= 0
+                ? Size.Empty
+                : GetLayout(availableSize.Width).MeasuredSize;
+
+        protected override void OnRender(IGraphicsContext context)
+        {
+            var bounds = Bounds;
+            if (_text.Length == 0 || bounds.Width <= 0 || bounds.Height <= 0) return;
+
+            var layout = GetLayout(bounds.Width);
+            context.Save();
+            try
+            {
+                context.SetClip(bounds);
+                context.Text.Draw(layout, new Point(bounds.X, bounds.Y), new TextDrawOptions(Foreground));
+            }
+            finally { context.Restore(); }
+        }
+
+        private ITextLayout GetLayout(double width)
+        {
+            var style = new TextRunStyle(FontFamily, FontSize, FontWeight, FontStyle == FontStyle.Italic);
+            var key = (Width: width, LineHeight: UiTheme.Type.BodySmall.LineHeight, Dpi: GetDpi(), Style: style);
+            if (_layout is not null && _layoutKey == key) return _layout;
+
+            _layoutKey = key;
+            return _layout = GetGraphicsFactory().TextEngine.CreateLayout(new TextLayoutRequest
+            {
+                Text = _text.AsMemory(),
+                Dpi = key.Dpi,
+                DefaultStyle = style,
+                Paragraph = new TextParagraphStyle
+                {
+                    MaxWidth = width,
+                    LineHeight = key.LineHeight,
+                    MaxHeight = MaxLines * key.LineHeight,
+                    Wrapping = TextWrapping.Wrap,
+                    Trimming = TextTrimming.CharacterEllipsis,
+                },
+            });
+        }
     }
 }
