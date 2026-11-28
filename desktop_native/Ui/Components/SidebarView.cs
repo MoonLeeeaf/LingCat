@@ -22,7 +22,7 @@ internal sealed class SidebarView
 
     public SidebarView(AuthSession auth)
     {
-        _accountButton = BuildBrand(auth);
+        _accountButton = BuildUserAvatar(auth);
         Root = new MaterialSurface
         {
             Variant = MaterialSurfaceVariant.Navigation,
@@ -65,7 +65,7 @@ internal sealed class SidebarView
         if (_settingsIcon is not null) _settingsIcon.Tint = UiTheme.TextSecondary;
     }
 
-    private MaterialIconButton BuildBrand(AuthSession auth)
+    private MaterialIconButton BuildUserAvatar(AuthSession auth)
     {
         var avatar = new UserAvatar(auth.User, auth.Client, auth.Stored.Token, 44);
         var button = CreateRoundButton(avatar.Root, $"账号：{auth.User.Nickname}").HorizontalAlignment(HorizontalAlignment.Center);
