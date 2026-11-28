@@ -16,6 +16,8 @@ internal sealed class ChatSummary
     public required string Id { get; init; }
     public required string Title { get; set; }
     public required string AvatarText { get; set; }
+    public string? AvatarFileHash { get; set; }
+    public string? PeerUserId { get; init; }
     public required Color AvatarColor { get; init; }
     public string Snippet { get; set; } = string.Empty;
     public string Time { get; set; } = string.Empty;

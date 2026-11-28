@@ -2,6 +2,7 @@ using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Rendering;
 using Aprillz.MewUI.Text;
+using LingCat_Desktop.Services;
 using MewUI.Material.Controls;
 
 namespace LingCat_Desktop.Ui.Components;
@@ -26,8 +27,11 @@ internal sealed class ChatListPane
     private string? _status;
     private Label? _statusLabel;
 
-    public ChatListPane()
+    private readonly AuthSession _auth;
+
+    public ChatListPane(AuthSession auth)
     {
+        _auth = auth;
         _scopeLabel = new Label()
             .Text("全部")
             .FontSize(UiTheme.Type.TitleLarge.FontSize)
@@ -163,8 +167,7 @@ internal sealed class ChatListPane
     {
         var active = chat.Id == _selectedChatId;
 
-        var avatar = UiFactory.Avatar(chat.AvatarText, chat.AvatarColor, 40, 15)
-            .VerticalAlignment(VerticalAlignment.Center);
+        var avatar = new UserAvatar(chat.AvatarFileHash, _auth.Client, _auth.Stored.Token, 40).Root;
 
         var title = new Label()
             .Text(chat.Title)

@@ -184,6 +184,8 @@ internal sealed class MainWindowView : Grid
                         changed |= chat.Title != fresh.Title || chat.AvatarText != fresh.AvatarText;
                         chat.Title = fresh.Title;
                         chat.AvatarText = fresh.AvatarText;
+                        changed |= chat.AvatarFileHash != fresh.AvatarFileHash;
+                        chat.AvatarFileHash = fresh.AvatarFileHash;
                         // The list endpoint may still return the original preview after an edit.
                         if (fresh.LastMessageId > chat.LastMessageId ||
                             (fresh.LastMessageId == chat.LastMessageId && !chat.LastMessageEdited))
@@ -340,8 +342,8 @@ internal sealed class MainWindowView : Grid
         var selectedChatId = _selectedChatId;
 
         var sidebar = new SidebarView(_auth);
-        var chatList = new ChatListPane();
-        var chatPage = new ChatPageView(() => _auth.User.Nickname);
+        var chatList = new ChatListPane(_auth);
+        var chatPage = new ChatPageView(_auth);
 
         _sidebar = sidebar;
         _chatList = chatList;
@@ -436,6 +438,8 @@ internal sealed class MainWindowView : Grid
         _auth.Stored.Nickname = user.Nickname;
         SessionStore.Instance.UpsertSession(_auth.Stored);
         _sidebar?.UpdateUserProfile(user);
+        foreach (var chat in _chats.Where(chat => chat.PeerUserId == user.Id)) chat.AvatarFileHash = user.AvatarFileHash;
+        _chatList?.Refresh();
         _chatPage?.ApplyTheme();
     }
 

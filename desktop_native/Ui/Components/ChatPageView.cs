@@ -1,7 +1,7 @@
-using System.Globalization;
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Resources;
+using LingCat_Desktop.Services;
 using MewUI.Material.Controls;
 using MewUI.Material.Themes;
 using MaterialIconButton = MewUI.Material.Controls.IconButton;
@@ -20,18 +20,19 @@ internal sealed class ChatPageView
     private readonly Button _send;
     private readonly Button _latest;
     private readonly Button _info;
-    private readonly Func<string> _ownName;
+    private readonly AuthSession _auth;
     private readonly List<(SimpleSvgSource Source, Button Button)> _icons = [];
     private ChatSummary? _chat;
     private ChatMessage[] _rendered = [];
+    private string? _renderedPeerAvatar;
     private bool _wasLoading;
     private bool _hadHistoryError;
     private bool _scrollQueued;
     private double? _requestedOffset;
 
-    public ChatPageView(Func<string> ownName)
+    public ChatPageView(AuthSession auth)
     {
-        _ownName = ownName;
+        _auth = auth;
         _scroll = new ScrollViewer().VerticalScroll(ScrollMode.Auto).HorizontalScroll(ScrollMode.Disabled).Content(_messages);
         _scroll.ScrollChanged += UpdateLatestButton;
         _messages.Arranged = QueueRequestedScroll;
@@ -93,10 +94,11 @@ internal sealed class ChatPageView
         var messages = chat?.Messages;
         bool loading = chat?.HistoryLoading == true;
         bool historyError = chat?.HistoryError is not null;
-        if (switched || _messages.Children.Count == 0 || loading != _wasLoading || historyError != _hadHistoryError ||
+        if (switched || chat?.AvatarFileHash != _renderedPeerAvatar || _messages.Children.Count == 0 || loading != _wasLoading || historyError != _hadHistoryError ||
             (messages is not null && !messages.SequenceEqual(_rendered)))
         {
             _rendered = messages?.ToArray() ?? [];
+            _renderedPeerAvatar = chat?.AvatarFileHash;
             _wasLoading = loading;
             _hadHistoryError = historyError;
             RenderMessages(follow ? double.MaxValue : offset);
@@ -219,10 +221,11 @@ internal sealed class ChatPageView
         var row = new Grid().Columns("*,*").Rows(showSender ? "Auto,Auto" : "Auto");
         if (showSender)
         {
-            var sender = message.IsMine ? _ownName() : _chat?.IsGroup == false ? _chat.Title : message.Sender;
+            var sender = message.IsMine ? _auth.User.Nickname : _chat?.IsGroup == false ? _chat.Title : message.Sender;
             if (string.IsNullOrWhiteSpace(sender)) sender = message.IsMine ? "我" : "未知用户";
-            var avatar = UiFactory.Avatar(StringInfo.GetNextTextElement(sender).Replace("_", "__"),
-                message.IsMine ? UiTheme.Accent : _chat?.AvatarColor ?? UiTheme.Accent, 40, 15);
+            var hash = message.IsMine ? _auth.User.AvatarFileHash : _chat?.IsGroup == false ? _chat.AvatarFileHash : null;
+            var lookupUserId = !message.IsMine && _chat?.IsGroup == true ? message.Sender : null;
+            var avatar = new UserAvatar(hash, _auth.Client, _auth.Stored.Token, 40, lookupUserId).Root;
             UIElement avatarView = avatar;
             if (message.IsMine || !string.IsNullOrWhiteSpace(message.Sender))
             {

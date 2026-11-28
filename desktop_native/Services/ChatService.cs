@@ -32,6 +32,8 @@ internal sealed class ChatService(AuthSession session)
         {
             Id = chat.Id, Title = title,
             AvatarText = title.Length == 0 ? "灵" : StringInfo.GetNextTextElement(title),
+            AvatarFileHash = chat.AvatarFileHash,
+            PeerUserId = chat.PeerUserId,
             AvatarColor = Color.FromRgb(0x71, 0x56, 0x79),
             Snippet = chat.LastMessageText ?? string.Empty,
             Time = FormatTime(chat.LastMessageTime),

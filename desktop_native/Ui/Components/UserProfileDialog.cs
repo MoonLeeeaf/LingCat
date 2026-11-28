@@ -26,6 +26,21 @@ internal static class UserProfileDialog
 
             if (isMe)
             {
+                dialog.Action("更换头像", "ic_person.svg", () =>
+                {
+                    var path = FileDialog.OpenFile(new OpenFileDialogOptions
+                    {
+                        Owner = dialog.Window, Title = "选择头像",
+                        Filters = [new FileFilter("图片（PNG、JPEG）", "*.png", "*.jpg", "*.jpeg")],
+                    });
+                    if (path is null) return;
+                    dialog.Run("正在上传头像…", "更换头像失败", () => AvatarUpload.UpdateAsync(auth, path), updated =>
+                    {
+                        profileChanged(updated);
+                        Render(updated, null, false);
+                        dialog.SetStatus("头像已更新");
+                    });
+                });
                 dialog.Action("编辑资料", "ic_edit.svg", () =>
                 {
                     var editor = new ProfileDialog("编辑资料");

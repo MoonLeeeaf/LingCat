@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using LingCat.ClientProtocol.Client;
@@ -18,6 +19,7 @@ internal sealed class UserAvatar
 
     private static readonly Lazy<ImageSource> DefaultSource = new(() =>
         ImageSource.FromResource(Assembly, "LingCat_Desktop.Assets.default_avatar.png"));
+    private static readonly ConditionalWeakTable<LingCatClient, AvatarCache> Caches = new();
 
     private readonly double _size;
     private IImageSource _source = DefaultSource.Value;
@@ -28,7 +30,7 @@ internal sealed class UserAvatar
         Root.ToolTip($"{user.Nickname} · {user.Username ?? user.Id}");
     }
 
-    public UserAvatar(string? hash, LingCatClient client, string accessToken, double size)
+    public UserAvatar(string? hash, LingCatClient client, string accessToken, double size, string? lookupUserId = null)
     {
         _size = size;
 
@@ -41,9 +43,9 @@ internal sealed class UserAvatar
             .Cursor(CursorType.Hand)
             .Child(CreateImage(_source));
 
-        if (!string.IsNullOrWhiteSpace(hash))
+        if (!string.IsNullOrWhiteSpace(hash) || !string.IsNullOrWhiteSpace(lookupUserId))
         {
-            _ = LoadAvatarAsync(hash, client, accessToken);
+            _ = LoadAvatarAsync(hash, lookupUserId, client, accessToken);
         }
     }
 
@@ -61,17 +63,22 @@ internal sealed class UserAvatar
         window.ShowDialog(owner);
     }
 
-    private async Task LoadAvatarAsync(string hash, LingCatClient client, string accessToken)
+    private async Task LoadAvatarAsync(string? hash, string? lookupUserId, LingCatClient client, string accessToken)
     {
         try
         {
-            var fileToken = await FileApi.RequestAccessUploadFileTokenAsync(
-                client,
-                new FileApi.RequestAccessUploadFileTokenOptions(accessToken)).ConfigureAwait(false);
-
-            var url = client.GetFileUrlByHashAndToken(hash, fileToken);
-            var bytes = await Http.GetByteArrayAsync(url).ConfigureAwait(false);
-            var source = ImageSource.FromBytes(bytes);
+            var cache = Caches.GetValue(client, _ => new AvatarCache());
+            if (string.IsNullOrWhiteSpace(hash) && !string.IsNullOrWhiteSpace(lookupUserId))
+                hash = await cache.Profiles.Get(lookupUserId, async () =>
+                    (await UserApi.QueryUserInfoAsync(client, new(accessToken, lookupUserId)).ConfigureAwait(false)).AvatarFileHash).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(hash)) return;
+            var avatarHash = hash;
+            var source = await cache.Images.Get(avatarHash, async () =>
+            {
+                var fileToken = await FileApi.RequestAccessUploadFileTokenAsync(client, new(accessToken)).ConfigureAwait(false);
+                var url = client.GetFileUrlByHashAndToken(avatarHash, fileToken);
+                return ImageSource.FromBytes(await Http.GetByteArrayAsync(url).ConfigureAwait(false));
+            }).ConfigureAwait(false);
 
             UiThread.Post(() =>
             {
@@ -82,6 +89,32 @@ internal sealed class UserAvatar
         catch
         {
             // 头像加载失败时保留默认头像。
+        }
+    }
+
+    private sealed class AvatarCache
+    {
+        public readonly RecentRequests<string?> Profiles = new();
+        public readonly RecentRequests<ImageSource> Images = new();
+    }
+
+    private sealed class RecentRequests<T>
+    {
+        private readonly Dictionary<string, (DateTimeOffset Expires, Task<T> Request)> _entries = new();
+
+        public Task<T> Get(string key, Func<Task<T>> load)
+        {
+            lock (_entries)
+            {
+                var now = DateTimeOffset.UtcNow;
+                if (_entries.TryGetValue(key, out var entry) && entry.Expires > now && !entry.Request.IsFaulted && !entry.Request.IsCanceled)
+                    return entry.Request;
+                if (_entries.Count >= 128 && !_entries.ContainsKey(key))
+                    _entries.Remove(_entries.MinBy(item => item.Value.Expires).Key);
+                var request = load();
+                _entries[key] = (now.AddMinutes(5), request);
+                return request;
+            }
         }
     }
 
