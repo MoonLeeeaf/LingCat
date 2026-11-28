@@ -17,6 +17,7 @@
     <PackageReference Include="Aprillz.MewUI" Version="0.22.1" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
     <PackageReference Include="NotificationIcon.NET" Version="1.2.8" />
+    <PackageReference Include="Notify.NET" Version="1.1.0" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
 
     <ProjectReference Include="..\client_protocol_csharp\LingCat-ClientProtocol.csproj" />

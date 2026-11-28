@@ -16,6 +16,8 @@ namespace LingCat_Desktop.Ui;
 internal sealed class MainWindowView : Grid
 {
     private readonly AuthSession _auth;
+    private readonly DesktopTray _tray;
+    private readonly DesktopNotifications _notifications;
     private readonly Action<StoredSession> _onSwitchAccount;
     private readonly Action _onAddAccount;
     private readonly Action _onLogout;
@@ -42,11 +44,15 @@ internal sealed class MainWindowView : Grid
 
     public MainWindowView(
         AuthSession auth,
+        DesktopTray tray,
+        DesktopNotifications notifications,
         Action<StoredSession> onSwitchAccount,
         Action onAddAccount,
         Action onLogout)
     {
         _auth = auth;
+        _tray = tray;
+        _notifications = notifications;
         _chatService = new ChatService(auth);
         _onSwitchAccount = onSwitchAccount;
         _onAddAccount = onAddAccount;
@@ -147,8 +153,14 @@ internal sealed class MainWindowView : Grid
                 UiThread.Post(() =>
                 {
                     if (_lifetime.IsCancellationRequested) return;
-                    if (_chats.Find(chat => chat.Id == msg.ChatId) is { } chat) ReceiveMessage(chat, message, replace: true);
+                    var chat = _chats.Find(chat => chat.Id == msg.ChatId);
+                    bool duplicate = chat?.Messages.Any(item => item.Id == message.Id) == true;
+                    if (chat is not null) ReceiveMessage(chat, message, replace: true);
                     else _ = RefreshChatsAsync();
+                    if (!duplicate && !message.IsMine && !IsReadingChat(msg.ChatId))
+                        _ = NotifyMessageAsync(msg.ChatId, chat, message,
+                            DesktopNotifications.ReplyId(message) is { } replyId
+                                ? chat?.Messages.Find(item => item.Id == replyId) : null);
                 });
                 break;
             case Methods.Message_Edited_Event:
@@ -167,6 +179,64 @@ internal sealed class MainWindowView : Grid
                 });
                 break;
         }
+    }
+
+    private bool IsReadingChat(string chatId) => _selectedChatId == chatId &&
+        FindVisualRoot() is Window && _tray.IsWindowActive;
+
+    private async Task NotifyMessageAsync(string chatId, ChatSummary? chat, ChatMessage message, ChatMessage? cachedQuote)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is null) return;
+        var token = _lifetime.Token;
+        try
+        {
+            if (chat is null)
+                chat = ChatService.ToSummary(await ChatApi.QueryChatInfoAsync(_auth.Client, new(_auth.Stored.Token, chatId)).ConfigureAwait(false));
+            if (chat.IsGroup && !message.Entities.Any(e => e.Type == "user_mention" && e.Data == _auth.User.Id))
+            {
+                if (DesktopNotifications.ReplyId(message) is not { } id) return;
+                var quoted = cachedQuote ?? await _chatService.GetMessageAsync(chatId, id).ConfigureAwait(false);
+                if (quoted?.IsMine != true) return;
+            }
+
+            dispatcher.BeginInvoke(() =>
+            {
+                if (!token.IsCancellationRequested && !IsReadingChat(chatId))
+                    _ = ShowMessageNotificationAsync(dispatcher, chat, message, token);
+            });
+        }
+        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("无法读取通知会话：{0}", ex.Message); }
+    }
+
+    private async Task ShowMessageNotificationAsync(IDispatcher dispatcher, ChatSummary chat,
+        ChatMessage message, CancellationToken token)
+    {
+        string title = _auth.Profiles.ChatTitle(chat);
+        string? name = _auth.Profiles.GetRemark(message.Sender);
+        if (name is null && !string.IsNullOrWhiteSpace(message.Sender))
+        {
+            try
+            {
+                var user = await _auth.Profiles.GetUserAsync(message.Sender).ConfigureAwait(false);
+                name = string.IsNullOrWhiteSpace(user.Nickname) ? user.Username : user.Nickname;
+            }
+            catch { /* Send the notification even when the sender profile is unavailable. */ }
+        }
+
+        dispatcher.BeginInvoke(() =>
+        {
+            if (token.IsCancellationRequested || IsReadingChat(chat.Id)) return;
+            string preview = DesktopNotifications.Preview(message);
+            string sender = _auth.Profiles.GetRemark(message.Sender) ?? name ?? "未知用户";
+            _ = _notifications.ShowAsync($"LingCat | {title}", message.IsSystem ? preview : $"{sender}：{preview}",
+                () => dispatcher.BeginInvoke(() =>
+                {
+                    if (token.IsCancellationRequested || FindVisualRoot() is not Window) return;
+                    _tray.ShowWindow();
+                    OpenChat(chat);
+                }), token);
+        });
     }
 
     private async Task RefreshRemarksAsync()
@@ -593,13 +663,15 @@ internal sealed class MainWindowView : Grid
         _chatPage?.ApplyTheme();
     }
 
-    private void OpenProfileChat(Chat profile)
+    private void OpenProfileChat(Chat profile) => OpenChat(ChatService.ToSummary(profile));
+
+    private void OpenChat(ChatSummary profile)
     {
         if (_lifetime.IsCancellationRequested || _chatList is null) return;
         var chat = _chats.Find(item => item.Id == profile.Id);
         if (chat is null)
         {
-            chat = ChatService.ToSummary(profile);
+            chat = profile;
             _chats.Insert(0, chat);
             _chatList.SetChats(_chats);
         }

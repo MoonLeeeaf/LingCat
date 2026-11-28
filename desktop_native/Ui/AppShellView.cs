@@ -31,9 +31,13 @@ internal sealed class AppShellView : Grid
     private AuthSession? _auth;
     private MainWindowView? _mainView;
     private LoginView? _loginView;
+    private readonly DesktopTray _tray;
+    private readonly DesktopNotifications _notifications;
 
-    public AppShellView()
+    public AppShellView(DesktopTray tray, DesktopNotifications notifications)
     {
+        _tray = tray;
+        _notifications = notifications;
         this.Columns("*");
     }
 
@@ -107,6 +111,8 @@ internal sealed class AppShellView : Grid
         _switchingAccount = false;
         _mainView = new MainWindowView(
             session,
+            _tray,
+            _notifications,
             SwitchAccount,
             ShowLoginForAddAccount,
             Logout);
@@ -233,6 +239,8 @@ internal sealed class AppShellView : Grid
             case ShellState.Main:
                 Add(_mainView ??= new MainWindowView(
                     _auth!,
+                    _tray,
+                    _notifications,
                     SwitchAccount,
                     ShowLoginForAddAccount,
                     Logout));

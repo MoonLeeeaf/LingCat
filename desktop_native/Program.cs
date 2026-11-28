@@ -66,7 +66,8 @@ var window = new Window { Padding = Thickness.Zero }
     .Background(UiTheme.WindowBackground)
     .Resizable(1180, 760, 900, 600, 1800, 1200);
 using var tray = new DesktopTray(window);
-var root = new AppShellView();
+await using var notifications = new DesktopNotifications();
+var root = new AppShellView(tray, notifications);
 window.Content = root;
 
 if (OperatingSystem.IsLinux())
