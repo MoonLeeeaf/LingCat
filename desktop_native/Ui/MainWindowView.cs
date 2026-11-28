@@ -46,7 +46,7 @@ internal sealed class MainWindowView : Grid
         _onAddAccount = onAddAccount;
         _onLogout = onLogout;
 
-        this.Columns("80,1,320,1,*");
+        this.Columns("80,0,320,0,*");
         BuildTree();
     }
 
