@@ -13,3 +13,5 @@ dotnet run --project desktop_native/LingCat-Desktop.csproj -- --dark --reduce-mo
 ```
 
 Linux 版在启动时读取 KDE Plasma、GNOME、Cinnamon、MATE 或 Xfce 的界面字体族。修改系统字体后重启 LingCat 即可生效；读取不到设置时使用 MewUI 的默认字体。
+
+头像支持 WebP 和 GIF；动图显示第一帧。发布时请保留输出目录中的 SkiaSharp 原生库。

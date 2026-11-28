@@ -1,5 +1,6 @@
 ﻿using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
+using Aprillz.MewUI.Resources;
 using LingCat_Desktop.Services;
 using LingCat_Desktop.Ui;
 using MewUI.Material.Themes;
@@ -44,6 +45,7 @@ void startUp()
 }
 
 startUp();
+ImageDecoders.RegisterFallback(new PhotoDecoder());
 
 var commandArgs = Environment.GetCommandLineArgs();
 AppPaths.Configure(commandArgs);
