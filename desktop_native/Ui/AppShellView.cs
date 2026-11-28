@@ -55,7 +55,7 @@ internal sealed class AppShellView : Grid
 
     public void ApplyTheme(MaterialTheme theme)
     {
-        _mainView?.ApplyTheme(theme);
+        _mainView?.ApplyTheme();
         _loginView?.ApplyTheme(theme);
     }
 

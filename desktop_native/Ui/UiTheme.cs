@@ -25,7 +25,6 @@ internal static class UiTheme
     public static Color BubbleSystem => Colors.SurfaceContainer;
     public static Color SurfaceActive => Colors.SecondaryContainer;
     public static Color Danger => Colors.Error;
-    public static Color Scrim => Colors.Scrim.WithAlpha(82);
     public static Color OnAvatar => Color.FromRgb(255, 255, 255);
 
     public static Color Rgb(uint rgb) => Color.FromRgb((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);

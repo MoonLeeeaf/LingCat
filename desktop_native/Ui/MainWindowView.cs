@@ -26,12 +26,10 @@ internal sealed class MainWindowView : Grid
     private SidebarView? _sidebar;
     private ChatListPane? _chatList;
     private ChatPageView? _chatPage;
-    private Grid? _accountOverlay;
-    private Border? _accountBackdrop;
+    private Window? _accountDialog;
+    private AccountPanelView? _accountPanel;
     private ChatListScope _scope = ChatListScope.All;
     private string? _selectedChatId;
-    private bool _accountPanelOpen;
-    private string? _accountError;
     private bool _appearanceOpen;
 
     public MainWindowView(
@@ -52,7 +50,11 @@ internal sealed class MainWindowView : Grid
 
     public void Start() => _ = RefreshChatsAsync();
 
-    public void Stop() => _lifetime.Cancel();
+    public void Stop()
+    {
+        _lifetime.Cancel();
+        _accountDialog?.Close();
+    }
 
     private async Task RefreshChatsAsync()
     {
@@ -171,19 +173,17 @@ internal sealed class MainWindowView : Grid
         if (_selectedChatId == chat.Id) _chatPage?.SetChat(chat);
     }
 
-    public void ApplyTheme(MaterialTheme theme)
+    public void ApplyTheme()
     {
         _sidebar?.ApplyTheme();
         _chatList?.ApplyTheme();
         _chatPage?.ApplyTheme();
-        if (_accountBackdrop is not null) _accountBackdrop.Background = theme.Colors.Scrim.WithAlpha(82);
     }
 
     public void ShowAccountError(string message)
     {
-        _accountPanelOpen = true;
-        _accountError = message;
-        RefreshAccountOverlay();
+        if (_accountPanel is { } panel) panel.SetError(message);
+        else ShowAccountDialog(message);
     }
 
     private void BuildTree()
@@ -197,15 +197,13 @@ internal sealed class MainWindowView : Grid
         _sidebar = sidebar;
         _chatList = chatList;
         _chatPage = chatPage;
-        _accountOverlay = null;
-        _accountBackdrop = null;
 
         sidebar.ScopeChanged += scope =>
         {
             _scope = scope;
             chatList.SetScope(scope);
         };
-        sidebar.AccountRequested += ToggleAccountPanel;
+        sidebar.AccountRequested += () => ShowAccountDialog();
         sidebar.SettingsRequested += ShowAppearanceSettings;
         chatList.ChatSelected += chat =>
         {
@@ -215,7 +213,6 @@ internal sealed class MainWindowView : Grid
         };
         chatPage.SendRequested += (chat, text) => _ = SendAsync(chat, text);
         chatPage.RefreshRequested += () => _ = RefreshChatsAsync();
-        chatList.RefreshRequested += () => _ = RefreshChatsAsync();
 
         Clear();
         Add(sidebar.Root.GridPosition(0, 0));
@@ -235,11 +232,6 @@ internal sealed class MainWindowView : Grid
         {
             chatList.SelectChat(target.Id);
         }
-
-        if (_accountPanelOpen)
-        {
-            RefreshAccountOverlay();
-        }
     }
 
     private void ShowAppearanceSettings()
@@ -256,91 +248,56 @@ internal sealed class MainWindowView : Grid
         modes.SelectionChanged += index => MaterialThemeManager.SetMode(index switch { 1 => ThemeVariant.Light, 2 => ThemeVariant.Dark, _ => ThemeVariant.System });
         var motion = new MaterialCheckBox { Content = new Label().Text("减少动态效果"), IsChecked = !MaterialThemeManager.MotionEnabled };
         motion.CheckedChanged += value => MaterialThemeManager.SetMotionEnabled(value != true);
-        var close = new TextButton().Content("完成").HorizontalAlignment(HorizontalAlignment.Right).OnClick(dialog.Close);
         dialog.PreviewKeyDown += e => { if (e.Key == Key.Escape) { e.Handled = true; dialog.Close(); } };
         dialog.Content = new MaterialSurface
         {
             Variant = MaterialSurfaceVariant.Dialog,
             CornerRadius = 0,
             Padding = new Thickness(24),
-            Content = new StackPanel().Spacing(12).Children(new Label().Text("外观设置").FontSize(UiTheme.Type.HeadlineSmall.FontSize), modes, motion, close),
+            Content = new StackPanel().Spacing(12).Children(new Label().Text("外观设置").FontSize(UiTheme.Type.HeadlineSmall.FontSize), modes, motion),
         };
         try
         {
-            close.Focus();
             dialog.ShowDialog(owner);
         }
         finally { _appearanceOpen = false; }
     }
 
-    private void ToggleAccountPanel()
+    private void ShowAccountDialog(string? error = null)
     {
-        _accountPanelOpen = !_accountPanelOpen;
-        _accountError = null;
-        RefreshAccountOverlay();
-    }
+        if (_accountDialog is not null || _lifetime.IsCancellationRequested || FindVisualRoot() is not Window owner) return;
 
-    private void CloseAccountPanel()
-    {
-        _accountPanelOpen = false;
-        _accountError = null;
-        RefreshAccountOverlay();
-        _sidebar?.FocusAccountButton();
-    }
-
-    private void RefreshAccountOverlay()
-    {
-        if (_accountOverlay is not null)
+        var panel = new AccountPanelView(_auth, error);
+        var dialog = new Window
         {
-            Remove(_accountOverlay);
-            _accountOverlay = null;
-            _accountBackdrop = null;
+            Title = "账号管理",
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            Content = panel.Root,
+        };
+        dialog.Resizable(400, 520, 340, 360, 700, 800);
+        dialog.PreviewKeyDown += e => { if (e.Key == Key.Escape) { e.Handled = true; dialog.Close(); } };
+
+        Action? onClose = null;
+        void SelectAction(Action action)
+        {
+            onClose = action;
+            dialog.Close();
+        }
+        panel.SwitchRequested += session => SelectAction(() => _onSwitchAccount(session));
+        panel.AddAccountRequested += () => SelectAction(_onAddAccount);
+        panel.LogoutRequested += () => SelectAction(_onLogout);
+
+        _accountDialog = dialog;
+        _accountPanel = panel;
+        try { dialog.ShowDialog(owner); }
+        finally
+        {
+            _accountDialog = null;
+            _accountPanel = null;
         }
 
-        if (!_accountPanelOpen) return;
-
-        var panel = new AccountPanelView(_auth, _accountError);
-        panel.CloseRequested += CloseAccountPanel;
-        panel.SwitchRequested += session =>
-        {
-            CloseAccountPanel();
-            _onSwitchAccount(session);
-        };
-        panel.AddAccountRequested += () =>
-        {
-            CloseAccountPanel();
-            _onAddAccount();
-        };
-        panel.LogoutRequested += () =>
-        {
-            CloseAccountPanel();
-            _onLogout();
-        };
-
-        var backdrop = _accountBackdrop = new Border()
-            .Background(UiTheme.Scrim)
-            .HorizontalAlignment(HorizontalAlignment.Stretch)
-            .VerticalAlignment(VerticalAlignment.Stretch);
-        backdrop.OnMouseUp(_ => CloseAccountPanel());
-
-        var overlay = new Grid()
-            .Rows("*")
-            .Columns("*")
-            .Children(
-                backdrop,
-                panel.Root
-                    .HorizontalAlignment(HorizontalAlignment.Left)
-                    .VerticalAlignment(VerticalAlignment.Top)
-                    .Margin(76, 14, 0, 0));
-
-        _accountOverlay = overlay;
-        overlay.KeyDown += e =>
-        {
-            if (e.Key != Key.Escape) return;
-            e.Handled = true;
-            CloseAccountPanel();
-        };
-        Add(overlay.GridPosition(0, 0, 1, 5));
-        panel.FocusFirstAction();
+        if (_lifetime.IsCancellationRequested) return;
+        _sidebar?.FocusAccountButton();
+        onClose?.Invoke();
     }
 }

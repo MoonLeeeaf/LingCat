@@ -7,11 +7,11 @@ using MewUI.Material.Themes;
 namespace LingCat_Desktop.Ui.Components;
 
 /// <summary>
-/// 侧边栏头像弹出的账号面板：当前账号、切换已保存账号、登录其他账号、退出登录。
+/// 账号管理对话框内容：当前账号、切换已保存账号、登录其他账号、退出登录。
 /// </summary>
 internal sealed class AccountPanelView
 {
-    private readonly Button _closeButton;
+    private readonly ErrorMessage _error = new();
 
     public AccountPanelView(AuthSession auth, string? error = null)
     {
@@ -24,19 +24,14 @@ internal sealed class AccountPanelView
             list.Add(BuildSessionRow(session, session.Key == auth.Stored.Key));
         }
 
-        _closeButton = new TextButton().Content("关闭").HorizontalAlignment(HorizontalAlignment.Right)
-            .OnClick(() => CloseRequested?.Invoke());
         var children = new List<Element>
         {
-            _closeButton,
             BuildCurrentUser(auth),
             UiFactory.DividerLine(false).Margin(0, 10, 0, 10),
+            _error,
         };
 
-        if (!string.IsNullOrWhiteSpace(error))
-        {
-            children.Add(new ErrorMessage(error).Margin(0, 0, 0, 8));
-        }
+        SetError(error);
 
         children.Add(new Label()
             .Text("账号")
@@ -44,22 +39,21 @@ internal sealed class AccountPanelView
             .Bold()
             .Foreground(UiTheme.TextMuted)
             .Margin(4, 0, 0, 4));
-        children.Add(new ScrollViewer()
-            .VerticalScroll(ScrollMode.Auto)
-            .HorizontalScroll(ScrollMode.Disabled)
-            .MaxHeight(280)
-            .Content(list));
+        children.Add(list);
         children.Add(UiFactory.DividerLine(false).Margin(0, 10, 0, 6));
-        children.Add(new FilledTonalButton().Content("＋  登录其他账号").OnClick(() => AddAccountRequested?.Invoke()));
+        children.Add(new FilledTonalButton().Content("登录其他账号").OnClick(() => AddAccountRequested?.Invoke()));
         children.Add(new OutlinedButton().Content("退出登录").OnClick(() => LogoutRequested?.Invoke()));
 
         Root = new MaterialSurface
         {
             Variant = MaterialSurfaceVariant.Dialog,
-            Content = new StackPanel().Spacing(6).Children(children.ToArray()),
-        }
-            .Width(320)
-            .Padding(16);
+            CornerRadius = 0,
+            Padding = new Thickness(16),
+            Content = new ScrollViewer()
+                .VerticalScroll(ScrollMode.Auto)
+                .HorizontalScroll(ScrollMode.Disabled)
+                .Content(new StackPanel().Spacing(6).Children(children.ToArray())),
+        };
     }
 
     public MaterialSurface Root { get; }
@@ -69,16 +63,18 @@ internal sealed class AccountPanelView
     public event Action? AddAccountRequested;
 
     public event Action? LogoutRequested;
-    public event Action? CloseRequested;
 
-    public void FocusFirstAction() => _closeButton.Focus();
+    public void SetError(string? message) => _error.SetMessage(message);
 
     private static StackPanel BuildCurrentUser(AuthSession auth)
     {
-        var text = new StackPanel()
-            .Spacing(2)
-            .VerticalAlignment(VerticalAlignment.Center)
+        return new StackPanel()
+            .Spacing(4)
             .Children(
+                new Label()
+                    .Text("当前账号")
+                    .FontSize(10)
+                    .SemiBold(),
                 new Label()
                     .Text(auth.User.Nickname)
                     .FontSize(14)
@@ -86,27 +82,6 @@ internal sealed class AccountPanelView
                     .TextTrimming(TextTrimming.CharacterEllipsis),
                 new Label().Text(auth.Stored.Account).FontSize(11),
                 new Label().Text(auth.Stored.Server).FontSize(10));
-
-        return new StackPanel()
-            .Spacing(10)
-            .Children(
-                new Label()
-                    .Text("当前账号")
-                    .FontSize(10)
-                    .SemiBold(),
-                new Grid()
-                    .Columns("Auto,*")
-                    .Children(
-                        UiFactory.Avatar(
-                                FirstChar(auth.User.Nickname),
-                                UiTheme.Accent,
-                                42,
-                                16,
-                                UiTheme.OnAccent)
-                            .GridPosition(0, 0),
-                        text
-                            .Margin(10, 0, 0, 0)
-                            .GridPosition(0, 1)));
     }
 
     private UIElement BuildSessionRow(StoredSession session, bool active)
@@ -125,25 +100,22 @@ internal sealed class AccountPanelView
             .TextTrimming(TextTrimming.CharacterEllipsis);
 
         var content = new Grid()
-                .Columns("Auto,*,Auto")
-                .Children(
-                    UiFactory.Avatar(FirstChar(displayName), UiTheme.SurfaceActive, 32, 12, UiTheme.Text)
-                        .GridPosition(0, 0),
-                    new StackPanel()
-                        .Spacing(1)
-                        .Margin(8, 0, 0, 0)
-                        .VerticalAlignment(VerticalAlignment.Center)
-                        .Children(title, subtitle)
-                        .GridPosition(0, 1),
-                    new Label()
-                        .Text(active ? "当前" : string.Empty)
-                        .FontSize(10)
-                        .VerticalAlignment(VerticalAlignment.Center)
-                        .GridPosition(0, 2));
+            .Columns("*,Auto")
+            .Children(new StackPanel()
+                .Spacing(1)
+                .VerticalAlignment(VerticalAlignment.Center)
+                .Children(title, subtitle)
+                .GridPosition(0, 0));
 
         if (active)
         {
-            return new MaterialSurface { Variant = MaterialSurfaceVariant.FilledCard, Content = content }.Padding(8, 7);
+            content.Add(new Label()
+                .Text("当前")
+                .FontSize(10)
+                .Margin(8, 0, 0, 0)
+                .VerticalAlignment(VerticalAlignment.Center)
+                .GridPosition(0, 1));
+            return content.Padding(8, 7);
         }
 
         var row = new TextButton { Content = content }.Padding(8, 7);
@@ -153,13 +125,18 @@ internal sealed class AccountPanelView
 
     private sealed class ErrorMessage : MaterialContentControl
     {
-        private readonly Label _label;
+        private readonly Label _label = new Label().TextWrapping(TextWrapping.Wrap);
 
-        public ErrorMessage(string message)
+        public ErrorMessage()
         {
-            _label = new Label().Text(message).TextWrapping(TextWrapping.Wrap);
             Content = _label;
             OnMaterialThemeChanged(MaterialTheme);
+        }
+
+        public void SetMessage(string? message)
+        {
+            _label.Text = message ?? string.Empty;
+            IsVisible = !string.IsNullOrWhiteSpace(message);
         }
 
         protected override void OnMaterialThemeChanged(MaterialTheme theme)
@@ -167,10 +144,5 @@ internal sealed class AccountPanelView
             _label.Foreground = theme.Colors.Error;
             _label.FontSize = theme.Typography.BodySmall.FontSize;
         }
-    }
-
-    private static string FirstChar(string value)
-    {
-        return string.IsNullOrWhiteSpace(value) ? "?" : value.Trim()[0].ToString();
     }
 }

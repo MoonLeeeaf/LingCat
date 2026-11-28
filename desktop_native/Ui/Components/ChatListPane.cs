@@ -59,7 +59,7 @@ internal sealed class ChatListPane
             Padding = new Thickness(0),
             CornerRadius = 0,
             Content = new Grid()
-                .Rows("Auto,Auto,*")
+                .Rows("Auto,*")
                 .Children(
                     _searchBox.Margin(14, 10, 14, 8).GridPosition(0, 0),
                     scroll.GridPosition(1, 0)),
@@ -67,8 +67,6 @@ internal sealed class ChatListPane
     }
 
     public event Action<ChatSummary>? ChatSelected;
-
-    public event Action? RefreshRequested;
 
     public IReadOnlyList<ChatSummary> Chats => _chats;
 
