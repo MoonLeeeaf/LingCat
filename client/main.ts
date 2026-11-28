@@ -2,7 +2,7 @@
 
 import 'mdui/mdui.css'
 import './styles.css'
-import 'mdui'
+import { setColorScheme } from 'mdui'
 
 import 'pinch-zoom-element'
 
@@ -10,6 +10,8 @@ import ReactDOM from 'react-dom/client'
 import React from 'react'
 
 import './ui/MduiPatchedTextAreaElement.ts'
+
+setColorScheme('#006A6A')
 
 const params = new URLSearchParams(location.search)
 const appEl = document.getElementById('app')!
