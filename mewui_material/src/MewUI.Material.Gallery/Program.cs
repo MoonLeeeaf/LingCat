@@ -35,6 +35,7 @@ var window = new Window
 {
     Title = "MewUI.Material Gallery",
     Background = MaterialThemeManager.Current.Colors.Background,
+    Padding = Thickness.Zero,
 };
 window.Resizable(1180, 780, 900, 600, 2200, 1400);
 window.Content = gallery.Root;

@@ -238,7 +238,7 @@ internal sealed class MainWindowView : Grid
     {
         if (_appearanceOpen || FindVisualRoot() is not Window owner) return;
         _appearanceOpen = true;
-        var dialog = new Window { Title = "外观设置" };
+        var dialog = new Window { Title = "外观设置", Padding = Thickness.Zero };
         dialog.Resizable(400, 310, 340, 280, 700, 600);
         var modes = new MaterialNavigation(MaterialNavigationLayout.Tabs);
         modes.AddDestination("跟随系统");
@@ -272,6 +272,7 @@ internal sealed class MainWindowView : Grid
         {
             Title = "账号管理",
             StartupLocation = WindowStartupLocation.CenterOwner,
+            Padding = Thickness.Zero,
             Content = panel.Root,
         };
         dialog.Resizable(400, 520, 340, 360, 700, 800);

@@ -12,7 +12,7 @@ public static class MaterialDialog
     public static async Task<bool> ConfirmAsync(Window owner, string title, string message,
         string confirmText = "OK", string cancelText = "Cancel")
     {
-        var dialog = new Window { Title = title };
+        var dialog = new Window { Title = title, Padding = Thickness.Zero };
         dialog.Resizable(460, 260, 340, 200, 1000, 800);
         bool confirmed = false;
         var accept = new FilledButton { Content = new Label().Text(confirmText) };
