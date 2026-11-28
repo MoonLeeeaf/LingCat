@@ -81,7 +81,7 @@ internal sealed class SidebarView
             .HorizontalAlignment(HorizontalAlignment.Center)
             .Children(
                 CreateNavItem("ic_chats.svg", "全部对话", ChatListScope.All),
-                CreateNavItem("ic_star.svg", "收藏对话", ChatListScope.Favourites));
+                CreateNavItem("ic_favourited.svg", "收藏对话", ChatListScope.Favourites));
     }
 
     private MaterialIconButton CreateNavItem(string iconFile, string tooltip, ChatListScope scope)
