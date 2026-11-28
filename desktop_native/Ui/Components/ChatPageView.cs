@@ -19,6 +19,7 @@ internal sealed class ChatPageView
     private readonly MaterialProgressBar _progress = new() { IsVisible = false, Height = 4 };
     private readonly Button _send;
     private readonly Button _latest;
+    private readonly Button _info;
     private readonly Func<string> _ownName;
     private readonly List<(SimpleSvgSource Source, Button Button)> _icons = [];
     private ChatSummary? _chat;
@@ -55,6 +56,10 @@ internal sealed class ChatPageView
         };
 
         _send = Icon("ic_send.svg", "发送（Ctrl+Enter）").OnClick(SendCurrentMessage);
+        _info = Icon("ic_info.svg", "对话资料").OnClick(() =>
+        {
+            if (_chat is { } chat) ChatProfileRequested?.Invoke(chat);
+        });
 
         Root = new MaterialSurface
         {
@@ -72,6 +77,8 @@ internal sealed class ChatPageView
 
     public MaterialSurface Root { get; }
     public event Action<ChatSummary, string>? SendRequested;
+    public event Action<ChatSummary>? ChatProfileRequested;
+    public event Action<string>? UserProfileRequested;
 
     public void SetChat(ChatSummary? chat)
     {
@@ -103,8 +110,9 @@ internal sealed class ChatPageView
         RenderMessages(_requestedOffset ?? (DistanceFromBottom <= FollowThreshold ? double.MaxValue : _scroll.VerticalOffset));
     }
 
-    private Grid BuildHeader() => new Grid().MinHeight(56).Padding(16, 4, 8, 4).Children(
-        _title.VerticalAlignment(VerticalAlignment.Center));
+    private Grid BuildHeader() => new Grid().Columns("*,Auto").MinHeight(56).Padding(16, 4, 8, 4).Children(
+        _title.VerticalAlignment(VerticalAlignment.Center).GridPosition(0, 0),
+        _info.VerticalAlignment(VerticalAlignment.Center).GridPosition(0, 1));
 
     private StackPanel BuildComposer()
     {
@@ -148,7 +156,7 @@ internal sealed class ChatPageView
     private void UpdateAppearance()
     {
         _title.Text = _chat?.Title ?? "选择一个对话";
-        _editor.IsEnabled = _chat is not null;
+        _editor.IsEnabled = _info.IsEnabled = _chat is not null;
         var error = _chat?.SendError ?? _chat?.HistoryError;
         _status.Text = error ?? (_chat?.Sending == true ? "正在发送…" : string.Empty);
         _status.IsVisible = _status.Text.Length != 0;
@@ -215,12 +223,18 @@ internal sealed class ChatPageView
             if (string.IsNullOrWhiteSpace(sender)) sender = message.IsMine ? "我" : "未知用户";
             var avatar = UiFactory.Avatar(StringInfo.GetNextTextElement(sender).Replace("_", "__"),
                 message.IsMine ? UiTheme.Accent : _chat?.AvatarColor ?? UiTheme.Accent, 40, 15);
+            UIElement avatarView = avatar;
+            if (message.IsMine || !string.IsNullOrWhiteSpace(message.Sender))
+            {
+                avatarView = new MaterialIconButton { Content = avatar }.ToolTip("用户资料")
+                    .OnClick(() => UserProfileRequested?.Invoke(message.IsMine ? string.Empty : message.Sender));
+            }
             var name = new Label().Text(sender.Replace("_", "__")).FontSize(UiTheme.Type.LabelLarge.FontSize)
                 .TextTrimming(TextTrimming.CharacterEllipsis).VerticalAlignment(VerticalAlignment.Center);
             var author = message.IsMine
                 ? new Grid().Columns("*,Auto").Children(
-                    name.HorizontalAlignment(HorizontalAlignment.Right).Margin(0, 0, 8, 0).GridPosition(0, 0), avatar.GridPosition(0, 1))
-                : new Grid().Columns("Auto,*").Children(avatar.GridPosition(0, 0), name.Margin(8, 0, 0, 0).GridPosition(0, 1));
+                    name.HorizontalAlignment(HorizontalAlignment.Right).Margin(0, 0, 8, 0).GridPosition(0, 0), avatarView.GridPosition(0, 1))
+                : new Grid().Columns("Auto,*").Children(avatarView.GridPosition(0, 0), name.Margin(8, 0, 0, 0).GridPosition(0, 1));
             row.Add(author.Margin(0, 4, 0, 0).GridPosition(0, column));
         }
 

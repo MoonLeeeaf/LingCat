@@ -361,6 +361,17 @@ internal sealed class MainWindowView : Grid
             _ = LoadHistoryAsync(chat);
         };
         chatPage.SendRequested += (chat, text) => _ = SendAsync(chat, text);
+        chatPage.UserProfileRequested += ShowUserProfile;
+        chatPage.ChatProfileRequested += chat =>
+        {
+            if (FindVisualRoot() is not Window owner) return;
+            ChatProfileDialog.Show(owner, _auth, chat, OpenProfileChat, favourited =>
+            {
+                chat.IsFavourite = favourited;
+                if (_chats.Find(item => item.Id == chat.Id) is { } listed) listed.IsFavourite = favourited;
+                _chatList?.Refresh();
+            }, ApplyUserProfile);
+        };
 
         Clear();
         Add(sidebar.Root.GridPosition(0, 0));
@@ -411,6 +422,37 @@ internal sealed class MainWindowView : Grid
         finally { _appearanceOpen = false; }
     }
 
+    private void ShowUserProfile(string userId)
+    {
+        if (_lifetime.IsCancellationRequested || FindVisualRoot() is not Window owner) return;
+        UserProfileDialog.Show(owner, _auth, string.IsNullOrEmpty(userId) ? _auth.User.Id : userId,
+            OpenProfileChat, ApplyUserProfile);
+    }
+
+    private void ApplyUserProfile(User user)
+    {
+        if (_lifetime.IsCancellationRequested) return;
+        _auth.User = user;
+        _auth.Stored.Nickname = user.Nickname;
+        SessionStore.Instance.UpsertSession(_auth.Stored);
+        _sidebar?.UpdateUserProfile(user);
+        _chatPage?.ApplyTheme();
+    }
+
+    private void OpenProfileChat(Chat profile)
+    {
+        if (_lifetime.IsCancellationRequested || _chatList is null) return;
+        var chat = _chats.Find(item => item.Id == profile.Id);
+        if (chat is null)
+        {
+            chat = ChatService.ToSummary(profile);
+            _chats.Insert(0, chat);
+            _chatList.SetChats(_chats);
+        }
+        if (!chat.IsFavourite && _scope == ChatListScope.Favourites) _sidebar?.SetScope(ChatListScope.All);
+        _chatList.SelectChat(chat.Id);
+    }
+
     private void ShowAccountDialog(string? error = null)
     {
         if (_accountDialog is not null || _lifetime.IsCancellationRequested || FindVisualRoot() is not Window owner) return;
@@ -435,6 +477,7 @@ internal sealed class MainWindowView : Grid
         panel.SwitchRequested += session => SelectAction(() => _onSwitchAccount(session));
         panel.AddAccountRequested += () => SelectAction(_onAddAccount);
         panel.LogoutRequested += () => SelectAction(_onLogout);
+        panel.ProfileRequested += () => SelectAction(() => ShowUserProfile(_auth.User.Id));
 
         _accountDialog = dialog;
         _accountPanel = panel;

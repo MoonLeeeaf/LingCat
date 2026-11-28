@@ -27,6 +27,7 @@ internal sealed class AccountPanelView
         var children = new List<Element>
         {
             BuildCurrentUser(auth),
+            new TextButton().Content("个人资料").OnClick(() => ProfileRequested?.Invoke()),
             UiFactory.DividerLine(false).Margin(0, 10, 0, 10),
             _error,
         };
@@ -63,6 +64,7 @@ internal sealed class AccountPanelView
     public event Action? AddAccountRequested;
 
     public event Action? LogoutRequested;
+    public event Action? ProfileRequested;
 
     public void SetError(string? message) => _error.SetMessage(message);
 

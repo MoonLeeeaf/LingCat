@@ -10,7 +10,7 @@ internal sealed record ServerConfig(string? PublicKey);
 internal sealed class AuthSession : IAsyncDisposable
 {
     public required StoredSession Stored { get; init; }
-    public required User User { get; init; }
+    public required User User { get; set; }
     public required LingCatClient Client { get; init; }
     public required string ConnectionSessionId { get; init; }
 

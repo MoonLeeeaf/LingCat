@@ -20,8 +20,15 @@ internal sealed class UserAvatar
         ImageSource.FromResource(Assembly, "LingCat_Desktop.Assets.default_avatar.png"));
 
     private readonly double _size;
+    private IImageSource _source = DefaultSource.Value;
 
     public UserAvatar(User user, LingCatClient client, string accessToken, double size)
+        : this(user.AvatarFileHash, client, accessToken, size)
+    {
+        Root.ToolTip($"{user.Nickname} · {user.Username ?? user.Id}");
+    }
+
+    public UserAvatar(string? hash, LingCatClient client, string accessToken, double size)
     {
         _size = size;
 
@@ -32,16 +39,27 @@ internal sealed class UserAvatar
             .ClipToBounds(true)
             .Background(UiTheme.SurfaceActive)
             .Cursor(CursorType.Hand)
-            .ToolTip($"{user.Nickname} · {user.Username ?? user.Id}")
-            .Child(CreateImage(DefaultSource.Value));
+            .Child(CreateImage(_source));
 
-        if (!string.IsNullOrWhiteSpace(user.AvatarFileHash))
+        if (!string.IsNullOrWhiteSpace(hash))
         {
-            _ = LoadAvatarAsync(user.AvatarFileHash, client, accessToken);
+            _ = LoadAvatarAsync(hash, client, accessToken);
         }
     }
 
     public Border Root { get; }
+
+    public void ShowPreview(Window owner)
+    {
+        var window = new Window
+        {
+            Title = "头像", StartupLocation = WindowStartupLocation.CenterOwner, Padding = Thickness.Zero,
+            Content = new Image().Source(_source).StretchMode(Stretch.Uniform),
+        };
+        window.Resizable(480, 480, 240, 240, 900, 900);
+        window.PreviewKeyDown += e => { if (e.Key == Key.Escape) { e.Handled = true; window.Close(); } };
+        window.ShowDialog(owner);
+    }
 
     private async Task LoadAvatarAsync(string hash, LingCatClient client, string accessToken)
     {
@@ -55,7 +73,11 @@ internal sealed class UserAvatar
             var bytes = await Http.GetByteArrayAsync(url).ConfigureAwait(false);
             var source = ImageSource.FromBytes(bytes);
 
-            UiThread.Post(() => Root.Child = CreateImage(source));
+            UiThread.Post(() =>
+            {
+                _source = source;
+                Root.Child = CreateImage(source);
+            });
         }
         catch
         {

@@ -1,6 +1,7 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Resources;
+using LingCat.ClientProtocol.Client;
 using LingCat_Desktop.Services;
 using MewUI.Material.Controls;
 using MaterialIconButton = MewUI.Material.Controls.IconButton;
@@ -17,11 +18,13 @@ internal sealed class SidebarView
 
     private readonly Dictionary<ChatListScope, NavEntry> _navItems = new();
     private readonly MaterialIconButton _accountButton;
+    private readonly AuthSession _auth;
     private SimpleSvgSource? _settingsIcon;
     private ChatListScope _scope = ChatListScope.All;
 
     public SidebarView(AuthSession auth)
     {
+        _auth = auth;
         _accountButton = BuildUserAvatar(auth);
         Root = new MaterialSurface
         {
@@ -49,6 +52,12 @@ internal sealed class SidebarView
     public ChatListScope Scope => _scope;
 
     public void FocusAccountButton() => _accountButton.Focus();
+
+    public void UpdateUserProfile(User user)
+    {
+        _accountButton.Content = new UserAvatar(user, _auth.Client, _auth.Stored.Token, 44).Root;
+        _accountButton.ToolTip($"账号：{user.Nickname}");
+    }
 
     public void SetScope(ChatListScope scope)
     {
