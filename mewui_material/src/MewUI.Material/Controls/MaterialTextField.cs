@@ -13,7 +13,7 @@ public class MaterialTextField : MaterialContentControl
     private readonly Label _label = new();
     private readonly Label _support = new();
     private readonly Border _frame;
-    private readonly MaterialTextFieldVariant _variant;
+    private MaterialTextFieldVariant _variant;
     private readonly TextButton? _clearButton;
     private bool _error;
 
@@ -74,7 +74,12 @@ public class MaterialTextField : MaterialContentControl
     public string Label { get => _label.Text; set { _label.Text = value; Refresh(); } }
     public string SupportingText { get => _support.Text; set { _support.Text = value; Refresh(); } }
     public bool HasError { get => _error; set { _error = value; Refresh(); } }
-    public MaterialTextFieldVariant Variant { get => _variant; }
+    /// <summary>Gets or sets the field's visual style without changing its editor or clear button.</summary>
+    public MaterialTextFieldVariant Variant
+    {
+        get => _variant;
+        init { _variant = value; Refresh(); }
+    }
     /// <summary>Raised when Enter is pressed in a plain-text field.</summary>
     public event Action<string>? Submitted;
     /// <summary>Raised when Enter is pressed, without exposing the input value.</summary>

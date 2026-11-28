@@ -32,7 +32,12 @@ internal sealed class ChatListPane
             .Text("全部")
             .FontSize(UiTheme.Type.TitleLarge.FontSize)
             .FontWeight(UiTheme.Type.TitleLarge.FontWeight);
-        _searchBox = new MaterialSearchBar { Placeholder = "搜索对话…", ClearButtonText = "清除" };
+        _searchBox = new MaterialSearchBar
+        {
+            Variant = MaterialTextFieldVariant.Filled,
+            Placeholder = "搜索对话…",
+            ClearButtonText = "清除",
+        };
         _searchBox.Editor.TextChanged += text =>
         {
             _filterText = text;
@@ -56,9 +61,8 @@ internal sealed class ChatListPane
             Content = new Grid()
                 .Rows("Auto,Auto,*")
                 .Children(
-                    BuildHeader().GridPosition(0, 0),
-                    _searchBox.Margin(14, 10, 14, 8).GridPosition(1, 0),
-                    scroll.GridPosition(2, 0)),
+                    _searchBox.Margin(14, 10, 14, 8).GridPosition(0, 0),
+                    scroll.GridPosition(1, 0)),
         };
     }
 
@@ -121,28 +125,6 @@ internal sealed class ChatListPane
     {
         _status = status;
         RefreshList();
-    }
-
-    private Grid BuildHeader()
-    {
-        var refreshButton = new MewUI.Material.Controls.IconButton()
-            .Content("↻")
-            .FontSize(18)
-            .ToolTip("刷新对话列表")
-            .OnClick(() => RefreshRequested?.Invoke());
-
-        return new Grid()
-            .Columns("*,Auto")
-            .Padding(14, 14, 14, 0)
-            .Children(
-                new StackPanel()
-                    .Spacing(3)
-                    .Children(
-                        _scopeLabel)
-                    .GridPosition(0, 0),
-                refreshButton
-                    .VerticalAlignment(VerticalAlignment.Center)
-                    .GridPosition(0, 1));
     }
 
     private void RefreshList()
