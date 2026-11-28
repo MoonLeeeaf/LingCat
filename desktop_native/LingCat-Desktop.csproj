@@ -16,7 +16,6 @@
 
     <PackageReference Include="Aprillz.MewUI" Version="0.22.1" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.4" />
     <PackageReference Include="NotificationIcon.NET" Version="1.2.8" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
 
