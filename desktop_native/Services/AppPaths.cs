@@ -50,6 +50,22 @@ internal static class AppPaths
         }
     }
 
+    public static string ImageCacheDirectory
+    {
+        get
+        {
+            if (_dataDirectory is not null) return Path.Combine(_dataDirectory, "cache", "images");
+            if (OperatingSystem.IsLinux())
+            {
+                var root = Environment.GetEnvironmentVariable("XDG_CACHE_HOME");
+                if (string.IsNullOrEmpty(root) || !Path.IsPathFullyQualified(root))
+                    root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache");
+                return Path.Combine(root, "LingCat", "images");
+            }
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LingCat", "cache", "images");
+        }
+    }
+
     private static void SetDataDirectory(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw)) return;

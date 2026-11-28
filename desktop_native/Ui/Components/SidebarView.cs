@@ -55,7 +55,7 @@ internal sealed class SidebarView
 
     public void UpdateUserProfile(User user)
     {
-        _accountButton.Content = new UserAvatar(user, _auth.Client, _auth.Stored.Token, 44).Root;
+        _accountButton.Content = new UserAvatar(user, _auth, 44).Root;
         _accountButton.ToolTip($"账号：{user.Nickname}");
     }
 
@@ -76,7 +76,7 @@ internal sealed class SidebarView
 
     private MaterialIconButton BuildUserAvatar(AuthSession auth)
     {
-        var avatar = new UserAvatar(auth.User, auth.Client, auth.Stored.Token, 44);
+        var avatar = new UserAvatar(auth.User, auth, 44);
         var button = CreateRoundButton(avatar.Root, $"账号：{auth.User.Nickname}").HorizontalAlignment(HorizontalAlignment.Center);
         button.Click += () => AccountRequested?.Invoke();
         return button;

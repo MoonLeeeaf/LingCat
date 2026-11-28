@@ -19,11 +19,12 @@ internal static class ChatProfileDialog
             dialog.Window.Close();
         }
 
-        void Render(Chat chat, string? remark)
+        void Render(Chat chat)
         {
             dialog.Clear();
+            var remark = chat.Type == "private" ? auth.Profiles.GetRemark(chat.PeerUserId ?? summary.PeerUserId) : null;
             var name = string.IsNullOrWhiteSpace(chat.Title) ? chat.ChatUnique ?? chat.Id : chat.Title;
-            var avatar = new UserAvatar(chat.AvatarFileHash, auth.Client, token, 64);
+            var avatar = new UserAvatar(chat.AvatarFileHash, auth, 64);
             dialog.Header(avatar, remark ?? name, remark is null ? null : name);
             dialog.Field("对话 ID", chat.Id, "ic_info.svg");
             dialog.Field("对话类型", chat.Type == "group" ? "群组" : "私聊", "ic_person.svg", copy: false);
@@ -47,23 +48,14 @@ internal static class ChatProfileDialog
                 }, saved =>
                 {
                     favouriteChanged(saved);
-                    Render(chat with { Favourited = saved }, remark);
+                    Render(chat with { Favourited = saved });
                     dialog.SetStatus(saved ? "已收藏对话" : "已取消收藏");
                 }));
             dialog.Action("打开对话", "ic_chats.svg", () => SelectChat(chat));
         }
 
         dialog.Show(owner, () => dialog.Run("正在加载对话资料…", "加载对话资料失败",
-            () => ChatApi.QueryChatInfoAsync(auth.Client, new(token, summary.Id)), chat =>
-            {
-                Render(chat, null);
-                if (chat.Type == "private" && !string.IsNullOrWhiteSpace(chat.PeerUserId))
-                    dialog.Run("正在读取备注…", "读取备注失败", () => UserApi.GetMyUserRemarksAsync(auth.Client, new(token)), remarks =>
-                    {
-                        var remark = remarks.FirstOrDefault(r => r.UserId == chat.PeerUserId)?.Remark;
-                        Render(chat, string.IsNullOrWhiteSpace(remark) ? null : remark);
-                    });
-            }));
+            () => ChatApi.QueryChatInfoAsync(auth.Client, new(token, summary.Id)), Render));
 
         if (selectedChat is not null) openChat(selectedChat);
     }

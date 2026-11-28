@@ -27,6 +27,8 @@ internal sealed class MainWindowView : Grid
     private bool _authorizing;
     private bool _loadingChats;
     private bool _refreshPending;
+    private bool _loadingRemarks;
+    private bool _remarksPending;
     private string? _chatStatus;
 
     private SidebarView? _sidebar;
@@ -68,12 +70,15 @@ internal sealed class MainWindowView : Grid
             });
         });
         _ = PollChatsAsync(_lifetime.Token);
+        _auth.Profiles.RemarksChanged += OnRemarksChanged;
+        _ = RefreshRemarksAsync();
         OnConnectionChanged();
     }
 
     public void Stop()
     {
         _lifetime.Cancel();
+        _auth.Profiles.RemarksChanged -= OnRemarksChanged;
         _auth.Client.RemoveOnReceiveListener(OnPackage);
         _connectionSubscription?.Dispose();
         _connectionSubscription = null;
@@ -118,6 +123,7 @@ internal sealed class MainWindowView : Grid
                 if (_lifetime.IsCancellationRequested || !authorized || !_auth.Client.IsConnected) return;
                 _needsAuthorization = false;
                 _ = RefreshChatsAsync();
+                _ = RefreshRemarksAsync();
                 if (_chats.Find(chat => chat.Id == _selectedChatId) is { } selected) _ = LoadHistoryAsync(selected);
             });
         }
@@ -127,6 +133,9 @@ internal sealed class MainWindowView : Grid
     {
         switch (package.MethodId)
         {
+            case Methods.User_Remarks_Changed_Event:
+                UiThread.Post(() => _ = RefreshRemarksAsync());
+                break;
             case Methods.Update_My_Chats_Event:
                 UiThread.Post(() => _ = RefreshChatsAsync());
                 break;
@@ -157,6 +166,37 @@ internal sealed class MainWindowView : Grid
                 });
                 break;
         }
+    }
+
+    private async Task RefreshRemarksAsync()
+    {
+        if (_lifetime.IsCancellationRequested) return;
+        if (_loadingRemarks) { _remarksPending = true; return; }
+        _loadingRemarks = true;
+        var revision = _auth.Profiles.RemarksRevision;
+        IReadOnlyList<UserRemark>? remarks = null;
+        try
+        {
+            remarks = await UserApi.GetMyUserRemarksAsync(_auth.Client, new(_auth.Stored.Token)).ConfigureAwait(false);
+        }
+        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("读取备注失败：{0}", ex.Message); }
+        UiThread.Post(() =>
+        {
+            _loadingRemarks = false;
+            if (_lifetime.IsCancellationRequested) return;
+            if (remarks is not null)
+            {
+                if (revision == _auth.Profiles.RemarksRevision) _auth.Profiles.ReplaceRemarks(remarks);
+                else _remarksPending = true;
+            }
+            if (_remarksPending) { _remarksPending = false; _ = RefreshRemarksAsync(); }
+        });
+    }
+
+    private void OnRemarksChanged()
+    {
+        _chatList?.Refresh();
+        _chatPage?.RefreshDisplayNames();
     }
 
     private async Task RefreshChatsAsync()

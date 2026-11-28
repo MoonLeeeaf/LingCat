@@ -9,6 +9,8 @@ internal sealed record ServerConfig(string? PublicKey);
 
 internal sealed class AuthSession : IAsyncDisposable
 {
+    private ProfileCache? _profiles;
+    public ProfileCache Profiles => _profiles ??= new(this);
     public required StoredSession Stored { get; init; }
     public required User User { get; set; }
     public required LingCatClient Client { get; init; }

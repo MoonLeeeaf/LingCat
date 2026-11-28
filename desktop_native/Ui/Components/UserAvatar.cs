@@ -4,6 +4,7 @@ using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Resources;
 using LingCat.ClientProtocol.Client;
+using LingCat_Desktop.Services;
 
 namespace LingCat_Desktop.Ui.Components;
 
@@ -13,25 +14,20 @@ namespace LingCat_Desktop.Ui.Components;
 internal sealed class UserAvatar
 {
     private static readonly Assembly Assembly = typeof(UserAvatar).Assembly;
-    private static readonly HttpClient Http = new()
-    {
-        Timeout = TimeSpan.FromSeconds(15),
-    };
-
     private static readonly Lazy<ImageSource> DefaultSource = new(() =>
         ImageSource.FromResource(Assembly, "LingCat_Desktop.Assets.default_avatar.png"));
-    private static readonly ConditionalWeakTable<LingCatClient, AvatarCache> Caches = new();
+    private static readonly ConditionalWeakTable<AuthSession, RecentRequests<ImageSource>> Caches = new();
 
     private readonly double _size;
     private IImageSource _source = DefaultSource.Value;
 
-    public UserAvatar(User user, LingCatClient client, string accessToken, double size)
-        : this(user.AvatarFileHash, client, accessToken, size)
+    public UserAvatar(User user, AuthSession auth, double size)
+        : this(user.AvatarFileHash, auth, size)
     {
         Root.ToolTip($"{user.Nickname} · {user.Username ?? user.Id}");
     }
 
-    public UserAvatar(string? hash, LingCatClient client, string accessToken, double size, string? lookupUserId = null)
+    public UserAvatar(string? hash, AuthSession auth, double size, Task<User>? profile = null)
     {
         _size = size;
 
@@ -44,9 +40,9 @@ internal sealed class UserAvatar
             .Cursor(CursorType.Hand)
             .Child(CreateImage(_source));
 
-        if (!string.IsNullOrWhiteSpace(hash) || !string.IsNullOrWhiteSpace(lookupUserId))
+        if (!string.IsNullOrWhiteSpace(hash) || profile is not null)
         {
-            _ = LoadAvatarAsync(hash, lookupUserId, client, accessToken);
+            _ = LoadAvatarAsync(hash, profile, auth);
         }
     }
 
@@ -64,21 +60,18 @@ internal sealed class UserAvatar
         window.ShowDialog(owner);
     }
 
-    private async Task LoadAvatarAsync(string? hash, string? lookupUserId, LingCatClient client, string accessToken)
+    private async Task LoadAvatarAsync(string? hash, Task<User>? profile, AuthSession auth)
     {
         try
         {
-            var cache = Caches.GetValue(client, _ => new AvatarCache());
-            if (string.IsNullOrWhiteSpace(hash) && !string.IsNullOrWhiteSpace(lookupUserId))
-                hash = await cache.Profiles.Get(lookupUserId, async () =>
-                    (await UserApi.QueryUserInfoAsync(client, new(accessToken, lookupUserId)).ConfigureAwait(false)).AvatarFileHash).ConfigureAwait(false);
+            var cache = Caches.GetValue(auth, _ => new RecentRequests<ImageSource>());
+            if (string.IsNullOrWhiteSpace(hash) && profile is not null)
+                hash = (await profile.ConfigureAwait(false)).AvatarFileHash;
             if (string.IsNullOrWhiteSpace(hash)) return;
             var avatarHash = hash;
-            var source = await cache.Images.Get(avatarHash, async () =>
+            var source = await cache.Get(avatarHash, async () =>
             {
-                var fileToken = await FileApi.RequestAccessUploadFileTokenAsync(client, new(accessToken)).ConfigureAwait(false);
-                var url = client.GetFileUrlByHashAndToken(avatarHash, fileToken);
-                var bytes = await Http.GetByteArrayAsync(url).ConfigureAwait(false);
+                var bytes = await ImageCache.GetAsync(auth, avatarHash).ConfigureAwait(false);
                 if (!ImageDecoders.TryDecode(bytes, out var pixels, out var orientation))
                     throw new InvalidDataException("无法显示此头像格式。");
                 return orientation == ImageOrientation.Identity
@@ -96,12 +89,6 @@ internal sealed class UserAvatar
         {
             // 头像加载失败时保留默认头像。
         }
-    }
-
-    private sealed class AvatarCache
-    {
-        public readonly RecentRequests<string?> Profiles = new();
-        public readonly RecentRequests<ImageSource> Images = new();
     }
 
     private sealed class RecentRequests<T>

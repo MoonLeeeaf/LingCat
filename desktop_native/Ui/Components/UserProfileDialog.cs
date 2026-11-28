@@ -15,11 +15,12 @@ internal static class UserProfileDialog
         bool isMe = userId == auth.User.Id;
         Chat? selectedChat = null;
 
-        void Render(User user, string? remark, bool canEditRemark)
+        void Render(User user)
         {
             dialog.Clear();
+            var remark = isMe ? null : auth.Profiles.GetRemark(userId);
             var name = string.IsNullOrWhiteSpace(user.Nickname) ? user.Username ?? user.Id : user.Nickname;
-            dialog.Header(new UserAvatar(user, auth.Client, token, 64), remark ?? name, remark is null ? null : name);
+            dialog.Header(new UserAvatar(user, auth, 64), remark ?? name, remark is null ? null : name);
             dialog.Field("用户 ID", user.Id, "ic_info.svg");
             dialog.Field("用户名", user.Username, "ic_person.svg");
             dialog.Field("简介", user.Description, "ic_description.svg");
@@ -37,7 +38,7 @@ internal static class UserProfileDialog
                     dialog.Run("正在上传头像…", "更换头像失败", () => AvatarUpload.UpdateAsync(auth, path), updated =>
                     {
                         profileChanged(updated);
-                        Render(updated, null, false);
+                        Render(updated);
                         dialog.SetStatus("头像已更新");
                     });
                 });
@@ -64,14 +65,14 @@ internal static class UserProfileDialog
                         {
                             editor.Window.Close();
                             profileChanged(updated);
-                            Render(updated, null, false);
+                            Render(updated);
                             dialog.SetStatus("资料已保存");
                         });
                     });
                     editor.Show(dialog.Window, () => nickname.Editor.Focus());
                 });
             }
-            else if (canEditRemark)
+            else
             {
                 dialog.Action("设置备注", "ic_edit.svg", () =>
                 {
@@ -89,7 +90,8 @@ internal static class UserProfileDialog
                         }, saved =>
                         {
                             editor.Window.Close();
-                            Render(user, saved.Length == 0 ? null : saved, true);
+                            auth.Profiles.SetRemark(userId, saved);
+                            Render(user);
                             dialog.SetStatus(saved.Length == 0 ? "备注已清除" : "备注已保存");
                         });
                     });
@@ -106,16 +108,7 @@ internal static class UserProfileDialog
 
         dialog.Show(owner, () => dialog.Run("正在加载用户资料…", "加载用户资料失败", () => isMe
             ? UserApi.QueryMyUserInfoAsync(auth.Client, new(token))
-            : UserApi.QueryUserInfoAsync(auth.Client, new(token, userId)), user =>
-        {
-            Render(user, null, false);
-            if (!isMe)
-                dialog.Run("正在读取备注…", "读取备注失败", () => UserApi.GetMyUserRemarksAsync(auth.Client, new(token)), remarks =>
-                {
-                    var remark = remarks.FirstOrDefault(r => r.UserId == userId)?.Remark;
-                    Render(user, string.IsNullOrWhiteSpace(remark) ? null : remark, true);
-                });
-        }));
+            : auth.Profiles.GetUserAsync(userId), Render));
 
         if (selectedChat is not null) openChat(selectedChat);
     }

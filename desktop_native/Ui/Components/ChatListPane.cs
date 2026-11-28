@@ -136,6 +136,7 @@ internal sealed class ChatListPane
             .Where(chat => _scope == ChatListScope.All || chat.IsFavourite)
             .Where(chat => string.IsNullOrEmpty(query)
                 || chat.Title.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || _auth.Profiles.ChatTitle(chat).Contains(query, StringComparison.OrdinalIgnoreCase)
                 || chat.Id.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || chat.Snippet.Contains(query, StringComparison.OrdinalIgnoreCase))
             .ToList();
@@ -167,10 +168,10 @@ internal sealed class ChatListPane
     {
         var active = chat.Id == _selectedChatId;
 
-        var avatar = new UserAvatar(chat.AvatarFileHash, _auth.Client, _auth.Stored.Token, 40).Root;
+        var avatar = new UserAvatar(chat.AvatarFileHash, _auth, 40).Root;
 
         var title = new Label()
-            .Text(chat.Title)
+            .Text(_auth.Profiles.ChatTitle(chat).Replace("_", "__"))
             .FontSize(UiTheme.Type.TitleSmall.FontSize)
             .FontWeight(UiTheme.Type.TitleSmall.FontWeight)
             .TextTrimming(TextTrimming.CharacterEllipsis);

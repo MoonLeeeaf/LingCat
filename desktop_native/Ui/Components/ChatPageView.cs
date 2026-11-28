@@ -1,6 +1,7 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Resources;
+using LingCat.ClientProtocol.Client;
 using LingCat_Desktop.Services;
 using MewUI.Material.Controls;
 using MewUI.Material.Themes;
@@ -109,6 +110,12 @@ internal sealed class ChatPageView
     {
         ApplyThemeCore();
         UpdateAppearance();
+        RefreshDisplayNames();
+    }
+
+    public void RefreshDisplayNames()
+    {
+        _title.Text = _chat is { } chat ? _auth.Profiles.ChatTitle(chat) : "选择一个对话";
         RenderMessages(_requestedOffset ?? (DistanceFromBottom <= FollowThreshold ? double.MaxValue : _scroll.VerticalOffset));
     }
 
@@ -157,7 +164,7 @@ internal sealed class ChatPageView
 
     private void UpdateAppearance()
     {
-        _title.Text = _chat?.Title ?? "选择一个对话";
+        _title.Text = _chat is { } chat ? _auth.Profiles.ChatTitle(chat) : "选择一个对话";
         _editor.IsEnabled = _info.IsEnabled = _chat is not null;
         var error = _chat?.SendError ?? _chat?.HistoryError;
         _status.Text = error ?? (_chat?.Sending == true ? "正在发送…" : string.Empty);
@@ -221,11 +228,13 @@ internal sealed class ChatPageView
         var row = new Grid().Columns("*,*").Rows(showSender ? "Auto,Auto" : "Auto");
         if (showSender)
         {
-            var sender = message.IsMine ? _auth.User.Nickname : _chat?.IsGroup == false ? _chat.Title : message.Sender;
+            var sender = message.IsMine ? _auth.User.Nickname : _chat is { IsGroup: false } chat
+                ? _auth.Profiles.ChatTitle(chat) : _auth.Profiles.GetRemark(message.Sender);
             if (string.IsNullOrWhiteSpace(sender)) sender = message.IsMine ? "我" : "未知用户";
             var hash = message.IsMine ? _auth.User.AvatarFileHash : _chat?.IsGroup == false ? _chat.AvatarFileHash : null;
-            var lookupUserId = !message.IsMine && _chat?.IsGroup == true ? message.Sender : null;
-            var avatar = new UserAvatar(hash, _auth.Client, _auth.Stored.Token, 40, lookupUserId).Root;
+            var profile = !message.IsMine && _chat?.IsGroup == true && !string.IsNullOrWhiteSpace(message.Sender)
+                ? _auth.Profiles.GetUserAsync(message.Sender) : null;
+            var avatar = new UserAvatar(hash, _auth, 40, profile).Root;
             UIElement avatarView = avatar;
             if (message.IsMine || !string.IsNullOrWhiteSpace(message.Sender))
             {
@@ -234,6 +243,7 @@ internal sealed class ChatPageView
             }
             var name = new Label().Text(sender.Replace("_", "__")).FontSize(UiTheme.Type.LabelLarge.FontSize)
                 .TextTrimming(TextTrimming.CharacterEllipsis).VerticalAlignment(VerticalAlignment.Center);
+            if (profile is not null) _ = SetSenderNameAsync(name, profile);
             var author = message.IsMine
                 ? new Grid().Columns("*,Auto").Children(
                     name.HorizontalAlignment(HorizontalAlignment.Right).Margin(0, 0, 8, 0).GridPosition(0, 0), avatarView.GridPosition(0, 1))
@@ -257,6 +267,19 @@ internal sealed class ChatPageView
         bubble.ContextMenu(new ContextMenu().Item(copy));
         row.Add(bubble.GridPosition(showSender ? 1 : 0, column));
         return row;
+    }
+
+    private async Task SetSenderNameAsync(Label label, Task<User> profile)
+    {
+        User user;
+        try { user = await profile.ConfigureAwait(false); }
+        catch { return; } // Keep the remark or placeholder when the lookup fails.
+        UiThread.Post(() =>
+        {
+            var name = _auth.Profiles.GetRemark(user.Id) ??
+                (!string.IsNullOrWhiteSpace(user.Nickname) ? user.Nickname : user.Username);
+            if (!string.IsNullOrWhiteSpace(name)) label.Text = name.Replace("_", "__");
+        });
     }
 
     private double DistanceFromBottom => Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight - _scroll.VerticalOffset);
