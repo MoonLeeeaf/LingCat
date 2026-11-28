@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace LingCat.ClientProtocol.Client;
@@ -13,10 +14,10 @@ namespace LingCat.ClientProtocol.Client;
 /// </summary>
 public static class MessageParser
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly MessageParserJsonContext JsonContext = new(new JsonSerializerOptions
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
+    });
 
     private static readonly Regex BoldRegex = new(@"^\*\*([^*]+)\*\*", RegexOptions.Compiled);
     private static readonly Regex ItalicRegex = new(@"^\*([^*]+)\*", RegexOptions.Compiled);
@@ -151,7 +152,7 @@ public static class MessageParser
                         payload["emoji"] = emoji;
                     }
 
-                    AddEntity("attachment", "[附件]", JsonSerializer.Serialize(payload, JsonOptions));
+                    AddEntity("attachment", "[附件]", JsonSerializer.Serialize(payload, JsonContext.DictionaryStringString));
                     i += match.Length;
                     continue;
                 }
@@ -172,7 +173,7 @@ public static class MessageParser
                     ["name"] = string.IsNullOrEmpty(name) ? "Unnamed" : name,
                 };
 
-                AddEntity("attachment", "[附件]", JsonSerializer.Serialize(payload, JsonOptions));
+                AddEntity("attachment", "[附件]", JsonSerializer.Serialize(payload, JsonContext.DictionaryStringString));
                 i += match.Length;
                 continue;
             }
