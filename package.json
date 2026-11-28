@@ -22,7 +22,7 @@
         "build-android-client": "cd android_client && sh gradlew assembleDebug",
         "generate-proto": "npx pbjs -t static-module -w esm -o ./protocol/lingcat-proto.js -d ./protocol/classes.proto ./protocol/methods.proto",
         "generate-proto-android": "protoc -I=./protocol --java_out=lite:./android/app/src/main/java/ ./protocol/*.proto",
-        "generate-proto-csharp": "protoc -I=./protocol --csharp_out=./client_protocol/csharp/Proto/ ./protocol/*.proto",
+        "generate-proto-csharp": "protoc -I=./protocol --csharp_out=./client_protocol_csharp/Proto/ ./protocol/*.proto",
         "typecheck": "tsc -p client/tsconfig.json --noEmit"
     },
     "devDependencies": {
