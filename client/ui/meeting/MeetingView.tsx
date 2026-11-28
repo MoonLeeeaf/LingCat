@@ -565,26 +565,7 @@ export function MeetingView({
                     挂断
                 </mdui-button>
             </div>
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '4px' }}>
-                {!isMobile && (
-                    <mdui-tooltip content={settings.pushToTalk ? '对讲机模式：按住麦克风按钮说话' : '开启对讲机模式'}>
-                        <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            fontSize: '12px',
-                            opacity: settings.pushToTalk ? 1 : 0.7,
-                        }}>
-                            <mdui-icon name="radio" style={{ fontSize: '18px' }} />
-                            <span>对讲机</span>
-                            <mdui-switch
-                                checked={settings.pushToTalk}
-                                checked-icon=""
-                                onChange={(e: any) => setMeetingSetting('pushToTalk', !!e.target.checked)}
-                            />
-                        </div>
-                    </mdui-tooltip>
-                )}
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                 <mdui-tooltip content="会议设置">
                     <mdui-button-icon
                         icon="settings"
