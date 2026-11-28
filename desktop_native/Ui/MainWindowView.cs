@@ -341,7 +341,7 @@ internal sealed class MainWindowView : Grid
 
         var sidebar = new SidebarView(_auth);
         var chatList = new ChatListPane();
-        var chatPage = new ChatPageView();
+        var chatPage = new ChatPageView(() => _auth.User.Nickname);
 
         _sidebar = sidebar;
         _chatList = chatList;
@@ -361,7 +361,6 @@ internal sealed class MainWindowView : Grid
             _ = LoadHistoryAsync(chat);
         };
         chatPage.SendRequested += (chat, text) => _ = SendAsync(chat, text);
-        chatPage.RefreshRequested += () => _ = RefreshChatsAsync();
 
         Clear();
         Add(sidebar.Root.GridPosition(0, 0));

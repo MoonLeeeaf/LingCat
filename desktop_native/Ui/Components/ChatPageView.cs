@@ -1,341 +1,289 @@
+using System.Globalization;
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
 using Aprillz.MewUI.Resources;
 using MewUI.Material.Controls;
+using MewUI.Material.Themes;
 using MaterialIconButton = MewUI.Material.Controls.IconButton;
 
 namespace LingCat_Desktop.Ui.Components;
 
-/// <summary>
-/// 右侧聊天页面框架。对应 UserMainLayout 的 main / Outlet：
-/// 会话头部、消息滚动区、底部输入区。
-/// </summary>
 internal sealed class ChatPageView
 {
-    public MaterialSurface Root { get; }
-
-    private readonly Label _avatarLabel;
-    private readonly Border _avatar;
-    private readonly Label _titleLabel;
-    private readonly Label _subtitleLabel;
-    private readonly StackPanel _messagesPanel;
+    private const double FollowThreshold = 16;
+    private readonly TextBlock _title = new() { TextTrimming = TextTrimming.CharacterEllipsis };
+    private readonly MessageStack _messages = new() { Spacing = 4, Padding = new Thickness(16, 12, 16, 12) };
     private readonly ScrollViewer _scroll;
-    private readonly MultiLineTextBox _composer;
-    private readonly Button _sendButton;
-    private readonly SimpleSvgSource _sendIcon;
-    private readonly Label _status;
-
+    private readonly MultiLineTextBox _editor;
+    private readonly Label _status = new Label().TextWrapping(TextWrapping.Wrap).Margin(4, 0, 4, 4);
+    private readonly MaterialProgressBar _progress = new() { IsVisible = false, Height = 4 };
+    private readonly Button _send;
+    private readonly Button _latest;
+    private readonly Func<string> _ownName;
+    private readonly List<(SimpleSvgSource Source, Button Button)> _icons = [];
     private ChatSummary? _chat;
+    private ChatMessage[] _rendered = [];
+    private bool _wasLoading;
+    private bool _hadHistoryError;
+    private bool _scrollQueued;
+    private double? _requestedOffset;
 
-    public ChatPageView()
+    public ChatPageView(Func<string> ownName)
     {
-        _avatarLabel = new Label()
-            .Text("灵")
-            .FontSize(16)
-            .Bold()
-            .Foreground(UiTheme.OnAccent)
-            .HorizontalAlignment(HorizontalAlignment.Center)
-            .VerticalAlignment(VerticalAlignment.Center);
+        _ownName = ownName;
+        _scroll = new ScrollViewer().VerticalScroll(ScrollMode.Auto).HorizontalScroll(ScrollMode.Disabled).Content(_messages);
+        _scroll.ScrollChanged += UpdateLatestButton;
+        _messages.Arranged = QueueRequestedScroll;
+        _latest = Icon("ic_arrow_downward.svg", "回到最新消息", filled: true)
+            .HorizontalAlignment(HorizontalAlignment.Right).VerticalAlignment(VerticalAlignment.Bottom)
+            .Margin(0, 0, 22, 10).OnClick(ScrollToLatest);
+        _latest.IsVisible = false;
 
-        _avatar = new Border()
-            .Width(42)
-            .Height(42)
-            .CornerRadius(21)
-            .Background(UiTheme.Accent)
-            .Child(_avatarLabel);
-
-        _titleLabel = new Label()
-            .Text("选择一个对话")
-            .FontSize(UiTheme.Type.TitleMedium.FontSize)
-            .FontWeight(UiTheme.Type.TitleMedium.FontWeight);
-
-        _subtitleLabel = UiFactory.Caption("从左侧列表开始", UiTheme.Type.BodySmall.FontSize);
-
-        _messagesPanel = new StackPanel()
-            .Spacing(4)
-            .Padding(24, 18, 24, 18);
-
-        _scroll = new ScrollViewer()
-            .VerticalScroll(ScrollMode.Auto)
-            .HorizontalScroll(ScrollMode.Disabled)
-            .Content(_messagesPanel);
-
-        _composer = new MultiLineTextBox()
-            .Placeholder("输入消息，Ctrl+Enter 发送...")
-            .Wrap(true)
-            .MinHeight(42)
-            .MaxHeight(110)
-            .Padding(12, 9);
-
-        _composer.TextChanged += text => { if (_chat != null) _chat.Draft = text; };
-        _composer.OnKeyDown(e =>
+        _editor = new MultiLineTextBox().Placeholder("输入...").Wrap(true)
+            .MinHeight(48).MaxHeight(168).Padding(4, 12);
+        _editor.SizeToDocument = true;
+        _editor.TextChanged += text =>
         {
-            if (e.Key == Key.Enter && e.PrimaryKey)
-            {
-                SendCurrentMessage();
-                e.Handled = true;
-            }
-        });
+            if (_chat is not null) _chat.Draft = text;
+            UpdateSendButton();
+        };
+        _editor.KeyDown += e =>
+        {
+            if (e.Handled || e.Key != Key.Enter || !e.PrimaryKey) return;
+            e.Handled = true;
+            SendCurrentMessage();
+        };
 
-        _sendIcon = IconAssets.Load("ic_send.svg", UiTheme.OnAccent);
-        _sendButton = new FilledIconButton()
-            .Content(IconAssets.Create(_sendIcon, 18))
-            .Width(44)
-            .Height(44)
-            .ToolTip("发送")
-            .OnClick(SendCurrentMessage);
-
-        _status = new Label().FontSize(UiTheme.Type.BodySmall.FontSize).TextWrapping(TextWrapping.Wrap).Margin(18, 0, 18, 4);
+        _send = Icon("ic_send.svg", "发送（Ctrl+Enter）").OnClick(SendCurrentMessage);
 
         Root = new MaterialSurface
         {
+            Variant = MaterialSurfaceVariant.ElevatedCard,
             Padding = new Thickness(0),
-            Content = new Grid()
-                .Rows("Auto,1,*,Auto")
-                .Children(
-                    BuildHeader().GridPosition(0, 0),
-                    UiFactory.DividerLine(false).GridPosition(1, 0),
-                    _scroll.GridPosition(2, 0),
-                    BuildComposer().GridPosition(3, 0)),
+            Content = new Grid().Rows("Auto,1,*,Auto").Children(
+                BuildHeader().GridPosition(0, 0),
+                UiFactory.DividerLine(false).GridPosition(1, 0),
+                new Grid().Rows("*").Columns("*").Children(_scroll, _latest).GridPosition(2, 0),
+                BuildComposer().GridPosition(3, 0)),
         };
-
+        ApplyThemeCore();
         SetChat(null);
     }
 
+    public MaterialSurface Root { get; }
     public event Action<ChatSummary, string>? SendRequested;
-    public event Action? RefreshRequested;
-
-    public ChatSummary? CurrentChat => _chat;
-
-    public string Draft
-    {
-        get => _composer.Text ?? string.Empty;
-        set => _composer.Text = value;
-    }
 
     public void SetChat(ChatSummary? chat)
     {
-        var draft = chat?.Draft ?? string.Empty;
+        bool switched = !ReferenceEquals(_chat, chat);
+        bool follow = switched || _requestedOffset == double.MaxValue || DistanceFromBottom <= FollowThreshold;
+        double offset = _requestedOffset ?? _scroll.VerticalOffset;
         _chat = chat;
-        if (Draft != draft) Draft = draft;
+        var draft = chat?.Draft ?? string.Empty;
+        if (_editor.Text != draft) _editor.Text = draft;
+        UpdateAppearance();
 
-        UpdateChatAppearance();
-        RenderMessages();
+        var messages = chat?.Messages;
+        bool loading = chat?.HistoryLoading == true;
+        bool historyError = chat?.HistoryError is not null;
+        if (switched || _messages.Children.Count == 0 || loading != _wasLoading || historyError != _hadHistoryError ||
+            (messages is not null && !messages.SequenceEqual(_rendered)))
+        {
+            _rendered = messages?.ToArray() ?? [];
+            _wasLoading = loading;
+            _hadHistoryError = historyError;
+            RenderMessages(follow ? double.MaxValue : offset);
+        }
     }
 
     public void ApplyTheme()
     {
-        _subtitleLabel.Foreground = UiTheme.TextSecondary;
-        var scrollOffset = _scroll.VerticalOffset;
-        UpdateChatAppearance();
-        RenderMessages(scrollToBottom: false);
-        _scroll.SetScrollOffsets(_scroll.HorizontalOffset, scrollOffset);
+        ApplyThemeCore();
+        UpdateAppearance();
+        RenderMessages(_requestedOffset ?? (DistanceFromBottom <= FollowThreshold ? double.MaxValue : _scroll.VerticalOffset));
     }
 
-    private void UpdateChatAppearance()
-    {
-        var chat = _chat;
-        if (chat is null)
-        {
-            _avatar.Background = UiTheme.Accent;
-            _avatarLabel.Foreground = UiTheme.OnAccent;
-            _avatarLabel.Text = "灵";
-            _titleLabel.Text = "选择一个对话";
-            _subtitleLabel.Text = "从左侧列表开始";
-            _composer.IsEnabled = false;
-            _sendButton.IsEnabled = false;
-        }
-        else
-        {
-            _avatar.Background = chat.AvatarColor;
-            _avatarLabel.Foreground = UiTheme.OnAvatar;
-            _avatarLabel.Text = chat.AvatarText;
-            _titleLabel.Text = chat.Title;
-            _subtitleLabel.Text = chat.IsGroup ? "群聊" : "私聊";
-            _composer.IsEnabled = true;
-            _sendButton.IsEnabled = !chat.Sending;
-        }
-
-        _status.Text = chat?.SendError ?? chat?.HistoryError ?? (chat?.HistoryLoading == true ? "正在加载消息…" : string.Empty);
-        _status.IsVisible = _status.Text.Length > 0;
-        _status.Foreground = chat?.SendError != null || chat?.HistoryError != null ? UiTheme.Danger : UiTheme.TextSecondary;
-        _sendIcon.Tint = _sendButton.IsEnabled ? UiTheme.OnAccent : UiTheme.Text.WithAlpha(97);
-    }
-
-    private Grid BuildHeader()
-    {
-        var actions = new StackPanel()
-            .Horizontal()
-            .Spacing(8)
-            .VerticalAlignment(VerticalAlignment.Center)
-            .Children(
-                HeaderAction("↻", "刷新对话和消息").OnClick(() => RefreshRequested?.Invoke()));
-
-        return new Grid()
-            .Columns("Auto,*,Auto")
-            .Padding(18, 12, 18, 12)
-            .Children(
-                _avatar
-                    .GridPosition(0, 0)
-                    .VerticalAlignment(VerticalAlignment.Center),
-                new StackPanel()
-                    .Spacing(2)
-                    .Margin(11, 0, 0, 0)
-                    .VerticalAlignment(VerticalAlignment.Center)
-                    .Children(
-                        _titleLabel,
-                        _subtitleLabel)
-                    .GridPosition(0, 1),
-                actions.GridPosition(0, 2));
-    }
-
-    private Button HeaderAction(string glyph, string tooltip)
-    {
-        return new MaterialIconButton()
-            .Content(glyph)
-            .FontSize(15)
-            .ToolTip(tooltip);
-    }
+    private Grid BuildHeader() => new Grid().MinHeight(56).Padding(16, 4, 8, 4).Children(
+        _title.VerticalAlignment(VerticalAlignment.Center));
 
     private StackPanel BuildComposer()
     {
-        var attach = new OutlinedIconButton { IsEnabled = false }
-            .Content("+")
-            .Width(42)
-            .Height(42)
-            .FontSize(18)
-            .ToolTip("添加附件");
-
-        return new StackPanel()
-            .Spacing(0)
-            .Children(
-                UiFactory.DividerLine(false),
-                _status,
-                new Grid()
-                    .Columns("Auto,*,Auto")
-                    .Padding(16, 12, 16, 14)
-                    .Children(
-                        attach
-                            .GridPosition(0, 0)
-                            .VerticalAlignment(VerticalAlignment.Bottom),
-                        UiFactory.EditorSurface(_composer)
-                            .Margin(10, 0, 10, 0)
-                            .GridPosition(0, 1),
-                        _sendButton
-                            .GridPosition(0, 2)
-                            .VerticalAlignment(VerticalAlignment.Bottom)));
+        var mic = UnavailableIcon("ic_mic.svg", "录制语音");
+        var mood = UnavailableIcon("ic_mood.svg", "贴纸");
+        var attachment = UnavailableIcon("ic_attachment.svg", "添加附件");
+        var actions = new StackPanel().Horizontal().Children(mood, attachment, _send)
+            .VerticalAlignment(VerticalAlignment.Bottom).Margin(0, 0, 0, 4);
+        var contents = new Grid().Columns("Auto,*,Auto").Children(
+            mic.VerticalAlignment(VerticalAlignment.Bottom).Margin(0, 0, 0, 4).GridPosition(0, 0),
+            _editor.GridPosition(0, 1),
+            actions.GridPosition(0, 2));
+        return new StackPanel().Padding(8, 4, 8, 8).Children(
+            _progress, _status, UiFactory.EditorSurface(_editor, contents));
     }
 
-    private void RenderMessages(bool scrollToBottom = true)
+    private MaterialButton Icon(string fileName, string tooltip, bool filled = false)
     {
-        _messagesPanel.Clear();
-
-        if (_chat is null)
-        {
-            AddPlaceholder("灵猫", "选择一个对话开始聊天");
-            return;
-        }
-
-        if (_chat.Messages.Count == 0)
-        {
-            if (!_chat.HistoryLoading && _chat.HistoryError == null)
-                AddPlaceholder(_chat.AvatarText, "还没有消息，发一句问候吧");
-            return;
-        }
-
-        foreach (var message in _chat.Messages)
-        {
-            _messagesPanel.Add(BuildMessage(message));
-        }
-
-        if (scrollToBottom) ScrollToBottom();
+        MaterialButton button = filled ? new FilledIconButton() : new MaterialIconButton();
+        var source = IconAssets.Load(fileName, UiTheme.TextSecondary);
+        button.Content = IconAssets.Create(source, 22);
+        _icons.Add((source, button));
+        return button.Width(40).Height(40).ToolTip(tooltip);
     }
 
-    private void AddPlaceholder(string avatarText, string text)
+    private Button UnavailableIcon(string fileName, string tooltip)
     {
-        _messagesPanel.Add(new StackPanel()
-            .Spacing(8)
-            .Margin(0, 96, 0, 0)
-            .HorizontalAlignment(HorizontalAlignment.Center)
-            .Children(
-                UiFactory.Avatar(avatarText, UiTheme.SurfaceActive, 58, 22, UiTheme.TextSecondary)
-                    .HorizontalAlignment(HorizontalAlignment.Center),
-                new Label()
-                    .Text(text)
-                    .FontSize(13)
-                    .Foreground(UiTheme.TextSecondary)
-                    .HorizontalAlignment(HorizontalAlignment.Center)));
+        var button = Icon(fileName, $"{tooltip}（原生端暂未支持）");
+        button.IsEnabled = false;
+        return button;
     }
 
-    private UIElement BuildMessage(ChatMessage message)
+    private void ApplyThemeCore()
     {
-        if (message.IsSystem)
+        _title.FontSize = UiTheme.Type.TitleMedium.FontSize;
+        _title.Foreground = UiTheme.Text;
+        _status.FontSize = UiTheme.Type.BodySmall.FontSize;
+        UpdateIconColors();
+    }
+
+    private void UpdateAppearance()
+    {
+        _title.Text = _chat?.Title ?? "选择一个对话";
+        _editor.IsEnabled = _chat is not null;
+        var error = _chat?.SendError ?? _chat?.HistoryError;
+        _status.Text = error ?? (_chat?.Sending == true ? "正在发送…" : string.Empty);
+        _status.IsVisible = _status.Text.Length != 0;
+        _status.Foreground = error is null ? UiTheme.TextSecondary : UiTheme.Danger;
+        _progress.IsVisible = _progress.IsIndeterminate = _chat?.Sending == true;
+        UpdateSendButton();
+    }
+
+    private void UpdateSendButton()
+    {
+        _send.IsEnabled = _chat is { Sending: false } && !string.IsNullOrWhiteSpace(_editor.Text);
+        UpdateIconColors();
+    }
+
+    private void UpdateIconColors()
+    {
+        foreach (var (source, button) in _icons)
+            source.Tint = !button.IsEnabled ? UiTheme.Text.WithAlpha(97) :
+                ReferenceEquals(button, _latest) ? UiTheme.OnAccent :
+                ReferenceEquals(button, _send) ? UiTheme.Accent : UiTheme.TextSecondary;
+    }
+
+    private void RenderMessages(double offset)
+    {
+        _requestedOffset = offset;
+        _messages.Clear();
+        if (_rendered.Length == 0)
         {
-            return new Label()
-                .Text(message.Text)
-                .FontSize(10)
-                .Foreground(UiTheme.TextMuted)
-                .HorizontalAlignment(HorizontalAlignment.Center)
-                .Margin(0, 6, 0, 6)
-                .Padding(10, 4)
-                .Background(UiTheme.BubbleSystem)
-                .CornerRadius(UiTheme.Shape.Small);
+            if (_wasLoading)
+                _messages.Add(new MaterialProgressBar { IsIndeterminate = true, Width = 120, Margin = new Thickness(0, 28, 0, 0), HorizontalAlignment = HorizontalAlignment.Center });
+            else if (!_hadHistoryError)
+                _messages.Add(new Label().Text(_chat is null ? "从左侧选择一个对话" : "还没有消息")
+                    .Foreground(UiTheme.TextMuted).Margin(0, 28, 0, 0).HorizontalAlignment(HorizontalAlignment.Center));
         }
 
-        var content = new StackPanel()
-            .Spacing(3)
-            .Children(
-                new Label()
-                    .Text(message.Text)
-                    .FontSize(UiTheme.Type.BodyMedium.FontSize)
-                    .Foreground(message.IsMine ? UiTheme.OnBubbleMine : UiTheme.Text)
-                    .TextWrapping(TextWrapping.Wrap)
-                    .MaxWidth(470));
-
-        if (!message.IsMine && _chat?.IsGroup == true && !string.IsNullOrEmpty(message.Sender))
+        ChatMessage? previous = null;
+        foreach (var message in _rendered)
         {
-            content.Insert(0, new Label()
-                .Text(message.Sender)
-                .FontSize(10)
-                .Bold()
-                .Foreground(UiTheme.AccentText));
+            bool showTime = previous?.Time != message.Time;
+            if (showTime && !string.IsNullOrEmpty(message.Time))
+                _messages.Add(new Label().Text(message.Time).FontSize(UiTheme.Type.BodySmall.FontSize)
+                    .Foreground(UiTheme.TextMuted).Margin(0, 12, 0, 6).HorizontalAlignment(HorizontalAlignment.Center));
+
+            if (message.IsSystem)
+                _messages.Add(new Label().Text(message.Text.Replace("_", "__")).FontSize(UiTheme.Type.BodySmall.FontSize)
+                    .TextWrapping(TextWrapping.Wrap).Foreground(UiTheme.TextSecondary)
+                    .Padding(10, 4).CornerRadius(10).Background(UiTheme.BubbleSystem)
+                    .HorizontalAlignment(HorizontalAlignment.Center));
+            else
+                _messages.Add(BuildMessage(message, showTime || previous is not { IsSystem: false } ||
+                    previous.IsMine != message.IsMine || previous.Sender != message.Sender));
+            previous = message;
+        }
+    }
+
+    private Grid BuildMessage(ChatMessage message, bool showSender)
+    {
+        int column = message.IsMine ? 1 : 0;
+        var side = message.IsMine ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+        var row = new Grid().Columns("*,*").Rows(showSender ? "Auto,Auto" : "Auto");
+        if (showSender)
+        {
+            var sender = message.IsMine ? _ownName() : _chat?.IsGroup == false ? _chat.Title : message.Sender;
+            if (string.IsNullOrWhiteSpace(sender)) sender = message.IsMine ? "我" : "未知用户";
+            var avatar = UiFactory.Avatar(StringInfo.GetNextTextElement(sender).Replace("_", "__"),
+                message.IsMine ? UiTheme.Accent : _chat?.AvatarColor ?? UiTheme.Accent, 40, 15);
+            var name = new Label().Text(sender.Replace("_", "__")).FontSize(UiTheme.Type.LabelLarge.FontSize)
+                .TextTrimming(TextTrimming.CharacterEllipsis).VerticalAlignment(VerticalAlignment.Center);
+            var author = message.IsMine
+                ? new Grid().Columns("*,Auto").Children(
+                    name.HorizontalAlignment(HorizontalAlignment.Right).Margin(0, 0, 8, 0).GridPosition(0, 0), avatar.GridPosition(0, 1))
+                : new Grid().Columns("Auto,*").Children(avatar.GridPosition(0, 0), name.Margin(8, 0, 0, 0).GridPosition(0, 1));
+            row.Add(author.Margin(0, 4, 0, 0).GridPosition(0, column));
         }
 
-        content.Add(new Label()
-            .Text(message.Time)
-            .FontSize(9)
-            .Foreground(message.IsMine ? UiTheme.OnBubbleMine : UiTheme.TextMuted)
-            .HorizontalAlignment(message.IsMine ? HorizontalAlignment.Right : HorizontalAlignment.Left));
+        var body = new TextBlock
+        {
+            Text = message.Text,
+            TextWrapping = TextWrapping.Wrap,
+            FontSize = UiTheme.Type.BodyMedium.FontSize,
+            Foreground = UiTheme.Text,
+        };
+        var bubble = new MaterialSurface { Variant = MaterialSurfaceVariant.ElevatedCard, Content = body }
+            .Padding(12, 8).HorizontalAlignment(side)
+            .Margin(message.IsMine ? 0 : 48, 0, message.IsMine ? 48 : 0, 0)
+            .ToolTip(message.Time);
+        var copy = new Command("chat.copy-message", "复制消息");
+        bubble.Commands.Register(copy, () => { Application.Current.PlatformServices.Clipboard?.TrySetText(message.Text); });
+        bubble.ContextMenu(new ContextMenu().Item(copy));
+        row.Add(bubble.GridPosition(showSender ? 1 : 0, column));
+        return row;
+    }
 
-        return new Border()
-            .Background(message.IsMine ? UiTheme.BubbleMine : UiTheme.BubbleOther)
-            .CornerRadius(UiTheme.Shape.Large)
-            .Padding(12, 8)
-            .MaxWidth(500)
-            .Margin(0, 3, 0, 3)
-            .HorizontalAlignment(message.IsMine ? HorizontalAlignment.Right : HorizontalAlignment.Left)
-            .Child(content);
+    private double DistanceFromBottom => Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight - _scroll.VerticalOffset);
+
+    private void UpdateLatestButton() => _latest.IsVisible = _rendered.Length != 0 && DistanceFromBottom > FollowThreshold;
+
+    private void ScrollToLatest()
+    {
+        _scroll.SetScrollOffsets(0, Math.Max(0, _messages.ActualHeight - _scroll.ViewportHeight));
+        UpdateLatestButton();
+    }
+
+    private void QueueRequestedScroll()
+    {
+        // ScrollViewer clamps offsets to the measured extent, so wait until the new rows are arranged.
+        if (_requestedOffset is null || _scrollQueued || !Application.IsRunning ||
+            Application.Current?.Dispatcher is not { } dispatcher) return;
+        _scrollQueued = true;
+        dispatcher.BeginInvoke(() =>
+        {
+            _scrollQueued = false;
+            if (_requestedOffset is not { } offset) return;
+            _requestedOffset = null;
+            if (Root.FindVisualRoot() is not Window) return;
+            if (offset == double.MaxValue) ScrollToLatest();
+            else _scroll.SetScrollOffsets(0, offset);
+            UpdateLatestButton();
+        });
     }
 
     private void SendCurrentMessage()
     {
-        if (_chat is null || _chat.Sending) return;
-
-        var text = _composer.Text?.Trim();
-        if (string.IsNullOrEmpty(text)) return;
-
-        SendRequested?.Invoke(_chat, text);
+        if (_chat is not { Sending: false } chat || string.IsNullOrWhiteSpace(_editor.Text)) return;
+        SendRequested?.Invoke(chat, _editor.Text.Trim());
     }
 
-    private void ScrollToBottom()
+    private sealed class MessageStack : StackPanel
     {
-        try
+        public Action? Arranged { get; set; }
+
+        protected override void ArrangeContent(Rect bounds)
         {
-            _scroll.SetScrollOffsets(_scroll.HorizontalOffset, double.MaxValue);
-        }
-        catch
-        {
-            // 布局尚未完成时忽略，下一次渲染会自然落到最新消息。
+            base.ArrangeContent(bounds);
+            Arranged?.Invoke();
         }
     }
 }

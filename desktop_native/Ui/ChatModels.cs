@@ -71,22 +71,22 @@ internal static class UiFactory
     };
 
     // The multiline composer keeps its built-in editing behavior inside Material chrome.
-    public static MaterialSurface EditorSurface(TextBase editor) => new EditorHost(editor);
+    public static MaterialSurface EditorSurface(TextBase editor, UIElement content) => new EditorHost(editor, content);
 
     private sealed class EditorHost : MaterialSurface
     {
         private readonly TextBase _editor;
 
-        public EditorHost(TextBase editor)
+        public EditorHost(TextBase editor, UIElement content)
         {
             _editor = editor;
             Variant = MaterialSurfaceVariant.OutlinedCard;
-            Padding = new Thickness(0);
+            Padding = new Thickness(4, 0);
             editor.Background = Color.Transparent;
             editor.BorderThickness = 0;
             editor.GotFocus += UpdateFocus;
             editor.LostFocus += UpdateFocus;
-            Content = editor;
+            Content = content;
             OnMaterialThemeChanged(MaterialTheme);
         }
 
