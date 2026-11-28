@@ -11,3 +11,5 @@ dotnet run --project desktop_native/LingCat-Desktop.csproj
 ```bash
 dotnet run --project desktop_native/LingCat-Desktop.csproj -- --dark --reduce-motion --data-dir=./LingCat-Data
 ```
+
+Linux 版在启动时读取 KDE Plasma、GNOME、Cinnamon、MATE 或 Xfce 的界面字体族。修改系统字体后重启 LingCat 即可生效；读取不到设置时使用 MewUI 的默认字体。

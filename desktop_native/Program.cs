@@ -88,9 +88,14 @@ window.Closed += () =>
     _ = root.DisposeSessionAsync();
 };
 
-Application.Create()
+var application = Application.Create()
     .UseTheme(themeMode)
-    .UseAccent(UiTheme.Accent)
+    .UseAccent(UiTheme.Accent);
+
+if (LinuxDesktopFont.GetFamily() is { } fontFamily)
+    application.UseMetrics(ThemeMetrics.Default with { FontFamily = fontFamily });
+
+application
     .OnStartup(() =>
     {
         MaterialThemeManager.AttachToApplication();

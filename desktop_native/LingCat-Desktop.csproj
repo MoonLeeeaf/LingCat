@@ -6,6 +6,7 @@
     <RootNamespace>LingCat_Desktop</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MewUIDevTools>true</MewUIDevTools>
   </PropertyGroup>
 
