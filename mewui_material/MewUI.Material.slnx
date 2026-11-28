@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MewUI.Material.Gallery/MewUI.Material.Gallery.csproj" />
+    <Project Path="src/MewUI.Material/MewUI.Material.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MewUI.Material.Tests/MewUI.Material.Tests.csproj" />
+  </Folder>
+</Solution>

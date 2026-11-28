@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MewUI.Material</RootNamespace>
+    <AssemblyName>MewUI.Material</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Material Design 3 themes and interactive controls for MewUI 0.22.1.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="MewUI.Material.Tests" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <PackageReference Include="Aprillz.MewUI.Core" Version="0.22.1" />
+    <PackageReference Include="MaterialColorUtilities" Version="0.3.0" />
+  </ItemGroup>
+
+</Project>

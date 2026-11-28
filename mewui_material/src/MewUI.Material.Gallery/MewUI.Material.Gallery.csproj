@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MewUI.Material.Gallery</RootNamespace>
+    <AssemblyName>MewUI.Material.Gallery</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aprillz.MewUI" Version="0.22.1" />
+    <ProjectReference Include="../MewUI.Material/MewUI.Material.csproj" />
+  </ItemGroup>
+
+</Project>
