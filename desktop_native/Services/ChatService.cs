@@ -19,37 +19,45 @@ internal sealed class ChatService(AuthSession session)
             foreach (var chat in batch)
             {
                 if (!seen.Add(chat.Id)) continue;
-                var title = string.IsNullOrWhiteSpace(chat.Title) ? chat.ChatUnique ?? chat.Id : chat.Title;
-                chats.Add(new ChatSummary
-                {
-                    Id = chat.Id, Title = title,
-                    AvatarText = title.Length == 0 ? "灵" : StringInfo.GetNextTextElement(title),
-                    AvatarColor = Color.FromRgb(0x71, 0x56, 0x79),
-                    Snippet = chat.LastMessageText ?? string.Empty,
-                    Time = FormatTime(chat.LastMessageTime),
-                    IsFavourite = chat.Favourited == true,
-                    IsGroup = chat.Type == "group",
-                });
+                chats.Add(ToSummary(chat));
             }
             if (batch.Count < pageSize) return chats;
         }
     }
 
+    public static ChatSummary ToSummary(Chat chat)
+    {
+        var title = string.IsNullOrWhiteSpace(chat.Title) ? chat.ChatUnique ?? chat.Id : chat.Title;
+        return new ChatSummary
+        {
+            Id = chat.Id, Title = title,
+            AvatarText = title.Length == 0 ? "灵" : StringInfo.GetNextTextElement(title),
+            AvatarColor = Color.FromRgb(0x71, 0x56, 0x79),
+            Snippet = chat.LastMessageText ?? string.Empty,
+            Time = FormatTime(chat.LastMessageTime),
+            LastMessageId = chat.LastMessageId,
+            IsFavourite = chat.Favourited == true,
+            IsGroup = chat.Type == "group",
+        };
+    }
+
     public async Task<IReadOnlyList<ChatMessage>> GetMessagesAsync(string chatId)
     {
         var messages = await ChatApi.GetChatMessagesAsync(session.Client, new(session.Stored.Token, chatId, Limit: 50)).ConfigureAwait(false);
-        return messages.OrderBy(message => message.Id).Select(message => new ChatMessage
-        {
-            Id = message.Id, Text = message.Text, Time = FormatTime(message.Time),
-            IsSystem = message.System == true, Sender = message.SenderUserId ?? string.Empty,
-            IsMine = message.SenderUserId == session.User.Id,
-        }).ToArray();
+        return messages.OrderBy(message => message.Id).Select(message => ToMessage(
+            message.Id, message.Text, message.Time, message.SenderUserId, message.System == true)).ToArray();
     }
+
+    public ChatMessage ToMessage(uint id, string text, ulong time, string? sender, bool system) => new()
+    {
+        Id = id, Text = text, Time = FormatTime(time), IsSystem = system,
+        Sender = sender ?? string.Empty, IsMine = sender == session.User.Id,
+    };
 
     public async Task<ChatMessage> SendAsync(string chatId, string text)
     {
         uint id = await ChatApi.SendChatMessageAsync(session.Client, new(session.Stored.Token, chatId, text)).ConfigureAwait(false);
-        return new ChatMessage { Id = id, Text = text, Time = DateTime.Now.ToString("HH:mm"), Sender = "我", IsMine = true };
+        return ToMessage(id, text, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), session.User.Id, false);
     }
 
     private static string FormatTime(ulong time)

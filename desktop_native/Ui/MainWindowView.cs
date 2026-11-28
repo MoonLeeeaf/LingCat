@@ -1,9 +1,11 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Controls;
+using LingCat.ClientProtocol.Client;
 using LingCat_Desktop.Services;
 using LingCat_Desktop.Ui.Components;
 using MewUI.Material.Controls;
 using MewUI.Material.Themes;
+using Proto = Lingcat.Methods;
 
 namespace LingCat_Desktop.Ui;
 
@@ -20,7 +22,11 @@ internal sealed class MainWindowView : Grid
     private readonly List<ChatSummary> _chats = [];
     private readonly ChatService _chatService;
     private readonly CancellationTokenSource _lifetime = new();
+    private IDisposable? _connectionSubscription;
+    private bool _needsAuthorization;
+    private bool _authorizing;
     private bool _loadingChats;
+    private bool _refreshPending;
     private string? _chatStatus;
 
     private SidebarView? _sidebar;
@@ -48,19 +54,117 @@ internal sealed class MainWindowView : Grid
         BuildTree();
     }
 
-    public void Start() => _ = RefreshChatsAsync();
+    public void Start()
+    {
+        if (_connectionSubscription is not null || _lifetime.IsCancellationRequested) return;
+        _auth.Client.AddOnReceiveListener(OnPackage);
+        _connectionSubscription = _auth.Client.SubscribeConnectionState(() =>
+        {
+            bool disconnected = !_auth.Client.IsConnected;
+            UiThread.Post(() =>
+            {
+                if (disconnected) _needsAuthorization = true;
+                OnConnectionChanged();
+            });
+        });
+        _ = PollChatsAsync(_lifetime.Token);
+        OnConnectionChanged();
+    }
 
     public void Stop()
     {
         _lifetime.Cancel();
+        _auth.Client.RemoveOnReceiveListener(OnPackage);
+        _connectionSubscription?.Dispose();
+        _connectionSubscription = null;
         _accountDialog?.Close();
+    }
+
+    private async Task PollChatsAsync(CancellationToken token)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(30));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(token).ConfigureAwait(false))
+                UiThread.Post(OnConnectionChanged);
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+    }
+
+    private void OnConnectionChanged()
+    {
+        if (_lifetime.IsCancellationRequested) return;
+        if (!_auth.Client.IsConnected) { _needsAuthorization = true; return; }
+        if (_needsAuthorization) _ = RestoreEventSubscriptionAsync();
+        else _ = RefreshChatsAsync();
+    }
+
+    private async Task RestoreEventSubscriptionAsync()
+    {
+        if (_authorizing) return;
+        _authorizing = true;
+        bool authorized = false;
+        try
+        {
+            await UserApi.AuthorizeAsync(_auth.Client, new(_auth.Stored.Token, _auth.ConnectionSessionId)).ConfigureAwait(false);
+            authorized = true;
+        }
+        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("聊天事件订阅恢复失败：{0}", ex.Message); }
+        finally
+        {
+            UiThread.Post(() =>
+            {
+                _authorizing = false;
+                if (_lifetime.IsCancellationRequested || !authorized || !_auth.Client.IsConnected) return;
+                _needsAuthorization = false;
+                _ = RefreshChatsAsync();
+                if (_chats.Find(chat => chat.Id == _selectedChatId) is { } selected) _ = LoadHistoryAsync(selected);
+            });
+        }
+    }
+
+    private void OnPackage(Package package)
+    {
+        switch (package.MethodId)
+        {
+            case Methods.Update_My_Chats_Event:
+                UiThread.Post(() => _ = RefreshChatsAsync());
+                break;
+            case Methods.Receive_Chat_Message_Event:
+                var msg = Proto.Receive_Chat_Message_Event.Parser.ParseFrom(package.Data).Msg;
+                if (msg is null || msg.ChatId.Length == 0) return;
+                var message = _chatService.ToMessage(msg.Id, msg.Text, msg.Time, msg.SenderUserId, msg.System);
+                UiThread.Post(() =>
+                {
+                    if (_lifetime.IsCancellationRequested) return;
+                    if (_chats.Find(chat => chat.Id == msg.ChatId) is { } chat) ReceiveMessage(chat, message, replace: true);
+                    else _ = RefreshChatsAsync();
+                });
+                break;
+            case Methods.Message_Edited_Event:
+                var edit = Proto.Message_Edited_Event.Parser.ParseFrom(package.Data);
+                UiThread.Post(() =>
+                {
+                    if (_lifetime.IsCancellationRequested || _chats.Find(chat => chat.Id == edit.ChatId) is not { } chat) return;
+                    if (chat.LastMessageId == edit.Id) chat.LastMessageEdited = true;
+                    if (chat.Messages.Find(message => message.Id == edit.Id) is { } existing)
+                        ReceiveMessage(chat, existing with { Text = edit.Text }, replace: true);
+                    else if (chat.LastMessageId == edit.Id)
+                    {
+                        chat.Snippet = edit.Text;
+                        _chatList?.Refresh();
+                    }
+                });
+                break;
+        }
     }
 
     private async Task RefreshChatsAsync()
     {
-        if (_loadingChats || _lifetime.IsCancellationRequested) return;
+        if (_lifetime.IsCancellationRequested || !_auth.Client.IsConnected || _needsAuthorization) return;
+        if (_loadingChats) { _refreshPending = true; return; }
         _loadingChats = true;
-        _chatList?.SetStatus(_chatStatus = "正在加载对话…");
+        if (_chats.Count == 0) _chatList?.SetStatus(_chatStatus = "正在加载对话…");
         try
         {
             var chats = await _chatService.GetChatsAsync(_lifetime.Token).ConfigureAwait(false);
@@ -69,20 +173,48 @@ internal sealed class MainWindowView : Grid
                 if (_lifetime.IsCancellationRequested) return;
                 _loadingChats = false;
                 var existing = _chats.ToDictionary(chat => chat.Id);
+                var previousOrder = _chats.ToArray();
+                bool changed = _chatStatus is not null;
                 _chats.Clear();
                 foreach (var fresh in chats)
                 {
                     if (!existing.TryGetValue(fresh.Id, out var chat)) chat = fresh;
-                    else if (!chat.Sending) { chat.Snippet = fresh.Snippet; chat.Time = fresh.Time; }
+                    else
+                    {
+                        changed |= chat.Title != fresh.Title || chat.AvatarText != fresh.AvatarText;
+                        chat.Title = fresh.Title;
+                        chat.AvatarText = fresh.AvatarText;
+                        // The list endpoint may still return the original preview after an edit.
+                        if (fresh.LastMessageId > chat.LastMessageId ||
+                            (fresh.LastMessageId == chat.LastMessageId && !chat.LastMessageEdited))
+                        {
+                            changed |= chat.Snippet != fresh.Snippet || chat.Time != fresh.Time;
+                            chat.Snippet = fresh.Snippet;
+                            chat.Time = fresh.Time;
+                            chat.LastMessageId = fresh.LastMessageId;
+                            chat.LastMessageEdited = false;
+                        }
+                    }
+                    changed |= chat.IsFavourite != fresh.IsFavourite;
                     chat.IsFavourite = fresh.IsFavourite;
                     _chats.Add(chat);
                 }
-                _chatList?.SetStatus(_chatStatus = null);
-                _chatList?.SetChats(_chats);
+                if (_chatStatus is not null) _chatList?.SetStatus(_chatStatus = null);
+                if (changed || !previousOrder.SequenceEqual(_chats)) _chatList?.SetChats(_chats);
                 var target = _chats.FirstOrDefault(chat => chat.Id == _selectedChatId)
                     ?? _chats.FirstOrDefault(chat => _scope == ChatListScope.All || chat.IsFavourite);
-                if (target != null) _chatList?.SelectChat(target.Id);
+                if (target != null)
+                {
+                    if (target.Id != _selectedChatId) _chatList?.SelectChat(target.Id);
+                    else
+                    {
+                        if (changed) UpdatePage(target);
+                        if (target.LastMessageId > (target.Messages.LastOrDefault()?.Id ?? 0) || target.HistoryError is not null)
+                            _ = LoadHistoryAsync(target);
+                    }
+                }
                 else { _selectedChatId = null; _chatPage?.SetChat(null); }
+                if (_refreshPending) { _refreshPending = false; _ = RefreshChatsAsync(); }
             });
         }
         catch (Exception ex)
@@ -91,7 +223,8 @@ internal sealed class MainWindowView : Grid
             {
                 if (_lifetime.IsCancellationRequested) return;
                 _loadingChats = false;
-                _chatList?.SetStatus(_chatStatus = $"加载对话失败：{ex.Message}");
+                if (_chats.Count == 0) _chatList?.SetStatus(_chatStatus = $"加载对话失败：{ex.Message}");
+                if (_refreshPending) { _refreshPending = false; _ = RefreshChatsAsync(); }
             });
         }
     }
@@ -101,6 +234,7 @@ internal sealed class MainWindowView : Grid
         if (chat.HistoryLoading || _lifetime.IsCancellationRequested) return;
         chat.HistoryLoading = true;
         chat.HistoryError = null;
+        var beforeRequest = chat.Messages.ToDictionary(message => message.Id);
         UpdatePage(chat);
         try
         {
@@ -108,12 +242,13 @@ internal sealed class MainWindowView : Grid
             UiThread.Post(() =>
             {
                 if (_lifetime.IsCancellationRequested) return;
-                // Preserve a just-sent message if this request's snapshot predates it.
-                uint latest = messages.Count == 0 ? 0 : messages[^1].Id;
-                var newer = chat.Messages.Where(message => message.Id > latest).ToArray();
+                // Keep pushes that arrived while this history request was in flight.
+                var merged = messages.ToDictionary(message => message.Id);
+                foreach (var message in chat.Messages)
+                    if (!beforeRequest.TryGetValue(message.Id, out var previous) || !ReferenceEquals(previous, message))
+                        merged[message.Id] = message;
                 chat.Messages.Clear();
-                chat.Messages.AddRange(messages);
-                chat.Messages.AddRange(newer);
+                chat.Messages.AddRange(merged.Values.OrderBy(message => message.Id).TakeLast(50));
                 chat.HistoryLoading = false;
                 UpdatePage(chat);
             });
@@ -143,17 +278,9 @@ internal sealed class MainWindowView : Grid
             UiThread.Post(() =>
             {
                 if (_lifetime.IsCancellationRequested) return;
-                if (chat.Messages.All(existing => existing.Id != message.Id))
-                {
-                    var index = chat.Messages.FindIndex(existing => existing.Id > message.Id);
-                    chat.Messages.Insert(index < 0 ? chat.Messages.Count : index, message);
-                }
-                chat.Snippet = chat.Messages[^1].Text;
-                chat.Time = chat.Messages[^1].Time;
                 if (chat.Draft == sentDraft) chat.Draft = string.Empty;
                 chat.Sending = false;
-                UpdatePage(chat);
-                _chatList?.Refresh();
+                ReceiveMessage(chat, message, replace: false);
             });
         }
         catch (Exception ex)
@@ -166,6 +293,28 @@ internal sealed class MainWindowView : Grid
                 UpdatePage(chat);
             });
         }
+    }
+
+    private void ReceiveMessage(ChatSummary chat, ChatMessage message, bool replace)
+    {
+        int index = chat.Messages.FindIndex(existing => existing.Id >= message.Id);
+        if (index < 0) chat.Messages.Add(message);
+        else if (chat.Messages[index].Id != message.Id) chat.Messages.Insert(index, message);
+        else if (replace && chat.Messages[index] != message) chat.Messages[index] = message;
+
+        if (_selectedChatId != chat.Id && !chat.HistoryLoading && chat.Messages.Count > 50)
+            chat.Messages.RemoveRange(0, chat.Messages.Count - 50);
+
+        if (message.Id >= chat.LastMessageId)
+        {
+            var latest = chat.Messages[^1];
+            if (latest.Id != chat.LastMessageId) chat.LastMessageEdited = false;
+            chat.LastMessageId = latest.Id;
+            chat.Snippet = latest.Text;
+            chat.Time = latest.Time;
+            _chatList?.Refresh();
+        }
+        UpdatePage(chat);
     }
 
     private void UpdatePage(ChatSummary chat)

@@ -14,11 +14,13 @@ internal enum ChatListScope
 internal sealed class ChatSummary
 {
     public required string Id { get; init; }
-    public required string Title { get; init; }
-    public required string AvatarText { get; init; }
+    public required string Title { get; set; }
+    public required string AvatarText { get; set; }
     public required Color AvatarColor { get; init; }
     public string Snippet { get; set; } = string.Empty;
     public string Time { get; set; } = string.Empty;
+    public uint LastMessageId { get; set; }
+    public bool LastMessageEdited { get; set; }
     public bool IsFavourite { get; set; }
     public bool IsGroup { get; init; }
     public int MemberCount { get; init; }
@@ -30,7 +32,7 @@ internal sealed class ChatSummary
     public List<ChatMessage> Messages { get; } = new();
 }
 
-internal sealed class ChatMessage
+internal sealed record ChatMessage
 {
     public uint Id { get; init; }
     public required string Text { get; init; }
