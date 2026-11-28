@@ -46,7 +46,7 @@ internal sealed class MainWindowView : Grid
         _onAddAccount = onAddAccount;
         _onLogout = onLogout;
 
-        this.Columns("92,1,320,1,*");
+        this.Columns("80,1,320,1,*");
         BuildTree();
     }
 
@@ -261,6 +261,7 @@ internal sealed class MainWindowView : Grid
         dialog.Content = new MaterialSurface
         {
             Variant = MaterialSurfaceVariant.Dialog,
+            CornerRadius = 0,
             Padding = new Thickness(24),
             Content = new StackPanel().Spacing(12).Children(new Label().Text("外观设置").FontSize(UiTheme.Type.HeadlineSmall.FontSize), modes, motion, close),
         };

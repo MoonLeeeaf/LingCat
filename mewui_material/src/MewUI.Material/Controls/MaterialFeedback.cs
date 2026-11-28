@@ -23,6 +23,7 @@ public static class MaterialDialog
         dialog.Content = new MaterialSurface
         {
             Variant = MaterialSurfaceVariant.Dialog,
+            CornerRadius = 0,
             Padding = new Thickness(24),
             Content = new Grid().Rows("Auto,*,Auto").Children(
                 new Label().Text(title).FontSize(MaterialThemeManager.Current.Typography.HeadlineSmall.FontSize).GridPosition(0, 0),
