@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LingCat_Desktop.Services;
 
@@ -21,17 +22,17 @@ internal sealed class StoreData
     public Dictionary<string, string> ServerPublicKeys { get; set; } = new();
 }
 
+[JsonSourceGenerationOptions(WriteIndented = true, PropertyNameCaseInsensitive = true)]
+[JsonSerializable(typeof(StoreData))]
+internal partial class SessionStoreJsonContext : JsonSerializerContext
+{
+}
+
 /// <summary>
 /// 本地会话与受信任服务端公钥的持久化存储，对应 TS 端的 ClientStorage / ClientManager 子集。
 /// </summary>
 internal sealed class SessionStore
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true,
-        PropertyNameCaseInsensitive = true,
-    };
-
     private readonly object _lock = new();
     private StoreData _data;
 
@@ -141,7 +142,7 @@ internal sealed class SessionStore
             if (!File.Exists(FilePath)) return new StoreData();
 
             var json = File.ReadAllText(FilePath);
-            return JsonSerializer.Deserialize<StoreData>(json, JsonOptions) ?? new StoreData();
+            return JsonSerializer.Deserialize(json, SessionStoreJsonContext.Default.StoreData) ?? new StoreData();
         }
         catch
         {
@@ -159,7 +160,7 @@ internal sealed class SessionStore
                 Directory.CreateDirectory(directory);
             }
 
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(_data, JsonOptions));
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(_data, SessionStoreJsonContext.Default.StoreData));
         }
         catch
         {
