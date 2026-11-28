@@ -34,8 +34,8 @@ internal sealed class ChatListPane
             .FontWeight(UiTheme.Type.TitleLarge.FontWeight);
         _searchBox = new MaterialSearchBar
         {
-            Variant = MaterialTextFieldVariant.Filled,
-            Placeholder = "搜索对话…",
+            Variant = MaterialTextFieldVariant.Outlined,
+            Placeholder = "从中寻找...",
             ClearButtonText = "清除",
         };
         _searchBox.Editor.TextChanged += text =>
