@@ -11,25 +11,41 @@ namespace LingCat_Desktop.Services;
 
 internal sealed class DesktopNotifications : IAsyncDisposable
 {
+    internal static bool DebugEnabled { get; set; }
+    internal static void Debug(string message)
+    {
+        if (DebugEnabled) Console.Error.WriteLine($"[通知] {message}");
+    }
+
     private readonly SemaphoreSlim _gate = new(1);
+    private readonly NotificationAvatar _avatars = new();
     private INotificationService? _service;
     private WindowsNotifications? _windows;
     private bool _initializationAttempted;
     private bool _disposed;
 
-    public async Task ShowAsync(string title, string body, Action openChat, CancellationToken token)
+    public async Task<bool> ShowAsync(string title, string body, Action openChat, CancellationToken token,
+        AuthSession? auth = null, string? avatarHash = null)
     {
         try
         {
             await _gate.WaitAsync(token).ConfigureAwait(false);
             try
             {
-                if (_disposed || token.IsCancellationRequested) return;
+                if (_disposed || token.IsCancellationRequested) return false;
+                string? avatarPath = null;
+                if (auth is not null && !string.IsNullOrWhiteSpace(avatarHash))
+                {
+                    try { avatarPath = await _avatars.GetPathAsync(auth, avatarHash, token).ConfigureAwait(false); }
+                    catch (OperationCanceledException) when (token.IsCancellationRequested) { return false; }
+                    catch (Exception ex) { Debug($"头像不可用，将发送纯文字通知（{ex.GetType().Name}）。"); }
+                }
+                if (token.IsCancellationRequested) return false;
                 if (OperatingSystem.IsWindows())
                 {
                     _windows ??= new WindowsNotifications();
-                    await _windows.ShowAsync(title, body, openChat, token).ConfigureAwait(false);
-                    return;
+                    await _windows.ShowAsync(title, body, openChat, token, avatarPath).ConfigureAwait(false);
+                    return true;
                 }
                 if (!_initializationAttempted)
                 {
@@ -38,19 +54,25 @@ internal sealed class DesktopNotifications : IAsyncDisposable
                     _service = await Task.Run<INotificationService?>(static () =>
                         OperatingSystem.IsLinux() ? new LinuxNotificationService("LingCat") :
                         OperatingSystem.IsMacOS() ? new MacOSNotificationService("LingCat") : null).ConfigureAwait(false);
+                    if (_service?.IsSupported != true)
+                        Console.Error.WriteLine("[通知] 系统通知不可用：请检查 libnotify、桌面通知服务或系统通知权限。");
                 }
-                if (_service?.IsSupported != true || token.IsCancellationRequested) return;
+                if (_service?.IsSupported != true || token.IsCancellationRequested) return false;
                 // Freedesktop notification bodies support a subset of markup, unlike chat text.
                 var request = NotificationBuilder.Create(title)
                     .WithBody(OperatingSystem.IsLinux() ? WebUtility.HtmlEncode(body) : body)
                     .OnActivated(_ => openChat());
+                if (avatarPath is not null) request.WithImage(avatarPath);
                 if (OperatingSystem.IsLinux()) request.AddButton("打开对话", _ => openChat(), "default");
-                await _service.ShowAsync(request.Build(), token).ConfigureAwait(false);
+                var id = await _service.ShowAsync(request.Build(), token).ConfigureAwait(false);
+                Debug($"系统通知服务已接受请求（ID: {id}）。");
+                return true;
             }
             finally { _gate.Release(); }
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { }
-        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("消息通知失败：{0}", ex.Message); }
+        catch (Exception ex) { Console.Error.WriteLine($"[通知] 发送失败：{ex.GetType().Name}: {ex.Message}"); }
+        return false;
     }
 
     internal static uint? ReplyId(ChatMessage message) =>
@@ -107,6 +129,7 @@ internal sealed class DesktopNotifications : IAsyncDisposable
             _disposed = true;
             if (OperatingSystem.IsWindows()) _windows?.Dispose();
             _service?.Dispose();
+            _avatars.Dispose();
         }
         finally { _gate.Release(); }
     }

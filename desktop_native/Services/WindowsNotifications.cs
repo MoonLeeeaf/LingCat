@@ -24,7 +24,7 @@ internal sealed partial class WindowsNotifications : IDisposable
         _thread.Start();
     }
 
-    public async Task ShowAsync(string title, string body, Action activate, CancellationToken token)
+    public async Task ShowAsync(string title, string body, Action activate, CancellationToken token, string? avatarPath)
     {
         if (!await _ready.Task.WaitAsync(token).ConfigureAwait(false)) return;
         var completed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -33,7 +33,7 @@ internal sealed partial class WindowsNotifications : IDisposable
             try
             {
                 token.ThrowIfCancellationRequested();
-                Show(title, body, activate);
+                Show(title, body, activate, avatarPath);
                 completed.TrySetResult();
             }
             catch (Exception ex) { completed.TrySetException(ex); }
@@ -83,12 +83,12 @@ internal sealed partial class WindowsNotifications : IDisposable
         return NativeLibrary.Load(File.Exists(flat) ? flat : Path.Combine(directory, "runtimes", rid, "native", name));
     }
 
-    private unsafe void Show(string title, string body, Action activate)
+    private unsafe void Show(string title, string body, Action activate, string? avatarPath)
     {
         var show = (delegate* unmanaged[Cdecl]<Toast*, Handler*, long>)NativeLibrary.GetExport(_library, "WNT_ShowToast");
-        fixed (char* titlePtr = title, bodyPtr = body)
+        fixed (char* titlePtr = title, bodyPtr = body, avatarPtr = avatarPath)
         {
-            var toast = new Toast { Title = (nint)titlePtr, Body = (nint)bodyPtr, AudioFile = -1 };
+            var toast = new Toast { Title = (nint)titlePtr, Body = (nint)bodyPtr, ImagePath = (nint)avatarPtr, AudioFile = -1 };
             var handler = new Handler { Activated = &OnActivated, Dismissed = &OnDismissed, Failed = &OnFailed };
             var id = show(&toast, &handler);
             if (id <= 0) throw new InvalidOperationException($"Windows 通知发送失败（{id}）。");

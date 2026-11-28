@@ -25,7 +25,10 @@ internal sealed class MainWindowView : Grid
     private readonly ChatService _chatService;
     private readonly CancellationTokenSource _lifetime = new();
     private IDisposable? _connectionSubscription;
-    private bool _needsAuthorization;
+    private long _authorizedConnectionGeneration;
+    private bool NeedsAuthorization => _authorizedConnectionGeneration != _auth.Client.ReconnectCount;
+    private readonly HashSet<(string ChatId, uint MessageId)> _recentPushes = [];
+    private readonly Queue<(string ChatId, uint MessageId)> _pushOrder = [];
     private bool _authorizing;
     private bool _loadingChats;
     private bool _refreshPending;
@@ -51,6 +54,7 @@ internal sealed class MainWindowView : Grid
         Action onLogout)
     {
         _auth = auth;
+        _authorizedConnectionGeneration = auth.AuthorizedConnectionGeneration;
         _tray = tray;
         _notifications = notifications;
         _chatService = new ChatService(auth);
@@ -66,15 +70,8 @@ internal sealed class MainWindowView : Grid
     {
         if (_connectionSubscription is not null || _lifetime.IsCancellationRequested) return;
         _auth.Client.AddOnReceiveListener(OnPackage);
-        _connectionSubscription = _auth.Client.SubscribeConnectionState(() =>
-        {
-            bool disconnected = !_auth.Client.IsConnected;
-            UiThread.Post(() =>
-            {
-                if (disconnected) _needsAuthorization = true;
-                OnConnectionChanged();
-            });
-        });
+        DesktopNotifications.Debug($"新消息监听已注册；当前连接已授权：{_auth.Client.IsConnected && !NeedsAuthorization}。");
+        _connectionSubscription = _auth.Client.SubscribeConnectionState(() => UiThread.Post(OnConnectionChanged));
         _ = PollChatsAsync(_lifetime.Token);
         _auth.Profiles.RemarksChanged += OnRemarksChanged;
         _ = RefreshRemarksAsync();
@@ -105,8 +102,8 @@ internal sealed class MainWindowView : Grid
     private void OnConnectionChanged()
     {
         if (_lifetime.IsCancellationRequested) return;
-        if (!_auth.Client.IsConnected) { _needsAuthorization = true; return; }
-        if (_needsAuthorization) _ = RestoreEventSubscriptionAsync();
+        if (!_auth.Client.IsConnected) return;
+        if (NeedsAuthorization) _ = RestoreEventSubscriptionAsync();
         else _ = RefreshChatsAsync();
     }
 
@@ -114,20 +111,27 @@ internal sealed class MainWindowView : Grid
     {
         if (_authorizing) return;
         _authorizing = true;
+        var generation = _auth.Client.ReconnectCount;
         bool authorized = false;
         try
         {
-            await UserApi.AuthorizeAsync(_auth.Client, new(_auth.Stored.Token, _auth.ConnectionSessionId)).ConfigureAwait(false);
+            // The server removes subscriptions by session ID when a socket closes. A delayed close
+            // from the previous socket must not remove the new socket's subscription.
+            var sessionId = FormattableString.Invariant($"{_auth.ConnectionSessionId}-{generation}");
+            await UserApi.AuthorizeAsync(_auth.Client, new(_auth.Stored.Token, sessionId)).ConfigureAwait(false);
             authorized = true;
+            DesktopNotifications.Debug("重连后的推送授权成功。");
         }
-        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("聊天事件订阅恢复失败：{0}", ex.Message); }
+        catch (Exception ex) { Console.Error.WriteLine($"[通知] 聊天推送重新授权失败：{ex.Message}"); }
         finally
         {
             UiThread.Post(() =>
             {
                 _authorizing = false;
-                if (_lifetime.IsCancellationRequested || !authorized || !_auth.Client.IsConnected) return;
-                _needsAuthorization = false;
+                if (_lifetime.IsCancellationRequested || !_auth.Client.IsConnected) return;
+                if (generation != _auth.Client.ReconnectCount) { OnConnectionChanged(); return; }
+                if (!authorized) return;
+                _authorizedConnectionGeneration = generation;
                 _ = RefreshChatsAsync();
                 _ = RefreshRemarksAsync();
                 if (_chats.Find(chat => chat.Id == _selectedChatId) is { } selected) _ = LoadHistoryAsync(selected);
@@ -154,10 +158,23 @@ internal sealed class MainWindowView : Grid
                 {
                     if (_lifetime.IsCancellationRequested) return;
                     var chat = _chats.Find(chat => chat.Id == msg.ChatId);
-                    bool duplicate = chat?.Messages.Any(item => item.Id == message.Id) == true;
+                    // A history request may already have displayed this message; only another push
+                    // counts as a duplicate for notifications.
+                    var key = (msg.ChatId, message.Id);
+                    bool firstPush = _recentPushes.Add(key);
+                    if (firstPush)
+                    {
+                        _pushOrder.Enqueue(key);
+                        if (_pushOrder.Count > 1024) _recentPushes.Remove(_pushOrder.Dequeue());
+                    }
                     if (chat is not null) ReceiveMessage(chat, message, replace: true);
                     else _ = RefreshChatsAsync();
-                    if (!duplicate && !message.IsMine && !IsReadingChat(msg.ChatId))
+                    bool reading = IsReadingChat(msg.ChatId);
+                    if (DesktopNotifications.DebugEnabled)
+                        DesktopNotifications.Debug(!firstPush ? "收到实时推送；已过滤重复推送。" :
+                            message.IsMine ? "收到实时推送；已过滤自己发送的消息。" :
+                            reading ? "收到实时推送；该会话正在前台查看。" : "收到实时推送；开始检查通知规则。");
+                    if (firstPush && !message.IsMine && !reading)
                         _ = NotifyMessageAsync(msg.ChatId, chat, message,
                             DesktopNotifications.ReplyId(message) is { } replyId
                                 ? chat?.Messages.Find(item => item.Id == replyId) : null);
@@ -195,9 +212,17 @@ internal sealed class MainWindowView : Grid
                 chat = ChatService.ToSummary(await ChatApi.QueryChatInfoAsync(_auth.Client, new(_auth.Stored.Token, chatId)).ConfigureAwait(false));
             if (chat.IsGroup && !message.Entities.Any(e => e.Type == "user_mention" && e.Data == _auth.User.Id))
             {
-                if (DesktopNotifications.ReplyId(message) is not { } id) return;
+                if (DesktopNotifications.ReplyId(message) is not { } id)
+                {
+                    DesktopNotifications.Debug("已过滤普通群聊消息（未提及当前用户，也没有回复）。");
+                    return;
+                }
                 var quoted = cachedQuote ?? await _chatService.GetMessageAsync(chatId, id).ConfigureAwait(false);
-                if (quoted?.IsMine != true) return;
+                if (quoted?.IsMine != true)
+                {
+                    DesktopNotifications.Debug("已过滤群聊回复（不是回复当前用户，或原消息不可用）。");
+                    return;
+                }
             }
 
             dispatcher.BeginInvoke(() =>
@@ -206,7 +231,7 @@ internal sealed class MainWindowView : Grid
                     _ = ShowMessageNotificationAsync(dispatcher, chat, message, token);
             });
         }
-        catch (Exception ex) { System.Diagnostics.Trace.TraceWarning("无法读取通知会话：{0}", ex.Message); }
+        catch (Exception ex) { Console.Error.WriteLine($"[通知] 无法读取通知会话或引用消息：{ex.Message}"); }
     }
 
     private async Task ShowMessageNotificationAsync(IDispatcher dispatcher, ChatSummary chat,
@@ -235,7 +260,7 @@ internal sealed class MainWindowView : Grid
                     if (token.IsCancellationRequested || FindVisualRoot() is not Window) return;
                     _tray.ShowWindow();
                     OpenChat(chat);
-                }), token);
+                }), token, _auth, chat.AvatarFileHash);
         });
     }
 
@@ -272,7 +297,7 @@ internal sealed class MainWindowView : Grid
 
     private async Task RefreshChatsAsync()
     {
-        if (_lifetime.IsCancellationRequested || !_auth.Client.IsConnected || _needsAuthorization) return;
+        if (_lifetime.IsCancellationRequested || !_auth.Client.IsConnected || NeedsAuthorization) return;
         if (_loadingChats) { _refreshPending = true; return; }
         _loadingChats = true;
         if (_chats.Count == 0) _chatList?.SetStatus(_chatStatus = "正在加载对话…");

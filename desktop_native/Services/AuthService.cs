@@ -1,5 +1,4 @@
 using System.Net;
-using System.Security.Cryptography;
 using System.Text.Json;
 using LingCat.ClientProtocol.Client;
 
@@ -15,6 +14,7 @@ internal sealed class AuthSession : IAsyncDisposable
     public required User User { get; set; }
     public required LingCatClient Client { get; init; }
     public required string ConnectionSessionId { get; init; }
+    public required long AuthorizedConnectionGeneration { get; init; }
 
     public ValueTask DisposeAsync() => Client.DisposeAsync();
 }
@@ -103,6 +103,7 @@ internal static class AuthService
             await ConnectAsync(client, cancellationToken).ConfigureAwait(false);
 
             var connectionSessionId = NewConnectionSessionId();
+            var authorizedGeneration = client.ReconnectCount;
             await UserApi.AuthorizeAsync(client, new UserApi.AuthorizeOptions(
                 stored.Token,
                 connectionSessionId)).ConfigureAwait(false);
@@ -120,6 +121,7 @@ internal static class AuthService
                 User = me,
                 Client = client,
                 ConnectionSessionId = connectionSessionId,
+                AuthorizedConnectionGeneration = authorizedGeneration,
             };
         }
         catch
@@ -137,6 +139,7 @@ internal static class AuthService
         CancellationToken cancellationToken)
     {
         var connectionSessionId = NewConnectionSessionId();
+        var authorizedGeneration = client.ReconnectCount;
         await UserApi.AuthorizeAsync(client, new UserApi.AuthorizeOptions(
             token,
             connectionSessionId)).ConfigureAwait(false);
@@ -163,6 +166,7 @@ internal static class AuthService
             User = me,
             Client = client,
             ConnectionSessionId = connectionSessionId,
+            AuthorizedConnectionGeneration = authorizedGeneration,
         };
     }
 
@@ -289,6 +293,6 @@ internal static class AuthService
 
     private static string NewConnectionSessionId()
     {
-        return "desktop-" + Convert.ToHexString(RandomNumberGenerator.GetBytes(4)).ToLowerInvariant();
+        return $"desktop-{Guid.NewGuid():N}";
     }
 }

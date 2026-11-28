@@ -44,10 +44,21 @@ void startUp()
     }
 }
 
+var commandArgs = Environment.GetCommandLineArgs();
+DesktopNotifications.DebugEnabled = commandArgs.Contains("--debug-notifications");
+if (commandArgs.Contains("--test-notification") && OperatingSystem.IsLinux())
+{
+    DesktopNotifications.DebugEnabled = true;
+    await using var test = new DesktopNotifications();
+    var sent = await test.ShowAsync("LingCat", "Linux 系统通知测试", () => { }, CancellationToken.None);
+    if (sent) await Task.Delay(TimeSpan.FromSeconds(6));
+    Environment.ExitCode = sent ? 0 : 1;
+    return;
+}
+
 startUp();
 ImageDecoders.RegisterFallback(new PhotoDecoder());
 
-var commandArgs = Environment.GetCommandLineArgs();
 AppPaths.Configure(commandArgs);
 
 var themeMode = commandArgs.Any(a => a is "--light")
