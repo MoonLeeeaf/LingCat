@@ -12,6 +12,10 @@ LingCat 客户端的 C# 协议库，由 `protocol/*.proto` 通过 `protoc` 生�
   - `Package`：请求 ID、序列化、XChaCha20-Poly1305 加解密
   - `SecureKey`：X25519 / Ed25519 / HKDF-SHA256
   - `Methods`：方法 ID 常量
+  - `UserApi` / `ChatApi` / `FileApi` / `E2EApi` / `MeetingApi` / `OAuthApi` / `StickerApi`：客户端业务 API
+  - `MessageParser`：轻量富文本语法与 text + entities 的互转
+  - `DecodeOrThrow`：响应解码与 `Error_Response` 错误抛出（`ProtocolException`）
+  - `Models`：客户端业务模型（`User`、`Chat`、`Message`、`StickerPack` 等）
 
 ## 使用
 
@@ -38,6 +42,56 @@ var response = await client.Invoke(
     }.ToByteArray());
 
 client.Disconnect();
+```
+
+### 业务 API
+
+所有业务 API 都是静态方法，参数使用 `XxxOptions` record，`TimeoutMs` 默认 20000：
+
+```csharp
+using LingCat.ClientProtocol.Client;
+
+var userId = await UserApi.RegisterAsync(client, new UserApi.RegisterOptions(
+    Password: "password",
+    Nickname: "昵称",
+    Username: "username"));
+
+var accessToken = await UserApi.LoginAsync(client, new UserApi.LoginOptions("username", "password"));
+await UserApi.AuthorizeAsync(client, new UserApi.AuthorizeOptions(accessToken, sessionId));
+
+var me = await UserApi.QueryMyUserInfoAsync(client, new UserApi.QueryMyUserInfoOptions(accessToken));
+
+var chatId = await ChatApi.CreateGroupAsync(client, new ChatApi.CreateGroupOptions(accessToken, "群名称"));
+
+var parsed = MessageParser.ParseMessage("你好 **世界**");
+var messageId = await ChatApi.SendChatMessageAsync(client, new ChatApi.SendChatMessageOptions(
+    accessToken, chatId, parsed.Text, parsed.Entities));
+
+var messages = await ChatApi.GetChatMessagesAsync(client, new ChatApi.GetChatMessagesOptions(accessToken, chatId));
+
+// 文件上传
+var uploadToken = await FileApi.RequestUploadFileTokenAsync(client,
+    new FileApi.RequestUploadFileTokenOptions(accessToken));
+
+var fileHash = await FileApi.UploadFileAsync(client, new FileApi.UploadFileOptions(
+    uploadToken, File.ReadAllBytes("a.txt"), chatId, "text/plain", "a.txt"));
+
+// 断点续传（chunk_size 由服务端下发）
+var resumableHash = await FileApi.UploadFileResumableAsync(
+    client, uploadToken, File.ReadAllBytes("big.bin"), "big.bin", "application/octet-stream");
+```
+
+服务端返回的业务错误会以 `ProtocolException` 抛出，包含 `RequestMethod` 与 `Code`：
+
+```csharp
+try
+{
+    await ChatApi.SendChatMessageAsync(client, options);
+}
+catch (ProtocolException ex)
+{
+    Console.WriteLine($"{Methods.GetMethodName(ex.RequestMethod)} -> {ex.Message} ({ex.Code})");
+}
 ```
 
 加解密与前端使用的 `libsodium-wrappers-sumo` 已做跨语言校验（X25519 / Ed25519 / HKDF / XChaCha20-Poly1305）。

@@ -27,6 +27,12 @@ internal sealed partial class GalleryView
         var field = new OutlinedTextField { Label = "Display name", Placeholder = "Enter a name", SupportingText = "At least 3 characters" };
         field.Editor.TextChanged += text => field.HasError = text.Length is > 0 and < 3;
         var filled = new FilledTextField { Label = "Notes", Placeholder = "Type here" };
+        var password = new OutlinedTextField(MaterialTextFieldInputType.Password)
+        {
+            Label = "Password",
+            SupportingText = "Enter clears the masked sample.",
+        };
+        password.SubmitRequested += () => password.Password = string.Empty;
         var search = new MaterialSearchBar { Label = "Search the example list" };
         var matches = new Label();
         string[] items = ["Ada", "Grace", "Katherine", "Margaret"];
@@ -84,7 +90,7 @@ internal sealed partial class GalleryView
 
         return new StackPanel().Spacing(18).Padding(26).Children(result,
             Heading("Buttons"), buttons, new MaterialDivider(),
-            Heading("Text fields and search"), field, filled, search, matches, new MaterialDivider(),
+            Heading("Text fields and search"), field, filled, password, search, matches, new MaterialDivider(),
             Heading("Selection controls"), new WrapPanel().Spacing(12).Children(check, toggle, radio1, radio2), selection, new MaterialDivider(),
             Heading("Surfaces"), cards, new MaterialDivider(),
             Heading("Dialogs and feedback"), new WrapPanel().Spacing(8).Children(dialog,

@@ -9,7 +9,7 @@ The library is built only on public MewUI 0.22.1 APIs and does not modify or for
 | Family | Available controls |
 | --- | --- |
 | Buttons | Filled, tonal, outlined, text, elevated, four icon variants, FAB and extended FAB |
-| Text input | Filled and outlined fields with supporting/error text, search bar with a localizable `ClearButtonText` |
+| Text input | Filled and outlined fields with plain-text or masked password input, supporting/error text, and search with a localizable `ClearButtonText` |
 | Selection | Checkbox (including mixed state), switch, grouped radio buttons |
 | Surfaces | Filled, outlined and elevated cards, surfaces, and horizontal/vertical dividers |
 | Feedback | Modal confirmation, snackbar with optional action, determinate/indeterminate progress |
@@ -61,6 +61,11 @@ var save = new FilledButton().Content("Save");
 save.Click += () => { /* Save settings */ };
 // Register MaterialThemeManager.AttachToApplication with Application.OnStartup.
 ```
+
+Use `new OutlinedTextField(MaterialTextFieldInputType.Password) { Label = "Password" }`
+for the equivalent of HTML `type="password"`. The native MewUI `PasswordBox` masks the
+input. `SubmitRequested` signals Enter without carrying the value; read `Password` explicitly
+when handling submission.
 
 Call runtime setters on the UI thread. `SetSeed`, `SetMode` and `SetTheme` update mounted
 controls; `SetMotionEnabled(false)` stops custom animation clocks while retaining hover,
